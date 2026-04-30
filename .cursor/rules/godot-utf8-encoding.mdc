@@ -1,0 +1,28 @@
+---
+description: Enforce UTF-8 for Godot text assets
+globs: **/*.{gd,tscn,tres,godot}
+alwaysApply: false
+---
+
+# Godot UTF-8 Encoding Rule
+
+- Save all Godot text files as UTF-8.
+- Never write UTF-16, UTF-32, or files containing NUL bytes.
+- Prefer UTF-8 without BOM unless a tool explicitly requires BOM.
+
+## Applies To
+
+- `*.gd`
+- `*.tscn`
+- `*.tres`
+- `*.godot`
+
+## Required Behavior
+
+- When creating or rewriting these files, ensure output encoding is UTF-8.
+- If a file appears as one-letter text in editors (for example only `c` from `class_name`), treat it as encoding corruption and rewrite it in UTF-8.
+- If parse errors mention invalid UTF-8 or bytes like `FF FE`, convert the file(s) before changing logic.
+
+## Quick Recovery
+
+If needed, convert a corrupted file by reading as UTF-16 and writing UTF-8, then reopen Godot.

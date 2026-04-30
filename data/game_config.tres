@@ -1,0 +1,10 @@
+[gd_resource type="Resource" format=3]
+
+[resource]
+ring_count = 10
+unlocked_ring_count = 5
+map_size = 2
+difficulty = 2
+penalties_enabled = true
+animal_turn_limit = 8
+animal_default_penalty = 0

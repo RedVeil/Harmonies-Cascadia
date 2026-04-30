@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://bex3vjf0ycmx7"
+
+[deps]
+
+files=["res://data/animals.range.translation", "res://data/animals.turn.translation", "res://data/animals.point.translation", "res://data/animals.penalty.translation", "res://data/animals.enabled.translation", "res://data/animals.symbol.translation", "res://data/animals.draw.translation", "res://data/animals.place.translation", "res://data/animals.required.translation", "res://data/animals.draw.translation"]
+
+source_file="res://data/animals.csv"
+dest_files=["res://data/animals.range.translation", "res://data/animals.turn.translation", "res://data/animals.point.translation", "res://data/animals.penalty.translation", "res://data/animals.enabled.translation", "res://data/animals.symbol.translation", "res://data/animals.draw.translation", "res://data/animals.place.translation", "res://data/animals.required.translation", "res://data/animals.draw.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

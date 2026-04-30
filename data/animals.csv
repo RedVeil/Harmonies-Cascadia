@@ -1,0 +1,6 @@
+name,range,turn_timer,point_score,penalty_score,enabled,symbol,draw_chance,place_specs,required_specs,draw_elements
+frog,1,0,10,0,true,res://assets/animals/symbols/frog.png,100,5:0,4:0,5
+bee,1,0,10,0,true,res://assets/animals/symbols/bee.png,100,2:0|2:1,1:0|1:0,2
+bear,1,0,10,0,true,res://assets/animals/symbols/bear.png,100,3:0|3:1|3:2,1:0|3:1,3
+fish,1,0,10,0,true,res://assets/animals/symbols/fish.png,100,4:0,4:0,4
+deer,1,0,10,0,true,res://assets/animals/symbols/deer.png,100,1:0|1:1|1:2,1:0|2:0,1
