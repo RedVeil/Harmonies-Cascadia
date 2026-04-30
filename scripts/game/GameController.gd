@@ -62,6 +62,12 @@ var has_placed_first_forest := false
 var game_finished := false
 var camera_offset := Vector2.ZERO
 var is_drag_panning := false
+var recent_group_highlight_tiles: Array[Vector2i] = []
+var recent_group_highlight_ttl: float = 0.0
+var recent_group_highlight_duration: float = 0.85
+var last_element_delta_info: String = "none"
+var left_drag_start_pos := Vector2.ZERO
+var left_drag_moved := false
 
 var hud_label: Label
 var rng := RandomNumberGenerator.new()
@@ -75,6 +81,7 @@ func _ready() -> void:
 	rng.randomize()
 	_load_config()
 	score_engine.load_elements_csv("res://data/elements.csv")
+	score_engine.load_rules_json("res://data/element_rules.json")
 	_load_progression_csv("res://data/progression.csv")
 	animal_system.load_animals_csv("res://data/animals.csv")
 	_sync_element_draw_weights()
@@ -254,6 +261,14 @@ func _rebuild_globals_debug_menu() -> void:
 	unlocked_rings_spin.value_changed.connect(_on_global_unlocked_rings_changed)
 	globals_tab_box.add_child(unlocked_rings_row["row"])
 
+	var score_snapshot := score_engine.score_board_state(board, grid)
+	var totals_label := Label.new()
+	totals_label.text = "Element state total: %d" % int(score_snapshot.get("total_element_score", 0))
+	globals_tab_box.add_child(totals_label)
+	var delta_label := Label.new()
+	delta_label.text = "Last element delta: %s" % last_element_delta_info
+	globals_tab_box.add_child(delta_label)
+
 func _on_debug_button_pressed() -> void:
 	if debug_popup == null:
 		return
@@ -292,12 +307,9 @@ func _debug_labeled_spinbox(label_text: String, value: float, min_value: float, 
 
 func _on_global_max_hand_changed(value: float) -> void:
 	max_hand_size = maxi(1, int(round(value)))
-	if _hand_total_count() > max_hand_size:
-		while _hand_total_count() > max_hand_size and not hand_cards.is_empty():
-			var last_i := hand_cards.size() - 1
-			hand_cards[last_i]["count"] = int(hand_cards[last_i]["count"]) - 1
-			if int(hand_cards[last_i]["count"]) <= 0:
-				hand_cards.remove_at(last_i)
+	if _hand_slot_count() > max_hand_size:
+		while _hand_slot_count() > max_hand_size and not hand_cards.is_empty():
+			hand_cards.remove_at(hand_cards.size() - 1)
 		_ensure_selected_card()
 	queue_redraw()
 
@@ -317,6 +329,9 @@ func _on_global_unlocked_rings_changed(value: float) -> void:
 
 func _process(delta: float) -> void:
 	var moved := _update_camera_pan_from_keys(delta)
+	if recent_group_highlight_ttl > 0.0:
+		recent_group_highlight_ttl = maxf(0.0, recent_group_highlight_ttl - delta)
+		moved = true
 	var coord := grid.world_to_axial(get_viewport().get_mouse_position())
 	hovered_hand_card_key = _hovered_hand_card_key(get_viewport().get_mouse_position())
 	if coord != hovered_coord:
@@ -332,16 +347,24 @@ func _unhandled_input(event: InputEvent) -> void:
 				_finish_run()
 				return
 	elif event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_RIGHT:
-			is_drag_panning = event.pressed
-			return
-		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-			if _try_select_card_from_hand(event.position):
-				queue_redraw()
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			if event.pressed:
+				is_drag_panning = true
+				left_drag_start_pos = event.position
+				left_drag_moved = false
 				return
-			_try_place_at_mouse()
+			if is_drag_panning:
+				is_drag_panning = false
+				if left_drag_moved:
+					return
+				if _try_select_card_from_hand(event.position):
+					queue_redraw()
+					return
+				_try_place_at_mouse()
 	elif event is InputEventMouseMotion and is_drag_panning:
 		camera_offset += event.relative
+		if event.position.distance_to(left_drag_start_pos) > 4.0:
+			left_drag_moved = true
 		_apply_camera_origin()
 		queue_redraw()
 
@@ -358,13 +381,19 @@ func _try_place_at_mouse() -> void:
 	var prev_score := total_score
 	var turn_delta := 0
 	if selected_mode == CARD_KIND_ELEMENT:
-		var preview := score_engine.preview_element_points(board, grid, coord, selected_element)
-		if not preview["valid"]:
-			_update_hud(preview["reason"])
+		var simulation := score_engine.simulate_action_delta(board, grid, {
+			"kind": "element",
+			"coord": coord,
+			"element": selected_element
+		})
+		if not bool(simulation.get("valid", false)):
+			_update_hud(String(simulation.get("reason", "Invalid move")))
 			return
-		var tile: TileState = board[coord]
-		score_engine.apply_element_placement(tile, selected_element)
-		turn_delta += preview["points"]
+		board = (simulation["after_board"] as Dictionary)
+		turn_delta += int(score_engine.placement_bonus) + int(simulation["delta"])
+		last_element_delta_info = "%+d (state %+d + base +1)" % [int(score_engine.placement_bonus) + int(simulation["delta"]), int(simulation["delta"])]
+		recent_group_highlight_tiles = (simulation.get("affected_group_tiles", []) as Array[Vector2i]).duplicate()
+		recent_group_highlight_ttl = recent_group_highlight_duration
 		if selected_element == TileState.Element.FOREST and not has_placed_first_forest:
 			has_placed_first_forest = true
 			spirit_system.maybe_spawn_first_forest_spirit(true, current_turn)
@@ -403,10 +432,19 @@ func _draw() -> void:
 		_draw_hex(c, _tile_color(board[c]))
 		_draw_tile_icon(c, board[c])
 	_draw_animal_symbols()
+	_draw_recent_group_highlight()
 	_draw_hover_highlights()
 	_draw_hover_preview()
 	_draw_progress_circle()
 	_draw_hand_ui()
+
+func _draw_recent_group_highlight() -> void:
+	if recent_group_highlight_ttl <= 0.0:
+		return
+	var alpha := clampf(recent_group_highlight_ttl / recent_group_highlight_duration, 0.0, 1.0)
+	for c in recent_group_highlight_tiles:
+		if _is_tile_unlocked(c):
+			_draw_glow_border(c, Color(0.95, 0.75, 0.16, 0.85 * alpha), 4.0)
 
 func _draw_animal_symbols() -> void:
 	for c in grid.coords:
@@ -435,13 +473,12 @@ func _draw_hex(coord: Vector2i, color: Color) -> void:
 	draw_polyline(pts + PackedVector2Array([pts[0]]), Color.BLACK, 2.0)
 
 func _draw_tile_icon(coord: Vector2i, tile: TileState) -> void:
-	if tile.element == TileState.Element.NONE:
-		return
-	var icon := score_engine.icon_for(tile.element, tile.stack_count)
-	if icon.is_empty():
+	var tex := score_engine.icon_texture_for(tile.element, tile.stack_count)
+	if tex == null:
 		return
 	var center := grid.axial_to_world(coord)
-	draw_string(ThemeDB.fallback_font, center + Vector2(-10, 5), icon, HORIZONTAL_ALIGNMENT_LEFT, 24, 14, Color.WHITE)
+	var size := Vector2(30, 30)
+	draw_texture_rect(tex, Rect2(center - size * 0.5, size), false)
 
 func _tile_color(tile: TileState) -> Color:
 	match tile.element:
@@ -537,45 +574,23 @@ func _build_hover_highlight_info(coord: Vector2i) -> Dictionary:
 	var can_place := false
 
 	if selected_mode == CARD_KIND_ELEMENT:
-		var preview := score_engine.preview_element_points(board, grid, coord, selected_element)
-		can_place = bool(preview["valid"])
+		var preview := score_engine.simulate_action_delta(board, grid, {
+			"kind": "element",
+			"coord": coord,
+			"element": selected_element
+		})
+		can_place = bool(preview.get("valid", false))
 		if can_place:
-			match selected_element:
-				TileState.Element.FIELD:
-					var sim_board: Dictionary = _clone_board(board)
-					score_engine.apply_element_placement(sim_board[coord] as TileState, TileState.Element.FIELD)
-					var field_component := _collect_connected(sim_board, coord, TileState.Element.FIELD)
-					var field_got_rule_points := int(preview["points"]) > int(score_engine.placement_bonus)
-					for fc in field_component:
-						if fc == coord or not _is_tile_unlocked(fc):
-							continue
-						if field_got_rule_points:
-							positive.append(fc)
-						else:
-							negative.append(fc)
-				TileState.Element.RIVER:
-					var sim_board: Dictionary = _clone_board(board)
-					(sim_board[coord] as TileState).element = TileState.Element.RIVER
-					var rivers := _collect_connected(sim_board, coord, TileState.Element.RIVER)
-					for r in rivers:
-						if r != coord and _is_tile_unlocked(r):
-							positive.append(r)
-				TileState.Element.MOUNTAIN:
-					var count := 0
-					var mountain_coords: Array[Vector2i] = []
-					for c in board.keys():
-						if (board[c] as TileState).element == TileState.Element.MOUNTAIN:
-							count += 1
-							mountain_coords.append(c)
-					if (count + 1) % 3 == 0:
-						for m in mountain_coords:
-							if _is_tile_unlocked(m):
-								positive.append(m)
-				TileState.Element.WETLANDS:
-					for n in grid.neighbors(coord):
-						var e := (board[n] as TileState).element
-						if _is_tile_unlocked(n) and e != TileState.Element.NONE:
-							positive.append(n)
+			var tiles: Array = preview.get("affected_group_tiles", [])
+			var gained_rule_points := int(preview.get("delta", 0)) > 0
+			for t in tiles:
+				var tc := t as Vector2i
+				if tc == coord or not _is_tile_unlocked(tc):
+					continue
+				if gained_rule_points:
+					positive.append(tc)
+				else:
+					negative.append(tc)
 	else:
 		can_place = animal_system.can_place_animal(board, coord, selected_animal)
 		if can_place and animal_system.animals_by_id.has(selected_animal):
@@ -699,13 +714,16 @@ func _preview_turn_points(coord: Vector2i) -> Dictionary:
 	var temp_animals: AnimalSystem = _clone_animal_system()
 
 	if selected_mode == CARD_KIND_ELEMENT:
-		var element_preview := score_engine.preview_element_points(sim_board, grid, coord, selected_element)
-		if not element_preview["valid"]:
+		var element_preview := score_engine.simulate_action_delta(sim_board, grid, {
+			"kind": "element",
+			"coord": coord,
+			"element": selected_element
+		})
+		if not bool(element_preview.get("valid", false)):
 			return {"valid": false, "points": 0}
 		valid = true
-		var tile: TileState = sim_board[coord]
-		score_engine.apply_element_placement(tile, selected_element)
-		turn_delta += int(element_preview["points"])
+		sim_board = element_preview["after_board"] as Dictionary
+		turn_delta += int(score_engine.placement_bonus) + int(element_preview["delta"])
 		if selected_element == TileState.Element.FOREST and not temp_first_forest:
 			temp_first_forest = true
 			temp_spirit.maybe_spawn_first_forest_spirit(true, current_turn)
@@ -771,12 +789,12 @@ func _draw_initial_hand() -> void:
 	_ensure_selected_card()
 
 func _draw_turn_cards() -> String:
-	if _hand_total_count() >= max_hand_size:
+	if _hand_slot_count() >= max_hand_size:
 		return "Hand full."
 	var element := _roll_element_draw()
 	_add_card(CARD_KIND_ELEMENT, element)
 	var msg := "Drew %s." % _element_name(element)
-	if _hand_total_count() >= max_hand_size:
+	if _hand_slot_count() >= max_hand_size:
 		animal_current_chance = min(animal_current_chance + 0.33, 1.0)
 		_ensure_selected_card()
 		return msg
@@ -847,13 +865,13 @@ func _roll_animal_for_element(element: int) -> int:
 	return int(options[0])
 
 func _add_card(kind: String, id: int) -> void:
-	if _hand_total_count() >= max_hand_size:
-		return
 	var key := _card_key(kind, id)
 	for card in hand_cards:
 		if String(card["key"]) == key:
 			card["count"] = int(card["count"]) + 1
 			return
+	if _hand_slot_count() >= max_hand_size:
+		return
 	hand_cards.append({
 		"key": key,
 		"kind": kind,
@@ -879,6 +897,9 @@ func _hand_total_count() -> int:
 	for card in hand_cards:
 		total += int(card["count"])
 	return total
+
+func _hand_slot_count() -> int:
+	return hand_cards.size()
 
 func _card_key(kind: String, id: int) -> String:
 	return "%s:%d" % [kind, id]
@@ -947,11 +968,9 @@ func _draw_card(rect: Rect2, card: Dictionary, selected: bool) -> void:
 		else:
 			var letter := _animal_name(id).substr(0, 1).to_upper()
 			draw_string(ThemeDB.fallback_font, rect.position + Vector2(rect.size.x * 0.45, rect.size.y * 0.60), letter, HORIZONTAL_ALIGNMENT_LEFT, 16, 22, Color.WHITE)
+		_draw_animal_placement_icons(rect, id)
 		_draw_animal_requirement_dots(rect, id)
 	elif kind == CARD_KIND_ELEMENT:
-		var e_icon := score_engine.icon_for(id, 0)
-		if not e_icon.is_empty():
-			draw_string(ThemeDB.fallback_font, rect.position + Vector2(rect.size.x * 0.34, rect.size.y * 0.58), e_icon, HORIZONTAL_ALIGNMENT_LEFT, 40, 22, Color.WHITE)
 		_draw_element_placement_dots(rect, id)
 	var count_text := str(count)
 	draw_string(ThemeDB.fallback_font, rect.position + Vector2(8, rect.size.y - 8), count_text, HORIZONTAL_ALIGNMENT_LEFT, 30, 22, Color.WHITE)
@@ -972,29 +991,49 @@ func _draw_animal_requirement_dots(rect: Rect2, animal_id: int) -> void:
 	if required_specs.is_empty():
 		return
 
-	var x := rect.position.x + rect.size.x - 26.0
+	var x := rect.position.x + rect.size.x - 22.0
 	var start_y := rect.position.y + 10.0
-	var step := 13.0
+	var step := 20.0
 	for idx in range(required_specs.size()):
 		var y := start_y + idx * step
 		if y > rect.position.y + rect.size.y - 14.0:
 			break
-		var symbol := _symbol_for_spec(str(required_specs[idx]))
-		draw_string(ThemeDB.fallback_font, Vector2(x, y + 4.0), symbol, HORIZONTAL_ALIGNMENT_LEFT, 24, 12, Color.WHITE)
+		var tex := _texture_for_spec(str(required_specs[idx]))
+		if tex != null:
+			draw_texture_rect(tex, Rect2(Vector2(x - 8.0, y - 8.0), Vector2(16, 16)), false)
+
+func _draw_animal_placement_icons(rect: Rect2, animal_id: int) -> void:
+	if not animal_system.animals_by_id.has(animal_id):
+		return
+	var def: Dictionary = animal_system.animals_by_id[animal_id]
+	var place_specs: Array = def["place_specs"]
+	if place_specs.is_empty():
+		return
+	var x := rect.position.x + 10.0
+	var start_y := rect.position.y + 10.0
+	var step := 20.0
+	for idx in range(place_specs.size()):
+		var y := start_y + idx * step
+		if y > rect.position.y + rect.size.y - 14.0:
+			break
+		var tex := _texture_for_spec(String(place_specs[idx]))
+		if tex != null:
+			draw_texture_rect(tex, Rect2(Vector2(x - 8.0, y - 8.0), Vector2(16, 16)), false)
 
 func _draw_element_placement_dots(rect: Rect2, element: int) -> void:
 	var place_specs := score_engine.allowed_place_specs_for_element(element)
 	if place_specs.is_empty():
 		return
-	var x := rect.position.x + rect.size.x - 26.0
+	var x := rect.position.x + 10.0
 	var start_y := rect.position.y + 10.0
-	var step := 13.0
+	var step := 20.0
 	for idx in range(place_specs.size()):
 		var y := start_y + idx * step
 		if y > rect.position.y + rect.size.y - 14.0:
 			break
-		var symbol := _symbol_for_spec(String(place_specs[idx]))
-		draw_string(ThemeDB.fallback_font, Vector2(x, y + 4.0), symbol, HORIZONTAL_ALIGNMENT_LEFT, 24, 12, Color.WHITE)
+		var tex := _texture_for_spec(String(place_specs[idx]))
+		if tex != null:
+			draw_texture_rect(tex, Rect2(Vector2(x - 8.0, y - 8.0), Vector2(16, 16)), false)
 
 func _color_for_spec(spec: String) -> Color:
 	var parsed := animal_system.parse_spec_key(spec)
@@ -1017,6 +1056,14 @@ func _symbol_for_spec(spec: String) -> String:
 		return "N0"
 	var icon := score_engine.icon_for(element, stacks)
 	return icon if not icon.is_empty() else "%d:%d" % [element, stacks]
+
+func _texture_for_spec(spec: String) -> Texture2D:
+	var parsed := animal_system.parse_spec_key(spec)
+	if parsed.is_empty():
+		return null
+	var element := int(parsed.get("element", TileState.Element.NONE))
+	var stacks := int(parsed.get("stacks", 0))
+	return score_engine.icon_texture_for(element, stacks)
 
 func _sync_element_draw_weights() -> void:
 	element_draw_weights.clear()
@@ -1217,13 +1264,13 @@ func _is_final_infinite_stage() -> bool:
 func _update_camera_pan_from_keys(delta: float) -> bool:
 	var dir := Vector2.ZERO
 	if Input.is_key_pressed(KEY_W):
-		dir.y -= 1.0
-	if Input.is_key_pressed(KEY_S):
 		dir.y += 1.0
+	if Input.is_key_pressed(KEY_S):
+		dir.y -= 1.0
 	if Input.is_key_pressed(KEY_A):
-		dir.x -= 1.0
-	if Input.is_key_pressed(KEY_D):
 		dir.x += 1.0
+	if Input.is_key_pressed(KEY_D):
+		dir.x -= 1.0
 	if dir == Vector2.ZERO:
 		return false
 	camera_offset += dir.normalized() * CAMERA_PAN_SPEED * delta

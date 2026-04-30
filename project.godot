@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Harmonies-Cascadia-MVP"
+config/name="Harmonies-Cascadia"
 config/version="0.1.0"
 run/main_scene="res://scenes/Main.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
