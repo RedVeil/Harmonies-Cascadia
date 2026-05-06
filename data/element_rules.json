@@ -172,7 +172,7 @@
         "scope": "group_per_tile",
         "conditions": [
           { "kind": "placed_stack_equals", "value": 1 },
-          { "kind": "distinct_neighbor_specs_min", "min": 3, "exclude_none": true }
+          { "kind": "distinct_neighbor_specs_min", "min": 3, "exclude_none": true, "count_mode": "element" }
         ],
         "score": { "kind": "flat", "value": 5 }
       },

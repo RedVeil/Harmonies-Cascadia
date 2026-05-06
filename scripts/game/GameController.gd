@@ -6,6 +6,7 @@ const TileState = preload("res://scripts/game/TileState.gd")
 const ScoreEngine = preload("res://scripts/scoring/ScoreEngine.gd")
 const AnimalSystem = preload("res://scripts/animals/AnimalSystem.gd")
 const SpiritSystem = preload("res://scripts/spirits/SpiritSystem.gd")
+const QuestSystem = preload("res://scripts/quests/QuestSystem.gd")
 
 const ELEMENT_KEYS := {
 	KEY_1: TileState.Element.FOREST,
@@ -29,8 +30,8 @@ const DIFFICULTY_CHALLENGE := 4
 
 const CARD_KIND_ELEMENT := "element"
 const CARD_KIND_ANIMAL := "animal"
-const CAMERA_BASE_ORIGIN := Vector2(640, 360)
 const CAMERA_PAN_SPEED := 480.0
+const BASE_VIEWPORT_SIZE := Vector2(1280.0, 720.0)
 
 var selected_map_size: int = MAP_SIZE_NORMAL
 var selected_difficulty: int = DIFFICULTY_NORMAL
@@ -39,11 +40,12 @@ var ring_count: int = 10
 var unlocked_ring_count: int = 0
 var progression_steps: Array[Dictionary] = []
 var progression_step_index: int = 0
-var grid := HexGrid.new(ring_count, 38.0, CAMERA_BASE_ORIGIN)
+var grid := HexGrid.new(ring_count, 38.0, Vector2.ZERO)
 var board := {}
 var score_engine := ScoreEngine.new()
 var animal_system := AnimalSystem.new()
 var spirit_system := SpiritSystem.new()
+var quest_system := QuestSystem.new()
 
 var current_turn: int = 1
 var total_score: int = 0
@@ -68,6 +70,20 @@ var recent_group_highlight_duration: float = 0.85
 var last_element_delta_info: String = "none"
 var left_drag_start_pos := Vector2.ZERO
 var left_drag_moved := false
+var recycle_bin_rect := Rect2()
+var recycle_binned_count: int = 0
+var recycle_cards_needed: int = 1
+var recycle_costs_by_difficulty: Dictionary = {
+	DIFFICULTY_BEGINNER: 1,
+	DIFFICULTY_EASY: 1,
+	DIFFICULTY_NORMAL: 2,
+	DIFFICULTY_ADVANCED: 2,
+	DIFFICULTY_CHALLENGE: 3
+}
+var quest_popup_text: String = ""
+var quest_popup_ttl: float = 0.0
+var quest_popup_duration: float = 2.4
+var quest_icon_rect := Rect2()
 
 var hud_label: Label
 var rng := RandomNumberGenerator.new()
@@ -79,11 +95,13 @@ var globals_tab_box: VBoxContainer
 
 func _ready() -> void:
 	rng.randomize()
+	get_viewport().size_changed.connect(_on_viewport_size_changed)
 	_load_config()
 	score_engine.load_elements_csv("res://data/elements.csv")
 	score_engine.load_rules_json("res://data/element_rules.json")
 	_load_progression_csv("res://data/progression.csv")
 	animal_system.load_animals_csv("res://data/animals.csv")
+	quest_system.load_quests_csv("res://data/quests.csv")
 	_sync_element_draw_weights()
 	_apply_difficulty_card_settings()
 	score_engine.init_rule_sets()
@@ -112,11 +130,33 @@ func _load_config() -> void:
 	if cfg_difficulty != null:
 		selected_difficulty = int(cfg_difficulty)
 	unlocked_ring_count = clampi(unlocked_ring_count, 0, ring_count)
-	grid = HexGrid.new(ring_count, 38.0, CAMERA_BASE_ORIGIN)
+	grid = HexGrid.new(ring_count, 38.0, _camera_base_origin())
 	_apply_camera_origin()
 	var cfg_penalties = cfg.get("penalties_enabled")
 	if cfg_penalties != null:
 		animal_system.penalties_enabled = bool(cfg_penalties)
+	var recycle_beginner = cfg.get("recycle_cost_beginner")
+	if recycle_beginner != null:
+		recycle_costs_by_difficulty[DIFFICULTY_BEGINNER] = maxi(1, int(recycle_beginner))
+	var recycle_easy = cfg.get("recycle_cost_easy")
+	if recycle_easy != null:
+		recycle_costs_by_difficulty[DIFFICULTY_EASY] = maxi(1, int(recycle_easy))
+	var recycle_normal = cfg.get("recycle_cost_normal")
+	if recycle_normal != null:
+		recycle_costs_by_difficulty[DIFFICULTY_NORMAL] = maxi(1, int(recycle_normal))
+	var recycle_advanced = cfg.get("recycle_cost_advanced")
+	if recycle_advanced != null:
+		recycle_costs_by_difficulty[DIFFICULTY_ADVANCED] = maxi(1, int(recycle_advanced))
+	var recycle_challenge = cfg.get("recycle_cost_challenge")
+	if recycle_challenge != null:
+		recycle_costs_by_difficulty[DIFFICULTY_CHALLENGE] = maxi(1, int(recycle_challenge))
+	var quest_base = cfg.get("quest_spawn_base_chance")
+	var quest_step = cfg.get("quest_spawn_step")
+	if quest_base != null or quest_step != null:
+		quest_system.configure_spawn(
+			float(quest_base) if quest_base != null else quest_system.spawn_base_chance,
+			float(quest_step) if quest_step != null else quest_system.spawn_chance_step
+		)
 
 func _create_hud() -> void:
 	return
@@ -307,9 +347,14 @@ func _debug_labeled_spinbox(label_text: String, value: float, min_value: float, 
 
 func _on_global_max_hand_changed(value: float) -> void:
 	max_hand_size = maxi(1, int(round(value)))
-	if _hand_slot_count() > max_hand_size:
-		while _hand_slot_count() > max_hand_size and not hand_cards.is_empty():
-			hand_cards.remove_at(hand_cards.size() - 1)
+	if _hand_total_count() > max_hand_size:
+		while _hand_total_count() > max_hand_size and not hand_cards.is_empty():
+			var last := hand_cards.size() - 1
+			var last_count := int(hand_cards[last]["count"])
+			if last_count > 1:
+				hand_cards[last]["count"] = last_count - 1
+			else:
+				hand_cards.remove_at(last)
 		_ensure_selected_card()
 	queue_redraw()
 
@@ -331,6 +376,9 @@ func _process(delta: float) -> void:
 	var moved := _update_camera_pan_from_keys(delta)
 	if recent_group_highlight_ttl > 0.0:
 		recent_group_highlight_ttl = maxf(0.0, recent_group_highlight_ttl - delta)
+		moved = true
+	if quest_popup_ttl > 0.0:
+		quest_popup_ttl = maxf(0.0, quest_popup_ttl - delta)
 		moved = true
 	var coord := grid.world_to_axial(get_viewport().get_mouse_position())
 	hovered_hand_card_key = _hovered_hand_card_key(get_viewport().get_mouse_position())
@@ -358,6 +406,9 @@ func _unhandled_input(event: InputEvent) -> void:
 				if left_drag_moved:
 					return
 				if _try_select_card_from_hand(event.position):
+					queue_redraw()
+					return
+				if _try_recycle_selected_card(event.position):
 					queue_redraw()
 					return
 				_try_place_at_mouse()
@@ -407,6 +458,12 @@ func _try_place_at_mouse() -> void:
 		animal_system.register_animal_goal(board, coord, selected_animal, current_turn)
 		turn_delta += a_score + 1
 
+	var quest_result := quest_system.on_tile_placed(board, grid)
+	turn_delta += int(quest_result.get("delta_points", 0))
+	if bool(quest_result.get("spawned", false)) or bool(quest_result.get("completed", false)):
+		quest_popup_text = String(quest_result.get("message", ""))
+		quest_popup_ttl = quest_popup_duration
+
 	_consume_selected_card()
 
 	var spirit_result := spirit_system.evaluate(board, grid, current_turn)
@@ -437,6 +494,7 @@ func _draw() -> void:
 	_draw_hover_preview()
 	_draw_progress_circle()
 	_draw_hand_ui()
+	_draw_quest_ui()
 
 func _draw_recent_group_highlight() -> void:
 	if recent_group_highlight_ttl <= 0.0:
@@ -513,9 +571,9 @@ func _draw_hover_preview() -> void:
 
 	var center := grid.axial_to_world(hovered_coord)
 	var preview := _preview_turn_points(hovered_coord)
-	if selected_mode == CARD_KIND_ELEMENT and preview["valid"]:
-		var overlay := Color(_tile_color(board[hovered_coord]))
+	if selected_mode == CARD_KIND_ELEMENT:
 		if preview["valid"]:
+			var overlay := Color(_tile_color(board[hovered_coord]))
 			match selected_element:
 				TileState.Element.FOREST:
 					overlay = Color(0.18, 0.60, 0.24, 0.55)
@@ -528,7 +586,14 @@ func _draw_hover_preview() -> void:
 				TileState.Element.WETLANDS:
 					overlay = Color(0.32, 0.72, 0.62, 0.55)
 			_draw_hex(hovered_coord, overlay)
+		else:
+			# Invalid target: strong desaturation + explicit cross marker.
+			_draw_hex(hovered_coord, Color(0.28, 0.28, 0.28, 0.78))
+			_draw_invalid_hover_marker(hovered_coord)
 	elif selected_mode == CARD_KIND_ANIMAL:
+		if not preview["valid"]:
+			_draw_hex(hovered_coord, Color(0.28, 0.28, 0.28, 0.72))
+			_draw_invalid_hover_marker(hovered_coord)
 		_draw_hover_animal_symbol(center)
 	if preview["valid"]:
 		var delta := int(preview["points"])
@@ -552,12 +617,10 @@ func _draw_hover_highlights() -> void:
 	for c in radius_tiles:
 		_draw_glow_border(c as Vector2i, Color(1, 1, 1, 0.35), 2.0)
 	_draw_glow_border(hovered_coord, info["border"] as Color, 4.0)
-	var positive: Array = info["positive"]
-	var negative: Array = info["negative"]
-	for c in positive:
-		_draw_glow_border(c as Vector2i, Color(1.0, 0.84, 0.2, 0.95), 3.0)
-	for c in negative:
-		_draw_glow_border(c as Vector2i, Color(1, 0.2, 0.2, 0.95), 3.0)
+	var contributors: Array = info["contributors"]
+	var contributor_color: Color = info["contributor_color"] as Color
+	for c in contributors:
+		_draw_glow_border(c as Vector2i, contributor_color, 3.0)
 
 func _draw_glow_border(coord: Vector2i, color: Color, width: float) -> void:
 	var center := grid.axial_to_world(coord)
@@ -567,30 +630,38 @@ func _draw_glow_border(coord: Vector2i, color: Color, width: float) -> void:
 		pts.append(center + Vector2(cos(ang), sin(ang)) * grid.tile_size * 0.97)
 	draw_polyline(pts + PackedVector2Array([pts[0]]), color, width)
 
+func _draw_invalid_hover_marker(coord: Vector2i) -> void:
+	var center := grid.axial_to_world(coord)
+	var r := grid.tile_size * 0.42
+	var c := Color(0.86, 0.86, 0.86, 0.92)
+	draw_line(center + Vector2(-r, -r), center + Vector2(r, r), c, 3.0)
+	draw_line(center + Vector2(-r, r), center + Vector2(r, -r), c, 3.0)
+
 func _build_hover_highlight_info(coord: Vector2i) -> Dictionary:
-	var positive: Array[Vector2i] = []
-	var negative: Array[Vector2i] = []
+	var contributors: Array[Vector2i] = []
 	var radius_tiles: Array[Vector2i] = []
 	var can_place := false
+	var preview := _preview_turn_points(coord)
+	var preview_points := int(preview.get("points", 0))
+	var quest_tiles: Array = preview.get("quest_highlight_tiles", [])
 
 	if selected_mode == CARD_KIND_ELEMENT:
-		var preview := score_engine.simulate_action_delta(board, grid, {
+		var sim := score_engine.simulate_action_delta(board, grid, {
 			"kind": "element",
 			"coord": coord,
 			"element": selected_element
 		})
-		can_place = bool(preview.get("valid", false))
+		can_place = bool(sim.get("valid", false))
 		if can_place:
-			var tiles: Array = preview.get("affected_group_tiles", [])
-			var gained_rule_points := int(preview.get("delta", 0)) > 0
-			for t in tiles:
+			var pos_tiles: Array = sim.get("positive_tiles", [])
+			var neg_tiles: Array = sim.get("negative_tiles", [])
+			var source_tiles: Array = pos_tiles if preview_points > 1 else neg_tiles
+			for t in source_tiles:
 				var tc := t as Vector2i
 				if tc == coord or not _is_tile_unlocked(tc):
 					continue
-				if gained_rule_points:
-					positive.append(tc)
-				else:
-					negative.append(tc)
+				if not contributors.has(tc):
+					contributors.append(tc)
 	else:
 		can_place = animal_system.can_place_animal(board, coord, selected_animal)
 		if can_place and animal_system.animals_by_id.has(selected_animal):
@@ -614,7 +685,8 @@ func _build_hover_highlight_info(coord: Vector2i) -> Dictionary:
 				var tkey := animal_system.tile_spec_key(board[c2] as TileState)
 				if needed_counts.has(tkey):
 					found_counts[tkey] = int(found_counts.get(tkey, 0)) + 1
-					positive.append(c2)
+					if not contributors.has(c2):
+						contributors.append(c2)
 			for tkey in needed_counts.keys():
 				if int(found_counts.get(tkey, 0)) < int(needed_counts[tkey]):
 					for c in board.keys():
@@ -625,11 +697,32 @@ func _build_hover_highlight_info(coord: Vector2i) -> Dictionary:
 						if dist == 0 or dist > check_range:
 							continue
 						var spec_key := animal_system.tile_spec_key(board[c2] as TileState)
-						if spec_key == String(tkey) and not positive.has(c2):
-							negative.append(c2)
+						if spec_key == String(tkey) and not contributors.has(c2):
+							contributors.append(c2)
 
-	var border := Color(1, 1, 1, 0.95) if can_place else Color(1, 0.2, 0.2, 0.95)
-	return {"border": border, "positive": positive, "negative": negative, "radius": radius_tiles}
+	var border := Color(0.72, 0.72, 0.72, 0.95)
+	var contributor_color := Color(1.0, 0.84, 0.2, 0.95)
+	if can_place:
+		if preview_points < 0:
+			border = Color(1.0, 0.2, 0.2, 0.95)
+			contributor_color = Color(1.0, 0.2, 0.2, 0.95)
+		elif preview_points > 1:
+			border = Color(1.0, 0.84, 0.2, 0.95)
+			contributor_color = Color(1.0, 0.84, 0.2, 0.95)
+		else:
+			# +1 (or 0 fallback) uses a neutral valid border.
+			border = Color(1.0, 1.0, 1.0, 0.95)
+	for q in quest_tiles:
+		var qc := q as Vector2i
+		if qc != coord and not contributors.has(qc):
+			contributors.append(qc)
+
+	return {
+		"border": border,
+		"contributors": contributors,
+		"contributor_color": contributor_color,
+		"radius": radius_tiles
+	}
 
 func _collect_connected(source_board: Dictionary, start: Vector2i, element: int) -> Array[Vector2i]:
 	var out: Array[Vector2i] = []
@@ -684,6 +777,55 @@ func _draw_progress_circle() -> void:
 	draw_line(center + Vector2(-24, 2), center + Vector2(24, 2), Color(0.92, 0.93, 0.95, 0.95), 3.0)
 	draw_string(ThemeDB.fallback_font, center + Vector2(-40, 36), bottom_text, HORIZONTAL_ALIGNMENT_CENTER, 80, 34, Color(0.92, 0.93, 0.95, 1.0))
 
+func _draw_quest_ui() -> void:
+	var vp := get_viewport_rect().size
+	var debug_bottom_y := 54.0
+	var score_circle_center_y := vp.y - 92.0
+	var icon_center := Vector2(92.0, (debug_bottom_y + score_circle_center_y) * 0.5)
+	var icon_radius := 24.0
+	quest_icon_rect = Rect2(icon_center - Vector2(icon_radius, icon_radius), Vector2(icon_radius * 2.0, icon_radius * 2.0))
+	draw_circle(icon_center, icon_radius, Color(0.10, 0.20, 0.32, 0.98))
+	draw_arc(icon_center, icon_radius, 0.0, TAU, 64, Color(0.82, 0.87, 0.93, 0.95), 3.0, true)
+	var q_progress := quest_system.active_quest_progress_ratio(board, grid)
+	if q_progress > 0.001:
+		var start := -PI / 2.0
+		var finish := start + TAU * q_progress
+		draw_arc(icon_center, icon_radius, start, finish, 64, Color(0.98, 0.84, 0.25, 1.0), 4.0, true)
+	var q_icon := quest_system.active_quest_icon_texture()
+	if q_icon != null:
+		draw_texture_rect(q_icon, Rect2(icon_center - Vector2(12, 12), Vector2(24, 24)), false)
+	else:
+		draw_string(
+			ThemeDB.fallback_font,
+			icon_center + Vector2(-10, 7),
+			"?",
+			HORIZONTAL_ALIGNMENT_LEFT,
+			20,
+			18,
+			Color(0.95, 0.97, 1.0, 1.0)
+		)
+	if quest_icon_rect.has_point(get_viewport().get_mouse_position()):
+		draw_string(
+			ThemeDB.fallback_font,
+			icon_center + Vector2(34, -8),
+			"Quest: %s | %s" % [quest_system.active_quest_rule_text(), quest_system.active_quest_progress_text(board, grid)],
+			HORIZONTAL_ALIGNMENT_LEFT,
+			580,
+			16,
+			Color(1.0, 0.96, 0.74, 1.0)
+		)
+	if quest_popup_ttl > 0.0 and not quest_popup_text.is_empty():
+		var alpha := clampf(quest_popup_ttl / quest_popup_duration, 0.0, 1.0)
+		draw_string(
+			ThemeDB.fallback_font,
+			Vector2(vp.x * 0.5 - 220, 52),
+			quest_popup_text,
+			HORIZONTAL_ALIGNMENT_LEFT,
+			440,
+			24,
+			Color(1.0, 0.92, 0.55, 0.75 + 0.25 * alpha)
+		)
+
 func _current_stage_progress() -> Dictionary:
 	if progression_steps.is_empty():
 		return {"current": 0, "needed": 0, "progress": 1.0, "needed_is_infinite": false}
@@ -702,9 +844,9 @@ func _current_stage_progress() -> Dictionary:
 
 func _preview_turn_points(coord: Vector2i) -> Dictionary:
 	if not grid.has_coord(coord) or not _is_tile_unlocked(coord):
-		return {"valid": false, "points": 0}
+		return {"valid": false, "points": 0, "quest_highlight_tiles": []}
 	if selected_card_key.is_empty():
-		return {"valid": false, "points": 0}
+		return {"valid": false, "points": 0, "quest_highlight_tiles": []}
 
 	var sim_board: Dictionary = _clone_board(board)
 	var turn_delta: int = 0
@@ -712,6 +854,8 @@ func _preview_turn_points(coord: Vector2i) -> Dictionary:
 	var temp_first_forest := has_placed_first_forest
 	var temp_spirit: SpiritSystem = _clone_spirit_system()
 	var temp_animals: AnimalSystem = _clone_animal_system()
+	var temp_quests: QuestSystem = _clone_quest_system()
+	var quest_highlight_tiles: Array[Vector2i] = []
 
 	if selected_mode == CARD_KIND_ELEMENT:
 		var element_preview := score_engine.simulate_action_delta(sim_board, grid, {
@@ -720,7 +864,7 @@ func _preview_turn_points(coord: Vector2i) -> Dictionary:
 			"element": selected_element
 		})
 		if not bool(element_preview.get("valid", false)):
-			return {"valid": false, "points": 0}
+			return {"valid": false, "points": 0, "quest_highlight_tiles": []}
 		valid = true
 		sim_board = element_preview["after_board"] as Dictionary
 		turn_delta += int(score_engine.placement_bonus) + int(element_preview["delta"])
@@ -729,7 +873,7 @@ func _preview_turn_points(coord: Vector2i) -> Dictionary:
 			temp_spirit.maybe_spawn_first_forest_spirit(true, current_turn)
 	else:
 		if not temp_animals.can_place_animal(sim_board, coord, selected_animal):
-			return {"valid": false, "points": 0}
+			return {"valid": false, "points": 0, "quest_highlight_tiles": []}
 		valid = true
 		var a_score := temp_animals.score_animal(sim_board, grid, coord, selected_animal)
 		var tile2: TileState = sim_board[coord]
@@ -737,10 +881,15 @@ func _preview_turn_points(coord: Vector2i) -> Dictionary:
 		temp_animals.register_animal_goal(sim_board, coord, selected_animal, current_turn)
 		turn_delta += a_score + 1
 
+	var quest_preview := temp_quests.preview_completion(sim_board, grid)
+	if bool(quest_preview.get("completed", false)):
+		turn_delta += int(quest_preview.get("delta_points", 0))
+		quest_highlight_tiles = (quest_preview.get("highlight_tiles", []) as Array[Vector2i]).duplicate()
+
 	var spirit_result := temp_spirit.evaluate(sim_board, grid, current_turn)
 	turn_delta += int(spirit_result["delta"])
 	turn_delta += temp_animals.process_turn_penalties(sim_board, current_turn)
-	return {"valid": valid, "points": turn_delta}
+	return {"valid": valid, "points": turn_delta, "quest_highlight_tiles": quest_highlight_tiles}
 
 func _clone_board(source_board: Dictionary) -> Dictionary:
 	var clone: Dictionary = {}
@@ -761,27 +910,41 @@ func _clone_animal_system() -> AnimalSystem:
 	cloned.pending_goals = animal_system.pending_goals.duplicate(true)
 	return cloned
 
+func _clone_quest_system() -> QuestSystem:
+	var cloned := QuestSystem.new()
+	cloned.spawn_base_chance = quest_system.spawn_base_chance
+	cloned.spawn_chance_step = quest_system.spawn_chance_step
+	cloned.current_spawn_chance = quest_system.current_spawn_chance
+	cloned.placed_tile_count = quest_system.placed_tile_count
+	cloned.guaranteed_first_quest_spawned = quest_system.guaranteed_first_quest_spawned
+	cloned.default_completion_points = quest_system.default_completion_points
+	cloned.quest_pool = quest_system.quest_pool.duplicate(true)
+	cloned.active_quest = quest_system.active_quest.duplicate(true)
+	return cloned
+
 func _apply_difficulty_card_settings() -> void:
 	match selected_difficulty:
 		DIFFICULTY_BEGINNER:
-			max_hand_size = 9
+			max_hand_size = 12
 			animal_base_chance = 0.10
 		DIFFICULTY_EASY:
-			max_hand_size = 8
+			max_hand_size = 10
 			animal_base_chance = 0.14
 		DIFFICULTY_NORMAL:
-			max_hand_size = 7
+			max_hand_size = 9
 			animal_base_chance = 0.18
 		DIFFICULTY_ADVANCED:
-			max_hand_size = 6
+			max_hand_size = 8
 			animal_base_chance = 0.22
 		DIFFICULTY_CHALLENGE:
-			max_hand_size = 5
+			max_hand_size = 7
 			animal_base_chance = 0.26
 		_:
-			max_hand_size = 7
+			max_hand_size = 9
 			animal_base_chance = 0.18
 	animal_current_chance = animal_base_chance
+	recycle_cards_needed = maxi(1, int(recycle_costs_by_difficulty.get(selected_difficulty, 1)))
+	recycle_binned_count = mini(recycle_binned_count, recycle_cards_needed - 1)
 
 func _draw_initial_hand() -> void:
 	for _i in range(min(3, max_hand_size)):
@@ -789,12 +952,12 @@ func _draw_initial_hand() -> void:
 	_ensure_selected_card()
 
 func _draw_turn_cards() -> String:
-	if _hand_slot_count() >= max_hand_size:
+	if _hand_total_count() >= max_hand_size:
 		return "Hand full."
 	var element := _roll_element_draw()
 	_add_card(CARD_KIND_ELEMENT, element)
 	var msg := "Drew %s." % _element_name(element)
-	if _hand_slot_count() >= max_hand_size:
+	if _hand_total_count() >= max_hand_size:
 		animal_current_chance = min(animal_current_chance + 0.33, 1.0)
 		_ensure_selected_card()
 		return msg
@@ -802,8 +965,10 @@ func _draw_turn_cards() -> String:
 	if rng.randf() <= animal_current_chance:
 		var animal := _roll_animal_for_element(element)
 		if animal != 0:
-			_add_card(CARD_KIND_ANIMAL, animal)
-			msg += " + %s." % _animal_name(animal)
+			var draw_amount := animal_system.animal_draw_amount(animal)
+			for _i in range(draw_amount):
+				_add_card(CARD_KIND_ANIMAL, animal)
+			msg += " + %s x%d." % [_animal_name(animal), draw_amount]
 			animal_current_chance = animal_base_chance
 		else:
 			animal_current_chance = min(animal_current_chance + 0.33, 1.0)
@@ -865,13 +1030,13 @@ func _roll_animal_for_element(element: int) -> int:
 	return int(options[0])
 
 func _add_card(kind: String, id: int) -> void:
+	if _hand_total_count() >= max_hand_size:
+		return
 	var key := _card_key(kind, id)
 	for card in hand_cards:
 		if String(card["key"]) == key:
 			card["count"] = int(card["count"]) + 1
 			return
-	if _hand_slot_count() >= max_hand_size:
-		return
 	hand_cards.append({
 		"key": key,
 		"kind": kind,
@@ -922,31 +1087,70 @@ func _apply_selected_card_state() -> void:
 
 func _draw_hand_ui() -> void:
 	var vp := get_viewport_rect().size
-	var card_w := 86.0
-	var card_h := 120.0
-	var gap := 12.0
-	var start := Vector2((vp.x - ((card_w + gap) * max_hand_size - gap)) * 0.5, vp.y - card_h - 14)
+	var ui_scale := _card_ui_scale()
+	var card_w := 86.0 * ui_scale
+	var card_h := 120.0 * ui_scale
+	var gap := 12.0 * ui_scale
+	var visible_slots := maxi(hand_cards.size(), 1)
+	var hand_width := (card_w + gap) * visible_slots - gap
+	var start := Vector2((vp.x - hand_width) * 0.5, vp.y - card_h - 14.0 * ui_scale)
+	var hand_counter := "Hand %d/%d" % [_hand_total_count(), max_hand_size]
+	draw_string(
+		ThemeDB.fallback_font,
+		Vector2(170.0 * ui_scale, vp.y - 98.0 * ui_scale),
+		hand_counter,
+		HORIZONTAL_ALIGNMENT_LEFT,
+		220.0 * ui_scale,
+		24.0 * ui_scale,
+		Color(0.95, 0.97, 1.0, 1.0)
+	)
+	_draw_recycle_ui(start, hand_width, card_h, ui_scale)
 	for i in range(hand_cards.size()):
 		var card: Dictionary = hand_cards[i]
 		var selected := String(card["key"]) == selected_card_key
 		var hovered := String(card["key"]) == hovered_hand_card_key
 		var rect := Rect2(start + Vector2(i * (card_w + gap), 0), Vector2(card_w, card_h))
 		if selected:
-			var lift := 14.0
+			var lift := 14.0 * ui_scale
 			var scale := 1.10
 			var new_size := rect.size * scale
 			var new_pos := rect.position - Vector2((new_size.x - rect.size.x) * 0.5, lift + (new_size.y - rect.size.y))
 			rect = Rect2(new_pos, new_size)
 		elif hovered:
-			var hover_lift := 8.0
+			var hover_lift := 8.0 * ui_scale
 			var hover_scale := 1.05
 			var hover_size := rect.size * hover_scale
 			var hover_pos := rect.position - Vector2((hover_size.x - rect.size.x) * 0.5, hover_lift + (hover_size.y - rect.size.y))
 			rect = Rect2(hover_pos, hover_size)
-		_draw_card(rect, card, selected)
+		_draw_card(rect, card, selected, ui_scale)
 	_draw_hovered_card_rule_tooltip()
 
-func _draw_card(rect: Rect2, card: Dictionary, selected: bool) -> void:
+func _draw_recycle_ui(start: Vector2, hand_width: float, card_h: float, ui_scale: float) -> void:
+	var bin_size := Vector2(44.0, 52.0) * ui_scale
+	var pos := Vector2(start.x + hand_width + 14.0 * ui_scale, start.y + card_h - bin_size.y)
+	recycle_bin_rect = Rect2(pos, bin_size)
+	draw_rect(recycle_bin_rect, Color(0.15, 0.20, 0.27, 0.96), true)
+	draw_rect(recycle_bin_rect, Color(0.86, 0.90, 0.95, 0.96), false, 2.0 * ui_scale)
+	var lid := Rect2(
+		Vector2(pos.x - 5.0 * ui_scale, pos.y - 8.0 * ui_scale),
+		Vector2(bin_size.x + 10.0 * ui_scale, 8.0 * ui_scale)
+	)
+	draw_rect(lid, Color(0.86, 0.90, 0.95, 0.96), true)
+	draw_line(pos + Vector2(bin_size.x * 0.34, bin_size.y * 0.2), pos + Vector2(bin_size.x * 0.34, bin_size.y * 0.82), Color(0.90, 0.92, 0.96), 2.0 * ui_scale)
+	draw_line(pos + Vector2(bin_size.x * 0.50, bin_size.y * 0.2), pos + Vector2(bin_size.x * 0.50, bin_size.y * 0.82), Color(0.90, 0.92, 0.96), 2.0 * ui_scale)
+	draw_line(pos + Vector2(bin_size.x * 0.66, bin_size.y * 0.2), pos + Vector2(bin_size.x * 0.66, bin_size.y * 0.82), Color(0.90, 0.92, 0.96), 2.0 * ui_scale)
+	var recycle_text := "%d/%d" % [recycle_binned_count, recycle_cards_needed]
+	draw_string(
+		ThemeDB.fallback_font,
+		Vector2(pos.x + bin_size.x + 8.0 * ui_scale, pos.y + bin_size.y * 0.72),
+		recycle_text,
+		HORIZONTAL_ALIGNMENT_LEFT,
+		96.0 * ui_scale,
+		20.0 * ui_scale,
+		Color(0.95, 0.97, 1.0, 1.0)
+	)
+
+func _draw_card(rect: Rect2, card: Dictionary, selected: bool, ui_scale: float) -> void:
 	var kind := String(card["kind"])
 	var id := int(card["id"])
 	var count := int(card["count"])
@@ -959,21 +1163,29 @@ func _draw_card(rect: Rect2, card: Dictionary, selected: bool) -> void:
 		var place_specs: Array = def["place_specs"]
 		if not place_specs.is_empty():
 			fill = _color_for_spec(str(place_specs[0]))
+
+	var stacked_layers := mini(maxi(count - 1, 0), 4)
+	var rim_offset := 5.0 * ui_scale
+	for layer in range(stacked_layers, 0, -1):
+		var back_rect := Rect2(rect.position - Vector2(0.0, float(layer) * rim_offset), rect.size)
+		var back_fill := fill.darkened(0.08 + 0.04 * float(layer))
+		var back_frame := frame.darkened(0.10 + 0.05 * float(layer))
+		draw_rect(back_rect, back_fill, true)
+		draw_rect(back_rect, back_frame, false, 2.0 * ui_scale)
+
 	draw_rect(rect, fill, true)
-	draw_rect(rect, frame, false, 3.0)
+	draw_rect(rect, frame, false, 3.0 * ui_scale)
 	if kind == CARD_KIND_ANIMAL:
 		var symbol := animal_system.animal_symbol_texture(id)
 		if symbol != null:
-			draw_texture_rect(symbol, rect.grow(-18), false)
+			draw_texture_rect(symbol, rect.grow(-18.0 * ui_scale), false)
 		else:
 			var letter := _animal_name(id).substr(0, 1).to_upper()
-			draw_string(ThemeDB.fallback_font, rect.position + Vector2(rect.size.x * 0.45, rect.size.y * 0.60), letter, HORIZONTAL_ALIGNMENT_LEFT, 16, 22, Color.WHITE)
+			draw_string(ThemeDB.fallback_font, rect.position + Vector2(rect.size.x * 0.45, rect.size.y * 0.60), letter, HORIZONTAL_ALIGNMENT_LEFT, 16.0 * ui_scale, 22 * ui_scale, Color.WHITE)
 		_draw_animal_placement_icons(rect, id)
 		_draw_animal_requirement_dots(rect, id)
 	elif kind == CARD_KIND_ELEMENT:
 		_draw_element_placement_dots(rect, id)
-	var count_text := str(count)
-	draw_string(ThemeDB.fallback_font, rect.position + Vector2(8, rect.size.y - 8), count_text, HORIZONTAL_ALIGNMENT_LEFT, 30, 22, Color.WHITE)
 
 func _tile_for_element_preview(element: int) -> TileState:
 	var t := TileState.new()
@@ -1072,12 +1284,21 @@ func _sync_element_draw_weights() -> void:
 
 func _try_select_card_from_hand(click_pos: Vector2) -> bool:
 	var vp := get_viewport_rect().size
-	var card_w := 86.0
-	var card_h := 120.0
-	var gap := 12.0
-	var start := Vector2((vp.x - ((card_w + gap) * max_hand_size - gap)) * 0.5, vp.y - card_h - 14)
+	var ui_scale := _card_ui_scale()
+	var card_w := 86.0 * ui_scale
+	var card_h := 120.0 * ui_scale
+	var gap := 12.0 * ui_scale
+	var visible_slots := maxi(hand_cards.size(), 1)
+	var hand_width := (card_w + gap) * visible_slots - gap
+	var start := Vector2((vp.x - hand_width) * 0.5, vp.y - card_h - 14.0 * ui_scale)
 	for i in range(hand_cards.size()):
-		var rect := Rect2(start + Vector2(i * (card_w + gap), 0), Vector2(card_w, card_h))
+		var card: Dictionary = hand_cards[i]
+		var stacked_layers := mini(maxi(int(card.get("count", 1)) - 1, 0), 4)
+		var rim_offset := 5.0 * ui_scale
+		var rect := Rect2(
+			start + Vector2(i * (card_w + gap), -float(stacked_layers) * rim_offset),
+			Vector2(card_w, card_h + float(stacked_layers) * rim_offset)
+		)
 		if rect.has_point(click_pos):
 			selected_card_key = String(hand_cards[i]["key"])
 			_apply_selected_card_state()
@@ -1087,16 +1308,25 @@ func _try_select_card_from_hand(click_pos: Vector2) -> bool:
 
 func _hovered_hand_card_key(mouse_pos: Vector2) -> String:
 	var vp := get_viewport_rect().size
-	var card_w := 86.0
-	var card_h := 120.0
-	var gap := 12.0
-	var start := Vector2((vp.x - ((card_w + gap) * max_hand_size - gap)) * 0.5, vp.y - card_h - 14)
+	var ui_scale := _card_ui_scale()
+	var card_w := 86.0 * ui_scale
+	var card_h := 120.0 * ui_scale
+	var gap := 12.0 * ui_scale
+	var visible_slots := maxi(hand_cards.size(), 1)
+	var hand_width := (card_w + gap) * visible_slots - gap
+	var start := Vector2((vp.x - hand_width) * 0.5, vp.y - card_h - 14.0 * ui_scale)
 	for i in range(hand_cards.size()):
 		var card: Dictionary = hand_cards[i]
 		var selected := String(card["key"]) == selected_card_key
 		var rect := Rect2(start + Vector2(i * (card_w + gap), 0), Vector2(card_w, card_h))
+		var stacked_layers := mini(maxi(int(card.get("count", 1)) - 1, 0), 4)
+		var rim_offset := 5.0 * ui_scale
+		rect = Rect2(
+			rect.position - Vector2(0.0, float(stacked_layers) * rim_offset),
+			Vector2(rect.size.x, rect.size.y + float(stacked_layers) * rim_offset)
+		)
 		if selected:
-			var lift := 14.0
+			var lift := 14.0 * ui_scale
 			var scale := 1.10
 			var new_size := rect.size * scale
 			var new_pos := rect.position - Vector2((new_size.x - rect.size.x) * 0.5, lift + (new_size.y - rect.size.y))
@@ -1107,6 +1337,22 @@ func _hovered_hand_card_key(mouse_pos: Vector2) -> String:
 
 func _update_hud(last_msg: String) -> void:
 	return
+
+func _try_recycle_selected_card(click_pos: Vector2) -> bool:
+	if not recycle_bin_rect.has_point(click_pos):
+		return false
+	if selected_card_key.is_empty():
+		return true
+	_consume_selected_card()
+	recycle_binned_count += 1
+	var recycle_msg := "Binned card (%d/%d)." % [recycle_binned_count, recycle_cards_needed]
+	if recycle_binned_count >= recycle_cards_needed:
+		recycle_binned_count = 0
+		var draw_msg := _draw_turn_cards()
+		recycle_msg = "Recycle ready: %s" % draw_msg
+	_ensure_selected_card()
+	_update_hud(recycle_msg)
+	return true
 
 func _draw_hovered_card_rule_tooltip() -> void:
 	if hovered_hand_card_key.is_empty():
@@ -1224,7 +1470,7 @@ func _load_progression_csv(path: String) -> void:
 			return true
 		return ta < tb
 	)
-	grid = HexGrid.new(ring_count, 38.0, CAMERA_BASE_ORIGIN)
+	grid = HexGrid.new(ring_count, 38.0, _camera_base_origin())
 	_apply_camera_origin()
 	unlocked_ring_count = clampi(unlocked_ring_count, 0, ring_count)
 
@@ -1278,7 +1524,20 @@ func _update_camera_pan_from_keys(delta: float) -> bool:
 	return true
 
 func _apply_camera_origin() -> void:
-	grid.origin = CAMERA_BASE_ORIGIN + camera_offset
+	grid.origin = _camera_base_origin() + camera_offset
+
+func _camera_base_origin() -> Vector2:
+	return get_viewport_rect().size * 0.5
+
+func _on_viewport_size_changed() -> void:
+	_apply_camera_origin()
+	queue_redraw()
+
+func _card_ui_scale() -> float:
+	var vp := get_viewport_rect().size
+	var sx := vp.x / BASE_VIEWPORT_SIZE.x
+	var sy := vp.y / BASE_VIEWPORT_SIZE.y
+	return clampf(minf(sx, sy), 0.85, 1.75)
 
 func _finish_run() -> void:
 	if game_finished:

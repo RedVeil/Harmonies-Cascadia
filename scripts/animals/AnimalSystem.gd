@@ -48,9 +48,10 @@ func load_animals_csv(path: String) -> void:
 		var enabled_col := 5
 		var symbol_col := 6
 		var draw_col := 7
-		var place_types_col := 8
-		var required_types_col := 9
-		var draw_elements_col := 10
+		var amount_col := 8
+		var place_types_col := 9
+		var required_types_col := 10
+		var draw_elements_col := 11
 		if cols[0].strip_edges().is_valid_int():
 			range_col = 2
 			timer_col = 3
@@ -59,9 +60,10 @@ func load_animals_csv(path: String) -> void:
 			enabled_col = 6
 			symbol_col = 7
 			draw_col = 8
-			place_types_col = 9
-			required_types_col = 10
-			draw_elements_col = 11
+			amount_col = 9
+			place_types_col = 10
+			required_types_col = 11
+			draw_elements_col = 12
 
 		var required_cols := enabled_col + 1
 		if cols.size() < required_cols:
@@ -76,6 +78,9 @@ func load_animals_csv(path: String) -> void:
 		var draw_chance := 1.0
 		if cols.size() > draw_col:
 			draw_chance = maxf(float(cols[draw_col].strip_edges()), 0.0)
+		var draw_amount := 1
+		if cols.size() > amount_col:
+			draw_amount = maxi(int(cols[amount_col].strip_edges()), 1)
 		var place_specs: Array[String] = []
 		var required_specs: Array[String] = []
 		if cols.size() > place_types_col:
@@ -114,7 +119,8 @@ func load_animals_csv(path: String) -> void:
 			"enabled": cols[enabled_col].strip_edges().to_lower() != "false",
 			"symbol_path": symbol_path,
 			"symbol_texture": symbol_texture,
-			"draw_chance": draw_chance
+			"draw_chance": draw_chance,
+			"draw_amount": draw_amount
 		}
 		animal_id_by_name[animal_name.to_lower()] = animal_id
 
@@ -203,6 +209,11 @@ func animal_draw_chance(animal: int) -> float:
 	if not animals_by_id.has(animal):
 		return 0.0
 	return float(animals_by_id[animal]["draw_chance"])
+
+func animal_draw_amount(animal: int) -> int:
+	if not animals_by_id.has(animal):
+		return 1
+	return maxi(int(animals_by_id[animal].get("draw_amount", 1)), 1)
 
 func _requirements_met(board: Dictionary, center: Vector2i, def: Dictionary) -> bool:
 	var check_range := int(def["range"])

@@ -56,6 +56,9 @@ func _condition_met(cond: Dictionary, board: Dictionary, grid, group: Dictionary
 		"distinct_neighbor_specs_min":
 			var min_count := int(cond.get("min", 0))
 			var exclude_none := bool(cond.get("exclude_none", true))
+			var count_mode := String(cond.get("count_mode", "spec"))
+			if count_mode == "element":
+				return analyzer.distinct_neighbor_elements_count(board, grid, coord, exclude_none) >= min_count
 			return analyzer.distinct_neighbor_specs_count(board, grid, coord, exclude_none) >= min_count
 		"river_neighbors_min":
 			var min_r := int(cond.get("min", 0))

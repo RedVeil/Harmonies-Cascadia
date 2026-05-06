@@ -53,6 +53,15 @@ func distinct_neighbor_specs_count(board: Dictionary, grid, coord: Vector2i, exc
 		seen[t.spec_key()] = true
 	return seen.size()
 
+func distinct_neighbor_elements_count(board: Dictionary, grid, coord: Vector2i, exclude_none: bool = true) -> int:
+	var seen: Dictionary = {}
+	for n in grid.neighbors(coord):
+		var t: TileState = board[n]
+		if exclude_none and t.element == TileState.Element.NONE:
+			continue
+		seen[int(t.element)] = true
+	return seen.size()
+
 func river_neighbor_count(board: Dictionary, grid, coord: Vector2i) -> int:
 	var count := 0
 	for n in grid.neighbors(coord):

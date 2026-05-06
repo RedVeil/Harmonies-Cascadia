@@ -221,6 +221,8 @@ func simulate_action_delta(board: Dictionary, grid, action: Dictionary) -> Dicti
 	var delta := int(after_snapshot["total_element_score"]) - int(before_snapshot["total_element_score"])
 	var element_key := _key_for_element(element)
 	var affected_group_tiles: Array[Vector2i] = []
+	var positive_tiles: Array[Vector2i] = []
+	var negative_tiles: Array[Vector2i] = []
 	if not element_key.is_empty():
 		var affected_groups := group_analyzer.connected_groups_touching_coord(after_board, grid, coord, element)
 		for g in affected_groups:
@@ -230,6 +232,11 @@ func simulate_action_delta(board: Dictionary, grid, action: Dictionary) -> Dicti
 					affected_group_tiles.append(c)
 		if affected_group_tiles.is_empty():
 			affected_group_tiles.append(coord)
+		var contributors := _element_action_contributor_tiles(after_board, grid, coord, element, element_key)
+		if delta < 0:
+			negative_tiles = contributors
+		elif delta > 1:
+			positive_tiles = contributors
 	return {
 		"valid": true,
 		"reason": "Valid placement",
@@ -238,7 +245,9 @@ func simulate_action_delta(board: Dictionary, grid, action: Dictionary) -> Dicti
 		"after_snapshot": after_snapshot,
 		"after_board": after_board,
 		"affected_group_tiles": affected_group_tiles,
-		"element_key": element_key
+		"element_key": element_key,
+		"positive_tiles": positive_tiles,
+		"negative_tiles": negative_tiles
 	}
 
 func _def_for(element: int) -> Dictionary:
@@ -455,3 +464,49 @@ func _clone_board(board: Dictionary) -> Dictionary:
 	for c in board.keys():
 		clone[c] = (board[c] as TileState).clone()
 	return clone
+
+func _element_action_contributor_tiles(after_board: Dictionary, grid, coord: Vector2i, element: int, element_key: String) -> Array[Vector2i]:
+	var out: Array[Vector2i] = []
+	var groups := group_analyzer.connected_groups_touching_coord(after_board, grid, coord, element)
+	for g in groups:
+		for gc in (g as Dictionary).get("coords", []):
+			var c := gc as Vector2i
+			if c == coord:
+				continue
+			if not out.has(c):
+				out.append(c)
+	if element_key == "wetlands" and rule_id_for("wetlands") == "diverse_neighbors_three_plus":
+		for n in _wetlands_diverse_neighbor_contributors(after_board, grid, coord):
+			if n != coord and not out.has(n):
+				out.append(n)
+	if element_key == "wetlands" and rule_id_for("wetlands") == "two_river_neighbors_four":
+		for n in _wetlands_river_neighbor_contributors(after_board, grid, coord):
+			if n != coord and not out.has(n):
+				out.append(n)
+	return out
+
+func _wetlands_diverse_neighbor_contributors(after_board: Dictionary, grid, coord: Vector2i) -> Array[Vector2i]:
+	var out: Array[Vector2i] = []
+	var seen_elements: Dictionary = {}
+	for n in grid.neighbors(coord):
+		if not after_board.has(n):
+			continue
+		var tile: TileState = after_board[n] as TileState
+		if tile.element == TileState.Element.NONE:
+			continue
+		var e := int(tile.element)
+		if seen_elements.has(e):
+			continue
+		seen_elements[e] = true
+		out.append(n)
+	return out
+
+func _wetlands_river_neighbor_contributors(after_board: Dictionary, grid, coord: Vector2i) -> Array[Vector2i]:
+	var out: Array[Vector2i] = []
+	for n in grid.neighbors(coord):
+		if not after_board.has(n):
+			continue
+		var tile: TileState = after_board[n] as TileState
+		if tile.element == TileState.Element.RIVER:
+			out.append(n)
+	return out

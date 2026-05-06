@@ -6,10 +6,10 @@ uid="uid://bex3vjf0ycmx7"
 
 [deps]
 
-files=["res://data/animals.range.translation", "res://data/animals.turn.translation", "res://data/animals.point.translation", "res://data/animals.penalty.translation", "res://data/animals.enabled.translation", "res://data/animals.symbol.translation", "res://data/animals.draw.translation", "res://data/animals.place.translation", "res://data/animals.required.translation", "res://data/animals.draw.translation"]
+files=["res://data/animals.range.translation", "res://data/animals.turn.translation", "res://data/animals.point.translation", "res://data/animals.penalty.translation", "res://data/animals.enabled.translation", "res://data/animals.symbol.translation", "res://data/animals.draw.translation", "res://data/animals.amount.translation", "res://data/animals.place.translation", "res://data/animals.required.translation", "res://data/animals.draw.translation"]
 
 source_file="res://data/animals.csv"
-dest_files=["res://data/animals.range.translation", "res://data/animals.turn.translation", "res://data/animals.point.translation", "res://data/animals.penalty.translation", "res://data/animals.enabled.translation", "res://data/animals.symbol.translation", "res://data/animals.draw.translation", "res://data/animals.place.translation", "res://data/animals.required.translation", "res://data/animals.draw.translation"]
+dest_files=["res://data/animals.range.translation", "res://data/animals.turn.translation", "res://data/animals.point.translation", "res://data/animals.penalty.translation", "res://data/animals.enabled.translation", "res://data/animals.symbol.translation", "res://data/animals.draw.translation", "res://data/animals.amount.translation", "res://data/animals.place.translation", "res://data/animals.required.translation", "res://data/animals.draw.translation"]
 
 [params]
 
