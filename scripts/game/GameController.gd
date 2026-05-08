@@ -30,6 +30,15 @@ const DIFFICULTY_CHALLENGE := 4
 
 const CARD_KIND_ELEMENT := "element"
 const CARD_KIND_ANIMAL := "animal"
+const BOOSTER_KIND_ELEMENT := "element"
+const BOOSTER_KIND_ANIMAL := "animal"
+const BOOSTER_KIND_MIX := "mix"
+const BOOSTER_COST := 1
+const BOOSTER_ELEMENT_EXTRA_CHANCE := 0.55
+const BOOSTER_ELEMENT_ANIMAL_CHANCE := 0.78
+const BOOSTER_ANIMAL_EXTRA_CHANCE := 0.45
+const BOOSTER_MILESTONE_INTERVAL := 20
+const BOOSTER_MILESTONE_REWARD := 1
 const CAMERA_PAN_SPEED := 480.0
 const BASE_VIEWPORT_SIZE := Vector2(1280.0, 720.0)
 
@@ -54,9 +63,6 @@ var selected_element: int = TileState.Element.FOREST
 var selected_animal: int = 0
 var hand_cards: Array[Dictionary] = []
 var selected_card_key: String = ""
-var max_hand_size: int = 7
-var animal_base_chance: float = 0.20
-var animal_current_chance: float = 0.20
 var element_draw_weights: Dictionary = {}
 var hovered_coord := Vector2i(99999, 99999)
 var hovered_hand_card_key: String = ""
@@ -84,6 +90,10 @@ var quest_popup_text: String = ""
 var quest_popup_ttl: float = 0.0
 var quest_popup_duration: float = 2.4
 var quest_icon_rect := Rect2()
+var booster_points: int = 2
+var booster_next_milestone: int = BOOSTER_MILESTONE_INTERVAL
+var booster_buttons: Array[Dictionary] = []
+var booster_button_rects: Dictionary = {}
 
 var hud_label: Label
 var rng := RandomNumberGenerator.new()
@@ -101,13 +111,13 @@ func _ready() -> void:
 	_load_progression_csv("res://data/progression.csv")
 	animal_system.load_animals_csv("res://data/animals.csv")
 	quest_system.load_quests_csv("res://data/quests.csv")
+	_setup_booster_buttons()
 	_sync_element_draw_weights()
 	_apply_difficulty_card_settings()
 	score_engine.init_rule_sets()
 	for c in grid.coords:
 		board[c] = TileState.new()
 	_apply_progression_unlocks(total_score)
-	_draw_initial_hand()
 	_create_hud()
 	_create_debug_ui()
 	queue_redraw()
@@ -274,20 +284,10 @@ func _rebuild_globals_debug_menu() -> void:
 	for child in globals_tab_box.get_children():
 		child.queue_free()
 
-	var max_hand_row := _debug_labeled_spinbox("Max Hand Cards", float(max_hand_size), 1, 20, 1)
-	var max_hand_spin: SpinBox = max_hand_row["spinbox"]
-	max_hand_spin.value_changed.connect(_on_global_max_hand_changed)
-	globals_tab_box.add_child(max_hand_row["row"])
-
-	var animal_base_row := _debug_labeled_spinbox("Animal Base Chance", animal_base_chance, 0.0, 1.0, 0.01)
-	var animal_base_spin: SpinBox = animal_base_row["spinbox"]
-	animal_base_spin.value_changed.connect(_on_global_animal_base_changed)
-	globals_tab_box.add_child(animal_base_row["row"])
-
-	var animal_current_row := _debug_labeled_spinbox("Animal Current Chance", animal_current_chance, 0.0, 1.0, 0.01)
-	var animal_current_spin: SpinBox = animal_current_row["spinbox"]
-	animal_current_spin.value_changed.connect(_on_global_animal_current_changed)
-	globals_tab_box.add_child(animal_current_row["row"])
+	var booster_points_row := _debug_labeled_spinbox("Booster Points", float(booster_points), 0, 999, 1)
+	var booster_points_spin: SpinBox = booster_points_row["spinbox"]
+	booster_points_spin.value_changed.connect(_on_global_booster_points_changed)
+	globals_tab_box.add_child(booster_points_row["row"])
 
 	var unlocked_rings_row := _debug_labeled_spinbox("Unlocked Rings", float(unlocked_ring_count), 0, ring_count, 1)
 	var unlocked_rings_spin: SpinBox = unlocked_rings_row["spinbox"]
@@ -338,27 +338,28 @@ func _debug_labeled_spinbox(label_text: String, value: float, min_value: float, 
 	row.add_child(spin)
 	return {"row": row, "spinbox": spin}
 
-func _on_global_max_hand_changed(value: float) -> void:
-	max_hand_size = maxi(1, int(round(value)))
-	if _hand_total_count() > max_hand_size:
-		while _hand_total_count() > max_hand_size and not hand_cards.is_empty():
-			var last := hand_cards.size() - 1
-			var last_count := int(hand_cards[last]["count"])
-			if last_count > 1:
-				hand_cards[last]["count"] = last_count - 1
-			else:
-				hand_cards.remove_at(last)
-		_ensure_selected_card()
-	queue_redraw()
+func _setup_booster_buttons() -> void:
+	booster_buttons.clear()
+	for element in score_engine.element_order():
+		booster_buttons.append({
+			"id": "element_%d" % element,
+			"name": _element_name(element),
+			"kind": BOOSTER_KIND_ELEMENT,
+			"element": element
+		})
+	booster_buttons.append({
+		"id": "animals",
+		"name": "Animals",
+		"kind": BOOSTER_KIND_ANIMAL
+	})
+	booster_buttons.append({
+		"id": "mix",
+		"name": "Mix",
+		"kind": BOOSTER_KIND_MIX
+	})
 
-func _on_global_animal_base_changed(value: float) -> void:
-	animal_base_chance = clampf(value, 0.0, 1.0)
-	if animal_current_chance < animal_base_chance:
-		animal_current_chance = animal_base_chance
-	queue_redraw()
-
-func _on_global_animal_current_changed(value: float) -> void:
-	animal_current_chance = clampf(value, 0.0, 1.0)
+func _on_global_booster_points_changed(value: float) -> void:
+	booster_points = maxi(0, int(round(value)))
 	queue_redraw()
 
 func _on_global_unlocked_rings_changed(value: float) -> void:
@@ -398,10 +399,10 @@ func _unhandled_input(event: InputEvent) -> void:
 				is_drag_panning = false
 				if left_drag_moved:
 					return
-				if _try_select_card_from_hand(event.position):
+				if _try_buy_booster(event.position):
 					queue_redraw()
 					return
-				if _try_recycle_selected_card(event.position):
+				if _try_select_card_from_hand(event.position):
 					queue_redraw()
 					return
 				_try_place_at_mouse()
@@ -462,15 +463,26 @@ func _try_place_at_mouse() -> void:
 	turn_delta += spirit_result["delta"]
 
 	total_score += turn_delta
+	var milestone_msg := _award_booster_milestones(total_score)
 	var unlock_msg := _apply_progression_unlocks(total_score)
-	var draw_msg := _draw_turn_cards()
 	current_turn += 1
 	if game_finished:
 		_update_hud("Game over. Final score: %d" % total_score)
-	elif unlock_msg.is_empty():
-		_update_hud("Turn +1, gained %d points. %s" % [turn_delta, draw_msg])
 	else:
-		_update_hud("Turn +1, gained %d points. %s %s" % [turn_delta, unlock_msg, draw_msg])
+		var status_parts: Array[String] = []
+		if not unlock_msg.is_empty():
+			status_parts.append(unlock_msg)
+		if not milestone_msg.is_empty():
+			status_parts.append(milestone_msg)
+		var status := ""
+		for i in range(status_parts.size()):
+			if i > 0:
+				status += " "
+			status += status_parts[i]
+		if status.is_empty():
+			_update_hud("Turn +1, gained %d points." % turn_delta)
+		else:
+			_update_hud("Turn +1, gained %d points. %s" % [turn_delta, status])
 	queue_redraw()
 
 func _draw() -> void:
@@ -483,8 +495,9 @@ func _draw() -> void:
 	_draw_recent_group_highlight()
 	_draw_hover_highlights()
 	_draw_hover_preview()
-	_draw_progress_circle()
 	_draw_hand_ui()
+	_draw_booster_ui()
+	_draw_progress_circle()
 	_draw_quest_ui()
 
 func _draw_recent_group_highlight() -> void:
@@ -683,7 +696,7 @@ func _draw_hover_animal_symbol(center: Vector2) -> void:
 func _draw_progress_circle() -> void:
 	var stage := _current_stage_progress()
 	var vp := get_viewport_rect().size
-	var center := Vector2(92, vp.y - 92)
+	var center := Vector2(108, vp.y - 246)
 	var radius := 64.0
 	var border_width := 8.0
 
@@ -848,57 +861,18 @@ func _clone_quest_system() -> QuestSystem:
 func _apply_difficulty_card_settings() -> void:
 	match selected_difficulty:
 		DIFFICULTY_BEGINNER:
-			max_hand_size = 12
-			animal_base_chance = 0.10
+			recycle_cards_needed = maxi(1, int(recycle_costs_by_difficulty.get(DIFFICULTY_BEGINNER, 1)))
 		DIFFICULTY_EASY:
-			max_hand_size = 10
-			animal_base_chance = 0.14
+			recycle_cards_needed = maxi(1, int(recycle_costs_by_difficulty.get(DIFFICULTY_EASY, 1)))
 		DIFFICULTY_NORMAL:
-			max_hand_size = 9
-			animal_base_chance = 0.18
+			recycle_cards_needed = maxi(1, int(recycle_costs_by_difficulty.get(DIFFICULTY_NORMAL, 1)))
 		DIFFICULTY_ADVANCED:
-			max_hand_size = 8
-			animal_base_chance = 0.22
+			recycle_cards_needed = maxi(1, int(recycle_costs_by_difficulty.get(DIFFICULTY_ADVANCED, 1)))
 		DIFFICULTY_CHALLENGE:
-			max_hand_size = 7
-			animal_base_chance = 0.26
+			recycle_cards_needed = maxi(1, int(recycle_costs_by_difficulty.get(DIFFICULTY_CHALLENGE, 1)))
 		_:
-			max_hand_size = 9
-			animal_base_chance = 0.18
-	animal_current_chance = animal_base_chance
-	recycle_cards_needed = maxi(1, int(recycle_costs_by_difficulty.get(selected_difficulty, 1)))
+			recycle_cards_needed = maxi(1, int(recycle_costs_by_difficulty.get(selected_difficulty, 1)))
 	recycle_binned_count = mini(recycle_binned_count, recycle_cards_needed - 1)
-
-func _draw_initial_hand() -> void:
-	for _i in range(min(3, max_hand_size)):
-		_draw_turn_cards()
-	_ensure_selected_card()
-
-func _draw_turn_cards() -> String:
-	if _hand_total_count() >= max_hand_size:
-		return "Hand full."
-	var element := _roll_element_draw()
-	_add_card(CARD_KIND_ELEMENT, element)
-	var msg := "Drew %s." % _element_name(element)
-	if _hand_total_count() >= max_hand_size:
-		animal_current_chance = min(animal_current_chance + 0.33, 1.0)
-		_ensure_selected_card()
-		return msg
-
-	if rng.randf() <= animal_current_chance:
-		var animal := _roll_animal_for_element(element)
-		if animal != 0:
-			var draw_amount := animal_system.animal_draw_amount(animal)
-			for _i in range(draw_amount):
-				_add_card(CARD_KIND_ANIMAL, animal)
-			msg += " + %s x%d." % [_animal_name(animal), draw_amount]
-			animal_current_chance = animal_base_chance
-		else:
-			animal_current_chance = min(animal_current_chance + 0.33, 1.0)
-	else:
-		animal_current_chance = min(animal_current_chance + 0.33, 1.0)
-	_ensure_selected_card()
-	return msg
 
 func _roll_element_draw() -> int:
 	var order := score_engine.element_order()
@@ -925,19 +899,100 @@ func _roll_element_draw() -> int:
 			element_draw_weights[e] = float(element_draw_weights[e]) + score_engine.draw_other_delta_for(e)
 	return chosen
 
-func _roll_animal_for_element(element: int) -> int:
-	var target_element := element
-	var roll := rng.randf()
-	if roll > 0.52:
-		var others := []
-		for e in [TileState.Element.FOREST, TileState.Element.FIELD, TileState.Element.MOUNTAIN, TileState.Element.RIVER, TileState.Element.WETLANDS]:
-			if e != element:
-				others.append(e)
-		var idx := int(floor((roll - 0.52) / 0.12))
-		idx = clampi(idx, 0, others.size() - 1)
-		target_element = int(others[idx])
+func _roll_uniform_element() -> int:
+	var order := score_engine.element_order()
+	if order.is_empty():
+		return TileState.Element.FOREST
+	return int(order[rng.randi_range(0, order.size() - 1)])
 
-	var options := animal_system.animal_ids_for_element(target_element)
+func _try_buy_booster(click_pos: Vector2) -> bool:
+	for booster_id in booster_button_rects.keys():
+		var rect: Rect2 = booster_button_rects[booster_id]
+		if not rect.has_point(click_pos):
+			continue
+		if booster_points < BOOSTER_COST:
+			_update_hud("Need %d booster point to open a booster." % BOOSTER_COST)
+			return true
+		var booster := _booster_by_id(String(booster_id))
+		if booster.is_empty():
+			return true
+		booster_points -= BOOSTER_COST
+		var result_msg := _open_booster(booster)
+		_ensure_selected_card()
+		_update_hud(result_msg)
+		return true
+	return false
+
+func _booster_by_id(id: String) -> Dictionary:
+	for booster in booster_buttons:
+		if String(booster.get("id", "")) == id:
+			return booster
+	return {}
+
+func _open_booster(booster: Dictionary) -> String:
+	var kind := String(booster.get("kind", ""))
+	match kind:
+		BOOSTER_KIND_ELEMENT:
+			return _open_element_booster(int(booster.get("element", TileState.Element.FOREST)))
+		BOOSTER_KIND_ANIMAL:
+			return _open_animal_booster()
+		BOOSTER_KIND_MIX:
+			return _open_mix_booster()
+		_:
+			return "Booster did nothing."
+
+func _open_element_booster(main_element: int) -> String:
+	var cards_added: int = 0
+	for _i in range(3):
+		_add_card(CARD_KIND_ELEMENT, main_element)
+		cards_added += 1
+	var other_element := _random_other_element(main_element)
+	_add_card(CARD_KIND_ELEMENT, other_element)
+	cards_added += 1
+	if rng.randf() <= BOOSTER_ELEMENT_EXTRA_CHANCE:
+		_add_card(CARD_KIND_ELEMENT, _roll_uniform_element())
+		cards_added += 1
+	if rng.randf() <= BOOSTER_ELEMENT_ANIMAL_CHANCE:
+		var animal := _roll_animal_for_element(main_element)
+		if animal != 0:
+			var animal_amount := animal_system.animal_draw_amount(animal)
+			for _i in range(animal_amount):
+				_add_card(CARD_KIND_ANIMAL, animal)
+			cards_added += animal_amount
+			return "%s booster: +%d cards incl. %s x%d." % [_element_name(main_element), cards_added, _animal_name(animal), animal_amount]
+	return "%s booster: +%d cards." % [_element_name(main_element), cards_added]
+
+func _open_animal_booster() -> String:
+	var rolls := 3
+	if rng.randf() <= BOOSTER_ANIMAL_EXTRA_CHANCE:
+		rolls += 1
+	var cards_added := 0
+	for _i in range(rolls):
+		var animal := _roll_animal_for_random_element()
+		if animal == 0:
+			continue
+		var amount := animal_system.animal_draw_amount(animal)
+		for _j in range(amount):
+			_add_card(CARD_KIND_ANIMAL, animal)
+		cards_added += amount
+	return "Animal booster: +%d animal cards." % cards_added
+
+func _open_mix_booster() -> String:
+	for _i in range(5):
+		_add_card(CARD_KIND_ELEMENT, _roll_uniform_element())
+	return "Mix booster: +5 random element cards."
+
+func _random_other_element(excluded_element: int) -> int:
+	var choices: Array[int] = []
+	for element in score_engine.element_order():
+		if element != excluded_element:
+			choices.append(element)
+	if choices.is_empty():
+		return _roll_uniform_element()
+	return int(choices[rng.randi_range(0, choices.size() - 1)])
+
+func _roll_animal_for_element(element: int) -> int:
+	var options := animal_system.animal_ids_for_element(element)
 	if options.is_empty():
 		return 0
 	var total := 0.0
@@ -952,9 +1007,19 @@ func _roll_animal_for_element(element: int) -> int:
 			return int(id)
 	return int(options[0])
 
+func _roll_animal_for_random_element() -> int:
+	var order := score_engine.element_order()
+	if order.is_empty():
+		return 0
+	var shuffled: Array[int] = order.duplicate()
+	shuffled.shuffle()
+	for element in shuffled:
+		var animal := _roll_animal_for_element(int(element))
+		if animal != 0:
+			return animal
+	return 0
+
 func _add_card(kind: String, id: int) -> void:
-	if _hand_total_count() >= max_hand_size:
-		return
 	var key := _card_key(kind, id)
 	for card in hand_cards:
 		if String(card["key"]) == key:
@@ -1017,7 +1082,7 @@ func _draw_hand_ui() -> void:
 	var visible_slots := maxi(hand_cards.size(), 1)
 	var hand_width := (card_w + gap) * visible_slots - gap
 	var start := Vector2((vp.x - hand_width) * 0.5, vp.y - card_h - 14.0 * ui_scale)
-	var hand_counter := "Hand %d/%d" % [_hand_total_count(), max_hand_size]
+	var hand_counter := "Hand %d cards" % _hand_total_count()
 	draw_string(
 		ThemeDB.fallback_font,
 		Vector2(170.0 * ui_scale, vp.y - 98.0 * ui_scale),
@@ -1027,7 +1092,6 @@ func _draw_hand_ui() -> void:
 		24.0 * ui_scale,
 		Color(0.95, 0.97, 1.0, 1.0)
 	)
-	_draw_recycle_ui(start, hand_width, card_h, ui_scale)
 	for i in range(hand_cards.size()):
 		var card: Dictionary = hand_cards[i]
 		var selected := String(card["key"]) == selected_card_key
@@ -1048,30 +1112,63 @@ func _draw_hand_ui() -> void:
 		_draw_card(rect, card, selected, ui_scale)
 	_draw_hovered_card_rule_tooltip()
 
-func _draw_recycle_ui(start: Vector2, hand_width: float, card_h: float, ui_scale: float) -> void:
-	var bin_size := Vector2(44.0, 52.0) * ui_scale
-	var pos := Vector2(start.x + hand_width + 14.0 * ui_scale, start.y + card_h - bin_size.y)
-	recycle_bin_rect = Rect2(pos, bin_size)
-	draw_rect(recycle_bin_rect, Color(0.15, 0.20, 0.27, 0.96), true)
-	draw_rect(recycle_bin_rect, Color(0.86, 0.90, 0.95, 0.96), false, 2.0 * ui_scale)
-	var lid := Rect2(
-		Vector2(pos.x - 5.0 * ui_scale, pos.y - 8.0 * ui_scale),
-		Vector2(bin_size.x + 10.0 * ui_scale, 8.0 * ui_scale)
+func _draw_booster_ui() -> void:
+	var vp := get_viewport_rect().size
+	var panel_pos := Vector2(22.0, vp.y - 172.0)
+	var button_w := 98.0
+	var button_h := 30.0
+	var gap := 8.0
+	var columns := 4
+	var rows := int(ceil(float(booster_buttons.size()) / float(columns)))
+	var panel_size := Vector2(
+		columns * button_w + (columns - 1) * gap + 20.0,
+		rows * button_h + (rows - 1) * gap + 62.0
 	)
-	draw_rect(lid, Color(0.86, 0.90, 0.95, 0.96), true)
-	draw_line(pos + Vector2(bin_size.x * 0.34, bin_size.y * 0.2), pos + Vector2(bin_size.x * 0.34, bin_size.y * 0.82), Color(0.90, 0.92, 0.96), 2.0 * ui_scale)
-	draw_line(pos + Vector2(bin_size.x * 0.50, bin_size.y * 0.2), pos + Vector2(bin_size.x * 0.50, bin_size.y * 0.82), Color(0.90, 0.92, 0.96), 2.0 * ui_scale)
-	draw_line(pos + Vector2(bin_size.x * 0.66, bin_size.y * 0.2), pos + Vector2(bin_size.x * 0.66, bin_size.y * 0.82), Color(0.90, 0.92, 0.96), 2.0 * ui_scale)
-	var recycle_text := "%d/%d" % [recycle_binned_count, recycle_cards_needed]
+	var panel_rect := Rect2(panel_pos, panel_size)
+	draw_rect(panel_rect, Color(0.08, 0.17, 0.26, 0.94), true)
+	draw_rect(panel_rect, Color(0.88, 0.90, 0.93, 0.96), false, 2.0)
 	draw_string(
 		ThemeDB.fallback_font,
-		Vector2(pos.x + bin_size.x + 8.0 * ui_scale, pos.y + bin_size.y * 0.72),
-		recycle_text,
+		panel_pos + Vector2(10.0, 22.0),
+		"Boosters (%d pts)" % booster_points,
 		HORIZONTAL_ALIGNMENT_LEFT,
-		96.0 * ui_scale,
-		20.0 * ui_scale,
+		panel_size.x - 20.0,
+		18.0,
 		Color(0.95, 0.97, 1.0, 1.0)
 	)
+	booster_button_rects.clear()
+	for i in range(booster_buttons.size()):
+		var booster: Dictionary = booster_buttons[i]
+		var col := i % columns
+		var row := int(i / columns)
+		var rect := Rect2(
+			panel_pos + Vector2(10.0 + col * (button_w + gap), 34.0 + row * (button_h + gap)),
+			Vector2(button_w, button_h)
+		)
+		var affordable := booster_points >= BOOSTER_COST
+		var fill := Color(0.18, 0.30, 0.42, 0.98) if affordable else Color(0.16, 0.16, 0.18, 0.94)
+		draw_rect(rect, fill, true)
+		draw_rect(rect, Color(0.90, 0.92, 0.96, 0.95), false, 1.5)
+		draw_string(
+			ThemeDB.fallback_font,
+			rect.position + Vector2(6.0, 20.0),
+			String(booster.get("name", "?")),
+			HORIZONTAL_ALIGNMENT_LEFT,
+			rect.size.x - 12.0,
+			16.0,
+			Color(0.95, 0.97, 1.0, 1.0)
+		)
+		booster_button_rects[String(booster.get("id", ""))] = rect
+
+func _award_booster_milestones(current_score: int) -> String:
+	var granted := 0
+	while current_score >= booster_next_milestone:
+		granted += BOOSTER_MILESTONE_REWARD
+		booster_next_milestone += BOOSTER_MILESTONE_INTERVAL
+	if granted <= 0:
+		return ""
+	booster_points += granted
+	return "Milestone reward: +%d booster points." % granted
 
 func _draw_card(rect: Rect2, card: Dictionary, selected: bool, ui_scale: float) -> void:
 	var kind := String(card["kind"])
@@ -1327,21 +1424,8 @@ func _hovered_hand_card_key(mouse_pos: Vector2) -> String:
 func _update_hud(last_msg: String) -> void:
 	return
 
-func _try_recycle_selected_card(click_pos: Vector2) -> bool:
-	if not recycle_bin_rect.has_point(click_pos):
-		return false
-	if selected_card_key.is_empty():
-		return true
-	_consume_selected_card()
-	recycle_binned_count += 1
-	var recycle_msg := "Binned card (%d/%d)." % [recycle_binned_count, recycle_cards_needed]
-	if recycle_binned_count >= recycle_cards_needed:
-		recycle_binned_count = 0
-		var draw_msg := _draw_turn_cards()
-		recycle_msg = "Recycle ready: %s" % draw_msg
-	_ensure_selected_card()
-	_update_hud(recycle_msg)
-	return true
+func _try_recycle_selected_card(_click_pos: Vector2) -> bool:
+	return false
 
 func _draw_hovered_card_rule_tooltip() -> void:
 	if hovered_hand_card_key.is_empty():
