@@ -97,8 +97,7 @@ func _ready() -> void:
 	rng.randomize()
 	get_viewport().size_changed.connect(_on_viewport_size_changed)
 	_load_config()
-	score_engine.load_elements_csv("res://data/elements.csv")
-	score_engine.load_rules_json("res://data/element_rules.json")
+	score_engine.load_elements_config("res://data/elements.json")
 	_load_progression_csv("res://data/progression.csv")
 	animal_system.load_animals_csv("res://data/animals.csv")
 	quest_system.load_quests_csv("res://data/quests.csv")
@@ -132,9 +131,6 @@ func _load_config() -> void:
 	unlocked_ring_count = clampi(unlocked_ring_count, 0, ring_count)
 	grid = HexGrid.new(ring_count, 38.0, _camera_base_origin())
 	_apply_camera_origin()
-	var cfg_penalties = cfg.get("penalties_enabled")
-	if cfg_penalties != null:
-		animal_system.penalties_enabled = bool(cfg_penalties)
 	var recycle_beginner = cfg.get("recycle_cost_beginner")
 	if recycle_beginner != null:
 		recycle_costs_by_difficulty[DIFFICULTY_BEGINNER] = maxi(1, int(recycle_beginner))
@@ -267,9 +263,6 @@ func _rebuild_draw_cards_debug_menu() -> void:
 		animal_ids.append(int(k))
 	animal_ids.sort()
 	for id in animal_ids:
-		var def: Dictionary = animal_system.animals_by_id[id]
-		if not bool(def.get("enabled", true)):
-			continue
 		var b := Button.new()
 		b.text = _animal_name(id)
 		b.pressed.connect(_on_debug_draw_card_pressed.bind(CARD_KIND_ANIMAL, id))
@@ -455,7 +448,6 @@ func _try_place_at_mouse() -> void:
 		var a_score := animal_system.score_animal(board, grid, coord, selected_animal)
 		var tile2: TileState = board[coord]
 		tile2.animal = selected_animal
-		animal_system.register_animal_goal(board, coord, selected_animal, current_turn)
 		turn_delta += a_score + 1
 
 	var quest_result := quest_system.on_tile_placed(board, grid)
@@ -468,7 +460,6 @@ func _try_place_at_mouse() -> void:
 
 	var spirit_result := spirit_system.evaluate(board, grid, current_turn)
 	turn_delta += spirit_result["delta"]
-	turn_delta += animal_system.process_turn_penalties(board, current_turn)
 
 	total_score += turn_delta
 	var unlock_msg := _apply_progression_unlocks(total_score)
@@ -539,31 +530,7 @@ func _draw_tile_icon(coord: Vector2i, tile: TileState) -> void:
 	draw_texture_rect(tex, Rect2(center - size * 0.5, size), false)
 
 func _tile_color(tile: TileState) -> Color:
-	match tile.element:
-		TileState.Element.NONE:
-			return Color(0.36, 0.28, 0.22)
-		TileState.Element.MOUNTAIN:
-			if tile.stack_count >= 2:
-				return Color(0.38, 0.38, 0.42)
-			if tile.stack_count == 1:
-				return Color(0.48, 0.48, 0.52)
-			return Color(0.58, 0.48, 0.38)
-		TileState.Element.FOREST:
-			if tile.stack_count >= 2:
-				return Color(0.10, 0.36, 0.14)
-			if tile.stack_count == 1:
-				return Color(0.16, 0.46, 0.20)
-			return Color(0.22, 0.52, 0.22)
-		TileState.Element.FIELD:
-			if tile.stack_count >= 1:
-				return Color(0.84, 0.74, 0.34)
-			return Color(0.90, 0.82, 0.46)
-		TileState.Element.RIVER:
-			return Color(0.20, 0.40, 0.85)
-		TileState.Element.WETLANDS:
-			return Color(0.20, 0.58, 0.50)
-		_:
-			return Color(0.36, 0.28, 0.22)
+	return score_engine.tile_color_for(int(tile.element), int(tile.stack_count))
 
 func _draw_hover_preview() -> void:
 	if not grid.has_coord(hovered_coord) or not _is_tile_unlocked(hovered_coord):
@@ -573,18 +540,8 @@ func _draw_hover_preview() -> void:
 	var preview := _preview_turn_points(hovered_coord)
 	if selected_mode == CARD_KIND_ELEMENT:
 		if preview["valid"]:
-			var overlay := Color(_tile_color(board[hovered_coord]))
-			match selected_element:
-				TileState.Element.FOREST:
-					overlay = Color(0.18, 0.60, 0.24, 0.55)
-				TileState.Element.FIELD:
-					overlay = Color(0.92, 0.84, 0.46, 0.55)
-				TileState.Element.MOUNTAIN:
-					overlay = Color(0.72, 0.72, 0.76, 0.55)
-				TileState.Element.RIVER:
-					overlay = Color(0.36, 0.58, 0.96, 0.55)
-				TileState.Element.WETLANDS:
-					overlay = Color(0.32, 0.72, 0.62, 0.55)
+			var overlay := score_engine.card_color_for_element(selected_element)
+			overlay.a = 0.55
 			_draw_hex(hovered_coord, overlay)
 		else:
 			# Invalid target: strong desaturation + explicit cross marker.
@@ -664,41 +621,11 @@ func _build_hover_highlight_info(coord: Vector2i) -> Dictionary:
 					contributors.append(tc)
 	else:
 		can_place = animal_system.can_place_animal(board, coord, selected_animal)
-		if can_place and animal_system.animals_by_id.has(selected_animal):
-			var def: Dictionary = animal_system.animals_by_id[selected_animal]
-			var needed_counts: Dictionary = {}
-			for t in def["required_specs"] as Array:
-				var key := str(t)
-				needed_counts[key] = int(needed_counts.get(key, 0)) + 1
-			var found_counts: Dictionary = {}
-			var check_range := int(def["range"])
-			for c in board.keys():
+		if can_place:
+			for c in animal_system.pattern_contributor_tiles(board, coord, selected_animal):
 				var c2 := c as Vector2i
-				if not _is_tile_unlocked(c2):
-					continue
-				var dist := HexCoord.distance(coord, c2)
-				if dist > check_range:
-					continue
-				radius_tiles.append(c2)
-				if dist == 0:
-					continue
-				var tkey := animal_system.tile_spec_key(board[c2] as TileState)
-				if needed_counts.has(tkey):
-					found_counts[tkey] = int(found_counts.get(tkey, 0)) + 1
-					if not contributors.has(c2):
-						contributors.append(c2)
-			for tkey in needed_counts.keys():
-				if int(found_counts.get(tkey, 0)) < int(needed_counts[tkey]):
-					for c in board.keys():
-						var c2 := c as Vector2i
-						if not _is_tile_unlocked(c2):
-							continue
-						var dist := HexCoord.distance(coord, c2)
-						if dist == 0 or dist > check_range:
-							continue
-						var spec_key := animal_system.tile_spec_key(board[c2] as TileState)
-						if spec_key == String(tkey) and not contributors.has(c2):
-							contributors.append(c2)
+				if _is_tile_unlocked(c2) and not contributors.has(c2):
+					contributors.append(c2)
 
 	var border := Color(0.72, 0.72, 0.72, 0.95)
 	var contributor_color := Color(1.0, 0.84, 0.2, 0.95)
@@ -878,7 +805,6 @@ func _preview_turn_points(coord: Vector2i) -> Dictionary:
 		var a_score := temp_animals.score_animal(sim_board, grid, coord, selected_animal)
 		var tile2: TileState = sim_board[coord]
 		tile2.animal = selected_animal
-		temp_animals.register_animal_goal(sim_board, coord, selected_animal, current_turn)
 		turn_delta += a_score + 1
 
 	var quest_preview := temp_quests.preview_completion(sim_board, grid)
@@ -888,7 +814,6 @@ func _preview_turn_points(coord: Vector2i) -> Dictionary:
 
 	var spirit_result := temp_spirit.evaluate(sim_board, grid, current_turn)
 	turn_delta += int(spirit_result["delta"])
-	turn_delta += temp_animals.process_turn_penalties(sim_board, current_turn)
 	return {"valid": valid, "points": turn_delta, "quest_highlight_tiles": quest_highlight_tiles}
 
 func _clone_board(source_board: Dictionary) -> Dictionary:
@@ -905,9 +830,7 @@ func _clone_spirit_system() -> SpiritSystem:
 
 func _clone_animal_system() -> AnimalSystem:
 	var cloned := AnimalSystem.new()
-	cloned.penalties_enabled = animal_system.penalties_enabled
 	cloned.animals_by_id = animal_system.animals_by_id.duplicate(true)
-	cloned.pending_goals = animal_system.pending_goals.duplicate(true)
 	return cloned
 
 func _clone_quest_system() -> QuestSystem:
@@ -1157,12 +1080,13 @@ func _draw_card(rect: Rect2, card: Dictionary, selected: bool, ui_scale: float) 
 	var frame := Color(0.92, 0.94, 0.97, 0.98) if selected else Color(0.82, 0.85, 0.9, 0.92)
 	var fill := Color(0.10, 0.20, 0.32, 0.96)
 	if kind == CARD_KIND_ELEMENT:
-		fill = _tile_color(_tile_for_element_preview(id))
+		fill = score_engine.card_color_for_element(id)
 	elif kind == CARD_KIND_ANIMAL and animal_system.animals_by_id.has(id):
 		var def: Dictionary = animal_system.animals_by_id[id]
-		var place_specs: Array = def["place_specs"]
-		if not place_specs.is_empty():
-			fill = _color_for_spec(str(place_specs[0]))
+		var pattern: Dictionary = def.get("pattern", {})
+		var center_req: Dictionary = pattern.get("center", {})
+		if not center_req.is_empty():
+			fill = _color_for_pattern_requirement(center_req)
 
 	var stacked_layers := mini(maxi(count - 1, 0), 4)
 	var rim_offset := 5.0 * ui_scale
@@ -1178,12 +1102,12 @@ func _draw_card(rect: Rect2, card: Dictionary, selected: bool, ui_scale: float) 
 	if kind == CARD_KIND_ANIMAL:
 		var symbol := animal_system.animal_symbol_texture(id)
 		if symbol != null:
-			draw_texture_rect(symbol, rect.grow(-18.0 * ui_scale), false)
+			# Animal art fills the whole card background.
+			draw_texture_rect(symbol, rect, false, Color(1, 1, 1, 0.96))
 		else:
 			var letter := _animal_name(id).substr(0, 1).to_upper()
 			draw_string(ThemeDB.fallback_font, rect.position + Vector2(rect.size.x * 0.45, rect.size.y * 0.60), letter, HORIZONTAL_ALIGNMENT_LEFT, 16.0 * ui_scale, 22 * ui_scale, Color.WHITE)
-		_draw_animal_placement_icons(rect, id)
-		_draw_animal_requirement_dots(rect, id)
+		_draw_animal_pattern_overlay(rect, id, ui_scale)
 	elif kind == CARD_KIND_ELEMENT:
 		_draw_element_placement_dots(rect, id)
 
@@ -1195,42 +1119,94 @@ func _tile_for_element_preview(element: int) -> TileState:
 func _color_for_element(element: int) -> Color:
 	return _tile_color(_tile_for_element_preview(element))
 
-func _draw_animal_requirement_dots(rect: Rect2, animal_id: int) -> void:
+func _draw_animal_pattern_overlay(rect: Rect2, animal_id: int, ui_scale: float) -> void:
 	if not animal_system.animals_by_id.has(animal_id):
 		return
 	var def: Dictionary = animal_system.animals_by_id[animal_id]
-	var required_specs: Array = def["required_specs"]
-	if required_specs.is_empty():
+	var pattern: Dictionary = def.get("pattern", {})
+	var center_req: Dictionary = pattern.get("center", {})
+	if center_req.is_empty():
 		return
+	var requirements: Array = pattern.get("requirements", [])
+	var adjacent: Array = pattern.get("adjacent", [])
 
-	var x := rect.position.x + rect.size.x - 22.0
-	var start_y := rect.position.y + 10.0
-	var step := 20.0
-	for idx in range(required_specs.size()):
-		var y := start_y + idx * step
-		if y > rect.position.y + rect.size.y - 14.0:
-			break
-		var tex := _texture_for_spec(str(required_specs[idx]))
-		if tex != null:
-			draw_texture_rect(tex, Rect2(Vector2(x - 8.0, y - 8.0), Vector2(16, 16)), false)
+	var panel_height := rect.size.y * 0.42
+	var panel_rect := Rect2(rect.position.x, rect.position.y + rect.size.y - panel_height, rect.size.x, panel_height)
+	draw_rect(panel_rect, Color(0.03, 0.06, 0.10, 0.82), true)
+	draw_line(
+		Vector2(panel_rect.position.x, panel_rect.position.y),
+		Vector2(panel_rect.position.x + panel_rect.size.x, panel_rect.position.y),
+		Color(0.92, 0.94, 0.97, 0.78),
+		1.5 * ui_scale
+	)
 
-func _draw_animal_placement_icons(rect: Rect2, animal_id: int) -> void:
-	if not animal_system.animals_by_id.has(animal_id):
-		return
-	var def: Dictionary = animal_system.animals_by_id[animal_id]
-	var place_specs: Array = def["place_specs"]
-	if place_specs.is_empty():
-		return
-	var x := rect.position.x + 10.0
-	var start_y := rect.position.y + 10.0
-	var step := 20.0
-	for idx in range(place_specs.size()):
-		var y := start_y + idx * step
-		if y > rect.position.y + rect.size.y - 14.0:
-			break
-		var tex := _texture_for_spec(String(place_specs[idx]))
-		if tex != null:
-			draw_texture_rect(tex, Rect2(Vector2(x - 8.0, y - 8.0), Vector2(16, 16)), false)
+	var nodes: Array[Dictionary] = []
+	nodes.append({"offset": Vector2i.ZERO, "req": center_req, "is_center": true})
+	for req_item in requirements:
+		var req := req_item as Dictionary
+		var offset := req.get("offset", Vector2i.ZERO) as Vector2i
+		nodes.append({"offset": offset, "req": req, "is_center": false})
+
+	var min_x := 999999.0
+	var max_x := -999999.0
+	var min_y := 999999.0
+	var max_y := -999999.0
+	var projected_points: Array[Vector2] = []
+	for node in nodes:
+		var offset := node.get("offset", Vector2i.ZERO) as Vector2i
+		# Axial -> 2D projection for a small in-card pattern map.
+		var px := float(offset.x) + float(offset.y) * 0.5
+		var py := float(offset.y) * 0.8660254
+		var p := Vector2(px, py)
+		projected_points.append(p)
+		min_x = minf(min_x, p.x)
+		max_x = maxf(max_x, p.x)
+		min_y = minf(min_y, p.y)
+		max_y = maxf(max_y, p.y)
+
+	var usable_rect := panel_rect.grow(-7.0 * ui_scale)
+	var pattern_size := Vector2(max_x - min_x, max_y - min_y)
+	var icon_size := Vector2(16.0, 16.0) * ui_scale
+	var step_by_width := usable_rect.size.x / maxf(pattern_size.x + 1.0, 1.0)
+	var step_by_height := usable_rect.size.y / maxf(pattern_size.y + 1.0, 1.0)
+	var step := minf(step_by_width, step_by_height)
+	step = clampf(step, 10.0 * ui_scale, 22.0 * ui_scale)
+	icon_size = Vector2(step * 0.8, step * 0.8)
+
+	var center_proj := Vector2((min_x + max_x) * 0.5, (min_y + max_y) * 0.5)
+	var draw_center := usable_rect.position + usable_rect.size * 0.5
+	var draw_positions: Array[Vector2] = []
+	for p in projected_points:
+		draw_positions.append(draw_center + (p - center_proj) * step)
+
+	for i in range(nodes.size()):
+		for j in range(i + 1, nodes.size()):
+			var a_off := (nodes[i].get("offset", Vector2i.ZERO) as Vector2i)
+			var b_off := (nodes[j].get("offset", Vector2i.ZERO) as Vector2i)
+			if HexCoord.distance(a_off, b_off) != 1:
+				continue
+			draw_line(
+				draw_positions[i],
+				draw_positions[j],
+				Color(0.92, 0.94, 0.97, 0.35),
+				1.3 * ui_scale
+			)
+
+	for idx in range(nodes.size()):
+		var req := nodes[idx].get("req", {}) as Dictionary
+		var req_tex := _texture_for_pattern_requirement(req)
+		var pos := draw_positions[idx]
+		var icon_rect := Rect2(pos - icon_size * 0.5, icon_size)
+		if req_tex != null:
+			draw_texture_rect(req_tex, icon_rect, false)
+		else:
+			draw_rect(icon_rect, _color_for_pattern_requirement(req), true)
+		if bool(nodes[idx].get("is_center", false)):
+			draw_rect(icon_rect.grow(1.0 * ui_scale), Color(1.0, 0.95, 0.45, 0.92), false, 1.5 * ui_scale)
+
+	if not adjacent.is_empty():
+		var dot_pos := panel_rect.position + Vector2(panel_rect.size.x - 10.0 * ui_scale, 10.0 * ui_scale)
+		draw_circle(dot_pos, 2.4 * ui_scale, Color(1.0, 0.86, 0.30, 0.95))
 
 func _draw_element_placement_dots(rect: Rect2, element: int) -> void:
 	var place_specs := score_engine.allowed_place_specs_for_element(element)
@@ -1258,6 +1234,13 @@ func _color_for_spec(spec: String) -> Color:
 	t.stack_count = stacks
 	return _tile_color(t)
 
+func _color_for_pattern_requirement(req: Dictionary) -> Color:
+	var t := TileState.new()
+	t.element = int(req.get("element", TileState.Element.NONE))
+	var stack = req.get("stack", 0)
+	t.stack_count = 0 if (stack is String and String(stack) == "*") else int(stack)
+	return _tile_color(t)
+
 func _symbol_for_spec(spec: String) -> String:
 	var parsed := animal_system.parse_spec_key(spec)
 	if parsed.is_empty():
@@ -1275,6 +1258,12 @@ func _texture_for_spec(spec: String) -> Texture2D:
 		return null
 	var element := int(parsed.get("element", TileState.Element.NONE))
 	var stacks := int(parsed.get("stacks", 0))
+	return score_engine.icon_texture_for(element, stacks)
+
+func _texture_for_pattern_requirement(req: Dictionary) -> Texture2D:
+	var element := int(req.get("element", TileState.Element.NONE))
+	var stack = req.get("stack", 0)
+	var stacks := 0 if (stack is String and String(stack) == "*") else int(stack)
 	return score_engine.icon_texture_for(element, stacks)
 
 func _sync_element_draw_weights() -> void:

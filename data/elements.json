@@ -1,0 +1,254 @@
+{
+  "version": 1,
+  "elements": {
+    "dead_earth": {
+      "id": 0,
+      "name": "DeadEarth",
+      "colors": ["#5c4738"],
+      "base_draw_weight": 0,
+      "draw_self_delta": 0,
+      "draw_other_delta": 0,
+      "min_draw_weight": 0,
+      "max_stacks": 0,
+      "allowed_place_specs": [],
+      "icons": ["N0"],
+      "available_rules": [],
+      "default_rule": "",
+      "rules": {}
+    },
+    "forest": {
+      "id": 1,
+      "name": "Forest",
+      "colors": ["#388538", "#297533", "#195c24"],
+      "base_draw_weight": 25,
+      "draw_self_delta": -5,
+      "draw_other_delta": 1,
+      "min_draw_weight": 1,
+      "max_stacks": 2,
+      "allowed_place_specs": ["0:0", "1:0", "1:1"],
+      "icons": ["F0", "F1", "F2"],
+      "available_rules": ["connected_tiered_1_3_7", "connected_mid_high_flat_4", "component_two_each_cap_ten", "jungle_pairs_fifteen"],
+      "default_rule": "connected_tiered_1_3_7",
+      "rules": {
+        "connected_tiered_1_3_7": {
+          "scope": "group_per_tile",
+          "conditions": [{ "kind": "has_same_element_neighbor" }],
+          "score": {
+            "kind": "stack_tier",
+            "tiers": [
+              { "min_stack": 0, "max_stack": 0, "points": 1 },
+              { "min_stack": 1, "max_stack": 1, "points": 3 },
+              { "min_stack": 2, "max_stack": 99, "points": 7 }
+            ],
+            "default": 0
+          }
+        },
+        "connected_mid_high_flat_4": {
+          "scope": "group_per_tile",
+          "conditions": [{ "kind": "has_same_element_neighbor" }],
+          "score": {
+            "kind": "stack_tier",
+            "tiers": [{ "min_stack": 1, "max_stack": 99, "points": 4 }],
+            "default": 0
+          }
+        },
+        "component_two_each_cap_ten": {
+          "scope": "group",
+          "conditions": [],
+          "score": { "kind": "group_size_per_unit_capped", "per": 2, "cap_size": 5 }
+        },
+        "jungle_pairs_fifteen": {
+          "scope": "group",
+          "conditions": [],
+          "score": { "kind": "pair_from_stack_min", "min_stack": 2, "pair_points": 15 }
+        }
+      }
+    },
+    "field": {
+      "id": 2,
+      "name": "Field",
+      "colors": ["#e5d175", "#d6bd57"],
+      "base_draw_weight": 25,
+      "draw_self_delta": -5,
+      "draw_other_delta": 1,
+      "min_draw_weight": 1,
+      "max_stacks": 1,
+      "allowed_place_specs": ["0:0", "2:0"],
+      "icons": ["A0", "A1"],
+      "available_rules": ["group_three_mix", "three_fields_only", "pair_field_grassland", "isolated_field_five"],
+      "default_rule": "group_three_mix",
+      "rules": {
+        "group_three_mix": {
+          "scope": "group",
+          "conditions": [{ "kind": "group_size", "min": 3, "max": 3, "max_mode": "invalidate" }],
+          "score": { "kind": "stack0_lookup", "table": { "3": 10, "2": 15, "1": 20 }, "default": 0 }
+        },
+        "three_fields_only": {
+          "scope": "group",
+          "conditions": [
+            { "kind": "group_size", "min": 3, "max": 3, "max_mode": "invalidate" },
+            { "kind": "stack_count_exact", "stack": 1, "count": 3 }
+          ],
+          "score": { "kind": "flat", "value": 15 }
+        },
+        "pair_field_grassland": {
+          "scope": "group",
+          "conditions": [
+            { "kind": "group_size", "min": 2, "max": 2, "max_mode": "invalidate" },
+            { "kind": "stack_mix_exact", "counts": { "0": 1, "1": 1 } }
+          ],
+          "score": { "kind": "flat", "value": 10 }
+        },
+        "isolated_field_five": {
+          "scope": "group_per_tile",
+          "conditions": [
+            { "kind": "placed_stack_equals", "value": 1 },
+            { "kind": "group_size", "min": 1, "max": 1, "max_mode": "invalidate" }
+          ],
+          "score": { "kind": "flat", "value": 5 }
+        }
+      }
+    },
+    "mountain": {
+      "id": 3,
+      "name": "Mountain",
+      "colors": ["#7a7a85", "#61616b", "#47474d"],
+      "base_draw_weight": 25,
+      "draw_self_delta": -5,
+      "draw_other_delta": 1,
+      "min_draw_weight": 1,
+      "max_stacks": 2,
+      "allowed_place_specs": ["0:0", "3:0", "3:1"],
+      "icons": ["M0", "M1", "M2"],
+      "available_rules": ["connected_tiered_1_3_7", "connected_mid_high_5_10", "tiered_3_3_1", "mid_high_flat_4"],
+      "default_rule": "connected_tiered_1_3_7",
+      "rules": {
+        "connected_tiered_1_3_7": {
+          "scope": "group_per_tile",
+          "conditions": [{ "kind": "has_same_element_neighbor" }],
+          "score": {
+            "kind": "stack_tier",
+            "tiers": [
+              { "min_stack": 0, "max_stack": 0, "points": 1 },
+              { "min_stack": 1, "max_stack": 1, "points": 3 },
+              { "min_stack": 2, "max_stack": 99, "points": 7 }
+            ],
+            "default": 0
+          }
+        },
+        "connected_mid_high_5_10": {
+          "scope": "group_per_tile",
+          "conditions": [{ "kind": "has_same_element_neighbor" }],
+          "score": {
+            "kind": "stack_tier",
+            "tiers": [
+              { "min_stack": 1, "max_stack": 1, "points": 5 },
+              { "min_stack": 2, "max_stack": 99, "points": 10 }
+            ],
+            "default": 0
+          }
+        },
+        "tiered_3_3_1": {
+          "scope": "group_per_tile",
+          "conditions": [{ "kind": "has_same_element_neighbor" }],
+          "score": {
+            "kind": "stack_tier",
+            "tiers": [
+              { "min_stack": 0, "max_stack": 0, "points": 3 },
+              { "min_stack": 1, "max_stack": 1, "points": 3 },
+              { "min_stack": 2, "max_stack": 99, "points": 1 }
+            ],
+            "default": 0
+          }
+        },
+        "mid_high_flat_4": {
+          "scope": "group_per_tile",
+          "conditions": [{ "kind": "has_same_element_neighbor" }],
+          "score": {
+            "kind": "stack_tier",
+            "tiers": [{ "min_stack": 1, "max_stack": 99, "points": 4 }],
+            "default": 0
+          }
+        }
+      }
+    },
+    "river": {
+      "id": 4,
+      "name": "River",
+      "colors": ["#3366d9"],
+      "base_draw_weight": 12.5,
+      "draw_self_delta": -5,
+      "draw_other_delta": 1,
+      "min_draw_weight": 1,
+      "max_stacks": 0,
+      "allowed_place_specs": ["0:0"],
+      "icons": ["R0"],
+      "available_rules": ["shortest_route", "short_river", "small_lakes", "big_lakes"],
+      "default_rule": "shortest_route",
+      "rules": {
+        "shortest_route": {
+          "scope": "group",
+          "conditions": [],
+          "score": { "kind": "river_length_curve", "cap_to_four": false }
+        },
+        "short_river": {
+          "scope": "group",
+          "conditions": [],
+          "score": { "kind": "river_length_curve", "cap_to_four": true }
+        },
+        "small_lakes": {
+          "scope": "group",
+          "conditions": [],
+          "score": { "kind": "river_degree_two_triplets", "triplet_points": 10 }
+        },
+        "big_lakes": {
+          "scope": "group",
+          "conditions": [{ "kind": "big_lake_shape" }],
+          "score": { "kind": "flat", "value": 10 }
+        }
+      }
+    },
+    "wetlands": {
+      "id": 5,
+      "name": "Wetlands",
+      "colors": ["#39a78f", "#2f7d6c"],
+      "base_draw_weight": 12.5,
+      "draw_self_delta": -5,
+      "draw_other_delta": 1,
+      "min_draw_weight": 1,
+      "max_stacks": 0,
+      "allowed_place_specs": ["0:0", "1:0", "2:0", "4:0", "5:0"],
+      "icons": ["W0", "W1"],
+      "available_rules": ["diverse_neighbors_three_plus", "group_flat_four", "group_three_ten", "two_river_neighbors_four"],
+      "default_rule": "diverse_neighbors_three_plus",
+      "rules": {
+        "diverse_neighbors_three_plus": {
+          "scope": "group_per_tile",
+          "conditions": [
+            { "kind": "placed_stack_equals", "value": 1 },
+            { "kind": "distinct_neighbor_specs_min", "min": 3, "exclude_none": true, "count_mode": "element" }
+          ],
+          "score": { "kind": "flat", "value": 5 }
+        },
+        "group_flat_four": {
+          "scope": "group",
+          "conditions": [],
+          "score": { "kind": "flat", "value": 4 }
+        },
+        "group_three_ten": {
+          "scope": "group",
+          "conditions": [{ "kind": "group_size", "min": 3, "max": 3, "max_mode": "invalidate" }],
+          "score": { "kind": "flat", "value": 10 }
+        },
+        "two_river_neighbors_four": {
+          "scope": "group_per_tile",
+          "conditions": [
+            { "kind": "placed_stack_equals", "value": 1 },
+            { "kind": "river_neighbors_min", "min": 2 }
+          ],
+          "score": { "kind": "flat", "value": 4 }
+        }
+      }
+    }
+  }
+}

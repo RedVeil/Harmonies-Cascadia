@@ -9,13 +9,13 @@ var placement_bonus: int = 1
 var selected_rule_set: Dictionary = {}
 var available_rule_sets: Dictionary = {}
 var element_defs: Dictionary = {}
-var rules_config: Dictionary = {}
 var group_analyzer := GroupAnalyzer.new()
 var rule_evaluator := RuleEvaluator.new()
 
 func init_rule_sets() -> void:
 	if element_defs.is_empty():
-		_init_default_element_defs()
+		push_error("Element definitions are empty. Load elements.json first.")
+		return
 	available_rule_sets.clear()
 	selected_rule_set.clear()
 	var key_to_element := {
@@ -33,8 +33,8 @@ func init_rule_sets() -> void:
 			if not _rule_def(String(element_key), rid).is_empty():
 				options[rid] = true
 		if options.is_empty():
-			var all_defs: Dictionary = (rules_config.get("elements", {}) as Dictionary).get(String(element_key), {})
-			for rid in all_defs.keys():
+			var eid_rules: Dictionary = _def_for(eid).get("rules", {})
+			for rid in eid_rules.keys():
 				options[String(rid)] = true
 		available_rule_sets[element_key] = options
 		var default_rule := String(_def_for(eid).get("default_rule", ""))
@@ -42,53 +42,65 @@ func init_rule_sets() -> void:
 			default_rule = String(options.keys()[0]) if not options.is_empty() else ""
 		selected_rule_set[element_key] = default_rule
 
-func load_elements_csv(path: String) -> void:
+func load_elements_config(path: String) -> void:
 	element_defs.clear()
-	var file: FileAccess = FileAccess.open(path, FileAccess.READ)
-	if file == null:
-		push_error("Elements CSV not found: %s" % path)
-		_init_default_element_defs()
-		return
-	var row_index := 0
-	while not file.eof_reached():
-		var line := file.get_line().strip_edges()
-		row_index += 1
-		if line.is_empty() or line.begins_with("#"):
-			continue
-		if row_index == 1 and line.to_lower().begins_with("element_id,"):
-			continue
-		var cols: PackedStringArray = line.split(",", false)
-		if cols.size() < 9:
-			continue
-		var element_id := int(cols[0].strip_edges())
-		if element_id < TileState.Element.NONE or element_id > TileState.Element.WETLANDS:
-			continue
-		element_defs[element_id] = {
-			"name": cols[1].strip_edges(),
-			"base_draw_weight": maxf(float(cols[2].strip_edges()), 0.0),
-			"draw_self_delta": float(cols[3].strip_edges()),
-			"draw_other_delta": float(cols[4].strip_edges()),
-			"min_draw_weight": maxf(float(cols[5].strip_edges()), 0.0),
-			"max_stacks": maxi(int(cols[6].strip_edges()), 0),
-			"allowed_place_specs": _parse_specs(cols[7].strip_edges()),
-			"icons": _parse_icons(cols[8].strip_edges()),
-			"icon_textures": _parse_icon_textures(cols[8].strip_edges()),
-			"available_rules": _parse_rule_ids(cols[9].strip_edges()) if cols.size() > 9 else [],
-			"default_rule": cols[10].strip_edges() if cols.size() > 10 else ""
-		}
-	if element_defs.is_empty():
-		_init_default_element_defs()
-	_ensure_dead_earth_def()
-
-func load_rules_json(path: String) -> void:
-	rules_config.clear()
 	if not FileAccess.file_exists(path):
-		push_error("Rules JSON not found: %s" % path)
+		push_error("Elements config JSON not found: %s" % path)
 		return
 	var raw := FileAccess.get_file_as_string(path)
 	var parsed = JSON.parse_string(raw)
-	if typeof(parsed) == TYPE_DICTIONARY:
-		rules_config = parsed
+	if typeof(parsed) != TYPE_DICTIONARY:
+		push_error("Invalid elements config JSON: %s" % path)
+		return
+	var root: Dictionary = parsed
+	var elements: Dictionary = root.get("elements", {})
+	if elements.is_empty():
+		push_error("Elements config has no elements: %s" % path)
+		return
+
+	for element_key in elements.keys():
+		var key := String(element_key).to_lower()
+		var entry: Dictionary = elements[element_key] as Dictionary
+		if entry.is_empty():
+			continue
+		var element_id := int(entry.get("id", _element_for_key(key)))
+		if element_id < TileState.Element.NONE or element_id > TileState.Element.WETLANDS:
+			continue
+		var icon_tokens: Array[String] = []
+		for raw_icon in entry.get("icons", []):
+			icon_tokens.append(String(raw_icon))
+		var rule_defs: Dictionary = entry.get("rules", {})
+		var available_rules: Array[String] = []
+		for rid in entry.get("available_rules", []):
+			available_rules.append(String(rid))
+		if available_rules.is_empty():
+			for rid in rule_defs.keys():
+				available_rules.append(String(rid))
+		var allowed_specs: Array[String] = []
+		for spec in entry.get("allowed_place_specs", []):
+			var s := String(spec).strip_edges()
+			if _is_valid_spec(s):
+				allowed_specs.append(s)
+
+		element_defs[element_id] = {
+			"name": String(entry.get("name", key.capitalize())),
+			"colors": _parse_colors(entry.get("colors", [])),
+			"base_draw_weight": maxf(float(entry.get("base_draw_weight", 0.0)), 0.0),
+			"draw_self_delta": float(entry.get("draw_self_delta", -5.0)),
+			"draw_other_delta": float(entry.get("draw_other_delta", 1.0)),
+			"min_draw_weight": maxf(float(entry.get("min_draw_weight", 0.0)), 0.0),
+			"max_stacks": maxi(int(entry.get("max_stacks", 0)), 0),
+			"allowed_place_specs": allowed_specs,
+			"icons": icon_tokens,
+			"icon_textures": _parse_icon_textures_from_array(icon_tokens),
+			"available_rules": available_rules,
+			"default_rule": String(entry.get("default_rule", "")),
+			"rules": rule_defs
+		}
+	if element_defs.is_empty():
+		push_error("Elements config produced no valid elements: %s" % path)
+		return
+	_ensure_dead_earth_def()
 
 func element_order() -> Array[int]:
 	var out: Array[int] = []
@@ -172,6 +184,19 @@ func allowed_place_specs_for_element(element: int) -> Array[String]:
 func max_stacks_for_element(element: int) -> int:
 	return int(_def_for(element).get("max_stacks", 0))
 
+func tile_color_for(element: int, stacks: int) -> Color:
+	var colors: Array = _def_for(element).get("colors", [])
+	if colors.is_empty():
+		return Color(1, 1, 1, 1)
+	var idx := clampi(stacks, 0, colors.size() - 1)
+	return _color_from_hex(String(colors[idx]), Color(1, 1, 1, 1))
+
+func card_color_for_element(element: int) -> Color:
+	var colors: Array = _def_for(element).get("colors", [])
+	if colors.is_empty():
+		return tile_color_for(element, 0)
+	return _color_from_hex(String(colors[0]), tile_color_for(element, 0))
+
 func score_board_state(board: Dictionary, grid) -> Dictionary:
 	var per_element_totals := {}
 	var group_breakdown := {}
@@ -253,30 +278,10 @@ func simulate_action_delta(board: Dictionary, grid, action: Dictionary) -> Dicti
 func _def_for(element: int) -> Dictionary:
 	return element_defs.get(element, {})
 
-func _parse_specs(raw: String) -> Array[String]:
-	var out: Array[String] = []
-	if raw.is_empty():
-		return out
-	for part in raw.split("|", false):
-		var p := part.strip_edges()
-		if _is_valid_spec(p):
-			out.append(p)
-	return out
-
-func _parse_icons(raw: String) -> Array[String]:
-	var out: Array[String] = []
-	if raw.is_empty():
-		return out
-	for part in raw.split("|", false):
-		out.append(part.strip_edges())
-	return out
-
-func _parse_icon_textures(raw: String) -> Array[Texture2D]:
+func _parse_icon_textures_from_array(tokens: Array[String]) -> Array[Texture2D]:
 	var out: Array[Texture2D] = []
-	if raw.is_empty():
-		return out
-	for part in raw.split("|", false):
-		out.append(_load_icon_texture(part.strip_edges()))
+	for token in tokens:
+		out.append(_load_icon_texture(token))
 	return out
 
 func _load_icon_texture(token: String) -> Texture2D:
@@ -300,93 +305,24 @@ func _is_valid_spec(spec: String) -> bool:
 	var parts := spec.split(":", false)
 	return parts.size() == 2 and parts[0].is_valid_int() and parts[1].is_valid_int()
 
-func _init_default_element_defs() -> void:
-	element_defs = {
-		TileState.Element.NONE: {
-			"name": "DeadEarth",
-			"base_draw_weight": 0.0,
-			"draw_self_delta": 0.0,
-			"draw_other_delta": 0.0,
-			"min_draw_weight": 0.0,
-			"max_stacks": 0,
-			"allowed_place_specs": [],
-			"icons": ["N0"],
-			"icon_textures": _parse_icon_textures("N0"),
-			"available_rules": [],
-			"default_rule": ""
-		},
-		TileState.Element.FOREST: {
-			"name": "Forest",
-			"base_draw_weight": 20.0,
-			"draw_self_delta": -5.0,
-			"draw_other_delta": 1.0,
-			"min_draw_weight": 1.0,
-			"max_stacks": 2,
-			"allowed_place_specs": ["0:0", "1:0", "1:1"],
-			"icons": ["F0", "F1", "F2"],
-			"icon_textures": _parse_icon_textures("F0|F1|F2"),
-			"available_rules": ["connected_tiered_1_3_7", "connected_mid_high_flat_4", "component_two_each_cap_ten", "jungle_pairs_fifteen"],
-			"default_rule": "connected_tiered_1_3_7"
-		},
-		TileState.Element.FIELD: {
-			"name": "Field",
-			"base_draw_weight": 20.0,
-			"draw_self_delta": -5.0,
-			"draw_other_delta": 1.0,
-			"min_draw_weight": 1.0,
-			"max_stacks": 1,
-			"allowed_place_specs": ["0:0", "2:0"],
-			"icons": ["A0", "A1"],
-			"icon_textures": _parse_icon_textures("A0|A1"),
-			"available_rules": ["group_three_mix", "three_fields_only", "pair_field_grassland", "isolated_field_five"],
-			"default_rule": "group_three_mix"
-		},
-		TileState.Element.MOUNTAIN: {
-			"name": "Mountain",
-			"base_draw_weight": 20.0,
-			"draw_self_delta": -5.0,
-			"draw_other_delta": 1.0,
-			"min_draw_weight": 1.0,
-			"max_stacks": 2,
-			"allowed_place_specs": ["0:0", "3:0", "3:1"],
-			"icons": ["M0", "M1", "M2"],
-			"icon_textures": _parse_icon_textures("M0|M1|M2"),
-			"available_rules": ["connected_tiered_1_3_7", "connected_mid_high_5_10", "tiered_3_3_1", "mid_high_flat_4"],
-			"default_rule": "connected_tiered_1_3_7"
-		},
-		TileState.Element.RIVER: {
-			"name": "River",
-			"base_draw_weight": 20.0,
-			"draw_self_delta": -5.0,
-			"draw_other_delta": 1.0,
-			"min_draw_weight": 1.0,
-			"max_stacks": 0,
-			"allowed_place_specs": ["0:0"],
-			"icons": ["R0"],
-			"icon_textures": _parse_icon_textures("R0"),
-			"available_rules": ["shortest_route", "short_river", "small_lakes", "big_lakes"],
-			"default_rule": "shortest_route"
-		},
-		TileState.Element.WETLANDS: {
-			"name": "Wetlands",
-			"base_draw_weight": 20.0,
-			"draw_self_delta": -5.0,
-			"draw_other_delta": 1.0,
-			"min_draw_weight": 1.0,
-			"max_stacks": 0,
-			"allowed_place_specs": ["1:0", "2:0", "4:0"],
-			"icons": ["W0"],
-			"icon_textures": _parse_icon_textures("W0"),
-			"available_rules": ["diverse_neighbors_three_plus", "group_flat_four", "group_three_ten", "two_river_neighbors_four"],
-			"default_rule": "diverse_neighbors_three_plus"
-		}
-	}
+func _parse_colors(raw_colors: Array) -> Array[String]:
+	var out: Array[String] = []
+	for raw in raw_colors:
+		var token := String(raw).strip_edges()
+		if token.is_empty():
+			continue
+		out.append(token)
+	return out
+
+func _color_from_hex(raw: String, fallback: Color) -> Color:
+	return Color.from_string(raw, fallback)
 
 func _ensure_dead_earth_def() -> void:
 	if element_defs.has(TileState.Element.NONE):
 		return
 	element_defs[TileState.Element.NONE] = {
 		"name": "DeadEarth",
+		"colors": ["#5C4738"],
 		"base_draw_weight": 0.0,
 		"draw_self_delta": 0.0,
 		"draw_other_delta": 0.0,
@@ -394,26 +330,17 @@ func _ensure_dead_earth_def() -> void:
 		"max_stacks": 0,
 		"allowed_place_specs": [],
 		"icons": ["N0"],
-		"icon_textures": _parse_icon_textures("N0"),
+		"icon_textures": _parse_icon_textures_from_array(["N0"]),
 		"available_rules": [],
-		"default_rule": ""
+		"default_rule": "",
+		"rules": {}
 	}
 
-func _parse_rule_ids(raw: String) -> Array[String]:
-	var out: Array[String] = []
-	if raw.is_empty():
-		return out
-	for part in raw.split("|", false):
-		var rid := part.strip_edges()
-		if not rid.is_empty():
-			out.append(rid)
-	return out
-
 func _rule_def(element_key: String, rule_id: String) -> Dictionary:
-	var elements: Dictionary = rules_config.get("elements", {})
-	if not elements.has(element_key):
+	var element_id := _element_for_key(element_key)
+	if element_id == TileState.Element.NONE:
 		return {}
-	var defs: Dictionary = elements[element_key]
+	var defs: Dictionary = _def_for(element_id).get("rules", {})
 	return defs.get(rule_id, {})
 
 func _evaluate_group_rule(rule_def: Dictionary, board: Dictionary, grid, group: Dictionary) -> int:
