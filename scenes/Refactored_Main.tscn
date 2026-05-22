@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://beawqa3qj40fn"]
+
+[ext_resource type="PackedScene" uid="uid://3lps20yejg6k" path="res://scenes/booster/booster_manager.tscn" id="1_a7jc5"]
+[ext_resource type="Script" uid="uid://bnb8amv0s2k4k" path="res://scripts/camera/IsometricCameraController.gd" id="1_x27jl"]
+[ext_resource type="PackedScene" uid="uid://baalf86is6lu2" path="res://scenes/card/card_manager.tscn" id="2_vg1d4"]
+[ext_resource type="PackedScene" uid="uid://dkeifl0skpmfk" path="res://scenes/hex/hex_manager.tscn" id="3_tbrwv"]
+[ext_resource type="PackedScene" uid="uid://1m8f7nk3gk26" path="res://scenes/hex/map_button.tscn" id="4_5mvym"]
+[ext_resource type="PackedScene" uid="uid://cm1vk1v7ec785" path="res://scenes/game/score_engine.tscn" id="4_xoyem"]
+[ext_resource type="PackedScene" uid="uid://e4s0qxa8vcde" path="res://scenes/game/orchestrator.tscn" id="5_71goi"]
+[ext_resource type="PackedScene" uid="uid://slux8ml7jqbn" path="res://scenes/quest/quest_manager.tscn" id="5_w2ew2"]
+[ext_resource type="PackedScene" uid="uid://b8oeyth2j2arg" path="res://scenes/game/point_counter.tscn" id="8_q5ijs"]
+
+[sub_resource type="Environment" id="Environment_tbrwv"]
+background_mode = 1
+background_color = Color(0.8186203, 0.7502329, 0.6806915, 1)
+
+[node name="RefactoredMain" type="Node3D" unique_id=1341387681]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=33937385]
+environment = SubResource("Environment_tbrwv")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment" unique_id=462752040]
+transform = Transform3D(-4.371139e-08, -0.7071068, 0.7071067, 0, 0.7071068, 0.7071067, -1, 3.0908623e-08, -3.0908616e-08, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=39127462]
+transform = Transform3D(1, 0, 0, 0, 0.7071068, 0.7071068, 0, -0.7071068, 0.7071068, 0, 29.4962, 32.186234)
+projection = 1
+current = true
+fov = 60.0
+size = 60.0
+near = 0.1
+far = 1000.0
+script = ExtResource("1_x27jl")
+move_speed = 24.0
+
+[node name="BoosterManager" parent="." unique_id=231766619 node_paths=PackedStringArray("orchestrator") instance=ExtResource("1_a7jc5")]
+position = Vector2(0, 569)
+orchestrator = NodePath("../Orchestrator")
+
+[node name="HandManager" parent="." unique_id=241167023 node_paths=PackedStringArray("orchestrator") instance=ExtResource("2_vg1d4")]
+position = Vector2(278, 542)
+orchestrator = NodePath("../Orchestrator")
+card_limit = 17
+
+[node name="HexManager" parent="." unique_id=866555908 node_paths=PackedStringArray("orchestrator") instance=ExtResource("3_tbrwv")]
+map_button = ExtResource("4_5mvym")
+map_ring_count = null
+orchestrator = NodePath("../Orchestrator")
+
+[node name="ScoreEngine" parent="." unique_id=271434607 instance=ExtResource("4_xoyem")]
+
+[node name="QuestManager" parent="." unique_id=409772543 instance=ExtResource("5_w2ew2")]
+position = Vector2(39, 72)
+
+[node name="Orchestrator" parent="." unique_id=1688505566 node_paths=PackedStringArray("booster_manager", "hand_manager", "hex_manager", "score_engine", "quest_manager", "point_counter") instance=ExtResource("5_71goi")]
+booster_manager = NodePath("../BoosterManager")
+hand_manager = NodePath("../HandManager")
+hex_manager = NodePath("../HexManager")
+score_engine = NodePath("../ScoreEngine")
+quest_manager = NodePath("../QuestManager")
+point_counter = NodePath("../PointCounter")
+
+[node name="PointCounter" parent="." unique_id=1020461036 node_paths=PackedStringArray("orchestrator") instance=ExtResource("8_q5ijs")]
+position = Vector2(80, 80)
+orchestrator = NodePath("../Orchestrator")

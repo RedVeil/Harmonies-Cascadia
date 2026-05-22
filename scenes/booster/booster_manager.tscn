@@ -1,0 +1,86 @@
+[gd_scene format=3 uid="uid://3lps20yejg6k"]
+
+[ext_resource type="Script" uid="uid://dhpl5abg2f64d" path="res://scripts/booster/booster_manager.gd" id="1_aj74b"]
+[ext_resource type="Script" uid="uid://bn7r6n5jftkr0" path="res://scripts/cards/card_container.gd" id="1_pe40v"]
+[ext_resource type="PackedScene" uid="uid://0fu8v3fe2jgj" path="res://scenes/card/card.tscn" id="3_ke0vr"]
+[ext_resource type="Shader" uid="uid://b4p8yk5wg88hu" path="res://assets/shader/progress_bar.gdshader" id="4_yeb88"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1m3pi"]
+shader = ExtResource("4_yeb88")
+shader_parameter/current_value = 0.0
+shader_parameter/lerp_value = 0.0
+shader_parameter/third_value = 0.0
+shader_parameter/front_color = Color(0.7529412, 0.101960786, 0.09411765, 1)
+shader_parameter/back_color = Color(0.3019608, 0.6745098, 0.87058824, 1)
+shader_parameter/third_color = Color(0.9098039, 0.8352941, 0.1882353, 1)
+
+[node name="BoosterManager" type="Node2D" unique_id=231766619]
+script = ExtResource("1_aj74b")
+
+[node name="CardContainer" type="Node2D" parent="." unique_id=576310366 node_paths=PackedStringArray("layout_rect")]
+z_index = 1
+script = ExtResource("1_pe40v")
+layout_rect = NodePath("../BoosterAreaReference")
+card_scene = ExtResource("3_ke0vr")
+max_gap = 100.0
+enable_stacking = null
+card_scale = null
+metadata/_custom_type_script = "uid://bn7r6n5jftkr0"
+
+[node name="BoosterAreaReference" type="ColorRect" parent="." unique_id=115703510]
+visible = false
+z_index = -1
+offset_left = 30.0
+offset_top = 3.0
+offset_right = 240.0
+offset_bottom = 97.0
+mouse_filter = 2
+
+[node name="AccPointBar" type="ColorRect" parent="." unique_id=1032457128]
+offset_top = -27.0
+offset_right = 200.0
+offset_bottom = -2.0
+color = Color(0.47397572, 0.47397572, 0.47397572, 1)
+
+[node name="ProgressBar" type="ColorRect" parent="AccPointBar" unique_id=2065025399]
+material = SubResource("ShaderMaterial_1m3pi")
+layout_mode = 0
+offset_right = 200.0
+offset_bottom = 25.0
+color = Color(1.540184e-06, 0.742786, 0.7476668, 1)
+
+[node name="Label" type="Label" parent="AccPointBar" unique_id=627897723]
+layout_mode = 0
+offset_right = 200.0
+offset_bottom = 25.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+text = "0 / 10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BoosterPointLabel" type="Panel" parent="." unique_id=110357191]
+offset_left = 217.0
+offset_top = -27.0
+offset_right = 242.0
+offset_bottom = -2.0
+
+[node name="CurrentPoints" type="Label" parent="BoosterPointLabel" unique_id=220220164]
+layout_mode = 0
+offset_top = -1.0
+offset_right = 25.0
+offset_bottom = 24.0
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PreviewPoints" type="Label" parent="BoosterPointLabel" unique_id=420879440]
+visible = false
+layout_mode = 0
+offset_left = 25.0
+offset_right = 50.0
+offset_bottom = 25.0
+text = "+1"
+horizontal_alignment = 1
+vertical_alignment = 1

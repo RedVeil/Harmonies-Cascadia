@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://b8oeyth2j2arg"]
+
+[ext_resource type="Script" uid="uid://bbktbkjb6lpki" path="res://scripts/game/point_counter.gd" id="1_iwanl"]
+[ext_resource type="Texture2D" uid="uid://ca2hp56qvfswa" path="res://assets/circle.png" id="1_uw2he"]
+[ext_resource type="Shader" uid="uid://8wow5a7grc78" path="res://assets/shader/circular_progress_bar.gdshader" id="2_iwanl"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ggq8u"]
+shader = ExtResource("2_iwanl")
+shader_parameter/primary_color = Color(0.7529412, 0.101960786, 0.09411765, 1)
+shader_parameter/secondary_color = Color(0.3019608, 0.6745098, 0.87058824, 1)
+shader_parameter/third_color = Color(0.9098039, 0.8352941, 0.1882353, 1)
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/unfilled_color = Color(0.443, 0.443, 0.443, 1)
+shader_parameter/current_value = 0.0
+shader_parameter/lerp_value = 0.0
+shader_parameter/third_value = 0.0
+shader_parameter/smooth_ = 0.005
+shader_parameter/width_in = 0.85
+shader_parameter/width_out = 0.95
+shader_parameter/border_width = 0.0
+
+[node name="PointCounter" type="Node2D" unique_id=1020461036]
+script = ExtResource("1_iwanl")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=101200354]
+position = Vector2(3.516674e-06, -5.9604645e-07)
+scale = Vector2(0.19000004, 0.19)
+texture = ExtResource("1_uw2he")
+
+[node name="ProgressBar" type="Sprite2D" parent="." unique_id=2076717452]
+material = SubResource("ShaderMaterial_ggq8u")
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("1_uw2he")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1407540716]
+offset_left = -20.0
+offset_top = -1.0
+offset_right = 20.0
+offset_bottom = 1.0
+color = Color(0, 0, 0, 1)
+
+[node name="CurrentLabel" type="Label" parent="." unique_id=660307299]
+offset_left = -34.0
+offset_top = -26.0
+offset_right = 34.0
+offset_bottom = 34.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "0+10"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="TargetLabel" type="Label" parent="." unique_id=1615549816]
+offset_left = -34.0
+offset_top = -34.0
+offset_right = 34.0
+offset_bottom = 25.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 2

@@ -1,0 +1,137 @@
+[gd_scene format=3 uid="uid://3bvwe0sroaru"]
+
+[ext_resource type="Script" uid="uid://32xqs6qfvsxg" path="res://scenes/game/placement_tooltip.gd" id="1_kjs7j"]
+[ext_resource type="Texture2D" uid="uid://boew28pgavxmj" path="res://assets/hex_outline.png" id="2_u02uc"]
+[ext_resource type="Texture2D" uid="uid://bjm1olkvh12fl" path="res://assets/hex_full.png" id="3_anuti"]
+
+[node name="PlacementTooltip" type="Node2D" unique_id=1404822029]
+script = ExtResource("1_kjs7j")
+
+[node name="element" type="Node2D" parent="." unique_id=250293903]
+z_index = 1
+scale = Vector2(0.5, 0.5)
+
+[node name="0" type="Sprite2D" parent="element" unique_id=816770408]
+visible = false
+texture = ExtResource("2_u02uc")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/0" unique_id=1819856055]
+show_behind_parent = true
+texture = ExtResource("3_anuti")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/0/Sprite2D" unique_id=1649905963]
+
+[node name="1" type="Sprite2D" parent="element" unique_id=540774914]
+visible = false
+position = Vector2(0, -360)
+texture = ExtResource("2_u02uc")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/1" unique_id=2136642677]
+show_behind_parent = true
+texture = ExtResource("3_anuti")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/1/Sprite2D" unique_id=1199683616]
+
+[node name="2" type="Sprite2D" parent="element" unique_id=732471621]
+visible = false
+position = Vector2(0, 360)
+texture = ExtResource("2_u02uc")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/2" unique_id=233860905]
+show_behind_parent = true
+texture = ExtResource("3_anuti")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/2/Sprite2D" unique_id=1401845861]
+
+[node name="animal" type="Node2D" parent="." unique_id=1633695476]
+z_index = 1
+scale = Vector2(0.5, 0.5)
+
+[node name="(0,0)" type="Sprite2D" parent="animal" unique_id=710472637]
+visible = false
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("2_u02uc")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/(0,0)" unique_id=422549064]
+show_behind_parent = true
+texture = ExtResource("3_anuti")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/(0,0)/Sprite2D" unique_id=2116645162]
+
+[node name="(-1,0)" type="Sprite2D" parent="animal" unique_id=1014776336]
+visible = false
+position = Vector2(-310, -180)
+scale = Vector2(0.99999976, 0.99999976)
+texture = ExtResource("2_u02uc")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/(-1,0)" unique_id=1763269611]
+show_behind_parent = true
+texture = ExtResource("3_anuti")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/(-1,0)/Sprite2D" unique_id=102002661]
+
+[node name="(0,1)" type="Sprite2D" parent="animal" unique_id=247670815]
+visible = false
+position = Vector2(4.7683716e-07, -360.00003)
+scale = Vector2(0.99999976, 0.99999976)
+texture = ExtResource("2_u02uc")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/(0,1)" unique_id=451015918]
+show_behind_parent = true
+texture = ExtResource("3_anuti")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/(0,1)/Sprite2D" unique_id=824968731]
+
+[node name="(-1,1)" type="Sprite2D" parent="animal" unique_id=213873289]
+visible = false
+position = Vector2(-310, 180.00003)
+scale = Vector2(0.99999976, 0.99999976)
+texture = ExtResource("2_u02uc")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/(-1,1)" unique_id=667345882]
+show_behind_parent = true
+texture = ExtResource("3_anuti")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/(-1,1)/Sprite2D" unique_id=2073218465]
+
+[node name="(0,-1)" type="Sprite2D" parent="animal" unique_id=1970963938]
+visible = false
+position = Vector2(0, 360)
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("2_u02uc")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/(0,-1)" unique_id=367155196]
+show_behind_parent = true
+texture = ExtResource("3_anuti")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/(0,-1)/Sprite2D" unique_id=1266278401]
+
+[node name="(1,-1)" type="Sprite2D" parent="animal" unique_id=464856756]
+visible = false
+position = Vector2(310, 179.99998)
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("2_u02uc")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/(1,-1)" unique_id=1268768387]
+show_behind_parent = true
+texture = ExtResource("3_anuti")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/(1,-1)/Sprite2D" unique_id=1987717354]
+
+[node name="(1,0)" type="Sprite2D" parent="animal" unique_id=1946438329]
+visible = false
+position = Vector2(310, -180)
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("2_u02uc")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/(1,0)" unique_id=730694205]
+show_behind_parent = true
+texture = ExtResource("3_anuti")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/(1,0)/Sprite2D" unique_id=615137148]
+
+[node name="Panel" type="Panel" parent="." unique_id=558093077]
+offset_left = -302.0
+offset_top = -307.0
+offset_right = 293.0
+offset_bottom = 311.0

@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://dkeifl0skpmfk"]
+
+[ext_resource type="Script" uid="uid://bttokb145g2nv" path="res://scripts/hex/hex_manager.gd" id="1_k7l4e"]
+[ext_resource type="PackedScene" uid="uid://bmgy5cn8lrk08" path="res://scenes/hex/hex_tile_container.tscn" id="2_k7l4e"]
+[ext_resource type="PackedScene" uid="uid://bo2vr7surwe56" path="res://scenes/hex/hex_tile.tscn" id="3_i8cld"]
+
+[node name="HexManager" type="Node3D" unique_id=866555908]
+script = ExtResource("1_k7l4e")
+
+[node name="HexTileContainer" parent="." unique_id=1069347499 instance=ExtResource("2_k7l4e")]
+hex_tile = ExtResource("3_i8cld")

@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://1m8f7nk3gk26"]
+
+[ext_resource type="Script" uid="uid://bndd78fhum7xi" path="res://scripts/hex/map_button.gd" id="1_okhts"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_okhts"]
+points = PackedVector3Array(0, 2, 0, 2, 2, 0, 1, 2, 1.732, -1, 2, 1.732, -2, 2, 0, -1, 2, -1.732, 1, 2, -1.732, 0, 0, 0, 2, 0, 0, 1, 0, 1.732, -1, 0, 1.732, -2, 0, 0, -1, 0, -1.732, 1, 0, -1.732)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vyrwg"]
+albedo_color = Color(0.6335562, 0.43252933, 0.10250264, 1)
+grow_amount = 0.299
+stencil_flags = 2
+stencil_outline_thickness = 0.131
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_mlbj0"]
+material = SubResource("StandardMaterial3D_vyrwg")
+top_radius = 2.0
+bottom_radius = 2.0
+height = 1.0
+radial_segments = 6
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_okhts"]
+albedo_color = Color(0.9411765, 0.2784314, 0.21960784, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_uvvb2"]
+material = SubResource("StandardMaterial3D_okhts")
+radius = 1.0
+
+[node name="StaticBody3D" type="StaticBody3D" unique_id=2089931694]
+script = ExtResource("1_okhts")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="." unique_id=576605822]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0046892166, 0)
+shape = SubResource("ConvexPolygonShape3D_okhts")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=104862912]
+transform = Transform3D(0.8656238, 0, 0.50069517, 0, 1, 0, -0.50069517, 0, 0.8656238, 0, 0.5, 0)
+mesh = SubResource("CylinderMesh_mlbj0")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MeshInstance3D" unique_id=1400657638]
+transform = Transform3D(0.99999994, 0, 2.9802322e-08, 0, 1, 0, -2.9802322e-08, 0, 0.99999994, 0, 0.53738654, 0)
+mesh = SubResource("SphereMesh_uvvb2")

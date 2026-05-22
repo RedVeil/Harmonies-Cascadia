@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://baalf86is6lu2"]
+
+[ext_resource type="Script" uid="uid://dcsotpixk5dmo" path="res://scripts/hand/hand_manager.gd" id="1_2rd7x"]
+[ext_resource type="Script" uid="uid://bn7r6n5jftkr0" path="res://scripts/cards/card_container.gd" id="2_us36d"]
+[ext_resource type="PackedScene" uid="uid://0fu8v3fe2jgj" path="res://scenes/card/card.tscn" id="3_fnvnm"]
+[ext_resource type="Texture2D" uid="uid://ca2hp56qvfswa" path="res://assets/circle.png" id="4_o7nb7"]
+[ext_resource type="Texture2D" uid="uid://d3d334omlfd7k" path="res://assets/carbage_can.png" id="5_f55ma"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_o7nb7"]
+radius = 210.0
+
+[node name="CardManager" type="Node2D" unique_id=231766619]
+script = ExtResource("1_2rd7x")
+
+[node name="CardContainer" type="Node2D" parent="." unique_id=576310366 node_paths=PackedStringArray("layout_rect")]
+z_index = 1
+script = ExtResource("2_us36d")
+layout_rect = NodePath("../CardAreaReference")
+card_scene = ExtResource("3_fnvnm")
+max_gap = 80.0
+enable_stacking = true
+card_scale = Vector2(0.15, 0.15)
+metadata/_custom_type_script = "uid://bn7r6n5jftkr0"
+
+[node name="CardAreaReference" type="ColorRect" parent="." unique_id=115703510]
+visible = false
+z_index = -1
+offset_right = 878.0
+offset_bottom = 150.0
+mouse_filter = 2
+
+[node name="RecyclingArea" type="Area2D" parent="." unique_id=37954181]
+position = Vector2(939.99994, 74.99999)
+scale = Vector2(0.2, 0.2)
+monitorable = false
+priority = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RecyclingArea" unique_id=2007424903]
+z_index = 1
+shape = SubResource("CircleShape2D_o7nb7")
+
+[node name="RecyclingBin" type="Sprite2D" parent="." unique_id=1133067387]
+modulate = Color(0.8901961, 0.39215687, 0.31764707, 1)
+position = Vector2(939.99994, 74.99999)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("4_o7nb7")
+
+[node name="Sprite2D" type="Sprite2D" parent="RecyclingBin" unique_id=708343283]
+modulate = Color(0.41598046, 0.41598043, 0.4159804, 1)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("5_f55ma")
+
+[connection signal="area_entered" from="RecyclingArea" to="." method="_on_recycling_area_area_entered"]
+[connection signal="area_exited" from="RecyclingArea" to="." method="_on_recycling_area_area_exited"]
+[connection signal="input_event" from="RecyclingArea" to="." method="_on_recycling_area_input_event"]
+[connection signal="mouse_entered" from="RecyclingArea" to="." method="_on_recycling_area_mouse_entered"]
+[connection signal="mouse_exited" from="RecyclingArea" to="." method="_on_recycling_area_mouse_exited"]
