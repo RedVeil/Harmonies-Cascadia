@@ -12,9 +12,18 @@ config_version=5
 
 config/name="Harmonies-Cascadia"
 config/version="0.1.0"
-run/main_scene="res://scenes/Main.tscn"
+run/main_scene="uid://beawqa3qj40fn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+CardCatalog="*uid://b8oog78vthmvf"
+Enums="*uid://dx4s0agjfg2qs"
+ElementCatalog="*uid://d2wigwbdsvfso"
+BoosterCatalog="*uid://crtpprdxd6gj4"
+RuleCatalog="*uid://tqkcwruu08es"
+QuestCatalog="*uid://dwsmx6x25woub"
 
 [display]
 
@@ -23,6 +32,23 @@ window/size/viewport_height=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
+[global_group]
+
+interactable=""
+
+[input]
+
+mouse_scroll_up={
+"deadzone": 0.2,
+"events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":0,"position":Vector2(0, 0),"global_position":Vector2(0, 0),"factor":1.0,"button_index":4,"canceled":false,"pressed":false,"double_click":false,"script":null)
+]
+}
+mouse_scroll_down={
+"deadzone": 0.2,
+"events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":0,"position":Vector2(0, 0),"global_position":Vector2(0, 0),"factor":1.0,"button_index":5,"canceled":false,"pressed":false,"double_click":false,"script":null)
+]
+}
+
 [physics]
 
 3d/physics_engine="Jolt Physics"
@@ -30,3 +56,6 @@ window/stretch/aspect="expand"
 [rendering]
 
 rendering_device/driver.windows="d3d12"
+lights_and_shadows/directional_shadow/size=8192
+anti_aliasing/quality/msaa_3d=2
+lights_and_shadows/positional_shadow/atlas_size=8192

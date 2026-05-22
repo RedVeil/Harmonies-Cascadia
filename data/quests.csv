@@ -1,4 +1,0 @@
-id,element,required_groups,min_group_size,max_group_size,icon,points
-forest_groups_5_any,forest,5,1,*,F0,25
-field_groups_3_exact3,field,3,3,3,A0,25
-mountain_group_1_size10,mountain,1,10,*,M0,25
