@@ -26,25 +26,16 @@ func set_element_placement(center:Array[Placement]) -> void:
 			300 / texture_size.y
 		)
 		
-		get_node("element/%d/Sprite2D" % i).self_modulate = Color.html(level.color)
-		get_node("element/%d/Sprite2D/Sprite2D" % i).texture = icon
-		get_node("element/%d/Sprite2D/Sprite2D" % i).scale = Vector2.ONE * scale_factor
-		get_node("element/%d" % i).show()
+		get_node("element/%d/%d/Sprite2D" % [center.size(), i]).self_modulate = Color.html(level.color)
+		get_node("element/%d/%d/Sprite2D/Sprite2D" % [center.size(), i]).texture = icon
+		get_node("element/%d/%d/Sprite2D/Sprite2D" % [center.size(), i]).scale = Vector2.ONE * scale_factor
+		get_node("element/%d" % [center.size()]).show()
 
 func set_animal_placement(center:Array[Placement],bonus:Array[Placement]) -> void:
 	var push_direction = Vector2i.ZERO
 	for b in bonus:
-		if b.coords.x == 2:
-			push_direction = Vector2i.LEFT
-			break
-		elif b.coords.x == -2:
-			push_direction = Vector2i.RIGHT
-			break
 		if b.coords.y == 2:
-			push_direction = Vector2i(-1 if b.coords.x >= 0 else 1, -1)
-			break
-		elif b.coords.y == -2:
-			push_direction = Vector2i(-1 if b.coords.x >= 0 else 1, 1)
+			push_direction = Vector2i(0,-1)
 			break
 	
 	if push_direction == Vector2i.ZERO:
@@ -76,7 +67,7 @@ func apply_animal_tile_style(placement: Placement, is_center:bool) -> void:
 			300 / texture_size.y
 		)
 		
-		get_node("animal/(%d,%d)/Sprite2D" % [placement.coords.x, placement.coords.y]).modulate = Color.html(level.color)
+		get_node("animal/(%d,%d)/Sprite2D" % [placement.coords.x, placement.coords.y]).self_modulate = Color.html(level.color)
 		get_node("animal/(%d,%d)/Sprite2D/Sprite2D" % [placement.coords.x, placement.coords.y]).texture = icon
 		get_node("animal/(%d,%d)/Sprite2D/Sprite2D" % [placement.coords.x, placement.coords.y]).scale = Vector2.ONE * scale_factor
 		get_node("animal/(%d,%d)" % [placement.coords.x, placement.coords.y]).show()

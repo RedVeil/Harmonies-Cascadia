@@ -14,12 +14,13 @@ size = Vector2(499.99994, 819.9999)
 monitorable = false
 priority = 1
 script = ExtResource("1_73nwn")
-scale_speed = 20.0
-bounce_height = 10.0
-bounce_speed = 6.0
+scale_speed = 12.0
+hover_scale = 1.2
+hover_height = 50.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1382946366]
 z_index = 1
+y_sort_enabled = true
 position = Vector2(9.536743e-07, -1.9073486e-06)
 scale = Vector2(0.1, 0.1)
 shape = SubResource("RectangleShape2D_jl6rh")
@@ -28,35 +29,38 @@ debug_color = Color(4.042983e-06, 0.5881858, 0.68830764, 0.41960785)
 [node name="visuals" type="Node2D" parent="." unique_id=1417204705]
 scale = Vector2(0.1, 0.1)
 
-[node name="Sprite2D" type="Sprite2D" parent="visuals" unique_id=1137015239]
+[node name="points" type="Node2D" parent="visuals" unique_id=474511993]
 visible = false
-z_index = 1
-position = Vector2(-150, -310)
-scale = Vector2(0.25, 0.25)
-texture = ExtResource("3_kaf1t")
+scale = Vector2(0.99999994, 0.99999994)
 
-[node name="Label2" type="Label" parent="visuals/Sprite2D" unique_id=155409266]
+[node name="Label2" type="Label" parent="visuals/points" unique_id=155409266]
 z_index = 2
-offset_left = -199.99994
-offset_top = -199.99988
-offset_right = 199.99997
-offset_bottom = 200.0
+offset_left = -200.0
+offset_top = -360.0
+offset_right = -100.00002
+offset_bottom = -260.00003
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 3
-theme_override_font_sizes/font_size = 200
+theme_override_font_sizes/font_size = 72
 text = "6"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="visuals/points" unique_id=1137015239]
+z_index = 1
+position = Vector2(-150.00002, -310.00003)
+scale = Vector2(0.25000003, 0.25000003)
+texture = ExtResource("3_kaf1t")
 
 [node name="Label" type="Label" parent="visuals" unique_id=1692518054]
 visible = false
 z_index = 1
 offset_left = -250.0
-offset_top = 320.00024
+offset_top = 289.99997
 offset_right = 249.99994
-offset_bottom = 500.00024
-theme_override_font_sizes/font_size = 48
+offset_bottom = 419.00024
+theme_override_font_sizes/font_size = 72
 text = "10 / 10"
 horizontal_alignment = 1
 
@@ -73,7 +77,7 @@ texture = ExtResource("3_73nwn")
 
 [node name="shadow" type="Sprite2D" parent="visuals" unique_id=866615572]
 z_index = -1
-position = Vector2(1.9999999, 1.9999999)
+position = Vector2(12, 11.999998)
 texture = ExtResource("4_1q37b")
 
 [node name="stacks" type="Node2D" parent="." unique_id=1785229949]
@@ -277,7 +281,29 @@ position = Vector2(1.9999999, 1.9999999)
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("4_1q37b")
 
+[node name="stack10" type="Node2D" parent="stacks" unique_id=1858401543]
+visible = false
+z_index = -11
+position = Vector2(0, -30)
+
+[node name="background" type="Sprite2D" parent="stacks/stack10" unique_id=1166040136]
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_73nwn")
+
+[node name="icon" type="Sprite2D" parent="stacks/stack10/background" unique_id=2081033631]
+
+[node name="border" type="Sprite2D" parent="stacks/stack10" unique_id=292114773]
+z_index = 1
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("3_73nwn")
+
+[node name="shadow" type="Sprite2D" parent="stacks/stack10" unique_id=304536951]
+z_index = -1
+position = Vector2(1.9999999, 1.9999999)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("4_1q37b")
+
 [node name="PlacementTooltip" parent="." unique_id=1404822029 instance=ExtResource("2_ri62e")]
 visible = false
-position = Vector2(0, -124)
+position = Vector2(0, -193)
 scale = Vector2(0.99999994, 0.99999994)

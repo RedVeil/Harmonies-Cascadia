@@ -76,15 +76,17 @@ func remove_quest() -> void:
 ## ----- Utility Functions ----- ##
 
 func set_element_quest_visuals(quest:Quest) -> void:
-	var level = ElementCatalog.elements[quest.id].levels[0]
-	$Background.modulate = Color.html(level.color)
-	set_icon(level.icon, 20)
+	var element = ElementCatalog.elements[quest.target_id]
+	var level = ElementCatalog.elements[quest.target_id].levels[0]
+	$Background.self_modulate = Color.html(level.color)
+	set_icon(level.icon, 300)
 
 func set_animal_quest_visuals(quest:Quest) -> void:
-	var placement = CardCatalog.animals[quest.id].placement[0]
+	var animal = CardCatalog.animals[CardCatalog.animals.find_custom(func (animal): return animal.id == quest.target_id)]
+	var placement = animal.placement[0]
 	var level = ElementCatalog.elements[placement.element].levels[placement.level-1]
-	$Background.modulate = Color.html(level.color)
-	set_icon(level.icon, 20)
+	$icon.self_modulate = Color.html(level.color)
+	set_icon(animal.icon, 300)
 
 func set_icon(icon_path:String, width:float) -> void:
 	var icon : Texture2D = load(icon_path)

@@ -15,7 +15,7 @@ func build_quest_options() -> bool:
 	if typeof(parsed) != TYPE_ARRAY:
 		push_error("Invalid quest data JSON: %s" % path)
 		return false
-	 
+
 	for option in parsed:
 		quest_options.append(parse_quest_option(option))
 		
@@ -26,8 +26,8 @@ func parse_quest_option(option:Dictionary) -> Quest:
 	quest_option.id = option.id
 	quest_option.name = option.name
 	quest_option.description = option.description
-	quest_option.type = option.description
-	quest_option.target_id = option.description
+	quest_option.type = option.type
+	quest_option.target_id = option.target_id
 	quest_option.levels.assign(option.levels)
 	quest_option.min_group_size = option.min_group_size
 	quest_option.max_group_size = option.max_group_size

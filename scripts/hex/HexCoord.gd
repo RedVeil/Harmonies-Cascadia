@@ -19,8 +19,6 @@ static var MAP_DIRECTIONS : Array[Vector2i] = [
 	Vector2i(-1, 2)
 ] 
 
-static func rotate_left(c: Vector2i) -> Vector2i:
-	return Vector2i(-c.y, c.x + c.y)
 
 static func neighbors(c: Vector2i) -> Array[Vector2i]:
 	var out: Array[Vector2i] = []
@@ -58,3 +56,18 @@ static func axial_to_world_pointy(coord: Vector2i, hex_size: float) -> Vector3:
 	var z := hex_size * 1.5 * float(r)
 
 	return Vector3(x, 0.0, z)
+	
+static func rotate_clockwise(point: Vector2i, center: Vector2i) -> Vector2i:
+	var q := point.x - center.x
+	var r := point.y - center.y
+
+	return center + Vector2i(q + r, -q)
+
+static func mirror(point: Vector2i, center: Vector2i) -> Vector2i:
+	var q := point.x - center.x
+	var r := point.y - center.y
+
+	# mirror across one hex axis
+	var mirrored := Vector2i(q + r, -r)
+
+	return center + mirrored

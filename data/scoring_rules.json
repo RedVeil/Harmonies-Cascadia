@@ -2,6 +2,7 @@
 	{
 		"id": 0,
 		"name": "ForestStandard",
+		"description": "Forests earn points by upgrading tiles. Each level of a forest earns more points than the last.",
 		"min_group_size": 1,
 		"max_group_size": 100000,
 		"points_per_tile_level": [
@@ -25,6 +26,7 @@
 	{
 		"id": 1,
 		"name": "ForestHigh",
+		"description": "ForestHigh",
 		"min_group_size": 1,
 		"max_group_size": 100000,
 		"points_per_tile_level": [
@@ -38,7 +40,7 @@
 			],
 			[
 				3,
-				3
+				5
 			]
 		],
 		"flat_points": 0,
@@ -48,6 +50,7 @@
 	{
 		"id": 2,
 		"name": "ForestReverse",
+		"description": "ForestReverse",
 		"min_group_size": 1,
 		"max_group_size": 100000,
 		"points_per_tile_level": [
@@ -71,6 +74,7 @@
 	{
 		"id": 3,
 		"name": "FieldStandard",
+		"description": "Fields earn flat points when placed in a group of 2 tiles. Adding more fields to a group dont award more points. Upgrading a field earns 1 additional point.",
 		"min_group_size": 2,
 		"max_group_size": 2,
 		"points_per_tile_level": [
@@ -90,6 +94,7 @@
 	{
 		"id": 4,
 		"name": "FieldSingle",
+		"description": "FieldSingle",
 		"min_group_size": 1,
 		"max_group_size": 1,
 		"points_per_tile_level": [
@@ -109,6 +114,7 @@
 	{
 		"id": 5,
 		"name": "FieldGroup",
+		"description": "FieldGroup",
 		"min_group_size": 4,
 		"max_group_size": 4,
 		"points_per_tile_level": [
@@ -128,6 +134,7 @@
 	{
 		"id": 6,
 		"name": "MountainStandard",
+		"description": "Mountains need to have atleast 1 neighboring mountain to earn points. After that they earn points by upgrading tiles.",
 		"min_group_size": 2,
 		"max_group_size": 100000,
 		"points_per_tile_level": [
@@ -151,6 +158,7 @@
 	{
 		"id": 7,
 		"name": "MountainSingle",
+		"description": "MountainSingle",
 		"min_group_size": 1,
 		"max_group_size": 100000,
 		"points_per_tile_level": [
@@ -174,6 +182,7 @@
 	{
 		"id": 8,
 		"name": "MountainGroup",
+		"description": "MountainGroup",
 		"min_group_size": 3,
 		"max_group_size": 3,
 		"points_per_tile_level": [
@@ -197,6 +206,7 @@
 	{
 		"id": 9,
 		"name": "RiverStandard",
+		"description": "Rivers earn points by the length of a river. The score calculation will always take the shortest route from end to end. All additional tiles earn flat points.",
 		"min_group_size": 1,
 		"max_group_size": 100000,
 		"points_per_tile_level": [
@@ -222,6 +232,7 @@
 	{
 		"id": 10,
 		"name": "RiverShort",
+		"description": "RiverShort",
 		"min_group_size": 1,
 		"max_group_size": 100000,
 		"points_per_tile_level": [
@@ -246,6 +257,7 @@
 	{
 		"id": 11,
 		"name": "RiverFlat",
+		"description": "RiverFlat",
 		"min_group_size": 1,
 		"max_group_size": 100000,
 		"points_per_tile_level": [
@@ -261,15 +273,12 @@
 	{
 		"id": 12,
 		"name": "WetlandStandard",
+		"description": "Wetlands need to have atleast 3 neighbors of different elements to score flat points.",
 		"min_group_size": 1,
 		"max_group_size": 1,
 		"points_per_tile_level": [
 			[
 				1,
-				0
-			],
-			[
-				2,
 				0
 			]
 		],
@@ -284,15 +293,12 @@
 	{
 		"id": 13,
 		"name": "WetlandPointsPer",
+		"description": "WetlandPointsPer",
 		"min_group_size": 1,
 		"max_group_size": 1,
 		"points_per_tile_level": [
 			[
 				1,
-				0
-			],
-			[
-				2,
 				0
 			]
 		],
@@ -307,15 +313,12 @@
 	{
 		"id": 13,
 		"name": "WetlandPair",
+		"description": "WetlandPair",
 		"min_group_size": 2,
 		"max_group_size": 2,
 		"points_per_tile_level": [
 			[
 				1,
-				0
-			],
-			[
-				2,
 				0
 			]
 		],

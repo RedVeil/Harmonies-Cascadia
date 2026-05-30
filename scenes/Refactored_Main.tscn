@@ -9,6 +9,8 @@
 [ext_resource type="PackedScene" uid="uid://e4s0qxa8vcde" path="res://scenes/game/orchestrator.tscn" id="5_71goi"]
 [ext_resource type="PackedScene" uid="uid://slux8ml7jqbn" path="res://scenes/quest/quest_manager.tscn" id="5_w2ew2"]
 [ext_resource type="PackedScene" uid="uid://b8oeyth2j2arg" path="res://scenes/game/point_counter.tscn" id="8_q5ijs"]
+[ext_resource type="PackedScene" uid="uid://betdpdjavfk4b" path="res://scenes/card/card_recycling.tscn" id="10_ggq8u"]
+[ext_resource type="PackedScene" uid="uid://bv5ofl0j1ktqc" path="res://scenes/game/score_tooltips.tscn" id="11_b2x3j"]
 
 [sub_resource type="Environment" id="Environment_tbrwv"]
 background_mode = 1
@@ -24,38 +26,39 @@ transform = Transform3D(-4.371139e-08, -0.7071068, 0.7071067, 0, 0.7071068, 0.70
 shadow_enabled = true
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=39127462]
-transform = Transform3D(1, 0, 0, 0, 0.7071068, 0.7071068, 0, -0.7071068, 0.7071068, 0, 29.4962, 32.186234)
+transform = Transform3D(1, 0, 0, 0, 0.7071068, 0.7071068, 0, -0.7071068, 0.7071068, 0, 50, 50)
 projection = 1
 current = true
 fov = 60.0
-size = 60.0
+size = 40.0
 near = 0.1
 far = 1000.0
 script = ExtResource("1_x27jl")
 move_speed = 24.0
 
+[node name="QuestManager" parent="." unique_id=409772543 instance=ExtResource("5_w2ew2")]
+position = Vector2(60, 133)
+
 [node name="BoosterManager" parent="." unique_id=231766619 node_paths=PackedStringArray("orchestrator") instance=ExtResource("1_a7jc5")]
-position = Vector2(0, 569)
+position = Vector2(51, 668)
 orchestrator = NodePath("../Orchestrator")
 
-[node name="HandManager" parent="." unique_id=241167023 node_paths=PackedStringArray("orchestrator") instance=ExtResource("2_vg1d4")]
-position = Vector2(278, 542)
+[node name="CardManager" parent="." unique_id=241167023 node_paths=PackedStringArray("orchestrator") instance=ExtResource("2_vg1d4")]
+position = Vector2(366, 614)
 orchestrator = NodePath("../Orchestrator")
-card_limit = 17
+card_limit = 8
+card_limit_buffer = 6
 
 [node name="HexManager" parent="." unique_id=866555908 node_paths=PackedStringArray("orchestrator") instance=ExtResource("3_tbrwv")]
+orchestrator = NodePath("../Orchestrator")
 map_button = ExtResource("4_5mvym")
 map_ring_count = null
-orchestrator = NodePath("../Orchestrator")
 
 [node name="ScoreEngine" parent="." unique_id=271434607 instance=ExtResource("4_xoyem")]
 
-[node name="QuestManager" parent="." unique_id=409772543 instance=ExtResource("5_w2ew2")]
-position = Vector2(39, 72)
-
-[node name="Orchestrator" parent="." unique_id=1688505566 node_paths=PackedStringArray("booster_manager", "hand_manager", "hex_manager", "score_engine", "quest_manager", "point_counter") instance=ExtResource("5_71goi")]
+[node name="Orchestrator" parent="." unique_id=1688505566 node_paths=PackedStringArray("booster_manager", "card_manager", "hex_manager", "score_engine", "quest_manager", "point_counter") instance=ExtResource("5_71goi")]
 booster_manager = NodePath("../BoosterManager")
-hand_manager = NodePath("../HandManager")
+card_manager = NodePath("../CardManager")
 hex_manager = NodePath("../HexManager")
 score_engine = NodePath("../ScoreEngine")
 quest_manager = NodePath("../QuestManager")
@@ -63,4 +66,12 @@ point_counter = NodePath("../PointCounter")
 
 [node name="PointCounter" parent="." unique_id=1020461036 node_paths=PackedStringArray("orchestrator") instance=ExtResource("8_q5ijs")]
 position = Vector2(80, 80)
+orchestrator = NodePath("../Orchestrator")
+
+[node name="CardRecycling" parent="." unique_id=1759140847 node_paths=PackedStringArray("orchestrator") instance=ExtResource("10_ggq8u")]
+position = Vector2(1016, 660)
+orchestrator = NodePath("../Orchestrator")
+
+[node name="ScoreTooltip" parent="." unique_id=33584632 node_paths=PackedStringArray("orchestrator") instance=ExtResource("11_b2x3j")]
+position = Vector2(1190, 0)
 orchestrator = NodePath("../Orchestrator")

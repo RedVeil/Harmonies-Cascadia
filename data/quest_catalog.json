@@ -1,14 +1,62 @@
 [
 	{
 		"id":0,
-		"name":"",
-		"description":"",
+		"name":"ForestGroup",
+		"description":"Have 3 forest groups of atleast 1 tile to score 30 points.",
 		"type":0,
-		"target_id":0,
-		"levels":[],
-		"min_group_size":0,
-		"max_group_size":0,
-		"group_amount":0,
-		"points":0
+		"target_id":1,
+		"levels":[1,2,3],
+		"min_group_size":1,
+		"max_group_size":10000,
+		"group_amount":3,
+		"points":30
+	},
+	{
+		"id":1,
+		"name":"FieldGroup",
+		"description":"Have 5 field groups of atleast 3 tile to score 60 points.",
+		"type":0,
+		"target_id":2,
+		"levels":[1,2],
+		"min_group_size":3,
+		"max_group_size":10000,
+		"group_amount":3,
+		"points":60
+	},
+	{
+		"id":2,
+		"name":"MountainPair",
+		"description":"Have 2 mountain group of 2 tiles with level 2 to score 20 points",
+		"type":0,
+		"target_id":3,
+		"levels":[3],
+		"min_group_size":2,
+		"max_group_size":2,
+		"group_amount":2,
+		"points":20
+	},
+	{
+		"id":3,
+		"name":"RiverGroup",
+		"description":"Have 3 river groups of exactly 1 tile to score 20 points.",
+		"type":0,
+		"target_id":4,
+		"levels":[1],
+		"min_group_size":1,
+		"max_group_size":1,
+		"group_amount":3,
+		"points":20
+	},
+	{
+		"id":4,
+		"name":"WetlandGroup",
+		"description":"Have 3 wetland groups of atleast 1 tile to score 20 points.",
+		"type":0,
+		"target_id":5,
+		"levels":[1],
+		"min_group_size":1,
+		"max_group_size":10000,
+		"group_amount":3,
+		"points":20
 	}
 ]

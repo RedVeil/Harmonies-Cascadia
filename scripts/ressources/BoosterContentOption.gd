@@ -12,4 +12,4 @@ enum RewardType {
 @export var type: RewardType = RewardType.ELEMENT
 @export var id: int = 0
 @export var amount: int = 1
-@export_range(0, 100, 0) var draw_chance: int = 0
+@export_range(0, 100, 0) var draw_chance: float = 0.0

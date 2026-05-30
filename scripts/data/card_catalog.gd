@@ -28,7 +28,7 @@ func parse_card(card:Dictionary) -> CardData:
 	card_data.id = card.id
 	card_data.type = card.type
 	card_data.name = card.name
-	card_data.amount = card.id
+	card_data.amount = card.amount
 	card_data.draw_chance = card.draw_chance
 	card_data.point_score = card.point_score
 	card_data.icon = card.icon

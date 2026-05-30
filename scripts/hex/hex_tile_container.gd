@@ -62,6 +62,7 @@ func apply_preview(preview:TileStatePreview) -> void:
 	if preview.is_valid:
 		apply_target_preview_visuals(preview)
 		apply_points_preview(preview)
+		prev_contributing_tiles.assign(preview.contributing_coords)
 	else:
 		tiles_by_coord[hover_target].show_outline(Color.CRIMSON)
 
@@ -93,7 +94,8 @@ func apply_target_preview_visuals(preview:TileStatePreview) -> void:
 	new_visuals.icon = load(element_level.icon)
 	
 	if tile_state.animal_id != -1:
-			new_visuals.animal_icon = load(CardCatalog.animals[tile_state.animal_id].icon)
+		var animal = CardCatalog.animals[CardCatalog.animals.find_custom(func (animal): return animal.id == tile_state.animal_id)]
+		new_visuals.animal_icon = load(animal.icon)
 	
 	new_target_visuals = new_visuals
 	tiles_by_coord[hover_target].update_visuals(new_visuals)
@@ -111,6 +113,7 @@ func show_positive_preview(preview: TileStatePreview) -> void:
 	tiles_by_coord[hover_target].show_points(preview.points_diff)
 		
 	for coord in preview.contributing_coords:
+		if coord != hover_target:
 			tiles_by_coord[coord].show_outline(Color.GOLD)
 
 func show_negative_preview(preview: TileStatePreview) -> void:
@@ -118,7 +121,8 @@ func show_negative_preview(preview: TileStatePreview) -> void:
 	tiles_by_coord[hover_target].show_points(preview.points_diff)
 	
 	for coord in preview.contributing_coords:
-		tiles_by_coord[coord].show_outline(Color.CRIMSON)
+		if coord != hover_target:
+			tiles_by_coord[coord].show_outline(Color.CRIMSON)
 			
 func show_neutral_preview(preview: TileStatePreview) -> void:
 	tiles_by_coord[hover_target].show_outline(Color.WHITE)

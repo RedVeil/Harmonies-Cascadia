@@ -4,52 +4,394 @@
 	"booster_options": [
 		{
 			"type": 1,
-			"draw_chance": 100,
+			"draw_chance": 22.0,
 			"base_content_options": [
 				{
 					"type": "element",
 					"id": 1,
 					"amount": 3,
-					"draw_chance": 100
+					"draw_chance": 100.0
 				},
 				{
 					"type": "animal",
 					"id": 1,
 					"amount": 1,
-					"draw_chance": 100
+					"draw_chance": 100.0
 				}
 			],
-			"extra_chance": 100,
+			"extra_chance": 100.0,
 			"extra_content_options": [
 				{
 					"type": "element",
 					"id": 1,
 					"amount": 1,
-					"draw_chance": 50
+					"draw_chance": 40.0
 				},
 				{
 					"type": "animal",
 					"id": 1,
 					"amount": 1,
-					"draw_chance": 30
+					"draw_chance": 25.0
 				},
 				{
 					"type": "quest",
-					"id": 1,
+					"id": 0,
 					"amount": 1,
-					"draw_chance": 5
+					"draw_chance": 20.0
 				},
 				{
 					"type": "booster_point",
 					"id": -1,
 					"amount": 1,
-					"draw_chance": 10
+					"draw_chance": 10.0
 				},
 				{
 					"type": "map_point",
 					"id": 1,
 					"amount": 1,
-					"draw_chance": 5
+					"draw_chance": 5.0
+				}
+			]
+		},
+		{
+			"type": 2,
+			"draw_chance": 22.0,
+			"base_content_options": [
+				{
+					"type": "element",
+					"id": 2,
+					"amount": 3,
+					"draw_chance": 100.0
+				},
+				{
+					"type": "animal",
+					"id": 2,
+					"amount": 1,
+					"draw_chance": 100.0
+				}
+			],
+			"extra_chance": 100.0,
+			"extra_content_options": [
+				{
+					"type": "element",
+					"id": 2,
+					"amount": 1,
+					"draw_chance": 40.0
+				},
+				{
+					"type": "animal",
+					"id": 2,
+					"amount": 1,
+					"draw_chance": 25.0
+				},
+				{
+					"type": "quest",
+					"id": 0,
+					"amount": 1,
+					"draw_chance": 20.0
+				},
+				{
+					"type": "booster_point",
+					"id": -1,
+					"amount": 1,
+					"draw_chance": 10.0
+				},
+				{
+					"type": "map_point",
+					"id": 1,
+					"amount": 1,
+					"draw_chance": 5.0
+				}
+			]
+		},
+		{
+			"type": 3,
+			"draw_chance": 22.0,
+			"base_content_options": [
+				{
+					"type": "element",
+					"id": 3,
+					"amount": 3,
+					"draw_chance": 100.0
+				},
+				{
+					"type": "animal",
+					"id": 3,
+					"amount": 1,
+					"draw_chance": 100.0
+				}
+			],
+			"extra_chance": 100.0,
+			"extra_content_options": [
+				{
+					"type": "element",
+					"id": 3,
+					"amount": 1,
+					"draw_chance": 40.0
+				},
+				{
+					"type": "animal",
+					"id": 3,
+					"amount": 1,
+					"draw_chance": 25.0
+				},
+				{
+					"type": "quest",
+					"id": 0,
+					"amount": 1,
+					"draw_chance": 20.0
+				},
+				{
+					"type": "booster_point",
+					"id": -1,
+					"amount": 1,
+					"draw_chance": 10.0
+				},
+				{
+					"type": "map_point",
+					"id": 1,
+					"amount": 1,
+					"draw_chance": 5.0
+				}
+			]
+		},
+		{
+			"type": 4,
+			"draw_chance": 12.0,
+			"base_content_options": [
+				{
+					"type": "element",
+					"id": 4,
+					"amount": 3,
+					"draw_chance": 100.0
+				},
+				{
+					"type": "animal",
+					"id": 4,
+					"amount": 1,
+					"draw_chance": 100.0
+				}
+			],
+			"extra_chance": 100.0,
+			"extra_content_options": [
+				{
+					"type": "element",
+					"id": 4,
+					"amount": 1,
+					"draw_chance": 40.0
+				},
+				{
+					"type": "animal",
+					"id": 4,
+					"amount": 1,
+					"draw_chance": 25.0
+				},
+				{
+					"type": "quest",
+					"id": 0,
+					"amount": 1,
+					"draw_chance": 20.0
+				},
+				{
+					"type": "booster_point",
+					"id": -1,
+					"amount": 1,
+					"draw_chance": 10.0
+				},
+				{
+					"type": "map_point",
+					"id": 1,
+					"amount": 1,
+					"draw_chance": 5.0
+				}
+			]
+		},
+		{
+			"type": 5,
+			"draw_chance": 12.0,
+			"base_content_options": [
+				{
+					"type": "element",
+					"id": 5,
+					"amount": 3,
+					"draw_chance": 100.0
+				},
+				{
+					"type": "animal",
+					"id": 5,
+					"amount": 1,
+					"draw_chance": 100.0
+				}
+			],
+			"extra_chance": 100.0,
+			"extra_content_options": [
+				{
+					"type": "element",
+					"id": 5,
+					"amount": 1,
+					"draw_chance": 40.0
+				},
+				{
+					"type": "animal",
+					"id": 5,
+					"amount": 1,
+					"draw_chance": 25.0
+				},
+				{
+					"type": "quest",
+					"id": 0,
+					"amount": 1,
+					"draw_chance": 20.0
+				},
+				{
+					"type": "booster_point",
+					"id": -1,
+					"amount": 1,
+					"draw_chance": 10.0
+				},
+				{
+					"type": "map_point",
+					"id": 1,
+					"amount": 1,
+					"draw_chance": 5.0
+				}
+			]
+		},
+		{
+			"type": 5,
+			"draw_chance": 10.0,
+			"base_content_options": [
+				{
+					"type": "animal",
+					"id": 1,
+					"amount": 1,
+					"draw_chance": 60.0
+				},
+				{
+					"type": "animal",
+					"id": 2,
+					"amount": 1,
+					"draw_chance": 60.0
+				},
+				{
+					"type": "animal",
+					"id": 3,
+					"amount": 1,
+					"draw_chance": 60.0
+				},
+				{
+					"type": "animal",
+					"id": 4,
+					"amount": 1,
+					"draw_chance": 60.0
+				},
+				{
+					"type": "animal",
+					"id": 5,
+					"amount": 1,
+					"draw_chance": 60.0
+				}
+			],
+			"extra_chance": 100.0,
+			"extra_content_options": [
+				{
+					"type": "animal",
+					"id": 1,
+					"amount": 1,
+					"draw_chance": 10.0
+				},
+				{
+					"type": "animal",
+					"id": 2,
+					"amount": 1,
+					"draw_chance": 10.0
+				},
+				{
+					"type": "animal",
+					"id": 3,
+					"amount": 1,
+					"draw_chance": 10.0
+				},
+				{
+					"type": "animal",
+					"id": 4,
+					"amount": 1,
+					"draw_chance": 10.0
+				},
+				{
+					"type": "animal",
+					"id": 5,
+					"amount": 1,
+					"draw_chance": 10.0
+				}
+			]
+		},
+		{
+			"type": 6,
+			"draw_chance": 100.0,
+			"base_content_options": [
+				{
+					"type": "element",
+					"id": 1,
+					"amount": 1,
+					"draw_chance": 70.0
+				},
+				{
+					"type": "element",
+					"id": 2,
+					"amount": 1,
+					"draw_chance": 70.0
+				},
+				{
+					"type": "element",
+					"id": 3,
+					"amount": 1,
+					"draw_chance": 70.0
+				},
+				{
+					"type": "element",
+					"id": 4,
+					"amount": 1,
+					"draw_chance": 70.0
+				},
+				{
+					"type": "element",
+					"id": 5,
+					"amount": 1,
+					"draw_chance": 70.0
+				}
+			],
+			"extra_chance": 100.0,
+			"extra_content_options": [
+				{
+					"type": "animal",
+					"id": 1,
+					"amount": 1,
+					"draw_chance": 10.0
+				},
+				{
+					"type": "animal",
+					"id": 2,
+					"amount": 1,
+					"draw_chance": 10.0
+				},
+				{
+					"type": "animal",
+					"id": 3,
+					"amount": 1,
+					"draw_chance": 10.0
+				},
+				{
+					"type": "animal",
+					"id": 4,
+					"amount": 1,
+					"draw_chance": 10.0
+				},
+				{
+					"type": "animal",
+					"id": 5,
+					"amount": 1,
+					"draw_chance": 10.0
 				}
 			]
 		}

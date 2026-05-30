@@ -1,8 +1,9 @@
 [gd_scene format=4 uid="uid://bo2vr7surwe56"]
 
 [ext_resource type="Script" uid="uid://dnlfgnqqdjd8s" path="res://scripts/hex/hex_tile.gd" id="1_pcuo8"]
+[ext_resource type="Texture2D" uid="uid://ca2hp56qvfswa" path="res://assets/circle.png" id="2_nn350"]
 [ext_resource type="Texture2D" uid="uid://boew28pgavxmj" path="res://assets/hex_outline.png" id="2_pcuo8"]
-[ext_resource type="Texture2D" uid="uid://c2lo61bwqr7y4" path="res://assets/elements/n0.png" id="2_vyrwg"]
+[ext_resource type="Texture2D" uid="uid://by87fjcwrqlgx" path="res://assets/elements/f0.png" id="4_4l472"]
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_vyrwg"]
 points = PackedVector3Array(0, 1, 0, 2, 1, 0, 1, 1, 1.732, -1, 1, 1.732, -2, 1, 0, -1, 1, -1.732, 1, 1, -1.732, 0, 0, 0, 2, 0, 0, 1, 0, 1.732, -1, 0, 1.732, -2, 0, 0, -1, 0, -1.732, 1, 0, -1.732)
@@ -71,11 +72,18 @@ debug_color = Color(1.0383441, 0, 0.96515715, 1)
 
 [node name="visuals" type="Node3D" parent="." unique_id=979666001]
 
-[node name="Label3D" type="Label3D" parent="visuals" unique_id=1816411517]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2293, 0)
+[node name="Sprite3D" type="Sprite3D" parent="visuals" unique_id=453342763]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 3.366984, 0)
 visible = false
 billboard = 1
-render_priority = 1
+render_priority = 2
+texture = ExtResource("2_nn350")
+
+[node name="Label3D" type="Label3D" parent="visuals/Sprite3D" unique_id=1816411517]
+transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, 0, 0, 0)
+billboard = 1
+render_priority = 3
+modulate = Color(0, 0, 0, 1)
 text = "+ 10 "
 font_size = 200
 
@@ -95,11 +103,13 @@ material_override = SubResource("StandardMaterial3D_pcuo8")
 mesh = SubResource("ArrayMesh_4l472")
 surface_material_override/0 = SubResource("StandardMaterial3D_nn350")
 
-[node name="elementIcon" type="Sprite3D" parent="visuals/StylizedHexTile" unique_id=502944477]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0.01, 0)
+[node name="animalIcon" type="Sprite3D" parent="visuals/StylizedHexTile" unique_id=2075642525]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0.01, 0)
 axis = 1
-texture = ExtResource("2_vyrwg")
+double_sided = false
+render_priority = 1
 
-[node name="animalIcon" type="Sprite3D" parent="visuals/StylizedHexTile/elementIcon" unique_id=2075642525]
-transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+[node name="elementIcon" type="Sprite3D" parent="visuals/StylizedHexTile" unique_id=502944477]
+transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, 0, 0.01, 0)
 axis = 1
+texture = ExtResource("4_4l472")

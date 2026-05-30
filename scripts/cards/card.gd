@@ -2,9 +2,8 @@ extends Area2D
 class_name Card
 
 @export var scale_speed : float = 1.0
-@export var bounce_height: float = 8.0
-@export var bounce_speed: float = 12.0
-@export var return_speed: float = 12.0
+@export var hover_scale: float = 8.0
+@export var hover_height: float = 12.0
 
 @onready var visuals : Node2D = $visuals
 @onready var stacks : Node2D = $stacks
@@ -14,34 +13,31 @@ class_name Card
 var container : CardContainer
 var id : int = 0
 
-var is_hovered : bool = false
 var is_active : bool = false
 var base_scale: Vector2 = Vector2(0.1,0.1)
 var target_scale : Vector2 = Vector2(0.1,0.1)
-var bounce_time : float = 0.0
 var base_visuals_position : Vector2 = Vector2.ZERO
-var enable_stacking : bool = false
+var target_visuals_position : Vector2 = Vector2.ZERO
 var stack_amount : int = 0
 var background_color : Color
-var is_booster : bool = false
+var base_z_index : int = 0
 
 ## ----- Initialisation ----- ##
 
 func _ready() -> void:
 	input_pickable = true
-
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
 	input_event.connect(_on_input_event)
 
-func init(cardData:CardData, parent:CardContainer, idx:int, stacking:bool, scale:Vector2, booster:bool) -> void:
+func init(cardData:CardData, parent:CardContainer, idx:int, scale:Vector2) -> void:
 	container = parent
 	id = idx
-	enable_stacking = stacking
-	is_booster = booster
 	
 	target_scale = scale
 	base_scale = scale
+	
+	stack_amount = cardData.amount
 	
 	collision.scale = scale
 	placement_tooltip.scale = Vector2.ONE * scale 
@@ -49,34 +45,31 @@ func init(cardData:CardData, parent:CardContainer, idx:int, stacking:bool, scale
 	background_color = Color.html(ElementCatalog.elements[cardData.element].levels[0].color)
 	$visuals/background.modulate = background_color
 	
-	var icon : Texture2D = load(cardData.icon)
-	var texture_size := icon.get_size()
-	var scale_factor = min(
-		500 / texture_size.x,
-		500 / texture_size.y
-	)
-	$visuals/icon.scale = Vector2.ONE * scale_factor
-	$visuals/icon.texture = icon
+	if cardData.icon != "":
+		var icon : Texture2D = load(cardData.icon)
+		var texture_size := icon.get_size()
+		var scale_factor = min(
+			500 / texture_size.x,
+			500 / texture_size.y
+		)
+		$visuals/icon.scale = Vector2.ONE * scale_factor
+		$visuals/icon.texture = icon
 	
-	if !is_booster:
-		placement_tooltip.init(cardData.type, cardData.placement, cardData.bonus)
-		$visuals/Sprite2D/Label2.text = "?" if cardData.type == 0 else "%d" % cardData.point_score
-		$visuals/Sprite2D.show()
+
+	placement_tooltip.init(cardData.type, cardData.placement, cardData.bonus)
+	$visuals/points/Label2.text = "?" if cardData.type == 0 else "%d" % cardData.point_score
+	$visuals/points.show()
 	
-	if enable_stacking:
-		$visuals/Label.show()
-		$visuals/Label.text = "%d | %d" % [stack_amount+1, 10]
+	$visuals/Label.show()
+	$visuals/Label.text = "%d | %d" % [stack_amount, 10]
 
 ## ----- Interactions Logic ----- ##
 
 func _on_mouse_entered() -> void:
-	is_hovered = true
-	if !is_booster:
-		placement_tooltip.show()
+	container.hover_card(id)
 
 func _on_mouse_exited() -> void:
-	is_hovered = false
-	placement_tooltip.hide()
+	container.exit_card(id)
 
 func _on_input_event(
 	viewport: Viewport,
@@ -85,56 +78,72 @@ func _on_input_event(
 ) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			select()
 			container.select_card(id)
 
 ## ----- Stack Logic ----- ##
 
 func increment() -> void:
-	if enable_stacking and stack_amount < 9:
+	if stack_amount < 10:
 		stack_amount += 1
 		get_node("stacks/stack%d/background" % stack_amount).modulate = background_color
 		get_node("stacks/stack%d" % stack_amount).show()
-		$visuals/Label.text = "%d | %d" % [stack_amount+1, 10]
+		$visuals/Label.text = "%d | %d" % [stack_amount, 10]
 
 func decrement() -> void:
-	if enable_stacking and stack_amount > 0:
+	if stack_amount > 0:
 		get_node("stacks/stack%d" % stack_amount ).hide()
 		stack_amount -= 1
-		$visuals/Label.text = "%d | %d" % [stack_amount+1, 10]
+		$visuals/Label.text = "%d | %d" % [stack_amount, 10]
 
 ## ----- Other Logic ----- ##
 
-func select():
-	is_active = true
-	target_scale = base_scale * 1.2
-	collision.scale = target_scale
-	placement_tooltip.scale = target_scale
-	placement_tooltip.position.y -= 20
+func handle_hover() -> void:
+	placement_tooltip.show()
+	if !is_active:
+		set_select_visuals()
 
-func deselect():
+func handle_exit() -> void:
+	placement_tooltip.hide()
+	if !is_active:
+		reset_select_visuals()
+
+func select() -> void:
+	is_active = true
+	self.z_index = base_z_index + 100
+	if target_visuals_position == base_visuals_position:
+		set_select_visuals()
+
+func deselect() -> void:
 	is_active = false
-	target_scale = base_scale
-	collision.scale = target_scale
-	placement_tooltip.scale = target_scale
-	placement_tooltip.position.y += 20
+	self.z_index = base_z_index
+	reset_select_visuals()
 
 func remove_card() -> void:
 	queue_free()
 
 ## ----- Animation Logic ----- ##
 
+func set_z(z:int) -> void:
+	base_z_index = z
+	self.z_index = base_z_index
+
+func set_select_visuals() -> void:
+	# self.z_index = base_z_index + 20
+	target_scale = base_scale * hover_scale
+	collision.scale = target_scale
+	placement_tooltip.scale = target_scale
+	target_visuals_position = visuals.position - Vector2(0.0, hover_height)
+
+func reset_select_visuals() -> void:
+	# self.z_index = base_z_index
+	target_scale = base_scale
+	collision.scale = target_scale
+	placement_tooltip.scale = target_scale
+	target_visuals_position = base_visuals_position
+
 func _process(delta: float) -> void:
-	if visuals.scale != target_scale:
+	if visuals.scale.distance_squared_to(target_scale) >= 0.001 * 0.001:
 		visuals.scale = visuals.scale.lerp(target_scale, delta * scale_speed)
 		stacks.scale = stacks.scale.lerp(target_scale, delta * scale_speed)
-	
-	if is_hovered and !is_active:
-		bounce_time += delta
-		var y_offset : float = -abs(sin(bounce_time * bounce_speed)) * bounce_height
-		visuals.position = base_visuals_position + Vector2(0.0, y_offset)
-	else:
-		visuals.position = visuals.position.lerp(
-			base_visuals_position,
-			min(delta * return_speed, 1.0)
-		)
+		visuals.position = visuals.position.lerp(target_visuals_position, delta * scale_speed)
+		collision.position = collision.position.lerp(target_visuals_position, delta * scale_speed)

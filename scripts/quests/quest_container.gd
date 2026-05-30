@@ -43,16 +43,19 @@ func reset_preview(id:int) -> void:
 
 
 ## ----- Layout Logic ----- ##
+
 func _layout_quests() -> void:
 	var rect_top := layout_rect.position.y
 	var rect_height := layout_rect.size.y
 	var center_x := layout_rect.position.x + layout_rect.size.x / 2.0
 	
 	var gap : float = min(rect_height / float(quest_amount), max_gap)
-		
-	for i in quest_amount:
+	
+	var quest_counter = 0
+	for i in quests.size():
 		var quest := quests[i]
 		if quest != null:
-			var y := rect_top + gap * float(i + 0.5)
+			var y := rect_top + gap * float(quest_counter + 0.5)
 			quest.position = Vector2(center_x, y)
-			quest.z_index = i
+			quest.z_index = quest_counter
+			quest_counter += 1

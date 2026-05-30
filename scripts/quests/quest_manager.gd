@@ -28,7 +28,7 @@ func _ready() -> void:
 
 func add_quest(id:int) -> void:
 	var quest_index = active_quests.find(-1)
-	if quest_index != -1:
+	if quest_index != -1 and !completed_quests.has(id):
 		active_quests[quest_index] = id
 		eligble_groups[quest_index] = []
 		eligble_groups_preview[quest_index] = []
@@ -82,7 +82,8 @@ func preview_element_quests(
 	hex_tiles:Dictionary[Vector2i, HexTileData]
 	) -> int:
 	var coords_ = group_coords.duplicate(true)
-	coords_.append(coord)
+	if !coords_.has(coord):
+		coords_.append(coord)
 	
 	var new_score : int = 0
 	
@@ -90,13 +91,17 @@ func preview_element_quests(
 		var quest_id = active_quests[i]
 		if quest_id != -1:
 			var quest = QuestCatalog.quest_options[quest_id]
-			if quest.type == 0 and quest.id == element:
-				var prev_group_amount = eligble_groups[i].size()
-				var new_group = []
+			if quest.type == 0 and quest.target_id == element:
+				var prev_group_amount : int = eligble_groups[i].size()
+				var new_group : Array[int] = []
 				if old_groups.size() > 0:
-					new_group = eligble_groups[i].filter(func (group): !old_groups.has(group))
-				
-				var group_size = 0
+					var filtered_groups = eligble_groups[i].filter(func (group): return !old_groups.has(group))
+					new_group.assign(filtered_groups)
+				elif old_groups.size() == 0 and eligble_groups[i].size() > 0:
+					var new_group_duplicate = eligble_groups[i].duplicate(true)
+					new_group.assign(new_group_duplicate)
+					
+				var group_size : int = 0
 				for c in coords_:
 					if quest.levels.has(hex_tiles[c].level):
 						group_size += 1
@@ -106,7 +111,7 @@ func preview_element_quests(
 				
 				if new_group.size() >= quest.group_amount:
 					new_score += quest.points
-					
+				
 				eligble_groups_preview[i] = new_group
 				preview_progress(i, new_group.size())
 	
@@ -118,7 +123,7 @@ func preview_animal_quests(animal_id:int) -> int:
 		var quest_id = active_quests[i]
 		if quest_id != -1:
 			var quest = QuestCatalog.quest_options[quest_id]
-			if quest.type == 1 and quest.id == animal_id:
+			if quest.type == 1 and quest.target_id == animal_id:
 				var new_group = [1]
 				if eligble_groups[i].size() > 0:
 					new_group[0] += eligble_groups[i][0]
@@ -133,13 +138,24 @@ func preview_animal_quests(animal_id:int) -> int:
 
 ## ----- Create new active Quests ----- ##
 
-func pick_quest(type:int, element:int) -> void:
-	var quest_index = active_quests.find(null)
+func pick_quest(type:int, element:int) -> int:
+	var quest_index = active_quests.find(-1)
 	if quest_index != -1:
-		var options_filtered = QuestCatalog.quest_options.filter(func (option): !completed_quests.has(option.id))
-		var options_by_type = options_filtered.filter(func (option): option.type == type)
-		if type == 0:
-			var options_by_element = options_by_type.filter(func (option): option.target_id == element)
-			active_quests[quest_index] = options_by_type.pick_random().id
+		var options_filtered = QuestCatalog.quest_options.filter(
+			func (option): return !completed_quests.has(option.id) and !active_quests.has(option.id)
+		)
+		var options_by_type = options_filtered.filter(func (option): return option.type == type)
+		
+		if options_by_type.size() == 0:
+			return -1
 		else:
-			active_quests[quest_index] = options_by_type.pick_random().id
+			if type == 0:
+				var options_by_element = options_by_type.filter(func (option): return option.target_id == element)
+				if options_by_element.size() == 0:
+					return -1
+				else:
+					return options_by_element.pick_random().id
+			else:
+				return options_by_type.pick_random().id
+	else:
+		return -1

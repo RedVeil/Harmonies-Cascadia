@@ -36,15 +36,18 @@ func calc_group_score(
 	var result : int = 0
 	var rule = active_rules[element]
 	if rule.special_rule == 1:
-		var coords_ := coords.duplicate()
+		var coords_ := coords.duplicate(true)
 		coords_.append(coord)
 		result = calculate_element_special_shortest_route(coords_, rule)
 	elif rule.special_rule == 2:
 		result = calculate_element_special_neighbors(coords, rule, tiles)
 	else:
-		var coords_ := coords.duplicate()
-		coords_.append(coord)
-		result = calculate_normal_element_group(coords_,rule, tiles)
+		if coords.has(coord):
+			result = calculate_normal_element_group(coords,rule, tiles)
+		else:
+			var coords_ := coords.duplicate(true)
+			coords_.append(coord)
+			result = calculate_normal_element_group(coords_,rule, tiles)
 	return result
 
 func calculate_normal_element_group(
@@ -79,11 +82,12 @@ func calculate_element_special_neighbors(
 	tiles:Dictionary[Vector2i, HexTileData]
 	) -> int:
 	var neighbor_elements : Array[int] = []
+	var eligble_neighbors : Array[Vector2i] = []
 	for c in coords:
 		var neighbor_element = tiles[c].element
 		if !neighbor_elements.has(neighbor_element) and neighbor_element > 0:
 			neighbor_elements.append(neighbor_element)
-	
+			eligble_neighbors.append(c)
 	if neighbor_elements.size() >= rule.special_rule_specs.neighbors_min:
 		if rule.special_rule_specs.points_per > 0:
 			return neighbor_elements.size() * rule.special_rule_specs.points_per
@@ -97,12 +101,12 @@ func calculate_element_special_neighbors(
 
 func calculate_element_special_shortest_route(coords: Array[Vector2i], rule:ScoringRule) -> int:
 	var rule_specs = rule.special_rule_specs
-	var length = find_longest_path(coords)
-	if length > rule_specs.points.size():
-		var diff = length - rule_specs.points.size()
+	var path = find_longest_path(coords)
+	if path.size() >= rule_specs.points.size():
+		var diff = path.size() - rule_specs.points.size()
 		return rule_specs.points[rule_specs.points.size()-1] + (diff * rule_specs.extra_points)
 	else:
-		return rule_specs.points[length]
+		return rule_specs.points[path.size()-1]
 
 func find_longest_path(coords: Array[Vector2i]) -> Array[Vector2i]:
 	if coords.is_empty():
@@ -187,43 +191,3 @@ func reconstruct_path(end_coord: Vector2i, came_from: Dictionary) -> Array[Vecto
 	
 	path.reverse()
 	return path
-
-func calculate_quest_points() -> int:
-	return 0
-
-
-#func apply_tile(coords:Vector2i) -> void:
-	#hex_manager.groups = hex_manager.groups_preview
-	#hex_manager.tiles = hex_manager.tiles_preview
-	#hex_manager.next_group_id = hex_manager.next_group_id_preview
-	#
-	#hex_manager.groups_preview = {}
-	#hex_manager.tiles_preview = {}
-	#hex_manager.next_group_id_preview = 0
-	#
-	#points_per_element_group = points_per_element_group_preview.duplicate(true)
-	#element_point_score = element_point_score_preview
-	#animal_point_score = animal_point_score_preview
-	#quest_point_score = quest_point_score_preview
-	#total_score = total_score_preview
-	#
-	#points_per_element_group_preview.clear()
-	#element_point_score_preview = 0
-	#animal_point_score_preview = 0
-	#quest_point_score_preview = 0
-	#total_score_preview = 0
-	#
-	#hand_manager.remove_card()
-	#booster_manager.apply_booster_points()
-	#update_display_points()
-#
-#
-
-#
-#func update_display_points() -> void:
-	#$Panel/Label.text = "%d" % total_score
-	#if total_score_preview == 0:
-		#$Panel/Label/Label.hide()
-	#else:
-		#$Panel/Label/Label.text = "%d" % (total_score_preview - total_score)
-		#$Panel/Label/Label.show()

@@ -1,0 +1,86 @@
+[gd_scene format=3 uid="uid://ccqmu132kjpb6"]
+
+[ext_resource type="Script" uid="uid://bbpowbnvd1qe" path="res://scripts/booster/booster.gd" id="1_r28fy"]
+[ext_resource type="Texture2D" uid="uid://ca2hp56qvfswa" path="res://assets/circle.png" id="2_430vb"]
+[ext_resource type="Shader" uid="uid://y4g8ky747mqh" path="res://assets/shader/shadow.gdshader" id="3_4cwg5"]
+[ext_resource type="Texture2D" uid="uid://cx4mwoth33xa6" path="res://assets/icons/random.png" id="4_430vb"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_430vb"]
+radius = 14.035668
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r28fy"]
+shader = ExtResource("3_4cwg5")
+shader_parameter/shadow_color = Color(0, 0, 0, 0.1254902)
+shader_parameter/blur_size = 20.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_430vb"]
+bg_color = Color(0.95686275, 0.8745098, 0.7921569, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.1254902)
+shadow_size = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4cwg5"]
+bg_color = Color(0.95686275, 0.8745098, 0.7921569, 1)
+shadow_color = Color(0, 0, 0, 0.1254902)
+shadow_size = 4
+
+[node name="Booster" type="Area2D" unique_id=321030438]
+monitorable = false
+priority = 1
+script = ExtResource("1_r28fy")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=800364982]
+z_index = 1
+shape = SubResource("CircleShape2D_430vb")
+
+[node name="background" type="Sprite2D" parent="." unique_id=869127976]
+scale = Vector2(0.07, 0.07)
+texture = ExtResource("2_430vb")
+
+[node name="shadow" type="Sprite2D" parent="background" unique_id=956875904]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_r28fy")
+position = Vector2(0.68392086, 1.1477747)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("2_430vb")
+
+[node name="icon" type="Sprite2D" parent="." unique_id=1938653007]
+self_modulate = Color(0.5686275, 0.5176471, 0.47058824, 1)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("4_430vb")
+
+[node name="Tooltip" type="Panel" parent="." unique_id=783815431]
+visible = false
+offset_left = -41.0
+offset_top = -77.0
+offset_right = 159.0
+offset_bottom = -28.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_430vb")
+
+[node name="Panel" type="Panel" parent="Tooltip" unique_id=1422591998]
+show_behind_parent = true
+layout_mode = 0
+offset_left = 41.000008
+offset_top = 29.0
+offset_right = 61.000008
+offset_bottom = 49.0
+rotation = 0.7853982
+theme_override_styles/panel = SubResource("StyleBoxFlat_4cwg5")
+
+[node name="Label" type="Label" parent="Tooltip" unique_id=1041448701]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 196.0
+offset_bottom = 42.0
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.4745098, 1)
+theme_override_font_sizes/font_size = 12
+text = "Buy this booster to get random cards."
+autowrap_mode = 2
+
+[connection signal="input_event" from="." to="." method="_on_input_event"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

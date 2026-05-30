@@ -15,7 +15,7 @@ enum CARD_TYPE {
 @export var bonus: Array[Placement] = []
 # how many cards of this type are stacked
 @export var amount: int = 0
-@export var draw_chance: int = 0
+@export var draw_chance: float = 0.0
 # used to get the background color of the card
 @export var element: GameEnums.ELEMENT = 0
 @export var point_score: int = 0

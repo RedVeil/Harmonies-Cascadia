@@ -4,5 +4,3 @@
 
 [node name="card_container" type="Node2D" unique_id=794137378 groups=["card_container", "interactable"]]
 script = ExtResource("1_5snm7")
-preferred_spacing = null
-minimum_spacing = null

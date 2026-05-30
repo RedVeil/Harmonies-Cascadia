@@ -9,6 +9,7 @@ enum SpecialRule {
 
 @export var id:int = 0
 @export var name:String = ""
+@export var description:String = ""
 # whats the minimum amount of tiles in the group to count?
 @export var min_group_size: int = 0
 # whats the maximum amount of tiles in the group to count?

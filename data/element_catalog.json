@@ -36,9 +36,7 @@
 			}
 		],
 		"scoring_rules": [
-			0,
-			1,
-			2
+			0
 		]
 	},
 	{
@@ -59,9 +57,7 @@
 			}
 		],
 		"scoring_rules": [
-			3,
-			4,
-			5
+			3
 		]
 	},
 	{
@@ -88,9 +84,7 @@
 			}
 		],
 		"scoring_rules": [
-			6,
-			7,
-			8
+			6
 		]
 	},
 	{
@@ -105,9 +99,7 @@
 			}
 		],
 		"scoring_rules": [
-			9,
-			10,
-			11
+			9
 		]
 	},
 	{
@@ -119,18 +111,10 @@
 				"name": "Wetland",
 				"color": "#39a78f",
 				"icon": "res://assets/elements/w0.png"
-			},
-			{
-				"level": 2,
-				"name": "Swamp",
-				"color": "#2f7d6c",
-				"icon": "res://assets/elements/w1.png"
 			}
 		],
 		"scoring_rules": [
-			12,
-			13,
-			14
+			12
 		]
 	}
 ]

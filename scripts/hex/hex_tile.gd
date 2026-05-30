@@ -30,7 +30,7 @@ func init(parent:HexTileContainer, location:Vector2i) -> void:
 
 func _on_mouse_entered() -> void:
 	container.handle_hover(coord)
-	$visuals/StylizedHexTile.material_override.albedo_color = visuals.color.lightened(0.5)
+	$visuals/StylizedHexTile.material_override.albedo_color = visuals.color.darkened(0.3)
 	
 func _on_mouse_exited() -> void:
 	container.handle_exit(coord)
@@ -55,18 +55,26 @@ func update_visuals(new_visuals:HexTileVisuals) -> void:
 	$visuals/StylizedHexTile/elementIcon.texture = new_visuals.icon
 	
 	if new_visuals.animal_icon:
-		$visuals/StylizedHexTile/elementIcon/animalIcon.texture = new_visuals.animal_icon
+		$visuals/StylizedHexTile/animalIcon.texture = new_visuals.animal_icon
+		$visuals/StylizedHexTile/animalIcon.show()
 	else:
-		$visuals/StylizedHexTile/elementIcon/animalIcon.texture = null
+		$visuals/StylizedHexTile/animalIcon.texture = null
+		$visuals/StylizedHexTile/animalIcon.hide()
 
 ## ----- Points Logic ----- ##
 
 func show_points(points:int) -> void:
-	$visuals/Label3D.text = "%d" % points
-	$visuals/Label3D.show()
+	$visuals/Sprite3D/Label3D.text = "%d" % points
+	if points > 0:
+		$visuals/Sprite3D.modulate = Color.GOLD
+	if points < 0:
+		$visuals/Sprite3D.modulate = Color.CRIMSON
+	
+	if points != 0:
+		$visuals/Sprite3D.show()
 
 func hide_points() -> void:
-	$visuals/Label3D.hide()
+	$visuals/Sprite3D.hide()
 
 ## ----- Outline Logic ----- ##
 
