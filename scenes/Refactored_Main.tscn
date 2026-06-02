@@ -44,7 +44,7 @@ position = Vector2(51, 668)
 orchestrator = NodePath("../Orchestrator")
 
 [node name="CardManager" parent="." unique_id=241167023 node_paths=PackedStringArray("orchestrator") instance=ExtResource("2_vg1d4")]
-position = Vector2(366, 614)
+position = Vector2(366, 599)
 orchestrator = NodePath("../Orchestrator")
 card_limit = 8
 card_limit_buffer = 6
@@ -69,7 +69,7 @@ position = Vector2(80, 80)
 orchestrator = NodePath("../Orchestrator")
 
 [node name="CardRecycling" parent="." unique_id=1759140847 node_paths=PackedStringArray("orchestrator") instance=ExtResource("10_ggq8u")]
-position = Vector2(1016, 660)
+position = Vector2(1160, 660)
 orchestrator = NodePath("../Orchestrator")
 
 [node name="ScoreTooltip" parent="." unique_id=33584632 node_paths=PackedStringArray("orchestrator") instance=ExtResource("11_b2x3j")]

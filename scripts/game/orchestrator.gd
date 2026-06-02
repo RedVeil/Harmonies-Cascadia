@@ -260,7 +260,9 @@ func reset_preview() -> void:
 	new_quest_score = 0
 
 func get_neighbor_contributing_coords(group_coords:Array[Vector2i]) -> Array[Vector2i]:
-	var coords : Array[Vector2i] = group_coords.duplicate(true)
+	var coords : Array[Vector2i] = []
+	if group_coords.size() > 1:
+		coords = group_coords.duplicate(true)
 	for coord in group_coords:
 		var neighbors = HexCoord.neighbors(coord)
 		for n in neighbors:

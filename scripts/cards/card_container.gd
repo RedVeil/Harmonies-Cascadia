@@ -5,7 +5,6 @@ var parent : Node
 
 @export var layout_rect: ColorRect
 @export var card_scene: PackedScene
-@export var card_scale : Vector2 = Vector2(0.1, 0.1)
 
 @export var fan_width : float = 250.0 # predefined max width
 @export var max_angle : float = 15.0         # total-ish visual fan strength
@@ -40,7 +39,7 @@ func add_card(card_data:CardData, id:int) -> void:
 	card_amount += 1
 	
 	add_child(card)
-	card.init(card_data, self, id, card_scale)
+	card.init(card_data, self, id)
 	
 	_layout_cards()
 
@@ -86,7 +85,12 @@ func _layout_cards() -> void:
 	var count := visible_cards.size()
 	if count == 0:
 		return
-
+	
+	visible_cards.sort_custom(func (a,b): return a.element_id < b.element_id)
+	var element_cards = visible_cards.filter(func (card): return !card.is_animal)
+	var animal_cards = visible_cards.filter(func (card): return card.is_animal)
+	visible_cards = element_cards + animal_cards
+	
 	var center_x := layout_rect.position.x + layout_rect.size.x / 2.0
 	var center_y := layout_rect.position.y + layout_rect.size.y / 2.0
 

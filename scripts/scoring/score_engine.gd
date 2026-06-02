@@ -88,6 +88,7 @@ func calculate_element_special_neighbors(
 		if !neighbor_elements.has(neighbor_element) and neighbor_element > 0:
 			neighbor_elements.append(neighbor_element)
 			eligble_neighbors.append(c)
+	
 	if neighbor_elements.size() >= rule.special_rule_specs.neighbors_min:
 		if rule.special_rule_specs.points_per > 0:
 			return neighbor_elements.size() * rule.special_rule_specs.points_per

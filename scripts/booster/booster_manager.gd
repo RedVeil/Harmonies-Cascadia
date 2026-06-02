@@ -29,10 +29,10 @@ func _ready() -> void:
 	booster_point_cost = BoosterCatalog.booster_point_cost
 	
 	for option in BoosterCatalog.booster_options:
-		if option.type != 6:
+		if option.type < 6:
 			booster_chances.append(option.draw_chance)
 	
-	boosters.resize(booster_limit + 1)
+	boosters.resize(booster_limit + 2)
 	
 	$hex/Label.text = "%d" % booster_points
 	
@@ -45,6 +45,7 @@ func _ready() -> void:
 	for i in range(booster_limit):
 		createBooster(i)
 	createBooster(3)
+	createBooster(4)
 
 ## ----- Pass Data Upstream ----- ##
 
@@ -124,6 +125,8 @@ func createBooster(idx:int) -> void:
 	var option_index : int = 0
 	if idx == 3:
 		option_index = BoosterCatalog.booster_options.find_custom(func (option): return option.type == 6)
+	elif idx == 4:
+		option_index = BoosterCatalog.booster_options.find_custom(func (option): return option.type == 7)
 	else:
 		option_index = pick_weighted(BoosterCatalog.booster_options, booster_chances)
 		update_booster_chances(option_index)

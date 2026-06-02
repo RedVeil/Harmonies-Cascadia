@@ -35,5 +35,8 @@ func group_by_element(
 				for c in hex_manager.groups[g]:
 					contributing_coords.append(c)
 		new_group_id = old_group_ids[0]
-	
+		
+	if !contributing_coords.has(coord):
+		contributing_coords.append(coord)
+		
 	return {"contributing_coords":contributing_coords, "old_group_ids":old_group_ids, "new_group_id":new_group_id}

@@ -14,13 +14,16 @@ var container : CardContainer
 var id : int = 0
 
 var is_active : bool = false
-var base_scale: Vector2 = Vector2(0.1,0.1)
-var target_scale : Vector2 = Vector2(0.1,0.1)
+var base_scale: Vector2 = Vector2.ONE
+var target_scale : Vector2 =  Vector2.ONE
 var base_visuals_position : Vector2 = Vector2.ZERO
 var target_visuals_position : Vector2 = Vector2.ZERO
 var stack_amount : int = 0
 var background_color : Color
 var base_z_index : int = 0
+
+var element_id : int = 0
+var is_animal:bool = false
 
 ## ----- Initialisation ----- ##
 
@@ -30,37 +33,37 @@ func _ready() -> void:
 	mouse_exited.connect(_on_mouse_exited)
 	input_event.connect(_on_input_event)
 
-func init(cardData:CardData, parent:CardContainer, idx:int, scale:Vector2) -> void:
+func init(cardData:CardData, parent:CardContainer, idx:int) -> void:
 	container = parent
 	id = idx
 	
-	target_scale = scale
-	base_scale = scale
-	
 	stack_amount = cardData.amount
 	
-	collision.scale = scale
-	placement_tooltip.scale = Vector2.ONE * scale 
+	element_id = cardData.element
+	is_animal = cardData.type == 1
 	
-	background_color = Color.html(ElementCatalog.elements[cardData.element].levels[0].color)
-	$visuals/background.modulate = background_color
-	
-	if cardData.icon != "":
+	$visuals/background.texture = load(get_card_background(cardData.element))
+	var mat = $visuals/elementIcon.material.duplicate()
+	mat.set_shader_parameter("unfilled_color", Color.html(ElementCatalog.elements[cardData.element].levels.back().color))
+	$visuals/elementIcon.material = mat
+	$visuals/pointsBackground.material = mat
+	if cardData.type == 1 and cardData.icon != "":
 		var icon : Texture2D = load(cardData.icon)
 		var texture_size := icon.get_size()
 		var scale_factor = min(
-			500 / texture_size.x,
-			500 / texture_size.y
+			50 / texture_size.x,
+			50 / texture_size.y
 		)
 		$visuals/icon.scale = Vector2.ONE * scale_factor
 		$visuals/icon.texture = icon
-	
+		$visuals/icon.show()
+		$visuals/elementIcon/Sprite2D.texture = load(ElementCatalog.elements[cardData.element].levels[cardData.placement[0].level-1].icon)
+	else:
+		$visuals/elementIcon/Sprite2D.texture = load(ElementCatalog.elements[cardData.element].levels.back().icon)
 
 	placement_tooltip.init(cardData.type, cardData.placement, cardData.bonus)
-	$visuals/points/Label2.text = "?" if cardData.type == 0 else "%d" % cardData.point_score
-	$visuals/points.show()
+	$visuals/PointsLabel.text = "?" if cardData.type == 0 else "%d" % cardData.point_score
 	
-	$visuals/Label.show()
 	$visuals/Label.text = "%d | %d" % [stack_amount, 10]
 
 ## ----- Interactions Logic ----- ##
@@ -128,17 +131,17 @@ func set_z(z:int) -> void:
 	self.z_index = base_z_index
 
 func set_select_visuals() -> void:
-	# self.z_index = base_z_index + 20
+	self.z_index = base_z_index + 20
 	target_scale = base_scale * hover_scale
 	collision.scale = target_scale
-	placement_tooltip.scale = target_scale
+	# placement_tooltip.scale = target_scale
 	target_visuals_position = visuals.position - Vector2(0.0, hover_height)
 
 func reset_select_visuals() -> void:
-	# self.z_index = base_z_index
+	self.z_index = base_z_index
 	target_scale = base_scale
 	collision.scale = target_scale
-	placement_tooltip.scale = target_scale
+	# placement_tooltip.scale = target_scale
 	target_visuals_position = base_visuals_position
 
 func _process(delta: float) -> void:
@@ -147,3 +150,21 @@ func _process(delta: float) -> void:
 		stacks.scale = stacks.scale.lerp(target_scale, delta * scale_speed)
 		visuals.position = visuals.position.lerp(target_visuals_position, delta * scale_speed)
 		collision.position = collision.position.lerp(target_visuals_position, delta * scale_speed)
+
+
+
+
+func get_card_background(element:int) -> String:
+	match(element):
+		1:
+			return "res://assets/cards/forest_card.png"
+		2:
+			return "res://assets/cards/field_card.png"
+		3:
+			return "res://assets/cards/mountain_card.png"
+		4:
+			return "res://assets/cards/river_card.png"
+		5:
+			return "res://assets/cards/wetland_card.png"
+		_:
+			return "res://assets/cards/forest_card.png"

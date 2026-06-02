@@ -16,6 +16,10 @@ var timer : float = 0.5
 
 func _ready() -> void:
 	input_pickable = true
+	
+	if id == 4:
+		icon.texture = load("res://assets/icons/animal.png")
+		$Tooltip/Label.text = "Buy this booster to get random animal cards."
 
 func init(parent:BoosterContainer) -> void:
 	container = parent
@@ -53,12 +57,8 @@ func _on_input_event(
 ## ----- Booster Visual Logic ----- ##
 
 func set_booster_visuals(type:Enums.BOOSTER_TYPE) -> void:
-	if type < 6:
-		if type == 5:
-			icon.texture = load("res://assets/icons/animal.png")
-			$Tooltip/Label.text = "Buy this booster to get random animal cards."
-		else:
-			var element = ElementCatalog.elements[type]
-			var level = element.levels[element.levels.size()-1]
-			icon.texture = load(level.icon)
-			$Tooltip/Label.text = "Buy this booster to get element and animal cards for %s." % element.name
+	if type < 5:
+		var element = ElementCatalog.elements[type]
+		var level = element.levels[element.levels.size()-1]
+		icon.texture = load(level.icon)
+		$Tooltip/Label.text = "Buy this booster to get element and animal cards for %s." % element.name

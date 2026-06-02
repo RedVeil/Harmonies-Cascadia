@@ -5,82 +5,112 @@
 [ext_resource type="PackedScene" uid="uid://3bvwe0sroaru" path="res://scenes/game/placement_tooltip.tscn" id="2_ri62e"]
 [ext_resource type="Texture2D" uid="uid://caiihuvh413eo" path="res://assets/cards/outline.png" id="3_73nwn"]
 [ext_resource type="Texture2D" uid="uid://ca2hp56qvfswa" path="res://assets/circle.png" id="3_kaf1t"]
+[ext_resource type="Texture2D" uid="uid://cyveh5llwxo0g" path="res://assets/cards/field_card.png" id="3_ri62e"]
 [ext_resource type="Texture2D" uid="uid://b6xqwg1tqnj67" path="res://assets/cards/shadow.png" id="4_1q37b"]
+[ext_resource type="Shader" uid="uid://8wow5a7grc78" path="res://assets/shader/circular_progress_bar.gdshader" id="4_v07qs"]
+[ext_resource type="Texture2D" uid="uid://boqn0q1xtndms" path="res://assets/elements/m2.png" id="6_0iqnq"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jl6rh"]
-size = Vector2(499.99994, 819.9999)
+size = Vector2(94, 168)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s65g1"]
+shader = ExtResource("4_v07qs")
+shader_parameter/primary_color = Color(1, 0, 0, 1)
+shader_parameter/secondary_color = Color(0.4, 0, 0, 1)
+shader_parameter/third_color = Color(0.8, 0.5, 0, 1)
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/unfilled_color = Color(0.443, 0.443, 0.443, 1)
+shader_parameter/current_value = 0.0
+shader_parameter/lerp_value = 0.0
+shader_parameter/third_value = 0.0
+shader_parameter/smooth_ = 0.005
+shader_parameter/width_in = 0.0
+shader_parameter/width_out = 0.95
+shader_parameter/border_width = 0.03
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_kaf1t"]
+light_mode = 2
 
 [node name="card" type="Area2D" unique_id=321030438]
 monitorable = false
 priority = 1
 script = ExtResource("1_73nwn")
-scale_speed = 12.0
+scale_speed = 8.0
 hover_scale = 1.2
 hover_height = 50.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1382946366]
+visible = false
 z_index = 1
 y_sort_enabled = true
-position = Vector2(9.536743e-07, -1.9073486e-06)
-scale = Vector2(0.1, 0.1)
+position = Vector2(9.536743e-07, 1.9073486e-06)
 shape = SubResource("RectangleShape2D_jl6rh")
 debug_color = Color(4.042983e-06, 0.5881858, 0.68830764, 0.41960785)
 
 [node name="visuals" type="Node2D" parent="." unique_id=1417204705]
-scale = Vector2(0.1, 0.1)
-
-[node name="points" type="Node2D" parent="visuals" unique_id=474511993]
-visible = false
-scale = Vector2(0.99999994, 0.99999994)
-
-[node name="Label2" type="Label" parent="visuals/points" unique_id=155409266]
-z_index = 2
-offset_left = -200.0
-offset_top = -360.0
-offset_right = -100.00002
-offset_bottom = -260.00003
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 3
-theme_override_font_sizes/font_size = 72
-text = "6"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Sprite2D" type="Sprite2D" parent="visuals/points" unique_id=1137015239]
-z_index = 1
-position = Vector2(-150.00002, -310.00003)
-scale = Vector2(0.25000003, 0.25000003)
-texture = ExtResource("3_kaf1t")
 
 [node name="Label" type="Label" parent="visuals" unique_id=1692518054]
-visible = false
 z_index = 1
-offset_left = -250.0
-offset_top = 289.99997
-offset_right = 249.99994
-offset_bottom = 419.00024
-theme_override_font_sizes/font_size = 72
+offset_left = -20.0
+offset_top = 63.0
+offset_right = 20.0
+offset_bottom = 75.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 8
 text = "10 / 10"
 horizontal_alignment = 1
 
 [node name="icon" type="Sprite2D" parent="visuals" unique_id=724824341]
+visible = false
 z_index = 1
+scale = Vector2(0.05, 0.05)
+
+[node name="pointsBackground" type="Sprite2D" parent="visuals" unique_id=2113715790]
+z_index = 1
+material = SubResource("ShaderMaterial_s65g1")
+position = Vector2(-28, -44)
+scale = Vector2(0.05, 0.05)
+texture = ExtResource("3_kaf1t")
+
+[node name="PointsLabel" type="Label" parent="visuals" unique_id=155409266]
+z_index = 1
+offset_left = -31.0
+offset_top = -52.0
+offset_right = -24.0
+offset_bottom = -35.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 12
+text = "6"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
 
 [node name="background" type="Sprite2D" parent="visuals" unique_id=106701842]
-modulate = Color(0.4627451, 1, 1, 1)
-texture = ExtResource("2_73nwn")
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("3_ri62e")
 
-[node name="border" type="Sprite2D" parent="visuals" unique_id=974459721]
-z_index = 1
-texture = ExtResource("3_73nwn")
+[node name="background" type="Sprite2D" parent="visuals/background" unique_id=1684528004]
+self_modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+material = SubResource("CanvasItemMaterial_kaf1t")
+position = Vector2(20, 20)
+texture = ExtResource("3_ri62e")
 
-[node name="shadow" type="Sprite2D" parent="visuals" unique_id=866615572]
-z_index = -1
-position = Vector2(12, 11.999998)
-texture = ExtResource("4_1q37b")
+[node name="elementIcon" type="Sprite2D" parent="visuals" unique_id=1017778785]
+material = SubResource("ShaderMaterial_s65g1")
+position = Vector2(-27.999998, -64.99999)
+scale = Vector2(0.05, 0.05)
+texture = ExtResource("3_kaf1t")
+
+[node name="Sprite2D" type="Sprite2D" parent="visuals/elementIcon" unique_id=1573955694]
+scale = Vector2(4, 4)
+texture = ExtResource("6_0iqnq")
 
 [node name="stacks" type="Node2D" parent="." unique_id=1785229949]
+visible = false
 
 [node name="stack1" type="Node2D" parent="stacks" unique_id=427414]
 visible = false
@@ -305,5 +335,4 @@ texture = ExtResource("4_1q37b")
 
 [node name="PlacementTooltip" parent="." unique_id=1404822029 instance=ExtResource("2_ri62e")]
 visible = false
-position = Vector2(0, -193)
-scale = Vector2(0.99999994, 0.99999994)
+position = Vector2(-49, -293)
