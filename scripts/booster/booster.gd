@@ -57,7 +57,7 @@ func _on_input_event(
 ## ----- Booster Visual Logic ----- ##
 
 func set_booster_visuals(type:Enums.BOOSTER_TYPE) -> void:
-	if type < 5:
+	if type < 6:
 		var element = ElementCatalog.elements[type]
 		var level = element.levels[element.levels.size()-1]
 		icon.texture = load(level.icon)

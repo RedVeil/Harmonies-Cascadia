@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://beawqa3qj40fn"]
+
+[ext_resource type="PackedScene" uid="uid://3lps20yejg6k" path="res://scenes/game/booster_manager.tscn" id="1_a7jc5"]
+[ext_resource type="PackedScene" uid="uid://baalf86is6lu2" path="res://scenes/game/card_manager.tscn" id="2_vg1d4"]
+[ext_resource type="PackedScene" uid="uid://dkeifl0skpmfk" path="res://scenes/game/hex_manager.tscn" id="3_tbrwv"]
+[ext_resource type="PackedScene" uid="uid://cm1vk1v7ec785" path="res://scenes/game/ScoreEngine.tscn" id="4_xoyem"]
+
+[sub_resource type="Environment" id="Environment_tbrwv"]
+background_mode = 1
+background_color = Color(0.8186203, 0.7502329, 0.6806915, 1)
+
+[node name="RefactoredMain" type="Node3D" unique_id=1341387681]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=33937385]
+environment = SubResource("Environment_tbrwv")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=39127462]
+transform = Transform3D(1, 0, 0, 0, 0.7071068, 0.7071068, 0, -0.7071068, 0.7071068, 0, 10, 5.4389725)
+projection = 1
+fov = 60.0
+size = 60.0
+near = 0.1
+far = 1000.0
+
+[node name="BoosterManager" parent="." unique_id=231766619 node_paths=PackedStringArray("hand_manager") instance=ExtResource("1_a7jc5")]
+position = Vector2(-2, 597)
+hand_manager = NodePath("../HandManager")
+
+[node name="HandManager" parent="." unique_id=241167023 instance=ExtResource("2_vg1d4")]
+position = Vector2(368, 597)
+
+[node name="HexManager" parent="." unique_id=866555908 node_paths=PackedStringArray("score_engine") instance=ExtResource("3_tbrwv")]
+score_engine = NodePath("../ScoreEngine")
+
+[node name="ScoreEngine" parent="." unique_id=271434607 node_paths=PackedStringArray("hand_manager", "hex_manager") instance=ExtResource("4_xoyem")]
+hand_manager = NodePath("../HandManager")
+hex_manager = NodePath("../HexManager")

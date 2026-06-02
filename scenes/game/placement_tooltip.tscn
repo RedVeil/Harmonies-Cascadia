@@ -1,8 +1,8 @@
-[gd_scene format=3 uid="uid://3bvwe0sroaru"]
+[gd_scene format=3 uid="uid://uspta7a1yqhh"]
 
-[ext_resource type="Script" uid="uid://32xqs6qfvsxg" path="res://scenes/game/placement_tooltip.gd" id="1_kjs7j"]
-[ext_resource type="Texture2D" uid="uid://boew28pgavxmj" path="res://assets/hex_outline.png" id="2_u02uc"]
-[ext_resource type="Texture2D" uid="uid://bjm1olkvh12fl" path="res://assets/hex_full.png" id="3_anuti"]
+[ext_resource type="Script" path="res://scenes/game/placement_tooltip.gd" id="1_kjs7j"]
+[ext_resource type="Texture2D" path="res://assets/hex_outline.png" id="2_u02uc"]
+[ext_resource type="Texture2D" path="res://assets/hex_full.png" id="3_anuti"]
 [ext_resource type="Texture2D" uid="uid://ba4wr1s7la27a" path="res://assets/elements/a0.png" id="4_n22po"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n22po"]

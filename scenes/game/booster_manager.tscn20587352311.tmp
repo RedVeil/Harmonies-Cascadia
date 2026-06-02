@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://3lps20yejg6k"]
+
+[ext_resource type="Script" uid="uid://dhpl5abg2f64d" path="res://scripts/booster_manager.gd" id="1_aj74b"]
+[ext_resource type="Script" uid="uid://bn7r6n5jftkr0" path="res://scripts/cards/card_container.gd" id="1_pe40v"]
+
+[node name="BoosterManager" type="Node2D" unique_id=231766619]
+script = ExtResource("1_aj74b")
+
+[node name="CardContainer" type="Node2D" parent="." unique_id=576310366]
+position = Vector2(490, 245)
+script = ExtResource("1_pe40v")
+allow_reordering = false
+align_from_center = false
+container_name = "BoosterContainer"
+debug_view = true
+int_border_left = 100.0
+int_border_right = 100.0
+int_border_up = 100.0
+int_border_down = 100.0
+metadata/_custom_type_script = "uid://bn7r6n5jftkr0"
+
+[node name="card_layer" type="Node2D" parent="CardContainer" unique_id=952461001]
+unique_name_in_owner = true
