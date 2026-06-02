@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://df4lpksbnpvvl"]
 
-[ext_resource type="Script" path="res://scripts/cards/card_manager.gd" id="1_2rd7x"]
-[ext_resource type="Script" path="res://scripts/cards/card_container.gd" id="2_us36d"]
-[ext_resource type="PackedScene" path="res://scenes/card/card.tscn" id="3_fnvnm"]
+[ext_resource type="Script" uid="uid://dcsotpixk5dmo" path="res://scripts/cards/card_manager.gd" id="1_2rd7x"]
+[ext_resource type="Script" uid="uid://bn7r6n5jftkr0" path="res://scripts/cards/card_container.gd" id="2_us36d"]
+[ext_resource type="PackedScene" uid="uid://0fu8v3fe2jgj" path="res://scenes/card/card.tscn" id="3_fnvnm"]
 
 [node name="CardManager" type="Node2D" unique_id=231766619]
 script = ExtResource("1_2rd7x")
@@ -12,7 +12,7 @@ z_index = 1
 script = ExtResource("2_us36d")
 layout_rect = NodePath("../CardAreaReference")
 card_scene = ExtResource("3_fnvnm")
-fan_width = 500.0
+fan_width = 640.0
 max_angle = 6.0
 arc_height = 0.0
 card_gap = 120.0
@@ -22,15 +22,15 @@ metadata/_custom_type_script = "uid://bn7r6n5jftkr0"
 [node name="CardAreaReference" type="ColorRect" parent="." unique_id=115703510]
 visible = false
 z_index = -1
-offset_right = 746.0
+offset_right = 640.0
 offset_bottom = 150.0
 mouse_filter = 2
 
 [node name="Panel" type="Panel" parent="." unique_id=287567885]
 visible = false
-offset_left = 38.0
+offset_left = 128.0
 offset_top = -25.0
-offset_right = 500.0
+offset_right = 590.0
 offset_bottom = -5.0
 
 [node name="Label" type="Label" parent="Panel" unique_id=782141277]

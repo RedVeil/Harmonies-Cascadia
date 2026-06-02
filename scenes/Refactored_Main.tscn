@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://3lps20yejg6k" path="res://scenes/booster/booster_manager.tscn" id="1_a7jc5"]
 [ext_resource type="Script" uid="uid://bnb8amv0s2k4k" path="res://scripts/camera/IsometricCameraController.gd" id="1_x27jl"]
-[ext_resource type="PackedScene" uid="uid://baalf86is6lu2" path="res://scenes/card/card_manager.tscn" id="2_vg1d4"]
+[ext_resource type="PackedScene" uid="uid://df4lpksbnpvvl" path="res://scenes/card/card_manager.tscn" id="2_vg1d4"]
 [ext_resource type="PackedScene" uid="uid://dkeifl0skpmfk" path="res://scenes/hex/hex_manager.tscn" id="3_tbrwv"]
 [ext_resource type="PackedScene" uid="uid://1m8f7nk3gk26" path="res://scenes/hex/map_button.tscn" id="4_5mvym"]
 [ext_resource type="PackedScene" uid="uid://cm1vk1v7ec785" path="res://scenes/game/score_engine.tscn" id="4_xoyem"]
@@ -44,7 +44,7 @@ position = Vector2(51, 668)
 orchestrator = NodePath("../Orchestrator")
 
 [node name="CardManager" parent="." unique_id=241167023 node_paths=PackedStringArray("orchestrator") instance=ExtResource("2_vg1d4")]
-position = Vector2(366, 599)
+position = Vector2(320, 599)
 orchestrator = NodePath("../Orchestrator")
 card_limit = 8
 card_limit_buffer = 6
@@ -69,9 +69,9 @@ position = Vector2(80, 80)
 orchestrator = NodePath("../Orchestrator")
 
 [node name="CardRecycling" parent="." unique_id=1759140847 node_paths=PackedStringArray("orchestrator") instance=ExtResource("10_ggq8u")]
-position = Vector2(1160, 660)
+position = Vector2(994, 660)
 orchestrator = NodePath("../Orchestrator")
 
 [node name="ScoreTooltip" parent="." unique_id=33584632 node_paths=PackedStringArray("orchestrator") instance=ExtResource("11_b2x3j")]
-position = Vector2(1190, 0)
+position = Vector2(1210, 0)
 orchestrator = NodePath("../Orchestrator")
