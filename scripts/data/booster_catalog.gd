@@ -1,10 +1,8 @@
 extends Node
 
 
-const path = "res://data/booster_settings.json"
+const path = "res://data/booster_catalog.json"
 
-var booster_limit:int = 0
-var booster_point_cost:int = 0
 
 var booster_options: Array[BoosterOption] = []
 
@@ -16,14 +14,11 @@ func build_booster_options() -> bool:
 		push_error("Booster data not found: %s" % path)
 		return false
 	var parsed = JSON.parse_string(FileAccess.get_file_as_string(path))
-	if typeof(parsed) != TYPE_DICTIONARY:
+	if typeof(parsed) != TYPE_ARRAY:
 		push_error("Invalid booster data JSON: %s" % path)
 		return false
-	
-	booster_limit = parsed.booster_limit
-	booster_point_cost = parsed.booster_point_cost
 	 
-	for option in parsed.booster_options:
+	for option in parsed:
 		booster_options.append(parse_booster_option(option))
 		
 	return true
@@ -32,8 +27,10 @@ func parse_booster_option(option:Dictionary) -> BoosterOption:
 	var booster_option := BoosterOption.new()
 	booster_option.type = option.type
 	booster_option.draw_chance = option.draw_chance
+	booster_option.extra_card_chance = option.extra_card_chance
 	booster_option.extra_chance = option.extra_chance
 	booster_option.base_content_options = parse_content_options(option.base_content_options)
+	booster_option.extra_card_options = parse_content_options(option.extra_card_options)
 	booster_option.extra_content_options = parse_content_options(option.extra_content_options)
 	return booster_option
 

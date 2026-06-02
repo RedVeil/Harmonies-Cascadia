@@ -42,6 +42,9 @@ position = Vector2(60, 133)
 [node name="BoosterManager" parent="." unique_id=231766619 node_paths=PackedStringArray("orchestrator") instance=ExtResource("1_a7jc5")]
 position = Vector2(51, 668)
 orchestrator = NodePath("../Orchestrator")
+booster_limit = 3
+booster_point_cost = 10
+booster_points = 5
 
 [node name="CardManager" parent="." unique_id=241167023 node_paths=PackedStringArray("orchestrator") instance=ExtResource("2_vg1d4")]
 position = Vector2(320, 599)
@@ -52,7 +55,6 @@ card_limit_buffer = 6
 [node name="HexManager" parent="." unique_id=866555908 node_paths=PackedStringArray("orchestrator") instance=ExtResource("3_tbrwv")]
 orchestrator = NodePath("../Orchestrator")
 map_button = ExtResource("4_5mvym")
-map_ring_count = null
 
 [node name="ScoreEngine" parent="." unique_id=271434607 instance=ExtResource("4_xoyem")]
 
@@ -67,6 +69,7 @@ point_counter = NodePath("../PointCounter")
 [node name="PointCounter" parent="." unique_id=1020461036 node_paths=PackedStringArray("orchestrator") instance=ExtResource("8_q5ijs")]
 position = Vector2(80, 80)
 orchestrator = NodePath("../Orchestrator")
+checkpoint = 150
 
 [node name="CardRecycling" parent="." unique_id=1759140847 node_paths=PackedStringArray("orchestrator") instance=ExtResource("10_ggq8u")]
 position = Vector2(994, 660)

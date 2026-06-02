@@ -4,7 +4,7 @@ class_name PointCounter
 @export var orchestrator : Orchestrator
 @export var checkpoint: int = 100
 
-var target : int = 0
+@export var target : int = 0
 var current: int = 0
 var preview: int = 0
 

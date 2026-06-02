@@ -12,7 +12,7 @@ z_index = 1
 script = ExtResource("2_us36d")
 layout_rect = NodePath("../CardAreaReference")
 card_scene = ExtResource("3_fnvnm")
-fan_width = 640.0
+fan_width = 500.0
 max_angle = 6.0
 arc_height = 0.0
 card_gap = 120.0
@@ -29,9 +29,9 @@ mouse_filter = 2
 [node name="Panel" type="Panel" parent="." unique_id=287567885]
 visible = false
 offset_left = 128.0
-offset_top = -25.0
+offset_top = -49.0
 offset_right = 590.0
-offset_bottom = -5.0
+offset_bottom = -29.0
 
 [node name="Label" type="Label" parent="Panel" unique_id=782141277]
 layout_mode = 0

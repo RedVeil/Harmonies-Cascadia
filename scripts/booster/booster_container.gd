@@ -21,6 +21,6 @@ func select_booster(id:int) -> void:
 
 ## ----- Pass Interactions and Data Downstream ----- ##
 
-func set_booster_visuals(id:int, type:Enums.BOOSTER_TYPE) -> void:
+func set_booster_visuals(id:int, type:Enums.BOOSTER_TYPE, is_shiny:bool) -> void:
 	if id < 3:
-		boosters[id].set_booster_visuals(type)
+		boosters[id].set_booster_visuals(type, is_shiny)

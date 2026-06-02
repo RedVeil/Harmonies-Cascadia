@@ -16,6 +16,7 @@ var timer : float = 0.5
 
 func _ready() -> void:
 	input_pickable = true
+	#$background.material = $background.material.duplicate()
 	
 	if id == 4:
 		icon.texture = load("res://assets/icons/animal.png")
@@ -56,7 +57,11 @@ func _on_input_event(
 
 ## ----- Booster Visual Logic ----- ##
 
-func set_booster_visuals(type:Enums.BOOSTER_TYPE) -> void:
+func set_booster_visuals(type:Enums.BOOSTER_TYPE, is_shiny:bool) -> void:
+	#if is_shiny:
+		#$background.material.set_shader_parameter("is_active", true)
+	#else:
+		#$background.material.set_shader_parameter("is_active", false)
 	if type < 6:
 		var element = ElementCatalog.elements[type]
 		var level = element.levels[element.levels.size()-1]

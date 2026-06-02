@@ -24,7 +24,7 @@ func _ready() -> void:
 func init(container:QuestContainer, quest:Quest) -> void:
 	quest_container = container
 	target = quest.group_amount
-	$Panel/Label.text = quest.description
+	$Tooltip/Label.text = quest.description
 	
 	if quest.type == 0:
 		set_element_quest_visuals(quest)
@@ -34,10 +34,10 @@ func init(container:QuestContainer, quest:Quest) -> void:
 ## ----- Interactions Logic ----- ##
 
 func _on_mouse_entered() -> void:
-	$Panel.show()
+	$Tooltip.show()
 
 func _on_mouse_exited() -> void:
-	$Panel.hide()
+	$Tooltip.hide()
 
 ## ----- Down stream Logic ----- ##
 

@@ -20,6 +20,20 @@ shader_parameter/lerp_value = 0.0
 shader_parameter/third_value = 0.0
 shader_parameter/rotation_offset = 0.0
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s5vew"]
+bg_color = Color(0.95686275, 0.8745098, 0.7921569, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.1254902)
+shadow_size = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ggv8q"]
+bg_color = Color(0.95686275, 0.8745098, 0.7921569, 1)
+shadow_color = Color(0, 0, 0, 0.1254902)
+shadow_size = 4
+
 [node name="Quest" type="Area2D" unique_id=1202232592]
 monitorable = false
 script = ExtResource("1_yxvbt")
@@ -47,17 +61,30 @@ rotation = -1.7453293
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("5_bl7d4")
 
-[node name="Panel" type="Panel" parent="." unique_id=2001782698]
+[node name="Tooltip" type="Panel" parent="." unique_id=631849646]
 visible = false
-offset_left = 29.0
-offset_top = -20.0
-offset_right = 487.0
-offset_bottom = 20.0
+offset_left = 35.0
+offset_top = -34.0
+offset_right = 235.0
+offset_bottom = 35.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_s5vew")
 
-[node name="Label" type="Label" parent="Panel" unique_id=1973012660]
+[node name="Panel" type="Panel" parent="Tooltip" unique_id=1356930744]
+show_behind_parent = true
 layout_mode = 0
-offset_left = 4.0
-offset_right = 457.0
+offset_top = 20.0
+offset_right = 20.000008
 offset_bottom = 40.0
-horizontal_alignment = 1
-vertical_alignment = 1
+rotation = 0.7853982
+theme_override_styles/panel = SubResource("StyleBoxFlat_ggv8q")
+
+[node name="Label" type="Label" parent="Tooltip" unique_id=441116182]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 5.0
+offset_right = 198.0
+offset_bottom = 62.0
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.4745098, 1)
+theme_override_font_sizes/font_size = 12
+text = "Get 5 additional mountain groups of exactly 1 tile to score 30 points."
+autowrap_mode = 2

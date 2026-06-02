@@ -5,10 +5,10 @@ class_name BoosterManager
 
 @export var orchestrator : Orchestrator
 
-var booster_limit:int = 0
-var booster_point_cost:int = 0
+@export var booster_limit:int = 0
+@export var booster_point_cost:int = 0
+@export var booster_points:int = 3
 
-var booster_points:int = 10
 var acc_points:int = 0
 
 var booster_points_preview:int = 0
@@ -25,8 +25,7 @@ var timer : float = 0.5
 ## ----- Initialisation ----- ##
 
 func _ready() -> void:
-	booster_limit = BoosterCatalog.booster_limit
-	booster_point_cost = BoosterCatalog.booster_point_cost
+	seed(randi())
 	
 	for option in BoosterCatalog.booster_options:
 		if option.type < 6:
@@ -140,6 +139,8 @@ func createBooster(idx:int) -> void:
 	
 	var options = picked_booster.base_content_options.duplicate(true)
 		
+	if pick_option(picked_booster.extra_card_chance):
+		options.append(picked_booster.extra_card_options[pick_weighted(picked_booster.extra_card_options, [])])
 	if pick_option(picked_booster.extra_chance):
 		options.append(picked_booster.extra_content_options[pick_weighted(picked_booster.extra_content_options, [])])
 		
@@ -170,7 +171,7 @@ func createBooster(idx:int) -> void:
 	
 	boosters[idx] = booster
 
-	booster_container.set_booster_visuals(idx, picked_booster.type)
+	booster_container.set_booster_visuals(idx, picked_booster.type, quest_ids.size() > 0)
 
 func pick_weighted(options: Array[Variant], chances: Array[float]) -> int:
 	var roll := randf_range(0.0, 99.9)
