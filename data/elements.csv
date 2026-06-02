@@ -1,7 +1,0 @@
-element_id,name,base_draw_weight,draw_self_delta,draw_other_delta,min_draw_weight,max_stacks,allowed_place_specs,icons,available_rules,default_rule
-0,DeadEarth,0,0,0,0,0,,N0,,
-1,Forest,20,-5,1,1,2,0:0|1:0|1:1,F0|F1|F2,connected_tiered_1_3_7|connected_mid_high_flat_4|component_two_each_cap_ten|jungle_pairs_fifteen,connected_tiered_1_3_7
-2,Field,20,-5,1,1,1,0:0|2:0,A0|A1,group_three_mix|three_fields_only|pair_field_grassland|isolated_field_five,group_three_mix
-3,Mountain,20,-5,1,1,2,0:0|3:0|3:1,M0|M1|M2,connected_tiered_1_3_7|connected_mid_high_5_10|tiered_3_3_1|mid_high_flat_4,connected_tiered_1_3_7
-4,River,20,-5,1,1,0,0:0,R0,shortest_route|short_river|small_lakes|big_lakes,shortest_route
-5,Wetlands,20,-5,1,1,0,0:0|1:0|2:0|4:0|5:0,W0|W1,diverse_neighbors_three_plus|group_flat_four|group_three_ten|two_river_neighbors_four,diverse_neighbors_three_plus

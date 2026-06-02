@@ -1,0 +1,116 @@
+[gd_scene format=3 uid="uid://3lps20yejg6k"]
+
+[ext_resource type="Script" uid="uid://dhpl5abg2f64d" path="res://scripts/booster/booster_manager.gd" id="1_aj74b"]
+[ext_resource type="PackedScene" uid="uid://bigecmmvbwaep" path="res://scenes/booster/booster_container.tscn" id="2_yeb88"]
+[ext_resource type="Texture2D" uid="uid://bjm1olkvh12fl" path="res://assets/hex_full.png" id="4_8ssg2"]
+[ext_resource type="Texture2D" uid="uid://ow2orhvmiym8" path="res://assets/hex_outline_bold.png" id="5_1m3pi"]
+[ext_resource type="Shader" uid="uid://bhkvpga6ortsm" path="res://assets/shader/hex_progress_bar.gdshader" id="5_prlpu"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0i60q"]
+shader = ExtResource("5_prlpu")
+shader_parameter/primary_color = Color(0.7176471, 0.8509804, 0.8745098, 1)
+shader_parameter/secondary_color = Color(0.43529412, 0.7019608, 0.7490196, 1)
+shader_parameter/third_color = Color(0.7176471, 0.8509804, 0.8745098, 1)
+shader_parameter/unfilled_color = Color(1, 1, 1, 1)
+shader_parameter/current_value = 0.0
+shader_parameter/lerp_value = 0.0
+shader_parameter/third_value = 0.0
+shader_parameter/rotation_offset = 1.55
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1m3pi"]
+radius = 30.016663
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1m3pi"]
+bg_color = Color(0.95686275, 0.8745098, 0.7921569, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.1254902)
+shadow_size = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6s4qe"]
+bg_color = Color(0.95686275, 0.8745098, 0.7921569, 1)
+shadow_color = Color(0, 0, 0, 0.1254902)
+shadow_size = 4
+
+[node name="BoosterManager" type="Node2D" unique_id=231766619]
+script = ExtResource("1_aj74b")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=658377995]
+visible = false
+offset_left = -5.0
+offset_top = 8.0
+offset_right = 35.0
+offset_bottom = 48.0
+scale = Vector2(4.28, 1)
+color = Color(0.5312893, 0.5312893, 0.5312893, 1)
+
+[node name="booster_container" parent="." unique_id=794137378 instance=ExtResource("2_yeb88")]
+position = Vector2(51, -5)
+
+[node name="hex" type="Node2D" parent="." unique_id=153682596]
+
+[node name="Sprite2D" type="Sprite2D" parent="hex" unique_id=626988041]
+self_modulate = Color(0.9137255, 0.8352941, 0.7607843, 1)
+rotation = -1.7453293
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("4_8ssg2")
+
+[node name="Sprite2D2" type="Sprite2D" parent="hex" unique_id=1367728347]
+material = SubResource("ShaderMaterial_0i60q")
+rotation = -1.7453293
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("5_1m3pi")
+
+[node name="Label" type="Label" parent="hex" unique_id=1138267740]
+offset_left = -20.0
+offset_top = -19.0
+offset_right = 20.0
+offset_bottom = 20.0
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 24
+text = "10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Area2D" type="Area2D" parent="." unique_id=41306123]
+monitorable = false
+priority = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=649725798]
+shape = SubResource("CircleShape2D_1m3pi")
+
+[node name="Tooltip" type="Panel" parent="." unique_id=1964164819]
+visible = false
+offset_left = -41.0
+offset_top = -124.0
+offset_right = 167.0
+offset_bottom = -49.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_1m3pi")
+
+[node name="Panel" type="Panel" parent="Tooltip" unique_id=77593408]
+show_behind_parent = true
+layout_mode = 0
+offset_left = 41.0
+offset_top = 61.0
+offset_right = 61.0
+offset_bottom = 81.0
+rotation = 0.7853982
+theme_override_styles/panel = SubResource("StyleBoxFlat_6s4qe")
+
+[node name="Label" type="Label" parent="Tooltip" unique_id=952408025]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 5.0
+offset_right = 203.0
+offset_bottom = 82.0
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.4745098, 1)
+theme_override_constants/line_spacing = -1
+theme_override_font_sizes/font_size = 12
+text = "These are your booster points. Earn booster points by placing tiles, finishing quests or recycling cards."
+autowrap_mode = 2
+
+[connection signal="mouse_entered" from="Area2D" to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Area2D" to="." method="_on_mouse_exited"]

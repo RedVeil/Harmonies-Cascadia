@@ -1,0 +1,24 @@
+---
+description: Merge card catalog JSON files by animal name, not id
+globs: data/card_catalog*.json
+alwaysApply: false
+---
+
+# Card catalog merges
+
+When copying or updating animal entries between `data/card_catalog.json` and `data/card_catalog (2) copy.json` (or other catalog JSON files):
+
+- **Match on `name`**, not `id`.
+- After merging into the full copy catalog, renumber `id` sequentially (0..n-1) if the user asks to adjust ids.
+- Do not assume `card_catalog.json` slot ids (e.g. 1, 10, 20) match positions in the full catalog after renumbering.
+
+Example (Node):
+
+```javascript
+const byName = Object.fromEntries(source.animals.map((a) => [a.name, a]));
+data.animals = data.animals.map((animal) =>
+  byName[animal.name] ? { ...byName[animal.name], id: animal.id } : animal
+);
+```
+
+When pulling from the small catalog into the full catalog, preserve the full catalog entry’s `id` unless renumbering is requested.

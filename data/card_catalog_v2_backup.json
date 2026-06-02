@@ -1,0 +1,1612 @@
+{
+	"elements": [
+		{
+			"id": 0,
+			"name": "DeadEarth",
+			"type": 0,
+			"placement": [
+				{
+					"element": 0,
+					"level": 0,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [],
+			"amount": 1,
+			"draw_chance": 100.0,
+			"element": 0,
+			"point_score": 0,
+			"icon": "res://assets/elements/n0.png"
+		},
+		{
+			"id": 1,
+			"name": "Forest",
+			"type": 0,
+			"placement": [
+				{
+					"element": 0,
+					"level": 0,
+					"coords": [
+						0,
+						0
+					]
+				},
+				{
+					"element": 1,
+					"level": 1,
+					"coords": [
+						0,
+						0
+					]
+				},
+				{
+					"element": 1,
+					"level": 2,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [],
+			"amount": 1,
+			"draw_chance": 100.0,
+			"element": 1,
+			"point_score": 0,
+			"icon": "res://assets/elements/f2.png"
+		},
+		{
+			"id": 2,
+			"name": "Field",
+			"type": 0,
+			"placement": [
+				{
+					"element": 0,
+					"level": 0,
+					"coords": [
+						0,
+						0
+					]
+				},
+				{
+					"element": 2,
+					"level": 1,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [],
+			"amount": 1,
+			"draw_chance": 100.0,
+			"element": 2,
+			"point_score": 0,
+			"icon": "res://assets/elements/a1.png"
+		},
+		{
+			"id": 3,
+			"name": "Mountain",
+			"type": 0,
+			"placement": [
+				{
+					"element": 0,
+					"level": 0,
+					"coords": [
+						0,
+						0
+					]
+				},
+				{
+					"element": 3,
+					"level": 1,
+					"coords": [
+						0,
+						0
+					]
+				},
+				{
+					"element": 3,
+					"level": 2,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [],
+			"amount": 1,
+			"draw_chance": 100.0,
+			"element": 3,
+			"point_score": 0,
+			"icon": "res://assets/elements/m2.png"
+		},
+		{
+			"id": 4,
+			"name": "River",
+			"type": 0,
+			"placement": [
+				{
+					"element": 0,
+					"level": 0,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [],
+			"amount": 1,
+			"draw_chance": 100.0,
+			"element": 4,
+			"point_score": 0,
+			"icon": "res://assets/elements/r0.png"
+		},
+		{
+			"id": 5,
+			"name": "Wetland",
+			"type": 0,
+			"placement": [
+				{
+					"element": 0,
+					"level": 0,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [],
+			"amount": 1,
+			"draw_chance": 100.0,
+			"element": 5,
+			"point_score": 0,
+			"icon": "res://assets/elements/w0.png"
+		}
+	],
+	"animals": [
+		{
+			"id": 0,
+			"name": "deer",
+			"type": 1,
+			"placement": [
+				{
+					"element": 1,
+					"level": 1,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 4,
+					"level": 1,
+					"coords": [
+						0,
+						1
+					]
+				},
+				{
+					"element": 4,
+					"level": 1,
+					"coords": [
+						0,
+						-1
+					]
+				}
+			],
+			"amount": 1,
+			"draw_chance": 10,
+			"element": 1,
+			"point_score": 3,
+			"icon": "res://assets/animals/icons/ForestMammal_Deer.png"
+		},
+		{
+			"name": "wolf",
+			"type": 1,
+			"placement": [
+				{
+					"element": 1,
+					"level": 2,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 3,
+					"level": 2,
+					"coords": [
+						0,
+						1
+					]
+				},
+				{
+					"element": 3,
+					"level": 2,
+					"coords": [
+						0,
+						2
+					]
+				}
+			],
+			"amount": 1,
+			"draw_chance": 10,
+			"element": 1,
+			"point_score": 6,
+			"icon": "res://assets/animals/icons/ForestMammal_Wolf.png",
+			"id": 1
+		},
+		{
+			"id": 2,
+			"name": "kingfisher",
+			"type": 1,
+			"placement": [
+				{
+					"element": 1,
+					"level": 3,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 4,
+					"level": 1,
+					"coords": [
+						0,
+						1
+					]
+				},
+				{
+					"element": 4,
+					"level": 1,
+					"coords": [
+						1,
+						-1
+					]
+				}
+			],
+			"amount": 1,
+			"draw_chance": 10,
+			"element": 1,
+			"point_score": 5,
+			"icon": "res://assets/animals/icons/Bird_Kingfisher.png"
+		},
+		{
+			"id": 3,
+			"name": "crow",
+			"type": 1,
+			"placement": [
+				{
+					"element": 1,
+					"level": 2,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 2,
+					"level": 1,
+					"coords": [
+						0,
+						1
+					]
+				},
+				{
+					"element": 2,
+					"level": 1,
+					"coords": [
+						1,
+						-1
+					]
+				}
+			],
+			"amount": 1,
+			"draw_chance": 10,
+			"element": 1,
+			"point_score": 4,
+			"icon": "res://assets/animals/icons/Bird_Crow.png"
+		},
+		{
+			"id": 4,
+			"name": "boar",
+			"type": 1,
+			"placement": [
+				{
+					"element": 1,
+					"level": 2,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 1,
+					"level": 2,
+					"coords": [
+						0,
+						1
+					]
+				},
+				{
+					"element": 1,
+					"level": 2,
+					"coords": [
+						0,
+						-1
+					]
+				}
+			],
+			"amount": 1,
+			"draw_chance": 10,
+			"element": 1,
+			"point_score": 6,
+			"icon": "res://assets/animals/icons/ForestMammal_Boar.png"
+		},
+		{
+			"id": 5,
+			"name": "squirrel",
+			"type": 1,
+			"placement": [
+				{
+					"element": 1,
+					"level": 2,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 2,
+					"level": 2,
+					"coords": [
+						0,
+						1
+					]
+				}
+			],
+			"amount": 1,
+			"draw_chance": 10,
+			"element": 1,
+			"point_score": 4,
+			"icon": "res://assets/animals/icons/ForrestRodent_Squirrel_Brown.png"
+		},
+		{
+			"id": 6,
+			"name": "parrot",
+			"type": 1,
+			"placement": [
+				{
+					"element": 1,
+					"level": 3,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 5,
+					"level": 1,
+					"coords": [
+						0,
+						1
+					]
+				},
+				{
+					"element": 5,
+					"level": 1,
+					"coords": [
+						0,
+						-1
+					]
+				}
+			],
+			"amount": 1,
+			"draw_chance": 10,
+			"element": 1,
+			"point_score": 5,
+			"icon": "res://assets/animals/icons/PetBird_Parrot_Macaw.png"
+		},
+		{
+			"id": 7,
+			"name": "monkey",
+			"type": 1,
+			"placement": [
+				{
+					"element": 1,
+					"level": 3,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 5,
+					"level": 1,
+					"coords": [
+						0,
+						1
+					]
+				}
+			],
+			"amount": 1,
+			"draw_chance": 10,
+			"element": 1,
+			"point_score": 4,
+			"icon": "res://assets/animals/icons/TropicalMammal_Monkey_Brown.png"
+		},
+		{
+			"id": 8,
+			"name": "coala",
+			"type": 1,
+			"placement": [
+				{
+					"element": 1,
+					"level": 3,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 1,
+					"level": 3,
+					"coords": [
+						0,
+						1
+					]
+				},
+				{
+					"element": 1,
+					"level": 3,
+					"coords": [
+						1,
+						0
+					]
+				}
+			],
+			"amount": 1,
+			"draw_chance": 10,
+			"element": 1,
+			"point_score": 9,
+			"icon": "res://assets/animals/icons/Marsupial_Coala.png"
+		},
+		{
+			"id": 27,
+			"name": "gorilla",
+			"type": 1,
+			"placement": [
+				{
+					"element": 1,
+					"level": 2,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 3,
+					"level": 3,
+					"coords": [
+						0,
+						1
+					]
+				},
+				{
+					"element": 3,
+					"level": 3,
+					"coords": [
+						0,
+						2
+					]
+				}
+			],
+			"amount": 1,
+			"draw_chance": 10,
+			"element": 1,
+			"point_score": 8,
+			"icon": "res://assets/animals/icons/TropicalMammal_Gorilla.png"
+		},
+		{
+			"id": 9,
+			"name": "bee",
+			"type": 1,
+			"placement": [
+				{
+					"element": 2,
+					"level": 1,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 2,
+					"level": 1,
+					"coords": [
+						0,
+						1
+					]
+				}
+			],
+			"amount": 2,
+			"draw_chance": 10,
+			"element": 2,
+			"point_score": 2,
+			"icon": "res://assets/animals/icons/Insect_Bee.png"
+		},
+		{
+			"name": "rabbit",
+			"type": 1,
+			"placement": [
+				{
+					"element": 2,
+					"level": 1,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 1,
+					"level": 2,
+					"coords": [
+						0,
+						1
+					]
+				}
+			],
+			"amount": 2,
+			"draw_chance": 10,
+			"element": 2,
+			"point_score": 2,
+			"icon": "res://assets/animals/icons/GrasslandRodent_Hare.png",
+			"id": 10
+		},
+		{
+			"id": 11,
+			"name": "mouse",
+			"type": 1,
+			"placement": [
+				{
+					"element": 2,
+					"level": 2,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 3,
+					"level": 1,
+					"coords": [
+						0,
+						1
+					]
+				}
+			],
+			"amount": 2,
+			"draw_chance": 10,
+			"element": 2,
+			"point_score": 2,
+			"icon": "res://assets/animals/icons/Rodent_Mouse_Grey.png"
+		},
+		{
+			"id": 12,
+			"name": "peacock",
+			"type": 1,
+			"placement": [
+				{
+					"element": 2,
+					"level": 1,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 5,
+					"level": 1,
+					"coords": [
+						0,
+						1
+					]
+				},
+				{
+					"element": 5,
+					"level": 1,
+					"coords": [
+						1,
+						0
+					]
+				}
+			],
+			"amount": 1,
+			"draw_chance": 10,
+			"element": 2,
+			"point_score": 3,
+			"icon": "res://assets/animals/icons/Bird_Peacock.png"
+		},
+		{
+			"id": 13,
+			"name": "hyena",
+			"type": 1,
+			"placement": [
+				{
+					"element": 2,
+					"level": 1,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 3,
+					"level": 2,
+					"coords": [
+						0,
+						1
+					]
+				},
+				{
+					"element": 3,
+					"level": 2,
+					"coords": [
+						1,
+						-1
+					]
+				}
+			],
+			"amount": 1,
+			"draw_chance": 10,
+			"element": 2,
+			"point_score": 5,
+			"icon": "res://assets/animals/icons/SavannaMammal_Hyena.png"
+		},
+		{
+			"id": 14,
+			"name": "hippo",
+			"type": 1,
+			"placement": [
+				{
+					"element": 2,
+					"level": 1,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 5,
+					"level": 1,
+					"coords": [
+						0,
+						1
+					]
+				},
+				{
+					"element": 5,
+					"level": 1,
+					"coords": [
+						0,
+						2
+					]
+				}
+			],
+			"amount": 1,
+			"draw_chance": 10,
+			"element": 2,
+			"point_score": 3,
+			"icon": "res://assets/animals/icons/SavannaMammal_Hippo.png"
+		},
+		{
+			"id": 15,
+			"name": "ladybug",
+			"type": 1,
+			"placement": [
+				{
+					"element": 2,
+					"level": 2,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 4,
+					"level": 1,
+					"coords": [
+						0,
+						1
+					]
+				}
+			],
+			"amount": 2,
+			"draw_chance": 10,
+			"element": 2,
+			"point_score": 2,
+			"icon": "res://assets/animals/icons/Insect_LadyBug.png"
+		},
+		{
+			"id": 16,
+			"name": "sheep",
+			"type": 1,
+			"placement": [
+				{
+					"element": 2,
+					"level": 2,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 2,
+					"level": 1,
+					"coords": [
+						0,
+						1
+					]
+				},
+				{
+					"element": 2,
+					"level": 1,
+					"coords": [
+						1,
+						0
+					]
+				}
+			],
+			"amount": 1,
+			"draw_chance": 10,
+			"element": 2,
+			"point_score": 4,
+			"icon": "res://assets/animals/icons/LivestockMammal_Sheep_White.png"
+		},
+		{
+			"id": 17,
+			"name": "cow",
+			"type": 1,
+			"placement": [
+				{
+					"element": 2,
+					"level": 2,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 4,
+					"level": 1,
+					"coords": [
+						0,
+						1
+					]
+				},
+				{
+					"element": 4,
+					"level": 1,
+					"coords": [
+						1,
+						-1
+					]
+				}
+			],
+			"amount": 1,
+			"draw_chance": 10,
+			"element": 2,
+			"point_score": 4,
+			"icon": "res://assets/animals/icons/LivestockMammal_Cow_Spotted.png"
+		},
+		{
+			"id": 18,
+			"name": "horse",
+			"type": 1,
+			"placement": [
+				{
+					"element": 2,
+					"level": 1,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 3,
+					"level": 1,
+					"coords": [
+						0,
+						1
+					]
+				},
+				{
+					"element": 3,
+					"level": 1,
+					"coords": [
+						0,
+						2
+					]
+				}
+			],
+			"amount": 1,
+			"draw_chance": 10,
+			"element": 2,
+			"point_score": 3,
+			"icon": "res://assets/animals/icons/LivestockMammal_Horse_Grey.png"
+		},
+		{
+			"id": 19,
+			"name": "bear",
+			"type": 1,
+			"placement": [
+				{
+					"element": 3,
+					"level": 2,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 1,
+					"level": 2,
+					"coords": [
+						0,
+						1
+					]
+				},
+				{
+					"element": 1,
+					"level": 2,
+					"coords": [
+						1,
+						0
+					]
+				}
+			],
+			"amount": 1,
+			"draw_chance": 10,
+			"element": 3,
+			"point_score": 6,
+			"icon": "res://assets/animals/icons/ForestMammal_Bear_Black.png"
+		},
+		{
+			"name": "swan",
+			"type": 1,
+			"placement": [
+				{
+					"element": 3,
+					"level": 1,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 4,
+					"level": 1,
+					"coords": [
+						0,
+						1
+					]
+				},
+				{
+					"element": 4,
+					"level": 1,
+					"coords": [
+						1,
+						0
+					]
+				}
+			],
+			"amount": 1,
+			"draw_chance": 10,
+			"element": 3,
+			"point_score": 3,
+			"icon": "res://assets/animals/icons/Bird_Swan_White.png",
+			"id": 20
+		},
+		{
+			"id": 21,
+			"name": "eagle",
+			"type": 1,
+			"placement": [
+				{
+					"element": 3,
+					"level": 3,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 4,
+					"level": 1,
+					"coords": [
+						0,
+						1
+					]
+				},
+				{
+					"element": 4,
+					"level": 1,
+					"coords": [
+						0,
+						2
+					]
+				}
+			],
+			"amount": 1,
+			"draw_chance": 10,
+			"element": 3,
+			"point_score": 5,
+			"icon": "res://assets/animals/icons/Bird_Eagle.png"
+		},
+		{
+			"id": 22,
+			"name": "platypus",
+			"type": 1,
+			"placement": [
+				{
+					"element": 3,
+					"level": 2,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 5,
+					"level": 1,
+					"coords": [
+						0,
+						1
+					]
+				},
+				{
+					"element": 5,
+					"level": 1,
+					"coords": [
+						0,
+						-1
+					]
+				}
+			],
+			"amount": 1,
+			"draw_chance": 10,
+			"element": 3,
+			"point_score": 4,
+			"icon": "res://assets/animals/icons/TropicalMammal_Platypus.png"
+		},
+		{
+			"id": 23,
+			"name": "llama",
+			"type": 1,
+			"placement": [
+				{
+					"element": 3,
+					"level": 2,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 2,
+					"level": 2,
+					"coords": [
+						0,
+						1
+					]
+				},
+				{
+					"element": 2,
+					"level": 2,
+					"coords": [
+						1,
+						-1
+					]
+				}
+			],
+			"amount": 1,
+			"draw_chance": 10,
+			"element": 3,
+			"point_score": 6,
+			"icon": "res://assets/animals/icons/LivestockMammal_Llama_Brown.png"
+		},
+		{
+			"id": 24,
+			"name": "hamster",
+			"type": 1,
+			"placement": [
+				{
+					"element": 3,
+					"level": 1,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 2,
+					"level": 1,
+					"coords": [
+						0,
+						1
+					]
+				}
+			],
+			"amount": 2,
+			"draw_chance": 10,
+			"element": 3,
+			"point_score": 2,
+			"icon": "res://assets/animals/icons/PetRodent_Hamster.png"
+		},
+		{
+			"id": 25,
+			"name": "capybara",
+			"type": 1,
+			"placement": [
+				{
+					"element": 3,
+					"level": 1,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 5,
+					"level": 1,
+					"coords": [
+						0,
+						1
+					]
+				}
+			],
+			"amount": 2,
+			"draw_chance": 10,
+			"element": 3,
+			"point_score": 2,
+			"icon": "res://assets/animals/icons/Rodent_Capybara.png"
+		},
+		{
+			"id": 26,
+			"name": "bat",
+			"type": 1,
+			"placement": [
+				{
+					"element": 3,
+					"level": 2,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 1,
+					"level": 2,
+					"coords": [
+						0,
+						1
+					]
+				},
+				{
+					"element": 1,
+					"level": 2,
+					"coords": [
+						1,
+						-1
+					]
+				}
+			],
+			"amount": 1,
+			"draw_chance": 10,
+			"element": 3,
+			"point_score": 6,
+			"icon": "res://assets/animals/icons/ForestMammal_Bat_Black.png"
+		},
+		{
+			"id": 28,
+			"name": "mountaingoat",
+			"type": 1,
+			"placement": [
+				{
+					"element": 3,
+					"level": 3,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 3,
+					"level": 2,
+					"coords": [
+						0,
+						1
+					]
+				},
+				{
+					"element": 3,
+					"level": 2,
+					"coords": [
+						0,
+						-1
+					]
+				}
+			],
+			"amount": 1,
+			"draw_chance": 10,
+			"element": 3,
+			"point_score": 7,
+			"icon": "res://assets/animals/icons/MountainMammal_Mountaingoat.png"
+		},
+		{
+			"id": 29,
+			"name": "vulture",
+			"type": 1,
+			"placement": [
+				{
+					"element": 3,
+					"level": 3,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 3,
+					"level": 3,
+					"coords": [
+						0,
+						1
+					]
+				},
+				{
+					"element": 3,
+					"level": 3,
+					"coords": [
+						0,
+						2
+					]
+				}
+			],
+			"amount": 1,
+			"draw_chance": 10,
+			"element": 3,
+			"point_score": 9,
+			"icon": "res://assets/animals/icons/Bird_Vulture.png"
+		},
+		{
+			"id": 30,
+			"name": "fish",
+			"type": 1,
+			"placement": [
+				{
+					"element": 4,
+					"level": 1,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 4,
+					"level": 1,
+					"coords": [
+						0,
+						1
+					]
+				},
+				{
+					"element": 4,
+					"level": 1,
+					"coords": [
+						0,
+						2
+					]
+				}
+			],
+			"amount": 1,
+			"draw_chance": 20,
+			"element": 4,
+			"point_score": 3,
+			"icon": "res://assets/animals/icons/Fish_Herring.png"
+		},
+		{
+			"name": "otter",
+			"type": 1,
+			"placement": [
+				{
+					"element": 4,
+					"level": 1,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 2,
+					"level": 1,
+					"coords": [
+						0,
+						1
+					]
+				},
+				{
+					"element": 2,
+					"level": 1,
+					"coords": [
+						0,
+						1
+					]
+				}
+			],
+			"amount": 1,
+			"draw_chance": 20,
+			"element": 4,
+			"point_score": 3,
+			"icon": "res://assets/animals/icons/WaterMammal_Otter.png",
+			"id": 31
+		},
+		{
+			"id": 32,
+			"name": "crab",
+			"type": 1,
+			"placement": [
+				{
+					"element": 4,
+					"level": 1,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 3,
+					"level": 2,
+					"coords": [
+						0,
+						1
+					]
+				}
+			],
+			"amount": 2,
+			"draw_chance": 20,
+			"element": 4,
+			"point_score": 2,
+			"icon": "res://assets/animals/icons/SeaShellfish_Crab_Sand.png"
+		},
+		{
+			"id": 33,
+			"name": "flamingo",
+			"type": 1,
+			"placement": [
+				{
+					"element": 4,
+					"level": 1,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 5,
+					"level": 1,
+					"coords": [
+						0,
+						1
+					]
+				},
+				{
+					"element": 5,
+					"level": 1,
+					"coords": [
+						1,
+						-1
+					]
+				}
+			],
+			"amount": 1,
+			"draw_chance": 20,
+			"element": 4,
+			"point_score": 3,
+			"icon": "res://assets/animals/icons/SavannaBird_Flamingo.png"
+		},
+		{
+			"id": 34,
+			"name": "salmon",
+			"type": 1,
+			"placement": [
+				{
+					"element": 4,
+					"level": 1,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 1,
+					"level": 2,
+					"coords": [
+						0,
+						1
+					]
+				},
+				{
+					"element": 1,
+					"level": 2,
+					"coords": [
+						1,
+						0
+					]
+				}
+			],
+			"amount": 1,
+			"draw_chance": 20,
+			"element": 4,
+			"point_score": 5,
+			"icon": "res://assets/animals/icons/Fish_Salmon.png"
+		},
+		{
+			"id": 35,
+			"name": "frog",
+			"type": 1,
+			"placement": [
+				{
+					"element": 5,
+					"level": 1,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 2,
+					"level": 1,
+					"coords": [
+						0,
+						1
+					]
+				}
+			],
+			"amount": 2,
+			"draw_chance": 20,
+			"element": 5,
+			"point_score": 2,
+			"icon": "res://assets/animals/icons/Amphibian_Frog_Green.png"
+		},
+		{
+			"id": 36,
+			"name": "crocodile",
+			"type": 1,
+			"placement": [
+				{
+					"element": 5,
+					"level": 1,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 4,
+					"level": 1,
+					"coords": [
+						0,
+						1
+					]
+				},
+				{
+					"element": 4,
+					"level": 1,
+					"coords": [
+						0,
+						2
+					]
+				}
+			],
+			"amount": 1,
+			"draw_chance": 20,
+			"element": 5,
+			"point_score": 3,
+			"icon": "res://assets/animals/icons/Reptile_Crocodile_Green.png"
+		},
+		{
+			"id": 37,
+			"name": "gecko",
+			"type": 1,
+			"placement": [
+				{
+					"element": 5,
+					"level": 1,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 1,
+					"level": 3,
+					"coords": [
+						0,
+						1
+					]
+				},
+				{
+					"element": 1,
+					"level": 3,
+					"coords": [
+						1,
+						-1
+					]
+				}
+			],
+			"amount": 1,
+			"draw_chance": 20,
+			"element": 5,
+			"point_score": 7,
+			"icon": "res://assets/animals/icons/Reptile_Lizard.png"
+		},
+		{
+			"id": 38,
+			"name": "snake",
+			"type": 1,
+			"placement": [
+				{
+					"element": 5,
+					"level": 1,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 3,
+					"level": 2,
+					"coords": [
+						0,
+						1
+					]
+				},
+				{
+					"element": 3,
+					"level": 2,
+					"coords": [
+						1,
+						-1
+					]
+				}
+			],
+			"amount": 1,
+			"draw_chance": 20,
+			"element": 5,
+			"point_score": 5,
+			"icon": "res://assets/animals/icons/Reptile_Snake_Brown.png"
+		},
+		{
+			"id": 39,
+			"name": "duck",
+			"type": 1,
+			"placement": [
+				{
+					"element": 5,
+					"level": 1,
+					"coords": [
+						0,
+						0
+					]
+				}
+			],
+			"bonus": [
+				{
+					"element": 5,
+					"level": 1,
+					"coords": [
+						0,
+						1
+					]
+				},
+				{
+					"element": 5,
+					"level": 1,
+					"coords": [
+						1,
+						0
+					]
+				}
+			],
+			"amount": 1,
+			"draw_chance": 20,
+			"element": 5,
+			"point_score": 3,
+			"icon": "res://assets/animals/icons/Bird_Duck_Mallard.png"
+		}
+	]
+}

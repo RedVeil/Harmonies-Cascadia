@@ -1,0 +1,227 @@
+[gd_scene format=3 uid="uid://3bvwe0sroaru"]
+
+[ext_resource type="Script" uid="uid://32xqs6qfvsxg" path="res://scenes/game/placement_tooltip.gd" id="1_kjs7j"]
+[ext_resource type="Texture2D" uid="uid://boew28pgavxmj" path="res://assets/hex_outline.png" id="2_u02uc"]
+[ext_resource type="Texture2D" uid="uid://bjm1olkvh12fl" path="res://assets/hex_full.png" id="3_anuti"]
+[ext_resource type="Texture2D" uid="uid://ba4wr1s7la27a" path="res://assets/elements/a0.png" id="4_n22po"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n22po"]
+bg_color = Color(0.9137255, 0.8352941, 0.7607843, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color(0, 0, 0, 0.32156864)
+shadow_size = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d75bn"]
+bg_color = Color(0.9137255, 0.8352941, 0.7607843, 1)
+shadow_color = Color(0, 0, 0, 0.32156864)
+shadow_size = 8
+
+[node name="PlacementTooltip" type="Node2D" unique_id=1404822029]
+script = ExtResource("1_kjs7j")
+
+[node name="element" type="Node2D" parent="." unique_id=250293903]
+z_index = 1
+position = Vector2(26, 29.999998)
+scale = Vector2(0.1, 0.1)
+
+[node name="1" type="Node2D" parent="element" unique_id=1079115816]
+visible = false
+position = Vector2(226.66675, 280.00073)
+
+[node name="0" type="Sprite2D" parent="element/1" unique_id=651328904]
+texture = ExtResource("2_u02uc")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/1/0" unique_id=2030177039]
+show_behind_parent = true
+texture = ExtResource("3_anuti")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/1/0/Sprite2D" unique_id=452642262]
+
+[node name="2" type="Node2D" parent="element" unique_id=1780109367]
+visible = false
+position = Vector2(236.6665, 300)
+
+[node name="0" type="Sprite2D" parent="element/2" unique_id=159886426]
+position = Vector2(-10, -320)
+texture = ExtResource("2_u02uc")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/2/0" unique_id=1414802856]
+show_behind_parent = true
+texture = ExtResource("3_anuti")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/2/0/Sprite2D" unique_id=396614939]
+
+[node name="1" type="Sprite2D" parent="element/2" unique_id=213908890]
+position = Vector2(-10, 250)
+texture = ExtResource("2_u02uc")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/2/1" unique_id=1829135287]
+show_behind_parent = true
+texture = ExtResource("3_anuti")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/2/1/Sprite2D" unique_id=1404738430]
+texture = ExtResource("4_n22po")
+
+[node name="ColorRect" type="ColorRect" parent="element/2" unique_id=1610648228]
+offset_left = -340.0
+offset_top = -36.0
+offset_right = -300.0
+offset_bottom = 4.0
+scale = Vector2(17.080002, 0.19999999)
+
+[node name="3" type="Node2D" parent="element" unique_id=1909515315]
+visible = false
+position = Vector2(220, 320)
+
+[node name="ColorRect" type="ColorRect" parent="element/3" unique_id=562089611]
+offset_left = -294.0
+offset_top = 110.0
+offset_right = -254.0
+offset_bottom = 150.0
+rotation = -1.0631475
+scale = Vector2(17.080002, 0.19999999)
+
+[node name="ColorRect2" type="ColorRect" parent="element/3" unique_id=1477684161]
+offset_left = 10.000011
+offset_top = 448.00003
+offset_right = 50.00001
+offset_bottom = 488.00003
+rotation = -1.0631475
+scale = Vector2(17.080002, 0.19999999)
+
+[node name="1" type="Sprite2D" parent="element/3" unique_id=816770408]
+position = Vector2(40, -30)
+texture = ExtResource("2_u02uc")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/3/1" unique_id=1819856055]
+show_behind_parent = true
+texture = ExtResource("3_anuti")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/3/1/Sprite2D" unique_id=1649905963]
+
+[node name="0" type="Sprite2D" parent="element/3" unique_id=540774914]
+position = Vector2(-252, -400.00024)
+texture = ExtResource("2_u02uc")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/3/0" unique_id=2136642677]
+show_behind_parent = true
+texture = ExtResource("3_anuti")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/3/0/Sprite2D" unique_id=1199683616]
+texture = ExtResource("4_n22po")
+
+[node name="2" type="Sprite2D" parent="element/3" unique_id=732471621]
+position = Vector2(302, 360)
+texture = ExtResource("2_u02uc")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/3/2" unique_id=233860905]
+show_behind_parent = true
+texture = ExtResource("3_anuti")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/3/2/Sprite2D" unique_id=1401845861]
+
+[node name="animal" type="Node2D" parent="." unique_id=1633695476]
+z_index = 1
+position = Vector2(50, 58)
+scale = Vector2(0.09, 0.09)
+
+[node name="(0,0)" type="Sprite2D" parent="animal" unique_id=1735063232]
+visible = false
+texture = ExtResource("2_u02uc")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/(0,0)" unique_id=1954690576]
+show_behind_parent = true
+texture = ExtResource("3_anuti")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/(0,0)/Sprite2D" unique_id=1105912998]
+texture = ExtResource("4_n22po")
+
+[node name="(-1,1)" type="Sprite2D" parent="animal" unique_id=1014776336]
+visible = false
+position = Vector2(-310, -180)
+scale = Vector2(0.99999976, 0.99999976)
+texture = ExtResource("2_u02uc")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/(-1,1)" unique_id=1763269611]
+show_behind_parent = true
+texture = ExtResource("3_anuti")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/(-1,1)/Sprite2D" unique_id=102002661]
+
+[node name="(0,1)" type="Sprite2D" parent="animal" unique_id=247670815]
+visible = false
+position = Vector2(4.7683716e-07, -360.00003)
+scale = Vector2(0.99999976, 0.99999976)
+texture = ExtResource("2_u02uc")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/(0,1)" unique_id=451015918]
+show_behind_parent = true
+texture = ExtResource("3_anuti")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/(0,1)/Sprite2D" unique_id=824968731]
+
+[node name="(-1,0)" type="Sprite2D" parent="animal" unique_id=213873289]
+visible = false
+position = Vector2(-310, 180.00003)
+scale = Vector2(0.99999976, 0.99999976)
+texture = ExtResource("2_u02uc")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/(-1,0)" unique_id=667345882]
+show_behind_parent = true
+texture = ExtResource("3_anuti")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/(-1,0)/Sprite2D" unique_id=2073218465]
+
+[node name="(0,-1)" type="Sprite2D" parent="animal" unique_id=1970963938]
+visible = false
+position = Vector2(0, 360)
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("2_u02uc")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/(0,-1)" unique_id=367155196]
+show_behind_parent = true
+texture = ExtResource("3_anuti")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/(0,-1)/Sprite2D" unique_id=1266278401]
+
+[node name="(1,-1)" type="Sprite2D" parent="animal" unique_id=464856756]
+visible = false
+position = Vector2(310, 179.99998)
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("2_u02uc")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/(1,-1)" unique_id=1268768387]
+show_behind_parent = true
+texture = ExtResource("3_anuti")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/(1,-1)/Sprite2D" unique_id=1987717354]
+
+[node name="(1,0)" type="Sprite2D" parent="animal" unique_id=1946438329]
+visible = false
+position = Vector2(310, -180)
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("2_u02uc")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/(1,0)" unique_id=730694205]
+show_behind_parent = true
+texture = ExtResource("3_anuti")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/(1,0)/Sprite2D" unique_id=615137148]
+
+[node name="Panel" type="Panel" parent="." unique_id=558093077]
+offset_right = 100.0
+offset_bottom = 120.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_n22po")
+
+[node name="Panel" type="Panel" parent="Panel" unique_id=1752528228]
+show_behind_parent = true
+layout_mode = 0
+offset_left = 49.000008
+offset_top = 109.00001
+offset_right = 65.00001
+offset_bottom = 125.00001
+rotation = 0.7853982
+theme_override_styles/panel = SubResource("StyleBoxFlat_d75bn")

@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://bigecmmvbwaep"]
+
+[ext_resource type="Script" uid="uid://dahp7tyfymk0s" path="res://scripts/booster/booster_container.gd" id="1_6mr2c"]
+[ext_resource type="PackedScene" uid="uid://ccqmu132kjpb6" path="res://scenes/booster/booster.tscn" id="2_swhpq"]
+
+[node name="booster_container" type="Node2D" unique_id=794137378 node_paths=PackedStringArray("boosters")]
+script = ExtResource("1_6mr2c")
+boosters = [NodePath("Booster"), NodePath("Booster2"), NodePath("Booster3"), NodePath("Booster4"), NodePath("Booster5")]
+
+[node name="Booster" parent="." unique_id=321030438 instance=ExtResource("2_swhpq")]
+
+[node name="Booster2" parent="." unique_id=1767161178 instance=ExtResource("2_swhpq")]
+position = Vector2(37, 0)
+id = 1
+
+[node name="Booster3" parent="." unique_id=544867222 instance=ExtResource("2_swhpq")]
+position = Vector2(75, 0)
+id = 2
+
+[node name="Booster4" parent="." unique_id=1232737516 instance=ExtResource("2_swhpq")]
+position = Vector2(112, 0)
+id = 3
+
+[node name="Booster5" parent="." unique_id=1461463527 instance=ExtResource("2_swhpq")]
+position = Vector2(148, 0)
+id = 4

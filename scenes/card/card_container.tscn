@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bg4hasgbpia88"]
+
+[ext_resource type="Script" uid="uid://bn7r6n5jftkr0" path="res://scripts/cards/card_container.gd" id="1_5snm7"]
+
+[node name="card_container" type="Node2D" unique_id=794137378 groups=["card_container", "interactable"]]
+script = ExtResource("1_5snm7")

@@ -1,0 +1,155 @@
+[gd_scene format=3 uid="uid://bv5ofl0j1ktqc"]
+
+[ext_resource type="Script" uid="uid://dggol5cr45w7e" path="res://scenes/game/score_tooltip.gd" id="1_d6nn3"]
+[ext_resource type="Texture2D" uid="uid://2c2kpkccrfy3" path="res://assets/icons/question.png" id="1_e867d"]
+[ext_resource type="Texture2D" uid="uid://jomsgj87ydn8" path="res://assets/elements/a1.png" id="3_44yi1"]
+[ext_resource type="PackedScene" uid="uid://ccy33o81w8qpr" path="res://scenes/game/tooltip_icon.tscn" id="3_e6s6x"]
+[ext_resource type="Texture2D" uid="uid://bkdyc7db8om56" path="res://assets/elements/f2.png" id="4_d4g8o"]
+[ext_resource type="Texture2D" uid="uid://boqn0q1xtndms" path="res://assets/elements/m2.png" id="5_ci7lu"]
+[ext_resource type="Texture2D" uid="uid://deto26ef4js8g" path="res://assets/elements/r0.png" id="6_d6nn3"]
+[ext_resource type="Texture2D" uid="uid://bour75pi3njo7" path="res://assets/elements/w0.png" id="8_ci7lu"]
+[ext_resource type="Texture2D" uid="uid://8sdglhlqxn7g" path="res://assets/score_tooltip/fields0.png" id="9_ci7lu"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e867d"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.1254902)
+shadow_size = 4
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_672qq"]
+size = Vector2(44, 40)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_44yi1"]
+bg_color = Color(0.95686275, 0.8745098, 0.7921569, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.1254902)
+shadow_size = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d4g8o"]
+bg_color = Color(0.95686275, 0.8745098, 0.7921569, 1)
+shadow_color = Color(0, 0, 0, 0.1254902)
+shadow_size = 4
+
+[node name="ScoreTooltip" type="Node2D" unique_id=2118125176]
+z_index = 1
+script = ExtResource("1_d6nn3")
+
+[node name="Panel" type="Panel" parent="." unique_id=376977882]
+offset_right = 44.0
+offset_bottom = 320.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_e867d")
+
+[node name="Button" type="Area2D" parent="." unique_id=33584632]
+position = Vector2(0, 280)
+monitorable = false
+priority = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Button" unique_id=552286692]
+position = Vector2(22, 20)
+shape = SubResource("RectangleShape2D_672qq")
+
+[node name="Sprite2D" type="Sprite2D" parent="Button" unique_id=2077933624]
+self_modulate = Color(0.5686275, 0.5176471, 0.47058824, 1)
+position = Vector2(22.000002, 18)
+scale = Vector2(0.32000005, 0.29333338)
+texture = ExtResource("1_e867d")
+
+[node name="icons" type="Node2D" parent="." unique_id=1708123780]
+
+[node name="TooltipIcon" parent="icons" unique_id=978343123 instance=ExtResource("3_e6s6x")]
+position = Vector2(22, 40)
+icon = ExtResource("4_d4g8o")
+
+[node name="TooltipIcon2" parent="icons" unique_id=1889096491 instance=ExtResource("3_e6s6x")]
+position = Vector2(22, 90)
+icon = ExtResource("3_44yi1")
+
+[node name="TooltipIcon3" parent="icons" unique_id=70363252 instance=ExtResource("3_e6s6x")]
+position = Vector2(22, 140)
+icon = ExtResource("5_ci7lu")
+
+[node name="TooltipIcon4" parent="icons" unique_id=414096696 instance=ExtResource("3_e6s6x")]
+position = Vector2(22, 190)
+icon = ExtResource("6_d6nn3")
+
+[node name="TooltipIcon5" parent="icons" unique_id=1628951938 instance=ExtResource("3_e6s6x")]
+position = Vector2(22, 240)
+icon = ExtResource("8_ci7lu")
+
+[node name="Panel2" type="Panel" parent="." unique_id=2102555946]
+visible = false
+offset_left = -197.0
+offset_top = 9.0
+offset_right = -18.0
+offset_bottom = 320.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_44yi1")
+
+[node name="Panel" type="Panel" parent="Panel2" unique_id=2014226531]
+show_behind_parent = true
+layout_mode = 0
+offset_left = 160.0
+offset_top = 104.0
+offset_right = 200.0
+offset_bottom = 144.0
+rotation = 0.7853982
+theme_override_styles/panel = SubResource("StyleBoxFlat_d4g8o")
+
+[node name="title" type="Node2D" parent="Panel2" unique_id=166627953]
+position = Vector2(197, -22)
+
+[node name="Label" type="Label" parent="Panel2/title" unique_id=959125867]
+offset_left = -197.0
+offset_top = 29.0
+offset_right = -18.0
+offset_bottom = 52.0
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_colors/font_outline_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_constants/outline_size = 1
+text = "Mountain"
+horizontal_alignment = 1
+
+[node name="ColorRect" type="ColorRect" parent="Panel2/title" unique_id=1615313368]
+offset_left = -150.0
+offset_top = 51.0
+offset_right = -66.0
+offset_bottom = 53.0
+color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+
+[node name="description" type="Node2D" parent="Panel2" unique_id=1516773916]
+position = Vector2(0, -28)
+
+[node name="ColorRect" type="ColorRect" parent="Panel2/description" unique_id=846609058]
+offset_left = 4.0
+offset_top = 228.0
+offset_right = 175.0
+offset_bottom = 230.0
+color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+
+[node name="Label" type="Label" parent="Panel2/description" unique_id=146333483]
+offset_top = 236.0
+offset_right = 179.0
+offset_bottom = 329.0
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_colors/font_outline_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 10
+text = "Rivers score by the length of a river.
+The score calculation will always take the shortest route from end to end. "
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="graphic" type="Node2D" parent="Panel2" unique_id=723530522]
+position = Vector2(18, -21)
+
+[node name="Sprite2D7" type="Sprite2D" parent="Panel2/graphic" unique_id=1924229882]
+position = Vector2(71, 134)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("9_ci7lu")
+
+[connection signal="input_event" from="Button" to="." method="_on_button_input_event"]
+[connection signal="mouse_entered" from="Button" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Button" to="." method="_on_button_mouse_exited"]

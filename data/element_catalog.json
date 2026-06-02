@@ -1,0 +1,120 @@
+[
+	{
+		"id": 0,
+		"name": "DeadEarth",
+		"levels": [
+			{
+				"level": 0,
+				"name": "DeadEarth",
+				"color": "#5c4738",
+				"icon": "res://assets/elements/n0.png"
+			}
+		],
+		"scoring_rules": []
+	},
+	{
+		"id": 1,
+		"name": "Forest",
+		"levels": [
+			{
+				"level": 1,
+				"name": "Bushland",
+				"color": "#388538",
+				"icon": "res://assets/elements/f0.png"
+			},
+			{
+				"level": 2,
+				"name": "Forest",
+				"color": "#297533",
+				"icon": "res://assets/elements/f1.png"
+			},
+			{
+				"level": 3,
+				"name": "DeepForest",
+				"color": "#195c24",
+				"icon": "res://assets/elements/f2.png"
+			}
+		],
+		"scoring_rules": [
+			0
+		]
+	},
+	{
+		"id": 2,
+		"name": "Field",
+		"levels": [
+			{
+				"level": 1,
+				"name": "Grassland",
+				"color": "#e5d175",
+				"icon": "res://assets/elements/a0.png"
+			},
+			{
+				"level": 2,
+				"name": "Field",
+				"color": "#d6bd57",
+				"icon": "res://assets/elements/a1.png"
+			}
+		],
+		"scoring_rules": [
+			3
+		]
+	},
+	{
+		"id": 3,
+		"name": "Mountain",
+		"levels": [
+			{
+				"level": 1,
+				"name": "Hill",
+				"color": "#7a7a85",
+				"icon": "res://assets/elements/m0.png"
+			},
+			{
+				"level": 2,
+				"name": "Mountain",
+				"color": "#61616b",
+				"icon": "res://assets/elements/m1.png"
+			},
+			{
+				"level": 3,
+				"name": "LargeMountain",
+				"color": "#47474d",
+				"icon": "res://assets/elements/m2.png"
+			}
+		],
+		"scoring_rules": [
+			6
+		]
+	},
+	{
+		"id": 4,
+		"name": "River",
+		"levels": [
+			{
+				"level": 1,
+				"name": "River",
+				"color": "#3366d9",
+				"icon": "res://assets/elements/r0.png"
+			}
+		],
+		"scoring_rules": [
+			9
+		]
+	},
+	{
+		"id": 5,
+		"name": "Wetland",
+		"levels": [
+			{
+				"level": 1,
+				"name": "Wetland",
+				"color": "#39a78f",
+				"icon": "res://assets/elements/w0.png"
+			}
+		],
+		"scoring_rules": [
+			12
+		]
+	}
+]

@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://slux8ml7jqbn"]
+
+[ext_resource type="Script" uid="uid://c11bxuixrwet1" path="res://scripts/quests/quest_manager.gd" id="1_iosgm"]
+[ext_resource type="PackedScene" uid="uid://bdcxhhkfujhaa" path="res://scenes/quest/quest_container.tscn" id="2_xb67k"]
+[ext_resource type="PackedScene" uid="uid://sgh5slp0kent" path="res://scenes/quest/quest.tscn" id="3_mudld"]
+
+[node name="QuestManager" type="Node2D" unique_id=409772543]
+script = ExtResource("1_iosgm")
+
+[node name="QuestContainer" parent="." unique_id=544854155 node_paths=PackedStringArray("layout_rect") instance=ExtResource("2_xb67k")]
+layout_rect = NodePath("../ColorRect")
+quest_scene = ExtResource("3_mudld")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1991946875]
+visible = false
+offset_right = 40.0
+offset_bottom = 261.0
