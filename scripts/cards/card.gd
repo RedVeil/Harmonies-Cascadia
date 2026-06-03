@@ -58,6 +58,9 @@ func init(cardData:CardData, parent:CardContainer, idx:int) -> void:
 		$visuals/icon.texture = icon
 		$visuals/icon.show()
 		$visuals/elementIcon/Sprite2D.texture = load(ElementCatalog.elements[cardData.element].levels[cardData.placement[0].level-1].icon)
+		$visuals/bonus_points/background.material = mat
+		$visuals/bonus_points/Label.text = "%d" % cardData.bonus_points if cardData.bonus_points > 0.5 else "1/2"
+		$visuals/bonus_points.show()
 	else:
 		$visuals/elementIcon/Sprite2D.texture = load(ElementCatalog.elements[cardData.element].levels.back().icon)
 

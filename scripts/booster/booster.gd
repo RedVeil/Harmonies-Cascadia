@@ -18,7 +18,7 @@ func _ready() -> void:
 	input_pickable = true
 	#$background.material = $background.material.duplicate()
 	
-	if id == 4:
+	if id == 0:
 		icon.texture = load("res://assets/icons/animal.png")
 		$Tooltip/Label.text = "Buy this booster to get random animal cards."
 

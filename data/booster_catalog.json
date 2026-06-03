@@ -276,32 +276,32 @@
 			{
 				"type": "element",
 				"id": 1,
-				"amount": 2,
-				"draw_chance": 70.0
+				"amount": 3,
+				"draw_chance": 80.0
 			},
 			{
 				"type": "element",
 				"id": 2,
-				"amount": 2,
-				"draw_chance": 70.0
+				"amount": 3,
+				"draw_chance": 80.0
 			},
 			{
 				"type": "element",
 				"id": 3,
-				"amount": 2,
+				"amount": 3,
 				"draw_chance": 70.0
 			},
 			{
 				"type": "element",
 				"id": 4,
-				"amount": 2,
-				"draw_chance": 70.0
+				"amount": 3,
+				"draw_chance": 60.0
 			},
 			{
 				"type": "element",
 				"id": 5,
-				"amount": 2,
-				"draw_chance": 70.0
+				"amount": 1,
+				"draw_chance": 60.0
 			}
 		],
 		"extra_card_chance": 100.0,
@@ -337,8 +337,15 @@
 				"draw_chance": 10.0
 			}
 		],
-		"extra_chance": 0.0,
-		"extra_content_options": []
+		"extra_chance": 40.0,
+		"extra_content_options": [
+			{
+				"type": "quest",
+				"id": 0,
+				"amount": 1,
+				"draw_chance": 100.0
+			},
+		]
 	},
 	{
 		"type": 7,
@@ -348,19 +355,19 @@
 				"type": "animal",
 				"id": 1,
 				"amount": 1,
-				"draw_chance": 50.0
+				"draw_chance": 70.0
 			},
 			{
 				"type": "animal",
 				"id": 2,
 				"amount": 1,
-				"draw_chance": 50.0
+				"draw_chance": 70.0
 			},
 			{
 				"type": "animal",
 				"id": 3,
 				"amount": 1,
-				"draw_chance": 50.0
+				"draw_chance": 70.0
 			},
 			{
 				"type": "animal",
@@ -372,7 +379,7 @@
 				"type": "animal",
 				"id": 5,
 				"amount": 1,
-				"draw_chance": 50.0
+				"draw_chance": 30.0
 			}
 		],
 		"extra_card_chance": 100.0,

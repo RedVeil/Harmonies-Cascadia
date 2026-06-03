@@ -2,9 +2,11 @@ extends Node2D
 class_name PointCounter
 
 @export var orchestrator : Orchestrator
-@export var checkpoint: int = 100
 
-@export var target : int = 0
+@export var checkpoint: int = 100
+@export var checkpoint_multiplier : float = 2.0
+
+var target : int = 0
 var current: int = 0
 var preview: int = 0
 
@@ -19,6 +21,7 @@ func _ready() -> void:
 	$ProgressBar.material.set_shader_parameter("lerp_value", 0.0)
 	$ProgressBar.material.set_shader_parameter("third_value", 0.0)
 	$Label.text = "%d" % current
+	$Tooltip/Label.text = "This is you Point Score. Earn enough points to unlock additional tiles to play with.\n(0 / %d)" % target
 
 ## ----- Down stream Logic ----- ##
 
@@ -35,11 +38,12 @@ func preview_progress(val:int) -> void:
 		if val > current:
 			$ProgressBar.material.set_shader_parameter("current_value",  0.0)
 			$ProgressBar.material.set_shader_parameter("third_value",  float(preview) / float(target))
-			$Label.text = "%d" % current
 		else:
 			$ProgressBar.material.set_shader_parameter("third_value",  0.0)
 			$ProgressBar.material.set_shader_parameter("current_value",  float(preview) / float(target))
-			$Label.text = "%d" % current
+		$Label.text = "%d" % current
+		$Tooltip/Label.text = "This is you Point Score. Earn enough points to unlock additional tiles to play with.\n(%d / %d)" % [preview, target]
+
 
 func apply_preview() -> void:
 	current = preview
@@ -49,8 +53,11 @@ func apply_preview() -> void:
 	$Label.text = "%d" % current
 	
 	if current >= target:
-		target += checkpoint
+		target = target * checkpoint_multiplier 
 		orchestrator.add_map_points(1)
+	
+	$Tooltip/Label.text = "This is you Point Score. Earn enough points to unlock additional tiles to play with.\n(%d / %d)" % [current, target]
+
 
 func reset_preview() -> void:
 	preview = current

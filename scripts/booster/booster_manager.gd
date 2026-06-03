@@ -6,11 +6,15 @@ class_name BoosterManager
 @export var orchestrator : Orchestrator
 
 @export var booster_limit:int = 0
-@export var booster_point_cost:int = 0
-@export var booster_points:int = 3
+@export var base_booster_point_cost:int = 10
+@export var booster_point_multiplier:float = 1.2
+@export var start_booster_points:int = 3
 
+var booster_point_cost:int = 0
+var booster_points:int = 0
 var acc_points:int = 0
 
+var booster_point_cost_preview:int = 0
 var booster_points_preview:int = 0
 var acc_points_preview:int = 0
 
@@ -32,8 +36,11 @@ func _ready() -> void:
 			booster_chances.append(option.draw_chance)
 	
 	boosters.resize(booster_limit + 2)
+	booster_points = start_booster_points
+	booster_point_cost = base_booster_point_cost
 	
 	$hex/Label.text = "%d" % booster_points
+	$Tooltip/Label.text = "These are your booster points. Earn booster points by placing tiles, finishing quests or recycling cards. (0 / %d)" % booster_point_cost
 	
 	$hex/Sprite2D2.material.set_shader_parameter("current_value", 0.0)
 	$hex/Sprite2D2.material.set_shader_parameter("lerp_value", 0.0)
@@ -41,10 +48,10 @@ func _ready() -> void:
 	
 	booster_container.init(self)
 	
-	for i in range(booster_limit):
-		createBooster(i)
-	createBooster(3)
-	createBooster(4)
+	#for i in range(booster_limit):
+		#createBooster(i)
+	createBooster(0)
+	createBooster(1)
 
 ## ----- Pass Data Upstream ----- ##
 
@@ -67,6 +74,7 @@ func select_booster(id:int) -> void:
 
 func change_booster_points(amount:int) -> void:
 	booster_points += amount
+	
 	$hex/Label.text = "%d" % booster_points
 
 ## ----- Pass Data Downstream ----- ##
@@ -75,14 +83,19 @@ func preview_booster_points(points:int) -> void:
 	if points == 0:
 		return
 	
-	var points_ = acc_points + points
-	if points_ < 0:
-		points_ = 0
+	var booster_progress = acc_points + points
+	if booster_progress < 0:
+		booster_progress = 0
+		
+	var gained_boosters := 0
+	while booster_progress >= booster_point_cost_preview:
+		booster_progress -= booster_point_cost_preview
+		booster_points_preview += 1
+		booster_point_cost_preview = int(booster_point_cost_preview * booster_point_multiplier)
 	
-	booster_points_preview = booster_points + int(floor(points_ / booster_point_cost))
-	acc_points_preview = points_ % booster_point_cost
+	acc_points_preview = booster_progress
 	
-	var progress = float(acc_points_preview) / float(booster_point_cost)
+	var progress = float(acc_points_preview) / float(booster_point_cost_preview)
 	var booster_point_diff = booster_points_preview - booster_points
 	if booster_point_diff > 0:
 		$hex/Sprite2D2.material.set_shader_parameter("current_value", 0.0)
@@ -95,25 +108,32 @@ func preview_booster_points(points:int) -> void:
 			$hex/Sprite2D2.material.set_shader_parameter("third_value",  0.0)
 		elif acc_points_preview > acc_points:
 			$hex/Sprite2D2.material.set_shader_parameter("current_value", 0.0)
-			$hex/Sprite2D2.material.set_shader_parameter("lerp_value", float(acc_points) / float(booster_point_cost))
+			$hex/Sprite2D2.material.set_shader_parameter("lerp_value", float(acc_points) / float(booster_point_cost_preview))
 			$hex/Sprite2D2.material.set_shader_parameter("third_value",  progress)
 		else:
 			$hex/Sprite2D2.material.set_shader_parameter("current_value", progress)
-			$hex/Sprite2D2.material.set_shader_parameter("lerp_value", float(acc_points) / float(booster_point_cost))
+			$hex/Sprite2D2.material.set_shader_parameter("lerp_value", float(acc_points) / float(booster_point_cost_preview))
 			$hex/Sprite2D2.material.set_shader_parameter("third_value",  0.0)
+	
+	$Tooltip/Label.text = "These are your booster points. Earn booster points by placing tiles, finishing quests or recycling cards. (%d / %d)" % [acc_points_preview, booster_point_cost_preview]
 
 
 func apply_booster_points() -> void:
 	change_booster_points(booster_points_preview - booster_points)
 	acc_points = acc_points_preview
+	booster_point_cost = booster_point_cost_preview
 	
 	$hex/Sprite2D2.material.set_shader_parameter("current_value", 0.0)
 	$hex/Sprite2D2.material.set_shader_parameter("lerp_value", float(acc_points) / float(booster_point_cost))
 	$hex/Sprite2D2.material.set_shader_parameter("third_value",  0.0)
+	
+	$Tooltip/Label.text = "These are your booster points. Earn booster points by placing tiles, finishing quests or recycling cards. (%d / %d)" % [acc_points, booster_point_cost]
+
 
 func reset_preview() -> void:
 	booster_points_preview = booster_points
 	acc_points_preview = acc_points
+	booster_point_cost_preview = booster_point_cost
 	
 	apply_booster_points()
 	
@@ -122,9 +142,9 @@ func reset_preview() -> void:
 func createBooster(idx:int) -> void:
 	var booster = BoosterData.new()
 	var option_index : int = 0
-	if idx == 3:
+	if idx == 1:
 		option_index = BoosterCatalog.booster_options.find_custom(func (option): return option.type == 6)
-	elif idx == 4:
+	elif idx == 0:
 		option_index = BoosterCatalog.booster_options.find_custom(func (option): return option.type == 7)
 	else:
 		option_index = pick_weighted(BoosterCatalog.booster_options, booster_chances)
@@ -155,7 +175,8 @@ func createBooster(idx:int) -> void:
 						if filtered_by_element.size() > 0:
 							cards.append(filtered_by_element.pick_random())
 					BoosterContentOption.RewardType.QUEST:
-						var quest_id = orchestrator.pick_quest(entry.id, picked_booster.type)
+						var quest_element = picked_booster.type if picked_booster.type < 6 else randi_range(1,5)
+						var quest_id = orchestrator.pick_quest(entry.id, quest_element)
 						if quest_id != -1:
 							quest_ids.append(quest_id)
 					BoosterContentOption.RewardType.BOOSTER_POINT:

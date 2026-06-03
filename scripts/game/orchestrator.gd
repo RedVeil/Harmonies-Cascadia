@@ -136,8 +136,16 @@ func handle_tile_click(coord: Vector2i) -> void:
 			score_engine.quest_score = new_quest_score
 			score_engine.total_score = new_element_score + new_quest_score + score_engine.animal_score
 		else:
+			var animal_multiplier_score = 0
+			if score_engine.placed_animals.has(selected_card.id):
+				var animal_amount = score_engine.placed_animals[selected_card.id]
+				animal_multiplier_score = int(animal_amount * selected_card.bonus_points)
+				score_engine.placed_animals[selected_card.id] = animal_amount + 1
+			else:
+				score_engine.placed_animals[selected_card.id] = 1
+			
 			score_engine.quest_score = new_quest_score
-			score_engine.animal_score += selected_card.point_score
+			score_engine.animal_score += selected_card.point_score + animal_multiplier_score
 			score_engine.total_score = score_engine.animal_score + new_quest_score + score_engine.element_score
 			
 		hex_manager.tiles[coord] = tile_data_preview
@@ -217,19 +225,22 @@ func handle_animal_preview(coord:Vector2i, card:CardData) -> TileStatePreview:
 	)
 	if placement_res.is_valid:
 		placement_valid = true
-		
 		tile_data_preview = hex_manager.tiles[coord].duplicate(true)
 		tile_data_preview.animal_id = card.id
 
 		contributing_coords.assign(placement_res.coords)
 		
 		new_quest_score = score_engine.quest_score + quest_manager.preview_animal_quests(card.id)
+		var animal_multiplier_score = 0
+		if score_engine.placed_animals.has(card.id):
+			var animal_amount = score_engine.placed_animals[card.id]
+			animal_multiplier_score = int(animal_amount * card.bonus_points)
 		
 		return TileStatePreview.new({
 			"is_valid":true,
 			"coord":coord,
 			"tile_data": tile_data_preview,
-			"points_diff": card.point_score + (new_quest_score - score_engine.quest_score),
+			"points_diff": card.point_score + animal_multiplier_score + (new_quest_score - score_engine.quest_score),
 			"contributing_coords":placement_res.coords
 		})
 	else:
