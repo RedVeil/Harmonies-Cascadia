@@ -82,17 +82,24 @@ func change_booster_points(amount:int) -> void:
 func preview_booster_points(points:int) -> void:
 	if points == 0:
 		return
-	
+
+	# Safety: never allow a 0-cost loop
+	if booster_point_cost_preview <= 0:
+		booster_point_cost_preview = booster_point_cost
+
 	var booster_progress = acc_points + points
 	if booster_progress < 0:
 		booster_progress = 0
-		
-	var gained_boosters := 0
+
+	booster_points_preview = booster_points
+	acc_points_preview = acc_points
+	booster_point_cost_preview = booster_point_cost
+
 	while booster_progress >= booster_point_cost_preview:
 		booster_progress -= booster_point_cost_preview
 		booster_points_preview += 1
-		booster_point_cost_preview = int(booster_point_cost_preview * booster_point_multiplier)
-	
+		booster_point_cost_preview = ceili(float(booster_point_cost_preview) * booster_point_multiplier)
+
 	acc_points_preview = booster_progress
 	
 	var progress = float(acc_points_preview) / float(booster_point_cost_preview)
