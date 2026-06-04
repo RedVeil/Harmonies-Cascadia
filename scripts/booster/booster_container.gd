@@ -22,5 +22,5 @@ func select_booster(id:int) -> void:
 ## ----- Pass Interactions and Data Downstream ----- ##
 
 func set_booster_visuals(id:int, boosterData:BoosterData) -> void:
-	if id < 3:
+	if id != 3:
 		boosters[id].set_booster_visuals(boosterData)

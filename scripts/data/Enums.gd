@@ -12,9 +12,9 @@ enum ELEMENT {
 
 const ELEMENT_NAMES : Array[String] = [
 	"None", 
-	"Mountain",
 	"Forest",
 	"Field",
+	"Mountain",
 	"River",
 	"Wetland"
 ]

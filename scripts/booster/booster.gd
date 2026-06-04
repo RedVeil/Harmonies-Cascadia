@@ -16,11 +16,10 @@ var timer : float = 0.5
 
 func _ready() -> void:
 	input_pickable = true
-	#$background.material = $background.material.duplicate()
 	
 	if id == 4:
 		icon.texture = load("res://assets/icons/animal.png")
-		$Tooltip/Label.text = "Buy this booster to get random animal cards."
+		# $Tooltip/Label.text = "Buy this booster to get random animal cards."
 
 func init(parent:BoosterContainer) -> void:
 	container = parent
@@ -81,11 +80,18 @@ func create_tooltip(boosterData: BoosterData) -> String:
 			contents.append("%d %ss" % [element_cards[i], Enums.ELEMENT_NAMES[i]])
 	for i in animal_cards.size():
 		if animal_cards[i] > 0:
-			contents.append("%d %s Animals" % [animal_cards[i], Enums.ELEMENT_NAMES[i]])
+			if boosterData.type == 7:
+				contents.append("%d %s" % [animal_cards[i], Enums.ELEMENT_NAMES[i]])
+			else:
+				contents.append("%d %s Animals" % [animal_cards[i], Enums.ELEMENT_NAMES[i]])
 	if boosterData.booster_points > 0:
 		contents.append("%d Booster Points" % boosterData.booster_points)
 	if boosterData.quest_ids.size() > 0:
 		contents.append("%d Quests" % boosterData.quest_ids.size())
 	if boosterData.map_points > 0:
 		contents.append("%d Map Points" % boosterData.map_points)
-	return "This booster contains: " + ", ".join(contents)
+	
+	if boosterData.type == 7:
+		return "This booster contains animals:\n" + ", ".join(contents)
+	else:
+		return "This booster contains:\n" + ", ".join(contents)

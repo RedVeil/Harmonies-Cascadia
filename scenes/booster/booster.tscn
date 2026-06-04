@@ -55,31 +55,31 @@ texture = ExtResource("4_430vb")
 
 [node name="Tooltip" type="Panel" parent="." unique_id=783815431]
 visible = false
-offset_left = -41.0
-offset_top = -77.0
-offset_right = 159.0
-offset_bottom = -28.0
+offset_left = -40.0
+offset_top = -101.0
+offset_right = 160.0
+offset_bottom = -33.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_430vb")
 
 [node name="Panel" type="Panel" parent="Tooltip" unique_id=1422591998]
 show_behind_parent = true
 layout_mode = 0
-offset_left = 41.000008
-offset_top = 29.0
-offset_right = 61.000008
-offset_bottom = 49.0
+offset_left = 40.0
+offset_top = 53.0
+offset_right = 60.0
+offset_bottom = 73.0
 rotation = 0.7853982
 theme_override_styles/panel = SubResource("StyleBoxFlat_4cwg5")
 
 [node name="Label" type="Label" parent="Tooltip" unique_id=1041448701]
 layout_mode = 0
 offset_left = 5.0
-offset_top = 5.0
 offset_right = 196.0
-offset_bottom = 42.0
+offset_bottom = 67.0
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.4745098, 1)
 theme_override_font_sizes/font_size = 12
 text = "Pay a booster point to get new booster options."
+vertical_alignment = 1
 autowrap_mode = 2
 
 [connection signal="input_event" from="." to="." method="_on_input_event"]

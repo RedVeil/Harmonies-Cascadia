@@ -768,7 +768,7 @@
 			"draw_chance": 10,
 			"element": 2,
 			"secondary_element": 5,
-			"point_score": 3,
+			"point_score": 5,
 			"bonus_points": 1,
 			"icon": "res://assets/animals/icons/SavannaMammal_Hippo.png"
 		},
@@ -1521,7 +1521,7 @@
 			"element": 5,
 			"secondary_element": 2,
 			"point_score": 2,
-			"bonus_points": 0.5,
+			"bonus_points": 1,
 			"icon": "res://assets/animals/icons/Amphibian_Frog_Green.png"
 		},
 		{
@@ -1556,11 +1556,11 @@
 					]
 				}
 			],
-			"amount": 3,
+			"amount": 2,
 			"draw_chance": 20,
 			"element": 5,
 			"secondary_element": 4,
-			"point_score": 3,
+			"point_score": 4,
 			"bonus_points": 1,
 			"icon": "res://assets/animals/icons/Reptile_Crocodile_Green.png"
 		},
@@ -1620,7 +1620,7 @@
 			],
 			"bonus": [
 				{
-					"element": 3,
+					"element": 1,
 					"level": 2,
 					"coords": [
 						0,
@@ -1628,7 +1628,7 @@
 					]
 				},
 				{
-					"element": 3,
+					"element": 1,
 					"level": 2,
 					"coords": [
 						1,
@@ -1640,7 +1640,7 @@
 			"draw_chance": 20,
 			"element": 5,
 			"secondary_element": 3,
-			"point_score": 5,
+			"point_score": 6,
 			"bonus_points": 1,
 			"icon": "res://assets/animals/icons/Reptile_Snake_Brown.png"
 		},
@@ -1660,7 +1660,7 @@
 			],
 			"bonus": [
 				{
-					"element": 5,
+					"element": 4,
 					"level": 1,
 					"coords": [
 						0,
@@ -1668,19 +1668,19 @@
 					]
 				},
 				{
-					"element": 5,
+					"element": 4,
 					"level": 1,
 					"coords": [
 						1,
-						0
+						-1
 					]
 				}
 			],
-			"amount": 3,
+			"amount": 2,
 			"draw_chance": 20,
 			"element": 5,
-			"secondary_element": 5,
-			"point_score": 3,
+			"secondary_element": 4,
+			"point_score": 4,
 			"bonus_points": 1,
 			"icon": "res://assets/animals/icons/Bird_Duck_Mallard.png"
 		}
