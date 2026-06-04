@@ -3,21 +3,25 @@ class_name FeedbackAudio
 
 ## Assign AudioStream arrays on FeedbackAudio (child of GameFeedback autoload).
 ## Each effect picks a random clip from its pool. Empty pools stay silent.
+## Short SFX share a voice pool; points scored uses its own player so it is not cut off.
 
 @export_group("Draw Card")
 @export var draw_card_sounds: Array[AudioStream] = []
 @export var draw_card_pitch_min: float = 0.93
 @export var draw_card_pitch_max: float = 1.07
 @export var draw_card_volume_jitter_db: float = 2.5
+@export var draw_card_extra_volume_db: float = 0.0
 
 @export_group("Hover Card")
 @export var hover_card_sounds: Array[AudioStream] = []
 @export var hover_card_pitch_min: float = 0.95
 @export var hover_card_pitch_max: float = 1.05
 @export var hover_card_volume_jitter_db: float = 1.5
+@export var hover_card_extra_volume_db: float = 0.0
 
 @export_group("Click Card")
 @export var click_card_sounds: Array[AudioStream] = []
+@export var click_card_extra_volume_db: float = 0.0
 
 @export_group("Hover Tile")
 @export var hover_tile_sounds: Array[AudioStream] = []
@@ -28,36 +32,78 @@ class_name FeedbackAudio
 
 @export_group("Place Tile")
 @export var place_tile_sounds: Array[AudioStream] = []
+@export var place_tile_extra_volume_db: float = 0.0
 @export var contributor_sounds: Array[AudioStream] = []
+@export var contributor_extra_volume_db: float = -3.0
 
 @export_group("Points Scored")
 @export var points_scored_sounds: Array[AudioStream] = []
+@export var points_scored_extra_volume_db: float = 0.0
 
 @export_group("Undo")
 @export var undo_sounds: Array[AudioStream] = []
+@export var undo_extra_volume_db: float = 0.0
 
 @export_group("Recycle")
 @export var recycle_sounds: Array[AudioStream] = []
+@export var recycle_extra_volume_db: float = 0.0
 
 @export_group("Click Button")
 @export var click_button_sounds: Array[AudioStream] = []
+@export var click_button_extra_volume_db: float = 0.0
 
 @export_group("Mix")
 @export var master_volume_offset_db: float = -20.0
+## Shared voices for placement, hover, clicks, etc.
+@export var polyphony: int = 8
 
-@onready var _player: AudioStreamPlayer = $AudioStreamPlayer
+var _players: Array[AudioStreamPlayer] = []
+var _next_player_index: int = 0
+var _points_player: AudioStreamPlayer
+
+func _ready() -> void:
+	_build_player_pool()
+	_points_player = AudioStreamPlayer.new()
+	_points_player.name = "PointsScoredPlayer"
+	add_child(_points_player)
+
+func _build_player_pool() -> void:
+	_players.clear()
+	var count := maxi(polyphony, 1)
+	for i in count:
+		var player := AudioStreamPlayer.new()
+		player.name = "SfxPlayer_%d" % i
+		add_child(player)
+		_players.append(player)
+
+func _acquire_player() -> AudioStreamPlayer:
+	for player in _players:
+		if not player.playing:
+			return player
+	_next_player_index = (_next_player_index + 1) % _players.size()
+	return _players[_next_player_index]
+
+func _play_on_player(
+	player: AudioStreamPlayer,
+	stream: AudioStream,
+	volume_db: float = 0.0,
+	pitch_scale: float = 1.0
+) -> void:
+	if stream == null or player == null:
+		return
+	player.stream = stream
+	player.pitch_scale = pitch_scale
+	player.volume_db = volume_db + master_volume_offset_db
+	player.play()
 
 func play_stream(
 	stream: AudioStream,
 	volume_db: float = 0.0,
 	pitch_scale: float = 1.0
 ) -> void:
-	if stream == null:
+	if stream == null or _players.is_empty():
 		return
-	_player.stream = stream
-	_player.pitch_scale = pitch_scale
-	_player.volume_db = volume_db + master_volume_offset_db
-	_player.play()
+	_play_on_player(_acquire_player(), stream, volume_db, pitch_scale)
 
 func _random_pitch(min_scale: float, max_scale: float) -> float:
 	return randf_range(min_scale, max_scale)
@@ -87,7 +133,8 @@ func play_draw_card() -> void:
 		draw_card_sounds,
 		draw_card_pitch_min,
 		draw_card_pitch_max,
-		draw_card_volume_jitter_db
+		draw_card_volume_jitter_db,
+		draw_card_extra_volume_db
 	)
 
 func play_hover_card() -> void:
@@ -95,11 +142,18 @@ func play_hover_card() -> void:
 		hover_card_sounds,
 		hover_card_pitch_min,
 		hover_card_pitch_max,
-		hover_card_volume_jitter_db
+		hover_card_volume_jitter_db,
+		hover_card_extra_volume_db
 	)
 
 func play_click_card() -> void:
-	_play_from_pool(click_card_sounds)
+	_play_from_pool(
+		click_card_sounds,
+		1.0,
+		1.0,
+		0.0,
+		click_card_extra_volume_db
+	)
 
 func play_hover_tile() -> void:
 	_play_from_pool(
@@ -111,22 +165,64 @@ func play_hover_tile() -> void:
 	)
 
 func play_place_tile() -> void:
-	_play_from_pool(place_tile_sounds)
+	_play_from_pool(
+		place_tile_sounds,
+		1.0,
+		1.0,
+		0.0,
+		place_tile_extra_volume_db
+	)
 
 func play_tile_contributor() -> void:
 	if contributor_sounds.is_empty():
-		_play_from_pool(place_tile_sounds, 0.9, 0.95, 0.0, -3.0)
+		_play_from_pool(
+			place_tile_sounds,
+			0.9,
+			0.95,
+			0.0,
+			contributor_extra_volume_db
+		)
 	else:
-		_play_from_pool(contributor_sounds)
+		_play_from_pool(
+			contributor_sounds,
+			1.0,
+			1.0,
+			0.0,
+			contributor_extra_volume_db
+		)
 
 func play_points_scored() -> void:
-	_play_from_pool(points_scored_sounds)
+	if points_scored_sounds.is_empty():
+		return
+	_play_on_player(
+		_points_player,
+		points_scored_sounds.pick_random(),
+		points_scored_extra_volume_db
+	)
 
 func play_undo() -> void:
-	_play_from_pool(undo_sounds)
+	_play_from_pool(
+		undo_sounds,
+		1.0,
+		1.0,
+		0.0,
+		undo_extra_volume_db
+	)
 
 func play_recycle() -> void:
-	_play_from_pool(recycle_sounds)
+	_play_from_pool(
+		recycle_sounds,
+		1.0,
+		1.0,
+		0.0,
+		recycle_extra_volume_db
+	)
 
 func play_click_button() -> void:
-	_play_from_pool(click_button_sounds)
+	_play_from_pool(
+		click_button_sounds,
+		1.0,
+		1.0,
+		0.0,
+		click_button_extra_volume_db
+	)

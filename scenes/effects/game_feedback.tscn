@@ -15,11 +15,14 @@ script = ExtResource("1_gf")
 [node name="FeedbackAudio" type="Node" parent="." unique_id=2051303084]
 script = ExtResource("2_fa")
 draw_card_sounds = Array[AudioStream]([ExtResource("3_wm0v8")])
+draw_card_extra_volume_db = -5.0
 hover_card_sounds = Array[AudioStream]([ExtResource("4_nqyak")])
+hover_card_extra_volume_db = -10.0
 click_card_sounds = Array[AudioStream]([ExtResource("5_7iqj8")])
 hover_tile_sounds = Array[AudioStream]([ExtResource("6_85gjx")])
+hover_tile_extra_volume_db = -20.0
 place_tile_sounds = Array[AudioStream]([ExtResource("4_s2")])
+place_tile_extra_volume_db = -10.0
 contributor_sounds = Array[AudioStream]([ExtResource("3_wm0v8")])
 points_scored_sounds = Array[AudioStream]([ExtResource("8_7iqj8")])
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="FeedbackAudio"]
+points_scored_extra_volume_db = 10.0
