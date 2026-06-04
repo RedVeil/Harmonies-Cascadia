@@ -4,9 +4,7 @@ class_name Card
 @export var scale_speed : float = 1.0
 @export var hover_scale: float = 8.0
 @export var hover_height: float = 12.0
-@export var spawn_duration : float = 0.35
-@export var redraw_duration : float = 0.22
-@export var layout_duration : float = 0.25
+@export var exit_tween_duration: float = 0.3
 
 @onready var visuals : Node2D = $visuals
 @onready var collision : CollisionShape2D = $CollisionShape2D
@@ -14,6 +12,9 @@ class_name Card
 
 var container : CardContainer
 var id : int = 0
+
+var is_mouse_inside : bool = false
+var exit_tween : Tween
 
 var is_active : bool = false
 var base_scale: Vector2 = Vector2.ONE
@@ -29,7 +30,8 @@ var is_animal:bool = false
 
 var _spawn_active : bool = false
 var _redraw_active : bool = false
-var _layout_tween : Tween
+var _spawn_layout_pending : bool = false
+var _feedback_tweens: Dictionary = {}
 
 ## ----- Initialisation ----- ##
 
@@ -38,6 +40,8 @@ func _ready() -> void:
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
 	input_event.connect(_on_input_event)
+	
+	# $visuals/background.material = $visuals/background.material.duplicate(true)
 
 func init(cardData:CardData, parent:CardContainer, idx:int) -> void:
 	container = parent
@@ -72,15 +76,27 @@ func init(cardData:CardData, parent:CardContainer, idx:int) -> void:
 	$visuals/points/Label.text = "?" if cardData.type == 0 else "%d" % cardData.point_score
 	
 	$visuals/Label.text = "x %d" % stack_amount
-	play_spawn_animation()
+
+func mark_spawn_layout() -> void:
+	_spawn_layout_pending = true
+
+func consume_spawn_layout() -> bool:
+	var pending := _spawn_layout_pending
+	_spawn_layout_pending = false
+	return pending
 
 ## ----- Interactions Logic ----- ##
 
 func _on_mouse_entered() -> void:
+	is_mouse_inside = true
 	container.hover_card(id)
+	
 
 func _on_mouse_exited() -> void:
+	is_mouse_inside = false
 	container.exit_card(id)
+	#setNormalState()
+	
 
 func _on_input_event(
 	viewport: Viewport,
@@ -89,7 +105,18 @@ func _on_input_event(
 ) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			GameFeedback.play_click_card()
 			container.select_card(id)
+	
+	#if event is InputEventMouseMotion and is_mouse_inside:
+		#var mouse_position = event.position
+		#var relative_mouse_position = mouse_position - global_position
+		#
+		##divide by scale to make independant of scale
+		##subtract by size/2.0 to center the mouse pos
+		## var centred_mouse_postion = relative_mouse_position/scale - $visuals/background.size/2.0
+		#
+		#$visuals/background.material.set_shader_parameter("_mousePos", relative_mouse_position)
 
 ## ----- Stack Logic ----- ##
 
@@ -97,7 +124,7 @@ func increment() -> void:
 	if stack_amount < 10:
 		stack_amount += 1
 		$visuals/Label.text = "x %d " % stack_amount
-		play_redraw_animation()
+		GameFeedback.run_hand_card_redraw(self)
 
 func decrement() -> void:
 	if stack_amount > 0:
@@ -109,6 +136,7 @@ func decrement() -> void:
 func handle_hover() -> void:
 	placement_tooltip.show()
 	if !is_active:
+		GameFeedback.play_hover_card()
 		set_select_visuals()
 
 func handle_exit() -> void:
@@ -130,50 +158,50 @@ func deselect() -> void:
 func remove_card() -> void:
 	queue_free()
 
-## ----- Animation Logic ----- ##
+## ----- Hand feedback (delegates to GameFeedback autoload) ----- ##
 
-func play_spawn_animation() -> void:
+func set_feedback_tween(key: StringName, tween: Tween) -> void:
+	if _feedback_tweens.has(key):
+		var existing: Tween = _feedback_tweens[key]
+		if existing.is_valid():
+			existing.kill()
+	_feedback_tweens[key] = tween
+
+func play_spawn_layout_motion(target_pos: Vector2, target_angle: float, z: int) -> void:
+	GameFeedback.run_hand_card_spawn(self, target_pos, target_angle, z)
+
+func is_spawn_feedback_active() -> bool:
+	return _spawn_active
+
+func begin_spawn_feedback() -> void:
 	_spawn_active = true
+
+func end_spawn_feedback(target_pos: Vector2, target_angle: float) -> void:
+	_spawn_active = false
+	position = target_pos
+	rotation_degrees = target_angle
+	visuals.scale = target_scale
+
+func reset_spawn_visuals() -> void:
 	visuals.scale = Vector2.ZERO
 	visuals.modulate = Color(1.0, 1.0, 1.0, 0.0)
-	var tween := create_tween().set_parallel(true)
-	tween.tween_property(visuals, "scale", base_scale, spawn_duration)\
-		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	tween.tween_property(visuals, "modulate", Color.WHITE, spawn_duration * 0.75)\
-		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	tween.finished.connect(func() -> void:
-		_spawn_active = false
-		visuals.scale = target_scale
-	)
 
-func play_redraw_animation() -> void:
-	if _spawn_active:
-		return
+func begin_redraw_feedback() -> void:
 	_redraw_active = true
-	var peak_scale := base_scale * 1.12
-	var tween := create_tween()
-	tween.tween_property(visuals, "scale", peak_scale, redraw_duration * 0.35)\
-		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	tween.tween_property(visuals, "scale", target_scale, redraw_duration * 0.65)\
-		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	tween.finished.connect(func() -> void:
-		_redraw_active = false
-	)
 
-func animate_layout(target_pos: Vector2, target_angle: float, z: int) -> void:
+func end_redraw_feedback() -> void:
+	_redraw_active = false
+
+func apply_layout(target_pos: Vector2, target_angle: float, z: int) -> void:
 	set_z(z)
-	var needs_motion := position.distance_squared_to(target_pos) > 0.25 \
-		or absf(rotation_degrees - target_angle) > 0.1
-	if not needs_motion:
-		position = target_pos
-		rotation_degrees = target_angle
-		return
-	if _layout_tween and _layout_tween.is_valid():
-		_layout_tween.kill()
-	_layout_tween = create_tween().set_parallel(true)
-	_layout_tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
-	_layout_tween.tween_property(self, "position", target_pos, layout_duration)
-	_layout_tween.tween_property(self, "rotation_degrees", target_angle, layout_duration)
+	position = target_pos
+	rotation_degrees = target_angle
+
+#func setNormalState():
+	#if exit_tween and exit_tween.is_valid():
+		#exit_tween.kill()
+	#exit_tween = get_tree().create_tween()
+	#exit_tween.tween_property($visuals/background.material, "shader_parameter/_mousePos", Vector2.ZERO, exit_tween_duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 func set_z(z:int) -> void:
 	base_z_index = z
@@ -200,7 +228,6 @@ func _process(delta: float) -> void:
 		visuals.scale = visuals.scale.lerp(target_scale, delta * scale_speed)
 		visuals.position = visuals.position.lerp(target_visuals_position, delta * scale_speed)
 		collision.position = collision.position.lerp(target_visuals_position, delta * scale_speed)
-
 
 func get_card_background(element:int) -> String:
 	match(element):

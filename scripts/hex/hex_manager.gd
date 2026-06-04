@@ -61,6 +61,13 @@ func apply_preview(preview:TileStatePreview) -> void:
 func apply_placement(coord:Vector2i) -> void:
 	hex_container.place_tile(coord)
 
+func play_placement_reward(
+	coord: Vector2i,
+	points: int,
+	contributing_coords: Array[Vector2i]
+) -> void:
+	hex_container.play_placement_reward(coord, points, contributing_coords)
+
 func reset_preview(coord:Vector2i) -> void:
 	hex_container.reset_preview(coord)
 	

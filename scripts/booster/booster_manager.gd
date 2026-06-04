@@ -31,6 +31,11 @@ var booster_chances : Array[float] = []
 var is_hovered : bool = false
 var timer : float = 0.5
 
+var _reward_tween : Tween
+
+var booster_label : Label
+var booster_progress_sprite : Sprite2D
+
 ## ----- Initialisation ----- ##
 
 func _ready() -> void:
@@ -44,6 +49,8 @@ func _ready() -> void:
 	booster_points = start_booster_points
 	booster_point_cost = base_booster_point_cost
 	
+	booster_label = $hex/Label
+	booster_progress_sprite = $hex/Sprite2D2
 	$hex/Label.text = "%d" % booster_points
 	$Tooltip/Label.text = "These are your booster points. Earn booster points by placing tiles, finishing quests or recycling cards. (0 / %d)" % booster_point_cost
 	
@@ -57,6 +64,7 @@ func _ready() -> void:
 		createBooster(i)
 	createBooster(3)
 	createBooster(4)
+	call_deferred("ensure_hex_label_pivot")
 
 ## ----- Pass Data Upstream ----- ##
 
@@ -130,15 +138,32 @@ func preview_booster_points(points:int) -> void:
 	$Tooltip/Label.text = "These are your booster points. Earn booster points by placing tiles, finishing quests or recycling cards. (%d / %d)" % [acc_points_preview, booster_point_cost_preview]
 
 
-func apply_booster_points() -> void:
+func apply_booster_points(animate_reward: bool = false) -> void:
 	booster_point_cost_backup = booster_point_cost
 	booster_points_backup = booster_points
 	acc_points_backup = acc_points
+	var gained_points := booster_points_preview - booster_points
+	var gained_acc := acc_points_preview - acc_points
 	
-	change_booster_points(booster_points_preview - booster_points)
+	change_booster_points(gained_points)
 	acc_points = acc_points_preview
 	booster_point_cost = booster_point_cost_preview
 	apply_current_style()
+	if animate_reward and (gained_points > 0 or gained_acc > 0):
+		GameFeedback.run_booster_reward(self)
+
+func ensure_hex_label_pivot() -> void:
+	booster_label.pivot_offset = booster_label.size * 0.5
+
+func set_reward_tween(tween: Tween) -> void:
+	if _reward_tween and _reward_tween.is_valid():
+		_reward_tween.kill()
+	_reward_tween = tween
+
+func kill_reward_tween() -> void:
+	if _reward_tween and _reward_tween.is_valid():
+		_reward_tween.kill()
+	_reward_tween = null
 
 func reset_preview() -> void:
 	booster_points_preview = booster_points

@@ -52,6 +52,7 @@ func _on_input_event(
 ) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			GameFeedback.play_click_button()
 			container.select_booster(id)
 
 ## ----- Booster Visual Logic ----- ##

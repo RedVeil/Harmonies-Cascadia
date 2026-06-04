@@ -24,6 +24,7 @@ ElementCatalog="*uid://d2wigwbdsvfso"
 BoosterCatalog="*uid://crtpprdxd6gj4"
 RuleCatalog="*uid://tqkcwruu08es"
 QuestCatalog="*uid://dwsmx6x25woub"
+GameFeedback="*res://scenes/effects/game_feedback.tscn"
 
 [display]
 

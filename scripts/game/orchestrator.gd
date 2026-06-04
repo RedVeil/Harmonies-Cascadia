@@ -27,6 +27,8 @@ var new_group : int = -1
 var tile_data_preview : HexTileData
 
 var new_group_score : int = 0
+var last_points_diff : int = 0
+var _hover_slide_coord := Vector2i(2147483647, 2147483647)
 
 var coord_backup : Vector2i
 var selected_card_backup : CardData 
@@ -81,6 +83,7 @@ func preview_recycle_card(id:int, amount:int, id_known:bool) -> void:
 func apply_recycle_card(id:int, amount:int, id_known:bool) -> void:
 	var card_id = id if id_known else selected_card_id
 	if selected_card_id != -1:
+		GameFeedback.play_recycle()
 		booster_manager.apply_booster_points()
 		card_manager.remove_card(card_id)
 		undo_button.disable()
@@ -93,10 +96,14 @@ func reset_recycle_card_preview() -> void:
 ## ----- Handle Tile Interactions ----- ##
 
 func handle_tile_hover(coord:Vector2i) -> void:
+	var entered_new_tile := coord != _hover_slide_coord
+	_hover_slide_coord = coord
 	tile_hovered = true
 	selected_coord = coord
 	
 	if selected_card_id != -1 and !cards_paused:
+		if entered_new_tile:
+			GameFeedback.run_tile_hover_slide()
 		var preview:TileStatePreview
 		var selected_card = card_manager.cards[selected_card_id]
 		if selected_card.type == 0:
@@ -105,11 +112,13 @@ func handle_tile_hover(coord:Vector2i) -> void:
 			preview = handle_animal_preview(coord, selected_card)
 		
 		hex_manager.apply_preview(preview)
+		last_points_diff = preview.points_diff
 		booster_manager.preview_booster_points(preview.points_diff)
 		point_counter.preview_progress(score_engine.total_score + preview.points_diff)
 
 func handle_tile_exit() -> void:
 	tile_hovered = false
+	_hover_slide_coord = Vector2i(2147483647, 2147483647)
 	
 	booster_manager.reset_preview()
 	hex_manager.reset_preview(selected_coord)
@@ -175,10 +184,11 @@ func handle_tile_click(coord: Vector2i) -> void:
 		hex_manager.tiles[coord] = tile_data_preview
 			
 		hex_manager.apply_placement(coord)
+		hex_manager.play_placement_reward(coord, last_points_diff, contributing_coords)
 		card_manager.remove_card(selected_card_id)
-		booster_manager.apply_booster_points()
+		booster_manager.apply_booster_points(true)
 		quest_manager.apply_preview()
-		point_counter.apply_preview()
+		point_counter.apply_preview(true)
 		
 		reset_preview()
 		undo_button.enable()
@@ -282,6 +292,7 @@ func handle_animal_preview(coord:Vector2i, card:CardData) -> TileStatePreview:
 ## ----- Undo Function ----- ##
 
 func undo() -> void:
+	GameFeedback.play_undo()
 	booster_manager.undo() # works
 	quest_manager.undo() # to be tested
 	point_counter.undo() # works

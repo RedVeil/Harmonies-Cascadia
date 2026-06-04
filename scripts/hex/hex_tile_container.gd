@@ -75,6 +75,23 @@ func place_tile(coord:Vector2i) -> void:
 	reset_tile_visuals(coord)
 	reset_contributing_tiles()
 
+func play_placement_reward(
+	coord: Vector2i,
+	points: int,
+	contributing_coords: Array[Vector2i]
+) -> void:
+	if !tiles_by_coord.has(coord):
+		return
+	var placed_element := hex_manager.tiles[coord].element
+	tiles_by_coord[coord].play_score_reward(points, placed_element)
+	var flash_delay := 0.0
+	for contributor in contributing_coords:
+		if contributor == coord or !tiles_by_coord.has(contributor):
+			continue
+		var element := hex_manager.tiles[contributor].element
+		tiles_by_coord[contributor].play_contributor_reward(element, flash_delay)
+		flash_delay += GameFeedback.settings.contributor_stagger
+
 func reset_preview(coord:Vector2i) -> void:
 	new_target_visuals = prev_target_visuals.duplicate(true)
 	

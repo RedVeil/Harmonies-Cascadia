@@ -5,6 +5,8 @@ var container : HexTileContainer
 var coord : Vector2i
 var visuals : HexTileVisuals
 
+var _feedback_tweens: Dictionary = {}
+
 ## ----- Initialisation ----- ##
 
 func _ready() -> void:
@@ -26,6 +28,13 @@ func init(parent:HexTileContainer, location:Vector2i) -> void:
 	container = parent
 	coord = location
 
+func set_feedback_tween(key: StringName, tween: Tween) -> void:
+	if _feedback_tweens.has(key):
+		var existing: Tween = _feedback_tweens[key]
+		if existing.is_valid():
+			existing.kill()
+	_feedback_tweens[key] = tween
+
 ## ----- Interaction Logic ----- ##
 
 func _on_mouse_entered() -> void:
@@ -37,11 +46,11 @@ func _on_mouse_exited() -> void:
 	$visuals/StylizedHexTile.material_override.albedo_color = visuals.color
 
 func _on_input_event(
-	camera: Camera3D,
+	_camera: Camera3D,
 	event: InputEvent,
-	event_position: Vector3,
-	normal: Vector3,
-	shape_idx: int
+	_event_position: Vector3,
+	_normal: Vector3,
+	_shape_idx: int
 ) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
@@ -84,3 +93,17 @@ func show_outline(color:Color) -> void:
 	
 func hide_outline() -> void:
 	$visuals/MeshInstance3D/outline.hide()
+
+## ----- Placement Reward (delegates to GameFeedback autoload) ----- ##
+
+func play_score_reward(points: int, element: int) -> void:
+	GameFeedback.run_hex_placement_reward(self, GameFeedback.HexRewardRole.PLACED, points, element)
+
+func play_contributor_reward(element: int, delay: float = 0.0) -> void:
+	GameFeedback.run_hex_placement_reward(
+		self,
+		GameFeedback.HexRewardRole.CONTRIBUTOR,
+		0,
+		element,
+		delay
+	)
