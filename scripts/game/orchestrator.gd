@@ -340,6 +340,13 @@ func get_neighbor_contributing_coords(group_coords:Array[Vector2i]) -> Array[Vec
 				coords.append(n)
 	return coords
 
+func get_secondary_elements() -> Array[int]:
+	var elements : Array[int] = [0,0,0,0,0,0]
+	for card in card_manager.cards:
+		if card != null and card.type == 0:
+			elements[card.id] += card.amount
+	return elements
+
 ## ----- Map Point Logic ----- ##
 
 func add_map_points(val:int) -> void:

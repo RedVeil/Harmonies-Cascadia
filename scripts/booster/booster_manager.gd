@@ -9,6 +9,7 @@ class_name BoosterManager
 @export var base_booster_point_cost:int = 10
 @export var booster_point_multiplier:float = 1.2
 @export var start_booster_points:int = 3
+@export var random_secondary_chance: float = 50.0
 
 var booster_point_cost:int = 0
 var booster_points:int = 0
@@ -170,7 +171,7 @@ func createBooster(idx:int) -> void:
 	var booster_points := 0
 	var map_points := 0
 	var quest_ids : Array[int] = []
-	
+
 	var options = picked_booster.base_content_options.duplicate(true)
 		
 	if pick_option(picked_booster.extra_card_chance):
@@ -185,9 +186,9 @@ func createBooster(idx:int) -> void:
 					BoosterContentOption.RewardType.ELEMENT:
 						cards.append(CardCatalog.elements[entry.id])
 					BoosterContentOption.RewardType.ANIMAL:
-						var filtered_by_element = CardCatalog.animals.filter(func (card): return card.element == entry.id)
-						if filtered_by_element.size() > 0:
-							cards.append(filtered_by_element.pick_random())
+						var animal : CardData = choose_animal(entry.id)
+						if animal.amount > 0:
+							cards.append(animal)
 					BoosterContentOption.RewardType.QUEST:
 						var quest_id = orchestrator.pick_quest(entry.id, picked_booster.type)
 						if quest_id != -1:
@@ -259,3 +260,42 @@ func apply_current_style() -> void:
 	$hex/Sprite2D2.material.set_shader_parameter("third_value",  0.0)
 	
 	$Tooltip/Label.text = "These are your booster points. Earn booster points by placing tiles, finishing quests or recycling cards. (%d / %d)" % [acc_points, booster_point_cost]
+
+
+func choose_animal(element:int) -> CardData:
+	var secondary_elements = [0,0,0,0,0,0]
+	for b in boosters:
+		if b != null && b.type < 6:
+			for c in b.cards:
+				if c.type == 0:
+					secondary_elements[c.id] += c.amount
+	if orchestrator:
+		var hand_elements = orchestrator.get_secondary_elements()
+		for i in hand_elements.size():
+			secondary_elements[i] += hand_elements[i]
+	
+	var total = secondary_elements.reduce(func (a, n): return a + n, 0)
+	var secondary_chances : Array[float]
+	if total > 0:
+		for e in secondary_elements:
+			secondary_chances.append((float(e) / float(total)) * 100.0)
+	
+	var secondary_element = 0
+	## X% chance to pick a random secondary element
+	if pick_option(random_secondary_chance if total > 0 else 100.0):
+		secondary_element = [1,2,3,4,5].pick_random()
+	else:
+		secondary_element = pick_weighted([0,1,2,3,4,5], secondary_chances)
+	
+	
+	var filtered_by_element = CardCatalog.animals.filter(func (card): return card.element == element)
+	if filtered_by_element.size() > 0:
+		var filtered_by_secondary_element = filtered_by_element.filter(func (card): return card.secondary_element == secondary_element)
+		if filtered_by_secondary_element.size() > 0:
+			return filtered_by_secondary_element.pick_random()
+		else:
+			return filtered_by_element.pick_random()
+	else:
+		return CardData.new()
+		
+		
