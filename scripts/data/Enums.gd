@@ -10,6 +10,15 @@ enum ELEMENT {
 	WETLAND = 5,
 }
 
+const ELEMENT_NAMES : Array[String] = [
+	"None", 
+	"Mountain",
+	"Forest",
+	"Field",
+	"River",
+	"Wetland"
+]
+
 enum LEVEL {
 	ANY = 0,
 	SMALL = 1,

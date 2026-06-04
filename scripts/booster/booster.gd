@@ -57,13 +57,35 @@ func _on_input_event(
 
 ## ----- Booster Visual Logic ----- ##
 
-func set_booster_visuals(type:Enums.BOOSTER_TYPE, is_shiny:bool) -> void:
-	#if is_shiny:
-		#$background.material.set_shader_parameter("is_active", true)
-	#else:
-		#$background.material.set_shader_parameter("is_active", false)
-	if type < 6:
-		var element = ElementCatalog.elements[type]
-		var level = element.levels[element.levels.size()-1]
-		icon.texture = load(level.icon)
-		$Tooltip/Label.text = "Buy this booster to get element and animal cards for %s." % element.name
+func set_booster_visuals(boosterData: BoosterData) -> void:
+	if boosterData.type != 6:
+		$Tooltip/Label.text = create_tooltip(boosterData)
+		if boosterData.type < 6:
+			var element = ElementCatalog.elements[boosterData.type]
+			var level = element.levels[element.levels.size()-1]
+			icon.texture = load(level.icon)
+	
+
+func create_tooltip(boosterData: BoosterData) -> String:
+	var element_cards := [0,0,0,0,0,0]
+	var animal_cards := [0,0,0,0,0,0]
+	for c in boosterData.cards:
+		if c.type == 0:
+			element_cards[c.id] += 1
+		else:
+			animal_cards[c.element] += 1
+	
+	var contents : Array[String] = []
+	for i in element_cards.size():
+		if element_cards[i] > 0:
+			contents.append("%d %ss" % [element_cards[i], Enums.ELEMENT_NAMES[i]])
+	for i in animal_cards.size():
+		if animal_cards[i] > 0:
+			contents.append("%d %s Animals" % [animal_cards[i], Enums.ELEMENT_NAMES[i]])
+	if boosterData.booster_points > 0:
+		contents.append("%d Booster Points" % boosterData.booster_points)
+	if boosterData.quest_ids.size() > 0:
+		contents.append("%d Quests" % boosterData.quest_ids.size())
+	if boosterData.map_points > 0:
+		contents.append("%d Map Points" % boosterData.map_points)
+	return "This booster contains: " + ", ".join(contents)

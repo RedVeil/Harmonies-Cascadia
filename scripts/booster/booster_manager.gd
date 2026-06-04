@@ -205,7 +205,7 @@ func createBooster(idx:int) -> void:
 	
 	boosters[idx] = booster
 
-	booster_container.set_booster_visuals(idx, picked_booster.type, quest_ids.size() > 0)
+	booster_container.set_booster_visuals(idx, booster)
 
 func pick_weighted(options: Array[Variant], chances: Array[float]) -> int:
 	var roll := randf_range(0.0, 99.9)
