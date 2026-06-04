@@ -31,8 +31,10 @@ func parse_card(card:Dictionary) -> CardData:
 	card_data.amount = card.amount
 	card_data.draw_chance = card.draw_chance
 	card_data.point_score = card.point_score
+	card_data.bonus_points = card.bonus_points
 	card_data.icon = card.icon
 	card_data.element = card.element
+	card_data.secondary_element = card.secondary_element
 	
 	var placement : Array[Placement] = []
 	for p in card.placement:

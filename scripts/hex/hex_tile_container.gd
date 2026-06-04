@@ -11,8 +11,10 @@ var tiles_by_coord: Dictionary[Vector2i, HexTile] = {}
 var has_hover:bool = false
 var hover_target:Vector2i = Vector2i.MAX
 
+var backup_target_visuals:HexTileVisuals
 var prev_target_visuals:HexTileVisuals
 var new_target_visuals:HexTileVisuals
+
 var prev_contributing_tiles : Array[Vector2i]
 
 ## ----- Initialisation ----- ##
@@ -35,7 +37,7 @@ func create_tile(coord: Vector2i) -> void:
 func handle_hover(coord: Vector2i) -> void:
 	## reset previous tile and contributing tiles
 	if has_hover:
-		reset_tile_visuals()
+		reset_tile_visuals(hover_target)
 		reset_contributing_tiles()
 
 	has_hover = true
@@ -49,7 +51,7 @@ func handle_exit(coord: Vector2i) -> void:
 	if has_hover && hover_target == coord:
 		hex_manager.handle_exit()
 		reset_contributing_tiles()
-		reset_tile_visuals()
+		reset_tile_visuals(hover_target)
 		has_hover = false
 		hover_target = Vector2i.MAX
 
@@ -67,22 +69,24 @@ func apply_preview(preview:TileStatePreview) -> void:
 		tiles_by_coord[hover_target].show_outline(Color.CRIMSON)
 
 func place_tile(coord:Vector2i) -> void:
-	prev_target_visuals = new_target_visuals
+	backup_target_visuals = prev_target_visuals.duplicate(true)
+	prev_target_visuals = new_target_visuals.duplicate(true)
 	
-	var target = tiles_by_coord[coord]
-	target.hide_outline()
-	target.hide_points()
-	
+	reset_tile_visuals(coord)
 	reset_contributing_tiles()
 
 func reset_preview(coord:Vector2i) -> void:
-	new_target_visuals = prev_target_visuals
-	var target = tiles_by_coord[coord]
-	target.hide_outline()
-	target.hide_points()
+	new_target_visuals = prev_target_visuals.duplicate(true)
 	
+	reset_tile_visuals(coord)
 	reset_contributing_tiles()
 
+func undo(coord:Vector2i) -> void:
+	prev_target_visuals = backup_target_visuals.duplicate(true)
+	
+	reset_tile_visuals(coord)
+	reset_contributing_tiles()
+	
 ## ----- Tile Preview Functions ----- ##
 
 func apply_target_preview_visuals(preview:TileStatePreview) -> void:
@@ -130,8 +134,8 @@ func show_neutral_preview(preview: TileStatePreview) -> void:
 
 ## ----- Reset Functions ----- ##
 
-func reset_tile_visuals() -> void:
-	var target = tiles_by_coord[hover_target]
+func reset_tile_visuals(coord:Vector2i) -> void:
+	var target = tiles_by_coord[coord]
 	target.update_visuals(prev_target_visuals)
 	target.hide_outline()
 	target.hide_points()

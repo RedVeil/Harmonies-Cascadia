@@ -70,17 +70,17 @@ shape = SubResource("CircleShape2D_ci8s0")
 [node name="Tooltip" type="Panel" parent="." unique_id=1536247392]
 visible = false
 offset_left = 80.0
-offset_top = -40.0
+offset_top = -39.0
 offset_right = 258.0
-offset_bottom = 20.0
+offset_bottom = 38.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_ci8s0")
 
 [node name="Panel" type="Panel" parent="Tooltip" unique_id=1468885251]
 show_behind_parent = true
 layout_mode = 0
-offset_top = 17.0
+offset_top = 25.0
 offset_right = 20.0
-offset_bottom = 37.0
+offset_bottom = 45.0
 rotation = 0.7853982
 theme_override_styles/panel = SubResource("StyleBoxFlat_3qcl6")
 
@@ -93,7 +93,8 @@ offset_bottom = 82.0
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.4745098, 1)
 theme_override_constants/line_spacing = -1
 theme_override_font_sizes/font_size = 12
-text = "This is you Point Score. Earn enough points to unlock additional tiles to play with."
+text = "This is you Point Score. Earn enough points to unlock additional tiles to play with.
+(1/10)"
 autowrap_mode = 2
 
 [connection signal="mouse_entered" from="Area2D" to="." method="_on_mouse_entered"]

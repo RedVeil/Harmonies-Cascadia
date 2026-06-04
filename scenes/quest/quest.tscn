@@ -18,7 +18,7 @@ shader_parameter/unfilled_color = Color(1, 1, 1, 1)
 shader_parameter/current_value = 0.0
 shader_parameter/lerp_value = 0.0
 shader_parameter/third_value = 0.0
-shader_parameter/rotation_offset = 0.0
+shader_parameter/rotation_offset = 1.55
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s5vew"]
 bg_color = Color(0.95686275, 0.8745098, 0.7921569, 1)

@@ -4,10 +4,19 @@ class_name ScoreEngine
 var active_rules : Dictionary[int, ScoringRule] = {}
 
 var points_per_element_group: Dictionary[int, int] = {}
+var placed_animals: Dictionary[int, int] = {}
 var element_score: int = 0
 var animal_score:int = 0
 var quest_score: int = 0
 var total_score : int = 0
+
+var new_element_score : int = 0
+var new_quest_score : int = 0
+
+var element_score_backup: int = 0
+var animal_score_backup:int = 0
+var quest_score_backup: int = 0
+var points_per_element_group_backup: Dictionary[int, int] = {}
 
 ## ----- Initialisation ----- ##
 

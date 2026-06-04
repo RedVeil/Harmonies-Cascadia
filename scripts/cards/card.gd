@@ -46,7 +46,7 @@ func init(cardData:CardData, parent:CardContainer, idx:int) -> void:
 	var mat = $visuals/elementIcon.material.duplicate()
 	mat.set_shader_parameter("unfilled_color", Color.html(ElementCatalog.elements[cardData.element].levels.back().color))
 	$visuals/elementIcon.material = mat
-	$visuals/pointsBackground.material = mat
+	$visuals/points/background.material = mat
 	if cardData.type == 1 and cardData.icon != "":
 		var icon : Texture2D = load(cardData.icon)
 		var texture_size := icon.get_size()
@@ -58,11 +58,14 @@ func init(cardData:CardData, parent:CardContainer, idx:int) -> void:
 		$visuals/icon.texture = icon
 		$visuals/icon.show()
 		$visuals/elementIcon/Sprite2D.texture = load(ElementCatalog.elements[cardData.element].levels[cardData.placement[0].level-1].icon)
+		$visuals/bonus_points/background.material = mat
+		$visuals/bonus_points/Label.text = "%d" % cardData.bonus_points if cardData.bonus_points > 0.5 else "1/2"
+		$visuals/bonus_points.show()
 	else:
 		$visuals/elementIcon/Sprite2D.texture = load(ElementCatalog.elements[cardData.element].levels.back().icon)
 
 	placement_tooltip.init(cardData.type, cardData.placement, cardData.bonus)
-	$visuals/PointsLabel.text = "?" if cardData.type == 0 else "%d" % cardData.point_score
+	$visuals/points/Label.text = "?" if cardData.type == 0 else "%d" % cardData.point_score
 	
 	$visuals/Label.text = "%d | %d" % [stack_amount, 10]
 
@@ -150,8 +153,6 @@ func _process(delta: float) -> void:
 		stacks.scale = stacks.scale.lerp(target_scale, delta * scale_speed)
 		visuals.position = visuals.position.lerp(target_visuals_position, delta * scale_speed)
 		collision.position = collision.position.lerp(target_visuals_position, delta * scale_speed)
-
-
 
 
 func get_card_background(element:int) -> String:

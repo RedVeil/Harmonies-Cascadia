@@ -17,6 +17,9 @@ var prev_card: Vector2i
 
 var map_buttons: Array[MapButton] = []
 
+var groups_backup: Dictionary[int, Array] = {}
+var next_group_id_backup:int = 0
+
 ## ----- Initialisation ----- ##
 
 func _ready() -> void:
@@ -60,6 +63,9 @@ func apply_placement(coord:Vector2i) -> void:
 
 func reset_preview(coord:Vector2i) -> void:
 	hex_container.reset_preview(coord)
+	
+func undo(coord:Vector2i) -> void:
+	hex_container.undo(coord)
 
 ## ----- Pass map_button interactions upstream ----- ##
 

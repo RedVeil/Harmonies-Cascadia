@@ -7,6 +7,8 @@ var target: int = 1
 var current: int = 0
 var preview: int = 0
 
+var current_backup : int = 0
+
 ## ----- Initialisation ----- ##
 
 func _ready() -> void:
@@ -59,14 +61,18 @@ func preview_progress(val:int) -> void:
 			$ProgressBar.material.set_shader_parameter("current_value",  float(preview) / float(target))
 
 func apply_preview() -> void:
+	current_backup = current
 	current = preview
-	$ProgressBar.material.set_shader_parameter("third_value",  0.0)
-	$ProgressBar.material.set_shader_parameter("current_value",  0.0)
-	$ProgressBar.material.set_shader_parameter("lerp_value",  float(current) / float(target))
+	set_current_style()
 
 func reset_preview() -> void:
 	preview = current
-	apply_preview()
+	set_current_style()
+	
+func undo() -> void:
+	preview = current_backup
+	current =current_backup
+	set_current_style()
 
 ## ----- Other Logic ----- ##
 
@@ -97,3 +103,8 @@ func set_icon(icon_path:String, width:float) -> void:
 	)
 	$Background/Icon.scale = Vector2.ONE * scale_factor
 	$Background/Icon.texture = icon
+
+func set_current_style() -> void:
+	$ProgressBar.material.set_shader_parameter("third_value",  0.0)
+	$ProgressBar.material.set_shader_parameter("current_value",  0.0)
+	$ProgressBar.material.set_shader_parameter("lerp_value",  float(current) / float(target))

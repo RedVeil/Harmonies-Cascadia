@@ -18,5 +18,7 @@ enum CARD_TYPE {
 @export var draw_chance: float = 0.0
 # used to get the background color of the card
 @export var element: GameEnums.ELEMENT = 0
+@export var secondary_element: GameEnums.ELEMENT = 0
 @export var point_score: int = 0
+@export var bonus_points: float = 0
 @export var icon: String = ""

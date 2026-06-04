@@ -41,6 +41,8 @@ func apply_preview(id:int) -> void:
 func reset_preview(id:int) -> void:
 	quests[id].reset_preview()
 
+func undo(id:int) -> void:
+	quests[id].undo()
 
 ## ----- Layout Logic ----- ##
 

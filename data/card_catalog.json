@@ -18,7 +18,9 @@
 			"amount": 1,
 			"draw_chance": 100,
 			"element": 0,
+			"secondary_element": 0,
 			"point_score": 0,
+			"bonus_points": 0,
 			"icon": "res://assets/elements/n0.png"
 		},
 		{
@@ -55,7 +57,9 @@
 			"amount": 1,
 			"draw_chance": 100,
 			"element": 1,
+			"secondary_element": 0,
 			"point_score": 0,
+			"bonus_points": 0,
 			"icon": "res://assets/elements/f2.png"
 		},
 		{
@@ -84,7 +88,9 @@
 			"amount": 1,
 			"draw_chance": 100,
 			"element": 2,
+			"secondary_element": 0,
 			"point_score": 0,
+			"bonus_points": 0,
 			"icon": "res://assets/elements/a1.png"
 		},
 		{
@@ -121,7 +127,9 @@
 			"amount": 1,
 			"draw_chance": 100,
 			"element": 3,
+			"secondary_element": 0,
 			"point_score": 0,
+			"bonus_points": 0,
 			"icon": "res://assets/elements/m2.png"
 		},
 		{
@@ -142,7 +150,9 @@
 			"amount": 1,
 			"draw_chance": 100,
 			"element": 4,
+			"secondary_element": 0,
 			"point_score": 0,
+			"bonus_points": 0,
 			"icon": "res://assets/elements/r0.png"
 		},
 		{
@@ -163,7 +173,9 @@
 			"amount": 1,
 			"draw_chance": 100,
 			"element": 5,
+			"secondary_element": 0,
 			"point_score": 0,
+			"bonus_points": 0,
 			"icon": "res://assets/elements/w0.png"
 		}
 	],
@@ -200,13 +212,16 @@
 					]
 				}
 			],
-			"amount": 1,
+			"amount": 3,
 			"draw_chance": 10,
 			"element": 1,
+			"secondary_element": 4,
 			"point_score": 3,
+			"bonus_points": 1,
 			"icon": "res://assets/animals/icons/ForestMammal_Deer.png"
 		},
 		{
+			"id": 1,
 			"name": "wolf",
 			"type": 1,
 			"placement": [
@@ -237,12 +252,13 @@
 					]
 				}
 			],
-			"amount": 1,
+			"amount": 2,
 			"draw_chance": 10,
 			"element": 1,
+			"secondary_element": 3,
 			"point_score": 6,
-			"icon": "res://assets/animals/icons/ForestMammal_Wolf.png",
-			"id": 1
+			"bonus_points": 1,
+			"icon": "res://assets/animals/icons/ForestMammal_Wolf.png"
 		},
 		{
 			"id": 2,
@@ -276,10 +292,12 @@
 					]
 				}
 			],
-			"amount": 1,
+			"amount": 2,
 			"draw_chance": 10,
 			"element": 1,
+			"secondary_element": 4,
 			"point_score": 5,
+			"bonus_points": 1,
 			"icon": "res://assets/animals/icons/Bird_Kingfisher.png"
 		},
 		{
@@ -314,10 +332,12 @@
 					]
 				}
 			],
-			"amount": 1,
+			"amount": 3,
 			"draw_chance": 10,
 			"element": 1,
+			"secondary_element": 2,
 			"point_score": 4,
+			"bonus_points": 1,
 			"icon": "res://assets/animals/icons/Bird_Crow.png"
 		},
 		{
@@ -352,10 +372,12 @@
 					]
 				}
 			],
-			"amount": 1,
+			"amount": 2,
 			"draw_chance": 10,
 			"element": 1,
+			"secondary_element": 1,
 			"point_score": 6,
+			"bonus_points": 1,
 			"icon": "res://assets/animals/icons/ForestMammal_Boar.png"
 		},
 		{
@@ -382,10 +404,12 @@
 					]
 				}
 			],
-			"amount": 1,
+			"amount": 5,
 			"draw_chance": 10,
 			"element": 1,
-			"point_score": 4,
+			"secondary_element": 2,
+			"point_score": 2,
+			"bonus_points": 0.5,
 			"icon": "res://assets/animals/icons/ForrestRodent_Squirrel_Brown.png"
 		},
 		{
@@ -412,10 +436,12 @@
 					]
 				}
 			],
-			"amount": 1,
+			"amount": 2,
 			"draw_chance": 10,
 			"element": 1,
+			"secondary_element": 5,
 			"point_score": 5,
+			"bonus_points": 1,
 			"icon": "res://assets/animals/icons/PetBird_Parrot_Macaw.png"
 		},
 		{
@@ -442,10 +468,12 @@
 					]
 				}
 			],
-			"amount": 1,
+			"amount": 3,
 			"draw_chance": 10,
 			"element": 1,
+			"secondary_element": 5,
 			"point_score": 4,
+			"bonus_points": 1,
 			"icon": "res://assets/animals/icons/TropicalMammal_Monkey_Brown.png"
 		},
 		{
@@ -483,7 +511,9 @@
 			"amount": 1,
 			"draw_chance": 10,
 			"element": 1,
+			"secondary_element": 1,
 			"point_score": 9,
+			"bonus_points": 1,
 			"icon": "res://assets/animals/icons/Marsupial_Coala.png"
 		},
 		{
@@ -521,7 +551,9 @@
 			"amount": 1,
 			"draw_chance": 10,
 			"element": 1,
+			"secondary_element": 3,
 			"point_score": 8,
+			"bonus_points": 1,
 			"icon": "res://assets/animals/icons/TropicalMammal_Gorilla.png"
 		},
 		{
@@ -548,13 +580,16 @@
 					]
 				}
 			],
-			"amount": 2,
+			"amount": 5,
 			"draw_chance": 10,
 			"element": 2,
+			"secondary_element": 2,
 			"point_score": 2,
+			"bonus_points": 0.5,
 			"icon": "res://assets/animals/icons/Insect_Bee.png"
 		},
 		{
+			"id": 11,
 			"name": "rabbit",
 			"type": 1,
 			"placement": [
@@ -577,12 +612,13 @@
 					]
 				}
 			],
-			"amount": 2,
+			"amount": 5,
 			"draw_chance": 10,
 			"element": 2,
+			"secondary_element": 1,
 			"point_score": 2,
-			"icon": "res://assets/animals/icons/GrasslandRodent_Hare.png",
-			"id": 11
+			"bonus_points": 0.5,
+			"icon": "res://assets/animals/icons/GrasslandRodent_Hare.png"
 		},
 		{
 			"id": 12,
@@ -608,10 +644,12 @@
 					]
 				}
 			],
-			"amount": 2,
+			"amount": 5,
 			"draw_chance": 10,
 			"element": 2,
+			"secondary_element": 3,
 			"point_score": 2,
+			"bonus_points": 0.5,
 			"icon": "res://assets/animals/icons/Rodent_Mouse_Grey.png"
 		},
 		{
@@ -646,10 +684,12 @@
 					]
 				}
 			],
-			"amount": 1,
+			"amount": 3,
 			"draw_chance": 10,
 			"element": 2,
+			"secondary_element": 5,
 			"point_score": 3,
+			"bonus_points": 1,
 			"icon": "res://assets/animals/icons/Bird_Peacock.png"
 		},
 		{
@@ -684,10 +724,12 @@
 					]
 				}
 			],
-			"amount": 1,
+			"amount": 2,
 			"draw_chance": 10,
 			"element": 2,
+			"secondary_element": 3,
 			"point_score": 5,
+			"bonus_points": 1,
 			"icon": "res://assets/animals/icons/SavannaMammal_Hyena.png"
 		},
 		{
@@ -722,10 +764,12 @@
 					]
 				}
 			],
-			"amount": 1,
+			"amount": 3,
 			"draw_chance": 10,
 			"element": 2,
+			"secondary_element": 5,
 			"point_score": 3,
+			"bonus_points": 1,
 			"icon": "res://assets/animals/icons/SavannaMammal_Hippo.png"
 		},
 		{
@@ -752,10 +796,12 @@
 					]
 				}
 			],
-			"amount": 2,
+			"amount": 5,
 			"draw_chance": 10,
 			"element": 2,
+			"secondary_element": 4,
 			"point_score": 2,
+			"bonus_points": 0.5,
 			"icon": "res://assets/animals/icons/Insect_LadyBug.png"
 		},
 		{
@@ -790,10 +836,12 @@
 					]
 				}
 			],
-			"amount": 1,
+			"amount": 3,
 			"draw_chance": 10,
 			"element": 2,
+			"secondary_element": 2,
 			"point_score": 4,
+			"bonus_points": 1,
 			"icon": "res://assets/animals/icons/LivestockMammal_Sheep_White.png"
 		},
 		{
@@ -828,10 +876,12 @@
 					]
 				}
 			],
-			"amount": 1,
+			"amount": 3,
 			"draw_chance": 10,
 			"element": 2,
+			"secondary_element": 4,
 			"point_score": 4,
+			"bonus_points": 1,
 			"icon": "res://assets/animals/icons/LivestockMammal_Cow_Spotted.png"
 		},
 		{
@@ -866,10 +916,12 @@
 					]
 				}
 			],
-			"amount": 1,
+			"amount": 3,
 			"draw_chance": 10,
 			"element": 2,
+			"secondary_element": 3,
 			"point_score": 3,
+			"bonus_points": 1,
 			"icon": "res://assets/animals/icons/LivestockMammal_Horse_Grey.png"
 		},
 		{
@@ -904,13 +956,16 @@
 					]
 				}
 			],
-			"amount": 1,
+			"amount": 2,
 			"draw_chance": 10,
 			"element": 3,
+			"secondary_element": 1,
 			"point_score": 6,
+			"bonus_points": 1,
 			"icon": "res://assets/animals/icons/ForestMammal_Bear_Black.png"
 		},
 		{
+			"id": 21,
 			"name": "swan",
 			"type": 1,
 			"placement": [
@@ -941,12 +996,13 @@
 					]
 				}
 			],
-			"amount": 1,
+			"amount": 3,
 			"draw_chance": 10,
 			"element": 3,
+			"secondary_element": 4,
 			"point_score": 3,
-			"icon": "res://assets/animals/icons/Bird_Swan_White.png",
-			"id": 21
+			"bonus_points": 1,
+			"icon": "res://assets/animals/icons/Bird_Swan_White.png"
 		},
 		{
 			"id": 22,
@@ -980,10 +1036,12 @@
 					]
 				}
 			],
-			"amount": 1,
+			"amount": 2,
 			"draw_chance": 10,
 			"element": 3,
+			"secondary_element": 4,
 			"point_score": 5,
+			"bonus_points": 1,
 			"icon": "res://assets/animals/icons/Bird_Eagle.png"
 		},
 		{
@@ -1010,10 +1068,12 @@
 					]
 				}
 			],
-			"amount": 1,
+			"amount": 3,
 			"draw_chance": 10,
 			"element": 3,
+			"secondary_element": 5,
 			"point_score": 4,
+			"bonus_points": 1,
 			"icon": "res://assets/animals/icons/TropicalMammal_Platypus.png"
 		},
 		{
@@ -1048,10 +1108,12 @@
 					]
 				}
 			],
-			"amount": 1,
+			"amount": 2,
 			"draw_chance": 10,
 			"element": 3,
+			"secondary_element": 2,
 			"point_score": 6,
+			"bonus_points": 1,
 			"icon": "res://assets/animals/icons/LivestockMammal_Llama_Brown.png"
 		},
 		{
@@ -1078,10 +1140,12 @@
 					]
 				}
 			],
-			"amount": 2,
+			"amount": 5,
 			"draw_chance": 10,
 			"element": 3,
+			"secondary_element": 2,
 			"point_score": 2,
+			"bonus_points": 0.5,
 			"icon": "res://assets/animals/icons/PetRodent_Hamster.png"
 		},
 		{
@@ -1108,10 +1172,12 @@
 					]
 				}
 			],
-			"amount": 2,
+			"amount": 5,
 			"draw_chance": 10,
 			"element": 3,
+			"secondary_element": 5,
 			"point_score": 2,
+			"bonus_points": 0.5,
 			"icon": "res://assets/animals/icons/Rodent_Capybara.png"
 		},
 		{
@@ -1146,10 +1212,12 @@
 					]
 				}
 			],
-			"amount": 1,
+			"amount": 2,
 			"draw_chance": 10,
 			"element": 3,
+			"secondary_element": 1,
 			"point_score": 6,
+			"bonus_points": 1,
 			"icon": "res://assets/animals/icons/ForestMammal_Bat_Black.png"
 		},
 		{
@@ -1184,10 +1252,12 @@
 					]
 				}
 			],
-			"amount": 1,
+			"amount": 2,
 			"draw_chance": 10,
 			"element": 3,
+			"secondary_element": 3,
 			"point_score": 7,
+			"bonus_points": 1,
 			"icon": "res://assets/animals/icons/MountainMammal_Mountaingoat.png"
 		},
 		{
@@ -1225,7 +1295,9 @@
 			"amount": 1,
 			"draw_chance": 10,
 			"element": 3,
+			"secondary_element": 3,
 			"point_score": 9,
+			"bonus_points": 1,
 			"icon": "res://assets/animals/icons/Bird_Vulture.png"
 		},
 		{
@@ -1260,13 +1332,16 @@
 					]
 				}
 			],
-			"amount": 1,
+			"amount": 3,
 			"draw_chance": 20,
 			"element": 4,
+			"secondary_element": 4,
 			"point_score": 3,
+			"bonus_points": 1,
 			"icon": "res://assets/animals/icons/Fish_Herring.png"
 		},
 		{
+			"id": 31,
 			"name": "otter",
 			"type": 1,
 			"placement": [
@@ -1297,12 +1372,13 @@
 					]
 				}
 			],
-			"amount": 1,
+			"amount": 3,
 			"draw_chance": 20,
 			"element": 4,
+			"secondary_element": 2,
 			"point_score": 3,
-			"icon": "res://assets/animals/icons/WaterMammal_Otter.png",
-			"id": 31
+			"bonus_points": 1,
+			"icon": "res://assets/animals/icons/WaterMammal_Otter.png"
 		},
 		{
 			"id": 32,
@@ -1328,10 +1404,12 @@
 					]
 				}
 			],
-			"amount": 2,
+			"amount": 5,
 			"draw_chance": 20,
 			"element": 4,
+			"secondary_element": 3,
 			"point_score": 2,
+			"bonus_points": 0.5,
 			"icon": "res://assets/animals/icons/SeaShellfish_Crab_Sand.png"
 		},
 		{
@@ -1366,10 +1444,12 @@
 					]
 				}
 			],
-			"amount": 1,
+			"amount": 3,
 			"draw_chance": 20,
 			"element": 4,
+			"secondary_element": 5,
 			"point_score": 3,
+			"bonus_points": 1,
 			"icon": "res://assets/animals/icons/SavannaBird_Flamingo.png"
 		},
 		{
@@ -1404,10 +1484,12 @@
 					]
 				}
 			],
-			"amount": 1,
+			"amount": 2,
 			"draw_chance": 20,
 			"element": 4,
+			"secondary_element": 1,
 			"point_score": 5,
+			"bonus_points": 1,
 			"icon": "res://assets/animals/icons/Fish_Salmon.png"
 		},
 		{
@@ -1434,10 +1516,12 @@
 					]
 				}
 			],
-			"amount": 2,
+			"amount": 5,
 			"draw_chance": 20,
 			"element": 5,
+			"secondary_element": 2,
 			"point_score": 2,
+			"bonus_points": 0.5,
 			"icon": "res://assets/animals/icons/Amphibian_Frog_Green.png"
 		},
 		{
@@ -1472,10 +1556,12 @@
 					]
 				}
 			],
-			"amount": 1,
+			"amount": 3,
 			"draw_chance": 20,
 			"element": 5,
+			"secondary_element": 4,
 			"point_score": 3,
+			"bonus_points": 1,
 			"icon": "res://assets/animals/icons/Reptile_Crocodile_Green.png"
 		},
 		{
@@ -1510,10 +1596,12 @@
 					]
 				}
 			],
-			"amount": 1,
+			"amount": 2,
 			"draw_chance": 20,
 			"element": 5,
+			"secondary_element": 1,
 			"point_score": 7,
+			"bonus_points": 1,
 			"icon": "res://assets/animals/icons/Reptile_Lizard.png"
 		},
 		{
@@ -1548,10 +1636,12 @@
 					]
 				}
 			],
-			"amount": 1,
+			"amount": 2,
 			"draw_chance": 20,
 			"element": 5,
+			"secondary_element": 3,
 			"point_score": 5,
+			"bonus_points": 1,
 			"icon": "res://assets/animals/icons/Reptile_Snake_Brown.png"
 		},
 		{
@@ -1586,10 +1676,12 @@
 					]
 				}
 			],
-			"amount": 1,
+			"amount": 3,
 			"draw_chance": 20,
 			"element": 5,
+			"secondary_element": 5,
 			"point_score": 3,
+			"bonus_points": 1,
 			"icon": "res://assets/animals/icons/Bird_Duck_Mallard.png"
 		}
 	]

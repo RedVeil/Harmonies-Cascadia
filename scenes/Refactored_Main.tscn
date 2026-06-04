@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://b8oeyth2j2arg" path="res://scenes/game/point_counter.tscn" id="8_q5ijs"]
 [ext_resource type="PackedScene" uid="uid://betdpdjavfk4b" path="res://scenes/card/card_recycling.tscn" id="10_ggq8u"]
 [ext_resource type="PackedScene" uid="uid://bv5ofl0j1ktqc" path="res://scenes/game/score_tooltips.tscn" id="11_b2x3j"]
+[ext_resource type="PackedScene" uid="uid://bde4y0iag4uud" path="res://scenes/game/undo_button.tscn" id="12_3qqq0"]
 
 [sub_resource type="Environment" id="Environment_tbrwv"]
 background_mode = 1
@@ -43,8 +44,7 @@ position = Vector2(60, 133)
 position = Vector2(51, 668)
 orchestrator = NodePath("../Orchestrator")
 booster_limit = 3
-booster_point_cost = 10
-booster_points = 5
+base_booster_point_cost = 15
 
 [node name="CardManager" parent="." unique_id=241167023 node_paths=PackedStringArray("orchestrator") instance=ExtResource("2_vg1d4")]
 position = Vector2(320, 599)
@@ -58,13 +58,14 @@ map_button = ExtResource("4_5mvym")
 
 [node name="ScoreEngine" parent="." unique_id=271434607 instance=ExtResource("4_xoyem")]
 
-[node name="Orchestrator" parent="." unique_id=1688505566 node_paths=PackedStringArray("booster_manager", "card_manager", "hex_manager", "score_engine", "quest_manager", "point_counter") instance=ExtResource("5_71goi")]
+[node name="Orchestrator" parent="." unique_id=1688505566 node_paths=PackedStringArray("booster_manager", "card_manager", "hex_manager", "score_engine", "quest_manager", "point_counter", "undo_button") instance=ExtResource("5_71goi")]
 booster_manager = NodePath("../BoosterManager")
 card_manager = NodePath("../CardManager")
 hex_manager = NodePath("../HexManager")
 score_engine = NodePath("../ScoreEngine")
 quest_manager = NodePath("../QuestManager")
 point_counter = NodePath("../PointCounter")
+undo_button = NodePath("../UndoButton")
 
 [node name="PointCounter" parent="." unique_id=1020461036 node_paths=PackedStringArray("orchestrator") instance=ExtResource("8_q5ijs")]
 position = Vector2(80, 80)
@@ -72,9 +73,13 @@ orchestrator = NodePath("../Orchestrator")
 checkpoint = 150
 
 [node name="CardRecycling" parent="." unique_id=1759140847 node_paths=PackedStringArray("orchestrator") instance=ExtResource("10_ggq8u")]
-position = Vector2(994, 660)
+position = Vector2(994, 694)
 orchestrator = NodePath("../Orchestrator")
 
 [node name="ScoreTooltip" parent="." unique_id=33584632 node_paths=PackedStringArray("orchestrator") instance=ExtResource("11_b2x3j")]
 position = Vector2(1210, 0)
+orchestrator = NodePath("../Orchestrator")
+
+[node name="UndoButton" parent="." unique_id=997758632 node_paths=PackedStringArray("orchestrator") instance=ExtResource("12_3qqq0")]
+position = Vector2(994, 659)
 orchestrator = NodePath("../Orchestrator")

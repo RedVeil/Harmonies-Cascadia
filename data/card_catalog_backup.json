@@ -16,7 +16,7 @@
 			],
 			"bonus": [],
 			"amount": 1,
-			"draw_chance": 100.0,
+			"draw_chance": 100,
 			"element": 0,
 			"point_score": 0,
 			"icon": "res://assets/elements/n0.png"
@@ -53,7 +53,7 @@
 			],
 			"bonus": [],
 			"amount": 1,
-			"draw_chance": 100.0,
+			"draw_chance": 100,
 			"element": 1,
 			"point_score": 0,
 			"icon": "res://assets/elements/f2.png"
@@ -82,7 +82,7 @@
 			],
 			"bonus": [],
 			"amount": 1,
-			"draw_chance": 100.0,
+			"draw_chance": 100,
 			"element": 2,
 			"point_score": 0,
 			"icon": "res://assets/elements/a1.png"
@@ -119,7 +119,7 @@
 			],
 			"bonus": [],
 			"amount": 1,
-			"draw_chance": 100.0,
+			"draw_chance": 100,
 			"element": 3,
 			"point_score": 0,
 			"icon": "res://assets/elements/m2.png"
@@ -140,7 +140,7 @@
 			],
 			"bonus": [],
 			"amount": 1,
-			"draw_chance": 100.0,
+			"draw_chance": 100,
 			"element": 4,
 			"point_score": 0,
 			"icon": "res://assets/elements/r0.png"
@@ -161,7 +161,7 @@
 			],
 			"bonus": [],
 			"amount": 1,
-			"draw_chance": 100.0,
+			"draw_chance": 100,
 			"element": 5,
 			"point_score": 0,
 			"icon": "res://assets/elements/w0.png"
@@ -195,7 +195,7 @@
 					"element": 4,
 					"level": 1,
 					"coords": [
-						0,
+						1,
 						-1
 					]
 				}
@@ -347,8 +347,8 @@
 					"element": 1,
 					"level": 2,
 					"coords": [
-						0,
-						-1
+						1,
+						0
 					]
 				}
 			],
@@ -409,14 +409,6 @@
 					"coords": [
 						0,
 						1
-					]
-				},
-				{
-					"element": 5,
-					"level": 1,
-					"coords": [
-						0,
-						-1
 					]
 				}
 			],
@@ -495,7 +487,7 @@
 			"icon": "res://assets/animals/icons/Marsupial_Coala.png"
 		},
 		{
-			"id": 27,
+			"id": 9,
 			"name": "gorilla",
 			"type": 1,
 			"placement": [
@@ -533,7 +525,7 @@
 			"icon": "res://assets/animals/icons/TropicalMammal_Gorilla.png"
 		},
 		{
-			"id": 9,
+			"id": 10,
 			"name": "bee",
 			"type": 1,
 			"placement": [
@@ -590,10 +582,10 @@
 			"element": 2,
 			"point_score": 2,
 			"icon": "res://assets/animals/icons/GrasslandRodent_Hare.png",
-			"id": 10
+			"id": 11
 		},
 		{
-			"id": 11,
+			"id": 12,
 			"name": "mouse",
 			"type": 1,
 			"placement": [
@@ -623,7 +615,7 @@
 			"icon": "res://assets/animals/icons/Rodent_Mouse_Grey.png"
 		},
 		{
-			"id": 12,
+			"id": 13,
 			"name": "peacock",
 			"type": 1,
 			"placement": [
@@ -661,7 +653,7 @@
 			"icon": "res://assets/animals/icons/Bird_Peacock.png"
 		},
 		{
-			"id": 13,
+			"id": 14,
 			"name": "hyena",
 			"type": 1,
 			"placement": [
@@ -699,7 +691,7 @@
 			"icon": "res://assets/animals/icons/SavannaMammal_Hyena.png"
 		},
 		{
-			"id": 14,
+			"id": 15,
 			"name": "hippo",
 			"type": 1,
 			"placement": [
@@ -737,7 +729,7 @@
 			"icon": "res://assets/animals/icons/SavannaMammal_Hippo.png"
 		},
 		{
-			"id": 15,
+			"id": 16,
 			"name": "ladybug",
 			"type": 1,
 			"placement": [
@@ -767,7 +759,7 @@
 			"icon": "res://assets/animals/icons/Insect_LadyBug.png"
 		},
 		{
-			"id": 16,
+			"id": 17,
 			"name": "sheep",
 			"type": 1,
 			"placement": [
@@ -805,7 +797,7 @@
 			"icon": "res://assets/animals/icons/LivestockMammal_Sheep_White.png"
 		},
 		{
-			"id": 17,
+			"id": 18,
 			"name": "cow",
 			"type": 1,
 			"placement": [
@@ -843,7 +835,7 @@
 			"icon": "res://assets/animals/icons/LivestockMammal_Cow_Spotted.png"
 		},
 		{
-			"id": 18,
+			"id": 19,
 			"name": "horse",
 			"type": 1,
 			"placement": [
@@ -881,7 +873,7 @@
 			"icon": "res://assets/animals/icons/LivestockMammal_Horse_Grey.png"
 		},
 		{
-			"id": 19,
+			"id": 20,
 			"name": "bear",
 			"type": 1,
 			"placement": [
@@ -954,10 +946,10 @@
 			"element": 3,
 			"point_score": 3,
 			"icon": "res://assets/animals/icons/Bird_Swan_White.png",
-			"id": 20
+			"id": 21
 		},
 		{
-			"id": 21,
+			"id": 22,
 			"name": "eagle",
 			"type": 1,
 			"placement": [
@@ -995,7 +987,7 @@
 			"icon": "res://assets/animals/icons/Bird_Eagle.png"
 		},
 		{
-			"id": 22,
+			"id": 23,
 			"name": "platypus",
 			"type": 1,
 			"placement": [
@@ -1016,14 +1008,6 @@
 						0,
 						1
 					]
-				},
-				{
-					"element": 5,
-					"level": 1,
-					"coords": [
-						0,
-						-1
-					]
 				}
 			],
 			"amount": 1,
@@ -1033,7 +1017,7 @@
 			"icon": "res://assets/animals/icons/TropicalMammal_Platypus.png"
 		},
 		{
-			"id": 23,
+			"id": 24,
 			"name": "llama",
 			"type": 1,
 			"placement": [
@@ -1071,7 +1055,7 @@
 			"icon": "res://assets/animals/icons/LivestockMammal_Llama_Brown.png"
 		},
 		{
-			"id": 24,
+			"id": 25,
 			"name": "hamster",
 			"type": 1,
 			"placement": [
@@ -1101,7 +1085,7 @@
 			"icon": "res://assets/animals/icons/PetRodent_Hamster.png"
 		},
 		{
-			"id": 25,
+			"id": 26,
 			"name": "capybara",
 			"type": 1,
 			"placement": [
@@ -1131,7 +1115,7 @@
 			"icon": "res://assets/animals/icons/Rodent_Capybara.png"
 		},
 		{
-			"id": 26,
+			"id": 27,
 			"name": "bat",
 			"type": 1,
 			"placement": [
@@ -1195,8 +1179,8 @@
 					"element": 3,
 					"level": 2,
 					"coords": [
-						0,
-						-1
+						1,
+						0
 					]
 				}
 			],
@@ -1308,8 +1292,8 @@
 					"element": 2,
 					"level": 1,
 					"coords": [
-						0,
-						1
+						1,
+						0
 					]
 				}
 			],

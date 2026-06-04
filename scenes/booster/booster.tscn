@@ -79,7 +79,7 @@ offset_right = 196.0
 offset_bottom = 42.0
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.4745098, 1)
 theme_override_font_sizes/font_size = 12
-text = "Buy this booster to get random cards."
+text = "Pay a booster point to get new booster options."
 autowrap_mode = 2
 
 [connection signal="input_event" from="." to="." method="_on_input_event"]

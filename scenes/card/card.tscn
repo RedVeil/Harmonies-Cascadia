@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bax2whoai3nus" path="res://scripts/cards/card.gd" id="1_73nwn"]
 [ext_resource type="Texture2D" uid="uid://c1goep5mtaksc" path="res://assets/cards/card.png" id="2_73nwn"]
-[ext_resource type="PackedScene" uid="uid://3bvwe0sroaru" path="res://scenes/game/placement_tooltip.tscn" id="2_ri62e"]
+[ext_resource type="PackedScene" uid="uid://uspta7a1yqhh" path="res://scenes/game/placement_tooltip.tscn" id="2_ri62e"]
 [ext_resource type="Texture2D" uid="uid://caiihuvh413eo" path="res://assets/cards/outline.png" id="3_73nwn"]
 [ext_resource type="Texture2D" uid="uid://ca2hp56qvfswa" path="res://assets/circle.png" id="3_kaf1t"]
 [ext_resource type="Texture2D" uid="uid://cyveh5llwxo0g" path="res://assets/cards/field_card.png" id="3_ri62e"]
@@ -61,24 +61,21 @@ theme_override_font_sizes/font_size = 8
 text = "10 / 10"
 horizontal_alignment = 1
 
-[node name="icon" type="Sprite2D" parent="visuals" unique_id=724824341]
-visible = false
-z_index = 1
-scale = Vector2(0.05, 0.05)
+[node name="points" type="Node2D" parent="visuals" unique_id=1884667598]
+position = Vector2(-28, -44)
 
-[node name="pointsBackground" type="Sprite2D" parent="visuals" unique_id=2113715790]
+[node name="background" type="Sprite2D" parent="visuals/points" unique_id=2113715790]
 z_index = 1
 material = SubResource("ShaderMaterial_s65g1")
-position = Vector2(-28, -44)
 scale = Vector2(0.05, 0.05)
 texture = ExtResource("3_kaf1t")
 
-[node name="PointsLabel" type="Label" parent="visuals" unique_id=155409266]
+[node name="Label" type="Label" parent="visuals/points" unique_id=45705084]
 z_index = 1
-offset_left = -31.0
-offset_top = -52.0
-offset_right = -24.0
-offset_bottom = -35.0
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 3
@@ -86,7 +83,35 @@ theme_override_font_sizes/font_size = 12
 text = "6"
 horizontal_alignment = 1
 vertical_alignment = 1
-metadata/_edit_use_anchors_ = true
+
+[node name="bonus_points" type="Node2D" parent="visuals" unique_id=842128323]
+visible = false
+
+[node name="background" type="Sprite2D" parent="visuals/bonus_points" unique_id=480464729]
+z_index = 1
+material = SubResource("ShaderMaterial_s65g1")
+position = Vector2(-28, -21.000006)
+scale = Vector2(0.05, 0.05)
+texture = ExtResource("3_kaf1t")
+
+[node name="Label" type="Label" parent="visuals/bonus_points" unique_id=1156241679]
+z_index = 1
+offset_left = -38.0
+offset_top = -33.0
+offset_right = -18.0
+offset_bottom = -10.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 12
+text = "6"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="icon" type="Sprite2D" parent="visuals" unique_id=724824341]
+visible = false
+z_index = 1
+scale = Vector2(0.05, 0.05)
 
 [node name="background" type="Sprite2D" parent="visuals" unique_id=106701842]
 scale = Vector2(0.1, 0.1)

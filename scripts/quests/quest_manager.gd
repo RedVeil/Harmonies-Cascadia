@@ -15,13 +15,21 @@ var eligble_groups : Array[Array] = []
 var eligble_groups_preview : Array[Array] = []
 var preview_quests : Array[int] = []
 
+var eligble_groups_backup: Array[Array] = []
+var active_quests_backup : Array[int] = []
+var preview_quests_backup : Array[int] = []
+var quest_progress_backup : Array[int] = []
+
 ## ----- Initialisation ----- ##
 
 func _ready() -> void:
 	active_quests.resize(quest_limit)
 	active_quests.fill(-1)
+	active_quests_backup = active_quests.duplicate(true)
 	eligble_groups.resize(quest_limit)
 	eligble_groups_preview.resize(quest_limit)
+	quest_progress_backup.resize(quest_limit)
+	
 	quest_container.init(quest_limit)
 
 ## ----- Pass data downstream ----- ##
@@ -46,11 +54,17 @@ func preview_progress(index:int, new_progress:int) -> void:
 	quest_container.preview_progress(index, new_progress)
 
 func apply_preview() -> void:
+	active_quests_backup = active_quests.duplicate(true)
+	eligble_groups_backup = eligble_groups.duplicate(true)
+	preview_quests_backup = preview_quests.duplicate(true)
+	quest_progress_backup.fill(0)
+	
 	for index in preview_quests:
 		var quest_id = active_quests[index]
 		var quest = QuestCatalog.quest_options[quest_id]
 		if quest.type == 0:
 			if eligble_groups_preview[index].size() >= quest.group_amount:
+				quest_progress_backup[index] = quest_container.quests[index].current
 				remove_quest(index)
 			else:
 				eligble_groups[index] = eligble_groups_preview[index]
@@ -58,6 +72,7 @@ func apply_preview() -> void:
 				quest_container.apply_preview(index)
 		else:
 			if eligble_groups_preview[index][0] >= quest.group_amount:
+				quest_progress_backup[index] = quest_container.quests[index].current
 				remove_quest(index)
 			else:
 				eligble_groups[index] = eligble_groups_preview[index]
@@ -70,6 +85,19 @@ func reset_preview() -> void:
 		eligble_groups_preview[index] = []
 		quest_container.reset_preview(index)
 	preview_quests = []
+
+func undo() -> void:
+	for index in preview_quests_backup:
+		if active_quests[index] == -1:
+			quest_container.add_quest(index, QuestCatalog.quest_options[active_quests_backup[index]])
+			quest_container.preview_progress(index, quest_progress_backup[index])
+			quest_container.apply_preview(index)
+		else:
+			quest_container.undo(index)
+		active_quests[index] = active_quests_backup[index]
+		eligble_groups[index] = eligble_groups_backup[index]
+		eligble_groups_preview[index] = []
+
 
 ## ----- Evaluate Quests ----- ##
 

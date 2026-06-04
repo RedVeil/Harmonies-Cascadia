@@ -7,6 +7,7 @@ class_name Orchestrator
 @export var score_engine:ScoreEngine
 @export var quest_manager:QuestManager
 @export var point_counter:PointCounter
+@export var undo_button:UndoButton
 
 @onready var placement_logic:PlacementLogic = $PlacementLogic
 @onready var grouping_logic:GroupingLogic = $GroupingLogic
@@ -26,8 +27,13 @@ var new_group : int = -1
 var tile_data_preview : HexTileData
 
 var new_group_score : int = 0
-var new_element_score : int = 0
-var new_quest_score : int = 0
+
+var coord_backup : Vector2i
+var selected_card_backup : CardData 
+var tile_backup : HexTileData
+var old_groups_backup : Array[int] = []
+var new_group_backup : int = -1
+var new_group_score_backup : int = 0
 
 func _ready() -> void:
 	var vp := get_viewport()
@@ -39,6 +45,7 @@ func _ready() -> void:
 
 func add_hand_card(card:CardData) -> void:
 	card_manager.add_card(card)
+	undo_button.disable()
 
 ## ----- Handle Hand Interactions ----- ##
 
@@ -76,6 +83,7 @@ func apply_recycle_card(id:int, amount:int, id_known:bool) -> void:
 	if selected_card_id != -1:
 		booster_manager.apply_booster_points()
 		card_manager.remove_card(card_id)
+		undo_button.disable()
 		if selected_card_id != -1:
 			preview_recycle_card(card_id, card_manager.recycling_value, true)
 
@@ -99,7 +107,6 @@ func handle_tile_hover(coord:Vector2i) -> void:
 		hex_manager.apply_preview(preview)
 		booster_manager.preview_booster_points(preview.points_diff)
 		point_counter.preview_progress(score_engine.total_score + preview.points_diff)
-		# quest_manager.preview_progress()
 
 func handle_tile_exit() -> void:
 	tile_hovered = false
@@ -113,7 +120,22 @@ func handle_tile_exit() -> void:
 func handle_tile_click(coord: Vector2i) -> void:
 	if selected_card_id != -1 and placement_valid and !cards_paused:
 		var selected_card = card_manager.cards[selected_card_id]
+		
+		selected_card_backup = selected_card.duplicate(true)
+		coord_backup = coord
+		tile_backup = hex_manager.tiles[coord].duplicate(true)
+		
+		score_engine.element_score_backup = score_engine.element_score
+		score_engine.animal_score_backup = score_engine.animal_score
+		score_engine.quest_score_backup = score_engine.quest_score
+		
 		if selected_card.type == 0:
+			old_groups_backup = old_groups.duplicate(true)
+			new_group_backup = new_group
+			new_group_score_backup = new_group_score
+			hex_manager.groups_backup = hex_manager.groups.duplicate(true)
+			score_engine.points_per_element_group_backup = score_engine.points_per_element_group.duplicate(true)
+			
 			if old_groups.size() == 0:
 				hex_manager.groups[new_group] = [coord]
 				hex_manager.next_group_id += 1
@@ -127,18 +149,28 @@ func handle_tile_click(coord: Vector2i) -> void:
 					for m in hex_manager.groups[g]:
 						hex_manager.tiles[m].group_id = old_groups[0]
 						new_group_members.append(m)
+					
 					hex_manager.groups.erase(g)
 					score_engine.points_per_element_group.erase(g)
+					
 				hex_manager.groups[old_groups[0]] = new_group_members
 				
 			score_engine.points_per_element_group[new_group] = new_group_score
-			score_engine.element_score = new_element_score
-			score_engine.quest_score = new_quest_score
-			score_engine.total_score = new_element_score + new_quest_score + score_engine.animal_score
+			score_engine.element_score = score_engine.new_element_score
+			score_engine.quest_score = score_engine.new_quest_score
+			score_engine.total_score = score_engine.new_element_score + score_engine.new_quest_score + score_engine.animal_score
 		else:
-			score_engine.quest_score = new_quest_score
-			score_engine.animal_score += selected_card.point_score
-			score_engine.total_score = score_engine.animal_score + new_quest_score + score_engine.element_score
+			var animal_multiplier_score = 0
+			if score_engine.placed_animals.has(selected_card.id):
+				var animal_amount = score_engine.placed_animals[selected_card.id]
+				animal_multiplier_score = int(animal_amount * selected_card.bonus_points)
+				score_engine.placed_animals[selected_card.id] = animal_amount + 1
+			else:
+				score_engine.placed_animals[selected_card.id] = 1
+			
+			score_engine.quest_score = score_engine.new_quest_score
+			score_engine.animal_score += selected_card.point_score + animal_multiplier_score
+			score_engine.total_score = score_engine.animal_score + score_engine.new_quest_score + score_engine.element_score
 			
 		hex_manager.tiles[coord] = tile_data_preview
 			
@@ -149,6 +181,7 @@ func handle_tile_click(coord: Vector2i) -> void:
 		point_counter.apply_preview()
 		
 		reset_preview()
+		undo_button.enable()
 		
 		if card_manager.cards[selected_card_id]:
 			handle_tile_hover(coord)
@@ -174,9 +207,10 @@ func handle_element_preview(coord:Vector2i, card:CardData) -> TileStatePreview:
 		if score_engine.active_rules[card.id].special_rule == 2:
 			contributing_coords = get_neighbor_contributing_coords(contributing_coords)
 		
+		
 		new_group_score = score_engine.calc_group_score(coord, contributing_coords, card.id, hex_manager.tiles)
-		new_element_score = score_engine.calc_total_group_score(old_groups) + new_group_score
-		new_quest_score = score_engine.quest_score + quest_manager.preview_element_quests(
+		score_engine.new_element_score = score_engine.calc_total_group_score(old_groups) + new_group_score
+		score_engine.new_quest_score = score_engine.quest_score + quest_manager.preview_element_quests(
 			card.id, 
 			old_groups,
 			new_group,
@@ -194,7 +228,7 @@ func handle_element_preview(coord:Vector2i, card:CardData) -> TileStatePreview:
 			"is_valid":true,
 			"coord":coord, 
 			"tile_data": tile_data_preview,
-			"points_diff": (new_element_score - score_engine.element_score) + (new_quest_score - score_engine.quest_score), 
+			"points_diff": (score_engine.new_element_score - score_engine.element_score) + (score_engine.new_quest_score - score_engine.quest_score), 
 			"contributing_coords":contributing_coords
 			})
 	else:
@@ -223,13 +257,17 @@ func handle_animal_preview(coord:Vector2i, card:CardData) -> TileStatePreview:
 
 		contributing_coords.assign(placement_res.coords)
 		
-		new_quest_score = score_engine.quest_score + quest_manager.preview_animal_quests(card.id)
+		score_engine.new_quest_score = score_engine.quest_score + quest_manager.preview_animal_quests(card.id)
+		var animal_multiplier_score = 0
+		if score_engine.placed_animals.has(card.id):
+			var animal_amount = score_engine.placed_animals[card.id]
+			animal_multiplier_score = int(animal_amount * card.bonus_points)
 		
 		return TileStatePreview.new({
 			"is_valid":true,
 			"coord":coord,
 			"tile_data": tile_data_preview,
-			"points_diff": card.point_score + (new_quest_score - score_engine.quest_score),
+			"points_diff": card.point_score + animal_multiplier_score + (score_engine.new_quest_score - score_engine.quest_score),
 			"contributing_coords":placement_res.coords
 		})
 	else:
@@ -240,6 +278,38 @@ func handle_animal_preview(coord:Vector2i, card:CardData) -> TileStatePreview:
 			"points_diff": 0, 
 			"contributing_coords":[]
 			})
+
+## ----- Undo Function ----- ##
+
+func undo() -> void:
+	booster_manager.undo() # works
+	quest_manager.undo() # to be tested
+	point_counter.undo() # works
+	card_manager.add_card(selected_card_backup) # works
+	
+	score_engine.element_score = score_engine.element_score_backup
+	score_engine.animal_score = score_engine.animal_score_backup
+	score_engine.quest_score = score_engine.quest_score_backup
+	score_engine.total_score = score_engine.element_score + score_engine.animal_score + score_engine.quest_score
+	
+	if selected_card_backup.type == 0: # works
+		score_engine.points_per_element_group = score_engine.points_per_element_group_backup.duplicate(true)
+		hex_manager.groups = hex_manager.groups_backup.duplicate(true)
+		if old_groups_backup.size() == 0: # works
+			hex_manager.next_group_id = hex_manager.next_group_id_backup
+		if old_groups_backup.size() > 1: # works
+			for g in old_groups_backup:
+				for m in hex_manager.groups[g]:
+					hex_manager.tiles[m].group_id = g
+	else:
+		if score_engine.placed_animals[selected_card_backup.id] > 1: # works
+			score_engine.placed_animals[selected_card_backup.id] -= 1
+		else: # works
+			score_engine.placed_animals.erase(selected_card_backup.id) 
+		
+	hex_manager.tiles[coord_backup] = tile_backup.duplicate(true)
+	hex_manager.undo(coord_backup) # works
+	undo_button.disable() # works
 
 ## ----- Utility Functions ----- ##
 
@@ -256,8 +326,8 @@ func reset_preview() -> void:
 	old_groups  = []
 	new_group = -1
 	new_group_score = 0
-	new_element_score = 0
-	new_quest_score = 0
+	score_engine.new_element_score = 0
+	score_engine.new_quest_score = 0
 
 func get_neighbor_contributing_coords(group_coords:Array[Vector2i]) -> Array[Vector2i]:
 	var coords : Array[Vector2i] = []
@@ -275,6 +345,7 @@ func get_neighbor_contributing_coords(group_coords:Array[Vector2i]) -> Array[Vec
 func add_map_points(val:int) -> void:
 	map_points += val
 	hex_manager.show_map_buttons()
+	undo_button.disable()
 	pause_cards()
 
 func handle_map_button_click(coord:Vector2i) -> void:
@@ -286,7 +357,6 @@ func handle_map_button_click(coord:Vector2i) -> void:
 		unpause_cards()
 	else:
 		hex_manager.show_map_buttons()
-
 
 ## ----- Quest Logic ----- ##
 

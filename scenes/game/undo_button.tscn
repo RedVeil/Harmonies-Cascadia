@@ -1,0 +1,87 @@
+[gd_scene format=3 uid="uid://bde4y0iag4uud"]
+
+[ext_resource type="Script" uid="uid://clr1dgs0xbhug" path="res://scripts/game/undo_button.gd" id="1_ofr7o"]
+[ext_resource type="Texture2D" uid="uid://ca2hp56qvfswa" path="res://assets/circle.png" id="2_hjekv"]
+[ext_resource type="Shader" uid="uid://y4g8ky747mqh" path="res://assets/shader/shadow.gdshader" id="3_4jxme"]
+[ext_resource type="Texture2D" uid="uid://qyaqw63x8s5d" path="res://assets/icons/undo.png" id="4_ofr7o"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hxqf6"]
+radius = 14.035668
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jrfn7"]
+shader = ExtResource("3_4jxme")
+shader_parameter/shadow_color = Color(0, 0, 0, 0.1254902)
+shader_parameter/blur_size = 20.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hxqf6"]
+bg_color = Color(0.95686275, 0.8745098, 0.7921569, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.1254902)
+shadow_size = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jrfn7"]
+bg_color = Color(0.95686275, 0.8745098, 0.7921569, 1)
+shadow_color = Color(0, 0, 0, 0.1254902)
+shadow_size = 4
+
+[node name="UndoButton" type="Area2D" unique_id=1759140847]
+monitorable = false
+priority = 2
+script = ExtResource("1_ofr7o")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1339124356]
+z_index = 1
+scale = Vector2(0.99999994, 0.99999994)
+shape = SubResource("CircleShape2D_hxqf6")
+
+[node name="background" type="Sprite2D" parent="." unique_id=1610738283]
+scale = Vector2(0.06999999, 0.06999999)
+texture = ExtResource("2_hjekv")
+
+[node name="shadow" type="Sprite2D" parent="background" unique_id=1816452682]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_jrfn7")
+position = Vector2(0.68392086, 1.1477747)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("2_hjekv")
+
+[node name="icon" type="Sprite2D" parent="." unique_id=1411433287]
+self_modulate = Color(0.8782205, 0.8782205, 0.8782205, 1)
+scale = Vector2(0.22, 0.22)
+texture = ExtResource("4_ofr7o")
+
+[node name="Tooltip" type="Panel" parent="." unique_id=1672230954]
+visible = false
+offset_left = -41.0
+offset_top = -77.0
+offset_right = 159.0
+offset_bottom = -28.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_hxqf6")
+
+[node name="Panel" type="Panel" parent="Tooltip" unique_id=70828015]
+show_behind_parent = true
+layout_mode = 0
+offset_left = 41.000008
+offset_top = 29.0
+offset_right = 61.000008
+offset_bottom = 49.0
+rotation = 0.7853982
+theme_override_styles/panel = SubResource("StyleBoxFlat_jrfn7")
+
+[node name="Label" type="Label" parent="Tooltip" unique_id=1778795921]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 197.0
+offset_bottom = 42.0
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.4745098, 1)
+theme_override_font_sizes/font_size = 12
+text = "Undo the last placement."
+autowrap_mode = 2
+
+[connection signal="input_event" from="." to="." method="_on_input_event"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
