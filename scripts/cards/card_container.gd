@@ -34,7 +34,7 @@ func deselect_card(id) -> void:
 	cards[id].deselect()
 
 func add_card(card_data:CardData, id:int) -> void:
-	var card := card_scene.instantiate() as Node2D
+	var card := card_scene.instantiate() as Card
 	cards[id] = card
 	card_amount += 1
 	
@@ -124,11 +124,7 @@ func _layout_cards() -> void:
 		var angle : float = offset * angle_step
 		angle = clamp(angle, -max_angle, max_angle)
 
-		card.position = Vector2(x, y)
-		card.rotation_degrees = angle
-
-		# z_index increases from left to right.
-		card.set_z(i*2)
+		card.animate_layout(Vector2(x, y), angle, i * 2)
 
 func _center_out_slot(i: int) -> int:
 	if i == 0:
