@@ -57,5 +57,13 @@ mouse_scroll_down={
 
 rendering_device/driver.windows="d3d12"
 lights_and_shadows/directional_shadow/size=8192
-anti_aliasing/quality/msaa_3d=2
+anti_aliasing/quality/msaa_2d=3
+anti_aliasing/quality/msaa_3d=3
 lights_and_shadows/positional_shadow/atlas_size=8192
+
+[shader_globals]
+
+mouse_screen_pos={
+"type": "vec2",
+"value": Vector2(0, 0)
+}

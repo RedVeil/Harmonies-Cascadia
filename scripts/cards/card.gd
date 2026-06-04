@@ -6,7 +6,6 @@ class_name Card
 @export var hover_height: float = 12.0
 
 @onready var visuals : Node2D = $visuals
-@onready var stacks : Node2D = $stacks
 @onready var collision : CollisionShape2D = $CollisionShape2D
 @onready var placement_tooltip : PlacementTooltip = $PlacementTooltip
 
@@ -43,31 +42,29 @@ func init(cardData:CardData, parent:CardContainer, idx:int) -> void:
 	is_animal = cardData.type == 1
 	
 	$visuals/background.texture = load(get_card_background(cardData.element))
-	var mat = $visuals/elementIcon.material.duplicate()
+	
+	var mat = $visuals/element.material.duplicate()
 	mat.set_shader_parameter("unfilled_color", Color.html(ElementCatalog.elements[cardData.element].levels.back().color))
-	$visuals/elementIcon.material = mat
+	$visuals/element.material = mat
 	$visuals/points/background.material = mat
+	
 	if cardData.type == 1 and cardData.icon != "":
 		var icon : Texture2D = load(cardData.icon)
-		var texture_size := icon.get_size()
-		var scale_factor = min(
-			50 / texture_size.x,
-			50 / texture_size.y
-		)
-		$visuals/icon.scale = Vector2.ONE * scale_factor
-		$visuals/icon.texture = icon
-		$visuals/icon.show()
-		$visuals/elementIcon/Sprite2D.texture = load(ElementCatalog.elements[cardData.element].levels[cardData.placement[0].level-1].icon)
+		$visuals/animal.texture = icon
+		$visuals/animal.show()
+		
+		$visuals/element/icon.texture = load(ElementCatalog.elements[cardData.element].levels[cardData.placement[0].level-1].icon)
+		
 		$visuals/bonus_points/background.material = mat
 		$visuals/bonus_points/Label.text = "%d" % cardData.bonus_points if cardData.bonus_points > 0.5 else "1/2"
 		$visuals/bonus_points.show()
 	else:
-		$visuals/elementIcon/Sprite2D.texture = load(ElementCatalog.elements[cardData.element].levels.back().icon)
+		$visuals/element/icon.texture = load(ElementCatalog.elements[cardData.element].levels.back().icon)
 
 	placement_tooltip.init(cardData.type, cardData.placement, cardData.bonus)
 	$visuals/points/Label.text = "?" if cardData.type == 0 else "%d" % cardData.point_score
 	
-	$visuals/Label.text = "%d | %d" % [stack_amount, 10]
+	$visuals/Label.text = "x %d" % stack_amount
 
 ## ----- Interactions Logic ----- ##
 
@@ -91,15 +88,12 @@ func _on_input_event(
 func increment() -> void:
 	if stack_amount < 10:
 		stack_amount += 1
-		get_node("stacks/stack%d/background" % stack_amount).modulate = background_color
-		get_node("stacks/stack%d" % stack_amount).show()
-		$visuals/Label.text = "%d | %d" % [stack_amount, 10]
+		$visuals/Label.text = "x %d " % stack_amount
 
 func decrement() -> void:
 	if stack_amount > 0:
-		get_node("stacks/stack%d" % stack_amount ).hide()
 		stack_amount -= 1
-		$visuals/Label.text = "%d | %d" % [stack_amount, 10]
+		$visuals/Label.text = "x %d" % stack_amount
 
 ## ----- Other Logic ----- ##
 
@@ -150,7 +144,6 @@ func reset_select_visuals() -> void:
 func _process(delta: float) -> void:
 	if visuals.scale.distance_squared_to(target_scale) >= 0.001 * 0.001:
 		visuals.scale = visuals.scale.lerp(target_scale, delta * scale_speed)
-		stacks.scale = stacks.scale.lerp(target_scale, delta * scale_speed)
 		visuals.position = visuals.position.lerp(target_visuals_position, delta * scale_speed)
 		collision.position = collision.position.lerp(target_visuals_position, delta * scale_speed)
 

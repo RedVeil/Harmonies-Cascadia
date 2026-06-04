@@ -47,7 +47,7 @@ booster_limit = 3
 base_booster_point_cost = 15
 
 [node name="CardManager" parent="." unique_id=241167023 node_paths=PackedStringArray("orchestrator") instance=ExtResource("2_vg1d4")]
-position = Vector2(320, 599)
+position = Vector2(320, 596)
 orchestrator = NodePath("../Orchestrator")
 card_limit = 8
 card_limit_buffer = 6
