@@ -1,6 +1,24 @@
 extends Camera3D
 
 @export var move_speed: float = 12.0
+@export var zoom_speed: float = 2.0
+@export var zoom_min: float = 10.0
+@export var zoom_max: float = 80.0
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not event is InputEventMouseButton or not event.pressed:
+		return
+
+	var zoom_delta := 0.0
+	if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+		zoom_delta = -zoom_speed * event.factor
+	elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+		zoom_delta = zoom_speed * event.factor
+	else:
+		return
+
+	size = clampf(size + zoom_delta, zoom_min, zoom_max)
 
 
 func _process(delta: float) -> void:
