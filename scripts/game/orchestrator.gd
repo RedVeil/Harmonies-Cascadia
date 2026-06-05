@@ -110,7 +110,7 @@ func handle_tile_hover(coord:Vector2i) -> void:
 			preview = handle_element_preview(coord, selected_card)
 		else:
 			preview = handle_animal_preview(coord, selected_card)
-		
+					
 		hex_manager.apply_preview(preview)
 		last_points_diff = preview.points_diff
 		booster_manager.preview_booster_points(preview.points_diff)
@@ -147,6 +147,7 @@ func handle_tile_click(coord: Vector2i) -> void:
 			
 			if old_groups.size() == 0:
 				hex_manager.groups[new_group] = [coord]
+				hex_manager.next_group_id_backup = hex_manager.next_group_id
 				hex_manager.next_group_id += 1
 			if old_groups.size() == 1:
 				if !hex_manager.groups[old_groups[0]].has(coord):
@@ -182,7 +183,7 @@ func handle_tile_click(coord: Vector2i) -> void:
 			score_engine.total_score = score_engine.animal_score + score_engine.new_quest_score + score_engine.element_score
 			
 		hex_manager.tiles[coord] = tile_data_preview
-			
+					
 		hex_manager.apply_placement(coord)
 		hex_manager.play_placement_reward(coord, last_points_diff, contributing_coords)
 		card_manager.remove_card(selected_card_id)
@@ -233,7 +234,7 @@ func handle_element_preview(coord:Vector2i, card:CardData) -> TileStatePreview:
 		hex_manager.tiles[coord].element = prev_element
 		hex_manager.tiles[coord].level -= 1
 		hex_manager.tiles[coord].group_id = var_prev_group
-		
+				
 		return TileStatePreview.new({
 			"is_valid":true,
 			"coord":coord, 
