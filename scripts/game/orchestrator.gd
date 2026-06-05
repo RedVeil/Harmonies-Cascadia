@@ -138,6 +138,7 @@ func handle_tile_click(coord: Vector2i) -> void:
 			
 			if old_groups.size() == 0:
 				hex_manager.groups[new_group] = [coord]
+				hex_manager.next_group_id_backup = hex_manager.next_group_id
 				hex_manager.next_group_id += 1
 			if old_groups.size() == 1:
 				if !hex_manager.groups[old_groups[0]].has(coord):
