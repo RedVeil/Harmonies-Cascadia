@@ -5,6 +5,7 @@ extends Camera3D
 @export var zoom_min: float = 10.0
 @export var zoom_max: float = 80.0
 
+## ----- Camera Input ----- ##
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not event is InputEventMouseButton or not event.pressed:
@@ -20,6 +21,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	size = clampf(size + zoom_delta, zoom_min, zoom_max)
 
+## ----- Camera Movement ----- ##
 
 func _process(delta: float) -> void:
 	var input_vector := Vector2.ZERO

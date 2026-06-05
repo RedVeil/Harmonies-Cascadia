@@ -1,6 +1,8 @@
 class_name HexCoord
 extends RefCounted
 
+## ----- Directions ----- ##
+
 static var DIRECTIONS : Array[Vector2i] = [
 	Vector2i(1, 0),
 	Vector2i(1, -1),
@@ -19,6 +21,7 @@ static var MAP_DIRECTIONS : Array[Vector2i] = [
 	Vector2i(-1, 2)
 ] 
 
+## ----- Neighbour Logic ----- ##
 
 static func neighbors(c: Vector2i) -> Array[Vector2i]:
 	var out: Array[Vector2i] = []
@@ -32,11 +35,15 @@ static func map_neighbors(c: Vector2i, distance:int) -> Array[Vector2i]:
 		out.append(c + (dir*distance))
 	return out
 
+## ----- Distance Logic ----- ##
+
 static func distance(a: Vector2i, b: Vector2i) -> int:
 	var dq := a.x - b.x
 	var dr := a.y - b.y
 	var ds := (-a.x - a.y) - (-b.x - b.y)
 	return int((abs(dq) + abs(dr) + abs(ds)) / 2)
+
+## ----- Coordinate Conversion ----- ##
 
 static func axial_to_world(coord: Vector2i, hex_size: float) -> Vector3:
 	var q := coord.x
@@ -57,6 +64,8 @@ static func axial_to_world_pointy(coord: Vector2i, hex_size: float) -> Vector3:
 
 	return Vector3(x, 0.0, z)
 	
+## ----- Transform Logic ----- ##
+
 static func rotate_clockwise(point: Vector2i, center: Vector2i) -> Vector2i:
 	var q := point.x - center.x
 	var r := point.y - center.y

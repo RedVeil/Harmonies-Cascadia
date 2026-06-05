@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://ca2hp56qvfswa" path="res://assets/circle.png" id="2_nn350"]
 [ext_resource type="Texture2D" uid="uid://boew28pgavxmj" path="res://assets/hex_outline.png" id="2_pcuo8"]
 [ext_resource type="Texture2D" uid="uid://by87fjcwrqlgx" path="res://assets/elements/f0.png" id="4_4l472"]
+[ext_resource type="AudioStream" uid="uid://cntyxxeo1ekgi" path="res://assets/audio/card-slide-2.ogg" id="5_place"]
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_vyrwg"]
 points = PackedVector3Array(0, 1, 0, 2, 1, 0, 1, 1, 1.732, -1, 1, 1.732, -2, 1, 0, -1, 1, -1.732, 1, 1, -1.732, 0, 0, 0, 2, 0, 0, 1, 0, 1.732, -1, 0, 1.732, -2, 0, 0, -1, 0, -1.732, 1, 0, -1.732)
@@ -65,6 +66,7 @@ shadow_mesh = SubResource("ArrayMesh_skloi")
 
 [node name="HexTile" type="StaticBody3D" unique_id=1124611875]
 script = ExtResource("1_pcuo8")
+place_celebrate_sounds = Array[AudioStream]([ExtResource("5_place")])
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1831272945]
 shape = SubResource("ConvexPolygonShape3D_vyrwg")

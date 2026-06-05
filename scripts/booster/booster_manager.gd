@@ -17,7 +17,7 @@ class_name BoosterManager
 @export var punch_settle_duration: float = 0.2
 @export var progress_base_scale: Vector2 = Vector2(0.15, 0.15)
 @export var progress_peak_scale: Vector2 = Vector2(0.165, 0.165)
-@export var points_reward_play_sound: bool = true
+@export var points_reward_sounds: Array[AudioStream] = []
 
 var booster_point_cost:int = 0
 var booster_points:int = 0
@@ -160,38 +160,6 @@ func apply_booster_points(animate_reward: bool = false) -> void:
 	if animate_reward and (gained_points > 0 or gained_acc > 0):
 		play_animation(&"points_reward", {})
 
-func play_animation(name: StringName, _params: Dictionary) -> void:
-	match name:
-		&"points_reward":
-			_animate_points_reward()
-
-func kill_animations() -> void:
-	FeedbackAnimHelper.kill_all(_feedback_tweens)
-	apply_current_style()
-
-func _animate_points_reward() -> void:
-	FeedbackAnimHelper.kill_all(_feedback_tweens)
-	if points_reward_play_sound:
-		GameFeedback.play_points_scored()
-
-	ensure_hex_label_pivot()
-	booster_label.scale = Vector2.ONE
-	booster_progress_sprite.scale = progress_base_scale
-
-	var tween := FeedbackAnimHelper.create_tween(self, _feedback_tweens, &"punch")
-	tween.set_parallel(true)
-	tween.tween_property(booster_label, "scale", Vector2(punch_scale, punch_scale), punch_up_duration)\
-		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	tween.tween_property(booster_progress_sprite, "scale", progress_peak_scale, punch_up_duration)\
-		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	tween.chain().tween_property(booster_label, "scale", Vector2.ONE, punch_settle_duration)\
-		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	tween.parallel().tween_property(booster_progress_sprite, "scale", progress_base_scale, punch_settle_duration)\
-		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-
-func ensure_hex_label_pivot() -> void:
-	booster_label.pivot_offset = booster_label.size * 0.5
-
 func reset_preview() -> void:
 	kill_animations()
 	booster_points_preview = booster_points
@@ -305,6 +273,39 @@ func _on_mouse_exited() -> void:
 	is_hovered = false
 	timer = 0.5
 	$Tooltip.hide()
+
+## ----- Animations ----- ##
+
+func play_animation(name: StringName, _params: Dictionary) -> void:
+	match name:
+		&"points_reward":
+			_animate_points_reward()
+
+func kill_animations() -> void:
+	FeedbackAnimHelper.kill_all(_feedback_tweens)
+	apply_current_style()
+
+func ensure_hex_label_pivot() -> void:
+	booster_label.pivot_offset = booster_label.size * 0.5
+
+func _animate_points_reward() -> void:
+	FeedbackAnimHelper.kill_all(_feedback_tweens)
+	FeedbackAnimHelper.play_sounds(points_reward_sounds)
+
+	ensure_hex_label_pivot()
+	booster_label.scale = Vector2.ONE
+	booster_progress_sprite.scale = progress_base_scale
+
+	var tween := FeedbackAnimHelper.create_tween(self, _feedback_tweens, &"punch")
+	tween.set_parallel(true)
+	tween.tween_property(booster_label, "scale", Vector2(punch_scale, punch_scale), punch_up_duration)\
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(booster_progress_sprite, "scale", progress_peak_scale, punch_up_duration)\
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.chain().tween_property(booster_label, "scale", Vector2.ONE, punch_settle_duration)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tween.parallel().tween_property(booster_progress_sprite, "scale", progress_base_scale, punch_settle_duration)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 
 ## ----- Utility Logic ----- ##
 

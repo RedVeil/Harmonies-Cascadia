@@ -14,7 +14,7 @@ class_name PointCounter
 
 @export_group("Score Count Animation")
 @export var count_duration: float = 0.55
-@export var score_reward_play_sound: bool = true
+@export var score_reward_sounds: Array[AudioStream] = []
 
 @export_group("Score Gain Popup Animation")
 @export var gain_popup_start: Vector2 = Vector2(72.0, 0.0)
@@ -61,7 +61,26 @@ func _ready() -> void:
 	gain_label = _gain_label
 	call_deferred("ensure_score_label_pivot")
 
-## ----- Down stream Logic ----- ##
+func _setup_gain_label() -> void:
+	_gain_popup = Node2D.new()
+	_gain_popup.name = "GainPopup"
+	_gain_popup.z_index = 2
+	add_child(_gain_popup)
+
+	_gain_label = Label.new()
+	_gain_label.visible = false
+	_gain_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_gain_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_gain_label.offset_left = -36.0
+	_gain_label.offset_top = -16.0
+	_gain_label.offset_right = 36.0
+	_gain_label.offset_bottom = 16.0
+	_gain_label.add_theme_color_override("font_outline_color", Color(1, 1, 1, 1))
+	_gain_label.add_theme_constant_override("outline_size", 5)
+	_gain_label.add_theme_font_size_override("font_size", 28)
+	_gain_popup.add_child(_gain_label)
+
+## ----- Score Logic ----- ##
 
 func preview_progress(val:int) -> void:
 	if val > target:
@@ -153,8 +172,7 @@ func ensure_score_label_pivot() -> void:
 func _animate_score_reward(gained: int, from_score: int, to_score: int) -> void:
 	FeedbackAnimHelper.kill_all(_feedback_tweens)
 	_finish_gain_popup()
-	if score_reward_play_sound:
-		GameFeedback.play_points_scored()
+	FeedbackAnimHelper.play_sounds(score_reward_sounds)
 
 	ensure_score_label_pivot()
 	_setup_gain_popup_text(gained)
@@ -223,25 +241,6 @@ func _finish_gain_popup() -> void:
 	gain_popup.modulate = Color.WHITE
 	gain_popup.position = gain_popup_start
 	gain_popup.scale = Vector2.ONE
-
-func _setup_gain_label() -> void:
-	_gain_popup = Node2D.new()
-	_gain_popup.name = "GainPopup"
-	_gain_popup.z_index = 2
-	add_child(_gain_popup)
-
-	_gain_label = Label.new()
-	_gain_label.visible = false
-	_gain_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_gain_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	_gain_label.offset_left = -36.0
-	_gain_label.offset_top = -16.0
-	_gain_label.offset_right = 36.0
-	_gain_label.offset_bottom = 16.0
-	_gain_label.add_theme_color_override("font_outline_color", Color(1, 1, 1, 1))
-	_gain_label.add_theme_constant_override("outline_size", 5)
-	_gain_label.add_theme_font_size_override("font_size", 28)
-	_gain_popup.add_child(_gain_label)
 
 ## ----- Utility Logic ----- ##
 

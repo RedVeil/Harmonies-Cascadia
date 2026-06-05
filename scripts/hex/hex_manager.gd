@@ -26,7 +26,7 @@ func _ready() -> void:
 	hex_container.init(self)
 	create_map(Vector2i.ZERO)
 
-## ----- Create new tiles ----- ##
+## ----- Tile Creation Logic ----- ##
 
 func create_tiles(origin: Vector2i) -> void:
 	for q in range(-map_ring_count, map_ring_count + 1):
@@ -42,7 +42,7 @@ func create_map(map_origin: Vector2i) -> void:
 		create_tiles(map_origin)
 		hex_map_active.append(map_origin)
 
-## ----- Pass tile interactions upstream ----- ##
+## ----- Pass Data Upstream ----- ##
 
 func handle_hover(coord:Vector2i) -> void:
 	orchestrator.handle_tile_hover(coord)
@@ -53,7 +53,10 @@ func handle_exit() -> void:
 func handle_click(coord:Vector2i) -> void:
 	orchestrator.handle_tile_click(coord)
 
-## ----- Pass tile interactions downstream ----- ##
+func handle_map_button_click(coord:Vector2i) -> void:
+	orchestrator.handle_map_button_click(coord)
+
+## ----- Pass Data Downstream ----- ##
 
 func apply_preview(preview:TileStatePreview) -> void:
 	hex_container.apply_preview(preview)
@@ -74,12 +77,7 @@ func reset_preview(coord:Vector2i) -> void:
 func undo(coord:Vector2i) -> void:
 	hex_container.undo(coord)
 
-## ----- Pass map_button interactions upstream ----- ##
-
-func handle_map_button_click(coord:Vector2i) -> void:
-	orchestrator.handle_map_button_click(coord)
-
-## ----- Pass map_button interactions downstream ----- ##
+## ----- Map Logic ----- ##
 
 func show_map_buttons() -> void:
 	var available_coords : Array[Vector2i] = []

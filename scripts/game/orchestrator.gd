@@ -37,6 +37,8 @@ var old_groups_backup : Array[int] = []
 var new_group_backup : int = -1
 var new_group_score_backup : int = 0
 
+## ----- Initialisation ----- ##
+
 func _ready() -> void:
 	var vp := get_viewport()
 	vp.physics_object_picking = true
@@ -290,7 +292,7 @@ func handle_animal_preview(coord:Vector2i, card:CardData) -> TileStatePreview:
 			"contributing_coords":[]
 			})
 
-## ----- Undo Function ----- ##
+## ----- Undo Logic ----- ##
 
 func undo() -> void:
 	GameFeedback.play_undo()
@@ -323,7 +325,7 @@ func undo() -> void:
 	hex_manager.undo(coord_backup) # works
 	undo_button.disable() # works
 
-## ----- Utility Functions ----- ##
+## ----- Utility Logic ----- ##
 
 func create_tile_data_preview(coord:Vector2i, element:int, group_id:int) -> HexTileData:
 	var prev_element = hex_manager.tiles[coord].element

@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://cyveh5llwxo0g" path="res://assets/cards/field_card.png" id="3_ri62e"]
 [ext_resource type="Shader" uid="uid://8wow5a7grc78" path="res://assets/shader/circular_progress_bar.gdshader" id="4_v07qs"]
 [ext_resource type="Texture2D" uid="uid://boqn0q1xtndms" path="res://assets/elements/m2.png" id="6_0iqnq"]
+[ext_resource type="AudioStream" uid="uid://ftrpl5416bkc" path="res://assets/audio/bookFlip2.ogg" id="7_draw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jl6rh"]
 size = Vector2(94, 168)
@@ -33,6 +34,8 @@ script = ExtResource("1_73nwn")
 scale_speed = 8.0
 hover_scale = 1.2
 hover_height = 50.0
+spawn_sounds = Array[AudioStream]([ExtResource("7_draw")])
+redraw_sounds = Array[AudioStream]([ExtResource("7_draw")])
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1382946366]
 visible = false

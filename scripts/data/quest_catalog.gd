@@ -4,8 +4,12 @@ const path = "res://data/quest_catalog.json"
 
 var quest_options: Array[Quest] = []
 
+## ----- Initialisation ----- ##
+
 func _ready() -> void:
 	build_quest_options()
+
+## ----- Loading Logic ----- ##
 
 func build_quest_options() -> bool:
 	if not FileAccess.file_exists(path):
@@ -20,6 +24,8 @@ func build_quest_options() -> bool:
 		quest_options.append(parse_quest_option(option))
 		
 	return true
+
+## ----- Parsing Logic ----- ##
 
 func parse_quest_option(option:Dictionary) -> Quest:
 	var quest_option := Quest.new()

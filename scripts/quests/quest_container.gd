@@ -13,7 +13,7 @@ var quest_amount : int = 0
 func init(quest_limit:int) -> void:
 	quests.resize(quest_limit)
 
-## ----- Pass Interactions and Data Downstream ----- ##
+## ----- Pass Data Downstream ----- ##
 
 func add_quest(id:int, questData:Quest) -> void:
 	var quest := quest_scene.instantiate() as Node2D

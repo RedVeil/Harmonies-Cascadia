@@ -9,12 +9,12 @@ class_name Card
 @export_group("Spawn Animation")
 @export var spawn_duration: float = 0.35
 @export var spawn_origin: Vector2 = Vector2.ZERO
-@export var spawn_play_sound: bool = true
+@export var spawn_sounds: Array[AudioStream] = []
 
 @export_group("Redraw Animation")
 @export var redraw_duration: float = 0.22
 @export var redraw_peak_scale: float = 1.12
-@export var redraw_play_sound: bool = true
+@export var redraw_sounds: Array[AudioStream] = []
 
 @onready var visuals : Node2D = $visuals
 @onready var collision : CollisionShape2D = $CollisionShape2D
@@ -86,6 +86,8 @@ func init(cardData:CardData, parent:CardContainer, idx:int) -> void:
 	$visuals/points/Label.text = "?" if cardData.type == 0 else "%d" % cardData.point_score
 	
 	$visuals/Label.text = "x %d" % stack_amount
+
+## ----- Layout Logic ----- ##
 
 func mark_spawn_layout() -> void:
 	_spawn_layout_pending = true
@@ -169,6 +171,24 @@ func remove_card() -> void:
 	kill_animations()
 	queue_free()
 
+func set_select_visuals() -> void:
+	self.z_index = base_z_index + 20
+	target_scale = base_scale * hover_scale
+	collision.scale = target_scale
+	# placement_tooltip.scale = target_scale
+	target_visuals_position = visuals.position - Vector2(0.0, hover_height)
+
+func reset_select_visuals() -> void:
+	self.z_index = base_z_index
+	target_scale = base_scale
+	collision.scale = target_scale
+	# placement_tooltip.scale = target_scale
+	target_visuals_position = base_visuals_position
+
+func set_z(z:int) -> void:
+	base_z_index = z
+	self.z_index = base_z_index
+
 ## ----- Animations ----- ##
 
 func play_spawn_animation(target_pos: Vector2, target_angle: float, z: int) -> void:
@@ -207,9 +227,16 @@ func apply_layout(target_pos: Vector2, target_angle: float, z: int) -> void:
 	position = target_pos
 	rotation_degrees = target_angle
 
+func _process(delta: float) -> void:
+	if _spawn_active or _redraw_active:
+		return
+	if visuals.scale.distance_squared_to(target_scale) >= 0.001 * 0.001:
+		visuals.scale = visuals.scale.lerp(target_scale, delta * scale_speed)
+		visuals.position = visuals.position.lerp(target_visuals_position, delta * scale_speed)
+		collision.position = collision.position.lerp(target_visuals_position, delta * scale_speed)
+
 func _animate_spawn(target_pos: Vector2, target_angle: float, z: int) -> void:
-	if spawn_play_sound:
-		GameFeedback.play_draw_card()
+	FeedbackAnimHelper.play_sounds(spawn_sounds)
 
 	_spawn_active = true
 	set_z(z)
@@ -235,8 +262,7 @@ func _animate_spawn(target_pos: Vector2, target_angle: float, z: int) -> void:
 	)
 
 func _animate_redraw() -> void:
-	if redraw_play_sound:
-		GameFeedback.play_draw_card()
+	FeedbackAnimHelper.play_sounds(redraw_sounds)
 
 	_redraw_active = true
 	var peak_scale := base_scale * redraw_peak_scale
@@ -249,31 +275,7 @@ func _animate_redraw() -> void:
 		_redraw_active = false
 	)
 
-func set_z(z:int) -> void:
-	base_z_index = z
-	self.z_index = base_z_index
-
-func set_select_visuals() -> void:
-	self.z_index = base_z_index + 20
-	target_scale = base_scale * hover_scale
-	collision.scale = target_scale
-	# placement_tooltip.scale = target_scale
-	target_visuals_position = visuals.position - Vector2(0.0, hover_height)
-
-func reset_select_visuals() -> void:
-	self.z_index = base_z_index
-	target_scale = base_scale
-	collision.scale = target_scale
-	# placement_tooltip.scale = target_scale
-	target_visuals_position = base_visuals_position
-
-func _process(delta: float) -> void:
-	if _spawn_active or _redraw_active:
-		return
-	if visuals.scale.distance_squared_to(target_scale) >= 0.001 * 0.001:
-		visuals.scale = visuals.scale.lerp(target_scale, delta * scale_speed)
-		visuals.position = visuals.position.lerp(target_visuals_position, delta * scale_speed)
-		collision.position = collision.position.lerp(target_visuals_position, delta * scale_speed)
+## ----- Utility Logic ----- ##
 
 func get_card_background(element:int) -> String:
 	match(element):

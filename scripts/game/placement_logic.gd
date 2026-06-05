@@ -1,6 +1,8 @@
 extends Node
 class_name PlacementLogic
 
+## ----- Placement Logic ----- ##
+
 func is_valid_element_placement(
 	target:HexTileData, 
 	options: Array[Placement]
@@ -25,6 +27,10 @@ func is_valid_animal_placement(
 	else:
 			return {"is_valid": false, "coords": []}
 
+func is_valid_center(target:HexTileData, options: Array[Placement]) -> bool:
+	return options.find_custom(
+		func(option):return option.element == target.element && option.level == target.level
+	) != -1
 
 func check_bonus_pattern(
 	coord: Vector2i,
@@ -67,11 +73,6 @@ func check_bonus_pattern(
 		"is_valid": false,
 		"coords": []
 	}
-
-func is_valid_center(target:HexTileData, options: Array[Placement]) -> bool:
-	return options.find_custom(
-		func(option):return option.element == target.element && option.level == target.level
-	) != -1
 
 func is_valid_bonus_tile(tile: HexTileData, requirement:Placement) -> bool:
 	return tile.element == requirement.element and tile.level == requirement.level

@@ -6,8 +6,12 @@ var elements: Array[CardData]
 var animals: Array[CardData]
 
 # Called when the node enters the scene tree for the first time.
+## ----- Initialisation ----- ##
+
 func _ready() -> void:
 	load_cards()
+
+## ----- Loading Logic ----- ##
 
 func load_cards():
 	if not FileAccess.file_exists(path):
@@ -22,6 +26,8 @@ func load_cards():
 		elements.append(parse_card(element))
 	for animal in parsed.animals:
 		animals.append(parse_card(animal))
+
+## ----- Parsing Logic ----- ##
 
 func parse_card(card:Dictionary) -> CardData:
 	var card_data := CardData.new()

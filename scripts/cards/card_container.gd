@@ -23,13 +23,13 @@ func init(parent_:Node, limit:int) -> void:
 	parent = parent_
 	cards.resize(limit)
 
-## ----- Pass Interactions and Data Upstream ----- ##
+## ----- Pass Data Upstream ----- ##
 
 func select_card(id:int) -> void:
 	cards[id].select()
 	parent.select_card(id)
 
-## ----- Pass Interactions and Data Downstream ----- ##
+## ----- Pass Data Downstream ----- ##
 
 func deselect_card(id) -> void:
 	cards[id].deselect()
@@ -58,7 +58,7 @@ func increment_card(id:int) -> void:
 func decrement_card(id:int) -> void:
 	cards[id].decrement()
 
-## ----- Handle Hover logic ----- ##
+## ----- Hover Logic ----- ##
 
 func hover_card(id:int) -> void:
 	if hover_card_id == -1:
@@ -141,6 +141,8 @@ func _layout_cards() -> void:
 			card.play_spawn_animation(target_pos, angle, i * 2)
 		else:
 			card.apply_layout(target_pos, angle, i * 2)
+
+## ----- Utility Logic ----- ##
 
 func _center_out_slot(i: int) -> int:
 	if i == 0:

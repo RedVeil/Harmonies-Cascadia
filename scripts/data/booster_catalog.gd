@@ -6,8 +6,12 @@ const path = "res://data/booster_catalog.json"
 
 var booster_options: Array[BoosterOption] = []
 
+## ----- Initialisation ----- ##
+
 func _ready() -> void:
 	build_booster_options()
+
+## ----- Loading Logic ----- ##
 
 func build_booster_options() -> bool:
 	if not FileAccess.file_exists(path):
@@ -22,6 +26,8 @@ func build_booster_options() -> bool:
 		booster_options.append(parse_booster_option(option))
 		
 	return true
+
+## ----- Parsing Logic ----- ##
 
 func parse_booster_option(option:Dictionary) -> BoosterOption:
 	var booster_option := BoosterOption.new()

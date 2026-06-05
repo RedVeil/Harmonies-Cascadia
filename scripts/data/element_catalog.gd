@@ -5,8 +5,12 @@ var path = "res://data/element_catalog.json"
 var elements: Array[Element]
 
 # Called when the node enters the scene tree for the first time.
+## ----- Initialisation ----- ##
+
 func _ready() -> void:
 	load_elements()
+
+## ----- Loading Logic ----- ##
 
 func load_elements():
 	if not FileAccess.file_exists(path):
@@ -18,6 +22,8 @@ func load_elements():
 		return false
 	for element in parsed:
 		elements.append(parse_element(element))
+
+## ----- Parsing Logic ----- ##
 
 func parse_element(element:Dictionary) -> Element:
 	var element_data := Element.new()

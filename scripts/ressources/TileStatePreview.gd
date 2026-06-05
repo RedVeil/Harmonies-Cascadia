@@ -7,6 +7,8 @@ var tile_data:HexTileData
 var points_diff: int = 0
 var contributing_coords: Array[Vector2i] = []
 
+## ----- Initialisation ----- ##
+
 func _init(initial_data: Dictionary = {}) -> void:
 	is_valid = initial_data.is_valid
 	coord = initial_data.coord

@@ -23,7 +23,7 @@ var prev_contributing_tiles : Array[Vector2i]
 func init(parent:HexManager) -> void:
 	hex_manager = parent
 
-## ----- Tile Creation ----- ##
+## ----- Tile Creation Logic ----- ##
 
 func create_tile(coord: Vector2i) -> void:
 	var tile := hex_tile.instantiate() as Node3D
@@ -33,7 +33,7 @@ func create_tile(coord: Vector2i) -> void:
 	tile.position = HexCoord.axial_to_world(coord, hex_size)
 	tiles_by_coord[coord] = tile
 
-## ----- Pass tile interactions upstream ----- ##
+## ----- Pass Data Upstream ----- ##
 
 func handle_hover(coord: Vector2i) -> void:
 	## reset previous tile and contributing tiles
@@ -59,7 +59,7 @@ func handle_exit(coord: Vector2i) -> void:
 func handle_click(coord:Vector2i) -> void:
 	hex_manager.handle_click(coord)
 
-## ----- Pass tile interactions downstream ----- ##
+## ----- Pass Data Downstream ----- ##
 
 func apply_preview(preview:TileStatePreview) -> void:
 	if preview.is_valid:
@@ -105,8 +105,8 @@ func undo(coord:Vector2i) -> void:
 	
 	reset_tile_visuals(coord)
 	reset_contributing_tiles()
-	
-## ----- Tile Preview Functions ----- ##
+
+## ----- Tile Preview Logic ----- ##
 
 func apply_target_preview_visuals(preview:TileStatePreview) -> void:
 	var new_visuals = HexTileVisuals.new()
@@ -151,7 +151,7 @@ func show_neutral_preview(preview: TileStatePreview) -> void:
 	tiles_by_coord[hover_target].show_outline(Color.WHITE)
 	tiles_by_coord[hover_target].show_points(preview.points_diff)
 
-## ----- Reset Functions ----- ##
+## ----- Reset Logic ----- ##
 
 func reset_tile_visuals(coord:Vector2i) -> void:
 	var target = tiles_by_coord[coord]

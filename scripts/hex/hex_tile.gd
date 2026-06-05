@@ -4,6 +4,7 @@ class_name HexTile
 const SCORE_POP_BASE_Y := 3.367
 
 @export_group("Place Score Pop Animation")
+@export var score_pop_sounds: Array[AudioStream] = []
 @export var score_pop_rise: float = 1.35
 @export var score_pop_peak_scale: float = 0.58
 @export var score_pop_up_duration: float = 0.18
@@ -12,24 +13,25 @@ const SCORE_POP_BASE_Y := 3.367
 @export var score_pop_fade_delay: float = 0.35
 
 @export_group("Outline Flash Animation")
+@export var outline_sounds: Array[AudioStream] = []
 @export var outline_flash_color: Color = Color(1.0, 0.9, 0.45, 1.0)
 @export var outline_flash_fade_duration: float = 0.45
 
 @export_group("Place Celebrate Animation")
+@export var place_celebrate_sounds: Array[AudioStream] = []
 @export var placed_lift: float = 0.15
 @export var placed_scale_peak: float = 1.04
 @export var placed_glow: float = 0.24
 @export var placed_rise_duration: float = 0.24
 @export var placed_settle_duration: float = 0.3
-@export var place_celebrate_play_sound: bool = true
 
 @export_group("Contributor Celebrate Animation")
+@export var contributor_sounds: Array[AudioStream] = []
 @export var contributor_lift: float = 0.09
 @export var contributor_scale_peak: float = 1.022
 @export var contributor_glow: float = 0.14
 @export var contributor_rise_duration: float = 0.2
 @export var contributor_settle_duration: float = 0.26
-@export var contributor_play_sound: bool = true
 
 var container : HexTileContainer
 var coord : Vector2i
@@ -58,7 +60,7 @@ func init(parent:HexTileContainer, location:Vector2i) -> void:
 	container = parent
 	coord = location
 
-## ----- Interaction Logic ----- ##
+## ----- Interactions Logic ----- ##
 
 func _on_mouse_entered() -> void:
 	container.handle_hover(coord)
@@ -79,7 +81,7 @@ func _on_input_event(
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			container.handle_click(coord)
 
-## ----- Update Visuals ----- ##
+## ----- Update Visuals Logic ----- ##
 
 func update_visuals(new_visuals:HexTileVisuals) -> void:
 	visuals = new_visuals
@@ -117,7 +119,7 @@ func show_outline(color:Color) -> void:
 func hide_outline() -> void:
 	$visuals/MeshInstance3D/outline.hide()
 
-## ----- Placement reward ----- ##
+## ----- Animations ----- ##
 
 func play_place_reward(points: int, element: int) -> void:
 	play_animation(&"place", {"points": points, "element": element})
@@ -142,8 +144,6 @@ func kill_animations() -> void:
 	_reset_outline_visuals()
 
 func _animate_place(points: int, element: int) -> void:
-	if place_celebrate_play_sound:
-		GameFeedback.play_place_tile()
 	if points != 0:
 		_animate_score_pop(points)
 	_animate_outline_flash(0.0)
@@ -151,13 +151,12 @@ func _animate_place(points: int, element: int) -> void:
 		_animate_celebrate(true, 0.0)
 
 func _animate_contributor(element: int, delay: float) -> void:
-	if contributor_play_sound:
-		GameFeedback.play_tile_contributor()
 	_animate_outline_flash(delay)
 	if element != GameEnums.ELEMENT.NONE:
 		_animate_celebrate(false, delay)
 
 func _animate_score_pop(points: int) -> void:
+	FeedbackAnimHelper.play_sounds(score_pop_sounds)
 	var sprite: Sprite3D = $visuals/Sprite3D
 	var label: Label3D = $visuals/Sprite3D/Label3D
 	if points > 0:
@@ -181,6 +180,7 @@ func _animate_score_pop(points: int) -> void:
 	tween.finished.connect(_reset_score_pop_visuals)
 
 func _animate_outline_flash(delay: float) -> void:
+	FeedbackAnimHelper.play_sounds(outline_sounds)
 	var outline: Sprite3D = $visuals/MeshInstance3D/outline
 	outline.modulate = outline_flash_color
 	outline.show()
@@ -193,6 +193,10 @@ func _animate_outline_flash(delay: float) -> void:
 	tween.finished.connect(_reset_outline_visuals)
 
 func _animate_celebrate(strong: bool, delay: float) -> void:
+	if strong:
+		FeedbackAnimHelper.play_sounds(place_celebrate_sounds)
+	else:
+		FeedbackAnimHelper.play_sounds(contributor_sounds)
 	var tile_visuals: Node3D = $visuals
 	var mesh: MeshInstance3D = $visuals/StylizedHexTile
 	var material := mesh.material_override as StandardMaterial3D

@@ -2,6 +2,8 @@ class_name FeedbackAnimHelper
 
 ## Shared tween lifecycle for scene-local feedback animations.
 
+## ----- Tween Lifecycle ----- ##
+
 static func set_tween(tweens: Dictionary, key: StringName, tween: Tween) -> void:
 	if tweens.has(key):
 		var existing: Tween = tweens[key]
@@ -27,3 +29,8 @@ static func create_tween(
 		tween.set_parallel(true)
 	set_tween(tweens, key, tween)
 	return tween
+
+static func play_sounds(sounds: Array[AudioStream]) -> void:
+	if sounds.is_empty():
+		return
+	GameFeedback.play_sounds(sounds)

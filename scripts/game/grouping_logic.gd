@@ -1,6 +1,8 @@
 extends Node
 class_name GroupingLogic
 
+## ----- Grouping Logic ----- ##
+
 func group_by_element(
 	coord:Vector2i, 
 	element:int, 

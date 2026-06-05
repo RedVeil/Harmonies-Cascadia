@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bjm1olkvh12fl" path="res://assets/hex_full.png" id="2_p4set"]
 [ext_resource type="Shader" uid="uid://bhkvpga6ortsm" path="res://assets/shader/hex_progress_bar.gdshader" id="3_qn64k"]
 [ext_resource type="Texture2D" uid="uid://ow2orhvmiym8" path="res://assets/hex_outline_bold.png" id="4_ci8s0"]
+[ext_resource type="AudioStream" uid="uid://d4nxe12i1lx46" path="res://assets/audio/chime_sound.mp3" id="5_score"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_iqdn0"]
 shader = ExtResource("3_qn64k")
@@ -35,6 +36,7 @@ shadow_size = 4
 
 [node name="PointCounter" type="Node2D" unique_id=1020461036]
 script = ExtResource("1_iwanl")
+score_reward_sounds = Array[AudioStream]([ExtResource("5_score")])
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=834061608]
 self_modulate = Color(0.9137255, 0.8352941, 0.7607843, 1)

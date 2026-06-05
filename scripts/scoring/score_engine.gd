@@ -27,7 +27,7 @@ func _ready() -> void:
 		active_rules[element.type] = RuleCatalog.rules[rule_id]
 		element.active_scoring_rule = rule_id
 
-## ----- Initialisation ----- ##
+## ----- Scoring Logic ----- ##
 
 func calc_total_group_score(excluded_groups:Array[int]) -> int:
 	var result : int = 0
@@ -117,6 +117,8 @@ func calculate_element_special_shortest_route(coords: Array[Vector2i], rule:Scor
 		return rule_specs.points[rule_specs.points.size()-1] + (diff * rule_specs.extra_points)
 	else:
 		return rule_specs.points[path.size()-1]
+
+## ----- Path Finding Logic ----- ##
 
 func find_longest_path(coords: Array[Vector2i]) -> Array[Vector2i]:
 	if coords.is_empty():

@@ -7,11 +7,7 @@ class_name CardRecycling
 var is_hovered : bool = false
 var timer : float = 0.5
 
-func _process(delta:float) -> void:
-	if is_hovered:
-		timer -= delta
-		if timer <= 0.0:
-			$Tooltip.show()
+## ----- Interactions Logic ----- ##
 
 func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
 	if event is InputEventMouseButton:
@@ -32,3 +28,11 @@ func _on_mouse_exited() -> void:
 	is_hovered = false
 	timer = 0.5
 	$Tooltip.hide()
+
+## ----- Tooltip Logic ----- ##
+
+func _process(delta:float) -> void:
+	if is_hovered:
+		timer -= delta
+		if timer <= 0.0:
+			$Tooltip.show()
