@@ -3,6 +3,7 @@ class_name HexTileContainer
 
 @export var hex_tile : PackedScene
 @export var hex_size: float = 2.0
+@export var contributor_stagger: float = 0.06
 
 var hex_manager : HexManager
 
@@ -80,17 +81,16 @@ func play_placement_reward(
 	points: int,
 	contributing_coords: Array[Vector2i]
 ) -> void:
-	if !tiles_by_coord.has(coord):
-		return
-	var placed_element := hex_manager.tiles[coord].element
-	tiles_by_coord[coord].play_score_reward(points, placed_element)
-	var flash_delay := 0.0
-	for contributor in contributing_coords:
-		if contributor == coord or !tiles_by_coord.has(contributor):
-			continue
-		var element := hex_manager.tiles[contributor].element
-		tiles_by_coord[contributor].play_contributor_reward(element, flash_delay)
-		flash_delay += GameFeedback.settings.contributor_stagger
+	tiles_by_coord[coord].play_place_reward(points, hex_manager.tiles[coord].element)
+	
+	if points != 0:
+		var flash_delay := 0.0
+		for contributor in contributing_coords:
+			if contributor == coord or !tiles_by_coord.has(contributor):
+				continue
+			var element := hex_manager.tiles[contributor].element
+			tiles_by_coord[contributor].play_contributor_reward(element, flash_delay)
+			flash_delay += contributor_stagger
 
 func reset_preview(coord:Vector2i) -> void:
 	new_target_visuals = prev_target_visuals.duplicate(true)
@@ -99,6 +99,8 @@ func reset_preview(coord:Vector2i) -> void:
 	reset_contributing_tiles()
 
 func undo(coord:Vector2i) -> void:
+	for tile in tiles_by_coord.values():
+		tile.kill_animations()
 	prev_target_visuals = backup_target_visuals.duplicate(true)
 	
 	reset_tile_visuals(coord)
@@ -153,6 +155,7 @@ func show_neutral_preview(preview: TileStatePreview) -> void:
 
 func reset_tile_visuals(coord:Vector2i) -> void:
 	var target = tiles_by_coord[coord]
+	target.kill_animations()
 	target.update_visuals(prev_target_visuals)
 	target.hide_outline()
 	target.hide_points()

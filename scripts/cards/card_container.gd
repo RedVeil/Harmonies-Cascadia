@@ -138,7 +138,7 @@ func _layout_cards() -> void:
 
 		var target_pos := Vector2(x, y)
 		if card.consume_spawn_layout():
-			card.play_spawn_layout_motion(target_pos, angle, i * 2)
+			card.play_spawn_animation(target_pos, angle, i * 2)
 		else:
 			card.apply_layout(target_pos, angle, i * 2)
 

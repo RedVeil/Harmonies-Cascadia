@@ -6,6 +6,16 @@ class_name Card
 @export var hover_height: float = 12.0
 @export var exit_tween_duration: float = 0.3
 
+@export_group("Spawn Animation")
+@export var spawn_duration: float = 0.35
+@export var spawn_origin: Vector2 = Vector2.ZERO
+@export var spawn_play_sound: bool = true
+
+@export_group("Redraw Animation")
+@export var redraw_duration: float = 0.22
+@export var redraw_peak_scale: float = 1.12
+@export var redraw_play_sound: bool = true
+
 @onready var visuals : Node2D = $visuals
 @onready var collision : CollisionShape2D = $CollisionShape2D
 @onready var placement_tooltip : PlacementTooltip = $PlacementTooltip
@@ -124,7 +134,7 @@ func increment() -> void:
 	if stack_amount < 10:
 		stack_amount += 1
 		$visuals/Label.text = "x %d " % stack_amount
-		GameFeedback.run_hand_card_redraw(self)
+		play_redraw_animation()
 
 func decrement() -> void:
 	if stack_amount > 0:
@@ -156,52 +166,88 @@ func deselect() -> void:
 	reset_select_visuals()
 
 func remove_card() -> void:
+	kill_animations()
 	queue_free()
 
-## ----- Hand feedback (delegates to GameFeedback autoload) ----- ##
+## ----- Animations ----- ##
 
-func set_feedback_tween(key: StringName, tween: Tween) -> void:
-	if _feedback_tweens.has(key):
-		var existing: Tween = _feedback_tweens[key]
-		if existing.is_valid():
-			existing.kill()
-	_feedback_tweens[key] = tween
+func play_spawn_animation(target_pos: Vector2, target_angle: float, z: int) -> void:
+	play_animation(&"spawn", {
+		"target_pos": target_pos,
+		"target_angle": target_angle,
+		"z": z,
+	})
 
-func play_spawn_layout_motion(target_pos: Vector2, target_angle: float, z: int) -> void:
-	GameFeedback.run_hand_card_spawn(self, target_pos, target_angle, z)
+func play_redraw_animation() -> void:
+	if _spawn_active:
+		return
+	play_animation(&"redraw", {})
+
+func play_animation(name: StringName, params: Dictionary) -> void:
+	match name:
+		&"spawn":
+			_animate_spawn(
+				params.get("target_pos", position),
+				params.get("target_angle", rotation_degrees),
+				params.get("z", base_z_index)
+			)
+		&"redraw":
+			_animate_redraw()
+
+func kill_animations() -> void:
+	FeedbackAnimHelper.kill_all(_feedback_tweens)
+	_spawn_active = false
+	_redraw_active = false
 
 func is_spawn_feedback_active() -> bool:
 	return _spawn_active
-
-func begin_spawn_feedback() -> void:
-	_spawn_active = true
-
-func end_spawn_feedback(target_pos: Vector2, target_angle: float) -> void:
-	_spawn_active = false
-	position = target_pos
-	rotation_degrees = target_angle
-	visuals.scale = target_scale
-
-func reset_spawn_visuals() -> void:
-	visuals.scale = Vector2.ZERO
-	visuals.modulate = Color(1.0, 1.0, 1.0, 0.0)
-
-func begin_redraw_feedback() -> void:
-	_redraw_active = true
-
-func end_redraw_feedback() -> void:
-	_redraw_active = false
 
 func apply_layout(target_pos: Vector2, target_angle: float, z: int) -> void:
 	set_z(z)
 	position = target_pos
 	rotation_degrees = target_angle
 
-#func setNormalState():
-	#if exit_tween and exit_tween.is_valid():
-		#exit_tween.kill()
-	#exit_tween = get_tree().create_tween()
-	#exit_tween.tween_property($visuals/background.material, "shader_parameter/_mousePos", Vector2.ZERO, exit_tween_duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+func _animate_spawn(target_pos: Vector2, target_angle: float, z: int) -> void:
+	if spawn_play_sound:
+		GameFeedback.play_draw_card()
+
+	_spawn_active = true
+	set_z(z)
+	position = spawn_origin
+	rotation_degrees = 0.0
+	visuals.scale = Vector2.ZERO
+	visuals.modulate = Color(1.0, 1.0, 1.0, 0.0)
+
+	var tween := FeedbackAnimHelper.create_tween(self, _feedback_tweens, &"spawn", true)
+	tween.tween_property(visuals, "scale", base_scale, spawn_duration)\
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(visuals, "modulate", Color.WHITE, spawn_duration * 0.75)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.tween_property(self, "position", target_pos, spawn_duration)\
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tween.tween_property(self, "rotation_degrees", target_angle, spawn_duration)\
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tween.finished.connect(func() -> void:
+		_spawn_active = false
+		position = target_pos
+		rotation_degrees = target_angle
+		visuals.scale = target_scale
+	)
+
+func _animate_redraw() -> void:
+	if redraw_play_sound:
+		GameFeedback.play_draw_card()
+
+	_redraw_active = true
+	var peak_scale := base_scale * redraw_peak_scale
+	var tween := FeedbackAnimHelper.create_tween(self, _feedback_tweens, &"redraw")
+	tween.tween_property(visuals, "scale", peak_scale, redraw_duration * 0.35)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.tween_property(visuals, "scale", target_scale, redraw_duration * 0.65)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tween.finished.connect(func() -> void:
+		_redraw_active = false
+	)
 
 func set_z(z:int) -> void:
 	base_z_index = z

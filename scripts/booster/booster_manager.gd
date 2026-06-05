@@ -11,6 +11,14 @@ class_name BoosterManager
 @export var start_booster_points:int = 3
 @export var random_secondary_chance: float = 50.0
 
+@export_group("Points Reward Animation")
+@export var punch_scale: float = 1.14
+@export var punch_up_duration: float = 0.12
+@export var punch_settle_duration: float = 0.2
+@export var progress_base_scale: Vector2 = Vector2(0.15, 0.15)
+@export var progress_peak_scale: Vector2 = Vector2(0.165, 0.165)
+@export var points_reward_play_sound: bool = true
+
 var booster_point_cost:int = 0
 var booster_points:int = 0
 var acc_points:int = 0
@@ -31,7 +39,7 @@ var booster_chances : Array[float] = []
 var is_hovered : bool = false
 var timer : float = 0.5
 
-var _reward_tween : Tween
+var _feedback_tweens: Dictionary = {}
 
 var booster_label : Label
 var booster_progress_sprite : Sprite2D
@@ -150,28 +158,49 @@ func apply_booster_points(animate_reward: bool = false) -> void:
 	booster_point_cost = booster_point_cost_preview
 	apply_current_style()
 	if animate_reward and (gained_points > 0 or gained_acc > 0):
-		GameFeedback.run_booster_reward(self)
+		play_animation(&"points_reward", {})
+
+func play_animation(name: StringName, _params: Dictionary) -> void:
+	match name:
+		&"points_reward":
+			_animate_points_reward()
+
+func kill_animations() -> void:
+	FeedbackAnimHelper.kill_all(_feedback_tweens)
+	apply_current_style()
+
+func _animate_points_reward() -> void:
+	FeedbackAnimHelper.kill_all(_feedback_tweens)
+	if points_reward_play_sound:
+		GameFeedback.play_points_scored()
+
+	ensure_hex_label_pivot()
+	booster_label.scale = Vector2.ONE
+	booster_progress_sprite.scale = progress_base_scale
+
+	var tween := FeedbackAnimHelper.create_tween(self, _feedback_tweens, &"punch")
+	tween.set_parallel(true)
+	tween.tween_property(booster_label, "scale", Vector2(punch_scale, punch_scale), punch_up_duration)\
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(booster_progress_sprite, "scale", progress_peak_scale, punch_up_duration)\
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.chain().tween_property(booster_label, "scale", Vector2.ONE, punch_settle_duration)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tween.parallel().tween_property(booster_progress_sprite, "scale", progress_base_scale, punch_settle_duration)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 
 func ensure_hex_label_pivot() -> void:
 	booster_label.pivot_offset = booster_label.size * 0.5
 
-func set_reward_tween(tween: Tween) -> void:
-	if _reward_tween and _reward_tween.is_valid():
-		_reward_tween.kill()
-	_reward_tween = tween
-
-func kill_reward_tween() -> void:
-	if _reward_tween and _reward_tween.is_valid():
-		_reward_tween.kill()
-	_reward_tween = null
-
 func reset_preview() -> void:
+	kill_animations()
 	booster_points_preview = booster_points
 	acc_points_preview = acc_points
 	booster_point_cost_preview = booster_point_cost
 	apply_current_style()
 
 func undo() -> void:
+	kill_animations()
 	change_booster_points(booster_points_backup - booster_points)
 	acc_points = acc_points_backup
 	booster_point_cost = booster_point_cost_backup
