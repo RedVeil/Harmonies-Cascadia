@@ -1,0 +1,16 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://cfyi23wjeuoim"]
+
+[ext_resource type="Shader" uid="uid://dpvv5isr0r3cs" path="res://assets/shader/tiles/ground/grass_ground.gdshader" id="1_o4e7w"]
+[ext_resource type="Texture2D" uid="uid://xfapwilgylqf" path="res://assets/tiles/materials/T_FoliageNoise.tres" id="2_o4e7w"]
+
+[sub_resource type="Gradient" id="Gradient_ueev5"]
+colors = PackedColorArray(0.3647059, 0.78039217, 0.49803922, 1, 0.11372549, 0.28627452, 0.16862746, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_mieq4"]
+gradient = SubResource("Gradient_ueev5")
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_o4e7w")
+shader_parameter/noise_texture = ExtResource("2_o4e7w")
+shader_parameter/color_gradient = SubResource("GradientTexture1D_mieq4")

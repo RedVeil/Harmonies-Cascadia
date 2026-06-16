@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://dhpfo7iq35bqf"]
+
+[ext_resource type="Material" uid="uid://dyhhxsqryhem1" path="res://assets/tiles/materials/lake_mask.tres" id="1_xabng"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_r2lxl"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" unique_id=1440434393]
+mesh = SubResource("PlaneMesh_r2lxl")
+surface_material_override/0 = ExtResource("1_xabng")

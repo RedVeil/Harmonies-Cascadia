@@ -196,9 +196,7 @@ func handle_tile_click(coord: Vector2i) -> void:
 		reset_preview()
 		undo_button.enable()
 		
-		if card_manager.cards[selected_card_id]:
-			handle_tile_hover(coord)
-		else:
+		if not card_manager.cards[selected_card_id]:
 			selected_card_id = -1
 
 

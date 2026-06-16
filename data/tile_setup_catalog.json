@@ -1,0 +1,13 @@
+[
+	{ "element": 0, "level": 0, "setup": "res://assets/tiles/setups/dead_earth_0.tres" },
+	{ "element": 1, "level": 1, "setup": "res://assets/tiles/setups/forest_1.tres" },
+	{ "element": 1, "level": 2, "setup": "res://assets/tiles/setups/forest_2.tres" },
+	{ "element": 1, "level": 3, "setup": "res://assets/tiles/setups/forest_3.tres" },
+	{ "element": 2, "level": 1, "setup": "res://assets/tiles/setups/field_1.tres" },
+	{ "element": 2, "level": 2, "setup": "res://assets/tiles/setups/field_2.tres" },
+	{ "element": 3, "level": 1, "setup": "res://assets/tiles/setups/mountain_1.tres" },
+	{ "element": 3, "level": 2, "setup": "res://assets/tiles/setups/mountain_2.tres" },
+	{ "element": 3, "level": 3, "setup": "res://assets/tiles/setups/mountain_3.tres" },
+	{ "element": 4, "level": 1, "setup": "res://assets/tiles/setups/river_1.tres" },
+	{ "element": 5, "level": 1, "setup": "res://assets/tiles/setups/wetland_1.tres" }
+]

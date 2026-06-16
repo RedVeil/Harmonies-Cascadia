@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="TileSetup" format=3 uid="uid://n24gaese0vp1"]
+
+[ext_resource type="Script" uid="uid://c3lvgpc7kuqep" path="res://scripts/ressources/TileCenterFeature.gd" id="1_0tue4"]
+[ext_resource type="Script" uid="uid://7ktcjexgnhdj" path="res://scripts/ressources/TileScatterLayer.gd" id="3_qfgto"]
+[ext_resource type="Resource" uid="uid://dyp87abnisoo" path="res://assets/tiles/setups/layers/grass_dense.tres" id="4_c16d4"]
+[ext_resource type="PackedScene" uid="uid://bugno0qurovdl" path="res://addons/stylized-nature/Mesh Scenes/Flower_1_Group.tscn" id="5_jkm62"]
+[ext_resource type="PackedScene" uid="uid://bhj8ebwqste5i" path="res://addons/stylized-nature/Mesh Scenes/Grass_Wheat.tscn" id="5_kfpgv"]
+[ext_resource type="PackedScene" uid="uid://c0u0qwp7kcyaq" path="res://addons/stylized-nature/Mesh Scenes/Flower_3_Group.tscn" id="6_emwls"]
+[ext_resource type="PackedScene" uid="uid://cnk6puex2htjj" path="res://addons/stylized-nature/Mesh Scenes/Flower_2_Group.tscn" id="7_0tl8p"]
+[ext_resource type="Script" uid="uid://yva726781osc" path="res://scripts/ressources/TileSetup.gd" id="8_hvevf"]
+[ext_resource type="PackedScene" uid="uid://1wi552q7rsqs" path="res://addons/stylized-nature/Mesh Scenes/Flower_4_Group.tscn" id="9_qfgto"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xxjvv"]
+albedo_color = Color(0.5764706, 0.59607846, 0.21176471, 1)
+
+[sub_resource type="Resource" id="Resource_c16d4"]
+script = ExtResource("3_qfgto")
+mesh_scenes = Array[PackedScene]([ExtResource("5_jkm62"), ExtResource("7_0tl8p"), ExtResource("6_emwls"), ExtResource("9_qfgto")])
+mesh_count_range = Vector2i(15, 20)
+offset = Vector3(0, 2, 0)
+scale = Vector2(0.1, 0.1)
+register_exclusions = false
+cast_shadow = false
+metadata/_custom_type_script = "uid://7ktcjexgnhdj"
+
+[sub_resource type="Resource" id="Resource_r7fur"]
+script = ExtResource("3_qfgto")
+mesh_scenes = Array[PackedScene]([ExtResource("5_kfpgv")])
+mesh_count_range = Vector2i(1000, 1000)
+hex_radius_inset = 0.05
+offset = Vector3(0, 0.1, 0)
+scale = Vector2(0.2, 0.2)
+register_exclusions = false
+metadata/_custom_type_script = "uid://7ktcjexgnhdj"
+
+[resource]
+script = ExtResource("8_hvevf")
+scatter_layers = Array[ExtResource("3_qfgto")]([SubResource("Resource_c16d4"), SubResource("Resource_r7fur"), ExtResource("4_c16d4")])
+ground_material = SubResource("StandardMaterial3D_xxjvv")

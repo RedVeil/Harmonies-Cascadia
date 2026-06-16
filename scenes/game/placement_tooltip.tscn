@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://uspta7a1yqhh"]
 
 [ext_resource type="Script" uid="uid://32xqs6qfvsxg" path="res://scripts/game/placement_tooltip.gd" id="1_kjs7j"]
-[ext_resource type="Texture2D" uid="uid://boew28pgavxmj" path="res://assets/hex_outline.png" id="2_u02uc"]
-[ext_resource type="Texture2D" uid="uid://bjm1olkvh12fl" path="res://assets/hex_full.png" id="3_anuti"]
+[ext_resource type="Texture2D" uid="uid://dj0cp3fpxsnh2" path="res://assets/icons/hex_outline_thin.png" id="2_n22po"]
+[ext_resource type="Texture2D" uid="uid://dra047eyuxuba" path="res://assets/icons/hex.png" id="3_d75bn"]
 [ext_resource type="Texture2D" uid="uid://ba4wr1s7la27a" path="res://assets/elements/a0.png" id="4_n22po"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n22po"]
@@ -32,11 +32,11 @@ visible = false
 position = Vector2(226.66675, 280.00073)
 
 [node name="0" type="Sprite2D" parent="element/1" unique_id=651328904]
-texture = ExtResource("2_u02uc")
+texture = ExtResource("2_n22po")
 
 [node name="Sprite2D" type="Sprite2D" parent="element/1/0" unique_id=2030177039]
 show_behind_parent = true
-texture = ExtResource("3_anuti")
+texture = ExtResource("3_d75bn")
 
 [node name="Sprite2D" type="Sprite2D" parent="element/1/0/Sprite2D" unique_id=452642262]
 
@@ -46,21 +46,21 @@ position = Vector2(236.6665, 300)
 
 [node name="0" type="Sprite2D" parent="element/2" unique_id=159886426]
 position = Vector2(-10, -320)
-texture = ExtResource("2_u02uc")
+texture = ExtResource("2_n22po")
 
 [node name="Sprite2D" type="Sprite2D" parent="element/2/0" unique_id=1414802856]
 show_behind_parent = true
-texture = ExtResource("3_anuti")
+texture = ExtResource("3_d75bn")
 
 [node name="Sprite2D" type="Sprite2D" parent="element/2/0/Sprite2D" unique_id=396614939]
 
 [node name="1" type="Sprite2D" parent="element/2" unique_id=213908890]
 position = Vector2(-10, 250)
-texture = ExtResource("2_u02uc")
+texture = ExtResource("2_n22po")
 
 [node name="Sprite2D" type="Sprite2D" parent="element/2/1" unique_id=1829135287]
 show_behind_parent = true
-texture = ExtResource("3_anuti")
+texture = ExtResource("3_d75bn")
 
 [node name="Sprite2D" type="Sprite2D" parent="element/2/1/Sprite2D" unique_id=1404738430]
 texture = ExtResource("4_n22po")
@@ -94,32 +94,32 @@ scale = Vector2(17.080002, 0.19999999)
 
 [node name="1" type="Sprite2D" parent="element/3" unique_id=816770408]
 position = Vector2(40, -30)
-texture = ExtResource("2_u02uc")
+texture = ExtResource("2_n22po")
 
 [node name="Sprite2D" type="Sprite2D" parent="element/3/1" unique_id=1819856055]
 show_behind_parent = true
-texture = ExtResource("3_anuti")
+texture = ExtResource("3_d75bn")
 
 [node name="Sprite2D" type="Sprite2D" parent="element/3/1/Sprite2D" unique_id=1649905963]
 
 [node name="0" type="Sprite2D" parent="element/3" unique_id=540774914]
 position = Vector2(-252, -400.00024)
-texture = ExtResource("2_u02uc")
+texture = ExtResource("2_n22po")
 
 [node name="Sprite2D" type="Sprite2D" parent="element/3/0" unique_id=2136642677]
 show_behind_parent = true
-texture = ExtResource("3_anuti")
+texture = ExtResource("3_d75bn")
 
 [node name="Sprite2D" type="Sprite2D" parent="element/3/0/Sprite2D" unique_id=1199683616]
 texture = ExtResource("4_n22po")
 
 [node name="2" type="Sprite2D" parent="element/3" unique_id=732471621]
 position = Vector2(302, 360)
-texture = ExtResource("2_u02uc")
+texture = ExtResource("2_n22po")
 
 [node name="Sprite2D" type="Sprite2D" parent="element/3/2" unique_id=233860905]
 show_behind_parent = true
-texture = ExtResource("3_anuti")
+texture = ExtResource("3_d75bn")
 
 [node name="Sprite2D" type="Sprite2D" parent="element/3/2/Sprite2D" unique_id=1401845861]
 
@@ -130,11 +130,11 @@ scale = Vector2(0.09, 0.09)
 
 [node name="(0,0)" type="Sprite2D" parent="animal" unique_id=1735063232]
 visible = false
-texture = ExtResource("2_u02uc")
+texture = ExtResource("2_n22po")
 
 [node name="Sprite2D" type="Sprite2D" parent="animal/(0,0)" unique_id=1954690576]
 show_behind_parent = true
-texture = ExtResource("3_anuti")
+texture = ExtResource("3_d75bn")
 
 [node name="Sprite2D" type="Sprite2D" parent="animal/(0,0)/Sprite2D" unique_id=1105912998]
 texture = ExtResource("4_n22po")
@@ -143,11 +143,11 @@ texture = ExtResource("4_n22po")
 visible = false
 position = Vector2(-310, -180)
 scale = Vector2(0.99999976, 0.99999976)
-texture = ExtResource("2_u02uc")
+texture = ExtResource("2_n22po")
 
 [node name="Sprite2D" type="Sprite2D" parent="animal/(-1,1)" unique_id=1763269611]
 show_behind_parent = true
-texture = ExtResource("3_anuti")
+texture = ExtResource("3_d75bn")
 
 [node name="Sprite2D" type="Sprite2D" parent="animal/(-1,1)/Sprite2D" unique_id=102002661]
 
@@ -155,11 +155,11 @@ texture = ExtResource("3_anuti")
 visible = false
 position = Vector2(4.7683716e-07, -360.00003)
 scale = Vector2(0.99999976, 0.99999976)
-texture = ExtResource("2_u02uc")
+texture = ExtResource("2_n22po")
 
 [node name="Sprite2D" type="Sprite2D" parent="animal/(0,1)" unique_id=451015918]
 show_behind_parent = true
-texture = ExtResource("3_anuti")
+texture = ExtResource("3_d75bn")
 
 [node name="Sprite2D" type="Sprite2D" parent="animal/(0,1)/Sprite2D" unique_id=824968731]
 
@@ -167,11 +167,11 @@ texture = ExtResource("3_anuti")
 visible = false
 position = Vector2(-310, 180.00003)
 scale = Vector2(0.99999976, 0.99999976)
-texture = ExtResource("2_u02uc")
+texture = ExtResource("2_n22po")
 
 [node name="Sprite2D" type="Sprite2D" parent="animal/(-1,0)" unique_id=667345882]
 show_behind_parent = true
-texture = ExtResource("3_anuti")
+texture = ExtResource("3_d75bn")
 
 [node name="Sprite2D" type="Sprite2D" parent="animal/(-1,0)/Sprite2D" unique_id=2073218465]
 
@@ -179,11 +179,11 @@ texture = ExtResource("3_anuti")
 visible = false
 position = Vector2(0, 360)
 scale = Vector2(0.99999994, 0.99999994)
-texture = ExtResource("2_u02uc")
+texture = ExtResource("2_n22po")
 
 [node name="Sprite2D" type="Sprite2D" parent="animal/(0,-1)" unique_id=367155196]
 show_behind_parent = true
-texture = ExtResource("3_anuti")
+texture = ExtResource("3_d75bn")
 
 [node name="Sprite2D" type="Sprite2D" parent="animal/(0,-1)/Sprite2D" unique_id=1266278401]
 
@@ -191,11 +191,11 @@ texture = ExtResource("3_anuti")
 visible = false
 position = Vector2(310, 179.99998)
 scale = Vector2(0.99999994, 0.99999994)
-texture = ExtResource("2_u02uc")
+texture = ExtResource("2_n22po")
 
 [node name="Sprite2D" type="Sprite2D" parent="animal/(1,-1)" unique_id=1268768387]
 show_behind_parent = true
-texture = ExtResource("3_anuti")
+texture = ExtResource("3_d75bn")
 
 [node name="Sprite2D" type="Sprite2D" parent="animal/(1,-1)/Sprite2D" unique_id=1987717354]
 
@@ -203,11 +203,11 @@ texture = ExtResource("3_anuti")
 visible = false
 position = Vector2(310, -180)
 scale = Vector2(0.99999994, 0.99999994)
-texture = ExtResource("2_u02uc")
+texture = ExtResource("2_n22po")
 
 [node name="Sprite2D" type="Sprite2D" parent="animal/(1,0)" unique_id=730694205]
 show_behind_parent = true
-texture = ExtResource("3_anuti")
+texture = ExtResource("3_d75bn")
 
 [node name="Sprite2D" type="Sprite2D" parent="animal/(1,0)/Sprite2D" unique_id=615137148]
 

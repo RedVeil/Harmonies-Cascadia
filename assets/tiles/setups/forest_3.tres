@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="TileSetup" format=3 uid="uid://d3ol8mx1j8nhg"]
+
+[ext_resource type="Script" uid="uid://c3lvgpc7kuqep" path="res://scripts/ressources/TileCenterFeature.gd" id="1_3hygu"]
+[ext_resource type="Script" uid="uid://7ktcjexgnhdj" path="res://scripts/ressources/TileScatterLayer.gd" id="3_xukq1"]
+[ext_resource type="PackedScene" uid="uid://pfh8uwte87wm" path="res://assets/tiles/assets/tree/common/tree6.tscn" id="14_36u2k"]
+[ext_resource type="Script" uid="uid://yva726781osc" path="res://scripts/ressources/TileSetup.gd" id="15_bigab"]
+[ext_resource type="Resource" uid="uid://dyp87abnisoo" path="res://assets/tiles/setups/layers/grass_dense.tres" id="18_h4ihv"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_67yjm"]
+albedo_color = Color(0.22581571, 0.34224916, 0.14340612, 1)
+
+[sub_resource type="Resource" id="Resource_m0wap"]
+script = ExtResource("3_xukq1")
+mesh_scenes = Array[PackedScene]([ExtResource("14_36u2k")])
+mesh_count_range = Vector2i(12, 15)
+hex_radius_inset = 0.05
+offset = Vector3(0, -1, 0)
+scale = Vector2(0.15, 0.2)
+use_jittered_grid = true
+register_exclusions = false
+metadata/_custom_type_script = "uid://7ktcjexgnhdj"
+
+[resource]
+script = ExtResource("15_bigab")
+scatter_layers = Array[ExtResource("3_xukq1")]([SubResource("Resource_m0wap"), ExtResource("18_h4ihv")])
+ground_material = SubResource("StandardMaterial3D_67yjm")

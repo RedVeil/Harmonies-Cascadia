@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="TileSetup" format=3 uid="uid://bo45yi472l2wj"]
+
+[ext_resource type="Script" uid="uid://yva726781osc" path="res://scripts/ressources/TileSetup.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://c3lvgpc7kuqep" path="res://scripts/ressources/TileCenterFeature.gd" id="1_xbgx5"]
+[ext_resource type="Script" uid="uid://7ktcjexgnhdj" path="res://scripts/ressources/TileScatterLayer.gd" id="3_jflls"]
+[ext_resource type="PackedScene" uid="uid://dc5ghrhms7mbl" path="res://assets/tiles/assets/mountain/SM_3DT_Mountain_20_Grass.fbx" id="3_x2wr6"]
+[ext_resource type="PackedScene" uid="uid://wxksel43hkcu" path="res://assets/tiles/assets/mountain/SM_3DT_Mountain_16_Grass.fbx" id="4_w6abd"]
+[ext_resource type="Resource" uid="uid://dyp87abnisoo" path="res://assets/tiles/setups/layers/grass_dense.tres" id="6_w6abd"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jflls"]
+albedo_color = Color(0.6, 0.4509804, 0.16078432, 1)
+
+[sub_resource type="Resource" id="Resource_1mrr3"]
+script = ExtResource("1_xbgx5")
+scene = ExtResource("3_x2wr6")
+scale = Vector3(1.8, 2, 1.8)
+material = SubResource("StandardMaterial3D_jflls")
+register_exclusions = false
+metadata/_custom_type_script = "uid://c3lvgpc7kuqep"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w6abd"]
+albedo_color = Color(0.6, 0.4509804, 0.16078432, 1)
+
+[sub_resource type="Resource" id="Resource_x2wr6"]
+script = ExtResource("1_xbgx5")
+scene = ExtResource("4_w6abd")
+scale = Vector3(1.2, 1.5, 1.2)
+material = SubResource("StandardMaterial3D_w6abd")
+register_exclusions = false
+metadata/_custom_type_script = "uid://c3lvgpc7kuqep"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x2wr6"]
+albedo_color = Color(0.63529414, 0.43137255, 0.101960786, 1)
+
+[resource]
+script = ExtResource("1_script")
+scatter_layers = Array[ExtResource("3_jflls")]([ExtResource("6_w6abd")])
+ground_material = SubResource("StandardMaterial3D_x2wr6")
+exclusion_padding = 0.01
+center_features = Array[ExtResource("1_xbgx5")]([SubResource("Resource_1mrr3"), SubResource("Resource_x2wr6")])

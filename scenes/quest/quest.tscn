@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://sgh5slp0kent"]
 
 [ext_resource type="Script" uid="uid://b16i1d16uk2fx" path="res://scripts/quests/quest.gd" id="1_yxvbt"]
-[ext_resource type="Texture2D" uid="uid://bjm1olkvh12fl" path="res://assets/hex_full.png" id="2_s5vew"]
+[ext_resource type="Texture2D" uid="uid://dra047eyuxuba" path="res://assets/icons/hex.png" id="2_s5vew"]
 [ext_resource type="Texture2D" uid="uid://ba4wr1s7la27a" path="res://assets/elements/a0.png" id="3_58lxg"]
-[ext_resource type="Shader" uid="uid://bhkvpga6ortsm" path="res://assets/shader/hex_progress_bar.gdshader" id="4_ggv8q"]
-[ext_resource type="Texture2D" uid="uid://ow2orhvmiym8" path="res://assets/hex_outline_bold.png" id="5_bl7d4"]
+[ext_resource type="Shader" uid="uid://bhkvpga6ortsm" path="res://assets/shader/cards/hex_progress_bar.gdshader" id="4_ggv8q"]
+[ext_resource type="Texture2D" uid="uid://b77eea30ut0so" path="res://assets/icons/hex_outline_bold.png" id="5_bl7d4"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_5jh4a"]
 radius = 21.0

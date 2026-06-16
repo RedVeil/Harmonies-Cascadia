@@ -29,6 +29,27 @@ static func neighbors(c: Vector2i) -> Array[Vector2i]:
 		out.append(c + dir)
 	return out
 
+
+static func direction_to_yaw_degrees(direction_index: int) -> float:
+	return float(posmod(direction_index, DIRECTIONS.size())) * 60.0
+
+
+static func pick_orientation_steps(coord: Vector2i) -> int:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash(Vector3i(coord.x, coord.y, 0))
+	return rng.randi_range(0, DIRECTIONS.size() - 1)
+
+
+static func directions_world_to_local(
+	world_directions: Array[int],
+	orientation_steps: int
+) -> Array[int]:
+	var local_directions: Array[int] = []
+	for world_direction in world_directions:
+		local_directions.append(posmod(world_direction - orientation_steps, DIRECTIONS.size()))
+	local_directions.sort()
+	return local_directions
+
 static func map_neighbors(c: Vector2i, distance:int) -> Array[Vector2i]:
 	var out: Array[Vector2i] = []
 	for dir in MAP_DIRECTIONS:

@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://depshy6q355um"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_wf637"]
+size = Vector2(0.2, 0.2)
+subdivide_width = 2
+subdivide_depth = 2
+
+[node name="GrassBlade" type="MeshInstance3D" unique_id=909474933]
+mesh = SubResource("QuadMesh_wf637")

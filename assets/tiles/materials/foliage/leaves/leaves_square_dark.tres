@@ -1,0 +1,42 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://t7oronhp2p4s"]
+
+[ext_resource type="Shader" uid="uid://pqjwdy5j4q4y" path="res://assets/shader/tiles/foliage/M_Leaves.gdshader" id="1_21foy"]
+[ext_resource type="Texture2D" uid="uid://dy8jtxo48j3yf" path="res://assets/tiles/materials/textures/foliage/Leaves_Birch.png" id="2_eg441"]
+[ext_resource type="Texture2D" path="res://assets/tiles/materials/T_FoliageNoise.tres" id="3_onqap"]
+[ext_resource type="Texture2D" uid="uid://bp6ewwfwase3o" path="res://assets/tiles/materials/palettes/palette_10.tres" id="4_wxwr3"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_21foy")
+shader_parameter/alpha_texture = ExtResource("2_eg441")
+shader_parameter/color_texture = ExtResource("4_wxwr3")
+shader_parameter/canopy_noise = ExtResource("3_onqap")
+shader_parameter/bottom_color = Color(0.055, 0.2, 0.22, 1)
+shader_parameter/middle_color = Color(0.08, 0.57, 0.43, 1)
+shader_parameter/top_color = Color(0.62, 0.88, 0.35, 1)
+shader_parameter/highlight_color = Color(0.85, 1, 0.55, 1)
+shader_parameter/canopy_bottom = 0.0
+shader_parameter/canopy_top = 5.0
+shader_parameter/gradient_contrast = 1.0
+shader_parameter/middle_position = 0.48
+shader_parameter/middle_softness = 0.24
+shader_parameter/noise_scale = 0.00999999977648
+shader_parameter/noise_strength = 1.0
+shader_parameter/secondary_noise_scale = 0.00999999977648
+shader_parameter/secondary_noise_strength = 1.0
+shader_parameter/noise_direction = Vector3(0.7, 0.25, 0.45)
+shader_parameter/texture_color_strength = 0.0
+shader_parameter/shadow_brightness = 1.0
+shader_parameter/light_brightness = 2.0
+shader_parameter/toon_steps = 3.0
+shader_parameter/toon_softness = 0.06
+shader_parameter/emission_strength = 0.1
+shader_parameter/backlight_color = Color(0.48, 0.88, 0.38, 1)
+shader_parameter/backlight_strength = 0.35
+shader_parameter/backlight_power = 2.0
+shader_parameter/alpha_cutoff = 0.35
+shader_parameter/wind_strength = 0.05
+shader_parameter/wind_speed = 1.2
+shader_parameter/wind_scale = 0.6
+shader_parameter/wind_direction = Vector2(1, 0.35)
+shader_parameter/wind_height_start = 0.05

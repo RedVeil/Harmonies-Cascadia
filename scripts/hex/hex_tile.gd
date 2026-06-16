@@ -35,8 +35,12 @@ const SCORE_POP_BASE_Y := 3.367
 
 var container : HexTileContainer
 var coord : Vector2i
+var tile_orientation_steps: int = 0
 var visuals : HexTileVisuals
+var committed_setup: TileSetupState
+var preview_setup: TileSetupState
 
+var _displayed_setup_signature: String = ""
 var _feedback_tweens: Dictionary = {}
 
 ## ----- Initialisation ----- ##
@@ -55,10 +59,29 @@ func _ready() -> void:
 	new_visuals.color = Color.html(ElementCatalog.elements[0].levels[0].color)
 	new_visuals.icon = load(ElementCatalog.elements[0].levels[0].icon)
 	update_visuals(new_visuals)
+	_apply_tile_orientation()
+	commit_setup(
+		TileSetupState.from_setup(
+			TileSetupCatalog.get_setup(GameEnums.ELEMENT.NONE, GameEnums.LEVEL.ANY),
+			[]
+		)
+	)
 
 func init(parent:HexTileContainer, location:Vector2i) -> void:
 	container = parent
 	coord = location
+	_ensure_orientation_steps()
+
+
+func _ensure_orientation_steps() -> void:
+	var tile_state := container.hex_manager.tiles[coord]
+	if tile_state.orientation_steps < 0:
+		tile_state.orientation_steps = HexCoord.pick_orientation_steps(coord)
+	tile_orientation_steps = tile_state.orientation_steps
+
+
+func _apply_tile_orientation() -> void:
+	$visuals/Tile_Default.rotation_degrees.y = HexCoord.direction_to_yaw_degrees(tile_orientation_steps)
 
 ## ----- Interactions Logic ----- ##
 
@@ -95,6 +118,50 @@ func update_visuals(new_visuals:HexTileVisuals) -> void:
 		$visuals/StylizedHexTile/animalIcon.texture = null
 		$visuals/StylizedHexTile/animalIcon.hide()
 
+
+func show_committed_setup() -> void:
+	if committed_setup != null:
+		_apply_setup_state(committed_setup)
+
+
+func set_preview_setup(state: TileSetupState) -> void:
+	if preview_setup != null and preview_setup.matches(state):
+		_apply_setup_state(state)
+		return
+
+	preview_setup = state.duplicate_state()
+	_apply_setup_state(preview_setup)
+
+
+func discard_preview_setup() -> void:
+	if preview_setup == null:
+		return
+
+	preview_setup = null
+	show_committed_setup()
+
+
+func commit_setup(state: TileSetupState) -> void:
+	if preview_setup != null:
+		committed_setup = preview_setup.duplicate_state()
+		preview_setup = null
+		return
+
+	committed_setup = state.duplicate_state()
+	_apply_setup_state(committed_setup)
+
+
+func _apply_setup_state(state: TileSetupState) -> void:
+	if state == null or state.setup == null:
+		return
+
+	var setup_signature := state.signature()
+	if setup_signature == _displayed_setup_signature:
+		return
+
+	_displayed_setup_signature = setup_signature
+	$visuals/Tile_Default.apply_setup(state.setup, state.get_context(), setup_signature)
+
 ## ----- Points Logic ----- ##
 
 func show_points(points:int) -> void:
@@ -113,11 +180,11 @@ func hide_points() -> void:
 ## ----- Outline Logic ----- ##
 
 func show_outline(color:Color) -> void:
-	$visuals/MeshInstance3D/outline.modulate = color
-	$visuals/MeshInstance3D/outline.show()
+	$visuals/outline.modulate = color
+	$visuals/outline.show()
 	
 func hide_outline() -> void:
-	$visuals/MeshInstance3D/outline.hide()
+	$visuals/outline.hide()
 
 ## ----- Animations ----- ##
 
@@ -181,7 +248,7 @@ func _animate_score_pop(points: int) -> void:
 
 func _animate_outline_flash(delay: float) -> void:
 	FeedbackAnimHelper.play_sounds(outline_sounds)
-	var outline: Sprite3D = $visuals/MeshInstance3D/outline
+	var outline: Sprite3D = $visuals/outline
 	outline.modulate = outline_flash_color
 	outline.show()
 
@@ -236,7 +303,7 @@ func _reset_score_pop_visuals() -> void:
 	sprite.scale = Vector3(0.5, 0.5, 0.5)
 
 func _reset_outline_visuals() -> void:
-	var outline: Sprite3D = $visuals/MeshInstance3D/outline
+	var outline: Sprite3D = $visuals/outline
 	outline.hide()
 	outline.modulate = Color.WHITE
 

@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://dotsdyb74gkxo"]
+
+[ext_resource type="Texture2D" uid="uid://drelsndsi4ugv" path="res://assets/tiles/materials/textures/rocks/PathRocks_Diffuse.png" id="1_j5ery"]
+
+[resource]
+disable_ambient_light = true
+albedo_texture = ExtResource("1_j5ery")
+metallic_specular = 0.0

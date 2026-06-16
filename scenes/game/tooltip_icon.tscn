@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ccy33o81w8qpr"]
 
-[ext_resource type="Texture2D" uid="uid://ca2hp56qvfswa" path="res://assets/circle.png" id="1_daw8n"]
+[ext_resource type="Texture2D" uid="uid://ca2hp56qvfswa" path="res://assets/icons/circle.png" id="1_daw8n"]
 [ext_resource type="Texture2D" uid="uid://jomsgj87ydn8" path="res://assets/elements/a1.png" id="2_d6sgi"]
 [ext_resource type="Script" uid="uid://d0jwsrs15ny0f" path="res://scripts/game/tooltip_icon.gd" id="2_qbs20"]
 

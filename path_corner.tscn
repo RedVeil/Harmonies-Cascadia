@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://b1kb8v3ngdk7t"]
+
+[ext_resource type="ArrayMesh" uid="uid://cg2ewxhl0poum" path="res://path-corner.obj" id="1_7yyoe"]
+
+[node name="PathCorner" type="Node3D" unique_id=901695894]
+
+[node name="PathCorner" type="MeshInstance3D" parent="." unique_id=1732549664]
+mesh = ExtResource("1_7yyoe")

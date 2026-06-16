@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="TileSetup" format=3 uid="uid://cdwkeurh7edl0"]
+
+[ext_resource type="Script" uid="uid://c3lvgpc7kuqep" path="res://scripts/ressources/TileCenterFeature.gd" id="1_ci3fh"]
+[ext_resource type="PackedScene" uid="uid://cmi3badcu3g4s" path="res://assets/tiles/assets/mountain/SM_3DT_Mountain_14_Grass.fbx" id="2_3t5xu"]
+[ext_resource type="PackedScene" uid="uid://wq68k6iycxxt" path="res://assets/tiles/assets/mountain/SM_3DT_Mountain_13_Grass.fbx" id="3_cnmv8"]
+[ext_resource type="PackedScene" uid="uid://comrk8tuvxpdg" path="res://assets/tiles/assets/mountain/SM_3DT_Mountain_12_Grass.fbx" id="4_v2c4a"]
+[ext_resource type="Script" uid="uid://7ktcjexgnhdj" path="res://scripts/ressources/TileScatterLayer.gd" id="9_56apo"]
+[ext_resource type="Script" uid="uid://yva726781osc" path="res://scripts/ressources/TileSetup.gd" id="11_8hpsf"]
+[ext_resource type="Resource" uid="uid://dyp87abnisoo" path="res://assets/tiles/setups/layers/grass_dense.tres" id="11_nv3wv"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3t5xu"]
+albedo_color = Color(0.47954512, 0.4929341, 0.44976252, 1)
+
+[sub_resource type="Resource" id="Resource_ci3fh"]
+script = ExtResource("1_ci3fh")
+scene = ExtResource("2_3t5xu")
+scale = Vector3(1.5, 2, 1.5)
+material = SubResource("StandardMaterial3D_3t5xu")
+register_exclusions = false
+metadata/_custom_type_script = "uid://c3lvgpc7kuqep"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cnmv8"]
+albedo_color = Color(0.47843137, 0.49411765, 0.4509804, 1)
+
+[sub_resource type="Resource" id="Resource_nv3wv"]
+script = ExtResource("1_ci3fh")
+scene = ExtResource("3_cnmv8")
+scale = Vector3(1.5, 2, 1.5)
+material = SubResource("StandardMaterial3D_cnmv8")
+register_exclusions = false
+metadata/_custom_type_script = "uid://c3lvgpc7kuqep"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v2c4a"]
+albedo_color = Color(0.47843137, 0.49411765, 0.4509804, 1)
+
+[sub_resource type="Resource" id="Resource_axt6r"]
+script = ExtResource("1_ci3fh")
+scene = ExtResource("4_v2c4a")
+scale = Vector3(1.2, 1.8, 1.2)
+material = SubResource("StandardMaterial3D_v2c4a")
+register_exclusions = false
+metadata/_custom_type_script = "uid://c3lvgpc7kuqep"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mttui"]
+albedo_color = Color(0.46316367, 0.3446725, 0.11308167, 1)
+
+[resource]
+script = ExtResource("11_8hpsf")
+scatter_layers = Array[ExtResource("9_56apo")]([ExtResource("11_nv3wv")])
+ground_material = SubResource("StandardMaterial3D_mttui")
+exclusion_padding = 0.01
+center_features = Array[ExtResource("1_ci3fh")]([SubResource("Resource_ci3fh"), SubResource("Resource_nv3wv"), SubResource("Resource_axt6r")])

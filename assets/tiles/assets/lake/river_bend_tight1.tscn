@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://dfvq1vvgeyxfn"]
+
+[ext_resource type="Shader" uid="uid://i6qyoprkvxk4" path="res://assets/shader/tiles/water/lake_mask.gdshader" id="1_763ur"]
+[ext_resource type="Texture2D" uid="uid://dl28h3fvhmmq0" path="res://assets/tiles/assets/river/bend_tight_1.png" id="2_ahcsb"]
+[ext_resource type="Texture2D" uid="uid://b2hh4mpxlm3x3" path="res://assets/tiles/materials/noise.tres" id="3_024i1"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_r2lxl"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4q8ff"]
+render_priority = 5
+shader = ExtResource("1_763ur")
+shader_parameter/mask_texture = ExtResource("2_ahcsb")
+shader_parameter/alpha_cutoff = 0.01999999955296
+shader_parameter/water_threshold_low = 0.22999999485904
+shader_parameter/water_threshold_high = 0.999999977648
+shader_parameter/noise_texture = ExtResource("3_024i1")
+shader_parameter/water_color_deep = Color(0.22, 0.48, 0.78, 1)
+shader_parameter/water_color_shallow = Color(0.35, 0.58, 0.92, 1)
+shader_parameter/water_highlight = Color(0.72, 0.88, 1, 1)
+shader_parameter/water_flow_speed = 0.12
+shader_parameter/water_flow_direction = Vector2(0.35, 0.65)
+shader_parameter/water_noise_scale = 0.35
+shader_parameter/water_roughness = 0.1
+shader_parameter/water_fresnel_strength = 0.37999999150624
+shader_parameter/shore_color_dry = Color(0.62, 0.54, 0.38, 1)
+shader_parameter/shore_color_wet = Color(0.42, 0.38, 0.3, 1)
+shader_parameter/shore_noise_scale = 0.53999998979258
+shader_parameter/shore_roughness = 0.95999997854208
+
+[node name="MeshInstance3D" type="MeshInstance3D" unique_id=1440434393]
+mesh = SubResource("PlaneMesh_r2lxl")
+surface_material_override/0 = SubResource("ShaderMaterial_4q8ff")

@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://jdfbq3vejqr7"]
+
+[ext_resource type="Texture2D" uid="uid://tclk3uv66eet" path="res://assets/tiles/materials/textures/rocks/Rocks_Diffuse.png" id="1_4pe7y"]
+
+[resource]
+albedo_texture = ExtResource("1_4pe7y")
+metallic_specular = 0.0

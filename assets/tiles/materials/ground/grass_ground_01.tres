@@ -1,0 +1,15 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://bra6ug2wjmj0j"]
+
+[ext_resource type="Shader" uid="uid://besyydqthmvb" path="res://assets/shader/tiles/ground/default_ground.gdshader" id="1_n6bbx"]
+[ext_resource type="Texture2D" uid="uid://c5grq5uftdydv" path="res://assets/tiles/setups/layers/T_Grass4_Color.png" id="2_suo21"]
+[ext_resource type="Texture2D" path="res://assets/tiles/materials/T_FoliageNoise.tres" id="3_suo21"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_n6bbx")
+shader_parameter/albedo = ExtResource("2_suo21")
+shader_parameter/tile_noise = ExtResource("3_suo21")
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/normal_strength = 1.0
+shader_parameter/global_uv_scale = 0.1
+shader_parameter/global_uv_offset = Vector2(0, 0)

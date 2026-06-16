@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="TileSetup" format=3 uid="uid://bh30mkdhfetf7"]
+
+[ext_resource type="Script" uid="uid://c3lvgpc7kuqep" path="res://scripts/ressources/TileCenterFeature.gd" id="1_rg0h8"]
+[ext_resource type="Script" uid="uid://yva726781osc" path="res://scripts/ressources/TileSetup.gd" id="1_script"]
+[ext_resource type="Shader" uid="uid://dpvv5isr0r3cs" path="res://assets/shader/tiles/ground/grass_ground.gdshader" id="2_evq3c"]
+[ext_resource type="Texture2D" uid="uid://5s1b4e47sxqs" path="res://assets/tiles/materials/palettes/palette_04.tres" id="3_7aytr"]
+[ext_resource type="Texture2D" uid="uid://b2hh4mpxlm3x3" path="res://assets/tiles/materials/noise.tres" id="4_3pjkf"]
+[ext_resource type="Script" uid="uid://7ktcjexgnhdj" path="res://scripts/ressources/TileScatterLayer.gd" id="5_bnmri"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_abqxs"]
+render_priority = 0
+shader = ExtResource("2_evq3c")
+shader_parameter/noise_texture = ExtResource("4_3pjkf")
+shader_parameter/color_gradient = ExtResource("3_7aytr")
+
+[resource]
+script = ExtResource("1_script")
+ground_material = SubResource("ShaderMaterial_abqxs")
+exclusion_padding = 0.05

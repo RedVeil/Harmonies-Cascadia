@@ -119,6 +119,7 @@ func _on_input_event(
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			GameFeedback.play_click_card()
 			container.select_card(id)
+			viewport.set_input_as_handled()
 	
 	#if event is InputEventMouseMotion and is_mouse_inside:
 		#var mouse_position = event.position
