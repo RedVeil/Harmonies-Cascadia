@@ -42,6 +42,7 @@ var preview_setup: TileSetupState
 
 var _displayed_setup_signature: String = ""
 var _feedback_tweens: Dictionary = {}
+var _animal_model_instance: Node3D = null
 
 ## ----- Initialisation ----- ##
 
@@ -117,6 +118,36 @@ func update_visuals(new_visuals:HexTileVisuals) -> void:
 	else:
 		$visuals/StylizedHexTile/animalIcon.texture = null
 		$visuals/StylizedHexTile/animalIcon.hide()
+
+	_set_animal_model(new_visuals.animal_model)
+
+
+func _set_animal_model(model_path: String) -> void:
+	if _animal_model_instance != null:
+		_animal_model_instance.queue_free()
+		_animal_model_instance = null
+
+	if model_path == "":
+		return
+	if not ResourceLoader.exists(model_path):
+		push_warning("Animal model does not exist: %s" % model_path)
+		return
+
+	var model_resource := load(model_path)
+	if model_resource == null or not (model_resource is PackedScene):
+		push_warning("Animal model is not a scene: %s" % model_path)
+		return
+
+	var model_node := (model_resource as PackedScene).instantiate()
+	if not (model_node is Node3D):
+		model_node.queue_free()
+		push_warning("Animal model root is not Node3D: %s" % model_path)
+		return
+
+	_animal_model_instance = model_node as Node3D
+	$visuals/animalModel.add_child(_animal_model_instance)
+	_animal_model_instance.position = Vector3.ZERO
+	_animal_model_instance.rotation = Vector3.ZERO
 
 
 func show_committed_setup() -> void:

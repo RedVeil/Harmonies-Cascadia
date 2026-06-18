@@ -39,6 +39,7 @@ func parse_card(card:Dictionary) -> CardData:
 	card_data.point_score = card.point_score
 	card_data.bonus_points = card.bonus_points
 	card_data.icon = card.icon
+	card_data.model = card.get("model", "")
 	card_data.element = card.element
 	card_data.secondary_element = card.secondary_element
 	

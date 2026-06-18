@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bxefb2on12tlx"]
 
-[ext_resource type="Material" uid="uid://b43nm87c4l54o" path="res://Materials/MI_Leaves.tres" id="1_6in35"]
+[ext_resource type="Material" uid="uid://b43nm87c4l54o" path="res://assets/tiles/materials/foliage/plants/MI_Leaves.tres" id="1_6in35"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_yeek5"]
 _surfaces = [{

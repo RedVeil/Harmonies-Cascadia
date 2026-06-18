@@ -2,15 +2,17 @@
 
 [ext_resource type="Script" uid="uid://yva726781osc" path="res://scripts/ressources/TileSetup.gd" id="1_script"]
 [ext_resource type="Script" uid="uid://7ktcjexgnhdj" path="res://scripts/ressources/TileScatterLayer.gd" id="4_yg2gw"]
-[ext_resource type="Shader" uid="uid://cidecmtlxgc45" path="res://Materials/M_Grass.gdshader" id="5_0ua3w"]
+[ext_resource type="Shader" uid="uid://cidecmtlxgc45" path="res://assets/shader/tiles/foliage/M_Grass.gdshader" id="5_0ua3w"]
 [ext_resource type="Script" uid="uid://c3lvgpc7kuqep" path="res://scripts/ressources/TileCenterFeature.gd" id="5_feature_script"]
+[ext_resource type="PackedScene" uid="uid://bxia3rw4k123f" path="res://assets/tiles/assets/tree/Birch_1.tscn" id="6_0ua3w"]
 [ext_resource type="Texture2D" uid="uid://h35uej8tofad" path="res://Materials/T_FoliageNoise.tres" id="6_owp8k"]
-[ext_resource type="PackedScene" uid="uid://bxia3rw4k123f" path="res://addons/stylized-nature/Mesh Scenes/Birch_1.tscn" id="7_0oq1t"]
-[ext_resource type="Material" uid="uid://b84scjo5cjjii" path="res://Materials/MI_Grass_Common.tres" id="7_5oama"]
-[ext_resource type="PackedScene" uid="uid://dcsuwvraeun1s" path="res://addons/stylized-nature/Mesh Scenes/Pine_1.tscn" id="8_pttri"]
-[ext_resource type="PackedScene" uid="uid://dnx51yuftbauf" path="res://addons/stylized-nature/Mesh Scenes/Pine_3.tscn" id="9_al3mh"]
-[ext_resource type="PackedScene" uid="uid://cpy1xry045xcx" path="res://addons/stylized-nature/Mesh Scenes/Pine_5.tscn" id="10_0ua3w"]
-[ext_resource type="PackedScene" uid="uid://pfh8uwte87wm" path="res://assets/tiles/assets/tree/common/tree6.tscn" id="14_2br54"]
+[ext_resource type="Material" uid="uid://b84scjo5cjjii" path="res://assets/tiles/materials/foliage/plants/MI_Grass_Common.tres" id="7_5oama"]
+[ext_resource type="PackedScene" uid="uid://pfh8uwte87wm" path="res://assets/tiles/assets/tree/tree6.tscn" id="7_owp8k"]
+[ext_resource type="PackedScene" uid="uid://dcsuwvraeun1s" path="res://assets/tiles/assets/tree/Pine_1.tscn" id="8_5oama"]
+[ext_resource type="PackedScene" uid="uid://dnx51yuftbauf" path="res://assets/tiles/assets/tree/Pine_3.tscn" id="9_h50gy"]
+[ext_resource type="PackedScene" uid="uid://cpy1xry045xcx" path="res://assets/tiles/assets/tree/Pine_5.tscn" id="10_lsqtj"]
+[ext_resource type="PackedScene" uid="uid://bugno0qurovdl" path="res://assets/tiles/assets/plants/Flower_1_Group.tscn" id="11_0ua3w"]
+[ext_resource type="PackedScene" uid="uid://dwaequv86mly" path="res://assets/tiles/assets/plants/Fern_1.tscn" id="12_owp8k"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pttri"]
 albedo_color = Color(0.32710338, 0.48398662, 0.21644446, 1)
@@ -89,10 +91,17 @@ scale = Vector2(0.1, 0.1)
 materials = Array[Material]([SubResource("ShaderMaterial_afxho")])
 register_exclusions = false
 
+[sub_resource type="Resource" id="Resource_pttri"]
+script = ExtResource("4_yg2gw")
+mesh_scenes = Array[PackedScene]([ExtResource("6_0ua3w")])
+scale = Vector2(0.1, 0.1)
+register_exclusions = false
+metadata/_custom_type_script = "uid://7ktcjexgnhdj"
+
 [sub_resource type="Resource" id="Resource_m0wap"]
 script = ExtResource("4_yg2gw")
-mesh_scenes = Array[PackedScene]([ExtResource("14_2br54")])
-mesh_count_range = Vector2i(6, 7)
+mesh_scenes = Array[PackedScene]([ExtResource("7_owp8k")])
+mesh_count_range = Vector2i(8, 10)
 hex_radius_inset = 0.05
 offset = Vector3(0, -2.5, 0)
 scale = Vector2(0.12, 0.15)
@@ -102,16 +111,40 @@ metadata/_custom_type_script = "uid://7ktcjexgnhdj"
 
 [sub_resource type="Resource" id="Resource_kdygk"]
 script = ExtResource("4_yg2gw")
-mesh_scenes = Array[PackedScene]([ExtResource("7_0oq1t"), ExtResource("8_pttri"), ExtResource("9_al3mh"), ExtResource("10_0ua3w")])
-mesh_count_range = Vector2i(6, 7)
+mesh_scenes = Array[PackedScene]([ExtResource("8_5oama"), ExtResource("9_h50gy"), ExtResource("10_lsqtj")])
+mesh_count_range = Vector2i(15, 20)
 hex_radius_inset = 0.05
 offset = Vector3(0, 1, 0)
-scale = Vector2(0.1, 0.1)
+scale = Vector2(0.15, 0.15)
 use_jittered_grid = true
+register_exclusions = false
+metadata/_custom_type_script = "uid://7ktcjexgnhdj"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fbe2e"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lrgg3"]
+albedo_color = Color(0.9450095, 0.861681, 0.73395103, 1)
+
+[sub_resource type="Resource" id="Resource_5oama"]
+script = ExtResource("4_yg2gw")
+mesh_scenes = Array[PackedScene]([ExtResource("11_0ua3w")])
+mesh_count_range = Vector2i(15, 20)
+hex_radius_inset = 0.05
+scale = Vector2(0.1, 0.1)
+materials = Array[Material]([SubResource("StandardMaterial3D_fbe2e"), SubResource("StandardMaterial3D_lrgg3")])
+register_exclusions = false
+metadata/_custom_type_script = "uid://7ktcjexgnhdj"
+
+[sub_resource type="Resource" id="Resource_lsqtj"]
+script = ExtResource("4_yg2gw")
+mesh_scenes = Array[PackedScene]([ExtResource("12_owp8k")])
+mesh_count_range = Vector2i(10, 15)
+offset = Vector3(0, 0.1, 0)
+scale = Vector2(0.2, 0.2)
 register_exclusions = false
 metadata/_custom_type_script = "uid://7ktcjexgnhdj"
 
 [resource]
 script = ExtResource("1_script")
-scatter_layers = Array[ExtResource("4_yg2gw")]([SubResource("Resource_h50gy"), SubResource("Resource_m0wap"), SubResource("Resource_kdygk")])
+scatter_layers = Array[ExtResource("4_yg2gw")]([SubResource("Resource_h50gy"), SubResource("Resource_pttri"), SubResource("Resource_m0wap"), SubResource("Resource_kdygk"), SubResource("Resource_5oama"), SubResource("Resource_lsqtj")])
 ground_material = SubResource("StandardMaterial3D_pttri")

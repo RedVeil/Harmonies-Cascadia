@@ -2,7 +2,7 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bbdh07si0u2bx"
+uid="uid://buaffti5pwa7k"
 path.s3tc="res://.godot/imported/T_Mountain_01_Dry_AmbientOcclusion.png-0876109e09eeee94289162fe738dabb0.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
@@ -22,12 +22,12 @@ compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
-compress/normal_map=0
+compress/normal_map=1
 compress/channel_pack=0
 mipmaps/generate=true
 mipmaps/limit=-1
-roughness/mode=0
-roughness/src_normal=""
+roughness/mode=8
+roughness/src_normal="res://assets/tiles/materials/textures/mountain/T_Mountain_01_Grass_OpenGL_Normal.png"
 process/channel_remap/red=0
 process/channel_remap/green=1
 process/channel_remap/blue=2

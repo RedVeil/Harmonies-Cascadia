@@ -2,6 +2,8 @@ shader_type spatial;
 render_mode cull_disabled, diffuse_lambert, specular_schlick_ggx, depth_prepass_alpha;
 
 uniform sampler2D texture_albedo : source_color;
+uniform vec4 ExtraColor : source_color  = vec4(1.0, 1.0, 1.0, 1.0);
+
 uniform float WindSpeed : hint_range(0.1, 10.0) = 2.0;
 uniform float WindIntensity : hint_range(0.0, 2.0) = 0.2;
 uniform sampler2D GeneratedNoise : hint_default_white;
@@ -31,7 +33,7 @@ void vertex() {
 
 void fragment() {
     vec4 albedo_tex = texture(texture_albedo, UV);
-    vec3 final_color = albedo_tex.rgb* vertex_r;
+    vec3 final_color = albedo_tex.rgb * vertex_r + ExtraColor.rgb;
     
     ALBEDO = final_color;
     ALPHA = albedo_tex.a;

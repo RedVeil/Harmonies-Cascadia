@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ce2g5c8ekshj8"]
 
-[ext_resource type="Material" uid="uid://b8j584k58xc1j" path="res://Materials/MI_Flowers_NoWind.tres" id="1_an4yn"]
+[ext_resource type="Material" uid="uid://b8j584k58xc1j" path="res://assets/tiles/materials/foliage/plants/MI_Flowers_NoWind.tres" id="1_an4yn"]
 [ext_resource type="Material" uid="uid://bbqudof6appuo" path="res://Materials/MI_Leaves_GiantPine.tres" id="2_ug870"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_8r30f"]

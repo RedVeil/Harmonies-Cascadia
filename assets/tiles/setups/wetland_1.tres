@@ -2,18 +2,44 @@
 
 [ext_resource type="Script" uid="uid://c3lvgpc7kuqep" path="res://scripts/ressources/TileCenterFeature.gd" id="1_rg0h8"]
 [ext_resource type="Script" uid="uid://yva726781osc" path="res://scripts/ressources/TileSetup.gd" id="1_script"]
-[ext_resource type="Shader" uid="uid://dpvv5isr0r3cs" path="res://assets/shader/tiles/ground/grass_ground.gdshader" id="2_evq3c"]
-[ext_resource type="Texture2D" uid="uid://5s1b4e47sxqs" path="res://assets/tiles/materials/palettes/palette_04.tres" id="3_7aytr"]
-[ext_resource type="Texture2D" uid="uid://b2hh4mpxlm3x3" path="res://assets/tiles/materials/noise.tres" id="4_3pjkf"]
+[ext_resource type="Shader" uid="uid://besyydqthmvb" path="res://assets/shader/tiles/ground/default_ground.gdshader" id="2_evq3c"]
+[ext_resource type="Texture2D" uid="uid://djnmdo50v7w18" path="res://T_Swamp11_Color.png" id="3_evq3c"]
+[ext_resource type="Texture2D" uid="uid://rqqbfifcxu32" path="res://T_Swamp11_Normal.png" id="4_7aytr"]
+[ext_resource type="Texture2D" uid="uid://b2hh4mpxlm3x3" path="res://assets/tiles/materials/noise.tres" id="5_abqxs"]
 [ext_resource type="Script" uid="uid://7ktcjexgnhdj" path="res://scripts/ressources/TileScatterLayer.gd" id="5_bnmri"]
+[ext_resource type="PackedScene" uid="uid://boqf1jp7m10oj" path="res://addons/stylized-nature/Mesh Scenes/Flower_6.tscn" id="7_3pjkf"]
+[ext_resource type="PackedScene" uid="uid://dmh24ximhjppg" path="res://addons/stylized-nature/Mesh Scenes/Flower_6_2.tscn" id="8_bnmri"]
+[ext_resource type="PackedScene" uid="uid://gn1vy15wyje5" path="res://addons/stylized-nature/Mesh Scenes/Plant_5.tscn" id="9_eukne"]
+[ext_resource type="PackedScene" uid="uid://yuu55abilefd" path="res://addons/stylized-nature/Mesh Scenes/Mushroom_Common.tscn" id="10_3657k"]
+[ext_resource type="PackedScene" uid="uid://b4lckhtpweenq" path="res://addons/stylized-nature/Mesh Scenes/Grass_Wispy_Short.tscn" id="11_ch43m"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_abqxs"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_eukne"]
 render_priority = 0
 shader = ExtResource("2_evq3c")
-shader_parameter/noise_texture = ExtResource("4_3pjkf")
-shader_parameter/color_gradient = ExtResource("3_7aytr")
+shader_parameter/albedo = ExtResource("3_evq3c")
+shader_parameter/normal_map = ExtResource("4_7aytr")
+shader_parameter/tile_noise = ExtResource("5_abqxs")
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/normal_strength = 4.0
+shader_parameter/global_uv_scale = 0.1
+shader_parameter/global_uv_offset = Vector2(0, 0)
+
+[sub_resource type="Resource" id="Resource_abqxs"]
+script = ExtResource("5_bnmri")
+mesh_scenes = Array[PackedScene]([ExtResource("7_3pjkf"), ExtResource("8_bnmri"), ExtResource("9_eukne"), ExtResource("10_3657k")])
+scale = Vector2(0.2, 0.2)
+metadata/_custom_type_script = "uid://7ktcjexgnhdj"
+
+[sub_resource type="Resource" id="Resource_eukne"]
+script = ExtResource("5_bnmri")
+mesh_scenes = Array[PackedScene]([ExtResource("11_ch43m")])
+mesh_count_range = Vector2i(25, 30)
+hex_radius_inset = 0.05
+scale = Vector2(0.2, 0.2)
+metadata/_custom_type_script = "uid://7ktcjexgnhdj"
 
 [resource]
 script = ExtResource("1_script")
-ground_material = SubResource("ShaderMaterial_abqxs")
+scatter_layers = Array[ExtResource("5_bnmri")]([SubResource("Resource_abqxs"), SubResource("Resource_eukne")])
+ground_material = SubResource("ShaderMaterial_eukne")
 exclusion_padding = 0.05

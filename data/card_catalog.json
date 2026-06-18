@@ -21,7 +21,8 @@
 			"secondary_element": 0,
 			"point_score": 0,
 			"bonus_points": 0,
-			"icon": "res://assets/elements/n0.png"
+			"icon": "res://assets/elements/n0.png",
+			"model": ""
 		},
 		{
 			"id": 1,
@@ -60,7 +61,8 @@
 			"secondary_element": 0,
 			"point_score": 0,
 			"bonus_points": 0,
-			"icon": "res://assets/elements/f2.png"
+			"icon": "res://assets/elements/f2.png",
+			"model": ""
 		},
 		{
 			"id": 2,
@@ -91,7 +93,8 @@
 			"secondary_element": 0,
 			"point_score": 0,
 			"bonus_points": 0,
-			"icon": "res://assets/elements/a1.png"
+			"icon": "res://assets/elements/a1.png",
+			"model": ""
 		},
 		{
 			"id": 3,
@@ -130,7 +133,8 @@
 			"secondary_element": 0,
 			"point_score": 0,
 			"bonus_points": 0,
-			"icon": "res://assets/elements/m2.png"
+			"icon": "res://assets/elements/m2.png",
+			"model": ""
 		},
 		{
 			"id": 4,
@@ -153,7 +157,8 @@
 			"secondary_element": 0,
 			"point_score": 0,
 			"bonus_points": 0,
-			"icon": "res://assets/elements/r0.png"
+			"icon": "res://assets/elements/r0.png",
+			"model": ""
 		},
 		{
 			"id": 5,
@@ -176,7 +181,8 @@
 			"secondary_element": 0,
 			"point_score": 0,
 			"bonus_points": 0,
-			"icon": "res://assets/elements/w0.png"
+			"icon": "res://assets/elements/w0.png",
+			"model": ""
 		}
 	],
 	"animals": [
@@ -218,7 +224,8 @@
 			"secondary_element": 4,
 			"point_score": 3,
 			"bonus_points": 1,
-			"icon": "res://assets/animals/icons/ForestMammal_Deer.png"
+			"icon": "res://assets/animals/icons/ForestMammal_Deer.png",
+			"model": "res://assets/animals/models/Deer.fbx"
 		},
 		{
 			"id": 1,
@@ -258,7 +265,8 @@
 			"secondary_element": 3,
 			"point_score": 6,
 			"bonus_points": 1,
-			"icon": "res://assets/animals/icons/ForestMammal_Wolf.png"
+			"icon": "res://assets/animals/icons/ForestMammal_Wolf.png",
+			"model": "res://assets/animals/models/GrayWolf.fbx"
 		},
 		{
 			"id": 2,
@@ -298,7 +306,8 @@
 			"secondary_element": 4,
 			"point_score": 5,
 			"bonus_points": 1,
-			"icon": "res://assets/animals/icons/Bird_Kingfisher.png"
+			"icon": "res://assets/animals/icons/Bird_Kingfisher.png",
+			"model": "res://assets/animals/models/Hummingbird.fbx"
 		},
 		{
 			"id": 3,
@@ -338,7 +347,8 @@
 			"secondary_element": 2,
 			"point_score": 4,
 			"bonus_points": 1,
-			"icon": "res://assets/animals/icons/Bird_Crow.png"
+			"icon": "res://assets/animals/icons/Bird_Crow.png",
+			"model": "res://assets/animals/models/Crow.fbx"
 		},
 		{
 			"id": 4,
@@ -378,7 +388,8 @@
 			"secondary_element": 1,
 			"point_score": 6,
 			"bonus_points": 1,
-			"icon": "res://assets/animals/icons/ForestMammal_Boar.png"
+			"icon": "res://assets/animals/icons/ForestMammal_Boar.png",
+			"model": "res://assets/animals/models/Boar.fbx"
 		},
 		{
 			"id": 5,
@@ -410,7 +421,8 @@
 			"secondary_element": 2,
 			"point_score": 2,
 			"bonus_points": 0.5,
-			"icon": "res://assets/animals/icons/ForrestRodent_Squirrel_Brown.png"
+			"icon": "res://assets/animals/icons/ForrestRodent_Squirrel_Brown.png",
+			"model": "res://assets/animals/models/RedSquirrel.fbx"
 		},
 		{
 			"id": 6,
@@ -442,7 +454,8 @@
 			"secondary_element": 5,
 			"point_score": 5,
 			"bonus_points": 1,
-			"icon": "res://assets/animals/icons/PetBird_Parrot_Macaw.png"
+			"icon": "res://assets/animals/icons/PetBird_Parrot_Macaw.png",
+			"model": "res://assets/animals/models/Hummingbird.fbx"
 		},
 		{
 			"id": 7,
@@ -474,7 +487,8 @@
 			"secondary_element": 5,
 			"point_score": 4,
 			"bonus_points": 1,
-			"icon": "res://assets/animals/icons/TropicalMammal_Monkey_Brown.png"
+			"icon": "res://assets/animals/icons/TropicalMammal_Monkey_Brown.png",
+			"model": "res://assets/animals/models/Chimpanzee.fbx"
 		},
 		{
 			"id": 8,
@@ -514,7 +528,8 @@
 			"secondary_element": 1,
 			"point_score": 9,
 			"bonus_points": 1,
-			"icon": "res://assets/animals/icons/Marsupial_Coala.png"
+			"icon": "res://assets/animals/icons/Marsupial_Coala.png",
+			"model": "res://assets/animals/models/Hummingbird.fbx"
 		},
 		{
 			"id": 9,
@@ -554,7 +569,8 @@
 			"secondary_element": 3,
 			"point_score": 8,
 			"bonus_points": 1,
-			"icon": "res://assets/animals/icons/TropicalMammal_Gorilla.png"
+			"icon": "res://assets/animals/icons/TropicalMammal_Gorilla.png",
+			"model": "res://assets/animals/models/Gorilla.fbx"
 		},
 		{
 			"id": 10,
@@ -586,7 +602,8 @@
 			"secondary_element": 2,
 			"point_score": 2,
 			"bonus_points": 0.5,
-			"icon": "res://assets/animals/icons/Insect_Bee.png"
+			"icon": "res://assets/animals/icons/Insect_Bee.png",
+			"model": "res://assets/animals/models/Bee.fbx"
 		},
 		{
 			"id": 11,
@@ -618,7 +635,8 @@
 			"secondary_element": 1,
 			"point_score": 2,
 			"bonus_points": 0.5,
-			"icon": "res://assets/animals/icons/GrasslandRodent_Hare.png"
+			"icon": "res://assets/animals/icons/GrasslandRodent_Hare.png",
+			"model": "res://assets/animals/models/Rabbit.fbx"
 		},
 		{
 			"id": 12,
@@ -650,7 +668,8 @@
 			"secondary_element": 3,
 			"point_score": 2,
 			"bonus_points": 0.5,
-			"icon": "res://assets/animals/icons/Rodent_Mouse_Grey.png"
+			"icon": "res://assets/animals/icons/Rodent_Mouse_Grey.png",
+			"model": "res://assets/animals/models/Mouse.fbx"
 		},
 		{
 			"id": 13,
@@ -690,7 +709,8 @@
 			"secondary_element": 5,
 			"point_score": 3,
 			"bonus_points": 1,
-			"icon": "res://assets/animals/icons/Bird_Peacock.png"
+			"icon": "res://assets/animals/icons/Bird_Peacock.png",
+			"model": "res://assets/animals/models/Peacock.fbx"
 		},
 		{
 			"id": 14,
@@ -730,7 +750,8 @@
 			"secondary_element": 3,
 			"point_score": 5,
 			"bonus_points": 1,
-			"icon": "res://assets/animals/icons/SavannaMammal_Hyena.png"
+			"icon": "res://assets/animals/icons/SavannaMammal_Hyena.png",
+			"model": "res://assets/animals/models/Hyena.fbx"
 		},
 		{
 			"id": 15,
@@ -770,7 +791,8 @@
 			"secondary_element": 5,
 			"point_score": 5,
 			"bonus_points": 1,
-			"icon": "res://assets/animals/icons/SavannaMammal_Hippo.png"
+			"icon": "res://assets/animals/icons/SavannaMammal_Hippo.png",
+			"model": "res://assets/animals/models/Hippo.fbx"
 		},
 		{
 			"id": 16,
@@ -802,7 +824,8 @@
 			"secondary_element": 4,
 			"point_score": 2,
 			"bonus_points": 0.5,
-			"icon": "res://assets/animals/icons/Insect_LadyBug.png"
+			"icon": "res://assets/animals/icons/Insect_LadyBug.png",
+			"model": "res://assets/animals/models/Ladybug.fbx"
 		},
 		{
 			"id": 17,
@@ -842,7 +865,8 @@
 			"secondary_element": 2,
 			"point_score": 4,
 			"bonus_points": 1,
-			"icon": "res://assets/animals/icons/LivestockMammal_Sheep_White.png"
+			"icon": "res://assets/animals/icons/LivestockMammal_Sheep_White.png",
+			"model": "res://assets/animals/models/Sheep.fbx"
 		},
 		{
 			"id": 18,
@@ -882,7 +906,8 @@
 			"secondary_element": 4,
 			"point_score": 4,
 			"bonus_points": 1,
-			"icon": "res://assets/animals/icons/LivestockMammal_Cow_Spotted.png"
+			"icon": "res://assets/animals/icons/LivestockMammal_Cow_Spotted.png",
+			"model": "res://assets/animals/models/BrownCow.fbx"
 		},
 		{
 			"id": 19,
@@ -922,7 +947,8 @@
 			"secondary_element": 3,
 			"point_score": 3,
 			"bonus_points": 1,
-			"icon": "res://assets/animals/icons/LivestockMammal_Horse_Grey.png"
+			"icon": "res://assets/animals/icons/LivestockMammal_Horse_Grey.png",
+			"model": "res://assets/animals/models/ChestnutHorse.fbx"
 		},
 		{
 			"id": 20,
@@ -962,7 +988,8 @@
 			"secondary_element": 1,
 			"point_score": 6,
 			"bonus_points": 1,
-			"icon": "res://assets/animals/icons/ForestMammal_Bear_Black.png"
+			"icon": "res://assets/animals/icons/ForestMammal_Bear_Black.png",
+			"model": "res://assets/animals/models/BrownBear.fbx"
 		},
 		{
 			"id": 21,
@@ -1002,7 +1029,8 @@
 			"secondary_element": 4,
 			"point_score": 3,
 			"bonus_points": 1,
-			"icon": "res://assets/animals/icons/Bird_Swan_White.png"
+			"icon": "res://assets/animals/icons/Bird_Swan_White.png",
+			"model": "res://assets/animals/models/Swan.fbx"
 		},
 		{
 			"id": 22,
@@ -1042,7 +1070,8 @@
 			"secondary_element": 4,
 			"point_score": 5,
 			"bonus_points": 1,
-			"icon": "res://assets/animals/icons/Bird_Eagle.png"
+			"icon": "res://assets/animals/icons/Bird_Eagle.png",
+			"model": "res://assets/animals/models/Eagle.fbx"
 		},
 		{
 			"id": 23,
@@ -1074,7 +1103,8 @@
 			"secondary_element": 5,
 			"point_score": 4,
 			"bonus_points": 1,
-			"icon": "res://assets/animals/icons/TropicalMammal_Platypus.png"
+			"icon": "res://assets/animals/icons/TropicalMammal_Platypus.png",
+			"model": "res://assets/animals/models/Hummingbird.fbx"
 		},
 		{
 			"id": 24,
@@ -1114,7 +1144,8 @@
 			"secondary_element": 2,
 			"point_score": 6,
 			"bonus_points": 1,
-			"icon": "res://assets/animals/icons/LivestockMammal_Llama_Brown.png"
+			"icon": "res://assets/animals/icons/LivestockMammal_Llama_Brown.png",
+			"model": "res://assets/animals/models/Llama.fbx"
 		},
 		{
 			"id": 25,
@@ -1146,7 +1177,8 @@
 			"secondary_element": 2,
 			"point_score": 2,
 			"bonus_points": 0.5,
-			"icon": "res://assets/animals/icons/PetRodent_Hamster.png"
+			"icon": "res://assets/animals/icons/PetRodent_Hamster.png",
+			"model": "res://assets/animals/models/Hummingbird.fbx"
 		},
 		{
 			"id": 26,
@@ -1178,7 +1210,8 @@
 			"secondary_element": 5,
 			"point_score": 2,
 			"bonus_points": 0.5,
-			"icon": "res://assets/animals/icons/Rodent_Capybara.png"
+			"icon": "res://assets/animals/icons/Rodent_Capybara.png",
+			"model": "res://assets/animals/models/Hummingbird.fbx"
 		},
 		{
 			"id": 27,
@@ -1218,7 +1251,8 @@
 			"secondary_element": 1,
 			"point_score": 6,
 			"bonus_points": 1,
-			"icon": "res://assets/animals/icons/ForestMammal_Bat_Black.png"
+			"icon": "res://assets/animals/icons/ForestMammal_Bat_Black.png",
+			"model": "res://assets/animals/models/VampireBat.fbx"
 		},
 		{
 			"id": 28,
@@ -1258,7 +1292,8 @@
 			"secondary_element": 3,
 			"point_score": 7,
 			"bonus_points": 1,
-			"icon": "res://assets/animals/icons/MountainMammal_Mountaingoat.png"
+			"icon": "res://assets/animals/icons/MountainMammal_Mountaingoat.png",
+			"model": "res://assets/animals/models/Goat.fbx"
 		},
 		{
 			"id": 29,
@@ -1298,7 +1333,8 @@
 			"secondary_element": 3,
 			"point_score": 9,
 			"bonus_points": 1,
-			"icon": "res://assets/animals/icons/Bird_Vulture.png"
+			"icon": "res://assets/animals/icons/Bird_Vulture.png",
+			"model": "res://assets/animals/models/Vulture.fbx"
 		},
 		{
 			"id": 30,
@@ -1338,7 +1374,8 @@
 			"secondary_element": 4,
 			"point_score": 3,
 			"bonus_points": 1,
-			"icon": "res://assets/animals/icons/Fish_Herring.png"
+			"icon": "res://assets/animals/icons/Fish_Herring.png",
+			"model": "res://assets/animals/models/Hummingbird.fbx"
 		},
 		{
 			"id": 31,
@@ -1378,7 +1415,8 @@
 			"secondary_element": 2,
 			"point_score": 3,
 			"bonus_points": 1,
-			"icon": "res://assets/animals/icons/WaterMammal_Otter.png"
+			"icon": "res://assets/animals/icons/WaterMammal_Otter.png",
+			"model": "res://assets/animals/models/Otter.fbx"
 		},
 		{
 			"id": 32,
@@ -1410,7 +1448,8 @@
 			"secondary_element": 3,
 			"point_score": 2,
 			"bonus_points": 0.5,
-			"icon": "res://assets/animals/icons/SeaShellfish_Crab_Sand.png"
+			"icon": "res://assets/animals/icons/SeaShellfish_Crab_Sand.png",
+			"model": "res://assets/animals/models/Hummingbird.fbx"
 		},
 		{
 			"id": 33,
@@ -1450,7 +1489,8 @@
 			"secondary_element": 5,
 			"point_score": 3,
 			"bonus_points": 1,
-			"icon": "res://assets/animals/icons/SavannaBird_Flamingo.png"
+			"icon": "res://assets/animals/icons/SavannaBird_Flamingo.png",
+			"model": "res://assets/animals/models/Hummingbird.fbx"
 		},
 		{
 			"id": 34,
@@ -1490,7 +1530,8 @@
 			"secondary_element": 1,
 			"point_score": 5,
 			"bonus_points": 1,
-			"icon": "res://assets/animals/icons/Fish_Salmon.png"
+			"icon": "res://assets/animals/icons/Fish_Salmon.png",
+			"model": "res://assets/animals/models/Hummingbird.fbx"
 		},
 		{
 			"id": 35,
@@ -1522,7 +1563,8 @@
 			"secondary_element": 2,
 			"point_score": 2,
 			"bonus_points": 1,
-			"icon": "res://assets/animals/icons/Amphibian_Frog_Green.png"
+			"icon": "res://assets/animals/icons/Amphibian_Frog_Green.png",
+			"model": "res://assets/animals/models/Toad.fbx"
 		},
 		{
 			"id": 36,
@@ -1562,7 +1604,8 @@
 			"secondary_element": 4,
 			"point_score": 4,
 			"bonus_points": 1,
-			"icon": "res://assets/animals/icons/Reptile_Crocodile_Green.png"
+			"icon": "res://assets/animals/icons/Reptile_Crocodile_Green.png",
+			"model": "res://assets/animals/models/Crocodile.fbx"
 		},
 		{
 			"id": 37,
@@ -1602,7 +1645,8 @@
 			"secondary_element": 1,
 			"point_score": 7,
 			"bonus_points": 1,
-			"icon": "res://assets/animals/icons/Reptile_Lizard.png"
+			"icon": "res://assets/animals/icons/Reptile_Lizard.png",
+			"model": "res://assets/animals/models/Gecko.fbx"
 		},
 		{
 			"id": 38,
@@ -1642,7 +1686,8 @@
 			"secondary_element": 3,
 			"point_score": 6,
 			"bonus_points": 1,
-			"icon": "res://assets/animals/icons/Reptile_Snake_Brown.png"
+			"icon": "res://assets/animals/icons/Reptile_Snake_Brown.png",
+			"model": "res://assets/animals/models/CoralSnake.fbx"
 		},
 		{
 			"id": 39,
@@ -1682,7 +1727,8 @@
 			"secondary_element": 4,
 			"point_score": 4,
 			"bonus_points": 1,
-			"icon": "res://assets/animals/icons/Bird_Duck_Mallard.png"
+			"icon": "res://assets/animals/icons/Bird_Duck_Mallard.png",
+			"model": "res://assets/animals/models/WildDuck.fbx"
 		}
 	]
 }

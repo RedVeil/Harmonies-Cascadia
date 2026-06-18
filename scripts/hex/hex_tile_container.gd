@@ -126,6 +126,7 @@ func apply_target_preview_visuals(preview:TileStatePreview) -> void:
 	if tile_state.animal_id != -1:
 		var animal = CardCatalog.animals[CardCatalog.animals.find_custom(func (animal): return animal.id == tile_state.animal_id)]
 		new_visuals.animal_icon = load(animal.icon)
+		new_visuals.animal_model = animal.model
 	
 	new_target_visuals = new_visuals
 	tiles_by_coord[hover_target].update_visuals(new_visuals)

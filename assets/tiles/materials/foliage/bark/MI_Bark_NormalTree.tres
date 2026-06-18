@@ -1,12 +1,10 @@
 [gd_resource type="ShaderMaterial" format=3 uid="uid://salx13f41xn5"]
 
 [ext_resource type="Shader" uid="uid://6pjdfngubk4f" path="res://assets/shader/tiles/foliage/M_Bark.gdshader" id="1_de0wv"]
-[ext_resource type="Texture2D" uid="uid://b8p2juqg7uukb" path="res://assets/tiles/materials/textures/bark/Bark_NormalTree_Normal.png" id="2_iey0d"]
 [ext_resource type="Texture2D" uid="uid://bq3psq7ffna4r" path="res://assets/tiles/materials/textures/bark/Bark_NormalTree.png" id="3_rcjlh"]
 
 [resource]
 render_priority = 0
 shader = ExtResource("1_de0wv")
-shader_parameter/Color_Bottom = Color(0.235171, 0.290303, 1.92523e-07, 1)
 shader_parameter/texture_albedo = ExtResource("3_rcjlh")
-shader_parameter/normal_map = ExtResource("2_iey0d")
+shader_parameter/Color_Bottom = Color(0.235171, 0.290303, 1.92523e-07, 1)

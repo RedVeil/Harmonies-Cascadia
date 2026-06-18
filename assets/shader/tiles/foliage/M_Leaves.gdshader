@@ -3,9 +3,9 @@ shader_type spatial;
 render_mode blend_mix,specular_schlick_ggx, depth_prepass_alpha;
 
 uniform vec4 Leaf_Color : source_color = vec4(0.45, 0.64, 0.0, 1.0);
-const vec4 ExtraColor = vec4(0.13, 0.33, 0.25, 1.0);
+uniform vec4 ExtraColor : source_color  = vec4(0.13, 0.33, 0.25, 1.0);
 varying vec3 obj_vertex;
-uniform sampler2D Alpha:filter_linear_mipmap, repeat_disable;
+uniform sampler2D Alpha;
 uniform vec4 SSS_Color : source_color = vec4(0.65, 0.70, 0.0, 1.0);
 uniform float WindSpeed : hint_range(0.1, 20.0) = 10.0;
 uniform float WindStrength : hint_range(0.0, 1.0) = 0.1;

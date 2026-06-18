@@ -1,9 +1,7 @@
 [gd_scene format=4 uid="uid://byh87sey2h1lf"]
 
-[ext_resource type="Texture2D" uid="uid://c4mafqsc1wq5m" path="res://assets/tiles/materials/textures/mountain/T_Mountain_01_Dry_BaseColor.png" id="1_ow7on"]
-[ext_resource type="Texture2D" uid="uid://bbdh07si0u2bx" path="res://assets/tiles/materials/textures/mountain/T_Mountain_01_Dry_AmbientOcclusion.png" id="2_1aca6"]
-[ext_resource type="Texture2D" uid="uid://il227vgxgqut" path="res://assets/tiles/materials/textures/mountain/T_Mountain_01_Grass_OpenGL_Normal.png" id="2_ow7on"]
-[ext_resource type="Texture2D" uid="uid://cnesr784d78ij" path="res://assets/tiles/materials/textures/mountain/T_Mountain_01_Grass_Roughness.png" id="3_1aca6"]
+[ext_resource type="Texture2D" uid="uid://buaffti5pwa7k" path="res://assets/tiles/materials/textures/mountain/T_Mountain_01_Dry_AmbientOcclusion.png" id="2_1aca6"]
+[ext_resource type="Texture2D" uid="uid://nff3sh0b3q83" path="res://assets/tiles/materials/textures/mountain/T_Mountain_01_Dry_OpenGL_Normal.png" id="3_l3cto"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8ggx0"]
 resource_name = "Mountain_01_Grass"
@@ -50,14 +48,15 @@ blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_fxdwy")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ukwd1"]
-albedo_texture = ExtResource("1_ow7on")
-roughness_texture = ExtResource("3_1aca6")
+diffuse_mode = 1
+albedo_color = Color(0.5333093, 0.53719, 0.5020377, 1)
 normal_enabled = true
-normal_texture = ExtResource("2_ow7on")
+normal_texture = ExtResource("3_l3cto")
 ao_enabled = true
+ao_light_affect = 0.5
 ao_texture = ExtResource("2_1aca6")
 
 [node name="SM_3DT_Mountain_01_Grass" type="MeshInstance3D" unique_id=1183131807]
-transform = Transform3D(100, 0, 0, 0, -4.371139e-06, 100, 0, -100, -4.371139e-06, 0, 0, 0)
+transform = Transform3D(1347.87, 0, 0, 0, -5.891727e-05, 1347.87, 0, -1347.87, -5.891727e-05, 0, 0, 0)
 mesh = SubResource("ArrayMesh_rs5qg")
 surface_material_override/0 = SubResource("StandardMaterial3D_ukwd1")

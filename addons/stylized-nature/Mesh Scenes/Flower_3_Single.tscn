@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cyycx5fg700ix"]
 
-[ext_resource type="Material" uid="uid://b43nm87c4l54o" path="res://Materials/MI_Leaves.tres" id="2_3p2pp"]
-[ext_resource type="Material" uid="uid://bhatmxlwha13o" path="res://Materials/MI_Flowers.tres" id="3_oj0bp"]
+[ext_resource type="Material" uid="uid://b43nm87c4l54o" path="res://assets/tiles/materials/foliage/plants/MI_Leaves.tres" id="2_3p2pp"]
+[ext_resource type="Material" uid="uid://bhatmxlwha13o" path="res://assets/tiles/materials/foliage/plants/MI_Flowers.tres" id="3_oj0bp"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_1yjbv"]
 _surfaces = [{

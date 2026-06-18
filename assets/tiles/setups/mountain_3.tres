@@ -1,28 +1,42 @@
 [gd_resource type="Resource" script_class="TileSetup" format=3 uid="uid://c8ryk4fj6y7o4"]
 
 [ext_resource type="Script" uid="uid://c3lvgpc7kuqep" path="res://scripts/ressources/TileCenterFeature.gd" id="1_1vh4x"]
+[ext_resource type="PackedScene" uid="uid://byh87sey2h1lf" path="res://assets/tiles/assets/mountain/mountain1.tscn" id="2_7ma1i"]
 [ext_resource type="Resource" uid="uid://dyp87abnisoo" path="res://assets/tiles/setups/layers/grass_dense.tres" id="4_a863a"]
-[ext_resource type="PackedScene" uid="uid://cqje8481v034t" path="res://assets/tiles/assets/mountain/SM_3DT_Mountain_04_Grass.fbx" id="4_tw45c"]
+[ext_resource type="PackedScene" uid="uid://bugno0qurovdl" path="res://assets/tiles/assets/plants/Flower_1_Group.tscn" id="5_7ma1i"]
 [ext_resource type="Script" uid="uid://7ktcjexgnhdj" path="res://scripts/ressources/TileScatterLayer.gd" id="9_djt7m"]
 [ext_resource type="Script" uid="uid://yva726781osc" path="res://scripts/ressources/TileSetup.gd" id="11_s2a0o"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a863a"]
-albedo_color = Color(0.34781694, 0.34781697, 0.34781685, 1)
-
 [sub_resource type="Resource" id="Resource_jw4bl"]
 script = ExtResource("1_1vh4x")
-scene = ExtResource("4_tw45c")
-scale = Vector3(1.2, 1.8, 1.2)
-material = SubResource("StandardMaterial3D_a863a")
+scene = ExtResource("2_7ma1i")
+location = Vector3(0, -1, 0)
+rotation_degrees = Vector3(-90, 0, 0)
+scale = Vector3(1150, 1100, 1500)
 register_exclusions = false
 metadata/_custom_type_script = "uid://c3lvgpc7kuqep"
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7ma1i"]
-albedo_color = Color(0.35385472, 0.2601802, 0.07683464, 1)
+albedo_color = Color(0.40018785, 0.58383155, 0.2694199, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fbe2e"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lrgg3"]
+albedo_color = Color(0.9450095, 0.861681, 0.73395103, 1)
+
+[sub_resource type="Resource" id="Resource_ja0ap"]
+script = ExtResource("9_djt7m")
+mesh_scenes = Array[PackedScene]([ExtResource("5_7ma1i")])
+mesh_count_range = Vector2i(10, 15)
+hex_radius_inset = 0.05
+scale = Vector2(0.1, 0.1)
+materials = Array[Material]([SubResource("StandardMaterial3D_fbe2e"), SubResource("StandardMaterial3D_lrgg3")])
+register_exclusions = false
+metadata/_custom_type_script = "uid://7ktcjexgnhdj"
 
 [resource]
 script = ExtResource("11_s2a0o")
-scatter_layers = Array[ExtResource("9_djt7m")]([ExtResource("4_a863a")])
+scatter_layers = Array[ExtResource("9_djt7m")]([ExtResource("4_a863a"), SubResource("Resource_ja0ap")])
 ground_material = SubResource("StandardMaterial3D_7ma1i")
 exclusion_padding = 0.0
 center_features = Array[ExtResource("1_1vh4x")]([SubResource("Resource_jw4bl")])

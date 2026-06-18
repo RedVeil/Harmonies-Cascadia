@@ -3,25 +3,17 @@
 [ext_resource type="Script" uid="uid://bnb8amv0s2k4k" path="res://scripts/camera/IsometricCameraController.gd" id="1_3j4k1"]
 [ext_resource type="PackedScene" uid="uid://cofumvkpk8rxk" path="res://scenes/hex/tile_default.tscn" id="1_22xhg"]
 [ext_resource type="Resource" uid="uid://o5fft4xc3g2q" path="res://assets/tiles/setups/forest_2.tres" id="2_3j4k1"]
-[ext_resource type="Resource" uid="uid://d3ol8mx1j8nhg" path="res://assets/tiles/setups/forest_3.tres" id="3_yp744"]
 [ext_resource type="Resource" uid="uid://b5yk63yoyjyo8" path="res://assets/tiles/setups/river_1.tres" id="4_d2x0f"]
 [ext_resource type="Resource" uid="uid://bo45yi472l2wj" path="res://assets/tiles/setups/mountain_1.tres" id="5_my8id"]
 [ext_resource type="Resource" uid="uid://cdwkeurh7edl0" path="res://assets/tiles/setups/mountain_2.tres" id="6_5aa0y"]
 [ext_resource type="Resource" uid="uid://c8ryk4fj6y7o4" path="res://assets/tiles/setups/mountain_3.tres" id="7_lxbil"]
 [ext_resource type="Resource" uid="uid://bh30mkdhfetf7" path="res://assets/tiles/setups/wetland_1.tres" id="8_vdxth"]
-[ext_resource type="Resource" uid="uid://n24gaese0vp1" path="res://assets/tiles/setups/field_1.tres" id="10_3j4k1"]
+[ext_resource type="Resource" uid="uid://n24gaese0vp1" path="res://assets/tiles/setups/field_1.tres" id="9_22wox"]
 [ext_resource type="Resource" uid="uid://n24gaese0vp1" path="res://assets/tiles/setups/field_2.tres" id="10_wf557"]
-[ext_resource type="ArrayMesh" uid="uid://cg2ewxhl0poum" path="res://path-corner.obj" id="11_jcfy8"]
 
 [sub_resource type="Environment" id="Environment_yp744"]
 background_mode = 1
 background_color = Color(0.8186203, 0.7502329, 0.6806915, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hanw2"]
-albedo_color = Color(0.5879934, 0.42863324, 0.18354073, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_usrsh"]
-albedo_color = Color(0.6253981, 1, 1, 1)
 
 [node name="Node3D" type="Node3D" unique_id=177571574]
 
@@ -52,10 +44,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35980225, 0, 3.0621338)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.211624, 0, -5.5643997)
 editor_setup = ExtResource("2_3j4k1")
 
-[node name="Tile_Default3" parent="." unique_id=500168333 instance=ExtResource("1_22xhg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.421902, 0, -14.021708)
-editor_setup = ExtResource("3_yp744")
-
 [node name="Tile_Default10" parent="." unique_id=1905896799 instance=ExtResource("1_22xhg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 46.075207, 0, -6.000414)
 editor_setup = ExtResource("4_d2x0f")
@@ -63,12 +51,18 @@ editor_setup = ExtResource("4_d2x0f")
 [node name="Tile_Default11" parent="." unique_id=1447798548 instance=ExtResource("1_22xhg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.398243, 0, 11.776062)
 editor_setup = ExtResource("4_d2x0f")
-editor_river_neighbor_directions = Array[int]([0, 0])
+
+[node name="Tile_Default14" parent="." unique_id=586260956 instance=ExtResource("1_22xhg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.130035, 0, 20.501202)
+editor_setup = ExtResource("4_d2x0f")
+
+[node name="Tile_Default13" parent="." unique_id=381967752 instance=ExtResource("1_22xhg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.03109, 0, 29.106693)
+editor_setup = ExtResource("4_d2x0f")
 
 [node name="Tile_Default12" parent="." unique_id=534335670 instance=ExtResource("1_22xhg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.133904, 0, 20.275019)
 editor_setup = ExtResource("4_d2x0f")
-editor_river_neighbor_directions = Array[int]([0])
 
 [node name="Tile_Default4" parent="." unique_id=499627477 instance=ExtResource("1_22xhg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35980225, 0, -13.991934)
@@ -88,14 +82,8 @@ editor_setup = ExtResource("8_vdxth")
 
 [node name="Tile_Default8" parent="." unique_id=1294499866 instance=ExtResource("1_22xhg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.211624, 0, 11.532862)
-editor_setup = ExtResource("10_3j4k1")
+editor_setup = ExtResource("9_22wox")
 
 [node name="Tile_Default9" parent="." unique_id=1530365315 instance=ExtResource("1_22xhg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.421902, 0, 3.075554)
 editor_setup = ExtResource("10_wf557")
-
-[node name="PathCorner" type="MeshInstance3D" parent="." unique_id=2104810960]
-transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 43.34985, 0.921072, 13.8230915)
-mesh = ExtResource("11_jcfy8")
-surface_material_override/0 = SubResource("StandardMaterial3D_hanw2")
-surface_material_override/1 = SubResource("StandardMaterial3D_usrsh")

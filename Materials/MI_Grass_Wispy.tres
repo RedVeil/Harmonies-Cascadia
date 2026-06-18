@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" format=3 uid="uid://baq4sm60ea2hl"]
 
-[ext_resource type="Shader" uid="uid://cidecmtlxgc45" path="res://Materials/M_Grass.gdshader" id="1_0pulh"]
+[ext_resource type="Shader" uid="uid://cidecmtlxgc45" path="res://assets/shader/tiles/foliage/M_Grass.gdshader" id="1_0pulh"]
 [ext_resource type="Texture2D" uid="uid://h35uej8tofad" path="res://Materials/T_FoliageNoise.tres" id="2_ic8t2"]
 [ext_resource type="Texture2D" uid="uid://dvsu16i3c8e" path="res://addons/stylized-nature/assets/Noise_Wind.png" id="3_bkdq1"]
 

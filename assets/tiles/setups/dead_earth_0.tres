@@ -5,8 +5,8 @@
 [ext_resource type="Material" uid="uid://xumuon0sgtay" path="res://assets/tiles/materials/ground/dead_earth_ground.tres" id="2_ground"]
 [ext_resource type="Script" uid="uid://7ktcjexgnhdj" path="res://scripts/ressources/TileScatterLayer.gd" id="3_7w4nh"]
 [ext_resource type="Resource" uid="uid://bvs31vyyf12pr" path="res://assets/tiles/setups/layers/pebbles_default.tres" id="3_pebbles"]
-[ext_resource type="Material" uid="uid://bbcpjdj21w7h3" path="res://assets/tiles/materials/foliage/bark/MI_Bark_DeadTree.tres" id="5_hquia"]
-[ext_resource type="PackedScene" uid="uid://bmeud0nbaid" path="res://assets/tiles/assets/tree/dead/dead_tree1.tscn" id="6_maytv"]
+[ext_resource type="Material" uid="uid://bbcpjdj21w7h3" path="res://Materials/MI_Bark_DeadTree.tres" id="5_hquia"]
+[ext_resource type="PackedScene" uid="uid://bmeud0nbaid" path="res://assets/tiles/assets/tree/dead_tree1.tscn" id="6_maytv"]
 
 [sub_resource type="Resource" id="Resource_adtxv"]
 script = ExtResource("3_7w4nh")

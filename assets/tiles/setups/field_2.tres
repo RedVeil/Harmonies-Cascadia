@@ -3,15 +3,15 @@
 [ext_resource type="Script" uid="uid://c3lvgpc7kuqep" path="res://scripts/ressources/TileCenterFeature.gd" id="1_0tue4"]
 [ext_resource type="Script" uid="uid://7ktcjexgnhdj" path="res://scripts/ressources/TileScatterLayer.gd" id="3_qfgto"]
 [ext_resource type="Resource" uid="uid://dyp87abnisoo" path="res://assets/tiles/setups/layers/grass_dense.tres" id="4_c16d4"]
-[ext_resource type="PackedScene" uid="uid://bugno0qurovdl" path="res://addons/stylized-nature/Mesh Scenes/Flower_1_Group.tscn" id="5_jkm62"]
-[ext_resource type="PackedScene" uid="uid://bhj8ebwqste5i" path="res://addons/stylized-nature/Mesh Scenes/Grass_Wheat.tscn" id="5_kfpgv"]
-[ext_resource type="PackedScene" uid="uid://c0u0qwp7kcyaq" path="res://addons/stylized-nature/Mesh Scenes/Flower_3_Group.tscn" id="6_emwls"]
+[ext_resource type="PackedScene" uid="uid://bugno0qurovdl" path="res://assets/tiles/assets/plants/Flower_1_Group.tscn" id="5_jkm62"]
+[ext_resource type="PackedScene" uid="uid://bhj8ebwqste5i" path="res://assets/tiles/assets/plants/Grass_Wheat.tscn" id="5_kfpgv"]
+[ext_resource type="PackedScene" uid="uid://c0u0qwp7kcyaq" path="res://assets/tiles/assets/plants/Flower_3_Group.tscn" id="6_emwls"]
 [ext_resource type="PackedScene" uid="uid://cnk6puex2htjj" path="res://addons/stylized-nature/Mesh Scenes/Flower_2_Group.tscn" id="7_0tl8p"]
 [ext_resource type="Script" uid="uid://yva726781osc" path="res://scripts/ressources/TileSetup.gd" id="8_hvevf"]
-[ext_resource type="PackedScene" uid="uid://1wi552q7rsqs" path="res://addons/stylized-nature/Mesh Scenes/Flower_4_Group.tscn" id="9_qfgto"]
+[ext_resource type="PackedScene" uid="uid://1wi552q7rsqs" path="res://assets/tiles/assets/plants/Flower_4_Group.tscn" id="9_qfgto"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xxjvv"]
-albedo_color = Color(0.5764706, 0.59607846, 0.21176471, 1)
+albedo_color = Color(0.40018785, 0.58383155, 0.2694199, 1)
 
 [sub_resource type="Resource" id="Resource_c16d4"]
 script = ExtResource("3_qfgto")
