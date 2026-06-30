@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://dd2yqnd5346b5"]
+
+[ext_resource type="PackedScene" uid="uid://cv2pqv1761xhe" path="res://assets/tiles/assets/hex_forest_detail.fbx" id="1_jkn4w"]
+
+[node name="Node3D" type="Node3D" unique_id=344020823]
+
+[node name="hex_forest_detail" parent="." unique_id=1161202553 instance=ExtResource("1_jkn4w")]
+transform = Transform3D(9.5, 0, 0, 0, 9.5, 0, 0, 0, 9.5, 0, 0, 0)
+
+[node name="base_marker" type="Node3D" parent="." unique_id=1078288233]
+transform = Transform3D(9.5, 0, 0, 0, 9.5, 0, 0, 0, 9.5, 0, 0, 0)
+
+[node name="Marker3D" type="Marker3D" parent="base_marker" unique_id=259755615]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.180316, 0)
+
+[node name="extra_marker" type="Node3D" parent="." unique_id=1569858624]
+transform = Transform3D(9.5, 0, 0, 0, 9.5, 0, 0, 0, 9.5, 0, 0, 0)
+
+[node name="Marker3D" type="Marker3D" parent="extra_marker" unique_id=644192381]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.594955, -7.880002)
+
+[node name="Marker3D2" type="Marker3D" parent="extra_marker" unique_id=1078375770]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.594955, 7.6654024)
+
+[node name="Marker3D3" type="Marker3D" parent="extra_marker" unique_id=415620578]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5983086, 9.594955, -2.2507772)
+
+[node name="Marker3D4" type="Marker3D" parent="extra_marker" unique_id=761935960]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5983086, 9.594955, 3.6779132)
+
+[node name="Marker3D5" type="Marker3D" parent="extra_marker" unique_id=1181926483]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.009527, 9.594955, 3.6779132)
+
+[node name="Marker3D6" type="Marker3D" parent="extra_marker" unique_id=2126553502]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.009527, 9.594955, -3.0005155)

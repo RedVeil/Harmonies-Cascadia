@@ -1,7 +1,7 @@
 extends StaticBody3D
 class_name HexTile
 
-const SCORE_POP_BASE_Y := 3.367
+const SCORE_POP_BASE_Y := 19.0
 
 @export_group("Place Score Pop Animation")
 @export var score_pop_sounds: Array[AudioStream] = []
@@ -35,64 +35,33 @@ const SCORE_POP_BASE_Y := 3.367
 
 var container : HexTileContainer
 var coord : Vector2i
-var tile_orientation_steps: int = 0
-var visuals : HexTileVisuals
-var committed_setup: TileSetupState
-var preview_setup: TileSetupState
+var visuals: TileLayersState
 
-var _displayed_setup_signature: String = ""
 var _feedback_tweens: Dictionary = {}
-var _animal_model_instance: Node3D = null
 
 ## ----- Initialisation ----- ##
 
 func _ready() -> void:
 	input_ray_pickable = true
-	
+
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
 	input_event.connect(_on_input_event)
-	
-	var original_mat := $visuals/StylizedHexTile.material_override as StandardMaterial3D
-	$visuals/StylizedHexTile.material_override = original_mat.duplicate()
-	
-	var new_visuals = HexTileVisuals.new()
-	new_visuals.color = Color.html(ElementCatalog.elements[0].levels[0].color)
-	new_visuals.icon = load(ElementCatalog.elements[0].levels[0].icon)
-	update_visuals(new_visuals)
-	_apply_tile_orientation()
-	commit_setup(
-		TileSetupState.from_setup(
-			TileSetupCatalog.get_setup(GameEnums.ELEMENT.NONE, GameEnums.LEVEL.ANY),
-			[]
-		)
-	)
 
-func init(parent:HexTileContainer, location:Vector2i) -> void:
+func init(parent:HexTileContainer, location:Vector2i, state: TileLayersState) -> void:
 	container = parent
 	coord = location
-	_ensure_orientation_steps()
-
-
-func _ensure_orientation_steps() -> void:
-	var tile_state := container.hex_manager.tiles[coord]
-	if tile_state.orientation_steps < 0:
-		tile_state.orientation_steps = HexCoord.pick_orientation_steps(coord)
-	tile_orientation_steps = tile_state.orientation_steps
-
-
-func _apply_tile_orientation() -> void:
-	$visuals/Tile_Default.rotation_degrees.y = HexCoord.direction_to_yaw_degrees(tile_orientation_steps)
+	update_visuals(state)
 
 ## ----- Interactions Logic ----- ##
 
 func _on_mouse_entered() -> void:
 	container.handle_hover(coord)
-	$visuals/StylizedHexTile.material_override.albedo_color = visuals.color.darkened(0.3)
-	
+	show_outline(Color.WHITE)
+
 func _on_mouse_exited() -> void:
 	container.handle_exit(coord)
-	$visuals/StylizedHexTile.material_override.albedo_color = visuals.color
+	hide_outline()
 
 func _on_input_event(
 	_camera: Camera3D,
@@ -107,115 +76,34 @@ func _on_input_event(
 
 ## ----- Update Visuals Logic ----- ##
 
-func update_visuals(new_visuals:HexTileVisuals) -> void:
-	visuals = new_visuals
-	$visuals/StylizedHexTile.material_override.albedo_color = new_visuals.color
-	$visuals/StylizedHexTile/elementIcon.texture = new_visuals.icon
-	
-	if new_visuals.animal_icon:
-		$visuals/StylizedHexTile/animalIcon.texture = new_visuals.animal_icon
-		$visuals/StylizedHexTile/animalIcon.show()
-	else:
-		$visuals/StylizedHexTile/animalIcon.texture = null
-		$visuals/StylizedHexTile/animalIcon.hide()
-
-	_set_animal_model(new_visuals.animal_model)
-
-
-func _set_animal_model(model_path: String) -> void:
-	if _animal_model_instance != null:
-		_animal_model_instance.queue_free()
-		_animal_model_instance = null
-
-	if model_path == "":
-		return
-	if not ResourceLoader.exists(model_path):
-		push_warning("Animal model does not exist: %s" % model_path)
-		return
-
-	var model_resource := load(model_path)
-	if model_resource == null or not (model_resource is PackedScene):
-		push_warning("Animal model is not a scene: %s" % model_path)
-		return
-
-	var model_node := (model_resource as PackedScene).instantiate()
-	if not (model_node is Node3D):
-		model_node.queue_free()
-		push_warning("Animal model root is not Node3D: %s" % model_path)
-		return
-
-	_animal_model_instance = model_node as Node3D
-	$visuals/animalModel.add_child(_animal_model_instance)
-	_animal_model_instance.position = Vector3.ZERO
-	_animal_model_instance.rotation = Vector3.ZERO
-
-
-func show_committed_setup() -> void:
-	if committed_setup != null:
-		_apply_setup_state(committed_setup)
-
-
-func set_preview_setup(state: TileSetupState) -> void:
-	if preview_setup != null and preview_setup.matches(state):
-		_apply_setup_state(state)
-		return
-
-	preview_setup = state.duplicate_state()
-	_apply_setup_state(preview_setup)
-
-
-func discard_preview_setup() -> void:
-	if preview_setup == null:
-		return
-
-	preview_setup = null
-	show_committed_setup()
-
-
-func commit_setup(state: TileSetupState) -> void:
-	if preview_setup != null:
-		committed_setup = preview_setup.duplicate_state()
-		preview_setup = null
-		return
-
-	committed_setup = state.duplicate_state()
-	_apply_setup_state(committed_setup)
-
-
-func _apply_setup_state(state: TileSetupState) -> void:
-	if state == null or state.setup == null:
-		return
-
-	var setup_signature := state.signature()
-	if setup_signature == _displayed_setup_signature:
-		return
-
-	_displayed_setup_signature = setup_signature
-	$visuals/Tile_Default.apply_setup(state.setup, state.get_context(), setup_signature)
+func update_visuals(state: TileLayersState) -> void:
+	visuals = state
+	$tile_visuals.rotation_degrees.y = HexCoord.direction_to_yaw_degrees(state.orientation_steps)
+	$tile_visuals.update_visuals(state, coord)
 
 ## ----- Points Logic ----- ##
 
 func show_points(points:int) -> void:
-	$visuals/Sprite3D/Label3D.text = "%d" % points
+	$Sprite3D/Label3D.text = "%d" % points
 	if points > 0:
-		$visuals/Sprite3D.modulate = Color.GOLD
+		$Sprite3D.modulate = Color.GOLD
 	if points < 0:
-		$visuals/Sprite3D.modulate = Color.CRIMSON
-	
+		$Sprite3D.modulate = Color.CRIMSON
+
 	if points != 0:
-		$visuals/Sprite3D.show()
+		$Sprite3D.show()
 
 func hide_points() -> void:
-	$visuals/Sprite3D.hide()
+	$Sprite3D.hide()
 
 ## ----- Outline Logic ----- ##
 
 func show_outline(color:Color) -> void:
-	$visuals/outline.modulate = color
-	$visuals/outline.show()
-	
+	$outline.modulate = color
+	$outline.show()
+
 func hide_outline() -> void:
-	$visuals/outline.hide()
+	$outline.hide()
 
 ## ----- Animations ----- ##
 
@@ -255,8 +143,8 @@ func _animate_contributor(element: int, delay: float) -> void:
 
 func _animate_score_pop(points: int) -> void:
 	FeedbackAnimHelper.play_sounds(score_pop_sounds)
-	var sprite: Sprite3D = $visuals/Sprite3D
-	var label: Label3D = $visuals/Sprite3D/Label3D
+	var sprite: Sprite3D = $Sprite3D
+	var label: Label3D = $Sprite3D/Label3D
 	if points > 0:
 		label.text = "+%d" % points
 		sprite.modulate = Color(1.0, 0.88, 0.35, 1.0)
@@ -266,7 +154,7 @@ func _animate_score_pop(points: int) -> void:
 
 	sprite.visible = true
 	sprite.position.y = SCORE_POP_BASE_Y
-	sprite.scale = Vector3(0.2, 0.2, 0.2)
+	sprite.scale = Vector3(1.0, 1.0, 1.0)
 
 	var tween := FeedbackAnimHelper.create_tween(self, _feedback_tweens, &"score_pop", true)
 	tween.tween_property(sprite, "scale", Vector3.ONE * score_pop_peak_scale, score_pop_up_duration)\
@@ -279,7 +167,7 @@ func _animate_score_pop(points: int) -> void:
 
 func _animate_outline_flash(delay: float) -> void:
 	FeedbackAnimHelper.play_sounds(outline_sounds)
-	var outline: Sprite3D = $visuals/outline
+	var outline: Sprite3D = $outline
 	outline.modulate = outline_flash_color
 	outline.show()
 
@@ -295,54 +183,40 @@ func _animate_celebrate(strong: bool, delay: float) -> void:
 		FeedbackAnimHelper.play_sounds(place_celebrate_sounds)
 	else:
 		FeedbackAnimHelper.play_sounds(contributor_sounds)
-	var tile_visuals: Node3D = $visuals
-	var mesh: MeshInstance3D = $visuals/StylizedHexTile
-	var material := mesh.material_override as StandardMaterial3D
+	var tile_visuals_node: Node3D = $tile_visuals
 
 	var lift := placed_lift if strong else contributor_lift
 	var peak_scale := Vector3.ONE * (placed_scale_peak if strong else contributor_scale_peak)
-	var glow_amount := placed_glow if strong else contributor_glow
 	var rise_duration := placed_rise_duration if strong else contributor_rise_duration
 	var settle_duration := placed_settle_duration if strong else contributor_settle_duration
-
-	var base_color := visuals.color
-	var glow_color := base_color.lightened(glow_amount)
 
 	var tween := FeedbackAnimHelper.create_tween(self, _feedback_tweens, &"celebrate")
 	if delay > 0.0:
 		tween.tween_interval(delay)
 	tween.set_parallel(true)
-	tween.tween_property(tile_visuals, "position:y", lift, rise_duration)\
+	tween.tween_property(tile_visuals_node, "position:y", lift, rise_duration)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	tween.tween_property(tile_visuals, "scale", peak_scale, rise_duration)\
+	tween.tween_property(tile_visuals_node, "scale", peak_scale, rise_duration)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	tween.tween_property(material, "albedo_color", glow_color, rise_duration * 0.7)\
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	tween.chain().tween_property(tile_visuals, "position:y", 0.0, settle_duration)\
+	tween.chain().tween_property(tile_visuals_node, "position:y", 0.0, settle_duration)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-	tween.parallel().tween_property(tile_visuals, "scale", Vector3.ONE, settle_duration)\
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-	tween.parallel().tween_property(material, "albedo_color", base_color, settle_duration * 0.85)\
+	tween.parallel().tween_property(tile_visuals_node, "scale", Vector3.ONE, settle_duration)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 	tween.finished.connect(_reset_celebrate_visuals)
 
 func _reset_score_pop_visuals() -> void:
-	var sprite: Sprite3D = $visuals/Sprite3D
+	var sprite: Sprite3D = $Sprite3D
 	sprite.hide()
 	sprite.modulate = Color.WHITE
 	sprite.position.y = SCORE_POP_BASE_Y
 	sprite.scale = Vector3(0.5, 0.5, 0.5)
 
 func _reset_outline_visuals() -> void:
-	var outline: Sprite3D = $visuals/outline
+	var outline: Sprite3D = $outline
 	outline.hide()
 	outline.modulate = Color.WHITE
 
 func _reset_celebrate_visuals() -> void:
-	var tile_visuals: Node3D = $visuals
-	var mesh: MeshInstance3D = $visuals/StylizedHexTile
-	var material := mesh.material_override as StandardMaterial3D
-	tile_visuals.position = Vector3.ZERO
-	tile_visuals.scale = Vector3.ONE
-	if visuals:
-		material.albedo_color = visuals.color
+	var tile_visuals_node: Node3D = $tile_visuals
+	tile_visuals_node.position = Vector3.ZERO
+	tile_visuals_node.scale = Vector3.ONE

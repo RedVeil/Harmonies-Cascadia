@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://cofumvkpk8rxk"]
+
+[ext_resource type="Script" uid="uid://b5njipowjb564" path="res://scripts/hex/tile_visuals.gd" id="1_riite"]
+
+[node name="tile_visuals" type="Node3D" unique_id=1712894082]
+script = ExtResource("1_riite")
+
+[node name="Scenes" type="Node3D" parent="." unique_id=526400763]
+
+[node name="Scatter" type="Node3D" parent="." unique_id=826400764]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, 0)
+
+[node name="MultiMeshLayer0" type="MultiMeshInstance3D" parent="Scatter" unique_id=826400765]
+
+[node name="MultiMeshLayer1" type="MultiMeshInstance3D" parent="Scatter" unique_id=826400766]
+
+[node name="MultiMeshLayer2" type="MultiMeshInstance3D" parent="Scatter" unique_id=826400767]
+
+[node name="MultiMeshLayer3" type="MultiMeshInstance3D" parent="Scatter" unique_id=826400768]
+
+[node name="MultiMeshLayer4" type="MultiMeshInstance3D" parent="Scatter" unique_id=826400769]
+
+[node name="MultiMeshLayer5" type="MultiMeshInstance3D" parent="Scatter" unique_id=1471032849]
+
+[node name="MultiMeshLayer6" type="MultiMeshInstance3D" parent="Scatter" unique_id=1243914826]
+
+[node name="animalModel" type="Node3D" parent="." unique_id=1983746501]

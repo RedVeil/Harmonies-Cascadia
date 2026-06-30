@@ -29,7 +29,6 @@ static func neighbors(c: Vector2i) -> Array[Vector2i]:
 		out.append(c + dir)
 	return out
 
-
 static func direction_to_yaw_degrees(direction_index: int) -> float:
 	return float(posmod(direction_index, DIRECTIONS.size())) * 60.0
 

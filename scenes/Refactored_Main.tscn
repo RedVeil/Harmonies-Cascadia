@@ -45,7 +45,7 @@ position = Vector2(60, 133)
 [node name="BoosterManager" parent="." unique_id=231766619 node_paths=PackedStringArray("orchestrator") instance=ExtResource("1_a7jc5")]
 position = Vector2(51, 668)
 orchestrator = NodePath("../Orchestrator")
-booster_limit = 3
+booster_limit = 5
 base_booster_point_cost = 15
 
 [node name="CardManager" parent="." unique_id=241167023 node_paths=PackedStringArray("orchestrator") instance=ExtResource("2_vg1d4")]

@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://vbn4wsie61cd"]
+
+[resource]
+resource_name = "BrownDark"
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.60714114, 0.35174924, 0.27003974, 1)
+emission_enabled = true
+emission = Color(0.60714114, 0.35174924, 0.27003974, 1)
+emission_energy_multiplier = 0.0

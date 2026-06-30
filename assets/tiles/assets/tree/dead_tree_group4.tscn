@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dbdrt0otrovra"]
+
+[ext_resource type="MultiMesh" uid="uid://tahe12v2ioqk" path="res://assets/tiles/assets/tree/dead_tree_group4.tres" id="1_co0vh"]
+
+[node name="MultiMeshInstance3D2" type="MultiMeshInstance3D" unique_id=1945968030]
+multimesh = ExtResource("1_co0vh")

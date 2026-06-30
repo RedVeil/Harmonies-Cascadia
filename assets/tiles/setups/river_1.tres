@@ -1,8 +1,0 @@
-[gd_resource type="Resource" script_class="TileSetup" format=3 uid="uid://b5yk63yoyjyo8"]
-
-[ext_resource type="Script" uid="uid://c3lvgpc7kuqep" path="res://scripts/ressources/TileCenterFeature.gd" id="1_7lnup"]
-[ext_resource type="Script" uid="uid://yva726781osc" path="res://scripts/ressources/TileSetup.gd" id="1_script"]
-[ext_resource type="Script" uid="uid://7ktcjexgnhdj" path="res://scripts/ressources/TileScatterLayer.gd" id="4_2dwbw"]
-
-[resource]
-script = ExtResource("1_script")

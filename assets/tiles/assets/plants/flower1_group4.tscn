@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://c30q03y3pta4b"]
+
+[ext_resource type="MultiMesh" uid="uid://c2dyft7f53o2f" path="res://assets/tiles/assets/plants/flower1_group4.tres" id="1_uv48k"]
+
+[node name="MultiMeshInstance3D5" type="MultiMeshInstance3D" unique_id=86273511]
+multimesh = ExtResource("1_uv48k")
