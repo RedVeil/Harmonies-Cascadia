@@ -363,6 +363,7 @@ func get_secondary_elements() -> Array[int]:
 
 func add_map_points(val:int) -> void:
 	map_points += val
+	hex_manager.discard_undo_visuals()
 	hex_manager.show_map_buttons()
 	undo_button.disable()
 	pause_cards()

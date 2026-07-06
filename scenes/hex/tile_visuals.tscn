@@ -2,8 +2,9 @@
 
 [ext_resource type="Script" uid="uid://b5njipowjb564" path="res://scripts/hex/tile_visuals.gd" id="1_riite"]
 
-[node name="tile_visuals" type="Node3D" unique_id=1712894082]
+[node name="tile_visuals" type="Node3D" unique_id=1712894082 node_paths=PackedStringArray("multimesh_slots")]
 script = ExtResource("1_riite")
+multimesh_slots = [NodePath("Scatter/MultiMeshLayer0"), NodePath("Scatter/MultiMeshLayer1"), NodePath("Scatter/MultiMeshLayer2"), NodePath("Scatter/MultiMeshLayer3"), NodePath("Scatter/MultiMeshLayer4"), NodePath("Scatter/MultiMeshLayer5"), NodePath("Scatter/MultiMeshLayer6")]
 
 [node name="Scenes" type="Node3D" parent="." unique_id=526400763]
 

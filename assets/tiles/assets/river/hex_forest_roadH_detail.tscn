@@ -99,3 +99,43 @@ multimesh = SubResource("MultiMesh_487xv")
 [node name="Grass_Common_Short2" type="MeshInstance3D" parent="Grass_Common_Short2" unique_id=47616287]
 visible = false
 mesh = SubResource("ArrayMesh_yn3ec")
+
+[node name="base_marker" type="Node3D" parent="." unique_id=1149684867]
+
+[node name="Marker3D" type="Marker3D" parent="base_marker" unique_id=576648944]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03746426, 9.807498, 7.344884)
+
+[node name="Marker3D2" type="Marker3D" parent="base_marker" unique_id=262769695]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.8552284, 9.807498, 1.29177)
+
+[node name="Marker3D3" type="Marker3D" parent="base_marker" unique_id=1880111930]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.0503511, 9.807498, -4.7547817)
+
+[node name="Marker3D4" type="Marker3D" parent="base_marker" unique_id=1166646244]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.641014, 9.807498, -3.5168219)
+
+[node name="Marker3D5" type="Marker3D" parent="base_marker" unique_id=2068682243]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5449705, 9.458574, 4.3952103)
+
+[node name="Marker3D6" type="Marker3D" parent="base_marker" unique_id=1249211026]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.2558203, 9.240733, -2.4094553)
+
+[node name="extra_marker" type="Node3D" parent="." unique_id=790152882]
+
+[node name="Marker3D" type="Marker3D" parent="extra_marker" unique_id=1571817394]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5432396, 8.9803505, 2.2086174)
+
+[node name="Marker3D2" type="Marker3D" parent="extra_marker" unique_id=943514245]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.0315135, 8.9803505, 3.7918737)
+
+[node name="Marker3D3" type="Marker3D" parent="extra_marker" unique_id=1110671720]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.997127, 8.9803505, 5.6081104)
+
+[node name="Marker3D4" type="Marker3D" parent="extra_marker" unique_id=1195309519]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.152473, 8.9803505, 5.8619604)
+
+[node name="Marker3D5" type="Marker3D" parent="extra_marker" unique_id=1113054506]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6685157, 8.9803505, 1.0172207)
+
+[node name="Marker3D6" type="Marker3D" parent="extra_marker" unique_id=2072712075]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.1230154, 8.9803505, 0.55426717)

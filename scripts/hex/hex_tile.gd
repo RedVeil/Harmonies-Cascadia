@@ -33,25 +33,182 @@ const SCORE_POP_BASE_Y := 19.0
 @export var contributor_rise_duration: float = 0.2
 @export var contributor_settle_duration: float = 0.26
 
-var container : HexTileContainer
-var coord : Vector2i
-var visuals: TileLayersState
+var container: HexTileContainer
+var coord: Vector2i
 
+var _visuals_root: Node3D
+var _committed_visuals: TileVisuals
+var _staging_visuals: TileVisuals
+var _showing_preview: bool = false
 var _feedback_tweens: Dictionary = {}
 
-## ----- Initialisation ----- ##
 
 func _ready() -> void:
 	input_ray_pickable = true
-
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
 	input_event.connect(_on_input_event)
+	_cache_visual_nodes()
 
-func init(parent:HexTileContainer, location:Vector2i, state: TileLayersState) -> void:
+
+func _cache_visual_nodes() -> void:
+	if _visuals_root != null:
+		return
+	_visuals_root = $VisualsRoot as Node3D
+	_committed_visuals = $VisualsRoot/current as TileVisuals
+	_staging_visuals = $VisualsRoot/previous as TileVisuals
+
+
+func init(parent: HexTileContainer, location: Vector2i) -> void:
 	container = parent
 	coord = location
-	update_visuals(state)
+	_cache_visual_nodes()
+	apply_committed(
+		GameEnums.ELEMENT.NONE,
+		GameEnums.LEVEL.ANY,
+		-1,
+		0
+	)
+
+
+func apply_committed(
+	element: int,
+	level: int,
+	animal_id: int = -1,
+	orientation_steps: int = 0,
+	scene_layer_rotations: Array[float] = []
+) -> void:
+	_cache_visual_nodes()
+	if _showing_preview:
+		reset_preview()
+	_set_orientation(orientation_steps)
+	_committed_visuals.apply(element, level, coord, animal_id, scene_layer_rotations)
+	_show_committed()
+
+
+func commit_preview_from_tile_data(
+	tile_data: HexTileData,
+	river_neighbors: Array[Vector2i] = []
+) -> void:
+	_cache_visual_nodes()
+	if not _showing_preview:
+		if tile_data.element == GameEnums.ELEMENT.RIVER:
+			var river_data := RiverPreviewLogic.get_river_index_and_rotation(coord, river_neighbors)
+			preview_from_tile_data(tile_data, [], river_data[0], river_data[1])
+		else:
+			preview_from_tile_data(tile_data)
+	_showing_preview = false
+	_swap_visual_buffers()
+	_show_committed()
+	_apply_tile_data_to_committed(tile_data, river_neighbors)
+
+
+func preview_visuals(
+	element: int,
+	level: int,
+	animal_id: int = -1,
+	orientation_steps: int = 0,
+	scene_layer_rotations: Array[float] = [],
+	river_index: int = -1
+) -> void:
+	_cache_visual_nodes()
+	_set_orientation(orientation_steps)
+	_staging_visuals.apply(element, level, coord, animal_id, scene_layer_rotations, river_index)
+	_committed_visuals.visible = false
+	_staging_visuals.visible = true
+	_showing_preview = true
+
+
+func preview_from_tile_data(
+	tile_data: HexTileData, 
+	scene_layer_rotations: Array[float] = [], 
+	rotation_steps:int = -1, 
+	river_index:int = -1
+	) -> void:
+	preview_visuals(
+		tile_data.element,
+		tile_data.level,
+		tile_data.animal_id,
+		_resolve_orientation_steps(tile_data) if rotation_steps == -1 else rotation_steps,
+		scene_layer_rotations,
+		river_index
+	)
+
+
+func reset_preview() -> void:
+	if not _showing_preview:
+		return
+	_show_committed()
+	_staging_visuals.clear_visuals()
+	_showing_preview = false
+
+
+func commit_preview() -> void:
+	if _showing_preview:
+		_showing_preview = false
+		_swap_visual_buffers()
+	_show_committed()
+	_committed_visuals.ensure_active_layers_visible()
+
+
+func restore_undo_visual() -> void:
+	_swap_visual_buffers()
+	_show_committed()
+	_showing_preview = false
+	_staging_visuals.clear_visuals()
+	_committed_visuals.ensure_active_layers_visible()
+
+
+func discard_undo_buffer() -> void:
+	_staging_visuals.clear_visuals()
+
+
+func _swap_visual_buffers() -> void:
+	var temp := _committed_visuals
+	_committed_visuals = _staging_visuals
+	_staging_visuals = temp
+
+
+func _show_committed() -> void:
+	_committed_visuals.visible = true
+	_staging_visuals.visible = false
+
+
+func _apply_tile_data_to_committed(
+	tile_data: HexTileData,
+	river_neighbors: Array[Vector2i] = []
+) -> void:
+	var rotation_steps := _resolve_orientation_steps(tile_data)
+	var river_index := -1
+	if tile_data.element == GameEnums.ELEMENT.RIVER:
+		var river_data := RiverPreviewLogic.get_river_index_and_rotation(coord, river_neighbors)
+		rotation_steps = river_data[0]
+		river_index = river_data[1]
+	_set_orientation(rotation_steps)
+	_committed_visuals.apply(
+		tile_data.element,
+		tile_data.level,
+		coord,
+		tile_data.animal_id,
+		[],
+		river_index,
+		true
+	)
+	_committed_visuals.ensure_active_layers_visible()
+
+
+func _set_orientation(orientation_steps: int) -> void:
+	_cache_visual_nodes()
+	_visuals_root.rotation_degrees.y = HexCoord.direction_to_yaw_degrees(orientation_steps)
+
+
+func _resolve_orientation_steps(tile_data: HexTileData) -> int:
+	if tile_data.orientation_steps >= 0:
+		return tile_data.orientation_steps
+	if tile_data.element != GameEnums.ELEMENT.RIVER:
+		return HexCoord.pick_orientation_steps(coord)
+	return 0
+
 
 ## ----- Interactions Logic ----- ##
 
@@ -59,9 +216,11 @@ func _on_mouse_entered() -> void:
 	container.handle_hover(coord)
 	show_outline(Color.WHITE)
 
+
 func _on_mouse_exited() -> void:
 	container.handle_exit(coord)
 	hide_outline()
+
 
 func _on_input_event(
 	_camera: Camera3D,
@@ -74,16 +233,10 @@ func _on_input_event(
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			container.handle_click(coord)
 
-## ----- Update Visuals Logic ----- ##
-
-func update_visuals(state: TileLayersState) -> void:
-	visuals = state
-	$tile_visuals.rotation_degrees.y = HexCoord.direction_to_yaw_degrees(state.orientation_steps)
-	$tile_visuals.update_visuals(state, coord)
 
 ## ----- Points Logic ----- ##
 
-func show_points(points:int) -> void:
+func show_points(points: int) -> void:
 	$Sprite3D/Label3D.text = "%d" % points
 	if points > 0:
 		$Sprite3D.modulate = Color.GOLD
@@ -93,25 +246,31 @@ func show_points(points:int) -> void:
 	if points != 0:
 		$Sprite3D.show()
 
+
 func hide_points() -> void:
 	$Sprite3D.hide()
 
+
 ## ----- Outline Logic ----- ##
 
-func show_outline(color:Color) -> void:
+func show_outline(color: Color) -> void:
 	$outline.modulate = color
 	$outline.show()
 
+
 func hide_outline() -> void:
 	$outline.hide()
+
 
 ## ----- Animations ----- ##
 
 func play_place_reward(points: int, element: int) -> void:
 	play_animation(&"place", {"points": points, "element": element})
 
+
 func play_contributor_reward(element: int, delay: float = 0.0) -> void:
 	play_animation(&"contributor", {"element": element, "delay": delay})
+
 
 func play_animation(name: StringName, params: Dictionary) -> void:
 	match name:
@@ -123,11 +282,13 @@ func play_animation(name: StringName, params: Dictionary) -> void:
 				params.get("delay", 0.0)
 			)
 
+
 func kill_animations() -> void:
 	FeedbackAnimHelper.kill_all(_feedback_tweens)
 	_reset_celebrate_visuals()
 	_reset_score_pop_visuals()
 	_reset_outline_visuals()
+
 
 func _animate_place(points: int, element: int) -> void:
 	if points != 0:
@@ -136,10 +297,12 @@ func _animate_place(points: int, element: int) -> void:
 	if element != GameEnums.ELEMENT.NONE:
 		_animate_celebrate(true, 0.0)
 
+
 func _animate_contributor(element: int, delay: float) -> void:
 	_animate_outline_flash(delay)
 	if element != GameEnums.ELEMENT.NONE:
 		_animate_celebrate(false, delay)
+
 
 func _animate_score_pop(points: int) -> void:
 	FeedbackAnimHelper.play_sounds(score_pop_sounds)
@@ -165,6 +328,7 @@ func _animate_score_pop(points: int) -> void:
 		.set_delay(score_pop_fade_delay).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	tween.finished.connect(_reset_score_pop_visuals)
 
+
 func _animate_outline_flash(delay: float) -> void:
 	FeedbackAnimHelper.play_sounds(outline_sounds)
 	var outline: Sprite3D = $outline
@@ -178,12 +342,13 @@ func _animate_outline_flash(delay: float) -> void:
 		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	tween.finished.connect(_reset_outline_visuals)
 
+
 func _animate_celebrate(strong: bool, delay: float) -> void:
 	if strong:
 		FeedbackAnimHelper.play_sounds(place_celebrate_sounds)
 	else:
 		FeedbackAnimHelper.play_sounds(contributor_sounds)
-	var tile_visuals_node: Node3D = $tile_visuals
+	_cache_visual_nodes()
 
 	var lift := placed_lift if strong else contributor_lift
 	var peak_scale := Vector3.ONE * (placed_scale_peak if strong else contributor_scale_peak)
@@ -194,15 +359,16 @@ func _animate_celebrate(strong: bool, delay: float) -> void:
 	if delay > 0.0:
 		tween.tween_interval(delay)
 	tween.set_parallel(true)
-	tween.tween_property(tile_visuals_node, "position:y", lift, rise_duration)\
+	tween.tween_property(_visuals_root, "position:y", lift, rise_duration)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	tween.tween_property(tile_visuals_node, "scale", peak_scale, rise_duration)\
+	tween.tween_property(_visuals_root, "scale", peak_scale, rise_duration)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	tween.chain().tween_property(tile_visuals_node, "position:y", 0.0, settle_duration)\
+	tween.chain().tween_property(_visuals_root, "position:y", 0.0, settle_duration)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-	tween.parallel().tween_property(tile_visuals_node, "scale", Vector3.ONE, settle_duration)\
+	tween.parallel().tween_property(_visuals_root, "scale", Vector3.ONE, settle_duration)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 	tween.finished.connect(_reset_celebrate_visuals)
+
 
 func _reset_score_pop_visuals() -> void:
 	var sprite: Sprite3D = $Sprite3D
@@ -211,12 +377,14 @@ func _reset_score_pop_visuals() -> void:
 	sprite.position.y = SCORE_POP_BASE_Y
 	sprite.scale = Vector3(0.5, 0.5, 0.5)
 
+
 func _reset_outline_visuals() -> void:
 	var outline: Sprite3D = $outline
 	outline.hide()
 	outline.modulate = Color.WHITE
 
+
 func _reset_celebrate_visuals() -> void:
-	var tile_visuals_node: Node3D = $tile_visuals
-	tile_visuals_node.position = Vector3.ZERO
-	tile_visuals_node.scale = Vector3.ONE
+	_cache_visual_nodes()
+	_visuals_root.position = Vector3.ZERO
+	_visuals_root.scale = Vector3.ONE

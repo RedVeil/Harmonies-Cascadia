@@ -44,14 +44,6 @@
 						0,
 						0
 					]
-				},
-				{
-					"element": 1,
-					"level": 2,
-					"coords": [
-						0,
-						0
-					]
 				}
 			],
 			"bonus": [],
@@ -275,7 +267,7 @@
 			"placement": [
 				{
 					"element": 1,
-					"level": 3,
+					"level": 2,
 					"coords": [
 						0,
 						0
@@ -431,7 +423,7 @@
 			"placement": [
 				{
 					"element": 1,
-					"level": 3,
+					"level": 2,
 					"coords": [
 						0,
 						0
@@ -464,7 +456,7 @@
 			"placement": [
 				{
 					"element": 1,
-					"level": 3,
+					"level": 2,
 					"coords": [
 						0,
 						0
@@ -497,7 +489,7 @@
 			"placement": [
 				{
 					"element": 1,
-					"level": 3,
+					"level": 2,
 					"coords": [
 						0,
 						0
@@ -507,7 +499,7 @@
 			"bonus": [
 				{
 					"element": 1,
-					"level": 3,
+					"level": 2,
 					"coords": [
 						0,
 						1
@@ -515,7 +507,7 @@
 				},
 				{
 					"element": 1,
-					"level": 3,
+					"level": 2,
 					"coords": [
 						1,
 						0
@@ -1624,7 +1616,7 @@
 			"bonus": [
 				{
 					"element": 1,
-					"level": 3,
+					"level": 2,
 					"coords": [
 						0,
 						1
@@ -1632,7 +1624,7 @@
 				},
 				{
 					"element": 1,
-					"level": 3,
+					"level": 2,
 					"coords": [
 						1,
 						-1

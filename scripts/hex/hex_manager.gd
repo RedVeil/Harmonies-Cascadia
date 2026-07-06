@@ -77,6 +77,9 @@ func reset_preview(coord:Vector2i) -> void:
 func undo(coord:Vector2i) -> void:
 	hex_container.undo(coord)
 
+func discard_undo_visuals() -> void:
+	hex_container.discard_undo_visuals()
+
 ## ----- Map Logic ----- ##
 
 func show_map_buttons() -> void:

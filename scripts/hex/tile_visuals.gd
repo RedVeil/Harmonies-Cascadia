@@ -4,92 +4,177 @@ class_name TileVisuals
 const BASE_SCENE_LAYER_Y_ROTATION := 30.0
 const BASE_MARKER_CONTAINER_NAMES := ["base_markers", "base_marker"]
 
-@export var scenes_root: Node3D
 @export var multimesh_slots: Array[MultiMeshInstance3D] = []
-@export var _active_signature: String = ""
+var _scenes_root: Node3D = null
+var _active_signature: String = ""
 var _multimesh_cache: Dictionary = {}
 var _scene_layer_pool: Dictionary = {}
 var _active_scene_layer_nodes: Dictionary = {}
 var _animal_model_instance: Node3D = null
 var _animal_anchor: Node3D
-var _displayed_animal_model: String = ""
+var _displayed_animal_id: int = -1
 
 
 func _ready() -> void:
-	_animal_anchor = $animalModel as Node3D
-
-
-func update_visuals(state: TileLayersState, coord: Vector2i) -> void:
-	if state == null:
-		return
-
 	_cache_nodes()
-	_apply_layers(state)
-	_apply_animal_model(state.animal_model, coord)
-
-
-func get_scene_layer_node(layer_index: int) -> Node:
-	if _scenes_root == null:
-		return null
-	return _scenes_root.get_node_or_null("SceneLayer%d" % layer_index)
 
 
 func _cache_nodes() -> void:
-	if not is_inside_tree():
-		return
-	_scenes_root = get_node_or_null("Scenes") as Node3D
 	if _scenes_root == null:
-		_scenes_root = self
+		_scenes_root = get_node_or_null("Scenes") as Node3D
+	if _animal_anchor == null:
+		_animal_anchor = get_node_or_null("animalModel") as Node3D
 
-	_multimesh_slots.clear()
-	var scatter_root := get_node_or_null("Scatter") as Node3D
-	if scatter_root == null:
+
+func apply(
+	element: int,
+	level: int,
+	coord: Vector2i,
+	animal_id: int = -1,
+	scene_layer_rotations: Array[float] = [],
+	river_index: int = -1,
+	force_refresh: bool = false
+) -> void:
+	_cache_nodes()
+	var resolved := TileSetupCatalog.resolve_layers(element, level, coord, river_index)
+	_apply_layers(
+		resolved.get("scene_layers", []),
+		resolved.get("multi_mesh_layers", []),
+		resolved.get("signature", ""),
+		scene_layer_rotations,
+		force_refresh
+	)
+	_apply_animal(animal_id, coord)
+
+
+func clear_visuals() -> void:
+	_cache_nodes()
+	_active_signature = ""
+	_displayed_animal_id = -1
+
+	_purge_orphan_scene_layers({})
+	_active_scene_layer_nodes.clear()
+	_scene_layer_pool.clear()
+
+	for slot in multimesh_slots:
+		if slot != null:
+			_clear_multimesh_slot(slot)
+
+	if _animal_model_instance != null:
+		_animal_model_instance.queue_free()
+		_animal_model_instance = null
+	_reset_animal_anchor()
+
+
+func ensure_active_layers_visible() -> void:
+	_cache_nodes()
+	for layer_index in _active_scene_layer_nodes.keys():
+		var layer_node: Node = _active_scene_layer_nodes[layer_index]
+		if not is_instance_valid(layer_node):
+			continue
+		var activated := _activate_scene_layer_node(layer_index, layer_node)
+		if activated != null:
+			_active_scene_layer_nodes[layer_index] = activated
+
+
+func _apply_layers(
+	resolved_scene_layers: Array,
+	resolved_multimesh_layers: Array,
+	signature: String,
+	scene_layer_rotations: Array[float],
+	force_refresh: bool = false
+) -> void:
+	var needs_rebuild := force_refresh or signature != _active_signature or _needs_scene_layer_rebuild(resolved_scene_layers)
+	if needs_rebuild:
+		_active_signature = signature
+		_apply_scene_layers(resolved_scene_layers)
+		_apply_multimesh_layers(resolved_multimesh_layers)
+
+	if _scenes_root == null:
 		return
 
-	for index in MULTIMESH_LAYER_COUNT:
-		var slot := scatter_root.get_node_or_null("MultiMeshLayer%d" % index) as MultiMeshInstance3D
-		if slot != null:
-			_multimesh_slots.append(slot)
-
-
-func _apply_layers(state: TileLayersState) -> void:
-	var layers_signature := state.signature()
-	if layers_signature != _active_signature:
-		_active_signature = layers_signature
-		_apply_scene_layers(state.scene_layers)
-		_apply_multimesh_layers(state.multi_mesh_layers)
-
-	for layer_index in state.scene_layer_rotations.size():
-		var layer_node = get_scene_layer_node(layer_index)
+	for layer_index in scene_layer_rotations.size():
+		var layer_node: Node = _active_scene_layer_nodes.get(layer_index, null)
+		if layer_node == null:
+			layer_node = _scenes_root.get_node_or_null("SceneLayer%d" % layer_index)
 		if layer_node is Node3D:
-			(layer_node as Node3D).rotation_degrees.y = state.scene_layer_rotations[layer_index]
+			(layer_node as Node3D).rotation_degrees.y = scene_layer_rotations[layer_index]
+
+
+func _needs_scene_layer_rebuild(resolved_scene_layers: Array) -> bool:
+	if resolved_scene_layers.is_empty():
+		return false
+	if _active_scene_layer_nodes.is_empty():
+		return true
+	for layer_node in _active_scene_layer_nodes.values():
+		if not is_instance_valid(layer_node):
+			return true
+		if not _node_belongs_to_this_visuals(layer_node):
+			return true
+		if layer_node is Node3D and not (layer_node as Node3D).visible:
+			return true
+	return false
 
 
 func _apply_scene_layers(resolved_scene_layers: Array) -> void:
 	var desired_layers: Dictionary = {}
+	var scenes_by_layer: Dictionary = {}
 	for layer_index in resolved_scene_layers.size():
 		var scene := _coerce_scene_layer(resolved_scene_layers[layer_index])
 		if scene == null:
 			continue
+		scenes_by_layer[layer_index] = scene
+		desired_layers[layer_index] = _get_or_create_scene_layer_instance(layer_index, scene)
 
-		var instance := _get_or_create_scene_layer_instance(layer_index, scene)
-		_activate_scene_layer_node(layer_index, instance)
-		desired_layers[layer_index] = instance
+	if desired_layers.is_empty():
+		return
 
-		var previous_node: Node = _active_scene_layer_nodes.get(layer_index, null)
-		if previous_node != null and previous_node != instance:
-			_deactivate_scene_layer_node(previous_node)
+	_purge_orphan_scene_layers(desired_layers)
 
-	for layer_index in _active_scene_layer_nodes.keys():
-		if not desired_layers.has(layer_index):
-			_deactivate_scene_layer_node(_active_scene_layer_nodes[layer_index])
+	for layer_index in desired_layers.keys():
+		var scene: PackedScene = scenes_by_layer[layer_index]
+		var instance := _activate_scene_layer_node(layer_index, desired_layers[layer_index], scene)
+		if instance != null:
+			desired_layers[layer_index] = instance
+		else:
+			desired_layers.erase(layer_index)
 
 	_active_scene_layer_nodes = desired_layers
 
 
+func _purge_orphan_scene_layers(desired_layers: Dictionary) -> void:
+	if _scenes_root == null:
+		return
+	var keep: Dictionary = {}
+	for node in desired_layers.values():
+		keep[node] = true
+	for child in _scenes_root.get_children():
+		if keep.has(child):
+			continue
+		_remove_node_from_pool(child)
+		child.queue_free()
+
+
+func _remove_node_from_pool(node: Node) -> void:
+	for layer_index in _scene_layer_pool.keys():
+		var layer_pool: Dictionary = _scene_layer_pool[layer_index]
+		for scene_path in layer_pool.keys():
+			if layer_pool[scene_path] == node:
+				layer_pool.erase(scene_path)
+
+
+func _store_pool_instance(layer_index: int, scene: PackedScene, node: Node) -> void:
+	var scene_path := scene.resource_path
+	if scene_path.is_empty():
+		return
+	var layer_pool: Dictionary = _scene_layer_pool.get(layer_index, {})
+	layer_pool[scene_path] = node
+	_scene_layer_pool[layer_index] = layer_pool
+
+
 func _apply_multimesh_layers(resolved_multimesh_layers: Array) -> void:
-	for slot_index in MULTIMESH_LAYER_COUNT:
-		var slot: MultiMeshInstance3D = _multimesh_slots[slot_index]
+	for slot_index in multimesh_slots.size():
+		var slot: MultiMeshInstance3D = multimesh_slots[slot_index]
 		if slot == null:
 			continue
 
@@ -112,16 +197,17 @@ func _apply_multimesh_layers(resolved_multimesh_layers: Array) -> void:
 		slot.visible = true
 
 
-func _apply_animal_model(model_path: String, coord: Vector2i) -> void:
-	if model_path == _displayed_animal_model and _animal_model_instance != null:
+func _apply_animal(animal_id: int, coord: Vector2i) -> void:
+	if animal_id == _displayed_animal_id and _animal_model_instance != null:
 		_position_animal_at_marker(coord)
 		return
 
-	_displayed_animal_model = model_path
+	_displayed_animal_id = animal_id
 	if _animal_model_instance != null:
 		_animal_model_instance.queue_free()
 		_animal_model_instance = null
 
+	var model_path := _resolve_animal_model_path(animal_id)
 	if model_path.is_empty():
 		_reset_animal_anchor()
 		return
@@ -145,6 +231,15 @@ func _apply_animal_model(model_path: String, coord: Vector2i) -> void:
 	_animal_model_instance.position = Vector3.ZERO
 	_animal_model_instance.rotation = Vector3.ZERO
 	_position_animal_at_marker(coord)
+
+
+func _resolve_animal_model_path(animal_id: int) -> String:
+	if animal_id == -1:
+		return ""
+	for card in CardCatalog.animals:
+		if card.id == animal_id:
+			return card.model
+	return ""
 
 
 func _position_animal_at_marker(coord: Vector2i) -> void:
@@ -189,7 +284,7 @@ func _collect_base_markers() -> Array[Marker3D]:
 
 
 func _pick_fallback_base_marker(coord: Vector2i) -> Marker3D:
-	var tile := get_parent()
+	var tile := _get_owner_tile()
 	if tile == null:
 		return null
 
@@ -211,6 +306,15 @@ func _pick_fallback_base_marker(coord: Vector2i) -> Marker3D:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = hash("%d,%d|base_marker" % [coord.x, coord.y])
 	return markers[rng.randi_range(0, markers.size() - 1)]
+
+
+func _get_owner_tile() -> HexTile:
+	var node: Node = self
+	while node != null:
+		if node is HexTile:
+			return node as HexTile
+		node = node.get_parent()
+	return null
 
 
 func _find_marker_container(root: Node, names: PackedStringArray) -> Node:
@@ -298,7 +402,10 @@ func _get_or_create_scene_layer_instance(layer_index: int, scene: PackedScene) -
 	if not scene_path.is_empty():
 		var layer_pool: Dictionary = _scene_layer_pool.get(layer_index, {})
 		if layer_pool.has(scene_path):
-			return layer_pool[scene_path]
+			var pooled: Node = layer_pool[scene_path]
+			if is_instance_valid(pooled) and _node_belongs_to_this_visuals(pooled):
+				return pooled
+			layer_pool.erase(scene_path)
 
 		var pooled_instance := scene.instantiate()
 		layer_pool[scene_path] = pooled_instance
@@ -308,11 +415,37 @@ func _get_or_create_scene_layer_instance(layer_index: int, scene: PackedScene) -
 	return scene.instantiate()
 
 
-func _activate_scene_layer_node(layer_index: int, node: Node) -> void:
+func _node_belongs_to_this_visuals(node: Node) -> bool:
+	_cache_nodes()
+	if not is_instance_valid(node):
+		return false
+	if node.get_parent() == null:
+		return true
+	var current: Node = node
+	while current != null:
+		if current == _scenes_root:
+			return true
+		if current.name == "Scenes" and current != _scenes_root:
+			return false
+		current = current.get_parent()
+	return false
+
+
+func _activate_scene_layer_node(
+	layer_index: int,
+	node: Node,
+	scene: PackedScene = null
+) -> Node:
+	_cache_nodes()
 	if node.get_parent() != _scenes_root:
+		if node.get_parent() != null and not _node_belongs_to_this_visuals(node):
+			if scene == null:
+				return null
+			node = scene.instantiate()
+			_store_pool_instance(layer_index, scene, node)
 		if node.get_parent() == null:
 			_scenes_root.add_child(node)
-		else:
+		elif node.get_parent() != _scenes_root:
 			node.reparent(_scenes_root)
 
 	node.name = "SceneLayer%d" % layer_index
@@ -325,11 +458,7 @@ func _activate_scene_layer_node(layer_index: int, node: Node) -> void:
 		else:
 			node3d.rotation_degrees.y = 0.0
 			node3d.position.y = 9.5
-
-
-func _deactivate_scene_layer_node(node: Node) -> void:
-	if node is Node3D:
-		(node as Node3D).visible = false
+	return node
 
 
 func _clear_multimesh_slot(slot: MultiMeshInstance3D) -> void:

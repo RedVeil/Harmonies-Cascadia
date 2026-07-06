@@ -3,11 +3,7 @@ extends Node
 const CATALOG_PATH := "res://data/tile_setup_catalog.json"
 
 var _entries: Dictionary = {}
-var _entry_layers_cache: Dictionary = {}
-var _default_scene_layers: Array = []
-var _default_multi_mesh_layers: Array = []
 var _game_seed: int = 0
-
 
 func _ready() -> void:
 	_game_seed = randi()
@@ -31,18 +27,40 @@ func load_catalog() -> void:
 			continue
 
 		var key := _make_key(element, level)
-		_entries[key] = entry
-		_entry_layers_cache[key] = {
+		_entries[key] = {
 			"scene_layers": _load_scene_layers_from_json(entry.get("scene_layers", [])),
 			"multi_mesh_layers": _load_multimesh_layers_from_json(entry.get("multi_mesh_layers", [])),
 		}
-		if element == GameEnums.ELEMENT.NONE and level == GameEnums.LEVEL.ANY:
-			_default_scene_layers = _duplicate_layers(
-				_entry_layers_cache[key].get("scene_layers", [])
-			)
-			_default_multi_mesh_layers = _duplicate_layers(
-				_entry_layers_cache[key].get("multi_mesh_layers", [])
-			)
+
+
+func resolve_layers(
+	element: int,
+	level: int,
+	coord: Vector2i = Vector2i.ZERO,
+	river_index: int = -1
+) -> Dictionary:
+	var key := _make_key(element, level)
+	if not _entries.has(key):
+		push_error("No tile setup catalog entry for element=%d level=%d" % [element, level])
+		return {
+			"scene_layers": [],
+			"multi_mesh_layers": [],
+			"signature": _make_signature(element, level, river_index),
+		}
+
+	var entry: Dictionary = _entries[key]
+	var scene_option_layers := _duplicate_layers(entry.get("scene_layers", []))
+	var multimesh_option_layers := _duplicate_layers(entry.get("multi_mesh_layers", []))
+	var pick_rng := _make_pick_rng(coord, element, level)
+	
+	if element == 4 and river_index == -1:
+		river_index = 12
+	
+	return {
+		"scene_layers": _resolve_scene_layers(scene_option_layers, pick_rng, river_index),
+		"multi_mesh_layers": _resolve_multimesh_layers(multimesh_option_layers, pick_rng),
+		"signature": _make_signature(element, level, river_index),
+	}
 
 
 func get_layers_state(
@@ -50,43 +68,13 @@ func get_layers_state(
 	level: int,
 	coord: Vector2i = Vector2i.ZERO
 ) -> TileLayersState:
-	var entry: Dictionary = _lookup_entry(element, level)
-	var scene_option_layers: Array = []
-	var multimesh_option_layers: Array = []
-
-	if entry.is_empty():
-		scene_option_layers = _duplicate_layers(_default_scene_layers)
-		multimesh_option_layers = _duplicate_layers(_default_multi_mesh_layers)
-	else:
-		var key := _make_key(entry.get("element", -1), entry.get("level", -1))
-		var cached_layers: Dictionary = _entry_layers_cache.get(key, {})
-		scene_option_layers = _duplicate_layers(cached_layers.get("scene_layers", []))
-		multimesh_option_layers = _duplicate_layers(cached_layers.get("multi_mesh_layers", []))
-
-	var pick_rng := _make_pick_rng(coord, element, level)
-	var resolved_scene_layers := _resolve_scene_layers(scene_option_layers, pick_rng)
-	var resolved_multimesh_layers := _resolve_multimesh_layers(multimesh_option_layers, pick_rng)
-	var signature := _make_signature(element, level)
+	var resolved := resolve_layers(element, level, coord)
 	return TileLayersState.create(
-		resolved_scene_layers,
-		resolved_multimesh_layers,
+		resolved.get("scene_layers", []),
+		resolved.get("multi_mesh_layers", []),
 		[],
-		signature
+		resolved.get("signature", _make_signature(element, level, -1))
 	)
-
-
-func _lookup_entry(element: int, level: int) -> Dictionary:
-	var key := _make_key(element, level)
-	if _entries.has(key):
-		return _entries[key]
-
-	if level > GameEnums.LEVEL.ANY:
-		return _lookup_entry(element, level - 1)
-
-	if element != GameEnums.ELEMENT.NONE:
-		return _lookup_entry(GameEnums.ELEMENT.NONE, GameEnums.LEVEL.ANY)
-
-	return {}
 
 
 func _load_scene_layers_from_json(raw_layers: Array) -> Array:
@@ -135,7 +123,7 @@ func _make_pick_rng(
 	rng.seed = hash(
 		"%d|%s|%d,%d" % [
 			_game_seed,
-			_make_signature(element, level),
+			_make_signature(element, level, -1),
 			coord.x,
 			coord.y,
 		]
@@ -149,7 +137,7 @@ func _pick_option_index(rng: RandomNumberGenerator, option_count: int) -> int:
 	return mini(rng.randi_range(0, 4), option_count - 1)
 
 
-func _resolve_scene_layers(option_layers: Array, rng: RandomNumberGenerator) -> Array:
+func _resolve_scene_layers(option_layers: Array, rng: RandomNumberGenerator, river_index: int = -1) -> Array:
 	var resolved: Array = []
 	for layer_options in option_layers:
 		if typeof(layer_options) != TYPE_ARRAY:
@@ -159,7 +147,9 @@ func _resolve_scene_layers(option_layers: Array, rng: RandomNumberGenerator) -> 
 		var options: Array = layer_options
 		var picked: PackedScene = null
 		if not options.is_empty():
-			var choice = options[_pick_option_index(rng, options.size())]
+			var index := _pick_option_index(rng, options.size()) if river_index == -1 else river_index
+			index = clampi(index, 0, options.size() - 1)
+			var choice = options[index]
 			if choice is PackedScene:
 				picked = choice
 		resolved.append(picked)
@@ -183,7 +173,9 @@ func _resolve_multimesh_layers(option_layers: Array, rng: RandomNumberGenerator)
 	return resolved
 
 
-func _make_signature(element: int, level: int) -> String:
+func _make_signature(element: int, level: int, river_index:int) -> String:
+	if element == GameEnums.ELEMENT.RIVER and river_index >= 0:
+		return "%d_%d_r%d" % [element, level, river_index]
 	return "%d_%d" % [element, level]
 
 

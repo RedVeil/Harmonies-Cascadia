@@ -323,7 +323,19 @@
 		"level": 1,
 		"scene_layers": [
 			[
-				"res://assets/tiles/assets/river/hex_forest_roadM_detail.tscn"
+				"res://assets/tiles/assets/river/hex_forest_roadA_detail.tscn",
+				"res://assets/tiles/assets/river/hex_forest_roadB_detail.tscn",
+				"res://assets/tiles/assets/river/hex_forest_roadC_detail.tscn",
+				"res://assets/tiles/assets/river/hex_forest_roadD_detail.tscn",
+				"res://assets/tiles/assets/river/hex_forest_roadE_detail.tscn",
+				"res://assets/tiles/assets/river/hex_forest_roadF_detail.tscn",
+				"res://assets/tiles/assets/river/hex_forest_roadG_detail.tscn",
+				"res://assets/tiles/assets/river/hex_forest_roadH_detail.tscn",
+				"res://assets/tiles/assets/river/hex_forest_roadI_detail.tscn",
+				"res://assets/tiles/assets/river/hex_forest_roadJ_detail.tscn",
+				"res://assets/tiles/assets/river/hex_forest_roadK_detail.tscn",
+				"res://assets/tiles/assets/river/hex_forest_roadL_detail.tscn",
+				"res://assets/tiles/assets/river/hex_forest_roadM_detail.tscn",
 			]
 		],
 		"multi_mesh_layers": []

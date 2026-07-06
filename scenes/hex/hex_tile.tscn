@@ -17,7 +17,12 @@ place_celebrate_sounds = Array[AudioStream]([ExtResource("5_place")])
 shape = SubResource("ConvexPolygonShape3D_vyrwg")
 debug_color = Color(1.0383441, 0, 0.96515715, 1)
 
-[node name="tile_visuals" parent="." unique_id=987731715 instance=ExtResource("3_nn350")]
+[node name="VisualsRoot" type="Node3D" parent="." unique_id=987731714]
+
+[node name="current" parent="VisualsRoot" unique_id=987731715 instance=ExtResource("3_nn350")]
+
+[node name="previous" parent="VisualsRoot" unique_id=987731716 instance=ExtResource("3_nn350")]
+visible = false
 
 [node name="outline" type="Sprite3D" parent="." unique_id=523391663]
 transform = Transform3D(5.4999986, 0, 0.003647387, 0, 5.5, 0, -0.003647387, 0, 5.4999986, 0, 10, 0)
