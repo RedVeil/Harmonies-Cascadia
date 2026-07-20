@@ -71,6 +71,7 @@ shape = SubResource("CircleShape2D_ci8s0")
 
 [node name="Tooltip" type="Panel" parent="." unique_id=1536247392]
 visible = false
+layout_mode = 0
 offset_left = 80.0
 offset_top = -39.0
 offset_right = 258.0
@@ -90,8 +91,8 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_3qcl6")
 layout_mode = 0
 offset_left = 7.0
 offset_top = 5.0
-offset_right = 203.0
-offset_bottom = 82.0
+offset_right = 171.0
+offset_bottom = 72.0
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.4745098, 1)
 theme_override_constants/line_spacing = -1
 theme_override_font_sizes/font_size = 12

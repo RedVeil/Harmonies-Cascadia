@@ -67,6 +67,14 @@ func select_hand_card(id:int) -> void:
 		card_manager.deselect_card(selected_card_id)
 		
 	selected_card_id = new_selection
+	if tile_hovered:
+		if new_selection == -1:
+			booster_manager.reset_preview()
+			hex_manager.reset_preview(selected_coord)
+			quest_manager.reset_preview()
+			point_counter.reset_preview()
+			reset_preview()
+		handle_tile_hover(selected_coord)
 
 func pause_cards() -> void:
 	# cards_paused = true
@@ -119,12 +127,15 @@ func handle_tile_hover(coord:Vector2i) -> void:
 		last_points_diff = preview.points_diff
 		booster_manager.preview_booster_points(preview.points_diff)
 		point_counter.preview_progress(score_engine.total_score + preview.points_diff)
+	else:
+		hex_manager.show_tile_info(coord)
 
 func handle_tile_exit() -> void:
 	tile_hovered = false
 	_hover_slide_coord = Vector2i(2147483647, 2147483647)
 	
 	booster_manager.reset_preview()
+	hex_manager.hide_tile_info(selected_coord)
 	hex_manager.reset_preview(selected_coord)
 	quest_manager.reset_preview()
 	point_counter.reset_preview()
@@ -200,6 +211,8 @@ func handle_tile_click(coord: Vector2i) -> void:
 		
 		if not card_manager.cards[selected_card_id]:
 			selected_card_id = -1
+		if tile_hovered and selected_card_id == -1:
+			hex_manager.show_tile_info(coord)
 
 
 ## ----- Handle Tile Preview ----- ##

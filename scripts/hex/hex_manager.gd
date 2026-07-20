@@ -73,6 +73,12 @@ func play_placement_reward(
 
 func reset_preview(coord:Vector2i) -> void:
 	hex_container.reset_preview(coord)
+
+func show_tile_info(coord: Vector2i) -> void:
+	hex_container.show_tile_info(coord)
+
+func hide_tile_info(coord: Vector2i) -> void:
+	hex_container.hide_tile_info(coord)
 	
 func undo(coord:Vector2i) -> void:
 	hex_container.undo(coord)

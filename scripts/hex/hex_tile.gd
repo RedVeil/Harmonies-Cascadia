@@ -2,11 +2,12 @@ extends StaticBody3D
 class_name HexTile
 
 const SCORE_POP_BASE_Y := 19.0
+const POINTS_BUBBLE_SCALE := Vector3(1.2, 1.2, 1.2)
 
 @export_group("Place Score Pop Animation")
 @export var score_pop_sounds: Array[AudioStream] = []
 @export var score_pop_rise: float = 1.35
-@export var score_pop_peak_scale: float = 0.58
+@export var score_pop_peak_scale: float = 1.5
 @export var score_pop_up_duration: float = 0.18
 @export var score_pop_float_duration: float = 0.85
 @export var score_pop_fade_duration: float = 0.55
@@ -41,6 +42,11 @@ var _committed_visuals: TileVisuals
 var _staging_visuals: TileVisuals
 var _showing_preview: bool = false
 var _feedback_tweens: Dictionary = {}
+var _score_pop_playing: bool = false
+var _hover_info_pending: bool = false
+var _pending_hover_element_tex: Texture2D = null
+var _pending_hover_animal_tex: Texture2D = null
+var _pending_hover_icon_color: Color = Color.WHITE
 
 
 func _ready() -> void:
@@ -248,18 +254,116 @@ func _on_input_event(
 ## ----- Points Logic ----- ##
 
 func show_points(points: int) -> void:
+	if _score_pop_playing:
+		return
+	hide_hover_info()
 	$Sprite3D/Label3D.text = "%d" % points
+	$Sprite3D.scale = POINTS_BUBBLE_SCALE
 	if points > 0:
 		$Sprite3D.modulate = Color.GOLD
-	if points < 0:
+	elif points < 0:
 		$Sprite3D.modulate = Color.CRIMSON
+	else:
+		$Sprite3D.modulate = Color.WHITE
 
-	if points != 0:
-		$Sprite3D.show()
+	$Sprite3D.show()
 
 
 func hide_points() -> void:
+	if _score_pop_playing:
+		return
 	$Sprite3D.hide()
+
+
+## ----- Hover Info Logic ----- ##
+
+const HOVER_ICON_TARGET_PX := 280.0
+## Half-distance between element/animal bubbles when both are shown (world units).
+const HOVER_BUBBLE_OFFSET_X := 2.5
+
+func show_hover_info(
+	element_tex: Texture2D,
+	animal_tex: Texture2D,
+	icon_color: Color = Color.WHITE
+) -> void:
+	if _score_pop_playing:
+		_pending_hover_element_tex = element_tex
+		_pending_hover_animal_tex = animal_tex
+		_pending_hover_icon_color = icon_color
+		_hover_info_pending = true
+		return
+
+	_hover_info_pending = false
+	_apply_hover_info(element_tex, animal_tex, icon_color)
+
+
+func hide_hover_info() -> void:
+	_clear_pending_hover_info()
+	$HoverInfo/ElementBubble.hide()
+	$HoverInfo/AnimalBubble.hide()
+	$HoverInfo.hide()
+
+
+func _apply_hover_info(
+	element_tex: Texture2D,
+	animal_tex: Texture2D,
+	icon_color: Color
+) -> void:
+	var element_bubble: Sprite3D = $HoverInfo/ElementBubble
+	var animal_bubble: Sprite3D = $HoverInfo/AnimalBubble
+	var show_element := element_tex != null
+	var show_animal := animal_tex != null
+
+	if show_element:
+		_apply_hover_icon(element_bubble.get_node("Icon") as Sprite3D, element_tex, icon_color)
+		element_bubble.show()
+	else:
+		element_bubble.hide()
+
+	if show_animal:
+		_apply_hover_icon(animal_bubble.get_node("Icon") as Sprite3D, animal_tex, icon_color)
+		animal_bubble.show()
+	else:
+		animal_bubble.hide()
+
+	if show_element and show_animal:
+		element_bubble.position.x = -HOVER_BUBBLE_OFFSET_X
+		animal_bubble.position.x = HOVER_BUBBLE_OFFSET_X
+	elif show_element:
+		element_bubble.position.x = 0.0
+	elif show_animal:
+		animal_bubble.position.x = 0.0
+
+	if show_element or show_animal:
+		$HoverInfo.show()
+	else:
+		$HoverInfo.hide()
+
+
+func _apply_hover_icon(icon: Sprite3D, tex: Texture2D, icon_color: Color) -> void:
+	icon.texture = tex
+	icon.modulate = icon_color
+	var size := tex.get_size()
+	var max_dim := maxf(size.x, size.y)
+	var scale_factor := HOVER_ICON_TARGET_PX / max_dim if max_dim > 0.0 else 1.0
+	icon.scale = Vector3.ONE * scale_factor
+
+
+func _clear_pending_hover_info() -> void:
+	_hover_info_pending = false
+	_pending_hover_element_tex = null
+	_pending_hover_animal_tex = null
+	_pending_hover_icon_color = Color.WHITE
+
+
+func _flush_pending_hover_info() -> void:
+	if not _hover_info_pending:
+		return
+	var element_tex := _pending_hover_element_tex
+	var animal_tex := _pending_hover_animal_tex
+	var icon_color := _pending_hover_icon_color
+	_clear_pending_hover_info()
+	_apply_hover_info(element_tex, animal_tex, icon_color)
 
 
 ## ----- Outline Logic ----- ##
@@ -295,9 +399,16 @@ func play_animation(name: StringName, params: Dictionary) -> void:
 
 
 func kill_animations() -> void:
-	FeedbackAnimHelper.kill_all(_feedback_tweens)
+	# Score pop runs to completion; hover/exit/preview resets must not cut it off.
+	var keys := _feedback_tweens.keys()
+	for key in keys:
+		if key == &"score_pop":
+			continue
+		var tween: Tween = _feedback_tweens[key]
+		if tween.is_valid():
+			tween.kill()
+		_feedback_tweens.erase(key)
 	_reset_celebrate_visuals()
-	_reset_score_pop_visuals()
 	_reset_outline_visuals()
 
 
@@ -317,6 +428,11 @@ func _animate_contributor(element: int, delay: float) -> void:
 
 func _animate_score_pop(points: int) -> void:
 	FeedbackAnimHelper.play_sounds(score_pop_sounds)
+	_score_pop_playing = true
+	# Hide any visible inspect bubbles without clearing a pending show.
+	$HoverInfo/ElementBubble.hide()
+	$HoverInfo/AnimalBubble.hide()
+	$HoverInfo.hide()
 	var sprite: Sprite3D = $Sprite3D
 	var label: Label3D = $Sprite3D/Label3D
 	if points > 0:
@@ -328,7 +444,7 @@ func _animate_score_pop(points: int) -> void:
 
 	sprite.visible = true
 	sprite.position.y = SCORE_POP_BASE_Y
-	sprite.scale = Vector3(1.0, 1.0, 1.0)
+	sprite.scale = POINTS_BUBBLE_SCALE
 
 	var tween := FeedbackAnimHelper.create_tween(self, _feedback_tweens, &"score_pop", true)
 	tween.tween_property(sprite, "scale", Vector3.ONE * score_pop_peak_scale, score_pop_up_duration)\
@@ -337,7 +453,13 @@ func _animate_score_pop(points: int) -> void:
 		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	tween.tween_property(sprite, "modulate:a", 0.0, score_pop_fade_duration)\
 		.set_delay(score_pop_fade_delay).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	tween.finished.connect(_reset_score_pop_visuals)
+	tween.finished.connect(_on_score_pop_finished)
+
+
+func _on_score_pop_finished() -> void:
+	_score_pop_playing = false
+	_reset_score_pop_visuals()
+	_flush_pending_hover_info()
 
 
 func _animate_outline_flash(delay: float) -> void:
@@ -386,7 +508,7 @@ func _reset_score_pop_visuals() -> void:
 	sprite.hide()
 	sprite.modulate = Color.WHITE
 	sprite.position.y = SCORE_POP_BASE_Y
-	sprite.scale = Vector3(0.5, 0.5, 0.5)
+	sprite.scale = POINTS_BUBBLE_SCALE
 
 
 func _reset_outline_visuals() -> void:

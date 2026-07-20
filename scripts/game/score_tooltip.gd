@@ -15,7 +15,6 @@ var active_tooltip : int = -1
 func _ready() -> void:
 	var icons = $icons.get_children()
 	for i in icons.size():
-		print(i)
 		icons[i].init(i, self)
 
 ## ----- Panel Logic ----- ##

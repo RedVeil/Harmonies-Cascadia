@@ -69,7 +69,9 @@ func apply_preview(preview: TileStatePreview) -> void:
 		prev_contributing_tiles.assign(preview.contributing_coords)
 	else:
 		tiles_by_coord[hover_target].reset_preview()
+		tiles_by_coord[hover_target].hide_points()
 		tiles_by_coord[hover_target].show_outline(Color.CRIMSON)
+		show_tile_info(hover_target)
 
 
 func place_tile(coord: Vector2i) -> void:
@@ -172,6 +174,7 @@ func get_element_neighbors(coord:Vector2i, element:GameEnums.ELEMENT) -> Array[V
 	return neighbors
 
 func apply_points_preview(preview: TileStatePreview) -> void:
+	hide_tile_info(hover_target)
 	if preview.points_diff > 0:
 		show_positive_preview(preview)
 	elif preview.points_diff < 0:
@@ -205,12 +208,44 @@ func show_neutral_preview(preview: TileStatePreview) -> void:
 
 ## ----- Reset Logic ----- ##
 
+func show_tile_info(coord: Vector2i) -> void:
+	if not tiles_by_coord.has(coord) or not hex_manager.tiles.has(coord):
+		return
+	var data: HexTileData = hex_manager.tiles[coord]
+	var element_tex: Texture2D = null
+	var animal_tex: Texture2D = null
+
+	var element := ElementCatalog.elements[data.element]
+	var level_index := 0 if data.element == GameEnums.ELEMENT.NONE else clampi(data.level - 1, 0, element.levels.size() - 1)
+	var level := element.levels[level_index]
+	element_tex = load(level.icon) as Texture2D
+	var icon_color := Color.html("#918478")
+
+	if data.animal_id != -1:
+		for card in CardCatalog.animals:
+			if card.id == data.animal_id:
+				if card.icon != "":
+					animal_tex = load(card.icon) as Texture2D
+				break
+
+	var tile := tiles_by_coord[coord]
+	tile.hide_points()
+	tile.show_hover_info(element_tex, animal_tex, icon_color)
+	tile.show_outline(Color.WHITE)
+
+
+func hide_tile_info(coord: Vector2i) -> void:
+	if tiles_by_coord.has(coord):
+		tiles_by_coord[coord].hide_hover_info()
+
+
 func reset_tile_visuals(coord: Vector2i) -> void:
 	var target = tiles_by_coord[coord]
 	target.kill_animations()
 	target.reset_preview()
 	target.hide_outline()
 	target.hide_points()
+	target.hide_hover_info()
 
 	for river_coord in prev_river_neighbor_tiles:
 		if tiles_by_coord.has(river_coord):
