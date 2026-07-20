@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bxuf6gpkrwnsx"]
+
+[ext_resource type="MultiMesh" uid="uid://bsi0uwuhtiodw" path="res://assets/tiles/assets/tree/pine_group2.tres" id="1_gsldn"]
+
+[node name="MultiMeshInstance3D" type="MultiMeshInstance3D" unique_id=1539483186]
+multimesh = ExtResource("1_gsldn")

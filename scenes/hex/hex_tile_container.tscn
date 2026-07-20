@@ -1,12 +1,14 @@
 [gd_scene format=3 uid="uid://bmgy5cn8lrk08"]
 
 [ext_resource type="Script" uid="uid://tjngkd4vvy87" path="res://scripts/hex/hex_tile_container.gd" id="1_mxi7r"]
+[ext_resource type="PackedScene" uid="uid://bo2vr7surwe56" path="res://scenes/hex/hex_tile.tscn" id="2_mjky3"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mxi7r"]
 size = Vector3(1000, 1, 1000)
 
 [node name="HexTileContainer" type="Node3D" unique_id=1069347499]
 script = ExtResource("1_mxi7r")
+hex_tile = ExtResource("2_mjky3")
 
 [node name="Area3D" type="Area3D" parent="." unique_id=1597490975]
 monitorable = false

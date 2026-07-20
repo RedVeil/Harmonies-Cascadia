@@ -1,0 +1,62 @@
+[remap]
+
+importer="scene"
+importer_version=1
+type="PackedScene"
+uid="uid://jkjojtik8twk"
+path="res://.godot/imported/hex_forest_roadL_detail.fbx-79d606ceb901945fd954dfa9786f3d8b.scn"
+
+[deps]
+
+source_file="res://tile_base/hex_forest_roadL_detail.fbx"
+dest_files=["res://.godot/imported/hex_forest_roadL_detail.fbx-79d606ceb901945fd954dfa9786f3d8b.scn"]
+
+[params]
+
+nodes/root_type=""
+nodes/root_name=""
+nodes/root_script=null
+nodes/apply_root_scale=true
+nodes/root_scale=1.0
+nodes/import_as_skeleton_bones=false
+nodes/use_name_suffixes=true
+nodes/use_node_type_suffixes=true
+meshes/ensure_tangents=true
+meshes/generate_lods=true
+meshes/create_shadow_meshes=true
+meshes/light_baking=1
+meshes/lightmap_texel_size=0.2
+meshes/force_disable_compression=false
+skins/use_named_skins=true
+animation/import=true
+animation/fps=30
+animation/trimming=true
+animation/remove_immutable_tracks=true
+animation/import_rest_as_RESET=false
+import_script/path=""
+materials/extract=0
+materials/extract_format=0
+materials/extract_path=""
+_subresources={
+"materials": {
+"Beige": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/tiles/materials/ground/Water.tres",
+"use_external/path": "uid://b2m0ie7iriblc"
+},
+"BrownDark": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/tiles/materials/ground/BrownDark.tres",
+"use_external/path": "uid://vbn4wsie61cd"
+},
+"Green": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/tiles/materials/ground/Green.tres",
+"use_external/path": "uid://cdxi2c6lkljle"
+}
+}
+}
+fbx/importer=0
+fbx/allow_geometry_helper_nodes=false
+fbx/embedded_image_handling=1
+fbx/naming_version=2

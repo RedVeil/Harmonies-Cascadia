@@ -1,115 +1,86 @@
-[gd_scene format=4 uid="uid://bo2vr7surwe56"]
+[gd_scene format=3 uid="uid://bo2vr7surwe56"]
 
 [ext_resource type="Script" uid="uid://dnlfgnqqdjd8s" path="res://scripts/hex/hex_tile.gd" id="1_pcuo8"]
-[ext_resource type="Texture2D" uid="uid://ca2hp56qvfswa" path="res://assets/circle.png" id="2_nn350"]
-[ext_resource type="Texture2D" uid="uid://boew28pgavxmj" path="res://assets/hex_outline.png" id="2_pcuo8"]
-[ext_resource type="Texture2D" uid="uid://by87fjcwrqlgx" path="res://assets/elements/f0.png" id="4_4l472"]
+[ext_resource type="Texture2D" uid="uid://ca2hp56qvfswa" path="res://assets/icons/circle.png" id="2_nn350"]
+[ext_resource type="PackedScene" uid="uid://cofumvkpk8rxk" path="res://scenes/hex/tile_visuals.tscn" id="3_nn350"]
+[ext_resource type="Texture2D" uid="uid://dn3plvv5w6ncp" path="res://assets/icons/hex_outline_thin2.png" id="4_nn350"]
+[ext_resource type="AudioStream" uid="uid://cntyxxeo1ekgi" path="res://assets/audio/card-slide-2.ogg" id="5_place"]
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_vyrwg"]
-points = PackedVector3Array(0, 1, 0, 2, 1, 0, 1, 1, 1.732, -1, 1, 1.732, -2, 1, 0, -1, 1, -1.732, 1, 1, -1.732, 0, 0, 0, 2, 0, 0, 1, 0, 1.732, -1, 0, 1.732, -2, 0, 0, -1, 0, -1.732, 1, 0, -1.732)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4l472"]
-albedo_color = Color(0.6335562, 0.43252933, 0.10250264, 1)
-grow_amount = 0.299
-stencil_flags = 2
-stencil_outline_thickness = 0.131
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_pcuo8"]
-material = SubResource("StandardMaterial3D_4l472")
-top_radius = 2.0
-bottom_radius = 2.0
-height = 1.0
-radial_segments = 6
-rings = 1
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pcuo8"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tfs8u"]
-resource_name = "Grass Green"
-cull_mode = 2
-albedo_color = Color(0.9063318, 0.9063318, 0.9063318, 1)
-roughness = 0.5
-
-[sub_resource type="ArrayMesh" id="ArrayMesh_skloi"]
-_surfaces = [{
-"aabb": AABB(-2, 0, -1.7320508, 4, 1e-05, 3.4641016),
-"format": 34896613377,
-"index_count": 18,
-"index_data": PackedByteArray("AAABAAIAAAADAAEAAAACAAQAAAAFAAMAAAAEAAYAAAAGAAUA"),
-"name": "Grass Green",
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 7,
-"vertex_data": PackedByteArray("/38AAP9/AAD/vwAAAAAAAP//AAD/fwAA/z8AAAAAAAD/vwAA//8AAAAAAAD/fwAA/z8AAP//AAA=")
-}]
-blend_shape_mode = 0
-
-[sub_resource type="ArrayMesh" id="ArrayMesh_4l472"]
-resource_name = "hexplane_Stylized Hex Tile Mesh"
-_surfaces = [{
-"aabb": AABB(-2, 0, -1.7320508, 4, 1e-05, 3.4641016),
-"format": 34896613383,
-"index_count": 18,
-"index_data": PackedByteArray("AAABAAIAAAADAAEAAAACAAQAAAAFAAMAAAAEAAYAAAAGAAUA"),
-"material": SubResource("StandardMaterial3D_tfs8u"),
-"name": "Grass Green",
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 7,
-"vertex_data": PackedByteArray("/38AAP9/////vwAAAAD/////AAD/f////z8AAAAA////vwAA/////wAAAAD/f////z8AAP//////f/+//3//v/9//7//f/+//3//v/9//7//f/+/")
-}]
-blend_shape_mode = 0
-shadow_mesh = SubResource("ArrayMesh_skloi")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nn350"]
+points = PackedVector3Array(0, 9.5, 0, 11, 9.5, 0, 5.5, 9.5, 9.526, -5.5, 9.5, 9.526, -11, 9.5, 0, -5.5, 9.5, -9.526, 5.5, 9.5, -9.526, 0, 0, 0, 11, 0, 0, 5.5, 0, 9.526, -5.5, 0, 9.526, -11, 0, 0, -5.5, 0, -9.526, 5.5, 0, -9.526)
 
 [node name="HexTile" type="StaticBody3D" unique_id=1124611875]
 script = ExtResource("1_pcuo8")
+place_celebrate_sounds = Array[AudioStream]([ExtResource("5_place")])
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1831272945]
 shape = SubResource("ConvexPolygonShape3D_vyrwg")
 debug_color = Color(1.0383441, 0, 0.96515715, 1)
 
-[node name="visuals" type="Node3D" parent="." unique_id=979666001]
+[node name="VisualsRoot" type="Node3D" parent="." unique_id=987731714]
 
-[node name="Sprite3D" type="Sprite3D" parent="visuals" unique_id=453342763]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 3.366984, 0)
+[node name="current" parent="VisualsRoot" unique_id=987731715 instance=ExtResource("3_nn350")]
+
+[node name="previous" parent="VisualsRoot" unique_id=987731716 instance=ExtResource("3_nn350")]
+visible = false
+
+[node name="outline" type="Sprite3D" parent="." unique_id=523391663]
+transform = Transform3D(5.4999986, 0, 0.003647387, 0, 5.5, 0, -0.003647387, 0, 5.4999986, 0, 10, 0)
+visible = false
+axis = 1
+texture = ExtResource("4_nn350")
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=453342763]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19, 0)
 visible = false
 billboard = 1
 render_priority = 2
 texture = ExtResource("2_nn350")
 
-[node name="Label3D" type="Label3D" parent="visuals/Sprite3D" unique_id=1816411517]
+[node name="Label3D" type="Label3D" parent="Sprite3D" unique_id=1816411517]
 transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, 0, 0, 0)
 billboard = 1
 render_priority = 3
 modulate = Color(0, 0, 0, 1)
-text = "+ 10 "
+text = "+10 "
 font_size = 200
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="visuals" unique_id=989010339]
-transform = Transform3D(0.8656238, 0, 0.50069517, 0, 1, 0, -0.50069517, 0, 0.8656238, 0, 0.5, 0)
-mesh = SubResource("CylinderMesh_pcuo8")
+[node name="base_marker" type="Node3D" parent="." unique_id=866209579]
 
-[node name="outline" type="Sprite3D" parent="visuals/MeshInstance3D" unique_id=523391663]
-transform = Transform3D(0.86595553, 0, -0.50012094, 0, 1, 0, 0.50012094, 0, 0.86595553, 0, 0.51236844, 0)
-visible = false
-axis = 1
-texture = ExtResource("2_pcuo8")
+[node name="Marker3D" type="Marker3D" parent="base_marker" unique_id=345897453]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.594955, -7.880002)
 
-[node name="StylizedHexTile" type="MeshInstance3D" parent="visuals" unique_id=467662036]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.01, 0)
-material_override = SubResource("StandardMaterial3D_pcuo8")
-mesh = SubResource("ArrayMesh_4l472")
-surface_material_override/0 = SubResource("StandardMaterial3D_nn350")
+[node name="Marker3D2" type="Marker3D" parent="base_marker" unique_id=57779171]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.594955, 7.6654024)
 
-[node name="animalIcon" type="Sprite3D" parent="visuals/StylizedHexTile" unique_id=2075642525]
-transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0.01, 0)
-axis = 1
-double_sided = false
-render_priority = 1
+[node name="Marker3D3" type="Marker3D" parent="base_marker" unique_id=71185805]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5983086, 9.594955, -2.2507772)
 
-[node name="elementIcon" type="Sprite3D" parent="visuals/StylizedHexTile" unique_id=502944477]
-transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, 0, 0.01, 0)
-axis = 1
-texture = ExtResource("4_4l472")
+[node name="Marker3D4" type="Marker3D" parent="base_marker" unique_id=1403375147]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5983086, 9.594955, 3.6779132)
+
+[node name="Marker3D5" type="Marker3D" parent="base_marker" unique_id=1239504806]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.009527, 9.594955, 3.6779132)
+
+[node name="Marker3D6" type="Marker3D" parent="base_marker" unique_id=507658065]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.009527, 9.594955, -3.0005155)
+
+[node name="extra_marker" type="Node3D" parent="." unique_id=521397571]
+
+[node name="Marker3D" type="Marker3D" parent="extra_marker" unique_id=649270654]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.594955, -7.880002)
+
+[node name="Marker3D2" type="Marker3D" parent="extra_marker" unique_id=1675038721]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.594955, 7.6654024)
+
+[node name="Marker3D3" type="Marker3D" parent="extra_marker" unique_id=223341578]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5983086, 9.594955, -2.2507772)
+
+[node name="Marker3D4" type="Marker3D" parent="extra_marker" unique_id=1626355806]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5983086, 9.594955, 3.6779132)
+
+[node name="Marker3D5" type="Marker3D" parent="extra_marker" unique_id=626234404]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.009527, 9.594955, 3.6779132)
+
+[node name="Marker3D6" type="Marker3D" parent="extra_marker" unique_id=77337294]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.009527, 9.594955, -3.0005155)

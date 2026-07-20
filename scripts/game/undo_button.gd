@@ -7,14 +7,29 @@ var enabled : bool = false
 var is_hovered : bool = false
 var timer : float = 0.5
 
+## ----- Initialisation ----- ##
+
 func _ready() -> void:
 	$icon.self_modulate = Color.GRAY
 
-func _process(delta:float) -> void:
-	if is_hovered:
-		timer -= delta
-		if timer <= 0.0:
-			$Tooltip.show()
+## ----- State Logic ----- ##
+
+func enable() -> void:
+	enabled = true
+	
+	$background.self_modulate = Color.WHITE
+	$icon.self_modulate = Color.html("#918478")
+
+func disable() -> void:
+	enabled = false
+	
+	$background.self_modulate = Color.WHITE
+	$icon.self_modulate = Color.GRAY
+	is_hovered = false
+	timer = 0.5
+	$Tooltip.hide()
+
+## ----- Interactions Logic ----- ##
 
 func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
 	if event is InputEventMouseButton:
@@ -36,17 +51,10 @@ func _on_mouse_exited() -> void:
 		timer = 0.5
 		$Tooltip.hide()
 
-func enable() -> void:
-	enabled = true
-	
-	$background.self_modulate = Color.WHITE
-	$icon.self_modulate = Color.html("#918478")
+## ----- Tooltip Logic ----- ##
 
-func disable() -> void:
-	enabled = false
-	
-	$background.self_modulate = Color.WHITE
-	$icon.self_modulate = Color.GRAY
-	is_hovered = false
-	timer = 0.5
-	$Tooltip.hide()
+func _process(delta:float) -> void:
+	if is_hovered:
+		timer -= delta
+		if timer <= 0.0:
+			$Tooltip.show()

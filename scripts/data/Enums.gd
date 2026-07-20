@@ -1,6 +1,8 @@
 extends Node
 class_name GameEnums
 
+## ----- Element Enumerations ----- ##
+
 enum ELEMENT {
 	NONE = 0,
 	FOREST = 1,
@@ -19,12 +21,16 @@ const ELEMENT_NAMES : Array[String] = [
 	"Wetland"
 ]
 
+## ----- Level Enumerations ----- ##
+
 enum LEVEL {
 	ANY = 0,
 	SMALL = 1,
 	MEDIUM = 2,
 	LARGE = 3
 }
+
+## ----- Booster Enumerations ----- ##
 
 enum BOOSTER_TYPE {
 	NONE = 0,

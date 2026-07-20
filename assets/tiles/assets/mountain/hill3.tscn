@@ -1,0 +1,105 @@
+[gd_scene format=3 uid="uid://ch77ms0rx4vrl"]
+
+[ext_resource type="PackedScene" uid="uid://b86i8uul6ivkn" path="res://assets/tiles/assets/plants/grass.tscn" id="1_56w0a"]
+[ext_resource type="PackedScene" uid="uid://dmugpscerbixi" path="res://addons/stylized-nature/Mesh Scenes/Pebble_Round_2.tscn" id="2_p36kw"]
+[ext_resource type="PackedScene" uid="uid://bynhn453vst5d" path="res://addons/stylized-nature/Mesh Scenes/Pebble_Square_4.tscn" id="3_lwjlt"]
+[ext_resource type="PackedScene" uid="uid://c7yry6lfhtido" path="res://addons/stylized-nature/Mesh Scenes/Pebble_Square_6.tscn" id="4_p36kw"]
+[ext_resource type="PackedScene" uid="uid://3avtambeoy1l" path="res://addons/stylized-nature/Mesh Scenes/Pebble_Square_1.tscn" id="5_lwjlt"]
+[ext_resource type="PackedScene" uid="uid://hdfjecma7tyq" path="res://addons/stylized-nature/Mesh Scenes/Pebble_Round_1.tscn" id="6_pr3qa"]
+[ext_resource type="PackedScene" uid="uid://dk8b3u7kp73q1" path="res://addons/stylized-nature/Mesh Scenes/Pebble_Square_5.tscn" id="7_mef3k"]
+[ext_resource type="PackedScene" uid="uid://cv2pqv1761xhe" path="res://assets/tiles/assets/hex_forest_detail.fbx" id="8_20ic7"]
+
+[node name="Node3D" type="Node3D" unique_id=1480201212]
+
+[node name="visuals" type="Node3D" parent="." unique_id=2020639698]
+transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, 0, 9.3, 0)
+
+[node name="grass" parent="visuals" unique_id=1861785440 instance=ExtResource("1_56w0a")]
+
+[node name="Pebble_Round_23" parent="visuals" unique_id=1444160610 instance=ExtResource("2_p36kw")]
+transform = Transform3D(14.999999, 0, 0, 0, 12, 0, 0, 0, 14.999999, -4.4047017, 0, -2.9655223)
+
+[node name="Pebble_Square_42" parent="visuals" unique_id=1255266339 instance=ExtResource("3_lwjlt")]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 2.2240276, 0, -3.6141527)
+
+[node name="Pebble_Round_24" parent="visuals" unique_id=1474306167 instance=ExtResource("2_p36kw")]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 5.8657494, 0, 2.1694083)
+
+[node name="Pebble_Round_25" parent="visuals" unique_id=665194001 instance=ExtResource("2_p36kw")]
+transform = Transform3D(15, 0, 0, 0, 12, 0, 0, 0, 15, -1.1479814, 0, 5.6153493)
+
+[node name="Pebble_Square_63" parent="visuals" unique_id=910690161 instance=ExtResource("4_p36kw")]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0.9684527, 0, -6.8264947)
+
+[node name="Pebble_Square_12" parent="visuals" unique_id=1985406226 instance=ExtResource("5_lwjlt")]
+transform = Transform3D(10.000002, 0, 0, 0, 10.000001, 0, 0, 0, 10.000002, -0.20266014, 0, 0.16416617)
+
+[node name="Pebble_Square_64" parent="visuals" unique_id=721097157 instance=ExtResource("4_p36kw")]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, -5.7343197, 0, 2.4315393)
+
+[node name="Pebble_Square_43" parent="visuals" unique_id=497063660 instance=ExtResource("3_lwjlt")]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 6.156244, 0, -2.609489)
+
+[node name="Pebble_Round_22" parent="visuals" unique_id=1049140347 instance=ExtResource("2_p36kw")]
+transform = Transform3D(5, -0.003300195, 0, 0.0033001953, 4.999997, -0.0040006274, 2.6226044e-06, 0.004000625, 4.9999995, 2.055221, 0, 5.3048573)
+
+[node name="Pebble_Square_65" parent="visuals" unique_id=1276401485 instance=ExtResource("4_p36kw")]
+transform = Transform3D(2.9999998, 0, 0, 0, 3, 0, 0, 0, 2.9999998, -3.481601, 0, -6.257902)
+
+[node name="Pebble_Round_26" parent="visuals" unique_id=95396866 instance=ExtResource("2_p36kw")]
+transform = Transform3D(2.9999998, 0, 0, 0, 3, 0, 0, 0, 2.9999998, 8.205706, 0, 0.40725994)
+
+[node name="Pebble_Round_13" parent="visuals" unique_id=829924694 instance=ExtResource("6_pr3qa")]
+transform = Transform3D(2.999999, -0.0019801178, 0, 0.0019801173, 2.9999983, -0.0024003752, 1.5497208e-06, 0.002400375, 2.9999988, -5.4086103, 0, 5.764806)
+
+[node name="Pebble_Square_13" parent="visuals" unique_id=134062256 instance=ExtResource("5_lwjlt")]
+transform = Transform3D(5, 0, 0, 0, 10, 0, 0, 0, 5, -6.9574966, 0, -0.21030736)
+
+[node name="Pebble_Round_27" parent="visuals" unique_id=1040045073 instance=ExtResource("2_p36kw")]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 4.4511404, 0, 5.7532187)
+
+[node name="Pebble_Square_52" parent="visuals" unique_id=1808007539 instance=ExtResource("7_mef3k")]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 4.0838366, 0, -1.349726)
+
+[node name="hex_forest_detail" parent="visuals" unique_id=1161202553 instance=ExtResource("8_20ic7")]
+transform = Transform3D(8.2272415, 0, -4.75, 0, 9.5, 0, 4.75, 0, 8.2272415, 0, -9.3, 0)
+
+[node name="base_marker" type="Node3D" parent="." unique_id=1629526398]
+
+[node name="Marker3D" type="Marker3D" parent="base_marker" unique_id=378347738]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.92903805, 10.6080675, -2.8331046)
+
+[node name="Marker3D2" type="Marker3D" parent="base_marker" unique_id=240129317]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4575448, 10.6080675, 5.481354)
+
+[node name="Marker3D3" type="Marker3D" parent="base_marker" unique_id=1403440328]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.1916797, 10.6080675, -0.118153095)
+
+[node name="Marker3D4" type="Marker3D" parent="base_marker" unique_id=1966559887]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.2306385, 10.6080675, -3.3547027)
+
+[node name="Marker3D5" type="Marker3D" parent="base_marker" unique_id=482383735]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.3686943, 10.6080675, -3.3547027)
+
+[node name="Marker3D6" type="Marker3D" parent="base_marker" unique_id=1867879106]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.3686943, 10.996763, 2.6784809)
+
+[node name="extra_marker" type="Node3D" parent="." unique_id=65287295]
+
+[node name="Marker3D7" type="Marker3D" parent="extra_marker" unique_id=605045377]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.92903805, 14.729112, -2.8331046)
+
+[node name="Marker3D8" type="Marker3D" parent="extra_marker" unique_id=903366881]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4575448, 14.729112, 5.481354)
+
+[node name="Marker3D9" type="Marker3D" parent="extra_marker" unique_id=975467264]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.1916797, 14.729112, -0.118153095)
+
+[node name="Marker3D10" type="Marker3D" parent="extra_marker" unique_id=237610019]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.2306385, 14.729112, -3.3547027)
+
+[node name="Marker3D11" type="Marker3D" parent="extra_marker" unique_id=1426731850]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.3686943, 14.729112, -3.3547027)
+
+[node name="Marker3D12" type="Marker3D" parent="extra_marker" unique_id=1576837045]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.3686943, 15.117807, 2.6784809)

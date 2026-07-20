@@ -3,8 +3,12 @@ extends Node
 var path = "res://data/scoring_rules.json"
 var rules : Array[ScoringRule] = []
 
+## ----- Initialisation ----- ##
+
 func _ready() -> void:
 	load_rules()
+
+## ----- Loading Logic ----- ##
 
 func load_rules():
 	if not FileAccess.file_exists(path):
@@ -16,6 +20,8 @@ func load_rules():
 		return false
 	for rule in parsed:
 		rules.append(parse_rule(rule))
+
+## ----- Parsing Logic ----- ##
 
 func parse_rule(data:Dictionary) -> ScoringRule:
 	var rule = ScoringRule.new()

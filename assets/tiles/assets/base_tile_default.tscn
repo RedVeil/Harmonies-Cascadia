@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://dv3fajdlvabgd"]
+
+[ext_resource type="PackedScene" uid="uid://cv2pqv1761xhe" path="res://assets/tiles/assets/hex_forest_detail.fbx" id="1_70saf"]
+[ext_resource type="Material" uid="uid://xumuon0sgtay" path="res://assets/tiles/materials/ground/dead_earth_ground.tres" id="2_cdimv"]
+
+[node name="hex_forest_detail" unique_id=1161202553 instance=ExtResource("1_70saf")]
+
+[node name="hex_forest_detail" parent="." index="0" unique_id=1890974999]
+transform = Transform3D(9.5, 0, 0, 0, 9.5, 0, 0, 0, 9.5, 0, 0, 0)
+surface_material_override/0 = ExtResource("2_cdimv")

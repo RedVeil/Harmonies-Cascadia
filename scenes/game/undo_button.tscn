@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://bde4y0iag4uud"]
 
 [ext_resource type="Script" uid="uid://clr1dgs0xbhug" path="res://scripts/game/undo_button.gd" id="1_ofr7o"]
-[ext_resource type="Texture2D" uid="uid://ca2hp56qvfswa" path="res://assets/circle.png" id="2_hjekv"]
-[ext_resource type="Shader" uid="uid://y4g8ky747mqh" path="res://assets/shader/shadow.gdshader" id="3_4jxme"]
+[ext_resource type="Texture2D" uid="uid://ca2hp56qvfswa" path="res://assets/icons/circle.png" id="2_hjekv"]
+[ext_resource type="Shader" uid="uid://y4g8ky747mqh" path="res://assets/shader/ui/shadow.gdshader" id="3_4jxme"]
 [ext_resource type="Texture2D" uid="uid://qyaqw63x8s5d" path="res://assets/icons/undo.png" id="4_ofr7o"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_hxqf6"]

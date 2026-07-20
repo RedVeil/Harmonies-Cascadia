@@ -10,10 +10,14 @@ var scale_speed : float = 10.0
 @export var orchestrator : Orchestrator
 var active_tooltip : int = -1
 
+## ----- Initialisation ----- ##
+
 func _ready() -> void:
 	var icons = $icons.get_children()
 	for i in icons.size():
 		icons[i].init(i, self)
+
+## ----- Panel Logic ----- ##
 
 func _process(delta: float) -> void:
 	if $Button.position.distance_squared_to(target_position) >= 0.01:
@@ -25,7 +29,9 @@ func _process(delta: float) -> void:
 			icon.show()
 		else:
 			icon.hide()
-	
+
+## ----- Interactions Logic ----- ##
+
 func _on_button_mouse_entered() -> void:
 	$Panel.get_theme_stylebox("panel").bg_color = Color.html("#918478")
 	$Button/Sprite2D.self_modulate = Color.WHITE
@@ -37,6 +43,7 @@ func _on_button_mouse_exited() -> void:
 func _on_button_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			GameFeedback.play_click_button()
 			if target_position.y == 0.0:
 				target_position = Vector2(0.0,280.0)
 				target_size = Vector2(44.0, 320.0)
@@ -57,6 +64,8 @@ func handle_click_toolip(id:int) -> void:
 		$Panel2/title/Label.text = get_title_text(id)
 		$Panel2/description/Label.text = get_description(id)
 		$Panel2/graphic/Sprite2D7.texture = get_desc_image(id)
+
+## ----- Tooltip Content Logic ----- ##
 
 func get_title_text(id:int) -> String:
 	match(id):

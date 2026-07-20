@@ -6,6 +6,8 @@ class_name MapButton
 var hex_manager: HexManager
 var my_coord:Vector2i
 
+## ----- Initialisation ----- ##
+
 func _ready() -> void:
 	input_ray_pickable = true
 	
@@ -18,13 +20,13 @@ func _ready() -> void:
 func init(container:HexManager, coord:Vector2i,) -> void:
 	hex_manager = container
 	my_coord = coord
-	
-func remove_button() -> void:
-	queue_free()
+
+## ----- Interactions Logic ----- ##
 
 func _on_input_event(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			GameFeedback.play_click_button()
 			hex_manager.handle_map_button_click(my_coord)
 
 func _on_mouse_entered() -> void:
@@ -32,3 +34,8 @@ func _on_mouse_entered() -> void:
 
 func _on_mouse_exited() -> void:
 	mesh.material_override.albedo_color = Color.html("#f04738")
+
+## ----- Utility Logic ----- ##
+
+func remove_button() -> void:
+	queue_free()

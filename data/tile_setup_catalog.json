@@ -1,0 +1,355 @@
+[
+	{
+		"element": 0,
+		"level": 0,
+		"scene_layers": [
+			[
+				"res://assets/tiles/assets/base_tile_default.tscn"
+			]
+		],
+		"multi_mesh_layers": [
+			[
+				"res://assets/tiles/assets/tree/dead_tree_group1.tres",
+				"res://assets/tiles/assets/tree/dead_tree_group2.tres",
+				"res://assets/tiles/assets/tree/dead_tree_group3.tres",
+				"res://assets/tiles/assets/tree/dead_tree_group4.tres",
+				"res://assets/tiles/assets/tree/dead_tree_group5.tres"
+			]
+		]
+	},
+	{
+		"element": 1,
+		"level": 1,
+		"scene_layers": [
+			[
+				"res://assets/tiles/assets/base_tile.tscn"
+			]
+		],
+		"multi_mesh_layers": [
+			[
+				"res://assets/tiles/assets/plants/grass.tres"
+			],
+			[
+				"res://assets/tiles/assets/plants/flower1_group1.tres",
+				"res://assets/tiles/assets/plants/flower1_group2.tres",
+				"res://assets/tiles/assets/plants/flower1_group3.tres",
+				"res://assets/tiles/assets/plants/flower1_group4.tres",
+				"res://assets/tiles/assets/plants/flower1_group5.tres"
+			],
+			[
+				"res://assets/tiles/assets/plants/fern_group1.tres",
+				"res://assets/tiles/assets/plants/fern_group2.tres",
+				"res://assets/tiles/assets/plants/fern_group3.tres",
+				"res://assets/tiles/assets/plants/fern_group4.tres",
+				"res://assets/tiles/assets/plants/fern_group5.tres"
+			],
+			[
+				"res://assets/tiles/assets/tree/birch_group_small1.tres",
+				"res://assets/tiles/assets/tree/birch_group_small2.tres",
+				"res://assets/tiles/assets/tree/birch_group_small3.tres",
+				"res://assets/tiles/assets/tree/birch_group_small4.tres",
+				"res://assets/tiles/assets/tree/birch_group_small5.tres"
+			],
+			[
+				"res://assets/tiles/assets/tree/pine_group_small1.tres",
+				"res://assets/tiles/assets/tree/pine_group_small2.tres",
+				"res://assets/tiles/assets/tree/pine_group_small3.tres",
+				"res://assets/tiles/assets/tree/pine_group_small4.tres",
+				"res://assets/tiles/assets/tree/pine_group_small5.tres"
+			],
+			[
+				"res://assets/tiles/assets/tree/tree_group_small1.tres",
+				"res://assets/tiles/assets/tree/tree_group_small2.tres",
+				"res://assets/tiles/assets/tree/tree_group_small3.tres",
+				"res://assets/tiles/assets/tree/tree_group_small4.tres",
+				"res://assets/tiles/assets/tree/tree_group_small5.tres"
+			]
+		]
+	},
+	{
+		"element": 1,
+		"level": 2,
+		"scene_layers": [
+			[
+				"res://assets/tiles/assets/base_tile.tscn"
+			]
+		],
+		"multi_mesh_layers": [
+			[
+				"res://assets/tiles/assets/plants/grass.tres"
+			],
+			[
+				"res://assets/tiles/assets/plants/flower1_group1.tres",
+				"res://assets/tiles/assets/plants/flower1_group2.tres",
+				"res://assets/tiles/assets/plants/flower1_group3.tres",
+				"res://assets/tiles/assets/plants/flower1_group4.tres",
+				"res://assets/tiles/assets/plants/flower1_group5.tres"
+			],
+			[
+				"res://assets/tiles/assets/plants/fern_group1.tres",
+				"res://assets/tiles/assets/plants/fern_group2.tres",
+				"res://assets/tiles/assets/plants/fern_group3.tres",
+				"res://assets/tiles/assets/plants/fern_group4.tres",
+				"res://assets/tiles/assets/plants/fern_group5.tres"
+			],
+			[
+				"res://assets/tiles/assets/tree/birch_group1.tres",
+				"res://assets/tiles/assets/tree/birch_group2.tres",
+				"res://assets/tiles/assets/tree/birch_group3.tres",
+				"res://assets/tiles/assets/tree/birch_group4.tres",
+				"res://assets/tiles/assets/tree/birch_group5.tres"
+			],
+			[
+				"res://assets/tiles/assets/tree/pine_group1.tres",
+				"res://assets/tiles/assets/tree/pine_group2.tres",
+				"res://assets/tiles/assets/tree/pine_group3.tres",
+				"res://assets/tiles/assets/tree/pine_group4.tres",
+				"res://assets/tiles/assets/tree/pine_group5.tres"
+			],
+			[
+				"res://assets/tiles/assets/tree/tree_group1.tres",
+				"res://assets/tiles/assets/tree/tree_group2.tres",
+				"res://assets/tiles/assets/tree/tree_group3.tres",
+				"res://assets/tiles/assets/tree/tree_group4.tres",
+				"res://assets/tiles/assets/tree/tree_group5.tres"
+			]
+		]
+	},
+	{
+		"element": 1,
+		"level": 3,
+		"scene_layers": [
+			[
+				"res://assets/tiles/assets/base_tile.tscn"
+			]
+		],
+		"multi_mesh_layers": [
+			[
+				"res://assets/tiles/assets/plants/grass.tres"
+			],
+			[
+				"res://assets/tiles/assets/plants/flower1_group1.tres",
+				"res://assets/tiles/assets/plants/flower1_group2.tres",
+				"res://assets/tiles/assets/plants/flower1_group3.tres",
+				"res://assets/tiles/assets/plants/flower1_group4.tres",
+				"res://assets/tiles/assets/plants/flower1_group5.tres"
+			],
+			[
+				"res://assets/tiles/assets/plants/fern_group1.tres",
+				"res://assets/tiles/assets/plants/fern_group2.tres",
+				"res://assets/tiles/assets/plants/fern_group3.tres",
+				"res://assets/tiles/assets/plants/fern_group4.tres",
+				"res://assets/tiles/assets/plants/fern_group5.tres"
+			],
+			[
+				"res://assets/tiles/assets/tree/birch_group1.tres",
+				"res://assets/tiles/assets/tree/birch_group2.tres",
+				"res://assets/tiles/assets/tree/birch_group3.tres",
+				"res://assets/tiles/assets/tree/birch_group4.tres",
+				"res://assets/tiles/assets/tree/birch_group5.tres"
+			],
+			[
+				"res://assets/tiles/assets/tree/pine_group1.tres",
+				"res://assets/tiles/assets/tree/pine_group2.tres",
+				"res://assets/tiles/assets/tree/pine_group3.tres",
+				"res://assets/tiles/assets/tree/pine_group4.tres",
+				"res://assets/tiles/assets/tree/pine_group5.tres"
+			],
+			[
+				"res://assets/tiles/assets/tree/tree_group1.tres",
+				"res://assets/tiles/assets/tree/tree_group2.tres",
+				"res://assets/tiles/assets/tree/tree_group3.tres",
+				"res://assets/tiles/assets/tree/tree_group4.tres",
+				"res://assets/tiles/assets/tree/tree_group5.tres"
+			]
+		]
+	},
+	{
+		"element": 2,
+		"level": 1,
+		"scene_layers": [
+			[
+				"res://assets/tiles/assets/base_tile.tscn"
+			]
+		],
+		"multi_mesh_layers": [
+			[
+				"res://assets/tiles/assets/plants/grass.tres"
+			],
+			[
+				"res://assets/tiles/assets/plants/grass_wheat_group1.tres",
+				"res://assets/tiles/assets/plants/grass_wheat_group2.tres",
+				"res://assets/tiles/assets/plants/grass_wheat_group3.tres",
+				"res://assets/tiles/assets/plants/grass_wheat_group4.tres",
+				"res://assets/tiles/assets/plants/grass_wheat_group5.tres"
+			],
+			[
+				"res://assets/tiles/assets/plants/flower1_group1.tres",
+				"res://assets/tiles/assets/plants/flower1_group2.tres",
+				"res://assets/tiles/assets/plants/flower1_group3.tres",
+				"res://assets/tiles/assets/plants/flower1_group4.tres",
+				"res://assets/tiles/assets/plants/flower1_group5.tres"
+			],
+			[
+				"res://assets/tiles/assets/plants/flower3_group1.tres",
+				"res://assets/tiles/assets/plants/flower3_group2.tres",
+				"res://assets/tiles/assets/plants/flower3_group3.tres",
+				"res://assets/tiles/assets/plants/flower3_group4.tres",
+				"res://assets/tiles/assets/plants/flower3_group5.tres"
+			],
+			[
+				"res://assets/tiles/assets/plants/flower4_group1.tres",
+				"res://assets/tiles/assets/plants/flower4_group2.tres",
+				"res://assets/tiles/assets/plants/flower4_group3.tres",
+				"res://assets/tiles/assets/plants/flower4_group4.tres",
+				"res://assets/tiles/assets/plants/flower4_group5.tres"
+			],
+			[
+				"res://assets/tiles/assets/plants/flower7_group1.tres",
+				"res://assets/tiles/assets/plants/flower7_group2.tres",
+				"res://assets/tiles/assets/plants/flower7_group3.tres",
+				"res://assets/tiles/assets/plants/flower7_group4.tres",
+				"res://assets/tiles/assets/plants/flower7_group5.tres"
+			]
+		]
+	},
+	{
+		"element": 2,
+		"level": 2,
+		"scene_layers": [
+			[
+				"res://assets/tiles/assets/base_tile.tscn"
+			]
+		],
+		"multi_mesh_layers": [
+			[
+				"res://assets/tiles/assets/plants/grass.tres"
+			],
+			[
+				"res://assets/tiles/assets/plants/grass_long.tres"
+			],
+			[
+				"res://assets/tiles/assets/plants/flower1_group1.tres",
+				"res://assets/tiles/assets/plants/flower1_group2.tres",
+				"res://assets/tiles/assets/plants/flower1_group3.tres",
+				"res://assets/tiles/assets/plants/flower1_group4.tres",
+				"res://assets/tiles/assets/plants/flower1_group5.tres"
+			],
+			[
+				"res://assets/tiles/assets/plants/flower3_group1.tres",
+				"res://assets/tiles/assets/plants/flower3_group2.tres",
+				"res://assets/tiles/assets/plants/flower3_group3.tres",
+				"res://assets/tiles/assets/plants/flower3_group4.tres",
+				"res://assets/tiles/assets/plants/flower3_group5.tres"
+			],
+			[
+				"res://assets/tiles/assets/plants/flower4_group1.tres",
+				"res://assets/tiles/assets/plants/flower4_group2.tres",
+				"res://assets/tiles/assets/plants/flower4_group3.tres",
+				"res://assets/tiles/assets/plants/flower4_group4.tres",
+				"res://assets/tiles/assets/plants/flower4_group5.tres"
+			],
+			[
+				"res://assets/tiles/assets/plants/flower7_group1.tres",
+				"res://assets/tiles/assets/plants/flower7_group2.tres",
+				"res://assets/tiles/assets/plants/flower7_group3.tres",
+				"res://assets/tiles/assets/plants/flower7_group4.tres",
+				"res://assets/tiles/assets/plants/flower7_group5.tres"
+			]
+		]
+	},
+	{
+		"element": 3,
+		"level": 1,
+		"scene_layers": [
+			[
+				"res://assets/tiles/assets/mountain/hill1.tscn",
+				"res://assets/tiles/assets/mountain/hill2.tscn",
+				"res://assets/tiles/assets/mountain/hill3.tscn"
+			]
+		],
+		"multi_mesh_layers": [
+			[
+				"res://assets/tiles/assets/plants/flower1_group1.tres",
+				"res://assets/tiles/assets/plants/flower1_group2.tres",
+				"res://assets/tiles/assets/plants/flower1_group3.tres",
+				"res://assets/tiles/assets/plants/flower1_group4.tres",
+				"res://assets/tiles/assets/plants/flower1_group5.tres"
+			]
+		]
+	},
+	{
+		"element": 3,
+		"level": 2,
+		"scene_layers": [
+			[
+				"res://assets/tiles/assets/mountain/small_mountain1.tscn",
+				"res://assets/tiles/assets/mountain/small_mountain2.tscn",
+				"res://assets/tiles/assets/mountain/small_mountain3.tscn"
+			]
+		],
+		"multi_mesh_layers": [
+			[
+				"res://assets/tiles/assets/plants/flower1_group1.tres",
+				"res://assets/tiles/assets/plants/flower1_group2.tres",
+				"res://assets/tiles/assets/plants/flower1_group3.tres",
+				"res://assets/tiles/assets/plants/flower1_group4.tres",
+				"res://assets/tiles/assets/plants/flower1_group5.tres"
+			]
+		]
+	},
+	{
+		"element": 3,
+		"level": 3,
+		"scene_layers": [
+			[
+				"res://assets/tiles/assets/mountain/mountain1.tscn",
+				"res://assets/tiles/assets/mountain/mountain2.tscn",
+				"res://assets/tiles/assets/mountain/mountain3.tscn"
+			]
+		],
+		"multi_mesh_layers": [
+			[
+				"res://assets/tiles/assets/plants/flower1_group1.tres",
+				"res://assets/tiles/assets/plants/flower1_group2.tres",
+				"res://assets/tiles/assets/plants/flower1_group3.tres",
+				"res://assets/tiles/assets/plants/flower1_group4.tres",
+				"res://assets/tiles/assets/plants/flower1_group5.tres"
+			]
+		]
+	},
+	{
+		"element": 4,
+		"level": 1,
+		"scene_layers": [
+			[
+				"res://assets/tiles/assets/river/hex_forest_roadA_detail.tscn",
+				"res://assets/tiles/assets/river/hex_forest_roadB_detail.tscn",
+				"res://assets/tiles/assets/river/hex_forest_roadC_detail.tscn",
+				"res://assets/tiles/assets/river/hex_forest_roadD_detail.tscn",
+				"res://assets/tiles/assets/river/hex_forest_roadE_detail.tscn",
+				"res://assets/tiles/assets/river/hex_forest_roadF_detail.tscn",
+				"res://assets/tiles/assets/river/hex_forest_roadG_detail.tscn",
+				"res://assets/tiles/assets/river/hex_forest_roadH_detail.tscn",
+				"res://assets/tiles/assets/river/hex_forest_roadI_detail.tscn",
+				"res://assets/tiles/assets/river/hex_forest_roadJ_detail.tscn",
+				"res://assets/tiles/assets/river/hex_forest_roadK_detail.tscn",
+				"res://assets/tiles/assets/river/hex_forest_roadL_detail.tscn",
+				"res://assets/tiles/assets/river/hex_forest_roadM_detail.tscn",
+			]
+		],
+		"multi_mesh_layers": []
+	},
+	{
+		"element": 5,
+		"level": 1,
+		"scene_layers": [
+			[
+				"res://assets/tiles/assets/wetlands/wetland1.tscn",
+				"res://assets/tiles/assets/wetlands/wetland2.tscn",
+				"res://assets/tiles/assets/wetlands/wetland3.tscn"
+			]
+		],
+		"multi_mesh_layers": []
+	}
+]

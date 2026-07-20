@@ -22,7 +22,7 @@ func _ready() -> void:
 func select_card(id:int) -> void:
 	orchestrator.select_hand_card(id)
 
-## ----- Pass Data downtream ----- ##
+## ----- Pass Data Downstream ----- ##
 
 func deselect_card(id:int) -> void:
 	card_container.deselect_card(id)

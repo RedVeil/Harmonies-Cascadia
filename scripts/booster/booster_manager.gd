@@ -11,6 +11,14 @@ class_name BoosterManager
 @export var start_booster_points:int = 3
 @export var random_secondary_chance: float = 50.0
 
+@export_group("Points Reward Animation")
+@export var punch_scale: float = 1.14
+@export var punch_up_duration: float = 0.12
+@export var punch_settle_duration: float = 0.2
+@export var progress_base_scale: Vector2 = Vector2(0.15, 0.15)
+@export var progress_peak_scale: Vector2 = Vector2(0.165, 0.165)
+@export var points_reward_sounds: Array[AudioStream] = []
+
 var booster_point_cost:int = 0
 var booster_points:int = 0
 var acc_points:int = 0
@@ -31,6 +39,11 @@ var booster_chances : Array[float] = []
 var is_hovered : bool = false
 var timer : float = 0.5
 
+var _feedback_tweens: Dictionary = {}
+
+var booster_label : Label
+var booster_progress_sprite : Sprite2D
+
 ## ----- Initialisation ----- ##
 
 func _ready() -> void:
@@ -44,6 +57,8 @@ func _ready() -> void:
 	booster_points = start_booster_points
 	booster_point_cost = base_booster_point_cost
 	
+	booster_label = $hex/Label
+	booster_progress_sprite = $hex/Sprite2D2
 	$hex/Label.text = "%d" % booster_points
 	$Tooltip/Label.text = "These are your booster points. Earn booster points by placing tiles, finishing quests or recycling cards. (0 / %d)" % booster_point_cost
 	
@@ -57,6 +72,7 @@ func _ready() -> void:
 		createBooster(i)
 	createBooster(3)
 	createBooster(4)
+	call_deferred("ensure_hex_label_pivot")
 
 ## ----- Pass Data Upstream ----- ##
 
@@ -130,23 +146,29 @@ func preview_booster_points(points:int) -> void:
 	$Tooltip/Label.text = "These are your booster points. Earn booster points by placing tiles, finishing quests or recycling cards. (%d / %d)" % [acc_points_preview, booster_point_cost_preview]
 
 
-func apply_booster_points() -> void:
+func apply_booster_points(animate_reward: bool = false) -> void:
 	booster_point_cost_backup = booster_point_cost
 	booster_points_backup = booster_points
 	acc_points_backup = acc_points
+	var gained_points := booster_points_preview - booster_points
+	var gained_acc := acc_points_preview - acc_points
 	
-	change_booster_points(booster_points_preview - booster_points)
+	change_booster_points(gained_points)
 	acc_points = acc_points_preview
 	booster_point_cost = booster_point_cost_preview
 	apply_current_style()
+	if animate_reward and (gained_points > 0 or gained_acc > 0):
+		play_animation(&"points_reward", {})
 
 func reset_preview() -> void:
+	kill_animations()
 	booster_points_preview = booster_points
 	acc_points_preview = acc_points
 	booster_point_cost_preview = booster_point_cost
 	apply_current_style()
 
 func undo() -> void:
+	kill_animations()
 	change_booster_points(booster_points_backup - booster_points)
 	acc_points = acc_points_backup
 	booster_point_cost = booster_point_cost_backup
@@ -251,6 +273,39 @@ func _on_mouse_exited() -> void:
 	is_hovered = false
 	timer = 0.5
 	$Tooltip.hide()
+
+## ----- Animations ----- ##
+
+func play_animation(name: StringName, _params: Dictionary) -> void:
+	match name:
+		&"points_reward":
+			_animate_points_reward()
+
+func kill_animations() -> void:
+	FeedbackAnimHelper.kill_all(_feedback_tweens)
+	apply_current_style()
+
+func ensure_hex_label_pivot() -> void:
+	booster_label.pivot_offset = booster_label.size * 0.5
+
+func _animate_points_reward() -> void:
+	FeedbackAnimHelper.kill_all(_feedback_tweens)
+	FeedbackAnimHelper.play_sounds(points_reward_sounds)
+
+	ensure_hex_label_pivot()
+	booster_label.scale = Vector2.ONE
+	booster_progress_sprite.scale = progress_base_scale
+
+	var tween := FeedbackAnimHelper.create_tween(self, _feedback_tweens, &"punch")
+	tween.set_parallel(true)
+	tween.tween_property(booster_label, "scale", Vector2(punch_scale, punch_scale), punch_up_duration)\
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(booster_progress_sprite, "scale", progress_peak_scale, punch_up_duration)\
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.chain().tween_property(booster_label, "scale", Vector2.ONE, punch_settle_duration)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tween.parallel().tween_property(booster_progress_sprite, "scale", progress_base_scale, punch_settle_duration)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 
 ## ----- Utility Logic ----- ##
 

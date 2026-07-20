@@ -1,0 +1,73 @@
+[gd_scene format=3 uid="uid://16y2kmmcn7ib"]
+
+[ext_resource type="Script" uid="uid://bnb8amv0s2k4k" path="res://scripts/camera/IsometricCameraController.gd" id="1_3j4k1"]
+[ext_resource type="PackedScene" uid="uid://cofumvkpk8rxk" path="res://scenes/hex/tile_visuals.tscn" id="1_22xhg"]
+[ext_resource type="PackedScene" uid="uid://3j5lxdopjpkp" path="res://assets/tiles/assets/river/hex_forest_roadA_detail.tscn" id="10_22wox"]
+
+[sub_resource type="Environment" id="Environment_yp744"]
+background_mode = 1
+background_color = Color(0.8186203, 0.7502329, 0.6806915, 1)
+
+[node name="Node3D" type="Node3D" unique_id=177571574]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=857892485]
+environment = SubResource("Environment_yp744")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment" unique_id=2042995454]
+transform = Transform3D(-0.8660253, -0.43301287, 0.24999996, 0, 0.50000006, 0.86602527, -0.5, 0.7500002, -0.43301257, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1373599360]
+transform = Transform3D(1, 0, 0, 0, 0.7071068, 0.7071068, 0, -0.7071068, 0.7071068, 0, 80, 80)
+projection = 1
+current = true
+fov = 60.0
+size = 100.0
+near = 0.1
+far = 1000.0
+script = ExtResource("1_3j4k1")
+move_speed = 24.0
+zoom_min = 50.0
+zoom_max = 100.0
+
+[node name="Tile_Default" parent="." unique_id=987731715 instance=ExtResource("1_22xhg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35980225, 0, 3.0621338)
+
+[node name="Tile_Default2" parent="." unique_id=419253470 instance=ExtResource("1_22xhg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.211624, 0, -5.5643997)
+
+[node name="Tile_Default10" parent="." unique_id=1905896799 instance=ExtResource("1_22xhg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 46.075207, 0, -6.000414)
+
+[node name="Tile_Default11" parent="." unique_id=1447798548 instance=ExtResource("1_22xhg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.398243, 0, 11.776062)
+
+[node name="Tile_Default14" parent="." unique_id=586260956 instance=ExtResource("1_22xhg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.130035, 0, 20.501202)
+
+[node name="Tile_Default13" parent="." unique_id=381967752 instance=ExtResource("1_22xhg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.03109, 0, 29.106693)
+
+[node name="Tile_Default12" parent="." unique_id=534335670 instance=ExtResource("1_22xhg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.133904, 0, 20.275019)
+
+[node name="Tile_Default4" parent="." unique_id=499627477 instance=ExtResource("1_22xhg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35980225, 0, -13.991934)
+
+[node name="Tile_Default5" parent="." unique_id=1327241940 instance=ExtResource("1_22xhg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.211624, 0, -22.618467)
+
+[node name="Tile_Default6" parent="." unique_id=324748843 instance=ExtResource("1_22xhg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.421902, 0, -31.075775)
+
+[node name="Tile_Default7" parent="." unique_id=413262778 instance=ExtResource("1_22xhg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35980225, 0, 20.37282)
+
+[node name="Tile_Default8" parent="." unique_id=1294499866 instance=ExtResource("1_22xhg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.211624, 0, 11.532862)
+
+[node name="Tile_Default9" parent="." unique_id=1530365315 instance=ExtResource("1_22xhg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.421902, 0, 3.075554)
+
+[node name="hex_forest_roadA_detail" parent="." unique_id=1588866648 instance=ExtResource("10_22wox")]
+transform = Transform3D(0.8660253, 0, 0.49999997, 0, 1, 0, -0.49999997, 0, 0.8660253, 46.91714, 0, -7.5492287)

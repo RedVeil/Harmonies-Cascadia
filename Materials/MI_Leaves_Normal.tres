@@ -1,0 +1,17 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://crf0mgti7cejm"]
+
+[ext_resource type="Shader" uid="uid://dn7bex5q6ddx5" path="res://Materials/M_Leaves.gdshader" id="1_tcfky"]
+[ext_resource type="Texture2D" uid="uid://b8pyt25inmlul" path="res://addons/stylized-nature/assets/Leaves_NormalTree.png" id="2_o5xc2"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_tcfky")
+shader_parameter/Leaf_Color = Color(0.3351222, 0.603311, 0.33477587, 1)
+shader_parameter/ExtraColor = Color(0.21176471, 0.4, 0.21176471, 1)
+shader_parameter/Alpha = ExtResource("2_o5xc2")
+shader_parameter/SSS_Color = Color(0.6509804, 0.7019608, 0, 1)
+shader_parameter/WindSpeed = 10.0
+shader_parameter/WindStrength = 0.1
+shader_parameter/SSS_Strength = 3.7500002018750003
+shader_parameter/SSS_Blend = 0.2
+shader_parameter/GlobalVariation = true

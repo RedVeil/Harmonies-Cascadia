@@ -6,12 +6,16 @@ class_name TooltipIcon
 var container : ScoringTooltip
 var id: int = -1
 
+## ----- Initialisation ----- ##
+
 func _ready() -> void:
 	$Sprite2D.texture = icon
 
 func init(idx:int, parent: ScoringTooltip) -> void:
 	id = idx
 	container = parent
+
+## ----- Interactions Logic ----- ##
 
 func _on_area_2d_mouse_entered() -> void:
 	self.self_modulate = Color.html("#918478")

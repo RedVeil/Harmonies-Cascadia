@@ -1,0 +1,16 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://edm3d5ibv8k4"]
+
+[ext_resource type="Shader" uid="uid://bdo3a6j7s5svx" path="res://assets/shader/tiles/foliage/M_Leaves_Pine.gdshader" id="1_fcmtn"]
+[ext_resource type="Texture2D" uid="uid://c85bsrkadylgw" path="res://assets/tiles/materials/textures/foliage/Leaf_Pine.png" id="2_6g2gm"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_fcmtn")
+shader_parameter/Leaf_Color = Color(0.22335178, 0.40436727, 0.18065387, 1)
+shader_parameter/Alpha = ExtResource("2_6g2gm")
+shader_parameter/SSS_Color = Color(0.65, 0.7, 0, 1)
+shader_parameter/WindSpeed = 10.0
+shader_parameter/WindStrength = 0.1
+shader_parameter/SSS_Strength = 1.946
+shader_parameter/SSS_Blend = 0.0850001
+shader_parameter/GlobalVariation = true

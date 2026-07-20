@@ -22,3 +22,4 @@ enum CARD_TYPE {
 @export var point_score: int = 0
 @export var bonus_points: float = 0
 @export var icon: String = ""
+@export var model: String = ""

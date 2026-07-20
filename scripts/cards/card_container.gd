@@ -15,6 +15,7 @@ var parent : Node
 var cards: Array[Node2D] = []
 var card_amount : int = 0
 var hover_card_id : int = -1
+var _relayout_queued : bool = false
 
 ## ----- Initialisation ----- ##
 
@@ -22,13 +23,13 @@ func init(parent_:Node, limit:int) -> void:
 	parent = parent_
 	cards.resize(limit)
 
-## ----- Pass Interactions and Data Upstream ----- ##
+## ----- Pass Data Upstream ----- ##
 
 func select_card(id:int) -> void:
 	cards[id].select()
 	parent.select_card(id)
 
-## ----- Pass Interactions and Data Downstream ----- ##
+## ----- Pass Data Downstream ----- ##
 
 func deselect_card(id) -> void:
 	cards[id].deselect()
@@ -40,15 +41,16 @@ func add_card(card_data:CardData, id:int) -> void:
 	
 	add_child(card)
 	card.init(card_data, self, id)
+	card.mark_spawn_layout()
 	
-	_layout_cards()
+	_queue_layout()
 
 func remove_card(id:int) -> void:
 	card_amount -= 1
 	cards[id].remove_card()
 	cards[id] = null
 	
-	_layout_cards()
+	_queue_layout()
 
 func increment_card(id:int) -> void:
 	cards[id].increment()
@@ -56,7 +58,7 @@ func increment_card(id:int) -> void:
 func decrement_card(id:int) -> void:
 	cards[id].decrement()
 
-## ----- Handle Hover logic ----- ##
+## ----- Hover Logic ----- ##
 
 func hover_card(id:int) -> void:
 	if hover_card_id == -1:
@@ -74,6 +76,16 @@ func exit_card(id:int) -> void:
 	cards[id].handle_exit()
 
 ## ----- Layout Logic ----- ##
+
+func _queue_layout() -> void:
+	if _relayout_queued:
+		return
+	_relayout_queued = true
+	call_deferred("_flush_layout")
+
+func _flush_layout() -> void:
+	_relayout_queued = false
+	_layout_cards()
 
 func _layout_cards() -> void:
 	var visible_cards: Array = []
@@ -106,7 +118,7 @@ func _layout_cards() -> void:
 	var max_offset : float = max(0.5, float(count - 1) / 2.0)
 
 	for i in count:
-		var card = visible_cards[i]
+		var card := visible_cards[i] as Card
 
 		# -0.5 / 0.5 for 2 cards,
 		# -1.5 / -0.5 / 0.5 / 1.5 for 4 cards, etc.
@@ -124,7 +136,13 @@ func _layout_cards() -> void:
 		var angle : float = offset * angle_step
 		angle = clamp(angle, -max_angle, max_angle)
 
-		card.animate_layout(Vector2(x, y), angle, i * 2)
+		var target_pos := Vector2(x, y)
+		if card.consume_spawn_layout():
+			card.play_spawn_animation(target_pos, angle, i * 2)
+		else:
+			card.apply_layout(target_pos, angle, i * 2)
+
+## ----- Utility Logic ----- ##
 
 func _center_out_slot(i: int) -> int:
 	if i == 0:

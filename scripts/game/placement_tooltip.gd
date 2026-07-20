@@ -1,6 +1,8 @@
 extends Node2D
 class_name PlacementTooltip
 
+## ----- Initialisation ----- ##
+
 func _ready() -> void:
 	return
 
@@ -14,6 +16,8 @@ func init(type:int, center:Array[Placement],bonus:Array[Placement]) -> void:
 		$animal.show()
 		set_animal_placement(center, bonus)
 		
+
+## ----- Element Placement Logic ----- ##
 
 func set_element_placement(center:Array[Placement]) -> void:
 	for i in center.size():
@@ -30,6 +34,8 @@ func set_element_placement(center:Array[Placement]) -> void:
 		get_node("element/%d/%d/Sprite2D/Sprite2D" % [center.size(), i]).texture = icon
 		get_node("element/%d/%d/Sprite2D/Sprite2D" % [center.size(), i]).scale = Vector2.ONE * scale_factor
 		get_node("element/%d" % [center.size()]).show()
+
+## ----- Animal Placement Logic ----- ##
 
 func set_animal_placement(center:Array[Placement],bonus:Array[Placement]) -> void:
 	var push_direction = Vector2i.ZERO
