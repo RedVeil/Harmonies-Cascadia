@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://bjerihms0uc67"]
+
+[ext_resource type="PackedScene" uid="uid://cg5glng7bhryj" path="res://assets/animals/models/raw/Lion_Female_01.glb" id="1_4igqs"]
+[ext_resource type="Script" uid="uid://c582u2pi2l1xu" path="res://scripts/animal.gd" id="2_0jwpt"]
+
+[node name="Lion_Female_01" unique_id=992310531 instance=ExtResource("1_4igqs")]
+script = ExtResource("2_0jwpt")
+anim_name = &"Lion_Female_Idle"
+max_start_delay_sec = 3.0
+
+[node name="Skeleton3D" parent="Skeleton_Lion_Female" parent_id_path=PackedInt32Array(1070322039) index="0" unique_id=766421672]
+bones/0/rotation = Quaternion(5.364448e-22, 1, -1.8874488e-08, -7.549789e-08)
+bones/1/position = Vector3(0.0015723611, 0.80685365, 0.4744654)
+bones/1/rotation = Quaternion(-0.6897086, -0.0071347253, -0.0005254924, 0.7240518)
+bones/2/position = Vector3(0.13706796, -0.013623838, -0.030618278)
+bones/2/rotation = Quaternion(-0.6312914, -0.020796893, -0.026444795, 0.77481574)
+bones/3/rotation = Quaternion(-0.4536691, -0.016580943, 0.044224396, 0.88991785)
+bones/4/rotation = Quaternion(0.6941198, 1.0393046e-07, -4.203442e-07, 0.7198595)
+bones/5/rotation = Quaternion(0.25436315, -0.012330744, 0.0026157736, 0.9670266)
+bones/6/position = Vector3(9.319757e-10, 0.23058495, -4.29889e-08)
+bones/6/rotation = Quaternion(-0.07273185, -1.9614844e-11, 1.7473408e-08, 0.9973515)
+bones/7/position = Vector3(-8.150102e-10, 0.2691578, -1.9551233e-07)
+bones/7/rotation = Quaternion(0.15376866, 8.380692e-11, -3.6442163e-08, 0.98810697)
+bones/8/rotation = Quaternion(0.07040599, 0.005494384, -0.015428993, 0.997384)
+bones/9/rotation = Quaternion(0.09256816, 0.0036822213, -0.009714676, 0.9956522)
+bones/10/rotation = Quaternion(-0.48729488, 0.0066669593, -0.006244444, 0.8731898)
+bones/11/rotation = Quaternion(0.11247847, -1.9293191e-09, -2.6332394e-08, 0.99365425)
+bones/12/rotation = Quaternion(0.8108376, 0.2970013, -0.15016212, 0.4814396)
+bones/13/rotation = Quaternion(0.8228672, -0.2842486, 0.14366499, 0.47058773)
+bones/14/position = Vector3(0.124172695, 0.22215007, -0.050416)
+bones/14/rotation = Quaternion(-0.6582483, -0.059279103, -0.06704738, 0.7474623)
+bones/15/position = Vector3(-0.015791053, 0.31851825, -0.06460781)
+bones/15/rotation = Quaternion(-0.41124249, -0.036909945, 0.08141715, 0.9071321)
+bones/16/rotation = Quaternion(0.26071233, -0.04157052, 0.052213363, 0.9631068)
+bones/17/rotation = Quaternion(0.38055468, 1.4798971e-08, -4.3331042e-07, 0.9247585)
+bones/18/position = Vector3(1.971425e-08, 0.12644595, 5.4173483e-09)
+bones/18/rotation = Quaternion(0.3589043, -0.04286187, -0.04245265, 0.93142277)
+bones/19/position = Vector3(-0.12374876, 0.2553933, -0.05756037)
+bones/19/rotation = Quaternion(-0.64760643, 0.058124255, 0.06791649, 0.7567132)
+bones/20/position = Vector3(0.015791047, 0.31851807, -0.06460788)
+bones/20/rotation = Quaternion(-0.41124254, 0.03690989, -0.081417166, 0.907132)
+bones/21/rotation = Quaternion(0.3051552, 0.044808455, 0.0051524807, 0.951234)
+bones/22/rotation = Quaternion(0.34772268, 1.9710444e-09, -3.1368035e-08, 0.9375974)
+bones/23/position = Vector3(2.974376e-08, 0.12644601, 4.894946e-08)
+bones/23/rotation = Quaternion(0.33570725, -0.01209816, 0.049604613, 0.9405816)
+bones/24/rotation = Quaternion(0.9798307, 4.7983267e-08, -4.6655663e-07, -0.19982965)
+bones/25/rotation = Quaternion(0.35951623, -0.0009949082, 0.009132687, 0.9330936)
+bones/26/rotation = Quaternion(-0.080796905, 0.0042315004, 0.009132776, 0.99667984)
+bones/27/rotation = Quaternion(-0.13427573, 0.004155436, 0.013617298, 0.99084175)
+bones/28/rotation = Quaternion(-0.106242225, 0.002797539, 0.017229786, 0.99418706)
+bones/29/rotation = Quaternion(-0.09540182, -0.0017569612, 0.019079678, 0.9952544)
+bones/30/position = Vector3(-0.13706794, -0.013623889, -0.030618217)
+bones/30/rotation = Quaternion(-0.6312914, 0.020797048, 0.026444934, 0.7748157)
+bones/31/rotation = Quaternion(-0.5991247, 0.019425014, -0.01596976, 0.80026066)
+bones/32/rotation = Quaternion(0.58754116, -8.0978666e-08, 3.1682447e-07, 0.80919427)
+bones/33/rotation = Quaternion(0.53791934, -0.010020431, 0.0019793084, 0.8429345)

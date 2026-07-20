@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://ce2ytvp1o84nq"]
+
+[ext_resource type="PackedScene" uid="uid://b5rgpsybbgu7r" path="res://assets/animals/models/raw/kiwi.glb" id="1_l1cam"]
+[ext_resource type="Script" uid="uid://c582u2pi2l1xu" path="res://scripts/animal.gd" id="2_aoy33"]
+
+[node name="kiwi" unique_id=1471922907 instance=ExtResource("1_l1cam")]
+script = ExtResource("2_aoy33")
+anim_name = &"Idle_A"
+
+[node name="Skeleton3D" parent="Rig" parent_id_path=PackedInt32Array(700985480) index="0" unique_id=1581322814]
+bones/1/position = Vector3(5.0594373e-22, 3.638208e-15, 0.7724713)
+bones/2/position = Vector3(0.3453224, 0.004734919, 0.09041423)
+bones/2/rotation = Quaternion(-0.036731705, -0.63998675, 0.7480495, -0.17172606)
+bones/3/position = Vector3(-0.34532237, 0.004734884, 0.09041424)
+bones/3/rotation = Quaternion(0.036731623, -0.63998663, 0.74804956, 0.17172614)
+bones/4/position = Vector3(0.1625171, -0.27088213, -0.004577409)
+bones/4/rotation = Quaternion(-9.3299214e-08, 3.5527137e-15, 1, -4.965751e-15)
+bones/5/position = Vector3(-0.1625171, -0.27088213, -0.0045774207)
+bones/5/rotation = Quaternion(-9.3299214e-08, 3.5527137e-15, 1, -4.965751e-15)

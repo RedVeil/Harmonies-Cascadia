@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://db4cdqli21cbf"]
+
+[ext_resource type="PackedScene" uid="uid://b1q3aogp61h32" path="res://assets/animals/models/raw/hamster.glb" id="1_5fm7t"]
+[ext_resource type="Script" uid="uid://c582u2pi2l1xu" path="res://scripts/animal.gd" id="2_dprjb"]
+
+[node name="hamster" unique_id=541227374 instance=ExtResource("1_5fm7t")]
+script = ExtResource("2_dprjb")
+anim_name = &"Idle_A"
+
+[node name="Skeleton3D" parent="Rig" parent_id_path=PackedInt32Array(1444488202) index="0" unique_id=36683193]
+bones/1/position = Vector3(2.941855e-22, -1.1920929e-07, 0.52134496)
+bones/1/scale = Vector3(1, 1, 1)
+bones/2/position = Vector3(1.4346184e-08, 0.05815966, -0.40295595)
+bones/2/rotation = Quaternion(-9.6200274e-08, -0.50024325, 0.86588496, 3.7767336e-08)
+bones/2/scale = Vector3(1, 0.99999976, 0.99999875)
+bones/3/position = Vector3(0.29905188, 0.08516518, 0.2401465)
+bones/3/rotation = Quaternion(-0.29165483, 0.13859436, -0.4062115, 0.8548224)
+bones/3/scale = Vector3(0.9999998, 0.9999999, 0.99999976)
+bones/4/position = Vector3(-0.29905188, 0.08516518, 0.24014653)
+bones/4/rotation = Quaternion(-0.29165486, -0.13859436, 0.4062115, 0.8548224)
+bones/4/scale = Vector3(0.9999998, 0.99999976, 0.99999976)
+bones/5/position = Vector3(0.19252665, -0.09312378, 0.2053835)
+bones/5/rotation = Quaternion(2.591007e-08, 4.6322117e-23, 1, 1.0416762e-15)
+bones/6/position = Vector3(0.22840253, -0.09312384, -0.2876217)
+bones/6/rotation = Quaternion(2.591007e-08, 4.6322117e-23, 1, 1.0416762e-15)
+bones/7/position = Vector3(-0.19252665, -0.09312378, 0.20538348)
+bones/7/rotation = Quaternion(2.591007e-08, 4.6322117e-23, 1, 1.0416762e-15)
+bones/8/position = Vector3(-0.2284025, -0.09312381, -0.2876217)
+bones/8/rotation = Quaternion(2.591007e-08, 4.6322117e-23, 1, 1.0416762e-15)

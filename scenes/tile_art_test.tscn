@@ -1,8 +1,84 @@
 [gd_scene format=3 uid="uid://16y2kmmcn7ib"]
 
 [ext_resource type="Script" uid="uid://bnb8amv0s2k4k" path="res://scripts/camera/IsometricCameraController.gd" id="1_3j4k1"]
-[ext_resource type="PackedScene" uid="uid://cofumvkpk8rxk" path="res://scenes/hex/tile_visuals.tscn" id="1_22xhg"]
-[ext_resource type="PackedScene" uid="uid://3j5lxdopjpkp" path="res://assets/tiles/assets/river/hex_forest_roadA_detail.tscn" id="10_22wox"]
+[ext_resource type="PackedScene" uid="uid://cx21hahxonh15" path="res://assets/tiles/assets/river/hex_forest_roadM_detail.tscn" id="2_dmbei"]
+[ext_resource type="PackedScene" uid="uid://dd2yqnd5346b5" path="res://assets/tiles/assets/base_tile.tscn" id="3_22wox"]
+[ext_resource type="PackedScene" uid="uid://cuohnjra64h77" path="res://assets/tiles/assets/tree/tree_group_small1.tscn" id="4_3j4k1"]
+[ext_resource type="PackedScene" uid="uid://da0qmx4lsyeuu" path="res://assets/tiles/assets/plants/flower4_group3.tscn" id="4_5aa0y"]
+[ext_resource type="PackedScene" uid="uid://bnu0x45ef4n2e" path="res://assets/tiles/assets/mountain/hill1.tscn" id="4_22xhg"]
+[ext_resource type="PackedScene" uid="uid://byh87sey2h1lf" path="res://assets/tiles/assets/mountain/mountain1.tscn" id="5_3j4k1"]
+[ext_resource type="PackedScene" uid="uid://3knltcmx2qpy" path="res://assets/tiles/assets/plants/flower7_group3.tscn" id="5_lxbil"]
+[ext_resource type="PackedScene" uid="uid://c7uqgi0qtlex2" path="res://assets/tiles/assets/mountain/small_mountain1.tscn" id="6_yp744"]
+[ext_resource type="PackedScene" uid="uid://bbtum1rkj1mgw" path="res://assets/tiles/assets/wetlands/wetland1.tscn" id="7_d2x0f"]
+[ext_resource type="PackedScene" uid="uid://ciysuaofh8l24" path="res://assets/tiles/assets/plants/grass_long.tscn" id="7_vdxth"]
+[ext_resource type="PackedScene" uid="uid://b86i8uul6ivkn" path="res://assets/tiles/assets/plants/grass.tscn" id="8_my8id"]
+[ext_resource type="PackedScene" uid="uid://i0c0bhd5e3vc" path="res://assets/tiles/assets/tree/birch_group5.tscn" id="9_5aa0y"]
+[ext_resource type="PackedScene" uid="uid://bgbtx6o7e0i30" path="res://assets/tiles/assets/tree/tree_group5.tscn" id="11_yp744"]
+[ext_resource type="PackedScene" uid="uid://cqlksqpqt0eyt" path="res://assets/tiles/assets/tree/pine_group1.tscn" id="12_d2x0f"]
+[ext_resource type="PackedScene" uid="uid://nje6x60dt2iu" path="res://assets/tiles/assets/plants/grass_wheat_group1.tscn" id="16_g01f6"]
+[ext_resource type="PackedScene" uid="uid://0nmj8n637r62" path="res://assets/animals/models/scenes/bison1.tscn" id="17_khgey"]
+[ext_resource type="PackedScene" uid="uid://cm41cbx4lqtkd" path="res://assets/animals/models/scenes/bear1.tscn" id="17_sdoc7"]
+[ext_resource type="PackedScene" uid="uid://d2yx3slgv8y7m" path="res://assets/animals/models/scenes/bear2.tscn" id="18_6a21n"]
+[ext_resource type="PackedScene" uid="uid://jkjyrowy1a6d" path="res://assets/animals/models/scenes/bee1.tscn" id="19_oogna"]
+[ext_resource type="PackedScene" uid="uid://c85qoq7skngnm" path="res://assets/animals/models/scenes/cow1.tscn" id="20_oklsk"]
+[ext_resource type="PackedScene" uid="uid://dj4cm1ju0k0p1" path="res://assets/animals/models/scenes/cow2.tscn" id="21_papau"]
+[ext_resource type="PackedScene" uid="uid://cclgbqfd5osnc" path="res://assets/animals/models/scenes/crocodile1.tscn" id="22_jhlnw"]
+[ext_resource type="PackedScene" uid="uid://bexr72tgniqma" path="res://assets/animals/models/scenes/deer1.tscn" id="23_vksti"]
+[ext_resource type="PackedScene" uid="uid://bivvk3he1eo65" path="res://assets/animals/models/scenes/deer2.tscn" id="24_2mjoy"]
+[ext_resource type="PackedScene" uid="uid://dvm4igeq51gpq" path="res://assets/animals/models/scenes/duck1.tscn" id="25_iq83n"]
+[ext_resource type="PackedScene" uid="uid://r2a0dfvhp23c" path="res://assets/animals/models/scenes/flamingo1.tscn" id="26_alvy0"]
+[ext_resource type="PackedScene" uid="uid://dl5yq5fxvlf8n" path="res://assets/animals/models/scenes/gorilla1.tscn" id="27_vcsx1"]
+[ext_resource type="PackedScene" uid="uid://wqkbg7je3iax" path="res://assets/animals/models/scenes/hippo1.tscn" id="28_viy7b"]
+[ext_resource type="PackedScene" uid="uid://dnixtdg30jbmr" path="res://assets/animals/models/scenes/horse1.tscn" id="29_m4r0f"]
+[ext_resource type="PackedScene" uid="uid://mitfhhdfkk3i" path="res://assets/animals/models/scenes/horse2.tscn" id="30_ia876"]
+[ext_resource type="PackedScene" uid="uid://cgdwyi5y2ukj8" path="res://assets/animals/models/scenes/horse3.tscn" id="31_8qaqm"]
+[ext_resource type="PackedScene" uid="uid://cfafk8x3gr4og" path="res://assets/animals/models/scenes/ladybug1.tscn" id="33_lx6bb"]
+[ext_resource type="PackedScene" uid="uid://c7m84ox5oadi0" path="res://assets/animals/models/scenes/lama1.tscn" id="34_m3l6b"]
+[ext_resource type="PackedScene" uid="uid://daeyxfog0ovyf" path="res://assets/animals/models/scenes/lama2.tscn" id="35_n10hj"]
+[ext_resource type="PackedScene" uid="uid://b4rq4crg7v2yi" path="res://assets/animals/models/scenes/monkey1.tscn" id="36_k8ve5"]
+[ext_resource type="PackedScene" uid="uid://b873ihcox1jb7" path="res://assets/animals/models/scenes/monkey2.tscn" id="37_nxa01"]
+[ext_resource type="PackedScene" uid="uid://cnenqjp0rfs16" path="res://assets/animals/models/scenes/otter1.tscn" id="38_feo81"]
+[ext_resource type="PackedScene" uid="uid://cii7rx61w1j7y" path="res://assets/animals/models/scenes/panda1.tscn" id="39_85w0e"]
+[ext_resource type="PackedScene" uid="uid://drr78h586hnaq" path="res://assets/animals/models/scenes/ram1.tscn" id="40_tmgrj"]
+[ext_resource type="PackedScene" uid="uid://b1bxc1mnu6rhi" path="res://assets/animals/models/scenes/ram2.tscn" id="41_nlwbn"]
+[ext_resource type="PackedScene" uid="uid://cosdyu2lsygmf" path="res://assets/animals/models/scenes/sheep1.tscn" id="42_25uk7"]
+[ext_resource type="PackedScene" uid="uid://vxhhah3eekcn" path="res://assets/animals/models/scenes/sheep2.tscn" id="43_jhfva"]
+[ext_resource type="PackedScene" uid="uid://d1j1hmejhygem" path="res://assets/animals/models/scenes/sheep3.tscn" id="44_abgrd"]
+[ext_resource type="PackedScene" uid="uid://2262on5t8i4p" path="res://assets/animals/models/scenes/swan1.tscn" id="45_t8srj"]
+[ext_resource type="PackedScene" uid="uid://d302lwfh8prsl" path="res://assets/animals/models/scenes/swan2.tscn" id="46_2eoh7"]
+[ext_resource type="PackedScene" uid="uid://b7c5pm3b0l7ly" path="res://assets/animals/models/scenes/wolf1.tscn" id="47_a4c1y"]
+[ext_resource type="PackedScene" uid="uid://crgnt3ti6jfuo" path="res://assets/animals/models/scenes/wolf2.tscn" id="48_42i83"]
+[ext_resource type="PackedScene" uid="uid://b140yecyp4j7l" path="res://assets/animals/models/scenes/rabbit1.tscn" id="49_6a21n"]
+[ext_resource type="PackedScene" uid="uid://cj5a4y6mh66uf" path="res://assets/animals/models/scenes/cat1.tscn" id="50_cu8ae"]
+[ext_resource type="PackedScene" uid="uid://cmmlbo4n6jm68" path="res://assets/animals/models/scenes/cat2.tscn" id="51_kx7ad"]
+[ext_resource type="PackedScene" uid="uid://2s6ahh08w4kt" path="res://assets/animals/models/scenes/cat3.tscn" id="52_27k62"]
+[ext_resource type="PackedScene" uid="uid://b2hny5cwxyyfc" path="res://assets/animals/models/scenes/cat4.tscn" id="53_p0mnb"]
+[ext_resource type="PackedScene" uid="uid://clmm7cn1a7hmv" path="res://assets/animals/models/scenes/chicken1.tscn" id="54_rgobq"]
+[ext_resource type="PackedScene" uid="uid://can01y27xqgwe" path="res://assets/animals/models/scenes/chicken2.tscn" id="55_lqmif"]
+[ext_resource type="PackedScene" uid="uid://dxpa6xs01daki" path="res://assets/animals/models/scenes/chicken3.tscn" id="56_g5ob4"]
+[ext_resource type="PackedScene" uid="uid://dwg1vxiwwhny" path="res://assets/animals/models/scenes/crab1.tscn" id="57_nnpu2"]
+[ext_resource type="PackedScene" uid="uid://b8h1k1bseausk" path="res://assets/animals/models/scenes/elephant1.tscn" id="58_c67tb"]
+[ext_resource type="PackedScene" uid="uid://byn578v8a3nyh" path="res://assets/animals/models/scenes/elephant2.tscn" id="59_jxmq6"]
+[ext_resource type="PackedScene" uid="uid://ccyd66fbt812b" path="res://assets/animals/models/scenes/fish1.tscn" id="60_4u3b7"]
+[ext_resource type="PackedScene" uid="uid://goq0slvgmok5" path="res://assets/animals/models/scenes/fox1.tscn" id="61_6lv56"]
+[ext_resource type="PackedScene" uid="uid://bak8e6g1phyyr" path="res://assets/animals/models/scenes/frog1.tscn" id="62_d3spx"]
+[ext_resource type="PackedScene" uid="uid://bd8qbuga6w0tu" path="res://assets/animals/models/scenes/cameleon1.tscn" id="63_4mudm"]
+[ext_resource type="PackedScene" uid="uid://duvi8lf7aknme" path="res://assets/animals/models/scenes/giraffe1.tscn" id="64_7ok3x"]
+[ext_resource type="PackedScene" uid="uid://db4cdqli21cbf" path="res://assets/animals/models/scenes/hamster1.tscn" id="65_1dwx0"]
+[ext_resource type="PackedScene" uid="uid://b1ovxhpmrq342" path="res://assets/animals/models/scenes/hedgehog1.tscn" id="66_du73t"]
+[ext_resource type="PackedScene" uid="uid://ce2ytvp1o84nq" path="res://assets/animals/models/scenes/kiwi1.tscn" id="67_4nsw5"]
+[ext_resource type="PackedScene" uid="uid://cn28jebvbsska" path="res://assets/animals/models/scenes/koala1.tscn" id="68_uf2wj"]
+[ext_resource type="PackedScene" uid="uid://c3bmp4j08vrdr" path="res://assets/animals/models/scenes/lion1.tscn" id="69_vkajr"]
+[ext_resource type="PackedScene" uid="uid://bjerihms0uc67" path="res://assets/animals/models/scenes/lion2.tscn" id="70_ikyyw"]
+[ext_resource type="PackedScene" uid="uid://vd8loy3ajhf6" path="res://assets/animals/models/scenes/moose1.tscn" id="71_cedbg"]
+[ext_resource type="PackedScene" uid="uid://diphf2c762x5q" path="res://assets/animals/models/scenes/moose2.tscn" id="72_i0tx1"]
+[ext_resource type="PackedScene" uid="uid://bt3eo08k51uly" path="res://assets/animals/models/scenes/pigeon1.tscn" id="73_aj2t3"]
+[ext_resource type="PackedScene" uid="uid://d24xdv31h1bhe" path="res://assets/animals/models/scenes/pigeon2.tscn" id="74_7np85"]
+[ext_resource type="PackedScene" uid="uid://dwuj7ap5gj8pv" path="res://assets/animals/models/scenes/pigeon3.tscn" id="75_44on7"]
+[ext_resource type="PackedScene" uid="uid://dx6tv1ufl4mqa" path="res://assets/animals/models/scenes/raccoon1.tscn" id="76_yfjim"]
+[ext_resource type="PackedScene" uid="uid://84sg7as2i5em" path="res://assets/animals/models/scenes/rhino1.tscn" id="77_n776m"]
+[ext_resource type="PackedScene" uid="uid://b05uawyeixpmy" path="res://assets/animals/models/scenes/tiger1.tscn" id="78_vmkj5"]
+[ext_resource type="PackedScene" uid="uid://3qkkvbuhalnw" path="res://assets/animals/models/scenes/tiger2.tscn" id="79_jywu0"]
 
 [sub_resource type="Environment" id="Environment_yp744"]
 background_mode = 1
@@ -14,7 +90,7 @@ background_color = Color(0.8186203, 0.7502329, 0.6806915, 1)
 environment = SubResource("Environment_yp744")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment" unique_id=2042995454]
-transform = Transform3D(-0.8660253, -0.43301287, 0.24999996, 0, 0.50000006, 0.86602527, -0.5, 0.7500002, -0.43301257, 0, 0, 0)
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999994, 0.86602545, -0.50000006, 0.75, -0.43301263, 0, 0, -5.890086)
 shadow_enabled = true
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1373599360]
@@ -30,44 +106,290 @@ move_speed = 24.0
 zoom_min = 50.0
 zoom_max = 100.0
 
-[node name="Tile_Default" parent="." unique_id=987731715 instance=ExtResource("1_22xhg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35980225, 0, 3.0621338)
+[node name="tiles" type="Node3D" parent="." unique_id=1276765733]
 
-[node name="Tile_Default2" parent="." unique_id=419253470 instance=ExtResource("1_22xhg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.211624, 0, -5.5643997)
+[node name="field3" type="Node3D" parent="tiles" unique_id=930090069]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.679502, 0, -89.05925)
 
-[node name="Tile_Default10" parent="." unique_id=1905896799 instance=ExtResource("1_22xhg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 46.075207, 0, -6.000414)
+[node name="Node3D6" parent="tiles/field3" unique_id=344020823 instance=ExtResource("3_22wox")]
 
-[node name="Tile_Default11" parent="." unique_id=1447798548 instance=ExtResource("1_22xhg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.398243, 0, 11.776062)
+[node name="MultiMeshInstance3D7" parent="tiles/field3" unique_id=86273511 instance=ExtResource("16_g01f6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0761385, 10.188806, -0.2681656)
 
-[node name="Tile_Default14" parent="." unique_id=586260956 instance=ExtResource("1_22xhg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.130035, 0, 20.501202)
+[node name="MultiMeshInstance3D5" parent="tiles/field3" unique_id=2032103743 instance=ExtResource("4_5aa0y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4353008, 8.415703, -0.058029175)
 
-[node name="Tile_Default13" parent="." unique_id=381967752 instance=ExtResource("1_22xhg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.03109, 0, 29.106693)
+[node name="MultiMeshInstance3D6" parent="tiles/field3" unique_id=972116252 instance=ExtResource("5_lxbil")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3639321, 8.7279625, -0.9663086)
 
-[node name="Tile_Default12" parent="." unique_id=534335670 instance=ExtResource("1_22xhg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.133904, 0, 20.275019)
+[node name="grass2" parent="tiles/field3" unique_id=1861785440 instance=ExtResource("8_my8id")]
+transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, -0.07143021, 9.189692, -0.17003632)
 
-[node name="Tile_Default4" parent="." unique_id=499627477 instance=ExtResource("1_22xhg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35980225, 0, -13.991934)
+[node name="field1" type="Node3D" parent="tiles" unique_id=1459505038]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.196518, 0, -89.05925)
 
-[node name="Tile_Default5" parent="." unique_id=1327241940 instance=ExtResource("1_22xhg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.211624, 0, -22.618467)
+[node name="Node3D6" parent="tiles/field1" unique_id=4262802 instance=ExtResource("3_22wox")]
 
-[node name="Tile_Default6" parent="." unique_id=324748843 instance=ExtResource("1_22xhg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.421902, 0, -31.075775)
+[node name="MultiMeshInstance3D7" parent="tiles/field1" unique_id=1212467575 instance=ExtResource("16_g01f6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0761385, 10.188806, -0.2681656)
 
-[node name="Tile_Default7" parent="." unique_id=413262778 instance=ExtResource("1_22xhg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35980225, 0, 20.37282)
+[node name="MultiMeshInstance3D5" parent="tiles/field1" unique_id=72486673 instance=ExtResource("4_5aa0y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4353008, 8.415703, -0.058029175)
 
-[node name="Tile_Default8" parent="." unique_id=1294499866 instance=ExtResource("1_22xhg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.211624, 0, 11.532862)
+[node name="MultiMeshInstance3D6" parent="tiles/field1" unique_id=441835827 instance=ExtResource("5_lxbil")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3639321, 8.7279625, -0.9663086)
 
-[node name="Tile_Default9" parent="." unique_id=1530365315 instance=ExtResource("1_22xhg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.421902, 0, 3.075554)
+[node name="grass2" parent="tiles/field1" unique_id=1907160837 instance=ExtResource("8_my8id")]
+transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, -0.07143021, 9.189692, -0.17003632)
 
-[node name="hex_forest_roadA_detail" parent="." unique_id=1588866648 instance=ExtResource("10_22wox")]
-transform = Transform3D(0.8660253, 0, 0.49999997, 0, 1, 0, -0.49999997, 0, 0.8660253, 46.91714, 0, -7.5492287)
+[node name="field2" type="Node3D" parent="tiles" unique_id=1173345743]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.355322, 0, -89.05925)
+
+[node name="Node3D6" parent="tiles/field2" unique_id=2063860593 instance=ExtResource("3_22wox")]
+
+[node name="MultiMeshInstance3D2" parent="tiles/field2" unique_id=638240232 instance=ExtResource("7_vdxth")]
+transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, 0.013921738, 9.082836, 0.07501221)
+
+[node name="MultiMeshInstance3D5" parent="tiles/field2" unique_id=242458602 instance=ExtResource("4_5aa0y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4353008, 8.415703, -0.058029175)
+
+[node name="MultiMeshInstance3D6" parent="tiles/field2" unique_id=1092043209 instance=ExtResource("5_lxbil")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3639321, 8.7279625, -0.9663086)
+
+[node name="grass2" parent="tiles/field2" unique_id=1782016616 instance=ExtResource("8_my8id")]
+transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, -0.07143021, 9.189692, -0.17003632)
+
+[node name="forest1" type="Node3D" parent="tiles" unique_id=1109180360]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1486568, 0, -65.07738)
+
+[node name="Node3D6" parent="tiles/forest1" unique_id=734232911 instance=ExtResource("3_22wox")]
+
+[node name="MultiMeshInstance3D" parent="tiles/forest1" unique_id=1539483186 instance=ExtResource("4_3j4k1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.38217354, 7.7901917, 0.10115051)
+
+[node name="grass2" parent="tiles/forest1" unique_id=1778956672 instance=ExtResource("8_my8id")]
+transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, -0.07143021, 9.189692, -0.17003632)
+
+[node name="forest2" type="Node3D" parent="tiles" unique_id=1642119854]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.330696, 0, -65.069725)
+
+[node name="Node3D" parent="tiles/forest2" unique_id=326333670 instance=ExtResource("3_22wox")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.499, 0, 0)
+
+[node name="grass" parent="tiles/forest2" unique_id=447773532 instance=ExtResource("8_my8id")]
+transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, 1.428, 8.796, 0)
+
+[node name="MultiMeshInstance3D" parent="tiles/forest2" unique_id=2045826894 instance=ExtResource("9_5aa0y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.919, 6.887, 0)
+
+[node name="MultiMeshInstance3D2" parent="tiles/forest2" unique_id=1154325667 instance=ExtResource("11_yp744")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.856, 8.896, 0)
+
+[node name="MultiMeshInstance3D3" parent="tiles/forest2" unique_id=2147027474 instance=ExtResource("12_d2x0f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.691, 7.745, 0)
+
+[node name="mountain1" parent="tiles" unique_id=1265511252 instance=ExtResource("4_22xhg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -40.34943)
+
+[node name="moutnain2" parent="tiles" unique_id=2123272113 instance=ExtResource("6_yp744")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.443594, 0, -40.34943)
+
+[node name="mountain3" parent="tiles" unique_id=1767085584 instance=ExtResource("5_3j4k1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.511826, 0, -40.34943)
+
+[node name="wetlands" parent="tiles" unique_id=1310223026 instance=ExtResource("7_d2x0f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.21098709, 0, -16.461346)
+
+[node name="river" parent="tiles" unique_id=199484641 instance=ExtResource("2_dmbei")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7696276, 0, 9.5748205)
+
+[node name="animals" type="Node3D" parent="." unique_id=1553618215]
+
+[node name="Bison_012" parent="animals" unique_id=1425163416 instance=ExtResource("17_khgey")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 10.524724, -38.51308)
+
+[node name="Bear_012" parent="animals" unique_id=1652076105 instance=ExtResource("17_sdoc7")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 3.808838, 9.933752, -43.113533)
+
+[node name="Bear_022" parent="animals" unique_id=1896002409 instance=ExtResource("18_6a21n")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 1.8422613, 9.933752, -43.113533)
+
+[node name="bee" parent="animals" unique_id=1264203858 instance=ExtResource("19_oogna")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 14.011307, -91.22247)
+
+[node name="Cow_012" parent="animals" unique_id=1501383829 instance=ExtResource("20_oklsk")]
+transform = Transform3D(7, 0, 0, 0, 7, 0, 0, 0, 7, 1.4184263, 10.410519, -90.50134)
+
+[node name="Cow_022" parent="animals" unique_id=2098699145 instance=ExtResource("21_papau")]
+transform = Transform3D(7, 0, 0, 0, 7, 0, 0, 0, 7, 2.9322007, 10.410519, -90.50134)
+
+[node name="Crocodile_012" parent="animals" unique_id=598369406 instance=ExtResource("22_jhlnw")]
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 0, 10.005501, -15.031084)
+
+[node name="Deer_012" parent="animals" unique_id=12142192 instance=ExtResource("23_vksti")]
+transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, 6.3827696, 10.306458, -65.06804)
+
+[node name="Deer_Female_012" parent="animals" unique_id=1577342567 instance=ExtResource("24_2mjoy")]
+transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, 7.8374133, 10.306458, -65.06804)
+
+[node name="Duck_012" parent="animals" unique_id=770333147 instance=ExtResource("25_iq83n")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 3.0932252, 10.272602, -13.594008)
+
+[node name="Flamingo_012" parent="animals" unique_id=905403136 instance=ExtResource("26_alvy0")]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, -1.6805644, 10.1616335, -16.802696)
+
+[node name="Gorilla_012" parent="animals" unique_id=1660077743 instance=ExtResource("27_vcsx1")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, -14.746602, 9.731224, -65.361916)
+
+[node name="Hippopotamus_012" parent="animals" unique_id=1574949799 instance=ExtResource("28_viy7b")]
+transform = Transform3D(7, 0, 0, 0, 7, 0, 0, 0, 7, -4.586875, 10.236288, -89.80691)
+
+[node name="Horse_012" parent="animals" unique_id=822097890 instance=ExtResource("29_m4r0f")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 9.80896, -85.17057)
+
+[node name="Horse_022" parent="animals" unique_id=7805199 instance=ExtResource("30_ia876")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 1.3786049, 9.80896, -85.17057)
+
+[node name="Horse_032" parent="animals" unique_id=1305526398 instance=ExtResource("31_8qaqm")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.8663096, 9.80896, -85.17057)
+
+[node name="ladybug" parent="animals" unique_id=1604660025 instance=ExtResource("33_lx6bb")]
+transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, -18.685738, 9.799379, -86.43974)
+
+[node name="Lama_012" parent="animals" unique_id=1873103690 instance=ExtResource("34_m3l6b")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, -2.6116955, 10.176551, -39.31614)
+
+[node name="Lama_022" parent="animals" unique_id=97459346 instance=ExtResource("35_n10hj")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, -3.3923094, 10.15977, -39.337517)
+
+[node name="Monkey_012" parent="animals" unique_id=2074968413 instance=ExtResource("36_k8ve5")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.741802, 10.37451, -37.513718)
+
+[node name="Monkey_022" parent="animals" unique_id=1431601455 instance=ExtResource("37_nxa01")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 3.5034688, 10.37451, -37.513718)
+
+[node name="otter" parent="animals" unique_id=141395713 instance=ExtResource("38_feo81")]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, -8.805478, 10.020186, 12.761303)
+
+[node name="Panda_012" parent="animals" unique_id=1631333183 instance=ExtResource("39_85w0e")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 10.38838, -70.09329)
+
+[node name="Ram_012" parent="animals" unique_id=1161704578 instance=ExtResource("40_tmgrj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9558277, 10.402048, -37.616455)
+
+[node name="Ram_022" parent="animals" unique_id=115930685 instance=ExtResource("41_nlwbn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.68929, 10.402048, -37.616455)
+
+[node name="Sheep_012" parent="animals" unique_id=1722669835 instance=ExtResource("42_25uk7")]
+transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 1.3229117, 10.580879, -94.72076)
+
+[node name="Sheep_022" parent="animals" unique_id=980016509 instance=ExtResource("43_jhfva")]
+transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 3.4112458, 10.580879, -94.72076)
+
+[node name="Sheep_032" parent="animals" unique_id=119932602 instance=ExtResource("44_abgrd")]
+transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 2.386961, 10.580879, -94.72076)
+
+[node name="Swan_012" parent="animals" unique_id=931456392 instance=ExtResource("45_t8srj")]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0.034701347, 10.595121, 1.779789)
+
+[node name="Swan_022" parent="animals" unique_id=356562819 instance=ExtResource("46_2eoh7")]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0.84913373, 10.613061, 1.779789)
+
+[node name="Wolf_012" parent="animals" unique_id=1320493748 instance=ExtResource("47_a4c1y")]
+transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, -1.5880389, 10.2142105, -34.0811)
+
+[node name="Wolf_022" parent="animals" unique_id=2086072075 instance=ExtResource("48_42i83")]
+transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, -2.3699617, 10.2142105, -34.0811)
+
+[node name="rabbit" parent="animals" unique_id=1615478330 instance=ExtResource("49_6a21n")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 7.212389, 10.055482, -88.87523)
+
+[node name="Cat_012" parent="animals" unique_id=799146806 instance=ExtResource("50_cu8ae")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.527941, -66.301575)
+
+[node name="Cat_022" parent="animals" unique_id=2098031551 instance=ExtResource("51_kx7ad")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.527941, -66.301575)
+
+[node name="Cat_032" parent="animals" unique_id=1383350547 instance=ExtResource("52_27k62")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.527941, -66.301575)
+
+[node name="Cat_042" parent="animals" unique_id=932248001 instance=ExtResource("53_p0mnb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.527941, -66.301575)
+
+[node name="Chicken_012" parent="animals" unique_id=50871882 instance=ExtResource("54_rgobq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.609214, 11.261875, -90.28735)
+
+[node name="Chicken_022" parent="animals" unique_id=61071656 instance=ExtResource("55_lqmif")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.609214, 11.261875, -90.28735)
+
+[node name="Chicken_032" parent="animals" unique_id=552472882 instance=ExtResource("56_g5ob4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.609214, 11.261875, -90.28735)
+
+[node name="crab" parent="animals" unique_id=53080086 instance=ExtResource("57_nnpu2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5661154, 10.238056, 9.656634)
+
+[node name="Elephant_012" parent="animals" unique_id=1718580595 instance=ExtResource("58_c67tb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4239035, 10.48962, -68.00797)
+
+[node name="Elephant_022" parent="animals" unique_id=29402470 instance=ExtResource("59_jxmq6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4239035, 10.48962, -68.00797)
+
+[node name="fish" parent="animals" unique_id=507076115 instance=ExtResource("60_4u3b7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.0864134, 10.371072, 8.400068)
+
+[node name="Fox_012" parent="animals" unique_id=81058295 instance=ExtResource("61_6lv56")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.527941, -66.301575)
+
+[node name="frog" parent="animals" unique_id=687751837 instance=ExtResource("62_d3spx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.0530987, 9.56493, 7.9070663)
+
+[node name="gecko" parent="animals" unique_id=1088443216 instance=ExtResource("63_4mudm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.234897, -11.52747)
+
+[node name="Giraffe_012" parent="animals" unique_id=1921070138 instance=ExtResource("64_7ok3x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.527941, -66.301575)
+
+[node name="hamster" parent="animals" unique_id=541227374 instance=ExtResource("65_1dwx0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45530176, 10.887819, -41.111763)
+
+[node name="hedgehog" parent="animals" unique_id=771079175 instance=ExtResource("66_du73t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.609214, 11.261875, -90.28735)
+
+[node name="kiwi" parent="animals" unique_id=1471922907 instance=ExtResource("67_4nsw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.527941, -66.301575)
+
+[node name="Koala_012" parent="animals" unique_id=673920851 instance=ExtResource("68_uf2wj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.527941, -66.301575)
+
+[node name="Lion_012" parent="animals" unique_id=607663781 instance=ExtResource("69_vkajr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.609214, 11.261875, -90.28735)
+
+[node name="Lion_Female_01" parent="animals" unique_id=992310531 instance=ExtResource("70_ikyyw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.609214, 11.261875, -90.28735)
+
+[node name="Moose_012" parent="animals" unique_id=301878831 instance=ExtResource("71_cedbg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9006734, 11.332113, -45.170666)
+
+[node name="Moose_Female_012" parent="animals" unique_id=822159474 instance=ExtResource("72_i0tx1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9006734, 11.332113, -45.170666)
+
+[node name="Pigeon_012" parent="animals" unique_id=1214834334 instance=ExtResource("73_aj2t3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.887819, -41.111763)
+
+[node name="Pigeon_022" parent="animals" unique_id=520755360 instance=ExtResource("74_7np85")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.887819, -41.111763)
+
+[node name="Pigeon_032" parent="animals" unique_id=363376907 instance=ExtResource("75_44on7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.887819, -41.111763)
+
+[node name="Raccoon_012" parent="animals" unique_id=1851881370 instance=ExtResource("76_yfjim")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.527941, -66.301575)
+
+[node name="Rhinoceros_012" parent="animals" unique_id=442450783 instance=ExtResource("77_n776m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.638482, 9.492896)
+
+[node name="Tiger_012" parent="animals" unique_id=994511058 instance=ExtResource("78_vmkj5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5572982, 10.48152, -36.407562)
+
+[node name="Tiger_022" parent="animals" unique_id=1591979160 instance=ExtResource("79_jywu0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5572982, 10.48152, -36.407562)

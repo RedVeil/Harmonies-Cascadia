@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bd8qbuga6w0tu"]
+
+[ext_resource type="PackedScene" uid="uid://dah14hqaaumfn" path="res://assets/animals/models/raw/gecko.glb" id="1_i00hg"]
+[ext_resource type="Script" uid="uid://c582u2pi2l1xu" path="res://scripts/animal.gd" id="2_xotjp"]
+
+[node name="gecko" unique_id=1088443216 instance=ExtResource("1_i00hg")]
+script = ExtResource("2_xotjp")
+anim_name = &"Idle_A"

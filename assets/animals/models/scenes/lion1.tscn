@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://c3bmp4j08vrdr"]
+
+[ext_resource type="PackedScene" uid="uid://dka78yashdac7" path="res://assets/animals/models/raw/Lion_01.glb" id="1_hfulc"]
+[ext_resource type="Script" uid="uid://c582u2pi2l1xu" path="res://scripts/animal.gd" id="2_3k5p1"]
+
+[node name="Lion_012" unique_id=607663781 instance=ExtResource("1_hfulc")]
+script = ExtResource("2_3k5p1")
+anim_name = &"Lion_Idle"
+max_start_delay_sec = 9.0
+
+[node name="Skeleton3D" parent="Skeleton_Lion" parent_id_path=PackedInt32Array(869388096) index="0" unique_id=500001498]
+bones/0/rotation = Quaternion(-1.2356203e-09, 1, -1.8874488e-08, -7.673351e-08)
+bones/1/position = Vector3(0.0020715843, 1.0437939, 0.6106375)
+bones/1/rotation = Quaternion(-0.6923593, -0.00077342766, -0.00074197084, 0.7215522)
+bones/2/position = Vector3(0.17737335, -0.01762985, -0.03962222)
+bones/2/rotation = Quaternion(-0.63129133, -0.02079684, -0.026444836, 0.77481574)
+bones/3/rotation = Quaternion(-0.5676175, -0.019126285, 0.029605946, 0.8225376)
+bones/4/rotation = Quaternion(0.6463416, 1.7763409e-07, -4.9769386e-07, 0.7630483)
+bones/5/rotation = Quaternion(0.44224098, -0.002947739, 0.00058516586, 0.8968913)
+bones/6/position = Vector3(-1.3572819e-10, 0.29838946, -3.6475805e-07)
+bones/6/rotation = Quaternion(-0.07273135, -4.838297e-12, 1.7273758e-08, 0.9973516)
+bones/7/position = Vector3(-0.00674223, 0.33542308, 0.02394716)
+bones/7/rotation = Quaternion(0.16098025, 6.0332546e-05, 0.0010700431, 0.9869571)
+bones/8/rotation = Quaternion(0.15530348, -0.00018296369, 0.0012357435, 0.9878661)
+bones/9/rotation = Quaternion(0.00695186, 3.07638e-06, 0.00020548233, 0.9999758)
+bones/10/rotation = Quaternion(-0.50902617, 0.000342006, -0.0005864378, 0.86075085)
+bones/11/rotation = Quaternion(-0.06224037, 2.405848e-13, 1.4843192e-08, 0.99806124)
+bones/12/rotation = Quaternion(0.7909264, 0.29627767, -0.12423952, 0.5207874)
+bones/13/rotation = Quaternion(0.7745687, -0.31541464, 0.13010234, 0.5325695)
+bones/14/position = Vector3(0.16016859, 0.32977393, -0.07782906)
+bones/14/rotation = Quaternion(-0.6476068, -0.05812403, -0.06791653, 0.75671303)
+bones/15/position = Vector3(-0.020434532, 0.41217974, -0.083606064)
+bones/15/rotation = Quaternion(-0.45013028, -0.0434092, 0.07648794, 0.8886214)
+bones/16/rotation = Quaternion(0.3602274, 2.8224775e-08, -5.6468302e-08, 0.93286455)
+bones/17/rotation = Quaternion(0.17440453, 0.0041032815, 0.0016566253, 0.98466414)
+bones/18/position = Vector3(1.6716967e-08, 0.16362791, -7.3634936e-08)
+bones/18/rotation = Quaternion(0.48356274, -5.6787883e-08, -8.501136e-08, 0.8753097)
+bones/19/position = Vector3(-0.16016857, 0.32977387, -0.07782907)
+bones/19/rotation = Quaternion(-0.6476067, 0.05812419, 0.067916565, 0.756713)
+bones/20/position = Vector3(0.020434465, 0.4121797, -0.08360606)
+bones/20/rotation = Quaternion(-0.45066833, 0.03743953, -0.08297126, 0.8880384)
+bones/21/rotation = Quaternion(0.36023194, -4.857464e-08, 2.7986935e-08, 0.9328628)
+bones/22/rotation = Quaternion(0.17440191, 0.0041033183, 0.001656699, 0.9846647)
+bones/23/position = Vector3(1.6323668e-08, 0.16362786, -1.1761784e-08)
+bones/23/rotation = Quaternion(0.48356307, 4.7853e-08, 1.4992523e-07, 0.8753095)
+bones/24/rotation = Quaternion(0.9819343, -0.002391171, -0.002774161, -0.1891869)
+bones/25/rotation = Quaternion(0.356775, -0.0047523975, -0.0005650194, 0.9341782)
+bones/26/rotation = Quaternion(-0.08153265, 0.0034404078, -0.01602998, 0.99653584)
+bones/27/rotation = Quaternion(-0.11600007, 0.0068827462, -0.029332865, 0.9927922)
+bones/28/rotation = Quaternion(-0.09344872, -0.0056172074, -0.047701042, 0.9944649)
+bones/29/rotation = Quaternion(-0.09201073, -0.0093114395, -0.0075544324, 0.9956859)
+bones/30/position = Vector3(-0.1773734, -0.017629877, -0.039622005)
+bones/30/rotation = Quaternion(-0.6312913, 0.020797037, 0.02644494, 0.7748158)
+bones/31/rotation = Quaternion(-0.5680916, 0.020051293, -0.025098741, 0.8223381)
+bones/32/rotation = Quaternion(0.64567006, 1.8384799e-07, -1.8787472e-07, 0.76361656)
+bones/33/rotation = Quaternion(0.4435826, -0.0029445558, 0.00058041024, 0.8962285)

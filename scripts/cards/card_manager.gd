@@ -28,11 +28,12 @@ func deselect_card(id:int) -> void:
 	card_container.deselect_card(id)
 
 func add_card(card_data:CardData) -> void:
-	var matching_card_id := cards.find_custom(func(card):return card != null && card.type == card_data.type && card.id == card_data.id)
+	var hand_card := card_data.duplicate(true)
+	var matching_card_id := cards.find_custom(func(card):return card != null && card.type == hand_card.type && card.id == hand_card.id)
 	if matching_card_id == -1:
 		var new_id := cards.find_custom(func(card_):return card_ == null)
-		cards[new_id] = card_data
-		card_container.add_card(card_data, new_id)
+		cards[new_id] = hand_card
+		card_container.add_card(hand_card, new_id)
 		card_amount += 1
 		if card_amount > card_limit:
 			orchestrator.pause_cards()
@@ -42,7 +43,7 @@ func add_card(card_data:CardData) -> void:
 			orchestrator.preview_recycle_card(matching_card_id, recycling_value, true)
 			orchestrator.apply_recycle_card(matching_card_id, recycling_value, true)
 		else:
-			cards[matching_card_id].amount += 1
+			cards[matching_card_id].amount += hand_card.amount
 			card_container.increment_card(matching_card_id)
 
 func remove_card(id:int) -> void:
