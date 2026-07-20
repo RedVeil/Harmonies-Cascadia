@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://cgdwyi5y2ukj8"]
+
+[ext_resource type="PackedScene" uid="uid://blvxj0xp5lh8v" path="res://assets/animals/models/raw/Horse_03.glb" id="1_bsfln"]
+[ext_resource type="Script" uid="uid://c582u2pi2l1xu" path="res://scripts/animal.gd" id="2_id78y"]
+
+[node name="Horse_032" unique_id=1305526398 instance=ExtResource("1_bsfln")]
+script = ExtResource("2_id78y")
+anim_name = &"Horse_Idle"
+max_start_delay_sec = 10.0
+
+[node name="Skeleton3D" parent="Skeleton_Horse_03" parent_id_path=PackedInt32Array(1085394562) index="0" unique_id=458002512]
+bones/0/rotation = Quaternion(-4.500013e-15, 1, -1.2219051e-07, -7.54978e-08)
+bones/1/position = Vector3(-1.3954782e-08, 1.3153025, 0.2195097)
+bones/1/rotation = Quaternion(-0.77686715, 2.9050904e-07, -4.0781148e-07, 0.6296647)
+bones/2/position = Vector3(0.118622385, -0.043677956, -0.0056533827)
+bones/2/rotation = Quaternion(0.91659856, 0.03387819, 0.002579727, -0.39836243)
+bones/3/rotation = Quaternion(0.62926704, 0.01574171, 0.021995012, 0.7767183)
+bones/4/rotation = Quaternion(-0.59124535, 0.018293032, 0.024262544, 0.80591905)
+bones/5/rotation = Quaternion(0.3448828, -0.011023506, -0.026890302, 0.93819577)
+bones/6/rotation = Quaternion(0.29128143, 0.009601978, -0.010290548, 0.9565339)
+bones/7/rotation = Quaternion(0.9608779, 0.03489797, -0.00032790098, -0.27476487)
+bones/8/rotation = Quaternion(0.42863065, 0.01445796, -0.014227558, 0.90325207)
+bones/9/rotation = Quaternion(0.16355145, 0.0055879913, -0.029698677, 0.9860718)
+bones/10/rotation = Quaternion(-0.11168285, 0.0029735696, -0.022131039, 0.9934931)
+bones/11/rotation = Quaternion(-0.13034229, -0.008775713, 0.022213481, 0.9911813)
+bones/13/rotation = Quaternion(0.090063415, 2.9679777e-08, 9.151485e-08, 0.99593604)
+bones/14/rotation = Quaternion(0.09796311, -1.2689365e-08, 1.012121e-07, 0.99519)
+bones/15/rotation = Quaternion(-0.49275067, -0.01260011, -0.020823158, 0.86983013)
+bones/15/scale = Vector3(1.0000001, 1.0000007, 1)
+bones/16/rotation = Quaternion(-0.597468, -0.013584288, 0.019622242, 0.80153763)
+bones/17/rotation = Quaternion(0.43674234, -0.010802281, 0.024039017, 0.8992006)
+bones/18/position = Vector3(5.7897864e-09, 0.32674214, -4.148717e-10)
+bones/18/rotation = Quaternion(-0.25457442, 0.006438327, -0.025105804, 0.96670586)
+bones/19/position = Vector3(-6.936336e-06, 0.31912956, 4.3081534e-05)
+bones/19/rotation = Quaternion(0.4202712, -0.0805397, 0.015160836, 0.90369)
+bones/20/position = Vector3(4.5181935e-08, 0.33447322, -0.044278424)
+bones/20/rotation = Quaternion(0.39972144, -3.5565332e-08, 3.9237273e-07, 0.91663665)
+bones/21/rotation = Quaternion(-0.09506054, -0.04083792, -0.032731123, 0.9940948)
+bones/23/rotation = Quaternion(-0.6144419, -7.595402e-08, -5.9144014e-07, 0.7889621)
+bones/24/rotation = Quaternion(0.7175239, 0.1470335, -0.13550292, 0.66721785)
+bones/26/rotation = Quaternion(0.71752375, -0.14703378, 0.13550389, 0.66721773)
+bones/28/rotation = Quaternion(-0.5944317, 0.010053352, 0.017622784, 0.8038901)
+bones/28/scale = Vector3(1.0000002, 0.99999994, 0.9999998)
+bones/29/rotation = Quaternion(-0.5875392, 0.014220273, -0.015965333, 0.8089133)
+bones/30/rotation = Quaternion(0.39506146, 0.0101300785, -0.019544953, 0.9183909)
+bones/31/position = Vector3(1.7080538e-08, 0.32674205, 4.918377e-09)
+bones/31/rotation = Quaternion(-0.2378568, -0.0064425925, 0.023612948, 0.97099185)
+bones/32/position = Vector3(9.605006e-08, 0.3191133, 3.1773106e-07)
+bones/32/rotation = Quaternion(0.5042623, -0.0148336105, -0.0056959316, 0.86340433)
+bones/33/position = Vector3(-0.10393488, -0.043677874, -0.005653815)
+bones/33/rotation = Quaternion(0.9100457, -0.015136999, -0.02074863, -0.41371164)
+bones/34/rotation = Quaternion(0.7283183, -0.02144689, -0.020258645, 0.68460363)
+bones/35/rotation = Quaternion(-0.6137464, -0.019226214, -0.027960757, 0.7887737)
+bones/36/rotation = Quaternion(0.3921553, 0.011147185, 0.029756093, 0.91935015)
+bones/37/position = Vector3(-1.271146e-07, 0.34406376, 9.021724e-07)
+bones/37/rotation = Quaternion(0.11979388, 0.012209922, -0.0077773915, 0.9926933)

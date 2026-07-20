@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bak8e6g1phyyr"]
+
+[ext_resource type="PackedScene" uid="uid://tcqj01o7a2ul" path="res://assets/animals/models/raw/frog.glb" id="1_eks0o"]
+[ext_resource type="Script" uid="uid://c582u2pi2l1xu" path="res://scripts/animal.gd" id="2_mdtms"]
+
+[node name="frog" unique_id=687751837 instance=ExtResource("1_eks0o")]
+script = ExtResource("2_mdtms")
+anim_name = &"Idle_A"

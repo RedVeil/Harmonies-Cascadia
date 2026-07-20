@@ -265,6 +265,8 @@ func handle_animal_preview(coord:Vector2i, card:CardData) -> TileStatePreview:
 		
 		tile_data_preview = hex_manager.tiles[coord].duplicate(true)
 		tile_data_preview.animal_id = card.id
+		tile_data_preview.animal_amount = CardCatalog.animals[card.id].amount
+		tile_data_preview.is_ground_animal = card.is_ground_animal
 
 		contributing_coords.assign(placement_res.coords)
 		

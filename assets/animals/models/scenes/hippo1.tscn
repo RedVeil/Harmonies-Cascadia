@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://wqkbg7je3iax"]
+
+[ext_resource type="PackedScene" uid="uid://2yna8vsxrf8i" path="res://assets/animals/models/raw/Hippopotamus_01.glb" id="1_kwavj"]
+[ext_resource type="Script" uid="uid://c582u2pi2l1xu" path="res://scripts/animal.gd" id="2_unqqu"]
+
+[node name="Hippopotamus_012" unique_id=1574949799 instance=ExtResource("1_kwavj")]
+script = ExtResource("2_unqqu")
+anim_name = &"Hippopotamus_Idle"
+max_start_delay_sec = 10.0
+
+[node name="Skeleton_Hippopotamus_01" parent="." index="0" unique_id=1350180344]
+transform = Transform3D(0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, 0, 0, 0)
+
+[node name="Skeleton3D" parent="Skeleton_Hippopotamus_01" index="0" unique_id=2123128424]
+bones/0/rotation = Quaternion(-6.2113036e-15, 1, -5.1658024e-08, -7.5497795e-08)
+bones/1/position = Vector3(0.014468642, 2.1364799, 0.71327233)
+bones/1/rotation = Quaternion(-0.63681644, 0.0048233923, -0.0022348142, 0.7709971)
+bones/2/position = Vector3(0.26507095, -0.08426104, -0.015715793)
+bones/2/rotation = Quaternion(0.951436, 0.10635055, 0.0320928, -0.28710493)
+bones/3/rotation = Quaternion(0.6291188, 0.04060103, 0.12228062, 0.7665563)
+bones/4/rotation = Quaternion(-0.6125047, -0.005478258, 0.022453591, 0.79012907)
+bones/5/rotation = Quaternion(0.52266794, -0.03700613, -0.038290318, 0.8508717)
+bones/6/rotation = Quaternion(-0.03956589, 0.05952005, -0.058208846, 0.9957428)
+bones/7/rotation = Quaternion(0.986534, 1.8952215e-09, 7.0611577e-07, -0.16355638)
+bones/8/rotation = Quaternion(0.112660974, -6.402888e-11, 7.90802e-08, 0.99363357)
+bones/9/rotation = Quaternion(0.3252332, 1.3543464e-09, 2.2922352e-07, 0.94563395)
+bones/11/rotation = Quaternion(-0.064587176, -0.009447592, -0.0032169647, 0.99786216)
+bones/12/position = Vector3(0.26209766, 0.5294026, 0.08985968)
+bones/12/rotation = Quaternion(-0.53207517, -0.0828248, -0.12960711, 0.8326093)
+bones/13/rotation = Quaternion(-0.5602636, -0.02881303, 0.21208446, 0.80018413)
+bones/14/rotation = Quaternion(0.4697894, -0.09204661, -0.03082762, 0.8774252)
+bones/15/rotation = Quaternion(0.005483036, 0.008652783, -0.0695079, 0.9975288)
+bones/16/rotation = Quaternion(-0.32532763, -0.008283986, -0.005229108, 0.9455507)
+bones/17/rotation = Quaternion(0.039490066, -0.005175846, -0.0074939867, 0.99917847)
+bones/18/rotation = Quaternion(0.04723937, -0.004496151, -0.0054462384, 0.9988587)
+bones/19/rotation = Quaternion(-0.07446147, 1.9965124e-10, -5.371256e-08, 0.9972239)
+bones/20/position = Vector3(1.4853399e-07, 0.61653095, -0.19478805)
+bones/20/rotation = Quaternion(-0.08515592, 0.0053323205, -0.0036364715, 0.9963468)
+bones/21/rotation = Quaternion(0.54269654, 0.2923085, -0.3252076, 0.7171306)
+bones/22/rotation = Quaternion(0.5460108, -0.29857907, 0.3861369, 0.68089724)
+bones/23/position = Vector3(-0.26209772, 0.52940273, 0.08985914)
+bones/23/rotation = Quaternion(-0.5320751, 0.082824245, 0.1296067, 0.83260936)
+bones/24/rotation = Quaternion(-0.52188045, 0.013903977, -0.17943329, 0.83381724)
+bones/25/rotation = Quaternion(0.57110107, 0.08555534, 0.03747529, 0.81554866)
+bones/26/rotation = Quaternion(-0.15678456, -0.010387878, 0.018133346, 0.9874117)
+bones/27/position = Vector3(-0.26507235, -0.084260784, -0.015716165)
+bones/27/rotation = Quaternion(0.951436, -0.10635003, -0.032093365, -0.28710505)
+bones/28/rotation = Quaternion(0.62911844, -0.040600333, -0.122281775, 0.7665565)
+bones/29/rotation = Quaternion(-0.50823337, -0.063937984, 0.03834747, 0.8579862)
+bones/30/rotation = Quaternion(0.6229207, 0.033933252, 0.04563515, 0.78021526)
+bones/31/rotation = Quaternion(-0.2761189, -0.013862933, -0.053027477, 0.9595595)

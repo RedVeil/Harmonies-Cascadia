@@ -3,6 +3,7 @@ class_name TileVisuals
 
 const BASE_SCENE_LAYER_Y_ROTATION := 30.0
 const BASE_MARKER_CONTAINER_NAMES := ["base_markers", "base_marker"]
+const EXTRA_MARKER_CONTAINER_NAMES := ["extra_markers", "extra_marker"]
 
 @export var multimesh_slots: Array[MultiMeshInstance3D] = []
 var _scenes_root: Node3D = null
@@ -10,9 +11,11 @@ var _active_signature: String = ""
 var _multimesh_cache: Dictionary = {}
 var _scene_layer_pool: Dictionary = {}
 var _active_scene_layer_nodes: Dictionary = {}
-var _animal_model_instance: Node3D = null
-var _animal_anchor: Node3D
+var _animals_root: Node3D = null
+var _animal_instances: Array[Node3D] = []
 var _displayed_animal_id: int = -1
+var _displayed_animal_amount: int = 0
+var _displayed_is_ground_animal: bool = false
 
 
 func _ready() -> void:
@@ -22,8 +25,8 @@ func _ready() -> void:
 func _cache_nodes() -> void:
 	if _scenes_root == null:
 		_scenes_root = get_node_or_null("Scenes") as Node3D
-	if _animal_anchor == null:
-		_animal_anchor = get_node_or_null("animalModel") as Node3D
+	if _animals_root == null:
+		_animals_root = get_node_or_null("animalModel") as Node3D
 
 
 func apply(
@@ -31,6 +34,8 @@ func apply(
 	level: int,
 	coord: Vector2i,
 	animal_id: int = -1,
+	animal_amount: int = 0,
+	is_ground_animal: bool = false,
 	scene_layer_rotations: Array[float] = [],
 	river_index: int = -1,
 	force_refresh: bool = false
@@ -44,13 +49,15 @@ func apply(
 		scene_layer_rotations,
 		force_refresh
 	)
-	_apply_animal(animal_id, coord)
+	_apply_animal(animal_id, animal_amount, is_ground_animal, coord)
 
 
 func clear_visuals() -> void:
 	_cache_nodes()
 	_active_signature = ""
 	_displayed_animal_id = -1
+	_displayed_animal_amount = 0
+	_displayed_is_ground_animal = false
 
 	_purge_orphan_scene_layers({})
 	_active_scene_layer_nodes.clear()
@@ -60,10 +67,7 @@ func clear_visuals() -> void:
 		if slot != null:
 			_clear_multimesh_slot(slot)
 
-	if _animal_model_instance != null:
-		_animal_model_instance.queue_free()
-		_animal_model_instance = null
-	_reset_animal_anchor()
+	_clear_animal_instances()
 
 
 func ensure_active_layers_visible() -> void:
@@ -197,84 +201,99 @@ func _apply_multimesh_layers(resolved_multimesh_layers: Array) -> void:
 		slot.visible = true
 
 
-func _apply_animal(animal_id: int, coord: Vector2i) -> void:
-	if animal_id == _displayed_animal_id and _animal_model_instance != null:
-		_position_animal_at_marker(coord)
+func _apply_animal(
+	animal_id: int,
+	animal_amount: int,
+	is_ground_animal: bool,
+	coord: Vector2i
+) -> void:
+	if (
+		animal_id == _displayed_animal_id
+		and animal_amount == _displayed_animal_amount
+		and is_ground_animal == _displayed_is_ground_animal
+		and not _animal_instances.is_empty()
+	):
+		_position_animals_at_markers(coord, is_ground_animal)
 		return
 
+	_clear_animal_instances()
 	_displayed_animal_id = animal_id
-	if _animal_model_instance != null:
-		_animal_model_instance.queue_free()
-		_animal_model_instance = null
+	_displayed_animal_amount = animal_amount
+	_displayed_is_ground_animal = is_ground_animal
 
-	var model_path := _resolve_animal_model_path(animal_id)
-	if model_path.is_empty():
-		_reset_animal_anchor()
-		return
-	if not ResourceLoader.exists(model_path):
-		push_warning("Animal model does not exist: %s" % model_path)
+	if animal_id == -1 or animal_amount <= 0 or _animals_root == null:
 		return
 
-	var model_resource := load(model_path)
-	if model_resource == null or not (model_resource is PackedScene):
-		push_warning("Animal model is not a scene: %s" % model_path)
+	var model_paths := _resolve_animal_model_paths(animal_id)
+	if model_paths.is_empty():
 		return
 
-	var model_node := (model_resource as PackedScene).instantiate()
-	if not (model_node is Node3D):
-		model_node.queue_free()
-		push_warning("Animal model root is not Node3D: %s" % model_path)
-		return
+	for _i in animal_amount:
+		var model_path: String = model_paths.pick_random()
+		if model_path.is_empty():
+			continue
+		if not ResourceLoader.exists(model_path):
+			push_warning("Animal model does not exist: %s" % model_path)
+			continue
 
-	_animal_model_instance = model_node as Node3D
-	_animal_anchor.add_child(_animal_model_instance)
-	_animal_model_instance.position = Vector3.ZERO
-	_animal_model_instance.rotation = Vector3.ZERO
-	_position_animal_at_marker(coord)
+		var model_resource := load(model_path)
+		if model_resource == null or not (model_resource is PackedScene):
+			push_warning("Animal model is not a scene: %s" % model_path)
+			continue
+
+		var model_node := (model_resource as PackedScene).instantiate()
+		if not (model_node is Node3D):
+			model_node.queue_free()
+			push_warning("Animal model root is not Node3D: %s" % model_path)
+			continue
+
+		_animals_root.add_child(model_node)
+		_animal_instances.append(model_node as Node3D)
+
+	_position_animals_at_markers(coord, is_ground_animal)
 
 
-func _resolve_animal_model_path(animal_id: int) -> String:
+func _resolve_animal_model_paths(animal_id: int) -> Array[String]:
 	if animal_id == -1:
-		return ""
+		return []
 	for card in CardCatalog.animals:
 		if card.id == animal_id:
-			return card.model
-	return ""
+			return card.models
+	return []
 
 
-func _position_animal_at_marker(coord: Vector2i) -> void:
-	if _animal_model_instance == null or _animal_anchor == null:
-		return
-
-	var marker: Marker3D = _pick_base_marker(coord)
-	if marker == null:
-		marker = _pick_fallback_base_marker(coord)
-
-	if marker != null:
-		_animal_anchor.global_transform = marker.global_transform
-	else:
-		_reset_animal_anchor()
-
-	_animal_model_instance.position = Vector3.ZERO
-	_animal_model_instance.rotation = Vector3.ZERO
-
-
-func _pick_base_marker(coord: Vector2i) -> Marker3D:
-	var markers := _collect_base_markers()
-	if markers.is_empty():
-		return null
-
+func _position_animals_at_markers(coord: Vector2i, is_ground_animal: bool) -> void:
 	var rng := RandomNumberGenerator.new()
-	rng.seed = hash("%d,%d|base_marker" % [coord.x, coord.y])
-	return markers[rng.randi_range(0, markers.size() - 1)]
+	var markers := _collect_markers(is_ground_animal)
+	for index in _animal_instances.size():
+		var instance := _animal_instances[index]
+		if not is_instance_valid(instance):
+			continue
+			
+		rng.seed = hash("%d,%d|%s|%d" % [coord.x, coord.y, "base_marker" if is_ground_animal else "extra_marker", index])
+
+		var marker_id := _pick_marker(coord, is_ground_animal, index, markers, rng)
+		if marker_id != -1:
+			instance.global_transform = markers[marker_id].global_transform
+			markers.remove_at(marker_id)
+			instance.rotation.y = rng.randf_range(0.0, 359.0)
 
 
-func _collect_base_markers() -> Array[Marker3D]:
+func _pick_marker(coord: Vector2i, is_ground_animal: bool, index: int, markers: Array[Marker3D], rng: RandomNumberGenerator) -> int:
+	if markers.is_empty():
+		markers = _collect_fallback_markers(is_ground_animal)
+	if markers.is_empty():
+		return -1
+	return rng.randi_range(0, markers.size() - 1)
+
+
+func _collect_markers(is_ground_animal: bool) -> Array[Marker3D]:
+	var container_names := BASE_MARKER_CONTAINER_NAMES if is_ground_animal else EXTRA_MARKER_CONTAINER_NAMES
 	var markers: Array[Marker3D] = []
 	for layer_node in _active_scene_layer_nodes.values():
 		if not (layer_node is Node):
 			continue
-		var container := _find_marker_container(layer_node as Node, BASE_MARKER_CONTAINER_NAMES)
+		var container := _find_marker_container(layer_node as Node, container_names)
 		if container == null:
 			continue
 		for child in container.get_children():
@@ -283,29 +302,25 @@ func _collect_base_markers() -> Array[Marker3D]:
 	return markers
 
 
-func _pick_fallback_base_marker(coord: Vector2i) -> Marker3D:
+func _collect_fallback_markers(is_ground_animal: bool) -> Array[Marker3D]:
 	var tile := _get_owner_tile()
 	if tile == null:
-		return null
+		return []
 
+	var container_names := BASE_MARKER_CONTAINER_NAMES if is_ground_animal else EXTRA_MARKER_CONTAINER_NAMES
 	var container: Node = null
-	for node_name in BASE_MARKER_CONTAINER_NAMES:
+	for node_name in container_names:
 		container = tile.get_node_or_null(node_name)
 		if container != null:
 			break
 	if container == null:
-		return null
+		return []
 
 	var markers: Array[Marker3D] = []
 	for child in container.get_children():
 		if child is Marker3D:
 			markers.append(child)
-	if markers.is_empty():
-		return null
-
-	var rng := RandomNumberGenerator.new()
-	rng.seed = hash("%d,%d|base_marker" % [coord.x, coord.y])
-	return markers[rng.randi_range(0, markers.size() - 1)]
+	return markers
 
 
 func _get_owner_tile() -> HexTile:
@@ -325,11 +340,11 @@ func _find_marker_container(root: Node, names: PackedStringArray) -> Node:
 	return null
 
 
-func _reset_animal_anchor() -> void:
-	if _animal_anchor == null:
-		return
-	_animal_anchor.position = Vector3.ZERO
-	_animal_anchor.rotation = Vector3.ZERO
+func _clear_animal_instances() -> void:
+	for instance in _animal_instances:
+		if is_instance_valid(instance):
+			instance.queue_free()
+	_animal_instances.clear()
 
 
 func _coerce_scene_layer(entry) -> PackedScene:

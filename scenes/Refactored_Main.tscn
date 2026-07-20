@@ -45,14 +45,16 @@ position = Vector2(60, 133)
 [node name="BoosterManager" parent="." unique_id=231766619 node_paths=PackedStringArray("orchestrator") instance=ExtResource("1_a7jc5")]
 position = Vector2(51, 668)
 orchestrator = NodePath("../Orchestrator")
-booster_limit = 5
+booster_limit = 3
 base_booster_point_cost = 15
+start_booster_points = 60
 
 [node name="CardManager" parent="." unique_id=241167023 node_paths=PackedStringArray("orchestrator") instance=ExtResource("2_vg1d4")]
 position = Vector2(320, 596)
 orchestrator = NodePath("../Orchestrator")
 card_limit = 8
 card_limit_buffer = 6
+recycling_value = 20
 
 [node name="HexManager" parent="." unique_id=866555908 node_paths=PackedStringArray("orchestrator") instance=ExtResource("3_tbrwv")]
 orchestrator = NodePath("../Orchestrator")
@@ -72,11 +74,12 @@ undo_button = NodePath("../UndoButton")
 [node name="PointCounter" parent="." unique_id=1020461036 node_paths=PackedStringArray("orchestrator") instance=ExtResource("8_q5ijs")]
 position = Vector2(80, 80)
 orchestrator = NodePath("../Orchestrator")
-checkpoint = 150
 
 [node name="CardRecycling" parent="." unique_id=1759140847 node_paths=PackedStringArray("orchestrator") instance=ExtResource("10_ggq8u")]
+z_index = 1
 position = Vector2(994, 694)
 orchestrator = NodePath("../Orchestrator")
+recycling_value = 20
 
 [node name="ScoreTooltip" parent="." unique_id=33584632 node_paths=PackedStringArray("orchestrator") instance=ExtResource("11_b2x3j")]
 position = Vector2(1210, 0)
