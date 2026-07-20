@@ -95,7 +95,7 @@ offset_bottom = 82.0
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.4745098, 1)
 theme_override_constants/line_spacing = -1
 theme_override_font_sizes/font_size = 12
-text = "This is you Point Score. Earn enough points to unlock additional tiles to play with.
+text = "This is you score. Earn enough points to unlock additional tiles to play with.
 (1/10)"
 autowrap_mode = 2
 

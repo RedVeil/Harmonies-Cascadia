@@ -26,7 +26,6 @@ func load_cards():
 		elements.append(parse_card(element))
 	for animal in parsed.animals:
 		var card = parse_card(animal)
-		print([card.name, card.models])
 		animals.append(card)
 
 ## ----- Parsing Logic ----- ##
@@ -42,7 +41,6 @@ func parse_card(card:Dictionary) -> CardData:
 	card_data.bonus_points = card.bonus_points
 	card_data.icon = card.icon
 	card_data.models.assign(card.get("models", []))
-	card_data.is_ground_animal = card.get("is_ground_animal", false)
 	card_data.element = card.element
 	card_data.secondary_element = card.secondary_element
 	

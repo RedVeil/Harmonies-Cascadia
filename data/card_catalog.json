@@ -435,7 +435,7 @@
 			"secondary_element": 2,
 			"point_score": 2,
 			"bonus_points": 0.5,
-			"icon": "res://assets/animals/icons/ForrestMammal_Raccoon.png",
+			"icon": "res://assets/animals/icons/ForestMammal_Raccoon.png",
 			"models": [
 				"res://assets/animals/models/scenes/racoon1.tscn"
 			]

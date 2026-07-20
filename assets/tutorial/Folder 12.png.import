@@ -2,24 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d2vp4egxc8lan"
-path.s3tc="res://.godot/imported/Crow_Animations_T_Crow.png-93a48bae5f9695a79d438b633729d6ad.s3tc.ctex"
+uid="uid://u1w22tu6eafr"
+path="res://.godot/imported/Folder 12.png-3bdc372e713acdfcb3f24c6966c2e3a0.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
-"vram_texture": true
-}
-generator_parameters={
-"md5": "9b343b20302573065c7e53272edb7f38"
+"vram_texture": false
 }
 
 [deps]
 
-source_file="res://Crow_Animations_T_Crow.png"
-dest_files=["res://.godot/imported/Crow_Animations_T_Crow.png-93a48bae5f9695a79d438b633729d6ad.s3tc.ctex"]
+source_file="res://assets/tutorial/Folder 12.png"
+dest_files=["res://.godot/imported/Folder 12.png-3bdc372e713acdfcb3f24c6966c2e3a0.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -27,7 +23,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
@@ -41,4 +37,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=0
+detect_3d/compress_to=1

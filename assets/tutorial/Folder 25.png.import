@@ -2,24 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://q4uw4p6tbj1e"
-path.s3tc="res://.godot/imported/Snake_Animations_T_Snake.png-d00561d21c6dade6b67f1bf7facb2845.s3tc.ctex"
+uid="uid://bqrlqwncxwgwf"
+path="res://.godot/imported/Folder 25.png-12346765d0d89e681404cc591df42f34.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
-"vram_texture": true
-}
-generator_parameters={
-"md5": "5bf24f6c7c69d04a488bdd59b297f6d6"
+"vram_texture": false
 }
 
 [deps]
 
-source_file="res://Snake_Animations_T_Snake.png"
-dest_files=["res://.godot/imported/Snake_Animations_T_Snake.png-d00561d21c6dade6b67f1bf7facb2845.s3tc.ctex"]
+source_file="res://assets/tutorial/Folder 25.png"
+dest_files=["res://.godot/imported/Folder 25.png-12346765d0d89e681404cc591df42f34.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -27,7 +23,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
@@ -41,4 +37,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=0
+detect_3d/compress_to=1

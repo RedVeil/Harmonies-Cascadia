@@ -234,7 +234,7 @@ func _set_animated_score_display(value: float) -> void:
 	$ProgressBar.material.set_shader_parameter("third_value", 0.0)
 	$ProgressBar.material.set_shader_parameter("current_value", 0.0)
 	$ProgressBar.material.set_shader_parameter("lerp_value", progress)
-	$Tooltip/Label.text = "This is you Point Score. Earn enough points to unlock additional tiles to play with.\n(%d / %d)" % [shown, target]
+	$Tooltip/Label.text = "This is you score. Earn enough points to unlock additional tiles to play with.\n(%d / %d)" % [shown, target]
 
 func _finish_gain_popup() -> void:
 	gain_label.visible = false
@@ -253,4 +253,4 @@ func apply_current_style() -> void:
 	$ProgressBar.material.set_shader_parameter("lerp_value",  float(current) / float(target))
 	$Label.text = "%d" % current
 	
-	$Tooltip/Label.text = "This is you Point Score. Earn enough points to unlock additional tiles to play with.\n(%d / %d)" % [current, target]
+	$Tooltip/Label.text = "This is you score. Earn enough points to unlock additional tiles to play with.\n(%d / %d)" % [current, target]

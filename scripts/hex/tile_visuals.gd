@@ -3,7 +3,6 @@ class_name TileVisuals
 
 const BASE_SCENE_LAYER_Y_ROTATION := 30.0
 const BASE_MARKER_CONTAINER_NAMES := ["base_markers", "base_marker"]
-const EXTRA_MARKER_CONTAINER_NAMES := ["extra_markers", "extra_marker"]
 
 @export var multimesh_slots: Array[MultiMeshInstance3D] = []
 var _scenes_root: Node3D = null
@@ -15,7 +14,6 @@ var _animals_root: Node3D = null
 var _animal_instances: Array[Node3D] = []
 var _displayed_animal_id: int = -1
 var _displayed_animal_amount: int = 0
-var _displayed_is_ground_animal: bool = false
 
 
 func _ready() -> void:
@@ -35,7 +33,6 @@ func apply(
 	coord: Vector2i,
 	animal_id: int = -1,
 	animal_amount: int = 0,
-	is_ground_animal: bool = false,
 	scene_layer_rotations: Array[float] = [],
 	river_index: int = -1,
 	force_refresh: bool = false
@@ -49,7 +46,7 @@ func apply(
 		scene_layer_rotations,
 		force_refresh
 	)
-	_apply_animal(animal_id, animal_amount, is_ground_animal, coord)
+	_apply_animal(animal_id, animal_amount, coord)
 
 
 func clear_visuals() -> void:
@@ -57,7 +54,6 @@ func clear_visuals() -> void:
 	_active_signature = ""
 	_displayed_animal_id = -1
 	_displayed_animal_amount = 0
-	_displayed_is_ground_animal = false
 
 	_purge_orphan_scene_layers({})
 	_active_scene_layer_nodes.clear()
@@ -204,22 +200,19 @@ func _apply_multimesh_layers(resolved_multimesh_layers: Array) -> void:
 func _apply_animal(
 	animal_id: int,
 	animal_amount: int,
-	is_ground_animal: bool,
 	coord: Vector2i
 ) -> void:
 	if (
 		animal_id == _displayed_animal_id
 		and animal_amount == _displayed_animal_amount
-		and is_ground_animal == _displayed_is_ground_animal
 		and not _animal_instances.is_empty()
 	):
-		_position_animals_at_markers(coord, is_ground_animal)
+		_position_animals_at_markers(coord)
 		return
 
 	_clear_animal_instances()
 	_displayed_animal_id = animal_id
 	_displayed_animal_amount = animal_amount
-	_displayed_is_ground_animal = is_ground_animal
 
 	if animal_id == -1 or animal_amount <= 0 or _animals_root == null:
 		return
@@ -250,7 +243,7 @@ func _apply_animal(
 		_animals_root.add_child(model_node)
 		_animal_instances.append(model_node as Node3D)
 
-	_position_animals_at_markers(coord, is_ground_animal)
+	_position_animals_at_markers(coord)
 
 
 func _resolve_animal_model_paths(animal_id: int) -> Array[String]:
@@ -262,38 +255,31 @@ func _resolve_animal_model_paths(animal_id: int) -> Array[String]:
 	return []
 
 
-func _position_animals_at_markers(coord: Vector2i, is_ground_animal: bool) -> void:
+func _position_animals_at_markers(coord: Vector2i) -> void:
 	var rng := RandomNumberGenerator.new()
-	var markers := _collect_markers(is_ground_animal)
+	var markers := _collect_markers()
+	if markers.is_empty():
+		markers = _collect_fallback_markers()
 	for index in _animal_instances.size():
 		var instance := _animal_instances[index]
 		if not is_instance_valid(instance):
 			continue
-			
-		rng.seed = hash("%d,%d|%s|%d" % [coord.x, coord.y, "base_marker" if is_ground_animal else "extra_marker", index])
+		if markers.is_empty():
+			break
 
-		var marker_id := _pick_marker(coord, is_ground_animal, index, markers, rng)
-		if marker_id != -1:
-			instance.global_transform = markers[marker_id].global_transform
-			markers.remove_at(marker_id)
-			instance.rotation.y = rng.randf_range(0.0, 359.0)
-
-
-func _pick_marker(coord: Vector2i, is_ground_animal: bool, index: int, markers: Array[Marker3D], rng: RandomNumberGenerator) -> int:
-	if markers.is_empty():
-		markers = _collect_fallback_markers(is_ground_animal)
-	if markers.is_empty():
-		return -1
-	return rng.randi_range(0, markers.size() - 1)
+		rng.seed = hash("%d,%d|base_marker|%d" % [coord.x, coord.y, index])
+		var marker_id := rng.randi_range(0, markers.size() - 1)
+		instance.global_transform = markers[marker_id].global_transform
+		markers.remove_at(marker_id)
+		instance.rotation.y = rng.randf_range(0.0, 359.0)
 
 
-func _collect_markers(is_ground_animal: bool) -> Array[Marker3D]:
-	var container_names := BASE_MARKER_CONTAINER_NAMES if is_ground_animal else EXTRA_MARKER_CONTAINER_NAMES
+func _collect_markers() -> Array[Marker3D]:
 	var markers: Array[Marker3D] = []
 	for layer_node in _active_scene_layer_nodes.values():
 		if not (layer_node is Node):
 			continue
-		var container := _find_marker_container(layer_node as Node, container_names)
+		var container := _find_marker_container(layer_node as Node, BASE_MARKER_CONTAINER_NAMES)
 		if container == null:
 			continue
 		for child in container.get_children():
@@ -302,14 +288,13 @@ func _collect_markers(is_ground_animal: bool) -> Array[Marker3D]:
 	return markers
 
 
-func _collect_fallback_markers(is_ground_animal: bool) -> Array[Marker3D]:
+func _collect_fallback_markers() -> Array[Marker3D]:
 	var tile := _get_owner_tile()
 	if tile == null:
 		return []
 
-	var container_names := BASE_MARKER_CONTAINER_NAMES if is_ground_animal else EXTRA_MARKER_CONTAINER_NAMES
 	var container: Node = null
-	for node_name in container_names:
+	for node_name in BASE_MARKER_CONTAINER_NAMES:
 		container = tile.get_node_or_null(node_name)
 		if container != null:
 			break

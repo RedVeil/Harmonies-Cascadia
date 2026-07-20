@@ -23,4 +23,3 @@ enum CARD_TYPE {
 @export var bonus_points: float = 0
 @export var icon: String = ""
 @export var models: Array[String] = []
-@export var is_ground_animal: bool = false

@@ -8,7 +8,10 @@ script = ExtResource("2_beni0")
 anim_name = &"Cat_Idle"
 max_start_delay_sec = 10.0
 
-[node name="Skeleton3D" parent="Skeleton_Cat_03" parent_id_path=PackedInt32Array(374046509) index="0" unique_id=485576440]
+[node name="Skeleton_Cat_03" parent="." index="0" unique_id=632518634]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
+
+[node name="Skeleton3D" parent="Skeleton_Cat_03" index="0" unique_id=460583347]
 bones/1/position = Vector3(-0.003066253, 0.28255975, 0.11240796)
 bones/1/rotation = Quaternion(-0.737764, -0.00071769604, 0.0006566828, 0.6750581)
 bones/2/position = Vector3(0.052180838, -0.007982345, -0.0043874807)

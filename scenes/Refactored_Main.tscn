@@ -12,6 +12,10 @@
 [ext_resource type="PackedScene" uid="uid://betdpdjavfk4b" path="res://scenes/card/card_recycling.tscn" id="10_ggq8u"]
 [ext_resource type="PackedScene" uid="uid://bv5ofl0j1ktqc" path="res://scenes/game/score_tooltips.tscn" id="11_b2x3j"]
 [ext_resource type="PackedScene" uid="uid://bde4y0iag4uud" path="res://scenes/game/undo_button.tscn" id="12_3qqq0"]
+[ext_resource type="PackedScene" uid="uid://btq3hb02wek7u" path="res://scenes/game/tutorial_overlay.tscn" id="13_tutorial"]
+[ext_resource type="Texture2D" uid="uid://cr3us6hvwje2s" path="res://assets/tutorial/Folder 1.png" id="14_0bw36"]
+[ext_resource type="Texture2D" uid="uid://b2c5gk5bhrmq6" path="res://assets/tutorial/Folder 2.png" id="15_l72vc"]
+[ext_resource type="Texture2D" uid="uid://c2cvea1126srm" path="res://assets/tutorial/Folder 3.png" id="16_0tef6"]
 
 [sub_resource type="Environment" id="Environment_tbrwv"]
 background_mode = 1
@@ -62,7 +66,7 @@ map_button = ExtResource("4_5mvym")
 
 [node name="ScoreEngine" parent="." unique_id=271434607 instance=ExtResource("4_xoyem")]
 
-[node name="Orchestrator" parent="." unique_id=1688505566 node_paths=PackedStringArray("booster_manager", "card_manager", "hex_manager", "score_engine", "quest_manager", "point_counter", "undo_button") instance=ExtResource("5_71goi")]
+[node name="Orchestrator" parent="." unique_id=1688505566 node_paths=PackedStringArray("booster_manager", "card_manager", "hex_manager", "score_engine", "quest_manager", "point_counter", "undo_button", "tutorial_overlay") instance=ExtResource("5_71goi")]
 booster_manager = NodePath("../BoosterManager")
 card_manager = NodePath("../CardManager")
 hex_manager = NodePath("../HexManager")
@@ -70,6 +74,7 @@ score_engine = NodePath("../ScoreEngine")
 quest_manager = NodePath("../QuestManager")
 point_counter = NodePath("../PointCounter")
 undo_button = NodePath("../UndoButton")
+tutorial_overlay = NodePath("../TutorialOverlay")
 
 [node name="PointCounter" parent="." unique_id=1020461036 node_paths=PackedStringArray("orchestrator") instance=ExtResource("8_q5ijs")]
 position = Vector2(80, 80)
@@ -88,3 +93,6 @@ orchestrator = NodePath("../Orchestrator")
 [node name="UndoButton" parent="." unique_id=997758632 node_paths=PackedStringArray("orchestrator") instance=ExtResource("12_3qqq0")]
 position = Vector2(994, 659)
 orchestrator = NodePath("../Orchestrator")
+
+[node name="TutorialOverlay" parent="." unique_id=1580048330 instance=ExtResource("13_tutorial")]
+slides = Array[Texture2D]([ExtResource("14_0bw36"), ExtResource("15_l72vc"), ExtResource("16_0tef6")])

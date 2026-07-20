@@ -28,6 +28,7 @@ visible = false
 transform = Transform3D(5.4999986, 0, 0.003647387, 0, 5.5, 0, -0.003647387, 0, 5.4999986, 0, 10, 0)
 visible = false
 axis = 1
+alpha_cut = 1
 texture = ExtResource("4_nn350")
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=453342763]
@@ -63,24 +64,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5983086, 9.594955, 3.67791
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.009527, 9.594955, 3.6779132)
 
 [node name="Marker3D6" type="Marker3D" parent="base_marker" unique_id=507658065]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.009527, 9.594955, -3.0005155)
-
-[node name="extra_marker" type="Node3D" parent="." unique_id=521397571]
-
-[node name="Marker3D" type="Marker3D" parent="extra_marker" unique_id=649270654]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.594955, -7.880002)
-
-[node name="Marker3D2" type="Marker3D" parent="extra_marker" unique_id=1675038721]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.594955, 7.6654024)
-
-[node name="Marker3D3" type="Marker3D" parent="extra_marker" unique_id=223341578]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5983086, 9.594955, -2.2507772)
-
-[node name="Marker3D4" type="Marker3D" parent="extra_marker" unique_id=1626355806]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5983086, 9.594955, 3.6779132)
-
-[node name="Marker3D5" type="Marker3D" parent="extra_marker" unique_id=626234404]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.009527, 9.594955, 3.6779132)
-
-[node name="Marker3D6" type="Marker3D" parent="extra_marker" unique_id=77337294]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.009527, 9.594955, -3.0005155)

@@ -60,7 +60,7 @@ func _ready() -> void:
 	booster_label = $hex/Label
 	booster_progress_sprite = $hex/Sprite2D2
 	$hex/Label.text = "%d" % booster_points
-	$Tooltip/Label.text = "These are your booster points. Earn booster points by placing tiles, finishing quests or recycling cards. (0 / %d)" % booster_point_cost
+	$Tooltip/Label.text = "These are your credits. Earn credits by placing tiles, finishing quests or recycling cards. (0 / %d)" % booster_point_cost
 	
 	$hex/Sprite2D2.material.set_shader_parameter("current_value", 0.0)
 	$hex/Sprite2D2.material.set_shader_parameter("lerp_value", 0.0)
@@ -143,7 +143,7 @@ func preview_booster_points(points:int) -> void:
 			$hex/Sprite2D2.material.set_shader_parameter("lerp_value", float(acc_points) / float(booster_point_cost_preview))
 			$hex/Sprite2D2.material.set_shader_parameter("third_value",  0.0)
 	
-	$Tooltip/Label.text = "These are your booster points. Earn booster points by placing tiles, finishing quests or recycling cards. (%d / %d)" % [acc_points_preview, booster_point_cost_preview]
+	$Tooltip/Label.text = "These are your credits. Earn credits by placing tiles, finishing quests or recycling cards. (%d / %d)" % [acc_points_preview, booster_point_cost_preview]
 
 
 func apply_booster_points(animate_reward: bool = false) -> void:
@@ -314,7 +314,7 @@ func apply_current_style() -> void:
 	$hex/Sprite2D2.material.set_shader_parameter("lerp_value", float(acc_points) / float(booster_point_cost))
 	$hex/Sprite2D2.material.set_shader_parameter("third_value",  0.0)
 	
-	$Tooltip/Label.text = "These are your booster points. Earn booster points by placing tiles, finishing quests or recycling cards. (%d / %d)" % [acc_points, booster_point_cost]
+	$Tooltip/Label.text = "These are your credits. Earn credits by placing tiles, finishing quests or recycling cards. (%d / %d)" % [acc_points, booster_point_cost]
 
 
 func choose_animal(element:int) -> CardData:

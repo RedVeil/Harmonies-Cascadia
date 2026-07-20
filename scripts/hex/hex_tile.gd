@@ -82,7 +82,7 @@ func apply_committed(
 	if _showing_preview:
 		reset_preview()
 	_set_orientation(orientation_steps)
-	_committed_visuals.apply(element, level, coord, animal_id, 0, false, scene_layer_rotations)
+	_committed_visuals.apply(element, level, coord, animal_id, 0, scene_layer_rotations)
 	_show_committed()
 
 
@@ -108,7 +108,6 @@ func preview_visuals(
 	level: int,
 	animal_id: int = -1,
 	animal_amount: int = 0,
-	is_ground_animal: bool = false,
 	orientation_steps: int = 0,
 	scene_layer_rotations: Array[float] = [],
 	river_index: int = -1
@@ -121,7 +120,6 @@ func preview_visuals(
 		coord,
 		animal_id,
 		animal_amount,
-		is_ground_animal,
 		scene_layer_rotations,
 		river_index
 	)
@@ -141,7 +139,6 @@ func preview_from_tile_data(
 		tile_data.level,
 		tile_data.animal_id,
 		tile_data.animal_amount,
-		tile_data.is_ground_animal,
 		_resolve_orientation_steps(tile_data) if rotation_steps == -1 else rotation_steps,
 		scene_layer_rotations,
 		river_index
@@ -204,7 +201,6 @@ func _apply_tile_data_to_committed(
 		coord,
 		tile_data.animal_id,
 		tile_data.animal_amount,
-		tile_data.is_ground_animal,
 		[],
 		river_index,
 		true

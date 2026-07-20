@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://deto26ef4js8g" path="res://assets/elements/r0.png" id="6_d6nn3"]
 [ext_resource type="Texture2D" uid="uid://bour75pi3njo7" path="res://assets/elements/w0.png" id="8_ci7lu"]
 [ext_resource type="Texture2D" uid="uid://8sdglhlqxn7g" path="res://assets/score_tooltip/fields0.png" id="9_ci7lu"]
+[ext_resource type="Texture2D" uid="uid://bnrcql3uy3afb" path="res://assets/icons/book.png" id="9_d6nn3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e867d"]
 bg_color = Color(1, 1, 1, 1)
@@ -40,12 +41,12 @@ script = ExtResource("1_d6nn3")
 
 [node name="Panel" type="Panel" parent="." unique_id=376977882]
 offset_right = 44.0
-offset_bottom = 320.0
+offset_bottom = 360.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_e867d")
 
 [node name="Button" type="Area2D" parent="." unique_id=33584632]
-position = Vector2(0, 280)
+position = Vector2(0, 320)
 monitorable = false
 priority = 1
 
@@ -80,6 +81,10 @@ icon = ExtResource("6_d6nn3")
 [node name="TooltipIcon5" parent="icons" unique_id=1628951938 instance=ExtResource("3_e6s6x")]
 position = Vector2(22, 240)
 icon = ExtResource("8_ci7lu")
+
+[node name="TooltipIcon6" parent="icons" unique_id=1606368459 instance=ExtResource("3_e6s6x")]
+position = Vector2(22, 290)
+icon = ExtResource("9_d6nn3")
 
 [node name="Panel2" type="Panel" parent="." unique_id=2102555946]
 visible = false

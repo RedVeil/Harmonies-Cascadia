@@ -111,7 +111,7 @@ offset_bottom = 82.0
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.4745098, 1)
 theme_override_constants/line_spacing = -1
 theme_override_font_sizes/font_size = 12
-text = "These are your booster points. Earn booster points by placing tiles, finishing quests or recycling cards."
+text = "These are your credits. Earn credits by placing tiles, finishing quests or recycling cards."
 autowrap_mode = 2
 
 [connection signal="mouse_entered" from="Area2D" to="." method="_on_mouse_entered"]

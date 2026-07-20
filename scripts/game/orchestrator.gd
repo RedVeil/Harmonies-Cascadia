@@ -8,6 +8,7 @@ class_name Orchestrator
 @export var quest_manager:QuestManager
 @export var point_counter:PointCounter
 @export var undo_button:UndoButton
+@export var tutorial_overlay:TutorialOverlay
 
 @onready var placement_logic:PlacementLogic = $PlacementLogic
 @onready var grouping_logic:GroupingLogic = $GroupingLogic
@@ -44,6 +45,7 @@ func _ready() -> void:
 	vp.physics_object_picking = true
 	vp.physics_object_picking_sort = true
 	vp.physics_object_picking_first_only = true
+	# show_tutorial()
 
 ## ----- Handle Booster Interactions ----- ##
 
@@ -266,7 +268,6 @@ func handle_animal_preview(coord:Vector2i, card:CardData) -> TileStatePreview:
 		tile_data_preview = hex_manager.tiles[coord].duplicate(true)
 		tile_data_preview.animal_id = card.id
 		tile_data_preview.animal_amount = CardCatalog.animals[card.id].amount
-		tile_data_preview.is_ground_animal = card.is_ground_animal
 
 		contributing_coords.assign(placement_res.coords)
 		
@@ -299,7 +300,10 @@ func undo() -> void:
 	booster_manager.undo() # works
 	quest_manager.undo() # to be tested
 	point_counter.undo() # works
-	card_manager.add_card(selected_card_backup) # works
+	# Placement consumes one copy; restore exactly one (not the full pre-place stack).
+	var restore_card := selected_card_backup.duplicate(true)
+	restore_card.amount = 1
+	card_manager.add_card(restore_card)
 	
 	score_engine.element_score = score_engine.element_score_backup
 	score_engine.animal_score = score_engine.animal_score_backup
@@ -393,3 +397,9 @@ func pick_quest(type:int, element:int) -> int:
 
 func get_active_rule(type:int) -> ScoringRule:
 	return score_engine.active_rules[type]
+
+## ----- Score Tutorial ----- ##
+
+func show_tutorial() -> void:
+	if tutorial_overlay:
+		tutorial_overlay.open()
