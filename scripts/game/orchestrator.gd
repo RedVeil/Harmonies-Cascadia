@@ -393,6 +393,7 @@ func add_map_points(val:int) -> void:
 	hex_manager.show_map_buttons()
 	undo_button.disable()
 	pause_cards()
+	point_counter.show_map_alert()
 
 func handle_map_button_click(coord:Vector2i) -> void:
 	map_points -= 1
@@ -400,6 +401,7 @@ func handle_map_button_click(coord:Vector2i) -> void:
 	hex_manager.remove_map_buttons()
 	
 	if map_points == 0:
+		point_counter.hide_map_alert()
 		unpause_cards()
 	else:
 		hex_manager.show_map_buttons()

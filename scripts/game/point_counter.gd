@@ -257,6 +257,14 @@ func _finish_gain_popup() -> void:
 	gain_popup.position = gain_popup_start
 	gain_popup.scale = Vector2.ONE
 
+## ----- Map Expansion Alert ----- ##
+
+func show_map_alert() -> void:
+	$MapAlert.show()
+
+func hide_map_alert() -> void:
+	$MapAlert.hide()
+
 ## ----- Utility Logic ----- ##
 
 func apply_current_style() -> void:
