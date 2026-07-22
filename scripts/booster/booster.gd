@@ -19,7 +19,7 @@ func _ready() -> void:
 	
 	if id == 4:
 		icon.texture = load("res://assets/icons/animal.png")
-		# $Tooltip/Label.text = "Buy this booster to get random animal cards."
+		$Tooltip/Label.text = "Open the animal market (1 credit per animal)."
 
 func init(parent:BoosterContainer) -> void:
 	container = parent
@@ -59,13 +59,17 @@ func _on_input_event(
 ## ----- Booster Visual Logic ----- ##
 
 func set_booster_visuals(boosterData: BoosterData) -> void:
-	if boosterData.type != 6:
-		$Tooltip/Label.text = create_tooltip(boosterData)
-		if boosterData.type < 6:
-			var element = ElementCatalog.elements[boosterData.type]
-			var level = element.levels[element.levels.size()-1]
-			icon.texture = load(level.icon)
-	
+	if boosterData.type == 7:
+		$Tooltip/Label.text = "Open the animal market (1 credit per animal)."
+		return
+	$Tooltip/Label.text = create_tooltip(boosterData)
+	if boosterData.type < 6:
+		var element = ElementCatalog.elements[boosterData.type]
+		var level = element.levels[element.levels.size()-1]
+		icon.texture = load(level.icon)
+	elif boosterData.type == 6:
+		icon.texture = load("res://assets/icons/random.png")
+
 
 func create_tooltip(boosterData: BoosterData) -> String:
 	var element_cards := [0,0,0,0,0,0]
@@ -82,10 +86,7 @@ func create_tooltip(boosterData: BoosterData) -> String:
 			contents.append("%d %ss" % [element_cards[i], Enums.ELEMENT_NAMES[i]])
 	for i in animal_cards.size():
 		if animal_cards[i] > 0:
-			if boosterData.type == 7:
-				contents.append("%d %s" % [animal_cards[i], Enums.ELEMENT_NAMES[i]])
-			else:
-				contents.append("%d %s Animals" % [animal_cards[i], Enums.ELEMENT_NAMES[i]])
+			contents.append("%d %s Animals" % [animal_cards[i], Enums.ELEMENT_NAMES[i]])
 	if boosterData.booster_points > 0:
 		contents.append("%d Booster Points" % boosterData.booster_points)
 	if boosterData.quest_ids.size() > 0:
@@ -93,7 +94,4 @@ func create_tooltip(boosterData: BoosterData) -> String:
 	if boosterData.map_points > 0:
 		contents.append("%d Map Points" % boosterData.map_points)
 	
-	if boosterData.type == 7:
-		return "This booster contains animals:\n" + ", ".join(contents)
-	else:
-		return "This booster contains:\n" + ", ".join(contents)
+	return "This booster contains:\n" + ", ".join(contents)

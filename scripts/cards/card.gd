@@ -21,6 +21,7 @@ class_name Card
 @onready var placement_tooltip : PlacementTooltip = $PlacementTooltip
 
 var container : CardContainer
+var _interaction_host: Node = null
 var id : int = 0
 
 var is_mouse_inside : bool = false
@@ -53,8 +54,10 @@ func _ready() -> void:
 	
 	# $visuals/background.material = $visuals/background.material.duplicate(true)
 
-func init(cardData:CardData, parent:CardContainer, idx:int) -> void:
-	container = parent
+func init(cardData:CardData, parent:Node, idx:int) -> void:
+	if parent is CardContainer:
+		container = parent
+	_interaction_host = parent
 	id = idx
 	
 	stack_amount = cardData.amount
@@ -101,35 +104,27 @@ func consume_spawn_layout() -> bool:
 
 func _on_mouse_entered() -> void:
 	is_mouse_inside = true
-	container.hover_card(id)
+	if _interaction_host and _interaction_host.has_method("hover_card"):
+		_interaction_host.hover_card(id)
 	
 
 func _on_mouse_exited() -> void:
 	is_mouse_inside = false
-	container.exit_card(id)
-	#setNormalState()
+	if _interaction_host and _interaction_host.has_method("exit_card"):
+		_interaction_host.exit_card(id)
 	
 
 func _on_input_event(
 	viewport: Viewport,
 	event: InputEvent,
-	shape_idx: int
+	_shape_idx: int
 ) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			GameFeedback.play_click_card()
-			container.select_card(id)
+			if _interaction_host and _interaction_host.has_method("select_card"):
+				_interaction_host.select_card(id)
 			viewport.set_input_as_handled()
-	
-	#if event is InputEventMouseMotion and is_mouse_inside:
-		#var mouse_position = event.position
-		#var relative_mouse_position = mouse_position - global_position
-		#
-		##divide by scale to make independant of scale
-		##subtract by size/2.0 to center the mouse pos
-		## var centred_mouse_postion = relative_mouse_position/scale - $visuals/background.size/2.0
-		#
-		#$visuals/background.material.set_shader_parameter("_mousePos", relative_mouse_position)
 
 ## ----- Stack Logic ----- ##
 

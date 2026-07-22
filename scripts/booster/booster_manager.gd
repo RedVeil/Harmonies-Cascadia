@@ -4,13 +4,20 @@ class_name BoosterManager
 @onready var booster_container : BoosterContainer = $booster_container
 
 @export var orchestrator : Orchestrator
+@export var animal_market : AnimalMarketOverlay
 
 @export var booster_limit:int = 0
 @export var base_booster_point_cost:int = 10
 @export var booster_point_multiplier:float = 1.2
 @export var start_booster_points:int = 3
 @export var random_secondary_chance: float = 50.0
-@export var guaranteed_animal_boosters: int = 2
+@export var guaranteed_animal_boosters: int = 0
+@export var animal_market_price: int = 1
+@export var animal_market_offer_count: int = 4
+@export var animal_market_reroll_price: int = 1
+@export var mixed_pack_card_count: int = 4
+## Weights for elements 1–5 (Forest, Field, Mountain, River, Wetland). Sum should be ~100.
+@export var mixed_element_weights: Array[float] = [30.0, 20.0, 18.0, 22.0, 10.0]
 
 @export_group("Points Reward Animation")
 @export var punch_scale: float = 1.14
@@ -47,14 +54,13 @@ var booster_label : Label
 var booster_progress_sprite : Sprite2D
 var _rng: RandomNumberGenerator
 
+var _market_offers: Array[CardData] = []
+
 ## ----- Initialisation ----- ##
 
 func _ready() -> void:
 	_rng = GameSession.make_rng("booster")
-	
-	for option in BoosterCatalog.booster_options:
-		if option.type < 6:
-			booster_chances.append(option.draw_chance)
+	_load_mixed_element_weights_from_catalog()
 	
 	boosters.resize(booster_limit + 2)
 	booster_points = start_booster_points
@@ -71,6 +77,11 @@ func _ready() -> void:
 	$hex/Sprite2D2.material.set_shader_parameter("third_value", 0.0)
 	
 	booster_container.init(self)
+	if animal_market:
+		animal_market.buy_pressed.connect(buy_market_animal)
+		animal_market.close_pressed.connect(close_animal_market)
+		animal_market.reroll_pressed.connect(reroll_animal_market)
+	_ensure_market_offers()
 	
 	for i in range(booster_limit):
 		createBooster(i)
@@ -81,24 +92,30 @@ func _ready() -> void:
 ## ----- Pass Data Upstream ----- ##
 
 func select_booster(id:int) -> void:
-	if booster_points > 0 and !paused:
-		change_booster_points(-1)
-		if id == 3:
-			for i in range(booster_limit):
-				createBooster(i)
-		else:
-			var booster = boosters[id]
-			for card in booster.cards:
-				orchestrator.add_hand_card(card)
-			if booster.booster_points > 0:
-				change_booster_points(booster.booster_points)
-			if booster.map_points > 0:
-				orchestrator.add_map_points(booster.map_points)
-			if booster.quest_ids.size() > 0:
-				for quest_id in booster.quest_ids:
-					orchestrator.add_quest(quest_id)
-			
-			createBooster(id)
+	if paused:
+		return
+	if id == 4:
+		open_animal_market()
+		return
+	if booster_points <= 0:
+		return
+	change_booster_points(-1)
+	if id == 3:
+		for i in range(booster_limit):
+			createBooster(i)
+	else:
+		var booster = boosters[id]
+		for card in booster.cards:
+			orchestrator.add_hand_card(card)
+		if booster.booster_points > 0:
+			change_booster_points(booster.booster_points)
+		if booster.map_points > 0:
+			orchestrator.add_map_points(booster.map_points)
+		if booster.quest_ids.size() > 0:
+			for quest_id in booster.quest_ids:
+				orchestrator.add_quest(quest_id)
+		
+		createBooster(id)
 
 func change_booster_points(amount:int) -> void:
 	booster_points += amount
@@ -177,73 +194,138 @@ func undo() -> void:
 	booster_point_cost = booster_point_cost_backup
 	apply_current_style()
 	
+## ----- Animal Market ----- ##
+
+func open_animal_market() -> void:
+	if animal_market == null:
+		return
+	_ensure_market_offers()
+	orchestrator.pause_cards()
+	animal_market.open(
+		_market_offers,
+		animal_market_price,
+		booster_points,
+		animal_market_reroll_price
+	)
+
+func buy_market_animal(offer_index: int) -> void:
+	if offer_index < 0 or offer_index >= _market_offers.size():
+		return
+	if booster_points < animal_market_price:
+		return
+	var bought := _market_offers[offer_index]
+	change_booster_points(-animal_market_price)
+	orchestrator.add_hand_card(bought)
+	var replacement := _generate_single_market_offer(_market_offer_used_ids(offer_index))
+	_market_offers[offer_index] = replacement
+	if animal_market:
+		animal_market.replace_offer(offer_index, replacement)
+		animal_market.update_credits(booster_points)
+
+func reroll_animal_market() -> void:
+	if animal_market == null:
+		return
+	if booster_points < animal_market_reroll_price:
+		return
+	change_booster_points(-animal_market_reroll_price)
+	_market_offers = _generate_market_offers()
+	animal_market.refresh_offers(_market_offers)
+	animal_market.update_credits(booster_points)
+
+func close_animal_market() -> void:
+	if animal_market:
+		animal_market.close()
+	orchestrator.unpause_cards()
+
+func _ensure_market_offers() -> void:
+	if _market_offers.size() < animal_market_offer_count:
+		_market_offers = _generate_market_offers()
+
+func _market_offer_used_ids(exclude_index: int = -1) -> Dictionary:
+	var used_ids: Dictionary = {}
+	for i in _market_offers.size():
+		if i == exclude_index:
+			continue
+		var offer := _market_offers[i]
+		if offer != null and offer.amount > 0:
+			used_ids[offer.id] = true
+	return used_ids
+
+func _generate_market_offers() -> Array[CardData]:
+	var offers: Array[CardData] = []
+	var used_ids: Dictionary = {}
+	var element := 1
+	var attempts := 0
+	var max_attempts := animal_market_offer_count * 8
+	while offers.size() < animal_market_offer_count and attempts < max_attempts:
+		attempts += 1
+		var animal := choose_animal(element)
+		element = element % 5 + 1
+		if animal.amount <= 0:
+			continue
+		if used_ids.has(animal.id):
+			continue
+		used_ids[animal.id] = true
+		offers.append(animal)
+	return offers
+
+func _generate_single_market_offer(used_ids: Dictionary) -> CardData:
+	var element := _rng.randi_range(1, 5)
+	var attempts := 0
+	while attempts < 40:
+		attempts += 1
+		var animal := choose_animal(element)
+		element = element % 5 + 1
+		if animal.amount <= 0:
+			continue
+		if used_ids.has(animal.id):
+			continue
+		return animal
+	# Fallback: allow a duplicate if catalog is too thin.
+	return choose_animal(_rng.randi_range(1, 5))
+
 ## ----- Create Booster Logic ----- ##
 
 func createBooster(idx:int) -> void:
 	var booster = BoosterData.new()
-	var option_index : int = 0
+	if idx == 4:
+		booster.type = 7
+		#booster.cards = []
+		boosters[idx] = booster
+		booster_container.set_booster_visuals(idx, booster)
+		return
 	if idx == 3:
-		option_index = BoosterCatalog.booster_options.find_custom(func (option): return option.type == 6)
-	elif idx == 4:
-		option_index = BoosterCatalog.booster_options.find_custom(func (option): return option.type == 7)
-	else:
-		option_index = pick_weighted(BoosterCatalog.booster_options, booster_chances)
-		update_booster_chances(option_index)
-	
-	var picked_booster = BoosterCatalog.booster_options[option_index]
-	var force_animal := idx < booster_limit and _guaranteed_animals_remaining > 0
-		
-	var cards : Array[CardData] = []
-	var booster_points := 0
-	var map_points := 0
-	var quest_ids : Array[int] = []
+		# Reroll slot — no pack contents.
+		booster.type = 6
+		#booster.cards = []
+		boosters[idx] = booster
+		return
 
-	var options = picked_booster.base_content_options.duplicate(true)
-		
-	if pick_option(picked_booster.extra_card_chance):
-		options.append(picked_booster.extra_card_options[pick_weighted(picked_booster.extra_card_options, [])])
-	if pick_option(picked_booster.extra_chance):
-		options.append(picked_booster.extra_content_options[pick_weighted(picked_booster.extra_content_options, [])])
-		
-	for entry in options:
-		for i in range(entry.amount):
-			var chance = entry.draw_chance
-			if force_animal and entry.type == BoosterContentOption.RewardType.ANIMAL:
-				chance = 100.0
-			if pick_option(chance):
-				match entry.type:
-					BoosterContentOption.RewardType.ELEMENT:
-						cards.append(CardCatalog.elements[entry.id])
-					BoosterContentOption.RewardType.ANIMAL:
-						var animal : CardData = choose_animal(entry.id)
-						if animal.amount > 0:
-							cards.append(animal)
-					BoosterContentOption.RewardType.QUEST:
-						var quest_id = orchestrator.pick_quest(entry.id, picked_booster.type)
-						if quest_id != -1:
-							quest_ids.append(quest_id)
-					BoosterContentOption.RewardType.BOOSTER_POINT:
-						booster_points += entry.amount
-					BoosterContentOption.RewardType.MAP_POINT:
-						map_points += entry.amount
-	
-	if force_animal:
-		_guaranteed_animals_remaining -= 1
-		var has_animal := cards.any(func (card: CardData): return card.type == 1)
-		if not has_animal:
-			var animal := choose_animal(picked_booster.type)
-			if animal.amount > 0:
-				cards.append(animal)
-	
-	booster.type = picked_booster.type
-	booster.cards = cards
-	booster.booster_points = booster_points
-	booster.map_points = map_points
-	booster.quest_ids = quest_ids
+	# Shop slots: always exactly N independently weighted element tiles.
+	booster.type = 6
+	booster.cards = _create_mixed_element_pack()
+	booster.booster_points = 0
+	booster.map_points = 0
+	# booster.quest_ids = []
 	
 	boosters[idx] = booster
-
 	booster_container.set_booster_visuals(idx, booster)
+
+func _load_mixed_element_weights_from_catalog() -> void:
+	if mixed_element_weights.size() < 5:
+		mixed_element_weights = [30.0, 20.0, 18.0, 22.0, 10.0]
+	for option in BoosterCatalog.booster_options:
+		if option.type >= 1 and option.type <= 5:
+			mixed_element_weights[option.type - 1] = option.draw_chance
+
+func _create_mixed_element_pack() -> Array[CardData]:
+	var cards: Array[CardData] = []
+	var element_ids: Array[Variant] = [1, 2, 3, 4, 5]
+	for _i in mixed_pack_card_count:
+		var element_id: int = element_ids[pick_weighted(element_ids, mixed_element_weights)]
+		cards.append(CardCatalog.elements[element_id])
+	return cards
+
 
 func pick_weighted(options: Array[Variant], chances: Array[float]) -> int:
 	var roll := _rng.randf_range(0.0, 99.9)

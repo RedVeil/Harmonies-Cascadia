@@ -566,7 +566,7 @@
 			"point_score": 4,
 			"bonus_points": 2,
 			"visual_amount": 1,
-			"icon": "res://assets/animals/icons/ForrestMammal_Bear_Panda.png",
+			"icon": "res://assets/animals/icons/ForestMammal_Bear_Panda.png",
 			"models": [
 				"res://assets/animals/models/scenes/panda1.tscn"
 			]

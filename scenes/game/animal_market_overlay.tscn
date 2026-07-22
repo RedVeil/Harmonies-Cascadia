@@ -1,0 +1,132 @@
+[gd_scene format=3 uid="uid://bqigxbarpo52k"]
+
+[ext_resource type="Script" path="res://scripts/game/animal_market_overlay.gd" id="1_market"]
+[ext_resource type="PackedScene" uid="uid://0fu8v3fe2jgj" path="res://scenes/card/card.tscn" id="2_card"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_popup"]
+bg_color = Color(0.95686275, 0.8745098, 0.7921569, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.1254902)
+shadow_size = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_blocker"]
+bg_color = Color(1, 1, 1, 0)
+
+[node name="AnimalMarketOverlay" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1_market")
+card_scene = ExtResource("2_card")
+
+[node name="FullscreenBlocker" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+color = Color(0, 0, 0, 0.35)
+
+[node name="PopupRoot" type="Node2D" parent="."]
+
+[node name="PopupPanel" type="Panel" parent="PopupRoot"]
+offset_left = -320.0
+offset_top = -180.0
+offset_right = 320.0
+offset_bottom = 180.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_popup")
+
+[node name="ClickBlocker" type="Panel" parent="PopupRoot"]
+offset_left = -320.0
+offset_top = -180.0
+offset_right = 320.0
+offset_bottom = 180.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_blocker")
+
+[node name="TitleLabel" type="Label" parent="PopupRoot"]
+offset_left = -280.0
+offset_top = -160.0
+offset_right = 280.0
+offset_bottom = -124.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 22
+text = "Animal Market"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CreditsLabel" type="Label" parent="PopupRoot"]
+offset_left = -280.0
+offset_top = -124.0
+offset_right = 280.0
+offset_bottom = -96.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 14
+text = "Credits: 0  ·  Price: 1 each"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="OffersRoot" type="Node2D" parent="PopupRoot"]
+
+[node name="CloseButton" type="Control" parent="PopupRoot"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 256.0
+offset_top = -166.0
+offset_right = 288.0
+offset_bottom = -130.0
+
+[node name="Label" type="Label" parent="PopupRoot/CloseButton"]
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 36.0
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 24
+text = "×"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RerollButton" type="Control" parent="PopupRoot"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -80.0
+offset_top = 140.0
+offset_right = 80.0
+offset_bottom = 172.0
+
+[node name="Background" type="ColorRect" parent="PopupRoot/RerollButton"]
+layout_mode = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 1)
+
+[node name="Label" type="Label" parent="PopupRoot/RerollButton"]
+layout_mode = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 14
+text = "Reroll (1)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="gui_input" from="FullscreenBlocker" to="." method="_on_blocker_gui_input"]
+[connection signal="gui_input" from="PopupRoot/CloseButton" to="." method="_on_close_gui_input"]
+[connection signal="mouse_entered" from="PopupRoot/CloseButton" to="." method="_on_close_mouse_entered"]
+[connection signal="mouse_exited" from="PopupRoot/CloseButton" to="." method="_on_close_mouse_exited"]
+[connection signal="gui_input" from="PopupRoot/RerollButton" to="." method="_on_reroll_gui_input"]
+[connection signal="mouse_entered" from="PopupRoot/RerollButton" to="." method="_on_reroll_mouse_entered"]
+[connection signal="mouse_exited" from="PopupRoot/RerollButton" to="." method="_on_reroll_mouse_exited"]
