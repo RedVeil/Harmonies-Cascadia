@@ -38,5 +38,5 @@ layout_mode = 0
 offset_top = -3.0
 offset_right = 421.0
 offset_bottom = 23.0
-text = "Hand limit reached. You wont be able to buy new boosters."
+text = "Animal limit reached. Recycle an animal to continue."
 horizontal_alignment = 1

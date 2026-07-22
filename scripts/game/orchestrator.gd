@@ -85,6 +85,8 @@ func unpause_cards() -> void:
 		return
 	if card_manager.card_amount > card_manager.card_limit:
 		return
+	if card_manager.animal_amount > card_manager.animal_limit:
+		return
 	cards_paused = false
 	booster_manager.paused = false
 	card_manager.unpause()

@@ -182,7 +182,6 @@ orchestrator = NodePath("../../Orchestrator")
 orchestrator = NodePath("../../Orchestrator")
 booster_limit = 3
 base_booster_point_cost = 15
-start_booster_points = 60
 
 [node name="CardManager" parent="HUD" unique_id=241167023 node_paths=PackedStringArray("orchestrator") instance=ExtResource("2_vg1d4")]
 orchestrator = NodePath("../../Orchestrator")
