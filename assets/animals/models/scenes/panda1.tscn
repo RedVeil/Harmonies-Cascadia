@@ -5,13 +5,11 @@
 
 [node name="Panda_012" unique_id=1631333183 instance=ExtResource("1_vhx7i")]
 script = ExtResource("2_xwf5h")
-anim_name = &"Panda_Idle"
+walk_anims = Array[StringName]([&"Panda_Walk"])
+idle_anims = Array[StringName]([&"Panda_Idle"])
 max_start_delay_sec = 2.947
 
-[node name="Skeleton_Panda" parent="." index="0" unique_id=698793679]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
-
-[node name="Skeleton3D" parent="Skeleton_Panda" index="0" unique_id=417249467]
+[node name="Skeleton3D" parent="Skeleton_Panda" parent_id_path=PackedInt32Array(458102816) index="0" unique_id=1162563736]
 bones/0/rotation = Quaternion(1.068224e-14, 1, 6.2585855e-08, -1.9470716e-07)
 bones/1/position = Vector3(-6.173378e-08, 0.46203232, 1.1257265)
 bones/1/rotation = Quaternion(-0.22139964, -3.1367836e-08, -2.6418558e-09, 0.97518325)

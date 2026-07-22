@@ -77,11 +77,15 @@ func select_hand_card(id:int) -> void:
 		handle_tile_hover(selected_coord)
 
 func pause_cards() -> void:
-	# cards_paused = true
+	cards_paused = true
 	booster_manager.paused = true
 	
 func unpause_cards() -> void:
-	# cards_paused = false
+	if map_points > 0:
+		return
+	if card_manager.card_amount > card_manager.card_limit:
+		return
+	cards_paused = false
 	booster_manager.paused = false
 	card_manager.unpause()
 	
@@ -201,13 +205,16 @@ func handle_tile_click(coord: Vector2i) -> void:
 					
 		hex_manager.apply_placement(coord)
 		hex_manager.play_placement_reward(coord, last_points_diff, contributing_coords)
-		card_manager.remove_card(selected_card_id)
+		# Commit HUD score before remove_card: emptying a stack deselects and
+		# would otherwise wipe preview before apply_preview can animate it.
 		booster_manager.apply_booster_points(true)
 		quest_manager.apply_preview()
 		point_counter.apply_preview(true)
+		card_manager.remove_card(selected_card_id)
 		
 		reset_preview()
-		undo_button.enable()
+		if map_points == 0:
+			undo_button.enable()
 		
 		if not card_manager.cards[selected_card_id]:
 			selected_card_id = -1
@@ -280,7 +287,7 @@ func handle_animal_preview(coord:Vector2i, card:CardData) -> TileStatePreview:
 		
 		tile_data_preview = hex_manager.tiles[coord].duplicate(true)
 		tile_data_preview.animal_id = card.id
-		tile_data_preview.animal_amount = CardCatalog.animals[card.id].amount
+		tile_data_preview.animal_amount = CardCatalog.animals[card.id].visual_amount
 
 		contributing_coords.assign(placement_res.coords)
 		

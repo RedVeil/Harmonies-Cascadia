@@ -5,13 +5,14 @@
 
 [node name="Bear_012" unique_id=1652076105 instance=ExtResource("1_56fj2")]
 script = ExtResource("2_os8nn")
-anim_name = &"Bear_Idle"
+walk_anims = Array[StringName]([&"Bear_Walk"])
+idle_anims = Array[StringName]([&"Bear_Idle"])
 max_start_delay_sec = 4.744
 
-[node name="Skeleton_Bear_01" parent="." index="0" unique_id=2130102371]
-transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
+[node name="Skeleton_Bear_01" parent="." index="0" unique_id=1083991316]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0, 0)
 
-[node name="Skeleton3D" parent="Skeleton_Bear_01" index="0" unique_id=1240343860]
+[node name="Skeleton3D" parent="Skeleton_Bear_01" index="0" unique_id=2010726550]
 bones/1/position = Vector3(8.4737356e-10, 1.5037445, 0.58606505)
 bones/1/rotation = Quaternion(-0.77426434, -3.6406366e-08, 3.936839e-08, 0.63286245)
 bones/3/position = Vector3(1.65496e-14, 0.3491891, 4.0407713e-09)

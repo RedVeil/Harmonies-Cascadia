@@ -5,13 +5,14 @@
 
 [node name="Hippopotamus_012" unique_id=1574949799 instance=ExtResource("1_kwavj")]
 script = ExtResource("2_unqqu")
-anim_name = &"Hippopotamus_Idle"
+walk_anims = Array[StringName]([&"Hippopotamus_Walk"])
+idle_anims = Array[StringName]([&"Hippopotamus_Idle"])
 max_start_delay_sec = 10.0
 
-[node name="Skeleton_Hippopotamus_01" parent="." index="0" unique_id=1350180344]
-transform = Transform3D(0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, 0, 0, 0)
+[node name="Skeleton_Hippopotamus_01" parent="." index="0" unique_id=335441556]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0, 0)
 
-[node name="Skeleton3D" parent="Skeleton_Hippopotamus_01" index="0" unique_id=2123128424]
+[node name="Skeleton3D" parent="Skeleton_Hippopotamus_01" index="0" unique_id=292645367]
 bones/0/rotation = Quaternion(-6.2113036e-15, 1, -5.1658024e-08, -7.5497795e-08)
 bones/1/position = Vector3(0.014468642, 2.1364799, 0.71327233)
 bones/1/rotation = Quaternion(-0.63681644, 0.0048233923, -0.0022348142, 0.7709971)

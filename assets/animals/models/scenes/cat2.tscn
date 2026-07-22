@@ -5,13 +5,14 @@
 
 [node name="Cat_022" unique_id=2098031551 instance=ExtResource("1_pjesi")]
 script = ExtResource("2_pyirx")
-anim_name = &"Cat_Idle"
+walk_anims = Array[StringName]([&"Cat_Walk"])
+idle_anims = Array[StringName]([&"Cat_Idle"])
 max_start_delay_sec = 10.0
 
-[node name="Skeleton_Cat_02" parent="." index="0" unique_id=1870507903]
+[node name="Skeleton_Cat_02" parent="." index="0" unique_id=1751560290]
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
 
-[node name="Skeleton3D" parent="Skeleton_Cat_02" index="0" unique_id=1819888079]
+[node name="Skeleton3D" parent="Skeleton_Cat_02" index="0" unique_id=279132494]
 bones/1/position = Vector3(-0.003066253, 0.28255975, 0.11240796)
 bones/1/rotation = Quaternion(-0.737764, -0.00071769604, 0.0006566828, 0.6750581)
 bones/2/position = Vector3(0.052180838, -0.007982345, -0.0043874807)

@@ -45,12 +45,6 @@
 		"levels": [
 			{
 				"level": 1,
-				"name": "Grassland",
-				"color": "#e5d175",
-				"icon": "res://assets/elements/a0.png"
-			},
-			{
-				"level": 2,
 				"name": "Field",
 				"color": "#d6bd57",
 				"icon": "res://assets/elements/a1.png"

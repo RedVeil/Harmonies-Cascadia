@@ -5,10 +5,14 @@
 
 [node name="Ram_022" unique_id=115930685 instance=ExtResource("1_ovam5")]
 script = ExtResource("2_nxrl4")
-anim_name = &"Ram_Idle"
+walk_anims = Array[StringName]([&"Ram_Walk"])
+idle_anims = Array[StringName]([&"Ram_Idle"])
 max_start_delay_sec = 4.014
 
-[node name="Skeleton3D" parent="Skeleton_Ram_02" parent_id_path=PackedInt32Array(1489134469) index="0" unique_id=727344336]
+[node name="Skeleton_Ram_02" parent="." index="0" unique_id=2144345808]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
+
+[node name="Skeleton3D" parent="Skeleton_Ram_02" index="0" unique_id=425182798]
 bones/0/position = Vector3(1.7736754e-21, 2.9833936e-05, 4.3368087e-19)
 bones/0/rotation = Quaternion(2.9724927e-17, 1, -1.8874474e-08, -7.549789e-08)
 bones/1/position = Vector3(4.289848e-15, 1.0347835, 0.29845554)

@@ -127,7 +127,9 @@ func preview_visuals(
 		animal_id,
 		animal_amount,
 		scene_layer_rotations,
-		river_index
+		river_index,
+		false,
+		false
 	)
 	_committed_visuals.visible = false
 	_staging_visuals.visible = true
@@ -209,6 +211,7 @@ func _apply_tile_data_to_committed(
 		tile_data.animal_amount,
 		[],
 		river_index,
+		true,
 		true
 	)
 	_committed_visuals.ensure_active_layers_visible()

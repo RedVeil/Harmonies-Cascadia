@@ -4,7 +4,8 @@ extends Resource
 enum SpecialRule {
 	NONE,
 	SHORTEST_ROUTE,
-	NEIGHBORS
+	NEIGHBORS,
+	GROUP_SIZE
 }
 
 @export var id:int = 0
@@ -24,10 +25,10 @@ enum SpecialRule {
 # specs for the special rule to calculate the score
 @export var special_rule_specs: Dictionary = {}
 
-## For shortest_route
+## For shortest_route (path length) and group_size (connected tile count)
 # {
-#points: [0,2,5,8,11,15] = specific point count at length
-#extra_points: 4 = points for each length over the array length
+#points: [0,2,5,8,11,15] = points at that size/length (1-indexed via size-1)
+#extra_points: 4 = points for each step over the array length
 # }
 
 ## for neighbors

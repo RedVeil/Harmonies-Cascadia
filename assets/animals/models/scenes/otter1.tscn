@@ -3436,11 +3436,12 @@ _data = {
 
 [node name="otter" type="Node3D" unique_id=141395713]
 script = ExtResource("1_xawk4")
-anim_name = &"Idle_A"
+walk_anims = Array[StringName]([&"Walk"])
+idle_anims = Array[StringName]([&"Idle_A", &"Idle_B", &"Idle_C"])
 max_start_delay_sec = 0.4
 
 [node name="Rig" type="Node3D" parent="." unique_id=860860458]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.09887762)
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0.09887762)
 
 [node name="Skeleton3D" type="Skeleton3D" parent="Rig" unique_id=1321802428]
 bones/0/name = "root"

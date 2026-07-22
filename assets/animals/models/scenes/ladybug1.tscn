@@ -80,11 +80,12 @@ _data = {
 
 [node name="ladybug" type="Node3D" unique_id=1604660025]
 script = ExtResource("1_j42ar")
-anim_name = &"idle"
+walk_anims = Array[StringName]([&"idle"])
+idle_anims = Array[StringName]([&"idle"])
 max_start_delay_sec = 0.75
 
 [node name="alt18" type="MeshInstance3D" parent="." unique_id=1259900260]
-transform = Transform3D(0.002, 0, 0, 0, -8.742278e-11, -0.002, 0, 0.002, -8.742278e-11, 0, 0.1, 0)
+transform = Transform3D(0.01, 0, 0, 0, -4.3711387e-10, -0.01, 0, 0.01, -4.3711387e-10, 0, 0.1, 0)
 mesh = SubResource("ArrayMesh_ie1qc")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1321434250]

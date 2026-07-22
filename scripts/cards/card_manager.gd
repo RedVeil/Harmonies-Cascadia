@@ -44,7 +44,7 @@ func add_card(card_data:CardData) -> void:
 			orchestrator.apply_recycle_card(matching_card_id, recycling_value, true)
 		else:
 			cards[matching_card_id].amount += hand_card.amount
-			card_container.increment_card(matching_card_id)
+			card_container.set_card_amount(matching_card_id, cards[matching_card_id].amount)
 
 func remove_card(id:int) -> void:
 	if cards[id].amount > 1:

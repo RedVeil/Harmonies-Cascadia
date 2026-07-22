@@ -5,10 +5,14 @@
 
 [node name="Horse_022" unique_id=7805199 instance=ExtResource("1_t7u7j")]
 script = ExtResource("2_ln00v")
-anim_name = &"Horse_Idle"
+walk_anims = Array[StringName]([&"Horse_Walk"])
+idle_anims = Array[StringName]([&"Horse_Idle"])
 max_start_delay_sec = 10.0
 
-[node name="Skeleton3D" parent="Skeleton_Horse_02" parent_id_path=PackedInt32Array(74940564) index="0" unique_id=47802753]
+[node name="Skeleton_Horse_02" parent="." index="0" unique_id=1801058257]
+transform = Transform3D(2.2, 0, 0, 0, 2.2, 0, 0, 0, 2.2, 0, 0, 0)
+
+[node name="Skeleton3D" parent="Skeleton_Horse_02" index="0" unique_id=1864583170]
 bones/0/rotation = Quaternion(-1.2036457e-14, 1, -1.2219051e-07, -7.54978e-08)
 bones/1/position = Vector3(2.0001083e-08, 1.295736, 0.22365062)
 bones/1/rotation = Quaternion(-0.7955698, 2.7876163e-07, -4.2099973e-07, 0.605862)

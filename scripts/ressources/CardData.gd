@@ -15,6 +15,8 @@ enum CARD_TYPE {
 @export var bonus: Array[Placement] = []
 # how many cards of this type are stacked
 @export var amount: int = 0
+# how many 3D models to spawn when this animal is placed (independent of amount)
+@export var visual_amount: int = 1
 @export var draw_chance: float = 0.0
 # used to get the background color of the card
 @export var element: GameEnums.ELEMENT = 0

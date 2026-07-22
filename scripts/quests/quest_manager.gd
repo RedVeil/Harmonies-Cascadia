@@ -19,10 +19,12 @@ var eligble_groups_backup: Array[Array] = []
 var active_quests_backup : Array[int] = []
 var preview_quests_backup : Array[int] = []
 var quest_progress_backup : Array[int] = []
+var _rng: RandomNumberGenerator
 
 ## ----- Initialisation ----- ##
 
 func _ready() -> void:
+	_rng = GameSession.make_rng("quest")
 	active_quests.resize(quest_limit)
 	active_quests.fill(-1)
 	active_quests_backup = active_quests.duplicate(true)
@@ -182,8 +184,8 @@ func pick_quest(type:int, element:int) -> int:
 				if options_by_element.size() == 0:
 					return -1
 				else:
-					return options_by_element.pick_random().id
+					return options_by_element[_rng.randi_range(0, options_by_element.size() - 1)].id
 			else:
-				return options_by_type.pick_random().id
+				return options_by_type[_rng.randi_range(0, options_by_type.size() - 1)].id
 	else:
 		return -1

@@ -21,9 +21,10 @@ var points_per_element_group_backup: Dictionary[int, int] = {}
 ## ----- Initialisation ----- ##
 
 func _ready() -> void:
+	var rng := GameSession.make_rng("scoring")
 	for i in range(5):
-		var element = ElementCatalog.elements[i+1]
-		var rule_id = element.scoring_rules[0]
+		var element = ElementCatalog.elements[i + 1]
+		var rule_id: int = element.scoring_rules[rng.randi() % element.scoring_rules.size()]
 		active_rules[element.type] = RuleCatalog.rules[rule_id]
 		element.active_scoring_rule = rule_id
 
@@ -50,6 +51,11 @@ func calc_group_score(
 		result = calculate_element_special_shortest_route(coords_, rule)
 	elif rule.special_rule == 2:
 		result = calculate_element_special_neighbors(coords, rule, tiles)
+	elif rule.special_rule == 3:
+		var coords_ := coords.duplicate(true)
+		if not coords_.has(coord):
+			coords_.append(coord)
+		result = calculate_element_special_group_size(coords_, rule)
 	else:
 		if coords.has(coord):
 			result = calculate_normal_element_group(coords,rule, tiles)
@@ -112,11 +118,21 @@ func calculate_element_special_neighbors(
 func calculate_element_special_shortest_route(coords: Array[Vector2i], rule:ScoringRule) -> int:
 	var rule_specs = rule.special_rule_specs
 	var path = find_longest_path(coords)
-	if path.size() >= rule_specs.points.size():
-		var diff = path.size() - rule_specs.points.size()
-		return rule_specs.points[rule_specs.points.size()-1] + (diff * rule_specs.extra_points)
-	else:
-		return rule_specs.points[path.size()-1]
+	return _points_from_size_curve(path.size(), rule_specs)
+
+func calculate_element_special_group_size(coords: Array[Vector2i], rule:ScoringRule) -> int:
+	if coords.size() < rule.min_group_size:
+		return 0
+	return _points_from_size_curve(coords.size(), rule.special_rule_specs)
+
+func _points_from_size_curve(size: int, rule_specs: Dictionary) -> int:
+	if size <= 0:
+		return 0
+	var points: Array = rule_specs.points
+	if size >= points.size():
+		var diff = size - points.size()
+		return points[points.size() - 1] + (diff * int(rule_specs.extra_points))
+	return points[size - 1]
 
 ## ----- Path Finding Logic ----- ##
 

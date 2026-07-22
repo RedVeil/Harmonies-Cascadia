@@ -55,6 +55,9 @@ func remove_card(id:int) -> void:
 func increment_card(id:int) -> void:
 	cards[id].increment()
 
+func set_card_amount(id:int, amount:int) -> void:
+	cards[id].set_stack_amount(amount)
+
 func decrement_card(id:int) -> void:
 	cards[id].decrement()
 

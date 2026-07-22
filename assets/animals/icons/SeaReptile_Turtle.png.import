@@ -2,24 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://2mcsqh33baiu"
-path.s3tc="res://.godot/imported/Walrus_01_ColorPalette_1.png-d34dd46675d962414606f162e5def1ef.s3tc.ctex"
+uid="uid://b1yuydfle1wt"
+path="res://.godot/imported/SeaReptile_Turtle.png-20b79d1a78f6f3755d292485aa01eacb.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
-"vram_texture": true
-}
-generator_parameters={
-"md5": "afacad1018e07f5969f22f6f907e241b"
+"vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/animals/models/raw/Walrus_01_ColorPalette_1.png"
-dest_files=["res://.godot/imported/Walrus_01_ColorPalette_1.png-d34dd46675d962414606f162e5def1ef.s3tc.ctex"]
+source_file="res://assets/animals/icons/SeaReptile_Turtle.png"
+dest_files=["res://.godot/imported/SeaReptile_Turtle.png-20b79d1a78f6f3755d292485aa01eacb.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -27,7 +23,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
@@ -41,4 +37,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=0
+detect_3d/compress_to=1

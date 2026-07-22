@@ -5,13 +5,14 @@
 
 [node name="Sheep_022" unique_id=980016509 instance=ExtResource("1_ma4gm")]
 script = ExtResource("2_1a0n0")
-anim_name = &"Sheep_Idle"
+walk_anims = Array[StringName]([&"Sheep_Walk"])
+idle_anims = Array[StringName]([&"Sheep_Idle"])
 max_start_delay_sec = 10.0
 
-[node name="Skeleton_Sheep_02" parent="." index="0" unique_id=141421780]
-transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+[node name="Skeleton_Sheep_02" parent="." index="0" unique_id=1417395965]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 
-[node name="Skeleton3D" parent="Skeleton_Sheep_02" index="0" unique_id=258161345]
+[node name="Skeleton3D" parent="Skeleton_Sheep_02" index="0" unique_id=1486698728]
 bones/1/position = Vector3(-1.48771875e-08, 0.5707415, 0.17678583)
 bones/1/rotation = Quaternion(-0.70649564, 0.0061758873, 0.0061653, 0.7076636)
 bones/2/position = Vector3(0.093563095, -0.0116338665, -0.015646437)

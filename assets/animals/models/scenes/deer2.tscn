@@ -5,13 +5,11 @@
 
 [node name="Deer_Female_012" unique_id=1577342567 instance=ExtResource("1_fasho")]
 script = ExtResource("2_frhmn")
-anim_name = &"Deer_Idle"
+walk_anims = Array[StringName]([&"Deer_Walk"])
+idle_anims = Array[StringName]([&"Deer_Idle"])
 max_start_delay_sec = 10.0
 
-[node name="Skeleton_Deer_Female" parent="." index="0" unique_id=135874881]
-transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
-
-[node name="Skeleton3D" parent="Skeleton_Deer_Female" index="0" unique_id=1327303551]
+[node name="Skeleton3D" parent="Skeleton_Deer_Female" parent_id_path=PackedInt32Array(233559631) index="0" unique_id=1450901759]
 bones/0/rotation = Quaternion(-4.3711395e-08, 1, -1.1424389e-07, -1.1920929e-07)
 bones/1/position = Vector3(-3.988639e-08, 1.0277029, 0.26415575)
 bones/1/rotation = Quaternion(-0.73905617, -1.0332868e-06, -6.972419e-08, 0.6736438)

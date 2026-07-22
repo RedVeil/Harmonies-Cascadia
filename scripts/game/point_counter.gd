@@ -87,6 +87,10 @@ func preview_progress(val:int) -> void:
 		preview = target
 	else:
 		preview = val
+
+	# Keep logical preview updated, but don't fight an in-flight score reward.
+	if _is_score_reward_playing():
+		return
 		
 	if val == current:
 		$ProgressBar.material.set_shader_parameter("third_value",  0.0)
@@ -118,12 +122,15 @@ func apply_preview(animate_reward: bool = false) -> void:
 			"from_score": current_backup,
 			"to_score": current,
 		})
-	else:
+	elif not _is_score_reward_playing():
 		apply_current_style()
 
 func reset_preview() -> void:
-	kill_animations()
 	preview = current
+	# Never cut a score reward short; only the next score_reward may replace it.
+	if _is_score_reward_playing():
+		return
+	kill_animations()
 	apply_current_style()
 
 func undo() -> void:
@@ -166,10 +173,18 @@ func kill_animations() -> void:
 	_finish_gain_popup()
 	apply_current_style()
 
+func _is_score_reward_playing() -> bool:
+	for key in [&"reward", &"punch"]:
+		var tw: Variant = _feedback_tweens.get(key)
+		if tw is Tween and tw.is_valid():
+			return true
+	return false
+
 func ensure_score_label_pivot() -> void:
 	score_label.pivot_offset = score_label.size * 0.5
 
 func _animate_score_reward(gained: int, from_score: int, to_score: int) -> void:
+	# Allowed interrupt: replacing the previous score reward with the next one.
 	FeedbackAnimHelper.kill_all(_feedback_tweens)
 	_finish_gain_popup()
 	FeedbackAnimHelper.play_sounds(score_reward_sounds)

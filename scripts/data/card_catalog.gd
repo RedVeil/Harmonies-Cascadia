@@ -36,6 +36,7 @@ func parse_card(card:Dictionary) -> CardData:
 	card_data.type = card.type
 	card_data.name = card.name
 	card_data.amount = card.amount
+	card_data.visual_amount = int(card.get("visual_amount", 1))
 	card_data.draw_chance = card.draw_chance
 	card_data.point_score = card.point_score
 	card_data.bonus_points = card.bonus_points

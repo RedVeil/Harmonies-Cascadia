@@ -102,7 +102,10 @@ func create_map_button(coord:Vector2i) -> void:
 	var button := map_button.instantiate() as Node3D
 	button.init(self, coord)
 	add_child(button)
-	button.position = HexCoord.axial_to_world(coord , 2.0)
+	var size := hex_container.hex_size
+	button.position = HexCoord.axial_to_world(coord, size)
+	# Mesh is authored for hex_size 2.0; scale to match the live tile grid.
+	button.scale = Vector3.ONE * (size / 2.0)
 	map_buttons.append(button)
 
 func remove_map_buttons() -> void:

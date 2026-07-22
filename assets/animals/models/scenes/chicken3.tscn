@@ -5,10 +5,14 @@
 
 [node name="Chicken_032" unique_id=552472882 instance=ExtResource("1_q8j5h")]
 script = ExtResource("2_smks1")
-anim_name = &"Chicken_Idle"
+walk_anims = Array[StringName]([&"Chicken_Walk"])
+idle_anims = Array[StringName]([&"Chicken_Idle"])
 max_start_delay_sec = 6.149
 
-[node name="Skeleton3D" parent="Skeleton_Chicken_03" parent_id_path=PackedInt32Array(1241210670) index="0" unique_id=142765631]
+[node name="Skeleton_Chicken_03" parent="." index="0" unique_id=1351129038]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+
+[node name="Skeleton3D" parent="Skeleton_Chicken_03" index="0" unique_id=593576630]
 bones/1/position = Vector3(-9.480186e-09, 0.25699025, 0.1491215)
 bones/1/rotation = Quaternion(-0.70723325, -4.7362626e-08, 3.0447957e-08, 0.70698035)
 bones/2/rotation = Quaternion(-0.1677451, -6.273583e-08, 2.9523509e-08, 0.9858304)

@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://cmkhyqx5ev6ha"
-path="res://.godot/imported/Walrus_01.glb-786e726baa581df6bdc72df70a12ee2f.scn"
+uid="uid://ct8ddv2vikcur"
+path="res://.godot/imported/turtle.glb-5bd51deb4c047dbb8a50bb3b0573d644.scn"
 
 [deps]
 
-source_file="res://assets/animals/models/raw/Walrus_01.glb"
-dest_files=["res://.godot/imported/Walrus_01.glb-786e726baa581df6bdc72df70a12ee2f.scn"]
+source_file="res://assets/animals/models/raw/turtle.glb"
+dest_files=["res://.godot/imported/turtle.glb-5bd51deb4c047dbb8a50bb3b0573d644.scn"]
 
 [params]
 
@@ -39,7 +39,7 @@ materials/extract_format=0
 materials/extract_path=""
 _subresources={
 "animations": {
-"Walrus_Idle": {
+"Walk": {
 "save_to_file/enabled": false,
 "save_to_file/fallback_path": "",
 "save_to_file/keep_custom_tracks": "",

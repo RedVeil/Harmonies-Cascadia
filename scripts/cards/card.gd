@@ -133,16 +133,20 @@ func _on_input_event(
 
 ## ----- Stack Logic ----- ##
 
-func increment() -> void:
-	if stack_amount < 10:
-		stack_amount += 1
-		$visuals/Label.text = "x %d " % stack_amount
+func set_stack_amount(amount: int, animate: bool = true) -> void:
+	if stack_amount == amount:
+		return
+	stack_amount = amount
+	$visuals/Label.text = "x %d" % stack_amount
+	if animate:
 		play_redraw_animation()
+
+func increment() -> void:
+	set_stack_amount(stack_amount + 1)
 
 func decrement() -> void:
 	if stack_amount > 0:
-		stack_amount -= 1
-		$visuals/Label.text = "x %d" % stack_amount
+		set_stack_amount(stack_amount - 1, false)
 
 ## ----- Other Logic ----- ##
 

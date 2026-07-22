@@ -182,44 +182,25 @@ transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, 0, 9.3, 
 [node name="hex_forest_detail" parent="visuals" unique_id=1161202553 instance=ExtResource("11_mvoqa")]
 transform = Transform3D(9.5, 0, 0, 0, 9.5, 0, 0, 0, 9.5, 0, 0, 0)
 
-[node name="base_marker" type="Node3D" parent="." unique_id=355894987]
+[node name="walk_markers" type="Node3D" parent="." unique_id=355894987]
+
+[node name="default" type="Node3D" parent="walk_markers" unique_id=1461136589]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.456601, 0)
 
-[node name="Marker3D" type="Marker3D" parent="base_marker" unique_id=1588527572]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9345274, -8.8848915)
+[node name="Marker3D" type="Marker3D" parent="walk_markers/default" unique_id=1588527572]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.118727684, -8.8848915)
 
-[node name="Marker3D2" type="Marker3D" parent="base_marker" unique_id=1339874064]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.324124, 0.65165234, 4.4562855)
+[node name="Marker3D2" type="Marker3D" parent="walk_markers/default" unique_id=1339874064]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.227588, 0.20793724, 5.618217)
 
-[node name="Marker3D3" type="Marker3D" parent="base_marker" unique_id=1023575276]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5983086, 0.80227184, 1.3919392)
+[node name="Marker3D3" type="Marker3D" parent="walk_markers/default" unique_id=1023575276]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.076656, 0.04649353, -1.0258877)
 
-[node name="Marker3D4" type="Marker3D" parent="base_marker" unique_id=2053825878]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.490306, 1.1217194, 4.904359)
+[node name="Marker3D4" type="Marker3D" parent="walk_markers/default" unique_id=2053825878]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.6627183, 0.08650589, 3.4053288)
 
-[node name="Marker3D5" type="Marker3D" parent="base_marker" unique_id=1258702424]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.32513523, 7.385806, 4.5453296)
+[node name="Marker3D5" type="Marker3D" parent="walk_markers/default" unique_id=1258702424]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.3586235, 0.20535374, 0.7660279)
 
-[node name="Marker3D6" type="Marker3D" parent="base_marker" unique_id=920521987]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.28717, 0.39212513, -5.5269337)
-
-[node name="extra_marker" type="Node3D" parent="." unique_id=1959025763]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.456601, 0)
-
-[node name="Marker3D" type="Marker3D" parent="extra_marker" unique_id=1845292961]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.594955, -7.880002)
-
-[node name="Marker3D2" type="Marker3D" parent="extra_marker" unique_id=2173111]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.594955, 7.6654024)
-
-[node name="Marker3D3" type="Marker3D" parent="extra_marker" unique_id=1903590284]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5983086, 9.594955, -2.2507772)
-
-[node name="Marker3D4" type="Marker3D" parent="extra_marker" unique_id=1234508774]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5983086, 9.594955, 3.6779132)
-
-[node name="Marker3D5" type="Marker3D" parent="extra_marker" unique_id=644776426]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.009527, 9.594955, 3.6779132)
-
-[node name="Marker3D6" type="Marker3D" parent="extra_marker" unique_id=2008871435]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.009527, 9.594955, -3.0005155)
+[node name="Marker3D6" type="Marker3D" parent="walk_markers/default" unique_id=920521987]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.693133, 0.09178066, -5.5269337)

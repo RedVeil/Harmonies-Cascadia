@@ -5,10 +5,11 @@
 
 [node name="Bison_012" unique_id=1425163416 instance=ExtResource("1_rv78i")]
 script = ExtResource("2_knxxs")
-anim_name = &"Bison_Idle"
+walk_anims = Array[StringName]([&"Bison_Walk"])
+idle_anims = Array[StringName]([&"Bison_Idle"])
 max_start_delay_sec = 8.789
 
-[node name="Skeleton3D" parent="Skeleton_Bison_01" parent_id_path=PackedInt32Array(1838377703) index="0" unique_id=1643611070]
+[node name="Skeleton3D" parent="Skeleton_Bison_01" parent_id_path=PackedInt32Array(1669834335) index="0" unique_id=1719572335]
 bones/0/rotation = Quaternion(6.3021656e-23, 1, 4.466507e-30, -4.0133926e-07)
 bones/1/position = Vector3(-2.358547e-07, 1.6294475, 0.7772513)
 bones/1/rotation = Quaternion(-0.62110555, 2.6911343e-07, -3.8807997e-07, 0.78372693)

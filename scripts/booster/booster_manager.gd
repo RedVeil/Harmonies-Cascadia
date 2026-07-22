@@ -10,6 +10,7 @@ class_name BoosterManager
 @export var booster_point_multiplier:float = 1.2
 @export var start_booster_points:int = 3
 @export var random_secondary_chance: float = 50.0
+@export var guaranteed_animal_boosters: int = 2
 
 @export_group("Points Reward Animation")
 @export var punch_scale: float = 1.14
@@ -35,6 +36,7 @@ var boosters: Array[BoosterData] = []
 
 var paused:bool = false
 var booster_chances : Array[float] = []
+var _guaranteed_animals_remaining: int = 0
 
 var is_hovered : bool = false
 var timer : float = 0.5
@@ -43,11 +45,12 @@ var _feedback_tweens: Dictionary = {}
 
 var booster_label : Label
 var booster_progress_sprite : Sprite2D
+var _rng: RandomNumberGenerator
 
 ## ----- Initialisation ----- ##
 
 func _ready() -> void:
-	seed(randi())
+	_rng = GameSession.make_rng("booster")
 	
 	for option in BoosterCatalog.booster_options:
 		if option.type < 6:
@@ -56,6 +59,7 @@ func _ready() -> void:
 	boosters.resize(booster_limit + 2)
 	booster_points = start_booster_points
 	booster_point_cost = base_booster_point_cost
+	_guaranteed_animals_remaining = guaranteed_animal_boosters
 	
 	booster_label = $hex/Label
 	booster_progress_sprite = $hex/Sprite2D2
@@ -80,7 +84,6 @@ func select_booster(id:int) -> void:
 	if booster_points > 0 and !paused:
 		change_booster_points(-1)
 		if id == 3:
-			seed(randi())
 			for i in range(booster_limit):
 				createBooster(i)
 		else:
@@ -188,6 +191,7 @@ func createBooster(idx:int) -> void:
 		update_booster_chances(option_index)
 	
 	var picked_booster = BoosterCatalog.booster_options[option_index]
+	var force_animal := idx < booster_limit and _guaranteed_animals_remaining > 0
 		
 	var cards : Array[CardData] = []
 	var booster_points := 0
@@ -203,7 +207,10 @@ func createBooster(idx:int) -> void:
 		
 	for entry in options:
 		for i in range(entry.amount):
-			if pick_option(entry.draw_chance):
+			var chance = entry.draw_chance
+			if force_animal and entry.type == BoosterContentOption.RewardType.ANIMAL:
+				chance = 100.0
+			if pick_option(chance):
 				match entry.type:
 					BoosterContentOption.RewardType.ELEMENT:
 						cards.append(CardCatalog.elements[entry.id])
@@ -220,6 +227,14 @@ func createBooster(idx:int) -> void:
 					BoosterContentOption.RewardType.MAP_POINT:
 						map_points += entry.amount
 	
+	if force_animal:
+		_guaranteed_animals_remaining -= 1
+		var has_animal := cards.any(func (card: CardData): return card.type == 1)
+		if not has_animal:
+			var animal := choose_animal(picked_booster.type)
+			if animal.amount > 0:
+				cards.append(animal)
+	
 	booster.type = picked_booster.type
 	booster.cards = cards
 	booster.booster_points = booster_points
@@ -231,7 +246,7 @@ func createBooster(idx:int) -> void:
 	booster_container.set_booster_visuals(idx, booster)
 
 func pick_weighted(options: Array[Variant], chances: Array[float]) -> int:
-	var roll := randf_range(0.0, 99.9)
+	var roll := _rng.randf_range(0.0, 99.9)
 	var running := 0.0
 	
 	for i in options.size():
@@ -245,7 +260,7 @@ func pick_weighted(options: Array[Variant], chances: Array[float]) -> int:
 	return options.size() -1
 
 func pick_option(chance:float) -> bool:
-	return randf_range(0.0, 99.9) < chance
+	return _rng.randf_range(0.0, 99.9) < chance
 
 func update_booster_chances(winner:int) -> void:
 	var diff : float = booster_chances[winner] - max(booster_chances[winner] - 10.0, 0.0)
@@ -338,7 +353,7 @@ func choose_animal(element:int) -> CardData:
 	var secondary_element = 0
 	## X% chance to pick a random secondary element
 	if pick_option(random_secondary_chance if total > 0 else 100.0):
-		secondary_element = [1,2,3,4,5].pick_random()
+		secondary_element = _pick_random([1, 2, 3, 4, 5])
 	else:
 		secondary_element = pick_weighted([0,1,2,3,4,5], secondary_chances)
 	
@@ -347,10 +362,12 @@ func choose_animal(element:int) -> CardData:
 	if filtered_by_element.size() > 0:
 		var filtered_by_secondary_element = filtered_by_element.filter(func (card): return card.secondary_element == secondary_element)
 		if filtered_by_secondary_element.size() > 0:
-			return filtered_by_secondary_element.pick_random()
+			return _pick_random(filtered_by_secondary_element)
 		else:
-			return filtered_by_element.pick_random()
+			return _pick_random(filtered_by_element)
 	else:
 		return CardData.new()
-		
-		
+
+
+func _pick_random(options: Array) -> Variant:
+	return options[_rng.randi_range(0, options.size() - 1)]

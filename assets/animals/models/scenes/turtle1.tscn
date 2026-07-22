@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://bya1rsbhgmcrj"]
+
+[ext_resource type="PackedScene" uid="uid://ct8ddv2vikcur" path="res://assets/animals/models/raw/turtle.glb" id="1_5n3iq"]
+[ext_resource type="Script" uid="uid://c582u2pi2l1xu" path="res://scripts/animal.gd" id="2_3hluc"]
+
+[node name="turtle" unique_id=219464716 instance=ExtResource("1_5n3iq")]
+script = ExtResource("2_3hluc")
+walk_anims = Array[StringName]([&"Walk"])
+idle_anims = Array[StringName]([&"Idle_A", &"Idle_B", &"Idle_C"])
+
+[node name="Rig" parent="." index="0" unique_id=1206722398]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0)
+
+[node name="Skeleton3D" parent="Rig" index="0" unique_id=382138488]
+bones/1/scale = Vector3(1, 1, 1)
+bones/2/position = Vector3(0.5247392, -0.25241467, 0.48299247)
+bones/2/rotation = Quaternion(0.32361785, -0.07133932, -0.73577404, 0.59060884)
+bones/2/scale = Vector3(0.99999994, 0.9999998, 1)
+bones/3/rotation = Quaternion(-0.27168396, 0.19244422, -0.09140775, 0.9385083)
+bones/4/position = Vector3(0.49751094, -0.2890999, -0.36240584)
+bones/4/rotation = Quaternion(0.055046003, 0.24370176, -0.801046, 0.5439713)
+bones/4/scale = Vector3(1.0000002, 1, 1)
+bones/5/rotation = Quaternion(-0.1965602, 0.059988108, -0.017553063, 0.9784976)
+bones/6/position = Vector3(-0.4975111, -0.28909987, -0.36240584)
+bones/6/rotation = Quaternion(0.055045817, -0.24370162, 0.801046, 0.54397136)
+bones/6/scale = Vector3(0.9999999, 0.99999994, 1.0000001)
+bones/7/rotation = Quaternion(-0.19656001, -0.059988383, 0.01755293, 0.97849756)
+bones/8/position = Vector3(-3.073106e-08, -0.073881246, -0.63716924)
+bones/8/rotation = Quaternion(-1.9800807e-07, -0.66833234, 0.7438628, 2.098005e-07)
+bones/8/scale = Vector3(1, 1.0000007, 0.999999)
+bones/9/position = Vector3(-0.5247391, -0.2524146, 0.4829924)
+bones/9/rotation = Quaternion(0.32361794, 0.07133942, 0.7357741, 0.5906088)
+bones/9/scale = Vector3(1, 0.99999994, 0.99999976)
+bones/10/rotation = Quaternion(-0.27168414, -0.19244434, 0.09140779, 0.93850815)

@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://bnu0x45ef4n2e" path="res://assets/tiles/assets/mountain/hill1.tscn" id="4_22xhg"]
 [ext_resource type="PackedScene" uid="uid://byh87sey2h1lf" path="res://assets/tiles/assets/mountain/mountain1.tscn" id="5_3j4k1"]
 [ext_resource type="PackedScene" uid="uid://3knltcmx2qpy" path="res://assets/tiles/assets/plants/flower7_group3.tscn" id="5_lxbil"]
+[ext_resource type="PackedScene" uid="uid://bya1rsbhgmcrj" path="res://assets/animals/models/scenes/turtle1.tscn" id="6_a4c1y"]
 [ext_resource type="PackedScene" uid="uid://c7uqgi0qtlex2" path="res://assets/tiles/assets/mountain/small_mountain1.tscn" id="6_yp744"]
 [ext_resource type="PackedScene" uid="uid://bbtum1rkj1mgw" path="res://assets/tiles/assets/wetlands/wetland1.tscn" id="7_d2x0f"]
 [ext_resource type="PackedScene" uid="uid://ciysuaofh8l24" path="res://assets/tiles/assets/plants/grass_long.tscn" id="7_vdxth"]
@@ -56,10 +57,8 @@
 [ext_resource type="PackedScene" uid="uid://clmm7cn1a7hmv" path="res://assets/animals/models/scenes/chicken1.tscn" id="54_rgobq"]
 [ext_resource type="PackedScene" uid="uid://can01y27xqgwe" path="res://assets/animals/models/scenes/chicken2.tscn" id="55_lqmif"]
 [ext_resource type="PackedScene" uid="uid://dxpa6xs01daki" path="res://assets/animals/models/scenes/chicken3.tscn" id="56_g5ob4"]
-[ext_resource type="PackedScene" uid="uid://dwg1vxiwwhny" path="res://assets/animals/models/scenes/crab1.tscn" id="57_nnpu2"]
 [ext_resource type="PackedScene" uid="uid://b8h1k1bseausk" path="res://assets/animals/models/scenes/elephant1.tscn" id="58_c67tb"]
 [ext_resource type="PackedScene" uid="uid://byn578v8a3nyh" path="res://assets/animals/models/scenes/elephant2.tscn" id="59_jxmq6"]
-[ext_resource type="PackedScene" uid="uid://ccyd66fbt812b" path="res://assets/animals/models/scenes/fish1.tscn" id="60_4u3b7"]
 [ext_resource type="PackedScene" uid="uid://goq0slvgmok5" path="res://assets/animals/models/scenes/fox1.tscn" id="61_6lv56"]
 [ext_resource type="PackedScene" uid="uid://bak8e6g1phyyr" path="res://assets/animals/models/scenes/frog1.tscn" id="62_d3spx"]
 [ext_resource type="PackedScene" uid="uid://bd8qbuga6w0tu" path="res://assets/animals/models/scenes/cameleon1.tscn" id="63_4mudm"]
@@ -75,7 +74,7 @@
 [ext_resource type="PackedScene" uid="uid://bt3eo08k51uly" path="res://assets/animals/models/scenes/pigeon1.tscn" id="73_aj2t3"]
 [ext_resource type="PackedScene" uid="uid://d24xdv31h1bhe" path="res://assets/animals/models/scenes/pigeon2.tscn" id="74_7np85"]
 [ext_resource type="PackedScene" uid="uid://dwuj7ap5gj8pv" path="res://assets/animals/models/scenes/pigeon3.tscn" id="75_44on7"]
-[ext_resource type="PackedScene" uid="uid://dx6tv1ufl4mqa" path="res://assets/animals/models/scenes/raccoon1.tscn" id="76_yfjim"]
+[ext_resource type="PackedScene" uid="uid://dx6tv1ufl4mqa" path="res://assets/animals/models/scenes/racoon1.tscn" id="76_yfjim"]
 [ext_resource type="PackedScene" uid="uid://84sg7as2i5em" path="res://assets/animals/models/scenes/rhino1.tscn" id="77_n776m"]
 [ext_resource type="PackedScene" uid="uid://b05uawyeixpmy" path="res://assets/animals/models/scenes/tiger1.tscn" id="78_vmkj5"]
 [ext_resource type="PackedScene" uid="uid://3qkkvbuhalnw" path="res://assets/animals/models/scenes/tiger2.tscn" id="79_jywu0"]
@@ -105,6 +104,194 @@ script = ExtResource("1_3j4k1")
 move_speed = 24.0
 zoom_min = 50.0
 zoom_max = 100.0
+
+[node name="animals" type="Node3D" parent="." unique_id=1553618215]
+
+[node name="Rhinoceros_012" parent="animals" unique_id=442450783 instance=ExtResource("77_n776m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6871462, 9.69276, 8.024551)
+
+[node name="Swan_012" parent="animals" unique_id=931456392 instance=ExtResource("45_t8srj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6579661, 10.020272, 12.6026)
+
+[node name="Swan_022" parent="animals" unique_id=356562819 instance=ExtResource("46_2eoh7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2711143, 10.020272, 12.6026)
+
+[node name="otter2" parent="animals" unique_id=141395713 instance=ExtResource("38_feo81")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.289319, 9.441628, 12.240818)
+
+[node name="turtle" parent="animals" unique_id=219464716 instance=ExtResource("6_a4c1y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 9.273456, 9)
+
+[node name="Bison_012" parent="animals" unique_id=1425163416 instance=ExtResource("17_khgey")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.524724, -38.51308)
+
+[node name="Bear_012" parent="animals" unique_id=1652076105 instance=ExtResource("17_sdoc7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.808838, 9.933752, -43.113533)
+
+[node name="Bear_022" parent="animals" unique_id=1896002409 instance=ExtResource("18_6a21n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8422613, 9.933752, -43.113533)
+
+[node name="bee" parent="animals" unique_id=1264203858 instance=ExtResource("19_oogna")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 14.011307, -91.22247)
+
+[node name="Cow_012" parent="animals" unique_id=1501383829 instance=ExtResource("20_oklsk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4184263, 10.410519, -90.50134)
+
+[node name="Cow_022" parent="animals" unique_id=2098699145 instance=ExtResource("21_papau")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.9322007, 10.410519, -90.50134)
+
+[node name="Crocodile_012" parent="animals" unique_id=598369406 instance=ExtResource("22_jhlnw")]
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 1.0221958, 10.005501, -18.449715)
+
+[node name="Deer_012" parent="animals" unique_id=12142192 instance=ExtResource("23_vksti")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.3827696, 10.306458, -65.06804)
+
+[node name="Deer_Female_012" parent="animals" unique_id=1577342567 instance=ExtResource("24_2mjoy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.8374133, 10.306458, -65.06804)
+
+[node name="Duck_012" parent="animals" unique_id=770333147 instance=ExtResource("25_iq83n")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 3.0932252, 10.272602, -13.594008)
+
+[node name="Flamingo_012" parent="animals" unique_id=905403136 instance=ExtResource("26_alvy0")]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, -1.6805644, 10.1616335, -16.802696)
+
+[node name="Gorilla_012" parent="animals" unique_id=1660077743 instance=ExtResource("27_vcsx1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.746602, 9.731224, -65.361916)
+
+[node name="Hippopotamus_012" parent="animals" unique_id=1574949799 instance=ExtResource("28_viy7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.586875, 10.236288, -89.80691)
+
+[node name="Horse_012" parent="animals" unique_id=822097890 instance=ExtResource("29_m4r0f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.80896, -85.17057)
+
+[node name="Horse_022" parent="animals" unique_id=7805199 instance=ExtResource("30_ia876")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3786049, 9.80896, -85.17057)
+
+[node name="Horse_032" parent="animals" unique_id=1305526398 instance=ExtResource("31_8qaqm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8663096, 9.80896, -85.17057)
+
+[node name="ladybug" parent="animals" unique_id=1604660025 instance=ExtResource("33_lx6bb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.685738, 10.059954, -86.43974)
+
+[node name="Lama_012" parent="animals" unique_id=1873103690 instance=ExtResource("34_m3l6b")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, -2.6116955, 10.176551, -39.31614)
+
+[node name="Lama_022" parent="animals" unique_id=97459346 instance=ExtResource("35_n10hj")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, -3.3923094, 10.15977, -39.337517)
+
+[node name="Monkey_012" parent="animals" unique_id=2074968413 instance=ExtResource("36_k8ve5")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.741802, 10.37451, -37.513718)
+
+[node name="Monkey_022" parent="animals" unique_id=1431601455 instance=ExtResource("37_nxa01")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 3.5034688, 10.37451, -37.513718)
+
+[node name="Panda_012" parent="animals" unique_id=1631333183 instance=ExtResource("39_85w0e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.876383, -70.09329)
+
+[node name="Ram_012" parent="animals" unique_id=1161704578 instance=ExtResource("40_tmgrj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9558277, 10.402048, -37.616455)
+
+[node name="Ram_022" parent="animals" unique_id=115930685 instance=ExtResource("41_nlwbn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.68929, 10.402048, -37.616455)
+
+[node name="Sheep_012" parent="animals" unique_id=1722669835 instance=ExtResource("42_25uk7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3229117, 10.580879, -94.72076)
+
+[node name="Sheep_022" parent="animals" unique_id=980016509 instance=ExtResource("43_jhfva")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4112458, 10.580879, -94.72076)
+
+[node name="Sheep_032" parent="animals" unique_id=119932602 instance=ExtResource("44_abgrd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.386961, 10.580879, -94.72076)
+
+[node name="Wolf_012" parent="animals" unique_id=1320493748 instance=ExtResource("47_a4c1y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5880389, 10.2142105, -34.0811)
+
+[node name="Wolf_022" parent="animals" unique_id=2086072075 instance=ExtResource("48_42i83")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4925256, 10.026487, -34.055946)
+
+[node name="rabbit" parent="animals" unique_id=1615478330 instance=ExtResource("49_6a21n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.212389, 10.055482, -88.87523)
+
+[node name="Cat_012" parent="animals" unique_id=799146806 instance=ExtResource("50_cu8ae")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.937788, -60.241295)
+
+[node name="Cat_022" parent="animals" unique_id=2098031551 instance=ExtResource("51_kx7ad")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4222889, 9.527941, -62.63439)
+
+[node name="Cat_032" parent="animals" unique_id=1383350547 instance=ExtResource("52_27k62")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.133709, 9.527941, -61.891)
+
+[node name="Cat_042" parent="animals" unique_id=932248001 instance=ExtResource("53_p0mnb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3892446, 9.527941, -61.419807)
+
+[node name="Chicken_012" parent="animals" unique_id=50871882 instance=ExtResource("54_rgobq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.609214, 11.261875, -87.081406)
+
+[node name="Chicken_022" parent="animals" unique_id=61071656 instance=ExtResource("55_lqmif")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.609214, 11.261875, -88.91085)
+
+[node name="Chicken_032" parent="animals" unique_id=552472882 instance=ExtResource("56_g5ob4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.609214, 11.261875, -90.28735)
+
+[node name="Elephant_012" parent="animals" unique_id=1718580595 instance=ExtResource("58_c67tb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4239035, 10.48962, -68.00797)
+
+[node name="Elephant_022" parent="animals" unique_id=29402470 instance=ExtResource("59_jxmq6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4239035, 10.48962, -68.00797)
+
+[node name="Fox_012" parent="animals" unique_id=81058295 instance=ExtResource("61_6lv56")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9718295, 9.743995, -66.301575)
+
+[node name="frog" parent="animals" unique_id=687751837 instance=ExtResource("62_d3spx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.0530987, 9.56493, 7.9070663)
+
+[node name="gecko" parent="animals" unique_id=1088443216 instance=ExtResource("63_4mudm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.234897, -11.52747)
+
+[node name="Giraffe_012" parent="animals" unique_id=1921070138 instance=ExtResource("64_7ok3x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.153007, 9.527941, -66.301575)
+
+[node name="hamster" parent="animals" unique_id=541227374 instance=ExtResource("65_1dwx0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45530176, 10.887819, -41.111763)
+
+[node name="hedgehog" parent="animals" unique_id=771079175 instance=ExtResource("66_du73t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.17659235, 11.261875, -90.28735)
+
+[node name="kiwi" parent="animals" unique_id=1471922907 instance=ExtResource("67_4nsw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.527941, -66.301575)
+
+[node name="Koala_012" parent="animals" unique_id=673920851 instance=ExtResource("68_uf2wj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1991367, 11.296205, -66.301575)
+
+[node name="Lion_012" parent="animals" unique_id=607663781 instance=ExtResource("69_vkajr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.845405, 11.261875, -90.28735)
+
+[node name="Lion_Female_01" parent="animals" unique_id=992310531 instance=ExtResource("70_ikyyw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7795925, 11.261875, -90.28735)
+
+[node name="Moose_012" parent="animals" unique_id=301878831 instance=ExtResource("71_cedbg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9006734, 11.332113, -45.170666)
+
+[node name="Moose_Female_012" parent="animals" unique_id=822159474 instance=ExtResource("72_i0tx1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.677937, 11.332113, -45.170666)
+
+[node name="Pigeon_012" parent="animals" unique_id=1214834334 instance=ExtResource("73_aj2t3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5833902, 10.887819, -41.111763)
+
+[node name="Pigeon_022" parent="animals" unique_id=520755360 instance=ExtResource("74_7np85")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9388962, 10.887819, -41.111763)
+
+[node name="Pigeon_032" parent="animals" unique_id=363376907 instance=ExtResource("75_44on7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.28694, 10.887819, -41.111763)
+
+[node name="Raccoon_012" parent="animals" unique_id=1851881370 instance=ExtResource("76_yfjim")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5326045, 9.595969, -66.301575)
+
+[node name="Tiger_012" parent="animals" unique_id=994511058 instance=ExtResource("78_vmkj5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6956005, 10.48152, -37.262318)
+
+[node name="Tiger_022" parent="animals" unique_id=1591979160 instance=ExtResource("79_jywu0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.2393584, 10.966828, -37.117397)
 
 [node name="tiles" type="Node3D" parent="." unique_id=1276765733]
 
@@ -163,6 +350,7 @@ transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, -0.07143
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1486568, 0, -65.07738)
 
 [node name="Node3D6" parent="tiles/forest1" unique_id=734232911 instance=ExtResource("3_22wox")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0082986355, 0.015271187, -0.025924683)
 
 [node name="MultiMeshInstance3D" parent="tiles/forest1" unique_id=1539483186 instance=ExtResource("4_3j4k1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.38217354, 7.7901917, 0.10115051)
@@ -202,194 +390,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.21098709, 0, -16.461346)
 
 [node name="river" parent="tiles" unique_id=199484641 instance=ExtResource("2_dmbei")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7696276, 0, 9.5748205)
-
-[node name="animals" type="Node3D" parent="." unique_id=1553618215]
-
-[node name="Bison_012" parent="animals" unique_id=1425163416 instance=ExtResource("17_khgey")]
-transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 10.524724, -38.51308)
-
-[node name="Bear_012" parent="animals" unique_id=1652076105 instance=ExtResource("17_sdoc7")]
-transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 3.808838, 9.933752, -43.113533)
-
-[node name="Bear_022" parent="animals" unique_id=1896002409 instance=ExtResource("18_6a21n")]
-transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 1.8422613, 9.933752, -43.113533)
-
-[node name="bee" parent="animals" unique_id=1264203858 instance=ExtResource("19_oogna")]
-transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 14.011307, -91.22247)
-
-[node name="Cow_012" parent="animals" unique_id=1501383829 instance=ExtResource("20_oklsk")]
-transform = Transform3D(7, 0, 0, 0, 7, 0, 0, 0, 7, 1.4184263, 10.410519, -90.50134)
-
-[node name="Cow_022" parent="animals" unique_id=2098699145 instance=ExtResource("21_papau")]
-transform = Transform3D(7, 0, 0, 0, 7, 0, 0, 0, 7, 2.9322007, 10.410519, -90.50134)
-
-[node name="Crocodile_012" parent="animals" unique_id=598369406 instance=ExtResource("22_jhlnw")]
-transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 0, 10.005501, -15.031084)
-
-[node name="Deer_012" parent="animals" unique_id=12142192 instance=ExtResource("23_vksti")]
-transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, 6.3827696, 10.306458, -65.06804)
-
-[node name="Deer_Female_012" parent="animals" unique_id=1577342567 instance=ExtResource("24_2mjoy")]
-transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, 7.8374133, 10.306458, -65.06804)
-
-[node name="Duck_012" parent="animals" unique_id=770333147 instance=ExtResource("25_iq83n")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 3.0932252, 10.272602, -13.594008)
-
-[node name="Flamingo_012" parent="animals" unique_id=905403136 instance=ExtResource("26_alvy0")]
-transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, -1.6805644, 10.1616335, -16.802696)
-
-[node name="Gorilla_012" parent="animals" unique_id=1660077743 instance=ExtResource("27_vcsx1")]
-transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, -14.746602, 9.731224, -65.361916)
-
-[node name="Hippopotamus_012" parent="animals" unique_id=1574949799 instance=ExtResource("28_viy7b")]
-transform = Transform3D(7, 0, 0, 0, 7, 0, 0, 0, 7, -4.586875, 10.236288, -89.80691)
-
-[node name="Horse_012" parent="animals" unique_id=822097890 instance=ExtResource("29_m4r0f")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 9.80896, -85.17057)
-
-[node name="Horse_022" parent="animals" unique_id=7805199 instance=ExtResource("30_ia876")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 1.3786049, 9.80896, -85.17057)
-
-[node name="Horse_032" parent="animals" unique_id=1305526398 instance=ExtResource("31_8qaqm")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.8663096, 9.80896, -85.17057)
-
-[node name="ladybug" parent="animals" unique_id=1604660025 instance=ExtResource("33_lx6bb")]
-transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, -18.685738, 9.799379, -86.43974)
-
-[node name="Lama_012" parent="animals" unique_id=1873103690 instance=ExtResource("34_m3l6b")]
-transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, -2.6116955, 10.176551, -39.31614)
-
-[node name="Lama_022" parent="animals" unique_id=97459346 instance=ExtResource("35_n10hj")]
-transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, -3.3923094, 10.15977, -39.337517)
-
-[node name="Monkey_012" parent="animals" unique_id=2074968413 instance=ExtResource("36_k8ve5")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.741802, 10.37451, -37.513718)
-
-[node name="Monkey_022" parent="animals" unique_id=1431601455 instance=ExtResource("37_nxa01")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 3.5034688, 10.37451, -37.513718)
-
-[node name="otter" parent="animals" unique_id=141395713 instance=ExtResource("38_feo81")]
-transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, -8.805478, 10.020186, 12.761303)
-
-[node name="Panda_012" parent="animals" unique_id=1631333183 instance=ExtResource("39_85w0e")]
-transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 10.38838, -70.09329)
-
-[node name="Ram_012" parent="animals" unique_id=1161704578 instance=ExtResource("40_tmgrj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9558277, 10.402048, -37.616455)
-
-[node name="Ram_022" parent="animals" unique_id=115930685 instance=ExtResource("41_nlwbn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.68929, 10.402048, -37.616455)
-
-[node name="Sheep_012" parent="animals" unique_id=1722669835 instance=ExtResource("42_25uk7")]
-transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 1.3229117, 10.580879, -94.72076)
-
-[node name="Sheep_022" parent="animals" unique_id=980016509 instance=ExtResource("43_jhfva")]
-transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 3.4112458, 10.580879, -94.72076)
-
-[node name="Sheep_032" parent="animals" unique_id=119932602 instance=ExtResource("44_abgrd")]
-transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 2.386961, 10.580879, -94.72076)
-
-[node name="Swan_012" parent="animals" unique_id=931456392 instance=ExtResource("45_t8srj")]
-transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0.034701347, 10.595121, 1.779789)
-
-[node name="Swan_022" parent="animals" unique_id=356562819 instance=ExtResource("46_2eoh7")]
-transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0.84913373, 10.613061, 1.779789)
-
-[node name="Wolf_012" parent="animals" unique_id=1320493748 instance=ExtResource("47_a4c1y")]
-transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, -1.5880389, 10.2142105, -34.0811)
-
-[node name="Wolf_022" parent="animals" unique_id=2086072075 instance=ExtResource("48_42i83")]
-transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, -2.3699617, 10.2142105, -34.0811)
-
-[node name="rabbit" parent="animals" unique_id=1615478330 instance=ExtResource("49_6a21n")]
-transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 7.212389, 10.055482, -88.87523)
-
-[node name="Cat_012" parent="animals" unique_id=799146806 instance=ExtResource("50_cu8ae")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.527941, -66.301575)
-
-[node name="Cat_022" parent="animals" unique_id=2098031551 instance=ExtResource("51_kx7ad")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.527941, -66.301575)
-
-[node name="Cat_032" parent="animals" unique_id=1383350547 instance=ExtResource("52_27k62")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.527941, -66.301575)
-
-[node name="Cat_042" parent="animals" unique_id=932248001 instance=ExtResource("53_p0mnb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.527941, -66.301575)
-
-[node name="Chicken_012" parent="animals" unique_id=50871882 instance=ExtResource("54_rgobq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.609214, 11.261875, -90.28735)
-
-[node name="Chicken_022" parent="animals" unique_id=61071656 instance=ExtResource("55_lqmif")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.609214, 11.261875, -90.28735)
-
-[node name="Chicken_032" parent="animals" unique_id=552472882 instance=ExtResource("56_g5ob4")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.609214, 11.261875, -90.28735)
-
-[node name="crab" parent="animals" unique_id=53080086 instance=ExtResource("57_nnpu2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5661154, 10.238056, 9.656634)
-
-[node name="Elephant_012" parent="animals" unique_id=1718580595 instance=ExtResource("58_c67tb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4239035, 10.48962, -68.00797)
-
-[node name="Elephant_022" parent="animals" unique_id=29402470 instance=ExtResource("59_jxmq6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4239035, 10.48962, -68.00797)
-
-[node name="fish" parent="animals" unique_id=507076115 instance=ExtResource("60_4u3b7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.0864134, 10.371072, 8.400068)
-
-[node name="Fox_012" parent="animals" unique_id=81058295 instance=ExtResource("61_6lv56")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.527941, -66.301575)
-
-[node name="frog" parent="animals" unique_id=687751837 instance=ExtResource("62_d3spx")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.0530987, 9.56493, 7.9070663)
-
-[node name="gecko" parent="animals" unique_id=1088443216 instance=ExtResource("63_4mudm")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.234897, -11.52747)
-
-[node name="Giraffe_012" parent="animals" unique_id=1921070138 instance=ExtResource("64_7ok3x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.527941, -66.301575)
-
-[node name="hamster" parent="animals" unique_id=541227374 instance=ExtResource("65_1dwx0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45530176, 10.887819, -41.111763)
-
-[node name="hedgehog" parent="animals" unique_id=771079175 instance=ExtResource("66_du73t")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.609214, 11.261875, -90.28735)
-
-[node name="kiwi" parent="animals" unique_id=1471922907 instance=ExtResource("67_4nsw5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.527941, -66.301575)
-
-[node name="Koala_012" parent="animals" unique_id=673920851 instance=ExtResource("68_uf2wj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.527941, -66.301575)
-
-[node name="Lion_012" parent="animals" unique_id=607663781 instance=ExtResource("69_vkajr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.609214, 11.261875, -90.28735)
-
-[node name="Lion_Female_01" parent="animals" unique_id=992310531 instance=ExtResource("70_ikyyw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.609214, 11.261875, -90.28735)
-
-[node name="Moose_012" parent="animals" unique_id=301878831 instance=ExtResource("71_cedbg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9006734, 11.332113, -45.170666)
-
-[node name="Moose_Female_012" parent="animals" unique_id=822159474 instance=ExtResource("72_i0tx1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9006734, 11.332113, -45.170666)
-
-[node name="Pigeon_012" parent="animals" unique_id=1214834334 instance=ExtResource("73_aj2t3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.887819, -41.111763)
-
-[node name="Pigeon_022" parent="animals" unique_id=520755360 instance=ExtResource("74_7np85")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.887819, -41.111763)
-
-[node name="Pigeon_032" parent="animals" unique_id=363376907 instance=ExtResource("75_44on7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.887819, -41.111763)
-
-[node name="Raccoon_012" parent="animals" unique_id=1851881370 instance=ExtResource("76_yfjim")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.527941, -66.301575)
-
-[node name="Rhinoceros_012" parent="animals" unique_id=442450783 instance=ExtResource("77_n776m")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.638482, 9.492896)
-
-[node name="Tiger_012" parent="animals" unique_id=994511058 instance=ExtResource("78_vmkj5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5572982, 10.48152, -36.407562)
-
-[node name="Tiger_022" parent="animals" unique_id=1591979160 instance=ExtResource("79_jywu0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5572982, 10.48152, -36.407562)

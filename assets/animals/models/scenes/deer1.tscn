@@ -5,13 +5,11 @@
 
 [node name="Deer_012" unique_id=12142192 instance=ExtResource("1_7ysdi")]
 script = ExtResource("2_4mxm4")
-anim_name = &"Deer_Idle"
+walk_anims = Array[StringName]([&"Deer_Walk"])
+idle_anims = Array[StringName]([&"Deer_Idle"])
 max_start_delay_sec = 10.0
 
-[node name="Skeleton_Deer" parent="." index="0" unique_id=625006264]
-transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
-
-[node name="Skeleton3D" parent="Skeleton_Deer" index="0" unique_id=1894332308]
+[node name="Skeleton3D" parent="Skeleton_Deer" parent_id_path=PackedInt32Array(90163928) index="0" unique_id=1959857797]
 bones/0/rotation = Quaternion(-4.3711395e-08, 1, -1.1424389e-07, -1.1920929e-07)
 bones/1/position = Vector3(7.318974e-05, 1.0270039, 0.2835393)
 bones/1/rotation = Quaternion(-0.73909867, -2.7573711e-05, 0.00010634921, 0.6735973)

@@ -2,7 +2,8 @@ extends Node3D
 class_name TileVisuals
 
 const BASE_SCENE_LAYER_Y_ROTATION := 30.0
-const BASE_MARKER_CONTAINER_NAMES := ["base_markers", "base_marker"]
+const WALK_MARKERS_ROOT_NAME := "walk_markers"
+const LEGACY_MARKER_CONTAINER_NAMES := ["base_markers", "base_marker"]
 
 @export var multimesh_slots: Array[MultiMeshInstance3D] = []
 var _scenes_root: Node3D = null
@@ -12,6 +13,7 @@ var _scene_layer_pool: Dictionary = {}
 var _active_scene_layer_nodes: Dictionary = {}
 var _animals_root: Node3D = null
 var _animal_instances: Array[Node3D] = []
+var _animal_roam_groups: Array = []
 var _displayed_animal_id: int = -1
 var _displayed_animal_amount: int = 0
 
@@ -35,18 +37,19 @@ func apply(
 	animal_amount: int = 0,
 	scene_layer_rotations: Array[float] = [],
 	river_index: int = -1,
-	force_refresh: bool = false
+	force_refresh: bool = false,
+	animate_animals: bool = false
 ) -> void:
 	_cache_nodes()
 	var resolved := TileSetupCatalog.resolve_layers(element, level, coord, river_index)
-	_apply_layers(
+	var layers_rebuilt := _apply_layers(
 		resolved.get("scene_layers", []),
 		resolved.get("multi_mesh_layers", []),
 		resolved.get("signature", ""),
 		scene_layer_rotations,
 		force_refresh
 	)
-	_apply_animal(animal_id, animal_amount, coord)
+	_apply_animal(animal_id, animal_amount, coord, animate_animals, layers_rebuilt)
 
 
 func clear_visuals() -> void:
@@ -54,6 +57,9 @@ func clear_visuals() -> void:
 	_active_signature = ""
 	_displayed_animal_id = -1
 	_displayed_animal_amount = 0
+
+	# Stop roam before freeing walk markers under scene layers.
+	_clear_animal_instances()
 
 	_purge_orphan_scene_layers({})
 	_active_scene_layer_nodes.clear()
@@ -63,7 +69,29 @@ func clear_visuals() -> void:
 		if slot != null:
 			_clear_multimesh_slot(slot)
 
-	_clear_animal_instances()
+
+func start_animal_roam() -> void:
+	for index in _animal_instances.size():
+		var instance := _animal_instances[index]
+		if not is_instance_valid(instance) or not (instance is Animal):
+			continue
+		var markers: Array[Marker3D] = []
+		if index < _animal_roam_groups.size():
+			var stored = _animal_roam_groups[index]
+			if stored is Array:
+				for item in stored:
+					if item is Marker3D and is_instance_valid(item):
+						markers.append(item as Marker3D)
+		(instance as Animal).start_roam(
+			markers,
+			hash("%s|%d" % [str(instance.get_path()), index])
+		)
+
+
+func freeze_animals() -> void:
+	for instance in _animal_instances:
+		if is_instance_valid(instance) and instance is Animal:
+			(instance as Animal).freeze()
 
 
 func ensure_active_layers_visible() -> void:
@@ -83,7 +111,7 @@ func _apply_layers(
 	signature: String,
 	scene_layer_rotations: Array[float],
 	force_refresh: bool = false
-) -> void:
+) -> bool:
 	var needs_rebuild := force_refresh or signature != _active_signature or _needs_scene_layer_rebuild(resolved_scene_layers)
 	if needs_rebuild:
 		_active_signature = signature
@@ -91,7 +119,7 @@ func _apply_layers(
 		_apply_multimesh_layers(resolved_multimesh_layers)
 
 	if _scenes_root == null:
-		return
+		return needs_rebuild
 
 	for layer_index in scene_layer_rotations.size():
 		var layer_node: Node = _active_scene_layer_nodes.get(layer_index, null)
@@ -99,6 +127,7 @@ func _apply_layers(
 			layer_node = _scenes_root.get_node_or_null("SceneLayer%d" % layer_index)
 		if layer_node is Node3D:
 			(layer_node as Node3D).rotation_degrees.y = scene_layer_rotations[layer_index]
+	return needs_rebuild
 
 
 func _needs_scene_layer_rebuild(resolved_scene_layers: Array) -> bool:
@@ -200,14 +229,22 @@ func _apply_multimesh_layers(resolved_multimesh_layers: Array) -> void:
 func _apply_animal(
 	animal_id: int,
 	animal_amount: int,
-	coord: Vector2i
+	coord: Vector2i,
+	animate_animals: bool,
+	layers_rebuilt: bool = false
 ) -> void:
 	if (
 		animal_id == _displayed_animal_id
 		and animal_amount == _displayed_animal_amount
 		and not _animal_instances.is_empty()
 	):
-		_position_animals_at_markers(coord)
+		# Scene-layer rebuild can free old walk markers; rebind before roam.
+		if layers_rebuilt or not _animal_roam_groups_are_valid():
+			_refresh_animal_roam_groups(coord)
+		if animate_animals:
+			start_animal_roam()
+		else:
+			freeze_animals()
 		return
 
 	_clear_animal_instances()
@@ -243,7 +280,7 @@ func _apply_animal(
 		_animals_root.add_child(model_node)
 		_animal_instances.append(model_node as Node3D)
 
-	_position_animals_at_markers(coord)
+	_position_animals_in_groups(coord, animate_animals)
 
 
 func _resolve_animal_model_paths(animal_id: int) -> Array[String]:
@@ -255,56 +292,138 @@ func _resolve_animal_model_paths(animal_id: int) -> Array[String]:
 	return []
 
 
-func _position_animals_at_markers(coord: Vector2i) -> void:
-	var rng := RandomNumberGenerator.new()
-	var markers := _collect_markers()
-	if markers.is_empty():
-		markers = _collect_fallback_markers()
+func _animal_roam_groups_are_valid() -> bool:
+	if _animal_roam_groups.size() != _animal_instances.size():
+		return false
+	for stored in _animal_roam_groups:
+		if not (stored is Array):
+			return false
+		for item in stored:
+			if item is Marker3D and not is_instance_valid(item):
+				return false
+	return true
+
+
+## Rebind roam markers from live scene layers without teleporting animals.
+func _refresh_animal_roam_groups(coord: Vector2i) -> void:
+	_animal_roam_groups.clear()
+	var groups := _collect_walk_groups()
+	if groups.is_empty():
+		groups = _collect_fallback_walk_groups()
+
+	for index in _animal_instances.size():
+		var empty_markers: Array[Marker3D] = []
+		if not is_instance_valid(_animal_instances[index]) or groups.is_empty():
+			_animal_roam_groups.append(empty_markers)
+			continue
+		var rng := RandomNumberGenerator.new()
+		rng.seed = hash("%d,%d|walk_group|%d" % [coord.x, coord.y, index])
+		var group_index := rng.randi_range(0, groups.size() - 1)
+		_animal_roam_groups.append(_markers_in_group(groups[group_index]))
+
+
+func _position_animals_in_groups(coord: Vector2i, animate_animals: bool) -> void:
+	_animal_roam_groups.clear()
+	var groups := _collect_walk_groups()
+	if groups.is_empty():
+		groups = _collect_fallback_walk_groups()
+
+	var group_marker_pools: Array = []
+	for group in groups:
+		group_marker_pools.append(_markers_in_group(group).duplicate())
+
 	for index in _animal_instances.size():
 		var instance := _animal_instances[index]
+		var empty_markers: Array[Marker3D] = []
 		if not is_instance_valid(instance):
+			_animal_roam_groups.append(empty_markers)
 			continue
-		if markers.is_empty():
+		if groups.is_empty():
+			_animal_roam_groups.append(empty_markers)
 			break
 
-		rng.seed = hash("%d,%d|base_marker|%d" % [coord.x, coord.y, index])
-		var marker_id := rng.randi_range(0, markers.size() - 1)
-		instance.global_transform = markers[marker_id].global_transform
-		markers.remove_at(marker_id)
-		instance.rotation.y = rng.randf_range(0.0, 359.0)
+		var rng := RandomNumberGenerator.new()
+		rng.seed = hash("%d,%d|walk_group|%d" % [coord.x, coord.y, index])
+
+		var group_index := rng.randi_range(0, groups.size() - 1)
+		var group_markers: Array[Marker3D] = _markers_in_group(groups[group_index])
+		_animal_roam_groups.append(group_markers)
+
+		var pool: Array = group_marker_pools[group_index]
+		if pool.is_empty():
+			pool = group_markers.duplicate()
+			group_marker_pools[group_index] = pool
+		if pool.is_empty():
+			if instance is Animal:
+				var animal_empty := instance as Animal
+				if animate_animals:
+					animal_empty.start_roam(
+						group_markers,
+						hash("%d,%d|roam|%d" % [coord.x, coord.y, index])
+					)
+				else:
+					animal_empty.freeze()
+			continue
+
+		var marker_index := rng.randi_range(0, pool.size() - 1)
+		var spawn_marker: Marker3D = pool[marker_index]
+		pool.remove_at(marker_index)
+
+		instance.global_position = spawn_marker.global_position
+		instance.rotation.y = rng.randf_range(0.0, TAU)
+
+		if instance is Animal:
+			var animal := instance as Animal
+			if animate_animals:
+				animal.start_roam(
+					group_markers,
+					hash("%d,%d|roam|%d" % [coord.x, coord.y, index]),
+					spawn_marker
+				)
+			else:
+				animal.freeze()
 
 
-func _collect_markers() -> Array[Marker3D]:
-	var markers: Array[Marker3D] = []
+func _collect_walk_groups() -> Array[Node3D]:
+	var groups: Array[Node3D] = []
 	for layer_node in _active_scene_layer_nodes.values():
 		if not (layer_node is Node):
 			continue
-		var container := _find_marker_container(layer_node as Node, BASE_MARKER_CONTAINER_NAMES)
-		if container == null:
-			continue
-		for child in container.get_children():
-			if child is Marker3D:
-				markers.append(child)
-	return markers
+		groups.append_array(_walk_groups_from_root(layer_node as Node))
+	return groups
 
 
-func _collect_fallback_markers() -> Array[Marker3D]:
+func _collect_fallback_walk_groups() -> Array[Node3D]:
 	var tile := _get_owner_tile()
 	if tile == null:
 		return []
+	return _walk_groups_from_root(tile)
 
-	var container: Node = null
-	for node_name in BASE_MARKER_CONTAINER_NAMES:
-		container = tile.get_node_or_null(node_name)
-		if container != null:
-			break
-	if container == null:
-		return []
 
+func _walk_groups_from_root(root: Node) -> Array[Node3D]:
+	var groups: Array[Node3D] = []
+	var walk_root := root.find_child(WALK_MARKERS_ROOT_NAME, true, false)
+	if walk_root != null:
+		for child in walk_root.get_children():
+			if child is Node3D and not _markers_in_group(child as Node3D).is_empty():
+				groups.append(child as Node3D)
+		if not groups.is_empty():
+			return groups
+
+	for legacy_name in LEGACY_MARKER_CONTAINER_NAMES:
+		var legacy := root.find_child(legacy_name, true, false)
+		if legacy == null and root.has_node(NodePath(legacy_name)):
+			legacy = root.get_node(NodePath(legacy_name))
+		if legacy is Node3D and not _markers_in_group(legacy as Node3D).is_empty():
+			groups.append(legacy as Node3D)
+	return groups
+
+
+func _markers_in_group(group: Node) -> Array[Marker3D]:
 	var markers: Array[Marker3D] = []
-	for child in container.get_children():
+	for child in group.get_children():
 		if child is Marker3D:
-			markers.append(child)
+			markers.append(child as Marker3D)
 	return markers
 
 
@@ -317,19 +436,14 @@ func _get_owner_tile() -> HexTile:
 	return null
 
 
-func _find_marker_container(root: Node, names: PackedStringArray) -> Node:
-	for node_name in names:
-		var found := root.find_child(node_name, true, false)
-		if found != null:
-			return found
-	return null
-
-
 func _clear_animal_instances() -> void:
 	for instance in _animal_instances:
 		if is_instance_valid(instance):
+			if instance is Animal:
+				(instance as Animal).stop_roam()
 			instance.queue_free()
 	_animal_instances.clear()
+	_animal_roam_groups.clear()
 
 
 func _coerce_scene_layer(entry) -> PackedScene:

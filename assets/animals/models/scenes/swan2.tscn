@@ -5,13 +5,14 @@
 
 [node name="Swan_022" unique_id=356562819 instance=ExtResource("1_wivq7")]
 script = ExtResource("2_7ra5p")
-anim_name = &"Swan_Idle"
+walk_anims = Array[StringName]([&"Swan_Walk"])
+idle_anims = Array[StringName]([&"Swan_Idle"])
 max_start_delay_sec = 3.34
 
-[node name="Skeleton_Swan_02" parent="." index="0" unique_id=542797894]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+[node name="Skeleton_Swan_02" parent="." index="0" unique_id=426899873]
+transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, 0, 0, 0)
 
-[node name="Skeleton3D" parent="Skeleton_Swan_02" index="0" unique_id=621629340]
+[node name="Skeleton3D" parent="Skeleton_Swan_02" index="0" unique_id=20264142]
 bones/0/rotation = Quaternion(1.0728896e-21, 1, -1.8874495e-08, -7.549789e-08)
 bones/1/position = Vector3(-1.0658141e-14, 0.34933302, 0.26659372)
 bones/1/rotation = Quaternion(-0.6039329, -0.004826297, -0.003656966, 0.7970122)

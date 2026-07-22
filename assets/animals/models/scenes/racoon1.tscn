@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://dx6tv1ufl4mqa"]
+
+[ext_resource type="PackedScene" uid="uid://mhkxtgducu05" path="res://assets/animals/models/raw/Raccoon_01.glb" id="1_q5lpn"]
+[ext_resource type="Script" uid="uid://c582u2pi2l1xu" path="res://scripts/animal.gd" id="2_u02kf"]
+
+[node name="Raccoon_012" unique_id=1529751640 instance=ExtResource("1_q5lpn")]
+script = ExtResource("2_u02kf")
+walk_anims = Array[StringName]([&"Raccoon_Walk"])
+idle_anims = Array[StringName]([&"Raccoon_Idle"])
+max_start_delay_sec = 10.0
+
+[node name="Skeleton_Raccoon" parent="." index="0" unique_id=439641973]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)

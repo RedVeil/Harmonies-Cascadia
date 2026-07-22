@@ -177,55 +177,6 @@
 				"res://assets/tiles/assets/plants/grass.tres"
 			],
 			[
-				"res://assets/tiles/assets/plants/grass_wheat_group1.tres",
-				"res://assets/tiles/assets/plants/grass_wheat_group2.tres",
-				"res://assets/tiles/assets/plants/grass_wheat_group3.tres",
-				"res://assets/tiles/assets/plants/grass_wheat_group4.tres",
-				"res://assets/tiles/assets/plants/grass_wheat_group5.tres"
-			],
-			[
-				"res://assets/tiles/assets/plants/flower1_group1.tres",
-				"res://assets/tiles/assets/plants/flower1_group2.tres",
-				"res://assets/tiles/assets/plants/flower1_group3.tres",
-				"res://assets/tiles/assets/plants/flower1_group4.tres",
-				"res://assets/tiles/assets/plants/flower1_group5.tres"
-			],
-			[
-				"res://assets/tiles/assets/plants/flower3_group1.tres",
-				"res://assets/tiles/assets/plants/flower3_group2.tres",
-				"res://assets/tiles/assets/plants/flower3_group3.tres",
-				"res://assets/tiles/assets/plants/flower3_group4.tres",
-				"res://assets/tiles/assets/plants/flower3_group5.tres"
-			],
-			[
-				"res://assets/tiles/assets/plants/flower4_group1.tres",
-				"res://assets/tiles/assets/plants/flower4_group2.tres",
-				"res://assets/tiles/assets/plants/flower4_group3.tres",
-				"res://assets/tiles/assets/plants/flower4_group4.tres",
-				"res://assets/tiles/assets/plants/flower4_group5.tres"
-			],
-			[
-				"res://assets/tiles/assets/plants/flower7_group1.tres",
-				"res://assets/tiles/assets/plants/flower7_group2.tres",
-				"res://assets/tiles/assets/plants/flower7_group3.tres",
-				"res://assets/tiles/assets/plants/flower7_group4.tres",
-				"res://assets/tiles/assets/plants/flower7_group5.tres"
-			]
-		]
-	},
-	{
-		"element": 2,
-		"level": 2,
-		"scene_layers": [
-			[
-				"res://assets/tiles/assets/base_tile.tscn"
-			]
-		],
-		"multi_mesh_layers": [
-			[
-				"res://assets/tiles/assets/plants/grass.tres"
-			],
-			[
 				"res://assets/tiles/assets/plants/grass_long.tres"
 			],
 			[

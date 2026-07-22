@@ -5,13 +5,14 @@
 
 [node name="Flamingo_012" unique_id=905403136 instance=ExtResource("1_g1tws")]
 script = ExtResource("2_o0xg5")
-anim_name = &"Flamingo_Idle"
+walk_anims = Array[StringName]([&"Flamingo_Walk"])
+idle_anims = Array[StringName]([&"Flamingo_Idle"])
 max_start_delay_sec = 2.497
 
-[node name="Skeleton_Flamingo" parent="." index="0" unique_id=318313557]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, -0.31079102, 0)
+[node name="Skeleton_Flamingo" parent="." index="0" unique_id=177052879]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, -0.31079102, 0)
 
-[node name="Skeleton3D" parent="Skeleton_Flamingo" index="0" unique_id=421356470]
+[node name="Skeleton3D" parent="Skeleton_Flamingo" index="0" unique_id=567310031]
 bones/0/rotation = Quaternion(2.1175824e-21, 1, -1.8874474e-08, -7.549789e-08)
 bones/1/position = Vector3(1.2644508e-14, 0.85726064, 0.31429952)
 bones/1/rotation = Quaternion(-0.5283045, -1.0163615e-07, 6.229726e-08, 0.84905493)

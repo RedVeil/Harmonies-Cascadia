@@ -5,13 +5,11 @@
 
 [node name="Wolf_012" unique_id=1320493748 instance=ExtResource("1_deb26")]
 script = ExtResource("2_optyt")
-anim_name = &"Wolf_Idle"
+walk_anims = Array[StringName]([&"Wolf_Walk"])
+idle_anims = Array[StringName]([&"Wolf_Idle"])
 max_start_delay_sec = 10.0
 
-[node name="Skeleton_Wolf_01" parent="." index="0" unique_id=1598932691]
-transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
-
-[node name="Skeleton3D" parent="Skeleton_Wolf_01" index="0" unique_id=1597592334]
+[node name="Skeleton3D" parent="Skeleton_Wolf_01" parent_id_path=PackedInt32Array(2074576205) index="0" unique_id=120953352]
 bones/0/rotation = Quaternion(-6.2113333e-15, 1, -8.146034e-08, -7.5498086e-08)
 bones/1/position = Vector3(-2.1725048e-08, 0.58927596, 0.3417316)
 bones/1/rotation = Quaternion(-0.6500337, -2.041304e-08, -2.3863418e-08, 0.7599054)

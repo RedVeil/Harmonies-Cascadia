@@ -2,17 +2,17 @@
 	{
 		"id": 0,
 		"name": "ForestStandard",
-		"description": "Forests earn points by upgrading tiles. Each level of a forest earns more points than the last.",
+		"description": "Each forest tile scores by level: 3 at L1, 4 at L2.",
 		"min_group_size": 1,
 		"max_group_size": 100000,
 		"points_per_tile_level": [
 			[
 				1,
-				2
+				3
 			],
 			[
 				2,
-				3
+				4
 			]
 		],
 		"flat_points": 0,
@@ -22,17 +22,17 @@
 	{
 		"id": 1,
 		"name": "ForestHigh",
-		"description": "ForestHigh",
+		"description": "Low value at L1 (1); strong payoff at L2 (5).",
 		"min_group_size": 1,
 		"max_group_size": 100000,
 		"points_per_tile_level": [
 			[
 				1,
-				0
+				1
 			],
 			[
 				2,
-				3
+				5
 			]
 		],
 		"flat_points": 0,
@@ -41,149 +41,48 @@
 	},
 	{
 		"id": 2,
-		"name": "ForestReverse",
-		"description": "ForestReverse",
+		"name": "ForestGrove",
+		"description": "Score by connected forest group size. Levels ignored.",
 		"min_group_size": 1,
 		"max_group_size": 100000,
 		"points_per_tile_level": [
 			[
 				1,
-				3
+				0
 			],
 			[
 				2,
-				2
+				0
 			]
 		],
 		"flat_points": 0,
-		"special_rule": 0,
-		"special_rule_specs": {}
+		"special_rule": 3,
+		"special_rule_specs": {
+			"points": [
+				0,
+				2,
+				5,
+				9,
+				14,
+				18,
+				22,
+				27,
+				31,
+				34,
+				37
+			],
+			"extra_points": 3
+		}
 	},
 	{
 		"id": 3,
 		"name": "FieldStandard",
-		"description": "Fields earn flat points when placed in a group of 2 tiles. Adding more fields to a group dont award more points. Upgrading a field earns 1 additional point.",
+		"description": "A field group of 2 or more scores 10 once.",
 		"min_group_size": 2,
 		"max_group_size": 2,
 		"points_per_tile_level": [
 			[
 				1,
-				2
-			],
-			[
-				2,
-				3
-			]
-		],
-		"flat_points": 0,
-		"special_rule": 0,
-		"special_rule_specs": {}
-	},
-	{
-		"id": 4,
-		"name": "FieldSingle",
-		"description": "FieldSingle",
-		"min_group_size": 1,
-		"max_group_size": 1,
-		"points_per_tile_level": [
-			[
-				1,
-				3
-			],
-			[
-				2,
-				4
-			]
-		],
-		"flat_points": 0,
-		"special_rule": 0,
-		"special_rule_specs": {}
-	},
-	{
-		"id": 5,
-		"name": "FieldGroup",
-		"description": "FieldGroup",
-		"min_group_size": 4,
-		"max_group_size": 4,
-		"points_per_tile_level": [
-			[
-				1,
-				3
-			],
-			[
-				2,
-				4
-			]
-		],
-		"flat_points": 0,
-		"special_rule": 0,
-		"special_rule_specs": {}
-	},
-	{
-		"id": 6,
-		"name": "MountainStandard",
-		"description": "Mountains need to have atleast 1 neighboring mountain to earn points. After that they earn points by upgrading tiles.",
-		"min_group_size": 2,
-		"max_group_size": 100000,
-		"points_per_tile_level": [
-			[
-				1,
-				1
-			],
-			[
-				2,
-				3
-			],
-			[
-				3,
-				7
-			]
-		],
-		"flat_points": 0,
-		"special_rule": 0,
-		"special_rule_specs": {}
-	},
-	{
-		"id": 7,
-		"name": "MountainSingle",
-		"description": "MountainSingle",
-		"min_group_size": 1,
-		"max_group_size": 100000,
-		"points_per_tile_level": [
-			[
-				1,
-				1
-			],
-			[
-				2,
-				2
-			],
-			[
-				3,
-				4
-			]
-		],
-		"flat_points": 0,
-		"special_rule": 0,
-		"special_rule_specs": {}
-	},
-	{
-		"id": 8,
-		"name": "MountainGroup",
-		"description": "MountainGroup",
-		"min_group_size": 3,
-		"max_group_size": 3,
-		"points_per_tile_level": [
-			[
-				1,
-				0
-			],
-			[
-				2,
-				0
-			],
-			[
-				3,
 				0
 			]
 		],
@@ -192,9 +91,113 @@
 		"special_rule_specs": {}
 	},
 	{
+		"id": 4,
+		"name": "FieldSingle",
+		"description": "Each field group scores 5 from one tile only (best for singles).",
+		"min_group_size": 1,
+		"max_group_size": 1,
+		"points_per_tile_level": [
+			[
+				1,
+				5
+			]
+		],
+		"flat_points": 0,
+		"special_rule": 0,
+		"special_rule_specs": {}
+	},
+	{
+		"id": 5,
+		"name": "FieldTriplets",
+		"description": "A field group of 3 or more scores 20 once.",
+		"min_group_size": 3,
+		"max_group_size": 100000,
+		"points_per_tile_level": [
+			[
+				1,
+				0
+			]
+		],
+		"flat_points": 20,
+		"special_rule": 0,
+		"special_rule_specs": {}
+	},
+	{
+		"id": 6,
+		"name": "MountainStandard",
+		"description": "Need at least 2 connected mountains. Scores 2 / 5 / 9 by level.",
+		"min_group_size": 2,
+		"max_group_size": 100000,
+		"points_per_tile_level": [
+			[
+				1,
+				2
+			],
+			[
+				2,
+				5
+			],
+			[
+				3,
+				9
+			]
+		],
+		"flat_points": 0,
+		"special_rule": 0,
+		"special_rule_specs": {}
+	},
+	{
+		"id": 7,
+		"name": "MountainRange",
+		"description": "Need at least 2 connected mountains. Flatter curve: 4 / 5 / 6 by level.",
+		"min_group_size": 2,
+		"max_group_size": 100000,
+		"points_per_tile_level": [
+			[
+				1,
+				4
+			],
+			[
+				2,
+				5
+			],
+			[
+				3,
+				6
+			]
+		],
+		"flat_points": 0,
+		"special_rule": 0,
+		"special_rule_specs": {}
+	},
+	{
+		"id": 8,
+		"name": "MountainSingle",
+		"description": "Mountains score 4 / 5 / 6 by level; only one tile per group counts.",
+		"min_group_size": 1,
+		"max_group_size": 1,
+		"points_per_tile_level": [
+			[
+				1,
+				4
+			],
+			[
+				2,
+				5
+			],
+			[
+				3,
+				6
+			]
+		],
+		"flat_points": 0,
+		"special_rule": 0,
+		"special_rule_specs": {}
+	},
+	{
 		"id": 9,
 		"name": "RiverStandard",
-		"description": "Rivers earn points by the length of a river. The score calculation will always take the shortest route from end to end. All additional tiles earn flat points.",
+		"description": "Score by longest river path. Keeps growing past length 9 (+6 each).",
 		"min_group_size": 1,
 		"max_group_size": 100000,
 		"points_per_tile_level": [
@@ -208,19 +211,22 @@
 		"special_rule_specs": {
 			"points": [
 				0,
-				2,
 				5,
-				8,
-				11,
-				15
+				10,
+				16,
+				22,
+				28,
+				34,
+				37,
+				40
 			],
-			"extra_points": 4
+			"extra_points": 6
 		}
 	},
 	{
 		"id": 10,
 		"name": "RiverShort",
-		"description": "RiverShort",
+		"description": "Score by longest path up to length 5 (max 24). No points beyond that.",
 		"min_group_size": 1,
 		"max_group_size": 100000,
 		"points_per_tile_level": [
@@ -233,11 +239,11 @@
 		"special_rule": 1,
 		"special_rule_specs": {
 			"points": [
-				1,
-				3,
-				6,
-				8,
-				11
+				0,
+				5,
+				11,
+				18,
+				24
 			],
 			"extra_points": 0
 		}
@@ -245,13 +251,13 @@
 	{
 		"id": 11,
 		"name": "RiverFlat",
-		"description": "RiverFlat",
+		"description": "Each river tile scores 4. Path shape does not matter.",
 		"min_group_size": 1,
 		"max_group_size": 100000,
 		"points_per_tile_level": [
 			[
 				1,
-				2
+				4
 			]
 		],
 		"flat_points": 0,
@@ -261,7 +267,7 @@
 	{
 		"id": 12,
 		"name": "WetlandStandard",
-		"description": "Wetlands need to have atleast 3 neighbors of different elements to score flat points.",
+		"description": "A wetland scores 12 if it has at least 3 different neighboring elements.",
 		"min_group_size": 1,
 		"max_group_size": 1,
 		"points_per_tile_level": [
@@ -274,14 +280,14 @@
 		"special_rule": 2,
 		"special_rule_specs": {
 			"neighbors_min": 3,
-			"points_flat": 5,
+			"points_flat": 12,
 			"points_per": 0
 		}
 	},
 	{
 		"id": 13,
 		"name": "WetlandPointsPer",
-		"description": "WetlandPointsPer",
+		"description": "A wetland scores 4 per different neighboring element (min 1).",
 		"min_group_size": 1,
 		"max_group_size": 1,
 		"points_per_tile_level": [
@@ -295,13 +301,13 @@
 		"special_rule_specs": {
 			"neighbors_min": 1,
 			"points_flat": 0,
-			"points_per": 2
+			"points_per": 4
 		}
 	},
 	{
-		"id": 13,
+		"id": 14,
 		"name": "WetlandPair",
-		"description": "WetlandPair",
+		"description": "A wetland group of 2 or more scores 20 once.",
 		"min_group_size": 2,
 		"max_group_size": 2,
 		"points_per_tile_level": [
@@ -310,7 +316,7 @@
 				0
 			]
 		],
-		"flat_points": 5,
+		"flat_points": 20,
 		"special_rule": 0,
 		"special_rule_specs": {}
 	}
