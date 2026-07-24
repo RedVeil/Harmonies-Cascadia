@@ -9,7 +9,10 @@ walk_anims = Array[StringName]([&"Deer_Walk"])
 idle_anims = Array[StringName]([&"Deer_Idle"])
 special_anims = Array[StringName]([&"Deer_Gesture"])
 
-[node name="Skeleton3D" parent="Skeleton_Deer_Female" parent_id_path=PackedInt32Array(367145725) index="0" unique_id=1314832012]
+[node name="Skeleton_Deer_Female" parent="." index="0" unique_id=367145725]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
+
+[node name="Skeleton3D" parent="Skeleton_Deer_Female" index="0" unique_id=1314832012]
 bones/0/rotation = Quaternion(-4.3711395e-08, 1, -1.1424389e-07, -1.1920929e-07)
 bones/1/position = Vector3(-2.8247732e-07, 0.9821902, 0.35422736)
 bones/1/rotation = Quaternion(-0.6876158, -1.234439e-06, 8.352547e-08, 0.72607476)

@@ -10,7 +10,7 @@ idle_anims = Array[StringName]([&"Flamingo_Idle"])
 special_anims = Array[StringName]([&"Flamingo_Gesture"])
 
 [node name="Skeleton_Flamingo" parent="." index="0" unique_id=549800180]
-transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, -0.31079102, 0)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, -0.31079102, 0)
 
 [node name="Skeleton3D" parent="Skeleton_Flamingo" index="0" unique_id=181495557]
 bones/0/rotation = Quaternion(2.1175824e-21, 1, -1.8874474e-08, -7.549789e-08)

@@ -9,7 +9,10 @@ walk_anims = Array[StringName]([&"Moose_Walk"])
 idle_anims = Array[StringName]([&"Moose_Idle"])
 special_anims = Array[StringName]([&"Moose_Gesture"])
 
-[node name="Skeleton3D" parent="Skeleton_Moose" parent_id_path=PackedInt32Array(78415346) index="0" unique_id=1199708266]
+[node name="Skeleton_Moose" parent="." index="0" unique_id=78415346]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+
+[node name="Skeleton3D" parent="Skeleton_Moose" index="0" unique_id=1199708266]
 bones/0/rotation = Quaternion(-2.6054013e-15, 1, -1.7384852e-07, -7.5498086e-08)
 bones/1/position = Vector3(-2.6972227e-08, 1.3979553, 0.42426595)
 bones/1/rotation = Quaternion(-0.73125935, 5.1976326e-07, -6.03712e-07, 0.6820995)

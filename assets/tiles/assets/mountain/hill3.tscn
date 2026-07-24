@@ -126,20 +126,20 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.3686943, 10, -3.3547027)
 [node name="Marker3D6" type="Marker3D" parent="walk_markers/default" unique_id=1867879106]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.3686943, 10, 2.6784809)
 
-[node name="walk_paths" type="Node3D" parent="." unique_id=1187174526]
+[node name="walk_paths" type="Node3D" parent="walk_markers" unique_id=1187174526]
 
-[node name="Path1" type="Path3D" parent="walk_paths" unique_id=662112865]
+[node name="Path1" type="Path3D" parent="walk_markers/walk_paths" unique_id=662112865]
 curve = SubResource("Curve3D_20ic7")
 
-[node name="Path2" type="Path3D" parent="walk_paths" unique_id=2146301367]
+[node name="Path2" type="Path3D" parent="walk_markers/walk_paths" unique_id=2146301367]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.24630833, 0, 0)
 curve = SubResource("Curve3D_ym076")
 
-[node name="Path3" type="Path3D" parent="walk_paths" unique_id=439389488]
+[node name="Path3" type="Path3D" parent="walk_markers/walk_paths" unique_id=439389488]
 curve = SubResource("Curve3D_u8kgn")
 
-[node name="Path4" type="Path3D" parent="walk_paths" unique_id=445494193]
+[node name="Path4" type="Path3D" parent="walk_markers/walk_paths" unique_id=445494193]
 curve = SubResource("Curve3D_8wxil")
 
-[node name="Path5" type="Path3D" parent="walk_paths" unique_id=1420471132]
+[node name="Path5" type="Path3D" parent="walk_markers/walk_paths" unique_id=1420471132]
 curve = SubResource("Curve3D_h5i5x")

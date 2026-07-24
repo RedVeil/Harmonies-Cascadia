@@ -336,15 +336,13 @@ func _refresh_animal_roam_groups(coord: Vector2i) -> void:
 	var paths := _collect_walk_paths()
 	if paths.is_empty():
 		paths = _collect_fallback_walk_paths()
+	var assigned := _assign_distinct_walk_paths(coord, _animal_instances.size(), paths)
 
 	for index in _animal_instances.size():
-		if not is_instance_valid(_animal_instances[index]) or paths.is_empty():
+		if not is_instance_valid(_animal_instances[index]):
 			_animal_roam_groups.append(null)
 			continue
-		var rng := RandomNumberGenerator.new()
-		rng.seed = hash("%d,%d|walk_path|%d" % [coord.x, coord.y, index])
-		var path_index := rng.randi_range(0, paths.size() - 1)
-		_animal_roam_groups.append(paths[path_index])
+		_animal_roam_groups.append(assigned[index])
 
 
 func _position_animals_in_groups(coord: Vector2i, animate_animals: bool) -> void:
@@ -352,24 +350,24 @@ func _position_animals_in_groups(coord: Vector2i, animate_animals: bool) -> void
 	var paths := _collect_walk_paths()
 	if paths.is_empty():
 		paths = _collect_fallback_walk_paths()
+	var assigned := _assign_distinct_walk_paths(coord, _animal_instances.size(), paths)
 
 	for index in _animal_instances.size():
 		var instance := _animal_instances[index]
 		if not is_instance_valid(instance):
 			_animal_roam_groups.append(null)
 			continue
-		if paths.is_empty():
+		var path: Path3D = assigned[index]
+		if path == null:
 			_animal_roam_groups.append(null)
 			if instance is Animal:
 				(instance as Animal).freeze()
 			continue
 
+		_animal_roam_groups.append(path)
+
 		var rng := RandomNumberGenerator.new()
 		rng.seed = hash("%d,%d|walk_path|%d" % [coord.x, coord.y, index])
-
-		var path_index := rng.randi_range(0, paths.size() - 1)
-		var path: Path3D = paths[path_index]
-		_animal_roam_groups.append(path)
 
 		var curve := path.curve
 		var start_offset := -1.0
@@ -388,6 +386,37 @@ func _position_animals_in_groups(coord: Vector2i, animate_animals: bool) -> void
 				animal.place_on_path(path, start_offset)
 		elif curve != null and start_offset >= 0.0:
 			instance.global_position = path.global_transform * curve.sample_baked(start_offset)
+
+
+## Deal walk paths so co-spawned animals prefer distinct Path3Ds.
+## Reuses paths only after every available path has been taken once.
+func _assign_distinct_walk_paths(
+	coord: Vector2i,
+	animal_count: int,
+	paths: Array[Path3D]
+) -> Array:
+	var assigned: Array = []
+	if animal_count <= 0:
+		return assigned
+	if paths.is_empty():
+		for _i in animal_count:
+			assigned.append(null)
+		return assigned
+
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash("%d,%d|walk_paths" % [coord.x, coord.y])
+	var remaining: Array[Path3D] = []
+
+	for _index in animal_count:
+		if remaining.is_empty():
+			remaining = paths.duplicate()
+			for i in range(remaining.size() - 1, 0, -1):
+				var j := rng.randi_range(0, i)
+				var tmp: Path3D = remaining[i]
+				remaining[i] = remaining[j]
+				remaining[j] = tmp
+		assigned.append(remaining.pop_back())
+	return assigned
 
 
 func _collect_walk_paths() -> Array[Path3D]:

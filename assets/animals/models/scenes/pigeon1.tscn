@@ -10,7 +10,7 @@ idle_anims = Array[StringName]([&"Pigeon_Idle"])
 special_anims = Array[StringName]([&"Pigeon_Gesture"])
 
 [node name="Skeleton_Pigeon_01" parent="." index="0" unique_id=1850031893]
-transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
 
 [node name="Skeleton3D" parent="Skeleton_Pigeon_01" index="0" unique_id=2036805228]
 bones/1/position = Vector3(3.259834e-13, 0.19347943, 0.0760608)

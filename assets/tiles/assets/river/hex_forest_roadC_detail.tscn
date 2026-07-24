@@ -156,21 +156,21 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.4124017, 9.240733, -4.2318
 transform = Transform3D(9.5, 0, 0, 0, 9.5, 0, 0, 0, 9.5, 0, 0, 0)
 
 [node name="Path1" type="Path3D" parent="walk_markers/walk_paths" unique_id=1395537159]
-transform = Transform3D(0.08276581, -0.0015967014, -0.99656767, 0.0004122177, 0.9999988, -0.0015679613, 0.996569, -0.00028101655, 0.08276636, -0.2124426, -0.13449217, 0.5032825)
+transform = Transform3D(0.08276581, -0.0015967014, -0.99656767, 0.0004122177, 0.9999988, -0.0015679613, 0.996569, -0.00028101655, 0.08276636, -0.47817844, 0.019377658, 0.5032825)
 curve = SubResource("Curve3D_bmhp4")
 
 [node name="Path2" type="Path3D" parent="walk_markers/walk_paths" unique_id=1745403266]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.009536944, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.009536944, 0.17560628)
 curve = SubResource("Curve3D_e241y")
 
 [node name="Path3" type="Path3D" parent="walk_markers/walk_paths" unique_id=803298727]
-transform = Transform3D(-0.9819026, 0, 0.1893868, 0, 1, 0, -0.1893868, 0, -0.9819026, 0.16600147, 0.022844717, -0.022273567)
+transform = Transform3D(-0.9819026, 0, 0.1893868, 0, 1, 0, -0.1893868, 0, -0.9819026, 0.06874461, 0.022844717, -0.13239805)
 curve = SubResource("Curve3D_qmmsn")
 
 [node name="Path4" type="Path3D" parent="walk_markers/walk_paths" unique_id=613488324]
-transform = Transform3D(-0.88186365, 0, -0.47150442, 0, 1, 0, 0.47150442, 0, -0.88186365, 0.3667612, 0.007986972, -0.34054846)
+transform = Transform3D(-0.88186365, 0, -0.47150442, 0, 1, 0, 0.47150442, 0, -0.88186365, 0.29715794, 0.007986972, -1.179142)
 curve = SubResource("Curve3D_qmmsn")
 
 [node name="Path5" type="Path3D" parent="walk_markers/walk_paths" unique_id=296634011]
-transform = Transform3D(0.5553671, 0, 0.8316052, 0, 1, 0, -0.8316052, 0, 0.5553671, 1.1003866, -0.12667747, 0.18101552)
+transform = Transform3D(0.9346706, 0, -0.35551488, 0, 1, 0, 0.35551488, 0, 0.9346706, 0.19143727, -0.12165893, 0.90519387)
 curve = SubResource("Curve3D_tq1v3")

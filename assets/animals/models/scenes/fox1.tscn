@@ -10,7 +10,7 @@ idle_anims = Array[StringName]([&"Fox_Idle"])
 special_anims = Array[StringName]([&"Fox_Gesture"])
 
 [node name="Skeleton_Fox" parent="." index="0" unique_id=968208249]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
 
 [node name="Skeleton3D" parent="Skeleton_Fox" index="0" unique_id=99399766]
 bones/0/rotation = Quaternion(-6.2113333e-15, 1, -8.146034e-08, -7.5498086e-08)

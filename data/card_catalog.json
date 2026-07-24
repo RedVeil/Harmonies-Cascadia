@@ -888,7 +888,7 @@
 			"secondary_element": 4.0,
 			"point_score": 5.0,
 			"bonus_points": 4.0,
-			"visual_amount": 4.0,
+			"visual_amount": 3.0,
 			"icon": "res://assets/animals/icons/Insect_LadyBug.png",
 			"models": [
 				"res://assets/animals/models/scenes/ladybug1.tscn"
@@ -1285,7 +1285,7 @@
 			"secondary_element": 2.0,
 			"point_score": 4.0,
 			"bonus_points": 2.0,
-			"visual_amount": 4.0,
+			"visual_amount": 3.0,
 			"icon": "res://assets/animals/icons/PetRodent_Hamster.png",
 			"models": [
 				"res://assets/animals/models/scenes/hamster1.tscn"
@@ -1321,7 +1321,7 @@
 			"secondary_element": 5.0,
 			"point_score": 7.0,
 			"bonus_points": 4.0,
-			"visual_amount": 4.0,
+			"visual_amount": 3.0,
 			"icon": "res://assets/animals/icons/Bird_Pigeon.png",
 			"models": [
 				"res://assets/animals/models/scenes/pigeon1.tscn",
@@ -1575,7 +1575,7 @@
 			"secondary_element": 3.0,
 			"point_score": 4.0,
 			"bonus_points": 2.0,
-			"visual_amount": 4.0,
+			"visual_amount": 3.0,
 			"icon": "res://assets/animals/icons/SeaShellfish_Crab_Sand.png",
 			"models": [
 				"res://assets/animals/models/scenes/crab1.tscn"
@@ -1611,7 +1611,7 @@
 			"secondary_element": 5.0,
 			"point_score": 6.0,
 			"bonus_points": 3.0,
-			"visual_amount": 4.0,
+			"visual_amount": 3.0,
 			"icon": "res://assets/animals/icons/Amphibian_Frog_Green.png",
 			"models": [
 				"res://assets/animals/models/scenes/frog1.tscn"
@@ -1699,7 +1699,7 @@
 			"secondary_element": 3.0,
 			"point_score": 7.0,
 			"bonus_points": 4.0,
-			"visual_amount": 1.0,
+			"visual_amount": 2.0,
 			"icon": "res://assets/animals/icons/SavannaMammal_Rhino.png",
 			"models": [
 				"res://assets/animals/models/scenes/rhino1.tscn"
@@ -1779,7 +1779,7 @@
 			"secondary_element": 1.0,
 			"point_score": 6.0,
 			"bonus_points": 3.0,
-			"visual_amount": 4.0,
+			"visual_amount": 2.0,
 			"icon": "res://assets/animals/icons/Reptile_Cameleon.png",
 			"models": [
 				"res://assets/animals/models/scenes/cameleon1.tscn"
@@ -1867,7 +1867,7 @@
 			"secondary_element": 4.0,
 			"point_score": 8.0,
 			"bonus_points": 5.0,
-			"visual_amount": 4.0,
+			"visual_amount": 3.0,
 			"icon": "res://assets/animals/icons/Bird_Duck_Mallard.png",
 			"models": [
 				"res://assets/animals/models/scenes/duck1.tscn"

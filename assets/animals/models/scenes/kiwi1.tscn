@@ -10,7 +10,7 @@ idle_anims = Array[StringName]([&"Idle_A", &"Idle_B", &"Idle_C"])
 special_anims = Array[StringName]([&"Bounce", &"Clicked"])
 
 [node name="Rig" parent="." index="0" unique_id=391256528]
-transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="Skeleton3D" parent="Rig" index="0" unique_id=2146200915]
 bones/1/position = Vector3(5.0594373e-22, 3.638208e-15, 0.7724713)
@@ -22,3 +22,6 @@ bones/4/position = Vector3(0.1625171, -0.27088213, -0.004577409)
 bones/4/rotation = Quaternion(-9.3299214e-08, 3.5527137e-15, 1, -4.965751e-15)
 bones/5/position = Vector3(-0.1625171, -0.27088213, -0.0045774207)
 bones/5/rotation = Quaternion(-9.3299214e-08, 3.5527137e-15, 1, -4.965751e-15)
+
+[node name="AnimationPlayer" parent="." index="1" unique_id=1680047456]
+speed_scale = 0.6

@@ -10,7 +10,7 @@ idle_anims = Array[StringName]([&"Ram_Idle"])
 special_anims = Array[StringName]([&"Ram_Gesture"])
 
 [node name="Skeleton_Ram_02" parent="." index="0" unique_id=163523336]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
+transform = Transform3D(2.2, 0, 0, 0, 2.2, 0, 0, 0, 2.2, 0, 0, 0)
 
 [node name="Skeleton3D" parent="Skeleton_Ram_02" index="0" unique_id=768869259]
 bones/0/position = Vector3(1.7736754e-21, 2.9833936e-05, 4.3368087e-19)

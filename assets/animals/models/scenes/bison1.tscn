@@ -3,13 +3,24 @@
 [ext_resource type="PackedScene" uid="uid://bebb53pg5v7bo" path="res://assets/animals/models/raw/Bison_01.glb" id="1_rv78i"]
 [ext_resource type="Script" uid="uid://c582u2pi2l1xu" path="res://scripts/animal.gd" id="2_knxxs"]
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ltgs3"]
+load_path = "res://.godot/imported/Bison_01_ColorPalette_1.png-add6b09cd90040887b7e086eb5166cb9.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i4i5j"]
+resource_name = "Color"
+cull_mode = 2
+albedo_texture = SubResource("CompressedTexture2D_ltgs3")
+
 [node name="Bison_012" unique_id=1425163416 instance=ExtResource("1_rv78i")]
 script = ExtResource("2_knxxs")
 walk_anims = Array[StringName]([&"Bison_Walk"])
 idle_anims = Array[StringName]([&"Bison_Idle"])
 special_anims = Array[StringName]([&"Bison_Gesture"])
 
-[node name="Skeleton3D" parent="Skeleton_Bison_01" parent_id_path=PackedInt32Array(1669834335) index="0" unique_id=1719572335]
+[node name="Skeleton_Bison_01" parent="." index="0" unique_id=1669834335]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
+
+[node name="Skeleton3D" parent="Skeleton_Bison_01" index="0" unique_id=1719572335]
 bones/0/rotation = Quaternion(6.3021656e-23, 1, 4.466507e-30, -4.0133926e-07)
 bones/1/position = Vector3(-2.358547e-07, 1.6294475, 0.7772513)
 bones/1/rotation = Quaternion(-0.62110555, 2.6911343e-07, -3.8807997e-07, 0.78372693)
@@ -52,3 +63,6 @@ bones/29/rotation = Quaternion(0.5479989, 4.2066798e-08, -1.4865202e-07, 0.83647
 bones/30/rotation = Quaternion(-0.64036024, 2.4161136e-07, -2.5993847e-07, 0.7680747)
 bones/31/rotation = Quaternion(0.5703714, -3.1059713e-07, 3.9294133e-07, 0.8213869)
 bones/32/rotation = Quaternion(0.09310363, 5.8090762e-08, -1.3311703e-07, 0.99565643)
+
+[node name="Bison_01" parent="Skeleton_Bison_01/Skeleton3D" index="0" unique_id=172036265]
+surface_material_override/0 = SubResource("StandardMaterial3D_i4i5j")

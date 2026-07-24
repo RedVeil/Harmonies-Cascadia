@@ -10,7 +10,7 @@ idle_anims = Array[StringName]([&"Swan_Idle"])
 special_anims = Array[StringName]([&"Swan_Gesture"])
 
 [node name="Skeleton_Swan_01" parent="." index="0" unique_id=480596249]
-transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, 0, 0, 0)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 
 [node name="Skeleton3D" parent="Skeleton_Swan_01" index="0" unique_id=442787696]
 bones/0/rotation = Quaternion(1.0728896e-21, 1, -1.8874495e-08, -7.549789e-08)

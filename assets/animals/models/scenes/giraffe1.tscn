@@ -9,7 +9,10 @@ walk_anims = Array[StringName]([&"Giraffe_Walk"])
 idle_anims = Array[StringName]([&"Giraffe_Idle"])
 special_anims = Array[StringName]([&"Giraffe_Gesture"])
 
-[node name="Skeleton3D" parent="Skeleton_Giraffe_01" parent_id_path=PackedInt32Array(766890437) index="0" unique_id=968996986]
+[node name="Skeleton_Giraffe_01" parent="." index="0" unique_id=766890437]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
+
+[node name="Skeleton3D" parent="Skeleton_Giraffe_01" index="0" unique_id=968996986]
 bones/1/position = Vector3(-1.0839926e-23, 3.0716603, 0.69944537)
 bones/1/rotation = Quaternion(-0.6469469, -2.7058867e-14, -8.500722e-15, 0.76253504)
 bones/2/rotation = Quaternion(0.013106037, -8.2426047e-17, -1.9890734e-13, 0.9999141)

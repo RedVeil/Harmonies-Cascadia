@@ -10,7 +10,7 @@ idle_anims = Array[StringName]([&"Cat_Idle"])
 special_anims = Array[StringName]([&"Cat_Stretch"])
 
 [node name="Skeleton_Cat_02" parent="." index="0" unique_id=1751560290]
-transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
 
 [node name="Skeleton3D" parent="Skeleton_Cat_02" index="0" unique_id=279132494]
 bones/1/position = Vector3(-0.003066253, 0.28255975, 0.11240796)

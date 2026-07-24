@@ -10,7 +10,7 @@ idle_anims = Array[StringName]([&"Duck_Idle"])
 special_anims = Array[StringName]([&"Duck_Gesture"])
 
 [node name="Skeleton_Duck" parent="." index="0" unique_id=1888425271]
-transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 0, 0, 0)
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
 
 [node name="Skeleton3D" parent="Skeleton_Duck" index="0" unique_id=364385868]
 bones/0/rotation = Quaternion(5.364448e-22, 1, -1.8874488e-08, -7.549789e-08)

@@ -9,7 +9,10 @@ walk_anims = Array[StringName]([&"Wolf_Walk"])
 idle_anims = Array[StringName]([&"Wolf_Idle"])
 special_anims = Array[StringName]([&"Wolf_Gesture"])
 
-[node name="Skeleton3D" parent="Skeleton_Wolf_01" parent_id_path=PackedInt32Array(843716952) index="0" unique_id=715406627]
+[node name="Skeleton_Wolf_01" parent="." index="0" unique_id=843716952]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
+
+[node name="Skeleton3D" parent="Skeleton_Wolf_01" index="0" unique_id=715406627]
 bones/0/rotation = Quaternion(-6.2113333e-15, 1, -8.146034e-08, -7.5498086e-08)
 bones/1/position = Vector3(-2.1725048e-08, 0.58927596, 0.3417316)
 bones/1/rotation = Quaternion(-0.6500337, -2.041304e-08, -2.3863418e-08, 0.7599054)

@@ -10,7 +10,7 @@ idle_anims = Array[StringName]([&"Lion_Female_Idle"])
 special_anims = Array[StringName]([&"Lion_Female_Gesture"])
 
 [node name="Skeleton_Lion_Female" parent="." index="0" unique_id=2112134064]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 
 [node name="Skeleton3D" parent="Skeleton_Lion_Female" index="0" unique_id=1435359263]
 bones/1/position = Vector3(2.3980824e-14, 0.80771434, 0.4744654)

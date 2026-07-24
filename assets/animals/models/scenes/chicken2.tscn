@@ -10,7 +10,7 @@ idle_anims = Array[StringName]([&"Chicken_Idle"])
 special_anims = Array[StringName]([&"Chicken_Eat"])
 
 [node name="Skeleton_Chicken_02" parent="." index="0" unique_id=1134777002]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
 
 [node name="Skeleton3D" parent="Skeleton_Chicken_02" index="0" unique_id=1727737120]
 bones/1/position = Vector3(-9.480186e-09, 0.25699025, 0.1491215)
