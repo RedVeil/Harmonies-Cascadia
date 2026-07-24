@@ -7,6 +7,7 @@
 script = ExtResource("2_aoy33")
 walk_anims = Array[StringName]([&"Walk"])
 idle_anims = Array[StringName]([&"Idle_A", &"Idle_B", &"Idle_C"])
+special_anims = Array[StringName]([&"Bounce", &"Clicked"])
 
 [node name="Rig" parent="." index="0" unique_id=391256528]
 transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)

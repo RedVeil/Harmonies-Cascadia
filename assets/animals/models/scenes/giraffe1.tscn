@@ -7,7 +7,7 @@
 script = ExtResource("2_pgunu")
 walk_anims = Array[StringName]([&"Giraffe_Walk"])
 idle_anims = Array[StringName]([&"Giraffe_Idle"])
-max_start_delay_sec = 10.0
+special_anims = Array[StringName]([&"Giraffe_Gesture"])
 
 [node name="Skeleton3D" parent="Skeleton_Giraffe_01" parent_id_path=PackedInt32Array(766890437) index="0" unique_id=968996986]
 bones/1/position = Vector3(-1.0839926e-23, 3.0716603, 0.69944537)

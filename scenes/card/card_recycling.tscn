@@ -55,18 +55,18 @@ texture = ExtResource("2_f7sw7")
 
 [node name="Tooltip" type="Panel" parent="." unique_id=1672230954]
 visible = false
-offset_left = -41.0
-offset_top = -77.0
-offset_right = 159.0
-offset_bottom = -28.0
+offset_left = -180.0
+offset_top = -80.0
+offset_right = 20.0
+offset_bottom = -31.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_hxqf6")
 
 [node name="Panel" type="Panel" parent="Tooltip" unique_id=70828015]
 show_behind_parent = true
 layout_mode = 0
-offset_left = 41.000008
+offset_left = 180.0
 offset_top = 29.0
-offset_right = 61.000008
+offset_right = 200.0
 offset_bottom = 49.0
 rotation = 0.7853982
 theme_override_styles/panel = SubResource("StyleBoxFlat_jrfn7")

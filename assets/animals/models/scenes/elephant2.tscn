@@ -7,7 +7,7 @@
 script = ExtResource("2_8xnxk")
 walk_anims = Array[StringName]([&"Elephant_Walk"])
 idle_anims = Array[StringName]([&"Elephant_Idle"])
-max_start_delay_sec = 4.0
+special_anims = Array[StringName]([&"Elephant_Gesture"])
 
 [node name="Skeleton3D" parent="Skeleton_Elephant_02" parent_id_path=PackedInt32Array(1384755471) index="0" unique_id=1549039695]
 bones/1/position = Vector3(-2.9004652e-13, 2.806587, 0.72185117)

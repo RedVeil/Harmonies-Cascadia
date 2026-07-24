@@ -7,12 +7,12 @@
 script = ExtResource("2_vp721")
 walk_anims = Array[StringName]([&"Crocodile_Walk"])
 idle_anims = Array[StringName]([&"Crocodile_Idle"])
-max_start_delay_sec = 8.677
+special_anims = Array[StringName]([&"Crocodile_Gesture"])
 
-[node name="Skeleton_Crocodile" parent="." index="0" unique_id=1653702163]
+[node name="Skeleton_Crocodile" parent="." index="0" unique_id=300422315]
 transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0, 0)
 
-[node name="Skeleton3D" parent="Skeleton_Crocodile" index="0" unique_id=950511951]
+[node name="Skeleton3D" parent="Skeleton_Crocodile" index="0" unique_id=1681944903]
 bones/1/position = Vector3(-3.3028243e-08, 0.56617194, 0.35232395)
 bones/1/rotation = Quaternion(-0.63849884, -0.012770234, 0.019438276, 0.76927125)
 bones/2/position = Vector3(-5.468002e-09, 0.37023076, 1.2159518e-08)

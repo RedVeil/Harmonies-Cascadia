@@ -7,7 +7,7 @@
 script = ExtResource("2_uamlm")
 walk_anims = Array[StringName]([&"Pigeon_Walk"])
 idle_anims = Array[StringName]([&"Pigeon_Idle"])
-max_start_delay_sec = 6.0
+special_anims = Array[StringName]([&"Pigeon_Gesture"])
 
 [node name="Skeleton_Pigeon_02" parent="." index="0" unique_id=1535838329]
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)

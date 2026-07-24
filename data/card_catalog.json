@@ -1,214 +1,214 @@
 {
 	"elements": [
 		{
-			"id": 0,
+			"id": 0.0,
 			"name": "DeadEarth",
-			"type": 0,
+			"type": 0.0,
 			"placement": [
 				{
-					"element": 0,
-					"level": 0,
+					"element": 0.0,
+					"level": 0.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [],
-			"amount": 1,
-			"draw_chance": 100,
-			"element": 0,
-			"secondary_element": 0,
-			"point_score": 0,
-			"bonus_points": 0,
+			"amount": 1.0,
+			"draw_chance": 100.0,
+			"element": 0.0,
+			"secondary_element": 0.0,
+			"point_score": 0.0,
+			"bonus_points": 0.0,
 			"icon": "res://assets/elements/n0.png",
 			"models": []
 		},
 		{
-			"id": 1,
+			"id": 1.0,
 			"name": "Forest",
-			"type": 0,
+			"type": 0.0,
 			"placement": [
 				{
-					"element": 0,
-					"level": 0,
+					"element": 0.0,
+					"level": 0.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				},
 				{
-					"element": 1,
-					"level": 1,
+					"element": 1.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [],
-			"amount": 1,
-			"draw_chance": 100,
-			"element": 1,
-			"secondary_element": 0,
-			"point_score": 0,
-			"bonus_points": 0,
+			"amount": 1.0,
+			"draw_chance": 100.0,
+			"element": 1.0,
+			"secondary_element": 0.0,
+			"point_score": 0.0,
+			"bonus_points": 0.0,
 			"icon": "res://assets/elements/f2.png",
 			"models": []
 		},
 		{
-			"id": 2,
+			"id": 2.0,
 			"name": "Field",
-			"type": 0,
+			"type": 0.0,
 			"placement": [
 				{
-					"element": 0,
-					"level": 0,
+					"element": 0.0,
+					"level": 0.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [],
-			"amount": 1,
-			"draw_chance": 100,
-			"element": 2,
-			"secondary_element": 0,
-			"point_score": 0,
-			"bonus_points": 0,
+			"amount": 1.0,
+			"draw_chance": 100.0,
+			"element": 2.0,
+			"secondary_element": 0.0,
+			"point_score": 0.0,
+			"bonus_points": 0.0,
 			"icon": "res://assets/elements/a1.png",
 			"models": []
 		},
 		{
-			"id": 3,
+			"id": 3.0,
 			"name": "Mountain",
-			"type": 0,
+			"type": 0.0,
 			"placement": [
 				{
-					"element": 0,
-					"level": 0,
+					"element": 0.0,
+					"level": 0.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				},
 				{
-					"element": 3,
-					"level": 1,
+					"element": 3.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				},
 				{
-					"element": 3,
-					"level": 2,
+					"element": 3.0,
+					"level": 2.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [],
-			"amount": 1,
-			"draw_chance": 100,
-			"element": 3,
-			"secondary_element": 0,
-			"point_score": 0,
-			"bonus_points": 0,
+			"amount": 1.0,
+			"draw_chance": 100.0,
+			"element": 3.0,
+			"secondary_element": 0.0,
+			"point_score": 0.0,
+			"bonus_points": 0.0,
 			"icon": "res://assets/elements/m2.png",
 			"models": []
 		},
 		{
-			"id": 4,
+			"id": 4.0,
 			"name": "River",
-			"type": 0,
+			"type": 0.0,
 			"placement": [
 				{
-					"element": 0,
-					"level": 0,
+					"element": 0.0,
+					"level": 0.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [],
-			"amount": 1,
-			"draw_chance": 100,
-			"element": 4,
-			"secondary_element": 0,
-			"point_score": 0,
-			"bonus_points": 0,
+			"amount": 1.0,
+			"draw_chance": 100.0,
+			"element": 4.0,
+			"secondary_element": 0.0,
+			"point_score": 0.0,
+			"bonus_points": 0.0,
 			"icon": "res://assets/elements/r0.png",
 			"models": []
 		},
 		{
-			"id": 5,
+			"id": 5.0,
 			"name": "Wetland",
-			"type": 0,
+			"type": 0.0,
 			"placement": [
 				{
-					"element": 0,
-					"level": 0,
+					"element": 0.0,
+					"level": 0.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [],
-			"amount": 1,
-			"draw_chance": 100,
-			"element": 5,
-			"secondary_element": 0,
-			"point_score": 0,
-			"bonus_points": 0,
+			"amount": 1.0,
+			"draw_chance": 100.0,
+			"element": 5.0,
+			"secondary_element": 0.0,
+			"point_score": 0.0,
+			"bonus_points": 0.0,
 			"icon": "res://assets/elements/w0.png",
 			"models": []
 		}
 	],
 	"animals": [
 		{
-			"id": 0,
+			"id": 0.0,
 			"name": "deer",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 1,
-					"level": 2,
+					"element": 1.0,
+					"level": 2.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 4,
-					"level": 1,
+					"element": 4.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				},
 				{
-					"element": 4,
-					"level": 1,
+					"element": 4.0,
+					"level": 1.0,
 					"coords": [
-						1,
-						-1
+						1.0,
+						-1.0
 					]
 				}
 			],
-			"amount": 3,
-			"draw_chance": 10,
-			"element": 1,
-			"secondary_element": 4,
-			"point_score": 4,
-			"bonus_points": 2,
-			"visual_amount": 2,
+			"amount": 3.0,
+			"draw_chance": 10.0,
+			"element": 1.0,
+			"secondary_element": 4.0,
+			"point_score": 4.0,
+			"bonus_points": 2.0,
+			"visual_amount": 2.0,
 			"icon": "res://assets/animals/icons/ForestMammal_Deer.png",
 			"models": [
 				"res://assets/animals/models/scenes/deer1.tscn",
@@ -216,88 +216,88 @@
 			]
 		},
 		{
-			"id": 1,
+			"id": 1.0,
 			"name": "fox",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 1,
-					"level": 1,
+					"element": 1.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 3,
-					"level": 2,
+					"element": 3.0,
+					"level": 2.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				},
 				{
-					"element": 3,
-					"level": 2,
+					"element": 3.0,
+					"level": 2.0,
 					"coords": [
-						0,
-						2
+						0.0,
+						2.0
 					]
 				}
 			],
-			"amount": 2,
-			"draw_chance": 10,
-			"element": 1,
-			"secondary_element": 3,
-			"point_score": 6,
-			"bonus_points": 3,
-			"visual_amount": 2,
+			"amount": 2.0,
+			"draw_chance": 10.0,
+			"element": 1.0,
+			"secondary_element": 3.0,
+			"point_score": 6.0,
+			"bonus_points": 3.0,
+			"visual_amount": 1.0,
 			"icon": "res://assets/animals/icons/ForestMammal_Fox.png",
 			"models": [
 				"res://assets/animals/models/scenes/fox1.tscn"
 			]
 		},
 		{
-			"id": 2,
+			"id": 2.0,
 			"name": "cat",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 1,
-					"level": 1,
+					"element": 1.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 3,
-					"level": 1,
+					"element": 3.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				},
 				{
-					"element": 3,
-					"level": 1,
+					"element": 3.0,
+					"level": 1.0,
 					"coords": [
-						1,
-						-1
+						1.0,
+						-1.0
 					]
 				}
 			],
-			"amount": 3,
-			"draw_chance": 10,
-			"element": 1,
-			"secondary_element": 3,
-			"point_score": 4,
-			"bonus_points": 2,
-			"visual_amount": 3,
+			"amount": 3.0,
+			"draw_chance": 10.0,
+			"element": 1.0,
+			"secondary_element": 3.0,
+			"point_score": 4.0,
+			"bonus_points": 2.0,
+			"visual_amount": 2.0,
 			"icon": "res://assets/animals/icons/PetMammal_Cat_Orange.png",
 			"models": [
 				"res://assets/animals/models/scenes/cat1.tscn",
@@ -307,220 +307,220 @@
 			]
 		},
 		{
-			"id": 3,
+			"id": 3.0,
 			"name": "kiwi",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 1,
-					"level": 1,
+					"element": 1.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 4,
-					"level": 1,
+					"element": 4.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				},
 				{
-					"element": 4,
-					"level": 1,
+					"element": 4.0,
+					"level": 1.0,
 					"coords": [
-						1,
-						0
+						1.0,
+						0.0
 					]
 				}
 			],
-			"amount": 4,
-			"draw_chance": 10,
-			"element": 1,
-			"secondary_element": 4,
-			"point_score": 3,
-			"bonus_points": 1,
-			"visual_amount": 4,
+			"amount": 4.0,
+			"draw_chance": 10.0,
+			"element": 1.0,
+			"secondary_element": 4.0,
+			"point_score": 3.0,
+			"bonus_points": 1.0,
+			"visual_amount": 3.0,
 			"icon": "res://assets/animals/icons/TropicalBird_Kiwi.png",
 			"models": [
 				"res://assets/animals/models/scenes/kiwi1.tscn"
 			]
 		},
 		{
-			"id": 4,
+			"id": 4.0,
 			"name": "giraffe",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 1,
-					"level": 2,
+					"element": 1.0,
+					"level": 2.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 2,
-					"level": 1,
+					"element": 2.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				},
 				{
-					"element": 2,
-					"level": 1,
+					"element": 2.0,
+					"level": 1.0,
 					"coords": [
-						1,
-						0
+						1.0,
+						0.0
 					]
 				}
 			],
-			"amount": 4,
-			"draw_chance": 10,
-			"element": 1,
-			"secondary_element": 2,
-			"point_score": 3,
-			"bonus_points": 1,
-			"visual_amount": 1,
+			"amount": 4.0,
+			"draw_chance": 10.0,
+			"element": 1.0,
+			"secondary_element": 2.0,
+			"point_score": 3.0,
+			"bonus_points": 1.0,
+			"visual_amount": 1.0,
 			"icon": "res://assets/animals/icons/SavannaMammal_Giraffe.png",
 			"models": [
 				"res://assets/animals/models/scenes/giraffe1.tscn"
 			]
 		},
 		{
-			"id": 5,
+			"id": 5.0,
 			"name": "racoon",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 1,
-					"level": 1,
+					"element": 1.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 2,
-					"level": 1,
+					"element": 2.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				},
 				{
-					"element": 2,
-					"level": 1,
+					"element": 2.0,
+					"level": 1.0,
 					"coords": [
-						1,
-						-1
+						1.0,
+						-1.0
 					]
 				}
 			],
-			"amount": 3,
-			"draw_chance": 10,
-			"element": 1,
-			"secondary_element": 2,
-			"point_score": 4,
-			"bonus_points": 2,
-			"visual_amount": 3,
+			"amount": 3.0,
+			"draw_chance": 10.0,
+			"element": 1.0,
+			"secondary_element": 2.0,
+			"point_score": 4.0,
+			"bonus_points": 2.0,
+			"visual_amount": 2.0,
 			"icon": "res://assets/animals/icons/ForestMammal_Racoon.png",
 			"models": [
 				"res://assets/animals/models/scenes/racoon1.tscn"
 			]
 		},
 		{
-			"id": 6,
+			"id": 6.0,
 			"name": "koala",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 1,
-					"level": 2,
+					"element": 1.0,
+					"level": 2.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 3,
-					"level": 1,
+					"element": 3.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				},
 				{
-					"element": 3,
-					"level": 1,
+					"element": 3.0,
+					"level": 1.0,
 					"coords": [
-						1,
-						0
+						1.0,
+						0.0
 					]
 				}
 			],
-			"amount": 3,
-			"draw_chance": 10,
-			"element": 1,
-			"secondary_element": 3,
-			"point_score": 4,
-			"bonus_points": 2,
-			"visual_amount": 3,
+			"amount": 3.0,
+			"draw_chance": 10.0,
+			"element": 1.0,
+			"secondary_element": 3.0,
+			"point_score": 4.0,
+			"bonus_points": 2.0,
+			"visual_amount": 2.0,
 			"icon": "res://assets/animals/icons/Marsupial_Coala.png",
 			"models": [
 				"res://assets/animals/models/scenes/koala1.tscn"
 			]
 		},
 		{
-			"id": 7,
+			"id": 7.0,
 			"name": "elephant",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 1,
-					"level": 2,
+					"element": 1.0,
+					"level": 2.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 1,
-					"level": 2,
+					"element": 1.0,
+					"level": 2.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				},
 				{
-					"element": 5,
-					"level": 1,
+					"element": 5.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						2
+						0.0,
+						2.0
 					]
 				}
 			],
-			"amount": 2,
-			"draw_chance": 10,
-			"element": 1,
-			"secondary_element": 5,
-			"point_score": 8,
-			"bonus_points": 5,
-			"visual_amount": 1,
+			"amount": 2.0,
+			"draw_chance": 10.0,
+			"element": 1.0,
+			"secondary_element": 5.0,
+			"point_score": 8.0,
+			"bonus_points": 5.0,
+			"visual_amount": 1.0,
 			"icon": "res://assets/animals/icons/SavannaMammal_Elephant.png",
 			"models": [
 				"res://assets/animals/models/scenes/elephant1.tscn",
@@ -528,240 +528,240 @@
 			]
 		},
 		{
-			"id": 8,
+			"id": 8.0,
 			"name": "panda",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 1,
-					"level": 2,
+					"element": 1.0,
+					"level": 2.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 2,
-					"level": 1,
+					"element": 2.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				},
 				{
-					"element": 2,
-					"level": 1,
+					"element": 2.0,
+					"level": 1.0,
 					"coords": [
-						1,
-						-1
+						1.0,
+						-1.0
 					]
 				}
 			],
-			"amount": 3,
-			"draw_chance": 10,
-			"element": 1,
-			"secondary_element": 2,
-			"point_score": 4,
-			"bonus_points": 2,
-			"visual_amount": 1,
+			"amount": 3.0,
+			"draw_chance": 10.0,
+			"element": 1.0,
+			"secondary_element": 2.0,
+			"point_score": 4.0,
+			"bonus_points": 2.0,
+			"visual_amount": 1.0,
 			"icon": "res://assets/animals/icons/ForestMammal_Bear_Panda.png",
 			"models": [
 				"res://assets/animals/models/scenes/panda1.tscn"
 			]
 		},
 		{
-			"id": 9,
+			"id": 9.0,
 			"name": "gorilla",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 1,
-					"level": 2,
+					"element": 1.0,
+					"level": 2.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 3,
-					"level": 3,
+					"element": 3.0,
+					"level": 3.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				}
 			],
-			"amount": 3,
-			"draw_chance": 10,
-			"element": 1,
-			"secondary_element": 3,
-			"point_score": 4,
-			"bonus_points": 2,
-			"visual_amount": 1,
+			"amount": 3.0,
+			"draw_chance": 10.0,
+			"element": 1.0,
+			"secondary_element": 3.0,
+			"point_score": 4.0,
+			"bonus_points": 2.0,
+			"visual_amount": 1.0,
 			"icon": "res://assets/animals/icons/TropicalMammal_Gorilla.png",
 			"models": [
 				"res://assets/animals/models/scenes/gorilla1.tscn"
 			]
 		},
 		{
-			"id": 10,
+			"id": 10.0,
 			"name": "bee",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 2,
-					"level": 1,
+					"element": 2.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 1,
-					"level": 2,
+					"element": 1.0,
+					"level": 2.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				},
 				{
-					"element": 1,
-					"level": 2,
+					"element": 1.0,
+					"level": 2.0,
 					"coords": [
-						1,
-						-1
+						1.0,
+						-1.0
 					]
 				}
 			],
-			"amount": 2,
-			"draw_chance": 10,
-			"element": 2,
-			"secondary_element": 1,
-			"point_score": 6,
-			"bonus_points": 3,
-			"visual_amount": 5,
+			"amount": 2.0,
+			"draw_chance": 10.0,
+			"element": 2.0,
+			"secondary_element": 1.0,
+			"point_score": 6.0,
+			"bonus_points": 3.0,
+			"visual_amount": 4.0,
 			"icon": "res://assets/animals/icons/Insect_Bee.png",
 			"models": [
 				"res://assets/animals/models/scenes/bee1.tscn"
 			]
 		},
 		{
-			"id": 11,
+			"id": 11.0,
 			"name": "hedgehog",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 2,
-					"level": 1,
+					"element": 2.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 1,
-					"level": 2,
+					"element": 1.0,
+					"level": 2.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				}
 			],
-			"amount": 4,
-			"draw_chance": 10,
-			"element": 2,
-			"secondary_element": 1,
-			"point_score": 3,
-			"bonus_points": 1,
-			"visual_amount": 5,
+			"amount": 4.0,
+			"draw_chance": 10.0,
+			"element": 2.0,
+			"secondary_element": 1.0,
+			"point_score": 3.0,
+			"bonus_points": 1.0,
+			"visual_amount": 3.0,
 			"icon": "res://assets/animals/icons/ForestMammal_Hedgehog.png",
 			"models": [
 				"res://assets/animals/models/scenes/hedgehog1.tscn"
 			]
 		},
 		{
-			"id": 12,
+			"id": 12.0,
 			"name": "rabbit",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 2,
-					"level": 1,
+					"element": 2.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 3,
-					"level": 1,
+					"element": 3.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				}
 			],
-			"amount": 4,
-			"draw_chance": 10,
-			"element": 2,
-			"secondary_element": 3,
-			"point_score": 3,
-			"bonus_points": 1,
-			"visual_amount": 4,
+			"amount": 4.0,
+			"draw_chance": 10.0,
+			"element": 2.0,
+			"secondary_element": 3.0,
+			"point_score": 3.0,
+			"bonus_points": 1.0,
+			"visual_amount": 3.0,
 			"icon": "res://assets/animals/icons/GrasslandRodent_Hare.png",
 			"models": [
 				"res://assets/animals/models/scenes/rabbit1.tscn"
 			]
 		},
 		{
-			"id": 13,
+			"id": 13.0,
 			"name": "chicken",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 2,
-					"level": 1,
+					"element": 2.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 1,
-					"level": 1,
+					"element": 1.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				},
 				{
-					"element": 1,
-					"level": 1,
+					"element": 1.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						2
+						0.0,
+						2.0
 					]
 				}
 			],
-			"amount": 4,
-			"draw_chance": 10,
-			"element": 2,
-			"secondary_element": 1,
-			"point_score": 3,
-			"bonus_points": 1,
-			"visual_amount": 4,
+			"amount": 4.0,
+			"draw_chance": 10.0,
+			"element": 2.0,
+			"secondary_element": 1.0,
+			"point_score": 3.0,
+			"bonus_points": 1.0,
+			"visual_amount": 3.0,
 			"icon": "res://assets/animals/icons/LivestockBird_Hen_Brown.png",
 			"models": [
 				"res://assets/animals/models/scenes/chicken1.tscn",
@@ -770,44 +770,44 @@
 			]
 		},
 		{
-			"id": 14,
+			"id": 14.0,
 			"name": "lion",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 2,
-					"level": 1,
+					"element": 2.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 3,
-					"level": 2,
+					"element": 3.0,
+					"level": 2.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				},
 				{
-					"element": 3,
-					"level": 2,
+					"element": 3.0,
+					"level": 2.0,
 					"coords": [
-						1,
-						0
+						1.0,
+						0.0
 					]
 				}
 			],
-			"amount": 2,
-			"draw_chance": 10,
-			"element": 2,
-			"secondary_element": 3,
-			"point_score": 8,
-			"bonus_points": 5,
-			"visual_amount": 2,
+			"amount": 2.0,
+			"draw_chance": 10.0,
+			"element": 2.0,
+			"secondary_element": 3.0,
+			"point_score": 8.0,
+			"bonus_points": 5.0,
+			"visual_amount": 2.0,
 			"icon": "res://assets/animals/icons/SavannaMammal_Lion_Male.png",
 			"models": [
 				"res://assets/animals/models/scenes/lion1.tscn",
@@ -815,124 +815,124 @@
 			]
 		},
 		{
-			"id": 15,
+			"id": 15.0,
 			"name": "hippo",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 2,
-					"level": 1,
+					"element": 2.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 5,
-					"level": 1,
+					"element": 5.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				}
 			],
-			"amount": 2,
-			"draw_chance": 10,
-			"element": 2,
-			"secondary_element": 5,
-			"point_score": 6,
-			"bonus_points": 3,
-			"visual_amount": 1,
+			"amount": 2.0,
+			"draw_chance": 10.0,
+			"element": 2.0,
+			"secondary_element": 5.0,
+			"point_score": 6.0,
+			"bonus_points": 3.0,
+			"visual_amount": 2.0,
 			"icon": "res://assets/animals/icons/SavannaMammal_Hippo.png",
 			"models": [
 				"res://assets/animals/models/scenes/hippo1.tscn"
 			]
 		},
 		{
-			"id": 16,
+			"id": 16.0,
 			"name": "ladybug",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 2,
-					"level": 1,
+					"element": 2.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 4,
-					"level": 1,
+					"element": 4.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				},
 				{
-					"element": 4,
-					"level": 1,
+					"element": 4.0,
+					"level": 1.0,
 					"coords": [
-						1,
-						-1
+						1.0,
+						-1.0
 					]
 				}
 			],
-			"amount": 2,
-			"draw_chance": 10,
-			"element": 2,
-			"secondary_element": 4,
-			"point_score": 5,
-			"bonus_points": 4,
-			"visual_amount": 5,
+			"amount": 2.0,
+			"draw_chance": 10.0,
+			"element": 2.0,
+			"secondary_element": 4.0,
+			"point_score": 5.0,
+			"bonus_points": 4.0,
+			"visual_amount": 4.0,
 			"icon": "res://assets/animals/icons/Insect_LadyBug.png",
 			"models": [
 				"res://assets/animals/models/scenes/ladybug1.tscn"
 			]
 		},
 		{
-			"id": 17,
+			"id": 17.0,
 			"name": "sheep",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 2,
-					"level": 1,
+					"element": 2.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 4,
-					"level": 1,
+					"element": 4.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				},
 				{
-					"element": 4,
-					"level": 1,
+					"element": 4.0,
+					"level": 1.0,
 					"coords": [
-						1,
-						0
+						1.0,
+						0.0
 					]
 				}
 			],
-			"amount": 3,
-			"draw_chance": 10,
-			"element": 2,
-			"secondary_element": 4,
-			"point_score": 4,
-			"bonus_points": 2,
-			"visual_amount": 3,
+			"amount": 3.0,
+			"draw_chance": 10.0,
+			"element": 2.0,
+			"secondary_element": 4.0,
+			"point_score": 4.0,
+			"bonus_points": 2.0,
+			"visual_amount": 2.0,
 			"icon": "res://assets/animals/icons/LivestockMammal_Sheep_White.png",
 			"models": [
 				"res://assets/animals/models/scenes/sheep1.tscn",
@@ -941,44 +941,44 @@
 			]
 		},
 		{
-			"id": 18,
+			"id": 18.0,
 			"name": "cow",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 2,
-					"level": 1,
+					"element": 2.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 4,
-					"level": 1,
+					"element": 4.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				},
 				{
-					"element": 4,
-					"level": 1,
+					"element": 4.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						2
+						0.0,
+						2.0
 					]
 				}
 			],
-			"amount": 2,
-			"draw_chance": 10,
-			"element": 2,
-			"secondary_element": 4,
-			"point_score": 5,
-			"bonus_points": 4,
-			"visual_amount": 2,
+			"amount": 2.0,
+			"draw_chance": 10.0,
+			"element": 2.0,
+			"secondary_element": 4.0,
+			"point_score": 5.0,
+			"bonus_points": 4.0,
+			"visual_amount": 2.0,
 			"icon": "res://assets/animals/icons/LivestockMammal_Cow_Spotted.png",
 			"models": [
 				"res://assets/animals/models/scenes/cow1.tscn",
@@ -986,44 +986,44 @@
 			]
 		},
 		{
-			"id": 19,
+			"id": 19.0,
 			"name": "horse",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 2,
-					"level": 1,
+					"element": 2.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 2,
-					"level": 1,
+					"element": 2.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				},
 				{
-					"element": 3,
-					"level": 1,
+					"element": 3.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						2
+						0.0,
+						2.0
 					]
 				}
 			],
-			"amount": 3,
-			"draw_chance": 10,
-			"element": 2,
-			"secondary_element": 3,
-			"point_score": 4,
-			"bonus_points": 2,
-			"visual_amount": 2,
+			"amount": 3.0,
+			"draw_chance": 10.0,
+			"element": 2.0,
+			"secondary_element": 3.0,
+			"point_score": 4.0,
+			"bonus_points": 2.0,
+			"visual_amount": 2.0,
 			"icon": "res://assets/animals/icons/LivestockMammal_Horse_Grey.png",
 			"models": [
 				"res://assets/animals/models/scenes/horse1.tscn",
@@ -1032,44 +1032,44 @@
 			]
 		},
 		{
-			"id": 20,
+			"id": 20.0,
 			"name": "tiger",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 3,
-					"level": 2,
+					"element": 3.0,
+					"level": 2.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 1,
-					"level": 1,
+					"element": 1.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				},
 				{
-					"element": 1,
-					"level": 1,
+					"element": 1.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						2
+						0.0,
+						2.0
 					]
 				}
 			],
-			"amount": 3,
-			"draw_chance": 10,
-			"element": 3,
-			"secondary_element": 1,
-			"point_score": 4,
-			"bonus_points": 2,
-			"visual_amount": 1,
+			"amount": 3.0,
+			"draw_chance": 10.0,
+			"element": 3.0,
+			"secondary_element": 1.0,
+			"point_score": 4.0,
+			"bonus_points": 2.0,
+			"visual_amount": 1.0,
 			"icon": "res://assets/animals/icons/TropicalMammal_Tiger.png",
 			"models": [
 				"res://assets/animals/models/scenes/tiger1.tscn",
@@ -1077,44 +1077,44 @@
 			]
 		},
 		{
-			"id": 21,
+			"id": 21.0,
 			"name": "moose",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 3,
-					"level": 2,
+					"element": 3.0,
+					"level": 2.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 4,
-					"level": 1,
+					"element": 4.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				},
 				{
-					"element": 4,
-					"level": 1,
+					"element": 4.0,
+					"level": 1.0,
 					"coords": [
-						1,
-						0
+						1.0,
+						0.0
 					]
 				}
 			],
-			"amount": 2,
-			"draw_chance": 10,
-			"element": 3,
-			"secondary_element": 4,
-			"point_score": 5,
-			"bonus_points": 4,
-			"visual_amount": 2,
+			"amount": 2.0,
+			"draw_chance": 10.0,
+			"element": 3.0,
+			"secondary_element": 4.0,
+			"point_score": 5.0,
+			"bonus_points": 4.0,
+			"visual_amount": 2.0,
 			"icon": "res://assets/animals/icons/ForestMammal_Moose.png",
 			"models": [
 				"res://assets/animals/models/scenes/moose1.tscn",
@@ -1122,88 +1122,88 @@
 			]
 		},
 		{
-			"id": 22,
+			"id": 22.0,
 			"name": "bison",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 3,
-					"level": 1,
+					"element": 3.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 4,
-					"level": 1,
+					"element": 4.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				},
 				{
-					"element": 4,
-					"level": 1,
+					"element": 4.0,
+					"level": 1.0,
 					"coords": [
-						1,
-						-1
+						1.0,
+						-1.0
 					]
 				}
 			],
-			"amount": 2,
-			"draw_chance": 10,
-			"element": 3,
-			"secondary_element": 4,
-			"point_score": 5,
-			"bonus_points": 4,
-			"visual_amount": 1,
+			"amount": 2.0,
+			"draw_chance": 10.0,
+			"element": 3.0,
+			"secondary_element": 4.0,
+			"point_score": 5.0,
+			"bonus_points": 4.0,
+			"visual_amount": 2.0,
 			"icon": "res://assets/animals/icons/GrasslandMammal_Bison.png",
 			"models": [
 				"res://assets/animals/models/scenes/bison1.tscn"
 			]
 		},
 		{
-			"id": 23,
+			"id": 23.0,
 			"name": "wolf",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 3,
-					"level": 1,
+					"element": 3.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 3,
-					"level": 1,
+					"element": 3.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				},
 				{
-					"element": 2,
-					"level": 1,
+					"element": 2.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						2
+						0.0,
+						2.0
 					]
 				}
 			],
-			"amount": 3,
-			"draw_chance": 10,
-			"element": 3,
-			"secondary_element": 2,
-			"point_score": 4,
-			"bonus_points": 2,
-			"visual_amount": 2,
+			"amount": 3.0,
+			"draw_chance": 10.0,
+			"element": 3.0,
+			"secondary_element": 2.0,
+			"point_score": 4.0,
+			"bonus_points": 2.0,
+			"visual_amount": 1.0,
 			"icon": "res://assets/animals/icons/ForestMammal_Wolf.png",
 			"models": [
 				"res://assets/animals/models/scenes/wolf1.tscn",
@@ -1211,36 +1211,36 @@
 			]
 		},
 		{
-			"id": 24,
+			"id": 24.0,
 			"name": "llama",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 3,
-					"level": 3,
+					"element": 3.0,
+					"level": 3.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 2,
-					"level": 1,
+					"element": 2.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				}
 			],
-			"amount": 3,
-			"draw_chance": 10,
-			"element": 3,
-			"secondary_element": 2,
-			"point_score": 4,
-			"bonus_points": 2,
-			"visual_amount": 2,
+			"amount": 3.0,
+			"draw_chance": 10.0,
+			"element": 3.0,
+			"secondary_element": 2.0,
+			"point_score": 4.0,
+			"bonus_points": 2.0,
+			"visual_amount": 2.0,
 			"icon": "res://assets/animals/icons/LivestockMammal_Llama_Brown.png",
 			"models": [
 				"res://assets/animals/models/scenes/lama1.tscn",
@@ -1248,80 +1248,80 @@
 			]
 		},
 		{
-			"id": 25,
+			"id": 25.0,
 			"name": "hamster",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 3,
-					"level": 1,
+					"element": 3.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 2,
-					"level": 1,
+					"element": 2.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				},
 				{
-					"element": 2,
-					"level": 1,
+					"element": 2.0,
+					"level": 1.0,
 					"coords": [
-						1,
-						0
+						1.0,
+						0.0
 					]
 				}
 			],
-			"amount": 3,
-			"draw_chance": 10,
-			"element": 3,
-			"secondary_element": 2,
-			"point_score": 4,
-			"bonus_points": 2,
-			"visual_amount": 4,
+			"amount": 3.0,
+			"draw_chance": 10.0,
+			"element": 3.0,
+			"secondary_element": 2.0,
+			"point_score": 4.0,
+			"bonus_points": 2.0,
+			"visual_amount": 4.0,
 			"icon": "res://assets/animals/icons/PetRodent_Hamster.png",
 			"models": [
 				"res://assets/animals/models/scenes/hamster1.tscn"
 			]
 		},
 		{
-			"id": 26,
+			"id": 26.0,
 			"name": "pigeon",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 3,
-					"level": 2,
+					"element": 3.0,
+					"level": 2.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 5,
-					"level": 1,
+					"element": 5.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				}
 			],
-			"amount": 2,
-			"draw_chance": 10,
-			"element": 3,
-			"secondary_element": 5,
-			"point_score": 7,
-			"bonus_points": 4,
-			"visual_amount": 4,
+			"amount": 2.0,
+			"draw_chance": 10.0,
+			"element": 3.0,
+			"secondary_element": 5.0,
+			"point_score": 7.0,
+			"bonus_points": 4.0,
+			"visual_amount": 4.0,
 			"icon": "res://assets/animals/icons/Bird_Pigeon.png",
 			"models": [
 				"res://assets/animals/models/scenes/pigeon1.tscn",
@@ -1330,44 +1330,44 @@
 			]
 		},
 		{
-			"id": 27,
+			"id": 27.0,
 			"name": "monkey",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 3,
-					"level": 2,
+					"element": 3.0,
+					"level": 2.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 1,
-					"level": 2,
+					"element": 1.0,
+					"level": 2.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				},
 				{
-					"element": 1,
-					"level": 2,
+					"element": 1.0,
+					"level": 2.0,
 					"coords": [
-						1,
-						-1
+						1.0,
+						-1.0
 					]
 				}
 			],
-			"amount": 2,
-			"draw_chance": 10,
-			"element": 3,
-			"secondary_element": 1,
-			"point_score": 8,
-			"bonus_points": 5,
-			"visual_amount": 3,
+			"amount": 2.0,
+			"draw_chance": 10.0,
+			"element": 3.0,
+			"secondary_element": 1.0,
+			"point_score": 8.0,
+			"bonus_points": 5.0,
+			"visual_amount": 2.0,
 			"icon": "res://assets/animals/icons/TropicalMammal_Monkey_Brown.png",
 			"models": [
 				"res://assets/animals/models/scenes/monkey1.tscn",
@@ -1375,36 +1375,36 @@
 			]
 		},
 		{
-			"id": 28,
+			"id": 28.0,
 			"name": "mountaingoat",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 3,
-					"level": 3,
+					"element": 3.0,
+					"level": 3.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 4,
-					"level": 1,
+					"element": 4.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				}
 			],
-			"amount": 3,
-			"draw_chance": 10,
-			"element": 3,
-			"secondary_element": 4,
-			"point_score": 4,
-			"bonus_points": 2,
-			"visual_amount": 3,
+			"amount": 3.0,
+			"draw_chance": 10.0,
+			"element": 3.0,
+			"secondary_element": 4.0,
+			"point_score": 4.0,
+			"bonus_points": 2.0,
+			"visual_amount": 2.0,
 			"icon": "res://assets/animals/icons/MountainMammal_Mountaingoat.png",
 			"models": [
 				"res://assets/animals/models/scenes/ram1.tscn",
@@ -1412,44 +1412,44 @@
 			]
 		},
 		{
-			"id": 29,
+			"id": 29.0,
 			"name": "bear",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 3,
-					"level": 2,
+					"element": 3.0,
+					"level": 2.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 1,
-					"level": 2,
+					"element": 1.0,
+					"level": 2.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				},
 				{
-					"element": 1,
-					"level": 2,
+					"element": 1.0,
+					"level": 2.0,
 					"coords": [
-						1,
-						0
+						1.0,
+						0.0
 					]
 				}
 			],
-			"amount": 2,
-			"draw_chance": 10,
-			"element": 3,
-			"secondary_element": 1,
-			"point_score": 6,
-			"bonus_points": 3,
-			"visual_amount": 1,
+			"amount": 2.0,
+			"draw_chance": 10.0,
+			"element": 3.0,
+			"secondary_element": 1.0,
+			"point_score": 6.0,
+			"bonus_points": 3.0,
+			"visual_amount": 1.0,
 			"icon": "res://assets/animals/icons/ForestMammal_Bear_Black.png",
 			"models": [
 				"res://assets/animals/models/scenes/bear1.tscn",
@@ -1457,88 +1457,88 @@
 			]
 		},
 		{
-			"id": 30,
+			"id": 30.0,
 			"name": "turtle",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 4,
-					"level": 1,
+					"element": 4.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 1,
-					"level": 1,
+					"element": 1.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				},
 				{
-					"element": 1,
-					"level": 1,
+					"element": 1.0,
+					"level": 1.0,
 					"coords": [
-						1,
-						-1
+						1.0,
+						-1.0
 					]
 				}
 			],
-			"amount": 3,
-			"draw_chance": 20,
-			"element": 4,
-			"secondary_element": 1,
-			"point_score": 4,
-			"bonus_points": 2,
-			"visual_amount": 3,
+			"amount": 3.0,
+			"draw_chance": 20.0,
+			"element": 4.0,
+			"secondary_element": 1.0,
+			"point_score": 4.0,
+			"bonus_points": 2.0,
+			"visual_amount": 2.0,
 			"icon": "res://assets/animals/icons/SeaReptile_Turtle.png",
 			"models": [
 				"res://assets/animals/models/scenes/turtle1.tscn"
 			]
 		},
 		{
-			"id": 31,
+			"id": 31.0,
 			"name": "swan",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 4,
-					"level": 1,
+					"element": 4.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 2,
-					"level": 1,
+					"element": 2.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				},
 				{
-					"element": 2,
-					"level": 1,
+					"element": 2.0,
+					"level": 1.0,
 					"coords": [
-						1,
-						0
+						1.0,
+						0.0
 					]
 				}
 			],
-			"amount": 3,
-			"draw_chance": 20,
-			"element": 4,
-			"secondary_element": 2,
-			"point_score": 4,
-			"bonus_points": 2,
-			"visual_amount": 3,
+			"amount": 3.0,
+			"draw_chance": 20.0,
+			"element": 4.0,
+			"secondary_element": 2.0,
+			"point_score": 4.0,
+			"bonus_points": 2.0,
+			"visual_amount": 2.0,
 			"icon": "res://assets/animals/icons/Bird_Swan_White.png",
 			"models": [
 				"res://assets/animals/models/scenes/swan1.tscn",
@@ -1546,328 +1546,328 @@
 			]
 		},
 		{
-			"id": 32,
+			"id": 32.0,
 			"name": "crab",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 4,
-					"level": 1,
+					"element": 4.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 3,
-					"level": 3,
+					"element": 3.0,
+					"level": 3.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				}
 			],
-			"amount": 3,
-			"draw_chance": 20,
-			"element": 4,
-			"secondary_element": 3,
-			"point_score": 4,
-			"bonus_points": 2,
-			"visual_amount": 4,
+			"amount": 3.0,
+			"draw_chance": 20.0,
+			"element": 4.0,
+			"secondary_element": 3.0,
+			"point_score": 4.0,
+			"bonus_points": 2.0,
+			"visual_amount": 4.0,
 			"icon": "res://assets/animals/icons/SeaShellfish_Crab_Sand.png",
 			"models": [
 				"res://assets/animals/models/scenes/crab1.tscn"
 			]
 		},
 		{
-			"id": 33,
+			"id": 33.0,
 			"name": "frog",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 4,
-					"level": 1,
+					"element": 4.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 5,
-					"level": 1,
+					"element": 5.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				}
 			],
-			"amount": 2,
-			"draw_chance": 20,
-			"element": 4,
-			"secondary_element": 5,
-			"point_score": 6,
-			"bonus_points": 3,
-			"visual_amount": 4,
+			"amount": 2.0,
+			"draw_chance": 20.0,
+			"element": 4.0,
+			"secondary_element": 5.0,
+			"point_score": 6.0,
+			"bonus_points": 3.0,
+			"visual_amount": 4.0,
 			"icon": "res://assets/animals/icons/Amphibian_Frog_Green.png",
 			"models": [
 				"res://assets/animals/models/scenes/frog1.tscn"
 			]
 		},
 		{
-			"id": 34,
+			"id": 34.0,
 			"name": "otter",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 4,
-					"level": 1,
+					"element": 4.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 4,
-					"level": 1,
+					"element": 4.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				},
 				{
-					"element": 1,
-					"level": 2,
+					"element": 1.0,
+					"level": 2.0,
 					"coords": [
-						0,
-						2
+						0.0,
+						2.0
 					]
 				}
 			],
-			"amount": 3,
-			"draw_chance": 20,
-			"element": 4,
-			"secondary_element": 1,
-			"point_score": 4,
-			"bonus_points": 2,
-			"visual_amount": 3,
+			"amount": 3.0,
+			"draw_chance": 20.0,
+			"element": 4.0,
+			"secondary_element": 1.0,
+			"point_score": 4.0,
+			"bonus_points": 2.0,
+			"visual_amount": 2.0,
 			"icon": "res://assets/animals/icons/WaterMammal_Otter.png",
 			"models": [
 				"res://assets/animals/models/scenes/otter1.tscn"
 			]
 		},
 		{
-			"id": 35,
+			"id": 35.0,
 			"name": "rhino",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 4,
-					"level": 1,
+					"element": 4.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 3,
-					"level": 1,
+					"element": 3.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				},
 				{
-					"element": 3,
-					"level": 1,
+					"element": 3.0,
+					"level": 1.0,
 					"coords": [
-						1,
-						0
+						1.0,
+						0.0
 					]
 				}
 			],
-			"amount": 2,
-			"draw_chance": 20,
-			"element": 5,
-			"secondary_element": 3,
-			"point_score": 7,
-			"bonus_points": 4,
-			"visual_amount": 1,
+			"amount": 2.0,
+			"draw_chance": 20.0,
+			"element": 5.0,
+			"secondary_element": 3.0,
+			"point_score": 7.0,
+			"bonus_points": 4.0,
+			"visual_amount": 1.0,
 			"icon": "res://assets/animals/icons/SavannaMammal_Rhino.png",
 			"models": [
 				"res://assets/animals/models/scenes/rhino1.tscn"
 			]
 		},
 		{
-			"id": 36,
+			"id": 36.0,
 			"name": "crocodile",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 5,
-					"level": 1,
+					"element": 5.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 4,
-					"level": 1,
+					"element": 4.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				},
 				{
-					"element": 4,
-					"level": 1,
+					"element": 4.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						2
+						0.0,
+						2.0
 					]
 				}
 			],
-			"amount": 2,
-			"draw_chance": 20,
-			"element": 5,
-			"secondary_element": 4,
-			"point_score": 8,
-			"bonus_points": 5,
-			"visual_amount": 1,
+			"amount": 2.0,
+			"draw_chance": 20.0,
+			"element": 5.0,
+			"secondary_element": 4.0,
+			"point_score": 8.0,
+			"bonus_points": 5.0,
+			"visual_amount": 2.0,
 			"icon": "res://assets/animals/icons/Reptile_Crocodile_Green.png",
 			"models": [
 				"res://assets/animals/models/scenes/crocodile1.tscn"
 			]
 		},
 		{
-			"id": 37,
+			"id": 37.0,
 			"name": "cameleon",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 5,
-					"level": 1,
+					"element": 5.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 1,
-					"level": 2,
+					"element": 1.0,
+					"level": 2.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				}
 			],
-			"amount": 2,
-			"draw_chance": 20,
-			"element": 5,
-			"secondary_element": 1,
-			"point_score": 6,
-			"bonus_points": 3,
-			"visual_amount": 4,
+			"amount": 2.0,
+			"draw_chance": 20.0,
+			"element": 5.0,
+			"secondary_element": 1.0,
+			"point_score": 6.0,
+			"bonus_points": 3.0,
+			"visual_amount": 4.0,
 			"icon": "res://assets/animals/icons/Reptile_Cameleon.png",
 			"models": [
 				"res://assets/animals/models/scenes/cameleon1.tscn"
 			]
 		},
 		{
-			"id": 38,
+			"id": 38.0,
 			"name": "flamingo",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 5,
-					"level": 1,
+					"element": 5.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 2,
-					"level": 1,
+					"element": 2.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				},
 				{
-					"element": 2,
-					"level": 1,
+					"element": 2.0,
+					"level": 1.0,
 					"coords": [
-						1,
-						0
+						1.0,
+						0.0
 					]
 				}
 			],
-			"amount": 2,
-			"draw_chance": 20,
-			"element": 5,
-			"secondary_element": 2,
-			"point_score": 8,
-			"bonus_points": 5,
-			"visual_amount": 3,
+			"amount": 2.0,
+			"draw_chance": 20.0,
+			"element": 5.0,
+			"secondary_element": 2.0,
+			"point_score": 8.0,
+			"bonus_points": 5.0,
+			"visual_amount": 2.0,
 			"icon": "res://assets/animals/icons/SavannaBird_Flamingo.png",
 			"models": [
 				"res://assets/animals/models/scenes/flamingo1.tscn"
 			]
 		},
 		{
-			"id": 39,
+			"id": 39.0,
 			"name": "duck",
-			"type": 1,
+			"type": 1.0,
 			"placement": [
 				{
-					"element": 5,
-					"level": 1,
+					"element": 5.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						0
+						0.0,
+						0.0
 					]
 				}
 			],
 			"bonus": [
 				{
-					"element": 4,
-					"level": 1,
+					"element": 4.0,
+					"level": 1.0,
 					"coords": [
-						0,
-						1
+						0.0,
+						1.0
 					]
 				},
 				{
-					"element": 4,
-					"level": 1,
+					"element": 4.0,
+					"level": 1.0,
 					"coords": [
-						1,
-						-1
+						1.0,
+						-1.0
 					]
 				}
 			],
-			"amount": 2,
-			"draw_chance": 20,
-			"element": 5,
-			"secondary_element": 4,
-			"point_score": 8,
-			"bonus_points": 5,
-			"visual_amount": 4,
+			"amount": 2.0,
+			"draw_chance": 20.0,
+			"element": 5.0,
+			"secondary_element": 4.0,
+			"point_score": 8.0,
+			"bonus_points": 5.0,
+			"visual_amount": 4.0,
 			"icon": "res://assets/animals/icons/Bird_Duck_Mallard.png",
 			"models": [
 				"res://assets/animals/models/scenes/duck1.tscn"

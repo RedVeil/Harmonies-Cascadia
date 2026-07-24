@@ -4,6 +4,7 @@ class_name PointCounter
 @export var orchestrator : Orchestrator
 @export var checkpoint: int = 100
 @export var checkpoint_multiplier : float = 2.0
+@export var checkpoint_flat_increase: int = 0
 
 @export_group("Score Punch Animation")
 @export var punch_scale: float = 1.14
@@ -113,7 +114,7 @@ func apply_preview(animate_reward: bool = false) -> void:
 	current = preview
 	
 	if current >= target:
-		target = target * checkpoint_multiplier
+		target = ceili((float(target) + float(checkpoint_flat_increase)) * checkpoint_multiplier)
 		orchestrator.add_map_points(1)
 	
 	if animate_reward and gained != 0:

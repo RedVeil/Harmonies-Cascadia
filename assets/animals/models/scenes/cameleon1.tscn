@@ -7,6 +7,7 @@
 script = ExtResource("2_xotjp")
 walk_anims = Array[StringName]([&"Walk"])
 idle_anims = Array[StringName]([&"Idle_A", &"Idle_B", &"Idle_C"])
+special_anims = Array[StringName]([&"Bounce", &"Eat"])
 
 [node name="Rig" parent="." index="0" unique_id=2018221805]
 transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0)
@@ -20,11 +21,11 @@ bones/2/rotation = Quaternion(1.2539968e-07, -0.61547184, 0.7881589, -1.1983674e
 bones/2/scale = Vector3(1, 0.99999976, 0.99999887)
 bones/3/rotation = Quaternion(0.7024611, 7.217432e-08, -1.7730386e-07, 0.7117222)
 bones/3/scale = Vector3(0.9999999, 1, 1)
-bones/4/position = Vector3(0.22050829, 0.007726202, 0.35492897)
+bones/4/position = Vector3(0.22050829, 0.008429477, 0.35488856)
 bones/4/rotation = Quaternion(2.591008e-08, -1.19867314e-29, 1, -7.3906817e-16)
-bones/5/position = Vector3(0.1641231, 0.0077263545, -0.46508253)
+bones/5/position = Vector3(0.16412306, -0.010139781, -0.4588117)
 bones/5/rotation = Quaternion(2.591008e-08, -9.243394e-30, 1, -7.3906796e-16)
-bones/6/position = Vector3(-0.22050832, 0.007726202, 0.35492894)
+bones/6/position = Vector3(-0.22050832, 0.008429477, 0.35488853)
 bones/6/rotation = Quaternion(2.591008e-08, -1.19867314e-29, 1, -7.3906817e-16)
-bones/7/position = Vector3(-0.16412307, 0.0077263545, -0.46508256)
+bones/7/position = Vector3(-0.16412303, -0.010139781, -0.45881173)
 bones/7/rotation = Quaternion(2.591008e-08, -9.243394e-30, 1, -7.3906796e-16)

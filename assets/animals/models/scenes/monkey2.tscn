@@ -7,12 +7,12 @@
 script = ExtResource("2_ucbvw")
 walk_anims = Array[StringName]([&"Monkey_Walk"])
 idle_anims = Array[StringName]([&"Monkey_Idle"])
-max_start_delay_sec = 5.138
+special_anims = Array[StringName]([&"Monkey_Gesture"])
 
-[node name="Skeleton_Monkey_02" parent="." index="0" unique_id=619232769]
+[node name="Skeleton_Monkey_02" parent="." index="0" unique_id=2011985556]
 transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0, 0)
 
-[node name="Skeleton3D" parent="Skeleton_Monkey_02" index="0" unique_id=1835117590]
+[node name="Skeleton3D" parent="Skeleton_Monkey_02" index="0" unique_id=1249880249]
 bones/0/rotation = Quaternion(-3.0662057e-17, 1, -1.8874488e-08, -7.549789e-08)
 bones/1/position = Vector3(-0.0050513553, 0.42506713, 0.17280355)
 bones/1/rotation = Quaternion(-0.62753934, 0.017202422, 0.021656414, 0.7780935)

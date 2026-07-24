@@ -3438,7 +3438,7 @@ _data = {
 script = ExtResource("1_xawk4")
 walk_anims = Array[StringName]([&"Walk"])
 idle_anims = Array[StringName]([&"Idle_A", &"Idle_B", &"Idle_C"])
-max_start_delay_sec = 0.4
+special_anims = Array[StringName]([&"Bounce", &"Clicked"])
 
 [node name="Rig" type="Node3D" parent="." unique_id=860860458]
 transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0.09887762)

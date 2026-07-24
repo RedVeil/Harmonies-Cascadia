@@ -7,12 +7,12 @@
 script = ExtResource("2_d8wd4")
 walk_anims = Array[StringName]([&"Bear_Walk"])
 idle_anims = Array[StringName]([&"Bear_Idle"])
-max_start_delay_sec = 4.744
+special_anims = Array[StringName]([&"Bear_Gesture"])
 
-[node name="Skeleton_Bear_02" parent="." index="0" unique_id=250160260]
+[node name="Skeleton_Bear_02" parent="." index="0" unique_id=347702720]
 transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0, 0)
 
-[node name="Skeleton3D" parent="Skeleton_Bear_02" index="0" unique_id=36454986]
+[node name="Skeleton3D" parent="Skeleton_Bear_02" index="0" unique_id=1783105793]
 bones/1/position = Vector3(8.4737356e-10, 1.5037445, 0.58606505)
 bones/1/rotation = Quaternion(-0.77426434, -3.6406366e-08, 3.936839e-08, 0.63286245)
 bones/3/position = Vector3(1.65496e-14, 0.3491891, 4.0407713e-09)

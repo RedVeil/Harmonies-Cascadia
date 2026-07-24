@@ -7,7 +7,7 @@
 script = ExtResource("2_3k5p1")
 walk_anims = Array[StringName]([&"Lion_Walk"])
 idle_anims = Array[StringName]([&"Lion_Idle"])
-max_start_delay_sec = 9.0
+special_anims = Array[StringName]([&"Lion_Gesture"])
 
 [node name="Skeleton_Lion" parent="." index="0" unique_id=1989516291]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)

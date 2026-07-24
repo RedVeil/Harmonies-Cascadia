@@ -7,6 +7,7 @@
 script = ExtResource("2_kl4ce")
 walk_anims = Array[StringName]([&"Walk"])
 idle_anims = Array[StringName]([&"Idle_A", &"Idle_B", &"Idle_C"])
+special_anims = Array[StringName]([&"Bounce", &"Clicked"])
 
 [node name="Rig" parent="." index="0" unique_id=392409895]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)

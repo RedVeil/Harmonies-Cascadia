@@ -7,7 +7,7 @@
 script = ExtResource("2_ac4qk")
 walk_anims = Array[StringName]([&"Koala_Walk"])
 idle_anims = Array[StringName]([&"Koala_Idle"])
-max_start_delay_sec = 2.5
+special_anims = Array[StringName]([&"Koala_Gesture"])
 
 [node name="Skeleton_Koala" parent="." index="0" unique_id=451923057]
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)

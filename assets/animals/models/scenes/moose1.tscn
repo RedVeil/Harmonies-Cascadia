@@ -7,7 +7,7 @@
 script = ExtResource("2_gm7a6")
 walk_anims = Array[StringName]([&"Moose_Walk"])
 idle_anims = Array[StringName]([&"Moose_Idle"])
-max_start_delay_sec = 10.0
+special_anims = Array[StringName]([&"Moose_Gesture"])
 
 [node name="Skeleton3D" parent="Skeleton_Moose" parent_id_path=PackedInt32Array(78415346) index="0" unique_id=1199708266]
 bones/0/rotation = Quaternion(-2.6054013e-15, 1, -1.7384852e-07, -7.5498086e-08)

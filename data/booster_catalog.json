@@ -13,7 +13,7 @@
 				"type": "animal",
 				"id": 1,
 				"amount": 1,
-				"draw_chance": 40.0
+				"draw_chance": 50.0
 			}
 		],
 		"extra_card_chance": 75.0,
@@ -37,13 +37,13 @@
 				"type": "quest",
 				"id": 0,
 				"amount": 1,
-				"draw_chance": 70.0
+				"draw_chance": 0.0
 			},
 			{
 				"type": "booster_point",
 				"id": -1,
 				"amount": 1,
-				"draw_chance": 25.0
+				"draw_chance": 95.0
 			},
 			{
 				"type": "map_point",
@@ -67,7 +67,7 @@
 				"type": "animal",
 				"id": 2,
 				"amount": 1,
-				"draw_chance": 40.0
+				"draw_chance": 50.0
 			}
 		],
 		"extra_card_chance": 75.0,
@@ -91,13 +91,13 @@
 				"type": "quest",
 				"id": 0,
 				"amount": 1,
-				"draw_chance": 70.0
+				"draw_chance": 0.0
 			},
 			{
 				"type": "booster_point",
 				"id": -1,
 				"amount": 1,
-				"draw_chance": 25.0
+				"draw_chance": 95.0
 			},
 			{
 				"type": "map_point",
@@ -121,7 +121,7 @@
 				"type": "animal",
 				"id": 3,
 				"amount": 1,
-				"draw_chance": 40.0
+				"draw_chance": 50.0
 			}
 		],
 		"extra_card_chance": 75.0,
@@ -145,13 +145,13 @@
 				"type": "quest",
 				"id": 0,
 				"amount": 1,
-				"draw_chance": 70.0
+				"draw_chance": 0.0
 			},
 			{
 				"type": "booster_point",
 				"id": -1,
 				"amount": 1,
-				"draw_chance": 25.0
+				"draw_chance": 95.0
 			},
 			{
 				"type": "map_point",
@@ -175,7 +175,7 @@
 				"type": "animal",
 				"id": 4,
 				"amount": 1,
-				"draw_chance": 40.0
+				"draw_chance": 50.0
 			}
 		],
 		"extra_card_chance": 75.0,
@@ -199,13 +199,13 @@
 				"type": "quest",
 				"id": 0,
 				"amount": 1,
-				"draw_chance": 70.0
+				"draw_chance": 0.0
 			},
 			{
 				"type": "booster_point",
 				"id": -1,
 				"amount": 1,
-				"draw_chance": 25.0
+				"draw_chance": 95.0
 			},
 			{
 				"type": "map_point",
@@ -253,13 +253,13 @@
 				"type": "quest",
 				"id": 0,
 				"amount": 1,
-				"draw_chance": 70.0
+				"draw_chance": 0.0
 			},
 			{
 				"type": "booster_point",
 				"id": -1,
 				"amount": 1,
-				"draw_chance": 25.0
+				"draw_chance": 95.0
 			},
 			{
 				"type": "map_point",
@@ -348,31 +348,31 @@
 				"type": "animal",
 				"id": 1,
 				"amount": 1,
-				"draw_chance": 50.0
+				"draw_chance": 70.0
 			},
 			{
 				"type": "animal",
 				"id": 2,
 				"amount": 1,
-				"draw_chance": 50.0
+				"draw_chance": 70.0
 			},
 			{
 				"type": "animal",
 				"id": 3,
 				"amount": 1,
-				"draw_chance": 50.0
+				"draw_chance": 70.0
 			},
 			{
 				"type": "animal",
 				"id": 4,
 				"amount": 1,
-				"draw_chance": 50.0
+				"draw_chance": 70.0
 			},
 			{
 				"type": "animal",
 				"id": 5,
 				"amount": 1,
-				"draw_chance": 50.0
+				"draw_chance": 30.0
 			}
 		],
 		"extra_card_chance": 100.0,

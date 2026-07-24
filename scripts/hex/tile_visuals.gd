@@ -3,6 +3,7 @@ class_name TileVisuals
 
 const BASE_SCENE_LAYER_Y_ROTATION := 30.0
 const WALK_MARKERS_ROOT_NAME := "walk_markers"
+const WALK_PATHS_NAME := "walk_paths"
 const LEGACY_MARKER_CONTAINER_NAMES := ["base_markers", "base_marker"]
 
 @export var multimesh_slots: Array[MultiMeshInstance3D] = []
@@ -42,14 +43,29 @@ func apply(
 ) -> void:
 	_cache_nodes()
 	var resolved := TileSetupCatalog.resolve_layers(element, level, coord, river_index)
+	var signature: String = str(resolved.get("signature", ""))
+	var will_rebuild_layers := (
+		force_refresh
+		or signature != _active_signature
+		or _needs_scene_layer_rebuild(resolved.get("scene_layers", []))
+	)
+	# Animals live on PathFollow under scene-layer Path3Ds; detach before those free.
+	if will_rebuild_layers:
+		_detach_animals_from_paths()
 	var layers_rebuilt := _apply_layers(
 		resolved.get("scene_layers", []),
 		resolved.get("multi_mesh_layers", []),
-		resolved.get("signature", ""),
+		signature,
 		scene_layer_rotations,
 		force_refresh
 	)
 	_apply_animal(animal_id, animal_amount, coord, animate_animals, layers_rebuilt)
+
+
+func _detach_animals_from_paths() -> void:
+	for instance in _animal_instances:
+		if is_instance_valid(instance) and instance is Animal:
+			(instance as Animal).detach_from_path()
 
 
 func clear_visuals() -> void:
@@ -58,7 +74,7 @@ func clear_visuals() -> void:
 	_displayed_animal_id = -1
 	_displayed_animal_amount = 0
 
-	# Stop roam before freeing walk markers under scene layers.
+	# Detach from PathFollow before freeing walk paths under scene layers.
 	_clear_animal_instances()
 
 	_purge_orphan_scene_layers({})
@@ -75,17 +91,28 @@ func start_animal_roam() -> void:
 		var instance := _animal_instances[index]
 		if not is_instance_valid(instance) or not (instance is Animal):
 			continue
-		var markers: Array[Marker3D] = []
-		if index < _animal_roam_groups.size():
-			var stored = _animal_roam_groups[index]
-			if stored is Array:
-				for item in stored:
-					if item is Marker3D and is_instance_valid(item):
-						markers.append(item as Marker3D)
+		var path: Path3D = null
+		if index < _animal_roam_groups.size() and _animal_roam_groups[index] is Path3D:
+			var stored_path := _animal_roam_groups[index] as Path3D
+			if is_instance_valid(stored_path):
+				path = stored_path
 		(instance as Animal).start_roam(
-			markers,
+			path,
 			hash("%s|%d" % [str(instance.get_path()), index])
 		)
+
+
+func place_animals_on_paths() -> void:
+	for index in _animal_instances.size():
+		var instance := _animal_instances[index]
+		if not is_instance_valid(instance) or not (instance is Animal):
+			continue
+		var path: Path3D = null
+		if index < _animal_roam_groups.size() and _animal_roam_groups[index] is Path3D:
+			var stored_path := _animal_roam_groups[index] as Path3D
+			if is_instance_valid(stored_path):
+				path = stored_path
+		(instance as Animal).place_on_path(path)
 
 
 func freeze_animals() -> void:
@@ -238,13 +265,13 @@ func _apply_animal(
 		and animal_amount == _displayed_animal_amount
 		and not _animal_instances.is_empty()
 	):
-		# Scene-layer rebuild can free old walk markers; rebind before roam.
+		# Scene-layer rebuild can free old paths; rebind before roam/place.
 		if layers_rebuilt or not _animal_roam_groups_are_valid():
 			_refresh_animal_roam_groups(coord)
 		if animate_animals:
 			start_animal_roam()
 		else:
-			freeze_animals()
+			place_animals_on_paths()
 		return
 
 	_clear_animal_instances()
@@ -296,135 +323,119 @@ func _animal_roam_groups_are_valid() -> bool:
 	if _animal_roam_groups.size() != _animal_instances.size():
 		return false
 	for stored in _animal_roam_groups:
-		if not (stored is Array):
+		if stored == null:
+			continue
+		if not (stored is Path3D) or not is_instance_valid(stored):
 			return false
-		for item in stored:
-			if item is Marker3D and not is_instance_valid(item):
-				return false
 	return true
 
 
-## Rebind roam markers from live scene layers without teleporting animals.
+## Rebind roam paths from live scene layers without teleporting animals.
 func _refresh_animal_roam_groups(coord: Vector2i) -> void:
 	_animal_roam_groups.clear()
-	var groups := _collect_walk_groups()
-	if groups.is_empty():
-		groups = _collect_fallback_walk_groups()
+	var paths := _collect_walk_paths()
+	if paths.is_empty():
+		paths = _collect_fallback_walk_paths()
 
 	for index in _animal_instances.size():
-		var empty_markers: Array[Marker3D] = []
-		if not is_instance_valid(_animal_instances[index]) or groups.is_empty():
-			_animal_roam_groups.append(empty_markers)
+		if not is_instance_valid(_animal_instances[index]) or paths.is_empty():
+			_animal_roam_groups.append(null)
 			continue
 		var rng := RandomNumberGenerator.new()
-		rng.seed = hash("%d,%d|walk_group|%d" % [coord.x, coord.y, index])
-		var group_index := rng.randi_range(0, groups.size() - 1)
-		_animal_roam_groups.append(_markers_in_group(groups[group_index]))
+		rng.seed = hash("%d,%d|walk_path|%d" % [coord.x, coord.y, index])
+		var path_index := rng.randi_range(0, paths.size() - 1)
+		_animal_roam_groups.append(paths[path_index])
 
 
 func _position_animals_in_groups(coord: Vector2i, animate_animals: bool) -> void:
 	_animal_roam_groups.clear()
-	var groups := _collect_walk_groups()
-	if groups.is_empty():
-		groups = _collect_fallback_walk_groups()
-
-	var group_marker_pools: Array = []
-	for group in groups:
-		group_marker_pools.append(_markers_in_group(group).duplicate())
+	var paths := _collect_walk_paths()
+	if paths.is_empty():
+		paths = _collect_fallback_walk_paths()
 
 	for index in _animal_instances.size():
 		var instance := _animal_instances[index]
-		var empty_markers: Array[Marker3D] = []
 		if not is_instance_valid(instance):
-			_animal_roam_groups.append(empty_markers)
+			_animal_roam_groups.append(null)
 			continue
-		if groups.is_empty():
-			_animal_roam_groups.append(empty_markers)
-			break
+		if paths.is_empty():
+			_animal_roam_groups.append(null)
+			if instance is Animal:
+				(instance as Animal).freeze()
+			continue
 
 		var rng := RandomNumberGenerator.new()
-		rng.seed = hash("%d,%d|walk_group|%d" % [coord.x, coord.y, index])
+		rng.seed = hash("%d,%d|walk_path|%d" % [coord.x, coord.y, index])
 
-		var group_index := rng.randi_range(0, groups.size() - 1)
-		var group_markers: Array[Marker3D] = _markers_in_group(groups[group_index])
-		_animal_roam_groups.append(group_markers)
+		var path_index := rng.randi_range(0, paths.size() - 1)
+		var path: Path3D = paths[path_index]
+		_animal_roam_groups.append(path)
 
-		var pool: Array = group_marker_pools[group_index]
-		if pool.is_empty():
-			pool = group_markers.duplicate()
-			group_marker_pools[group_index] = pool
-		if pool.is_empty():
-			if instance is Animal:
-				var animal_empty := instance as Animal
-				if animate_animals:
-					animal_empty.start_roam(
-						group_markers,
-						hash("%d,%d|roam|%d" % [coord.x, coord.y, index])
-					)
-				else:
-					animal_empty.freeze()
-			continue
-
-		var marker_index := rng.randi_range(0, pool.size() - 1)
-		var spawn_marker: Marker3D = pool[marker_index]
-		pool.remove_at(marker_index)
-
-		instance.global_position = spawn_marker.global_position
-		instance.rotation.y = rng.randf_range(0.0, TAU)
+		var curve := path.curve
+		var start_offset := -1.0
+		if curve != null and curve.get_baked_length() > 0.05:
+			start_offset = rng.randf_range(0.0, curve.get_baked_length())
 
 		if instance is Animal:
 			var animal := instance as Animal
 			if animate_animals:
 				animal.start_roam(
-					group_markers,
+					path,
 					hash("%d,%d|roam|%d" % [coord.x, coord.y, index]),
-					spawn_marker
+					start_offset
 				)
 			else:
-				animal.freeze()
+				animal.place_on_path(path, start_offset)
+		elif curve != null and start_offset >= 0.0:
+			instance.global_position = path.global_transform * curve.sample_baked(start_offset)
 
 
-func _collect_walk_groups() -> Array[Node3D]:
-	var groups: Array[Node3D] = []
+func _collect_walk_paths() -> Array[Path3D]:
+	var paths: Array[Path3D] = []
 	for layer_node in _active_scene_layer_nodes.values():
 		if not (layer_node is Node):
 			continue
-		groups.append_array(_walk_groups_from_root(layer_node as Node))
-	return groups
+		paths.append_array(_walk_paths_from_root(layer_node as Node))
+	return paths
 
 
-func _collect_fallback_walk_groups() -> Array[Node3D]:
+func _collect_fallback_walk_paths() -> Array[Path3D]:
 	var tile := _get_owner_tile()
 	if tile == null:
 		return []
-	return _walk_groups_from_root(tile)
+	return _walk_paths_from_root(tile)
 
 
-func _walk_groups_from_root(root: Node) -> Array[Node3D]:
-	var groups: Array[Node3D] = []
+func _walk_paths_from_root(root: Node) -> Array[Path3D]:
+	var paths: Array[Path3D] = []
 	var walk_root := root.find_child(WALK_MARKERS_ROOT_NAME, true, false)
 	if walk_root != null:
-		for child in walk_root.get_children():
-			if child is Node3D and not _markers_in_group(child as Node3D).is_empty():
-				groups.append(child as Node3D)
-		if not groups.is_empty():
-			return groups
+		var paths_root := walk_root.get_node_or_null(WALK_PATHS_NAME)
+		if paths_root != null:
+			for child in paths_root.get_children():
+				if child is Path3D and (child as Path3D).curve != null:
+					paths.append(child as Path3D)
+		if not paths.is_empty():
+			return paths
+		# Also accept Path3D nodes nested anywhere under walk_markers.
+		_collect_path3d_recursive(walk_root, paths)
+		if not paths.is_empty():
+			return paths
 
 	for legacy_name in LEGACY_MARKER_CONTAINER_NAMES:
 		var legacy := root.find_child(legacy_name, true, false)
 		if legacy == null and root.has_node(NodePath(legacy_name)):
 			legacy = root.get_node(NodePath(legacy_name))
-		if legacy is Node3D and not _markers_in_group(legacy as Node3D).is_empty():
-			groups.append(legacy as Node3D)
-	return groups
+		if legacy != null:
+			_collect_path3d_recursive(legacy, paths)
+	return paths
 
 
-func _markers_in_group(group: Node) -> Array[Marker3D]:
-	var markers: Array[Marker3D] = []
-	for child in group.get_children():
-		if child is Marker3D:
-			markers.append(child as Marker3D)
-	return markers
+func _collect_path3d_recursive(node: Node, paths: Array[Path3D]) -> void:
+	if node is Path3D and (node as Path3D).curve != null:
+		paths.append(node as Path3D)
+	for child in node.get_children():
+		_collect_path3d_recursive(child, paths)
 
 
 func _get_owner_tile() -> HexTile:

@@ -106,7 +106,7 @@ _data = {
 script = ExtResource("1_xdj1y")
 walk_anims = Array[StringName]([&"idle"])
 idle_anims = Array[StringName]([&"idle"])
-max_start_delay_sec = 0.75
+special_anims = Array[StringName]([&"idle"])
 
 [node name="base_129" type="MeshInstance3D" parent="." unique_id=836252280]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0.15, 0)
