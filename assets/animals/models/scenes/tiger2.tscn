@@ -8,9 +8,12 @@ transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0, 0)
 script = ExtResource("2_on871")
 walk_anims = Array[StringName]([&"Tiger_Walk"])
 idle_anims = Array[StringName]([&"Tiger_Idle"])
-max_start_delay_sec = 2.5
+special_anims = Array[StringName]([&"Tiger_Gesture"])
 
-[node name="Skeleton3D" parent="Skeleton_Tiger_02" parent_id_path=PackedInt32Array(515786649) index="0" unique_id=1006749876]
+[node name="Skeleton_Tiger_02" parent="." index="0" unique_id=515786649]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+
+[node name="Skeleton3D" parent="Skeleton_Tiger_02" index="0" unique_id=1006749876]
 bones/1/position = Vector3(-0.0040772497, 1.0801395, 0.55082655)
 bones/1/rotation = Quaternion(-0.7448105, -0.0007164642, -0.0016318209, 0.6672737)
 bones/2/position = Vector3(0.18334553, -0.009634572, 0.018597845)

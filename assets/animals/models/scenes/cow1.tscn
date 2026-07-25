@@ -7,12 +7,12 @@
 script = ExtResource("2_x3muq")
 walk_anims = Array[StringName]([&"Cow_Walk"])
 idle_anims = Array[StringName]([&"Cow_Idle"])
-max_start_delay_sec = 10.0
+special_anims = Array[StringName]([&"Cow_Eat"])
 
-[node name="Skeleton_Cow_01" parent="." index="0" unique_id=1460852435]
+[node name="Skeleton_Cow_01" parent="." index="0" unique_id=1643247382]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 
-[node name="Skeleton3D" parent="Skeleton_Cow_01" index="0" unique_id=171359712]
+[node name="Skeleton3D" parent="Skeleton_Cow_01" index="0" unique_id=1625924964]
 bones/1/position = Vector3(3.3787941e-09, 1.2670177, 0.40735787)
 bones/1/rotation = Quaternion(-0.74557245, -0.008479449, -0.009971861, 0.66629606)
 bones/2/position = Vector3(0.23155338, -0.052872438, -0.005169128)

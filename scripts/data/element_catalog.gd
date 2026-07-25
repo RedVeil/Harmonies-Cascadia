@@ -34,6 +34,8 @@ func parse_element(element:Dictionary) -> Element:
 	if element_data.scoring_rules.size() > 0:
 		var rng := GameSession.make_rng("scoring")
 		element_data.active_scoring_rule = element.scoring_rules[rng.randi_range(0, element.scoring_rules.size() - 1)]
+		var rng := GameSession.make_rng("scoring")
+		element_data.active_scoring_rule = element.scoring_rules[rng.randi_range(0, element.scoring_rules.size() - 1)]
 	
 	var levels : Array[ElementLevel] = []
 	for l in element.levels:

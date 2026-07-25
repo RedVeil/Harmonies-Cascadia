@@ -89,23 +89,30 @@ func discard_undo_visuals() -> void:
 ## ----- Map Logic ----- ##
 
 func show_map_buttons() -> void:
-	var available_coords : Array[Vector2i] = []
+	var available_origins : Array[Vector2i] = []
 	for key in hex_map_active:
 		var neighbors = HexCoord.map_neighbors(key, map_ring_count)
 		for n in neighbors:
-			if !available_coords.has(n) && !hex_map_active.has(n):
-				available_coords.append(n)
-	for coord in available_coords:
-		create_map_button(coord)
+			if !available_origins.has(n) && !hex_map_active.has(n):
+				available_origins.append(n)
+	for origin in available_origins:
+		var new_coords := _new_coords_for_origin(origin)
+		if not new_coords.is_empty():
+			create_map_button(origin, new_coords)
 
-func create_map_button(coord:Vector2i) -> void:
-	var button := map_button.instantiate() as Node3D
-	button.init(self, coord)
+func _new_coords_for_origin(origin: Vector2i) -> Array[Vector2i]:
+	var out: Array[Vector2i] = []
+	for q in range(-map_ring_count, map_ring_count + 1):
+		for r in range(-map_ring_count, map_ring_count + 1):
+			var c := origin + Vector2i(q, r)
+			if HexCoord.distance(origin, c) <= map_ring_count and not tiles.has(c):
+				out.append(c)
+	return out
+
+func create_map_button(origin: Vector2i, new_coords: Array[Vector2i]) -> void:
+	var button := map_button.instantiate() as MapButton
 	add_child(button)
-	var size := hex_container.hex_size
-	button.position = HexCoord.axial_to_world(coord, size)
-	# Mesh is authored for hex_size 2.0; scale to match the live tile grid.
-	button.scale = Vector3.ONE * (size / 2.0)
+	button.init(self, origin, new_coords, hex_container.hex_size)
 	map_buttons.append(button)
 
 func remove_map_buttons() -> void:

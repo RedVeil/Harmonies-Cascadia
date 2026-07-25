@@ -7,10 +7,10 @@
 script = ExtResource("2_pxqpn")
 walk_anims = Array[StringName]([&"Rhinoceros_Walk"])
 idle_anims = Array[StringName]([&"Rhinoceros_Idle"])
-max_start_delay_sec = 10.0
+special_anims = Array[StringName]([&"Rhinoceros_Gesture"])
 
 [node name="Skeleton_Rhinoceros_01" parent="." index="0" unique_id=1577741463]
-transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0, 0)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
 
 [node name="Skeleton3D" parent="Skeleton_Rhinoceros_01" index="0" unique_id=2122070863]
 bones/0/rotation = Quaternion(-8.308058e-17, 1, -1.8874495e-08, -7.549789e-08)

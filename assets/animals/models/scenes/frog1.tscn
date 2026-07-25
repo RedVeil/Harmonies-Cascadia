@@ -3,15 +3,16 @@
 [ext_resource type="PackedScene" uid="uid://tcqj01o7a2ul" path="res://assets/animals/models/raw/frog.glb" id="1_eks0o"]
 [ext_resource type="Script" uid="uid://c582u2pi2l1xu" path="res://scripts/animal.gd" id="2_mdtms"]
 
-[node name="frog" unique_id=687751837 instance=ExtResource("1_eks0o")]
+[node name="frog" unique_id=446793786 instance=ExtResource("1_eks0o")]
 script = ExtResource("2_mdtms")
-walk_anims = Array[StringName]([&"Walk"])
+walk_anims = Array[StringName]([&"Jump"])
 idle_anims = Array[StringName]([&"Idle_A", &"Idle_B", &"Idle_C"])
+special_anims = Array[StringName]([&"Bounce", &"Clicked"])
 
-[node name="Rig" parent="." index="0" unique_id=1083755761]
-transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0)
+[node name="Rig" parent="." index="0" unique_id=1243962214]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
 
-[node name="Skeleton3D" parent="Rig" index="0" unique_id=757102718]
+[node name="Skeleton3D" parent="Rig" index="0" unique_id=595617476]
 bones/1/position = Vector3(-4.2351647e-22, -1.5078292e-29, 0.4945434)
 bones/1/rotation = Quaternion(0.70710665, 1.2587426e-08, 1.2587422e-08, 0.7071069)
 bones/1/scale = Vector3(1, 1, 1)
@@ -19,11 +20,14 @@ bones/2/position = Vector3(0.2109144, 0.03556606, 0.2911042)
 bones/2/rotation = Quaternion(-0.019237451, 0.25023398, 0.96571183, -0.06643444)
 bones/2/scale = Vector3(0.9999999, 0.9999995, 0.999999)
 bones/3/position = Vector3(0.46814486, -0.11212704, -0.22649819)
-bones/3/rotation = Quaternion(-7.534976e-08, 0.06261683, 0.99803764, -4.727375e-09)
+bones/3/rotation = Quaternion(-7.534977e-08, 0.06261683, 0.99803764, -4.7273754e-09)
 bones/3/scale = Vector3(1, 1.0000006, 1.0000272)
 bones/4/position = Vector3(-0.46814486, -0.11212704, -0.22649822)
-bones/4/rotation = Quaternion(7.534976e-08, 0.06261683, 0.99803764, 4.727374e-09)
+bones/4/rotation = Quaternion(7.534977e-08, 0.06261683, 0.99803764, 4.7273745e-09)
 bones/4/scale = Vector3(1, 1.0000006, 1.0000272)
 bones/5/position = Vector3(-0.21091445, 0.035566077, 0.29110426)
-bones/5/rotation = Quaternion(0.019237407, 0.25023398, 0.9657119, 0.06643445)
+bones/5/rotation = Quaternion(0.019237407, 0.25023398, 0.96571183, 0.06643446)
 bones/5/scale = Vector3(0.9999999, 0.9999996, 0.99999905)
+
+[node name="AnimationPlayer" parent="." index="1" unique_id=354169253]
+speed_scale = 0.5

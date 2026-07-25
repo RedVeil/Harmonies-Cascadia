@@ -7,12 +7,12 @@
 script = ExtResource("2_nxrl4")
 walk_anims = Array[StringName]([&"Ram_Walk"])
 idle_anims = Array[StringName]([&"Ram_Idle"])
-max_start_delay_sec = 4.014
+special_anims = Array[StringName]([&"Ram_Gesture"])
 
-[node name="Skeleton_Ram_02" parent="." index="0" unique_id=2144345808]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
+[node name="Skeleton_Ram_02" parent="." index="0" unique_id=163523336]
+transform = Transform3D(2.2, 0, 0, 0, 2.2, 0, 0, 0, 2.2, 0, 0, 0)
 
-[node name="Skeleton3D" parent="Skeleton_Ram_02" index="0" unique_id=425182798]
+[node name="Skeleton3D" parent="Skeleton_Ram_02" index="0" unique_id=768869259]
 bones/0/position = Vector3(1.7736754e-21, 2.9833936e-05, 4.3368087e-19)
 bones/0/rotation = Quaternion(2.9724927e-17, 1, -1.8874474e-08, -7.549789e-08)
 bones/1/position = Vector3(4.289848e-15, 1.0347835, 0.29845554)

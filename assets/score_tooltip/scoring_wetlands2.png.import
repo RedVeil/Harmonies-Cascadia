@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bhccfroyv51if"
-path="res://.godot/imported/mountain0.png-1fadf7d0bb098d7c9251ac82e55dfbf4.ctex"
+uid="uid://c3q0dbe037mdk"
+path="res://.godot/imported/scoring_wetlands2.png-9eb9545491f96210fe185bd86f625edd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/score_tooltip/mountain0.png"
-dest_files=["res://.godot/imported/mountain0.png-1fadf7d0bb098d7c9251ac82e55dfbf4.ctex"]
+source_file="res://assets/score_tooltip/scoring_wetlands2.png"
+dest_files=["res://.godot/imported/scoring_wetlands2.png-9eb9545491f96210fe185bd86f625edd.ctex"]
 
 [params]
 
