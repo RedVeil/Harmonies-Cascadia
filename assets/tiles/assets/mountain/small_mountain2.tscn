@@ -84,6 +84,41 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_h18m6")
 
+[sub_resource type="Curve3D" id="Curve3D_walk1"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0.1263294, -8.8848915, 0, 0, 0, 0, 0, 0, 5.2315817, 0.2977896, -5.3500395, 0, 0, 0, 0, 0, 0, 0.3422802, 4.283046, 0.1724882, 0, 0, 0, 0, 0, 0, 6.462818, 0.2368088, 5.258358, 0, 0, 0, 0, 0, 0, -0.624243, 0.2511511, 8.396053),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0)
+}
+point_count = 5
+
+[sub_resource type="Curve3D" id="Curve3D_walk2"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 6.462818, 0.2368088, 5.258358, 0, 0, 0, 0, 0, 0, -0.624243, 0.2511511, 8.396053, 0, 0, 0, 0, 0, 0, -7.4109106, 0.2355814, 3.8077626),
+"tilts": PackedFloat32Array(0, 0, 0)
+}
+point_count = 3
+
+[sub_resource type="Curve3D" id="Curve3D_walk3"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0.3422802, 4.283046, 0.1724882, 0, 0, 0, 0, 0, 0, 5.2315817, 0.2977896, -5.3500395, 0, 0, 0, 0, 0, 0, 0, 0.1263294, -8.8848915, 0, 0, 0, 0, 0, 0, -7.4109106, 0.2355814, 3.8077626),
+"tilts": PackedFloat32Array(0, 0, 0, 0)
+}
+point_count = 4
+
+[sub_resource type="Curve3D" id="Curve3D_walk4"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -7.4109106, 0.2355814, 3.8077626, 0, 0, 0, 0, 0, 0, -0.624243, 0.2511511, 8.396053, 0, 0, 0, 0, 0, 0, 6.462818, 0.2368088, 5.258358, 0, 0, 0, 0, 0, 0, 0.3422802, 4.283046, 0.1724882, 0, 0, 0, 0, 0, 0, 5.2315817, 0.2977896, -5.3500395),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0)
+}
+point_count = 5
+
+[sub_resource type="Curve3D" id="Curve3D_walk5"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -0.624243, 0.2511511, 8.396053, 0, 0, 0, 0, 0, 0, 6.462818, 0.2368088, 5.258358, 0, 0, 0, 0, 0, 0, 0.3422802, 4.283046, 0.1724882, 0, 0, 0, 0, 0, 0, 5.2315817, 0.2977896, -5.3500395),
+"tilts": PackedFloat32Array(0, 0, 0, 0)
+}
+point_count = 4
+
 [node name="Node3D" type="Node3D" unique_id=1441660558]
 
 [node name="visuals" type="Node3D" parent="." unique_id=248078662]
@@ -166,3 +201,23 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.624243, 0.25115108, 8.3960
 
 [node name="Marker3D6" type="Marker3D" parent="walk_markers/default" unique_id=1481735719]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.2315817, 0.29778957, -5.3500395)
+
+
+[node name="walk_paths" type="Node3D" parent="walk_markers" unique_id=1939960638]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.456601, 0)
+
+[node name="Path1" type="Path3D" parent="walk_markers/walk_paths" unique_id=614432724]
+curve = SubResource("Curve3D_walk1")
+
+[node name="Path2" type="Path3D" parent="walk_markers/walk_paths" unique_id=1241274472]
+curve = SubResource("Curve3D_walk2")
+
+[node name="Path3" type="Path3D" parent="walk_markers/walk_paths" unique_id=1171841598]
+curve = SubResource("Curve3D_walk3")
+
+[node name="Path4" type="Path3D" parent="walk_markers/walk_paths" unique_id=470086362]
+curve = SubResource("Curve3D_walk4")
+
+[node name="Path5" type="Path3D" parent="walk_markers/walk_paths" unique_id=1668788706]
+curve = SubResource("Curve3D_walk5")
+

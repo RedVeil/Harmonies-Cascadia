@@ -7,9 +7,10 @@
 script = ExtResource("2_kl4ce")
 walk_anims = Array[StringName]([&"Walk"])
 idle_anims = Array[StringName]([&"Idle_A", &"Idle_B", &"Idle_C"])
+special_anims = Array[StringName]([&"Bounce", &"Clicked"])
 
 [node name="Rig" parent="." index="0" unique_id=392409895]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="Skeleton3D" parent="Rig" index="0" unique_id=850189685]
 bones/1/position = Vector3(0, 0, 0.8781992)
@@ -28,3 +29,6 @@ bones/6/position = Vector3(-0.30750018, -0.36709195, -0.32789436)
 bones/6/rotation = Quaternion(-6.1512694e-08, -2.3161059e-23, 1, -2.5269754e-15)
 bones/7/position = Vector3(-0.30750018, -0.36709172, 0.34431708)
 bones/7/rotation = Quaternion(-6.151269e-08, -5.302019e-23, 1, -7.5061794e-16)
+
+[node name="AnimationPlayer" parent="." index="1" unique_id=119897036]
+speed_scale = 0.6

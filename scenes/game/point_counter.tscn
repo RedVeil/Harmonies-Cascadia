@@ -114,7 +114,7 @@ offset_top = -3.0
 offset_right = 440.0
 offset_bottom = 23.0
 mouse_filter = 2
-text = "Map expansion available. Choose a red marker to grow the map."
+text = "Map expansion available. Choose a highlighted area to grow the map."
 horizontal_alignment = 1
 
 [connection signal="mouse_entered" from="Area2D" to="." method="_on_mouse_entered"]

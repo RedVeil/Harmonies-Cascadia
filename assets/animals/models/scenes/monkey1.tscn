@@ -7,12 +7,12 @@
 script = ExtResource("2_ewqow")
 walk_anims = Array[StringName]([&"Monkey_Walk"])
 idle_anims = Array[StringName]([&"Monkey_Idle"])
-max_start_delay_sec = 5.144
+special_anims = Array[StringName]([&"Monkey_Gesture"])
 
-[node name="Skeleton_Monkey_01" parent="." index="0" unique_id=14638101]
-transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0, 0)
+[node name="Skeleton_Monkey_01" parent="." index="0" unique_id=628961592]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
 
-[node name="Skeleton3D" parent="Skeleton_Monkey_01" index="0" unique_id=672658921]
+[node name="Skeleton3D" parent="Skeleton_Monkey_01" index="0" unique_id=1625484754]
 bones/0/rotation = Quaternion(-3.0662057e-17, 1, -1.8874488e-08, -7.549789e-08)
 bones/1/position = Vector3(-0.0050513553, 0.42506713, 0.17280355)
 bones/1/rotation = Quaternion(-0.62753934, 0.017202422, 0.021656414, 0.7780935)
@@ -59,8 +59,8 @@ bones/38/rotation = Quaternion(-0.039903235, 0.026022555, -0.25198823, 0.9665571
 bones/39/rotation = Quaternion(0.032632183, 0.012172394, -0.0020747823, 0.9993912)
 bones/40/rotation = Quaternion(0.34391916, 0.0038939796, -0.01204553, 0.93891394)
 bones/41/rotation = Quaternion(-0.3448746, 0.003919268, -0.019282073, 0.9384425)
-bones/42/rotation = Quaternion(0.8047705, 0.5872994, -0.01774315, 0.084314175)
-bones/43/rotation = Quaternion(0.77586436, -0.6283094, -0.0010750768, 0.057102405)
+bones/42/rotation = Quaternion(0.8232509, 0.55934674, 0.06687893, 0.07011706)
+bones/43/rotation = Quaternion(0.7512929, -0.62591594, -0.20607457, 0.036351886)
 bones/44/position = Vector3(-0.027404796, 0.05179664, 0.025273928)
 bones/44/rotation = Quaternion(-0.3806673, 0.068154484, 0.22259389, 0.8949299)
 bones/45/rotation = Quaternion(-0.37859008, 0.1271188, -0.21897908, 0.8902576)
@@ -69,7 +69,7 @@ bones/47/rotation = Quaternion(0.52578783, 0.13777958, 0.020720776, 0.83912736)
 bones/48/position = Vector3(-0.03493693, 0.059732538, -0.018470522)
 bones/48/rotation = Quaternion(-0.032574777, 0.027299825, 0.20376173, 0.9780975)
 bones/49/position = Vector3(-4.593545e-09, 0.024120918, -3.5710173e-09)
-bones/49/rotation = Quaternion(-0.00057882007, 0.0039558206, -0.06947402, 0.99757576)
+bones/49/rotation = Quaternion(0.21770287, -0.023260493, 0.01980236, 0.975537)
 bones/50/rotation = Quaternion(-0.0052887863, 0.04810707, 0.08541684, 0.99516916)
 bones/51/rotation = Quaternion(-0.21329753, -0.048279397, -0.030360686, 0.97532123)
 bones/52/rotation = Quaternion(-0.037823766, 0.048352964, 0.09671771, 0.9934169)

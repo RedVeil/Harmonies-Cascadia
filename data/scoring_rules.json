@@ -1,8 +1,8 @@
 [
 	{
 		"id": 0,
-		"name": "ForestStandard",
-		"description": "Each forest tile scores by level: 3 at L1, 4 at L2.",
+		"name": "Forest",
+		"description": "Each forest tile scores by level. 3 Points for level 1 and 4 Points for level 2.",
 		"min_group_size": 1,
 		"max_group_size": 100000,
 		"points_per_tile_level": [
@@ -21,8 +21,8 @@
 	},
 	{
 		"id": 1,
-		"name": "ForestHigh",
-		"description": "Low value at L1 (1); strong payoff at L2 (5).",
+		"name": "Tall Forest",
+		"description": "Each forest tile scores by level. 1 Points for level 1 and 5 Points for level 2.",
 		"min_group_size": 1,
 		"max_group_size": 100000,
 		"points_per_tile_level": [
@@ -41,8 +41,8 @@
 	},
 	{
 		"id": 2,
-		"name": "ForestGrove",
-		"description": "Score by connected forest group size. Levels ignored.",
+		"name": "Sprawling Forest",
+		"description": "Each forest group scores based on its size. The more tiles a forest group has the more it scores.",
 		"min_group_size": 1,
 		"max_group_size": 100000,
 		"points_per_tile_level": [
@@ -76,8 +76,8 @@
 	},
 	{
 		"id": 3,
-		"name": "FieldStandard",
-		"description": "A field group of 2 or more scores 10 once.",
+		"name": "Field",
+		"description": "A field that is connected to one or more other fields scores a flat 10 points.",
 		"min_group_size": 2,
 		"max_group_size": 2,
 		"points_per_tile_level": [
@@ -92,8 +92,8 @@
 	},
 	{
 		"id": 4,
-		"name": "FieldSingle",
-		"description": "Each field group scores 5 from one tile only (best for singles).",
+		"name": "Small Fields",
+		"description": "Each field without any field neighbors scores 5 points.",
 		"min_group_size": 1,
 		"max_group_size": 1,
 		"points_per_tile_level": [
@@ -108,8 +108,8 @@
 	},
 	{
 		"id": 5,
-		"name": "FieldTriplets",
-		"description": "A field group of 3 or more scores 20 once.",
+		"name": "Large Fields",
+		"description": "A field that is connected to two or more other fields scores a flat 20 points.",
 		"min_group_size": 3,
 		"max_group_size": 100000,
 		"points_per_tile_level": [
@@ -124,8 +124,8 @@
 	},
 	{
 		"id": 6,
-		"name": "MountainStandard",
-		"description": "Need at least 2 connected mountains. Scores 2 / 5 / 9 by level.",
+		"name": "Mountains",
+		"description": "Mountains score only if they are connected to another mountain. A level 1 mountain scores 2 points, a level 2 mountain scores 5 points and a level 3 mountain scores 9 points.",
 		"min_group_size": 2,
 		"max_group_size": 100000,
 		"points_per_tile_level": [
@@ -148,8 +148,8 @@
 	},
 	{
 		"id": 7,
-		"name": "MountainRange",
-		"description": "Need at least 2 connected mountains. Flatter curve: 4 / 5 / 6 by level.",
+		"name": "Tall Mountains",
+		"description": "Mountains score only if they are connected to another mountain. A level 1 mountain scores 4 points, a level 2 mountain scores 5 points and a level 3 mountain scores 6 points.",
 		"min_group_size": 2,
 		"max_group_size": 100000,
 		"points_per_tile_level": [
@@ -172,8 +172,8 @@
 	},
 	{
 		"id": 8,
-		"name": "MountainSingle",
-		"description": "Mountains score 4 / 5 / 6 by level; only one tile per group counts.",
+		"name": "Isolated Mountains",
+		"description": "Mountains score only if they are NOT connected to another mountain. A level 1 mountain scores 4 points, a level 2 mountain scores 5 points and a level 3 mountain scores 6 points.",
 		"min_group_size": 1,
 		"max_group_size": 1,
 		"points_per_tile_level": [
@@ -196,8 +196,8 @@
 	},
 	{
 		"id": 9,
-		"name": "RiverStandard",
-		"description": "Score by longest river path. Keeps growing past length 9 (+6 each).",
+		"name": "Long River",
+		"description": "Score by the length of the river. It only scores the shorted route from end to end. The longer the river the more points you score.",
 		"min_group_size": 1,
 		"max_group_size": 100000,
 		"points_per_tile_level": [
@@ -211,22 +211,22 @@
 		"special_rule_specs": {
 			"points": [
 				0,
-				5,
-				10,
+				4,
+				9,
 				16,
 				22,
-				28,
-				34,
-				37,
-				40
+				29,
+				35,
+				39,
+				46
 			],
 			"extra_points": 6
 		}
 	},
 	{
 		"id": 10,
-		"name": "RiverShort",
-		"description": "Score by longest path up to length 5 (max 24). No points beyond that.",
+		"name": "Short River",
+		"description": "Score by the length of the river. It only scores the shorted route from end to end. You earn more and more points until your river is 5 tiles long.",
 		"min_group_size": 1,
 		"max_group_size": 100000,
 		"points_per_tile_level": [
@@ -250,8 +250,8 @@
 	},
 	{
 		"id": 11,
-		"name": "RiverFlat",
-		"description": "Each river tile scores 4. Path shape does not matter.",
+		"name": "River",
+		"description": "Each river tile scores 4 points. The shape or length of the river does not matter.",
 		"min_group_size": 1,
 		"max_group_size": 100000,
 		"points_per_tile_level": [
@@ -266,8 +266,8 @@
 	},
 	{
 		"id": 12,
-		"name": "WetlandStandard",
-		"description": "A wetland scores 12 if it has at least 3 different neighboring elements.",
+		"name": "Wetland",
+		"description": "A wetland scores 12 points if it has at least 3 different neighboring elements. Different tile levels dont affect the scoring.",
 		"min_group_size": 1,
 		"max_group_size": 1,
 		"points_per_tile_level": [
@@ -286,8 +286,8 @@
 	},
 	{
 		"id": 13,
-		"name": "WetlandPointsPer",
-		"description": "A wetland scores 4 per different neighboring element (min 1).",
+		"name": "Wetland Neighbors",
+		"description": "A wetland scores 4 points per different neighboring element. The more different elements the more points you score.",
 		"min_group_size": 1,
 		"max_group_size": 1,
 		"points_per_tile_level": [
@@ -306,8 +306,8 @@
 	},
 	{
 		"id": 14,
-		"name": "WetlandPair",
-		"description": "A wetland group of 2 or more scores 20 once.",
+		"name": "Wetland Group",
+		"description": "A wetland that is connected to one or more other wetlands scores a flat 20 points.",
 		"min_group_size": 2,
 		"max_group_size": 2,
 		"points_per_tile_level": [

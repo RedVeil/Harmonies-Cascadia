@@ -9,6 +9,41 @@
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_vyrwg"]
 points = PackedVector3Array(0, 9.5, 0, 11, 9.5, 0, 5.5, 9.5, 9.526, -5.5, 9.5, 9.526, -11, 9.5, 0, -5.5, 9.5, -9.526, 5.5, 9.5, -9.526, 0, 0, 0, 11, 0, 0, 5.5, 0, 9.526, -5.5, 0, 9.526, -11, 0, 0, -5.5, 0, -9.526, 5.5, 0, -9.526)
 
+[sub_resource type="Curve3D" id="Curve3D_walk1"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 9.594955, -7.880002, 0, 0, 0, 0, 0, 0, 7.009527, 9.594955, -3.0005155, 0, 0, 0, 0, 0, 0, 7.009527, 9.594955, 3.6779132, 0, 0, 0, 0, 0, 0, 0, 9.594955, 7.6654024, 0, 0, 0, 0, 0, 0, -6.5983086, 9.594955, 3.6779132),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0)
+}
+point_count = 5
+
+[sub_resource type="Curve3D" id="Curve3D_walk2"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 9.594955, 7.6654024, 0, 0, 0, 0, 0, 0, 7.009527, 9.594955, 3.6779132, 0, 0, 0, 0, 0, 0, 7.009527, 9.594955, -3.0005155),
+"tilts": PackedFloat32Array(0, 0, 0)
+}
+point_count = 3
+
+[sub_resource type="Curve3D" id="Curve3D_walk3"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -6.5983086, 9.594955, -2.2507772, 0, 0, 0, 0, 0, 0, -6.5983086, 9.594955, 3.6779132, 0, 0, 0, 0, 0, 0, 0, 9.594955, 7.6654024, 0, 0, 0, 0, 0, 0, 7.009527, 9.594955, 3.6779132),
+"tilts": PackedFloat32Array(0, 0, 0, 0)
+}
+point_count = 4
+
+[sub_resource type="Curve3D" id="Curve3D_walk4"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -6.5983086, 9.594955, 3.6779132, 0, 0, 0, 0, 0, 0, 7.009527, 9.594955, 3.6779132, 0, 0, 0, 0, 0, 0, 7.009527, 9.594955, -3.0005155, 0, 0, 0, 0, 0, 0, 0, 9.594955, -7.880002, 0, 0, 0, 0, 0, 0, -6.5983086, 9.594955, -2.2507772),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0)
+}
+point_count = 5
+
+[sub_resource type="Curve3D" id="Curve3D_walk5"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 7.009527, 9.594955, 3.6779132, 0, 0, 0, 0, 0, 0, 0, 9.594955, -7.880002, 0, 0, 0, 0, 0, 0, 7.009527, 9.594955, -3.0005155, 0, 0, 0, 0, 0, 0, 0, 9.594955, 7.6654024),
+"tilts": PackedFloat32Array(0, 0, 0, 0)
+}
+point_count = 4
+
 [node name="HexTile" type="StaticBody3D" unique_id=1124611875]
 script = ExtResource("1_pcuo8")
 place_celebrate_sounds = Array[AudioStream]([ExtResource("5_place")])
@@ -98,3 +133,22 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.009527, 9.594955, 3.6779132
 
 [node name="Marker3D6" type="Marker3D" parent="walk_markers/default" unique_id=507658065]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.009527, 9.594955, -3.0005155)
+
+
+[node name="walk_paths" type="Node3D" parent="walk_markers" unique_id=1065010964]
+
+[node name="Path1" type="Path3D" parent="walk_markers/walk_paths" unique_id=1039424661]
+curve = SubResource("Curve3D_walk1")
+
+[node name="Path2" type="Path3D" parent="walk_markers/walk_paths" unique_id=407456060]
+curve = SubResource("Curve3D_walk2")
+
+[node name="Path3" type="Path3D" parent="walk_markers/walk_paths" unique_id=69354852]
+curve = SubResource("Curve3D_walk3")
+
+[node name="Path4" type="Path3D" parent="walk_markers/walk_paths" unique_id=1256454814]
+curve = SubResource("Curve3D_walk4")
+
+[node name="Path5" type="Path3D" parent="walk_markers/walk_paths" unique_id=1360261802]
+curve = SubResource("Curve3D_walk5")
+

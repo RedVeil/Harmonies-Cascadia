@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://31ga76urtngr"
-path="res://.godot/imported/forest0.png-7a83fdec8ef003e2b25f176397801631.ctex"
+uid="uid://diyjmvwygs4vq"
+path="res://.godot/imported/scoring_fields1.png-ef495e4cc9a054e1a65b19861226096e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/score_tooltip/forest0.png"
-dest_files=["res://.godot/imported/forest0.png-7a83fdec8ef003e2b25f176397801631.ctex"]
+source_file="res://assets/score_tooltip/scoring_fields1.png"
+dest_files=["res://.godot/imported/scoring_fields1.png-ef495e4cc9a054e1a65b19861226096e.ctex"]
 
 [params]
 

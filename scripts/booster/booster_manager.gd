@@ -9,6 +9,7 @@ class_name BoosterManager
 @export var booster_limit:int = 0
 @export var base_booster_point_cost:int = 10
 @export var booster_point_multiplier:float = 1.2
+@export var booster_point_flat_increase:int = 0
 @export var start_booster_points:int = 3
 @export var random_secondary_chance: float = 50.0
 @export var guaranteed_animal_boosters: int = 0
@@ -138,7 +139,9 @@ func preview_booster_points(points:int) -> void:
 	while booster_progress >= booster_point_cost_preview:
 		booster_progress -= booster_point_cost_preview
 		booster_points_preview += 1
-		booster_point_cost_preview = ceili(float(booster_point_cost_preview) * booster_point_multiplier)
+		booster_point_cost_preview = ceili(
+			(float(booster_point_cost_preview) + float(booster_point_flat_increase)) * booster_point_multiplier
+		)
 	
 	acc_points_preview = booster_progress
 	

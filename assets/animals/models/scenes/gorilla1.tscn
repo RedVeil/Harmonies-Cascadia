@@ -7,9 +7,12 @@
 script = ExtResource("2_k6mn4")
 walk_anims = Array[StringName]([&"Gorilla_Walk"])
 idle_anims = Array[StringName]([&"Gorilla_Idle"])
-max_start_delay_sec = 7.441
+special_anims = Array[StringName]([&"Gorilla_Gesture"])
 
-[node name="Skeleton3D" parent="Skeleton_Gorilla" parent_id_path=PackedInt32Array(755596644) index="0" unique_id=1408407924]
+[node name="Skeleton_Gorilla" parent="." index="0" unique_id=1038342560]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+
+[node name="Skeleton3D" parent="Skeleton_Gorilla" index="0" unique_id=651508734]
 bones/0/rotation = Quaternion(1.0728896e-21, 1, -1.8874495e-08, -7.549789e-08)
 bones/1/position = Vector3(-7.1054274e-15, 1.1147832, -0.15021037)
 bones/1/rotation = Quaternion(-0.57340044, 0.004711801, -0.051061366, 0.817669)

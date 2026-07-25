@@ -7,10 +7,10 @@
 script = ExtResource("2_ac4qk")
 walk_anims = Array[StringName]([&"Koala_Walk"])
 idle_anims = Array[StringName]([&"Koala_Idle"])
-max_start_delay_sec = 2.5
+special_anims = Array[StringName]([&"Koala_Gesture"])
 
 [node name="Skeleton_Koala" parent="." index="0" unique_id=451923057]
-transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
 
 [node name="Skeleton3D" parent="Skeleton_Koala" index="0" unique_id=46112729]
 bones/0/rotation = Quaternion(7.421106e-15, 1, -2.9811957e-09, -6.715443e-07)

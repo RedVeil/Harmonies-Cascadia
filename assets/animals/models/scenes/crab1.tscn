@@ -7,8 +7,12 @@
 script = ExtResource("2_2xfeu")
 walk_anims = Array[StringName]([&"Walk"])
 idle_anims = Array[StringName]([&"Idle_A", &"Idle_B", &"Idle_C"])
+special_anims = Array[StringName]([&"Bounce", &"Clicked"])
 
-[node name="Skeleton3D" parent="Rig" parent_id_path=PackedInt32Array(1270648179) index="0" unique_id=1101154012]
+[node name="Rig" parent="." index="0" unique_id=1270648179]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
+
+[node name="Skeleton3D" parent="Rig" index="0" unique_id=1101154012]
 bones/1/position = Vector3(-9.1909705e-17, 0.014728771, 0.16119662)
 bones/1/rotation = Quaternion(0.70710665, 8.5290594e-08, 8.529057e-08, 0.7071069)
 bones/1/scale = Vector3(1, 1, 1)
@@ -34,3 +38,6 @@ bones/9/scale = Vector3(1, 0.99999994, 0.9999997)
 bones/10/position = Vector3(-0.22730498, -0.025011405, 0.035287946)
 bones/10/rotation = Quaternion(-0.34951514, 0.36033005, 0.62125623, 0.60169935)
 bones/10/scale = Vector3(1, 1, 0.9999998)
+
+[node name="AnimationPlayer" parent="." index="1" unique_id=2119195594]
+speed_scale = 0.6

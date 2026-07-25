@@ -59,7 +59,7 @@ far = 1000.0
 script = ExtResource("1_x27jl")
 move_speed = 24.0
 zoom_min = 50.0
-zoom_max = 100.0
+zoom_max = 150.0
 
 [node name="HexManager" parent="." unique_id=866555908 node_paths=PackedStringArray("orchestrator") instance=ExtResource("3_tbrwv")]
 orchestrator = NodePath("../Orchestrator")

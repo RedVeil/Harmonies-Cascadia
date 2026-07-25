@@ -117,6 +117,38 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_34s6y")
 
+[sub_resource type="Curve3D" id="Curve3D_k8afw"]
+closed = true
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -0.32430178, 1.0003016, -0.41656297, 0, 0, 0, 0, 0, 0, -0.25880072, 0.9996985, -0.381211, 0, 0, 0, 0, 0, 0, -0.20884171, 0.99969435, -0.31929946, 0, 0, 0, 0, 0, 0, -0.21823713, 0.9997059, -0.26524344, 0, 0, 0, 0, 0, 0, -0.23890254, 0.99971664, -0.21278596, 0, 0, 0, 0, 0, 0, -0.26053187, 0.9997611, -0.14017446, 0, 0, 0, 0, 0, 0, -0.3147866, 0.9997685, -0.0539165, 0, 0, 0, 0, 0, 0, -0.45755365, 0.9997755, 0.086643815, 0, 0, 0, 0, 0, 0, -0.46145123, 1.0002012, 0.15374693, 0, 0, 0, 0, 0, 0, -0.48464963, 1.0000702, 0.24984768, 0, 0, 0, 0, 0, 0, -0.490534, 1.0001241, 0.3451061, 0, 0, 0, 0, 0, 0, -0.5299937, 1.0001513, 0.372485, 0, 0, 0, 0, 0, 0, -0.5874972, 1.0001242, 0.37241623, 0, 0, 0, 0, 0, 0, -0.6782211, 1.0001233, 0.3496882, 0, 0, 0, 0, 0, 0, -0.74822104, 1.0001233, 0.30768827, 0, 0, 0, 0, 0, 0, -0.8162211, 1.0001235, 0.22668827, 0, 0, 0, 0, 0, 0, -0.86322105, 1.0001234, 0.14368823, 0, 0, 0, 0, 0, 0, -0.86290306, 1.0002321, 0.07602638, 0, 0, 0, 0, 0, 0, -0.8493624, 1.0002174, -0.0116930455, 0, 0, 0, 0, 0, 0, -0.7842177, 1.0001869, -0.11262849, 0, 0, 0, 0, 0, 0, -0.75612164, 1.0001781, -0.19704592, 0, 0, 0, 0, 0, 0, -0.7431217, 1.0001781, -0.25004598, 0, 0, 0, 0, 0, 0, -0.7001216, 1.0001781, -0.30804595, 0, 0, 0, 0, 0, 0, -0.6556381, 1.0002458, -0.34170523, 0, 0, 0, 0, 0, 0, -0.5973784, 1.0002599, -0.36279136, 0, 0, 0, 0, 0, 0, -0.49330375, 1.000278, -0.39364898, 0, 0, 0, 0, 0, 0, -0.39647007, 1.0003141, -0.4128077),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 27
+
+[sub_resource type="Curve3D" id="Curve3D_34s6y"]
+closed = true
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0.008236259, 1, -1.0854425, 0, 0, 0, 0, 0, 0, -0.06725685, 1, -1.0585682, 0, 0, 0, 0, 0, 0, -0.188, 1, -0.9564209, 0, 0, 0, 0, 0, 0, -0.19009022, 1, -0.87513876, 0, 0, 0, 0, 0, 0, -0.20609654, 1, -0.813748, 0, 0, 0, 0, 0, 0, -0.18785267, 1, -0.7594325, 0, 0, 0, 0, 0, 0, -0.14325671, 1, -0.6492047, 0, 0, 0, 0, 0, 0, -0.04022826, 1, -0.4684248, 0, 0, 0, 0, 0, 0, 0.034414265, 1, -0.45802, 0, 0, 0, 0, 0, 0, 0.08943765, 1, -0.49126193, 0, 0, 0, 0, 0, 0, 0.14284737, 1, -0.55529296, 0, 0, 0, 0, 0, 0, 0.12806503, 1, -0.6193048, 0, 0, 0, 0, 0, 0, 0.13728072, 1, -0.6626185, 0, 0, 0, 0, 0, 0, 0.14910115, 1, -0.706052, 0, 0, 0, 0, 0, 0, 0.19519174, 1, -0.7525799, 0, 0, 0, 0, 0, 0, 0.2139804, 1, -0.8614261, 0, 0, 0, 0, 0, 0, 0.22267018, 1, -0.9184054, 0, 0, 0, 0, 0, 0, 0.13551885, 1, -1.0421942),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 18
+
+[sub_resource type="Curve3D" id="Curve3D_k2g7e"]
+closed = true
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0.008236259, 1, -1.0854425, 0, 0, 0, 0, 0, 0, -0.06725685, 1, -1.0585682, 0, 0, 0, 0, 0, 0, -0.188, 1, -0.9564209, 0, 0, 0, 0, 0, 0, -0.19009022, 1, -0.87513876, 0, 0, 0, 0, 0, 0, -0.20609654, 1, -0.813748, 0, 0, 0, 0, 0, 0, -0.15711202, 1, -0.7653617, 0, 0, 0, 0, 0, 0, -0.08439472, 1, -0.6628353, 0, 0, 0, 0, 0, 0, 0.0015861988, 1, -0.56303275, 0, 0, 0, 0, 0, 0, 0.05417618, 1, -0.46183163, 0, 0, 0, 0, 0, 0, 0.12653098, 1, -0.46425474, 0, 0, 0, 0, 0, 0, 0.18119061, 1, -0.5171397, 0, 0, 0, 0, 0, 0, 0.19393772, 1, -0.63201016, 0, 0, 0, 0, 0, 0, 0.18507752, 1, -0.67183745, 0, 0, 0, 0, 0, 0, 0.20838651, 1, -0.71748686, 0, 0, 0, 0, 0, 0, 0.18545097, 1, -0.8030823, 0, 0, 0, 0, 0, 0, 0.2139804, 1, -0.8614261, 0, 0, 0, 0, 0, 0, 0.22267018, 1, -0.9184054, 0, 0, 0, 0, 0, 0, 0.13551885, 1, -1.0421942),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 18
+
+[sub_resource type="Curve3D" id="Curve3D_dghkh"]
+closed = true
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0.038656563, 0.9999999, -1.0398914, 0, 0, 0, 0, 0, 0, -0.036836475, 0.9999999, -1.0130168, 0, 0, 0, 0, 0, 0, -0.10839212, 0.99999976, -0.93597156, 0, 0, 0, 0, 0, 0, -0.1366851, 0.9999999, -0.86010265, 0, 0, 0, 0, 0, 0, -0.12457541, 0.9999999, -0.7870904, 0, 0, 0, 0, 0, 0, -0.10676849, 0.99999976, -0.5977093, 0, 0, 0, 0, 0, 0, -0.056873977, 0.99999976, -0.39225823, 0, 0, 0, 0, 0, 0, 0.043436438, 0.99999976, -0.3229257, 0, 0, 0, 0, 0, 0, 0.117202014, 0.99999976, -0.37020218, 0, 0, 0, 0, 0, 0, 0.14648488, 0.9999999, -0.4939623, 0, 0, 0, 0, 0, 0, 0.14621744, 0.9999999, -0.6001413, 0, 0, 0, 0, 0, 0, 0.14595833, 0.99999976, -0.7398078, 0, 0, 0, 0, 0, 0, 0.21117821, 0.99999976, -0.84481126, 0, 0, 0, 0, 0, 0, 0.4414054, 0.99999976, -0.9740151, 0, 0, 0, 0, 0, 0, 0.46484604, 0.99999976, -1.063462, 0, 0, 0, 0, 0, 0, 0.39684364, 0.99999976, -1.1319544, 0, 0, 0, 0, 0, 0, 0.32423112, 0.99999976, -1.168221),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 17
+
 [node name="hex_forest_roadF_detail" type="Node3D" unique_id=1786249467]
 
 [node name="Base" parent="." unique_id=804612203 instance=ExtResource("1_f3a4v")]
@@ -134,42 +166,47 @@ multimesh = SubResource("MultiMesh_34s6y")
 visible = false
 mesh = SubResource("ArrayMesh_k8afw")
 
-[node name="base_marker" type="Node3D" parent="." unique_id=1036291289]
+[node name="walk_markers" type="Node3D" parent="." unique_id=1813107264]
 
-[node name="Marker3D" type="Marker3D" parent="base_marker" unique_id=574258743]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.3227453, 9.807498, 6.6469803)
+[node name="default" type="Node3D" parent="walk_markers" unique_id=1454937664]
 
-[node name="Marker3D2" type="Marker3D" parent="base_marker" unique_id=1448816313]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.391899, 9.807498, 3.8264637)
+[node name="Marker3D" type="Marker3D" parent="walk_markers/default" unique_id=1144217490]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.30517387, 9.807498, 7.94851)
 
-[node name="Marker3D3" type="Marker3D" parent="base_marker" unique_id=1288678215]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.0503511, 9.807498, -4.7547817)
+[node name="Marker3D2" type="Marker3D" parent="walk_markers/default" unique_id=1611781490]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.42315, 9.807498, 3.8264637)
 
-[node name="Marker3D4" type="Marker3D" parent="base_marker" unique_id=1187132304]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.641014, 9.807498, -3.5168219)
+[node name="Marker3D3" type="Marker3D" parent="walk_markers/default" unique_id=598024264]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24283648, 9.807498, -7.738043)
 
-[node name="Marker3D5" type="Marker3D" parent="base_marker" unique_id=70049653]
+[node name="Marker3D4" type="Marker3D" parent="walk_markers/default" unique_id=525260201]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.6083784, 9.807498, -4.6201687)
+
+[node name="Marker3D5" type="Marker3D" parent="walk_markers/default" unique_id=1226780753]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.455454, 9.458574, 3.3972273)
 
-[node name="Marker3D6" type="Marker3D" parent="base_marker" unique_id=1377228021]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.2558203, 9.240733, 2.6526756)
+[node name="Marker3D6" type="Marker3D" parent="walk_markers/default" unique_id=249215460]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.4124017, 9.240733, -4.231861)
 
-[node name="extra_marker" type="Node3D" parent="." unique_id=1117852191]
+[node name="walk_paths" type="Node3D" parent="walk_markers" unique_id=240429721]
+transform = Transform3D(9.5, 0, 0, 0, 9.5, 0, 0, 0, 9.5, 0, 0, 0)
 
-[node name="Marker3D" type="Marker3D" parent="extra_marker" unique_id=665905723]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9388986, 8.9803505, 0.0139911175)
+[node name="Path1" type="Path3D" parent="walk_markers/walk_paths" unique_id=1189806554]
+transform = Transform3D(-0.8383049, 0.0012004097, 0.5452001, 0.0004122177, 0.9999988, -0.0015679614, -0.5452014, -0.0010896982, -0.8383043, -0.7978634, 0.006060048, -0.90317017)
+curve = SubResource("Curve3D_k8afw")
 
-[node name="Marker3D2" type="Marker3D" parent="extra_marker" unique_id=1226560815]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.036159, 8.9803505, 1.006263)
+[node name="Path2" type="Path3D" parent="walk_markers/walk_paths" unique_id=1686898238]
+transform = Transform3D(-0.9190734, 0, 0.39408636, 0, 1, 0, -0.39408636, 0, -0.9190734, 0.49555168, -0.110791154, -0.9521426)
+curve = SubResource("Curve3D_34s6y")
 
-[node name="Marker3D3" type="Marker3D" parent="extra_marker" unique_id=203317727]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.997127, 8.9803505, 5.6081104)
+[node name="Path3" type="Path3D" parent="walk_markers/walk_paths" unique_id=1733647530]
+transform = Transform3D(-0.45343062, 0, -0.8912917, 0, 1, 0, 0.8912917, 0, -0.45343062, -1.1835741, 0.022844717, 0.115176104)
+curve = SubResource("Curve3D_k2g7e")
 
-[node name="Marker3D4" type="Marker3D" parent="extra_marker" unique_id=269994225]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6986823, 8.9803505, -0.22132611)
+[node name="Path4" type="Path3D" parent="walk_markers/walk_paths" unique_id=1458976341]
+transform = Transform3D(0.06759737, 0, -0.9977127, 0, 1, 0, 0.9977127, 0, 0.06759737, -0.4664892, 0.007986972, 0.6269031)
+curve = SubResource("Curve3D_k2g7e")
 
-[node name="Marker3D5" type="Marker3D" parent="extra_marker" unique_id=883348272]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1682444, 8.9803505, 2.9858482)
-
-[node name="Marker3D6" type="Marker3D" parent="extra_marker" unique_id=1385554326]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.1230154, 8.9803505, 0.55426717)
+[node name="Path5" type="Path3D" parent="walk_markers/walk_paths" unique_id=927730372]
+transform = Transform3D(0.03971331, 0, 0.9992112, 0, 1, 0, -0.9992112, 0, 0.03971331, 1.200593, -0.15677723, 0.07587701)
+curve = SubResource("Curve3D_dghkh")

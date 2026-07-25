@@ -3,16 +3,24 @@
 [ext_resource type="PackedScene" uid="uid://c4l7fjvecffxw" path="res://assets/animals/models/raw/Bear_01.glb" id="1_56fj2"]
 [ext_resource type="Script" uid="uid://c582u2pi2l1xu" path="res://scripts/animal.gd" id="2_os8nn"]
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_2k1cu"]
+load_path = "res://.godot/imported/Bear_01_ColorPalette_1.png-eb3f711a8e9fe0685b99c228f753a555.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j6kb0"]
+resource_name = "Color"
+cull_mode = 2
+albedo_texture = SubResource("CompressedTexture2D_2k1cu")
+
 [node name="Bear_012" unique_id=1652076105 instance=ExtResource("1_56fj2")]
 script = ExtResource("2_os8nn")
 walk_anims = Array[StringName]([&"Bear_Walk"])
 idle_anims = Array[StringName]([&"Bear_Idle"])
-max_start_delay_sec = 4.744
+special_anims = Array[StringName]([&"Bear_Gesture"])
 
-[node name="Skeleton_Bear_01" parent="." index="0" unique_id=1083991316]
-transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0, 0)
+[node name="Skeleton_Bear_01" parent="." index="0" unique_id=213316732]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 
-[node name="Skeleton3D" parent="Skeleton_Bear_01" index="0" unique_id=2010726550]
+[node name="Skeleton3D" parent="Skeleton_Bear_01" index="0" unique_id=153957450]
 bones/1/position = Vector3(8.4737356e-10, 1.5037445, 0.58606505)
 bones/1/rotation = Quaternion(-0.77426434, -3.6406366e-08, 3.936839e-08, 0.63286245)
 bones/3/position = Vector3(1.65496e-14, 0.3491891, 4.0407713e-09)
@@ -59,3 +67,6 @@ bones/36/rotation = Quaternion(-0.5017467, -0.032533508, -0.047834035, 0.8630781
 bones/37/rotation = Quaternion(0.7617021, 0.049478445, 0.034485586, 0.6451143)
 bones/38/rotation = Quaternion(-0.0676606, -4.2432458e-07, -3.0711234e-08, 0.9977085)
 bones/39/rotation = Quaternion(0.29272488, -0.012672293, 0.022227515, 0.9558544)
+
+[node name="Bear_01" parent="Skeleton_Bear_01/Skeleton3D" index="0" unique_id=96083176]
+surface_material_override/0 = SubResource("StandardMaterial3D_j6kb0")

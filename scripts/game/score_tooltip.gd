@@ -67,41 +67,43 @@ func handle_click_toolip(id:int) -> void:
 		$Panel2.show()
 		$Panel2/Panel.position.y = (id*50.0) + 4.0
 		
-		$Panel2/title/Label.text = get_title_text(id)
-		$Panel2/description/Label.text = get_description(id)
-		$Panel2/graphic/Sprite2D7.texture = get_desc_image(id)
+		$Panel2/title/Label.text = orchestrator.get_active_rule(id+1).name
+		$Panel2/description/Label.text = orchestrator.get_active_rule(id+1).description
+		$Panel2/graphic/Sprite2D7.texture = get_desc_image(orchestrator.get_active_rule(id+1).id)
 
 ## ----- Tooltip Content Logic ----- ##
-
-func get_title_text(id:int) -> String:
-	match(id):
-		0:
-			return "Forest"
-		1:
-			return "Field"
-		2:
-			return "Mountain"
-		3:
-			return "River"
-		4:
-			return "Wetland"
-		_:
-			return ""
-
-func get_description(id:int) -> String:
-	return orchestrator.get_active_rule(id+1).description
 
 func get_desc_image(id:int) -> Texture2D:
 	match(id):
 		0:
-			return load("res://assets/score_tooltip/forest0.png")
+			return load("res://assets/score_tooltip/scoring_forest1.png")
 		1:
-			return load("res://assets/score_tooltip/fields0.png")
+			return load("res://assets/score_tooltip/scoring_forest2.png")
 		2:
-			return load("res://assets/score_tooltip/mountain0.png")
+			return load("res://assets/score_tooltip/scoring_forest3.png")
 		3:
-			return load("res://assets/score_tooltip/river0.png")
+			return load("res://assets/score_tooltip/scoring_fields1.png")
 		4:
-			return load("res://assets/score_tooltip/wetland0.png")
+			return load("res://assets/score_tooltip/scoring_fields2.png")
+		5:
+			return load("res://assets/score_tooltip/scoring_fields3.png")
+		6:
+			return load("res://assets/score_tooltip/scoring_mountain1.png")
+		7:
+			return load("res://assets/score_tooltip/scoring_mountain2.png")
+		8:
+			return load("res://assets/score_tooltip/scoring_mountain3.png")
+		9:
+			return load("res://assets/score_tooltip/scoring_river1.png")
+		10:
+			return load("res://assets/score_tooltip/scoring_river2.png")
+		11:
+			return load("res://assets/score_tooltip/scoring_river3.png")
+		12:
+			return load("res://assets/score_tooltip/scoring_wetlands1.png")
+		13:
+			return load("res://assets/score_tooltip/scoring_wetlands2.png")
+		14:
+			return load("res://assets/score_tooltip/scoring_wetlands3.png")
 		_:
-			return load("res://assets/score_tooltip/forest0.png")
+			return load("res://assets/score_tooltip/scoring_forest1.png")

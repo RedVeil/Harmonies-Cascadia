@@ -8,8 +8,8 @@
 [ext_resource type="Texture2D" uid="uid://boqn0q1xtndms" path="res://assets/elements/m2.png" id="5_ci7lu"]
 [ext_resource type="Texture2D" uid="uid://deto26ef4js8g" path="res://assets/elements/r0.png" id="6_d6nn3"]
 [ext_resource type="Texture2D" uid="uid://bour75pi3njo7" path="res://assets/elements/w0.png" id="8_ci7lu"]
-[ext_resource type="Texture2D" uid="uid://8sdglhlqxn7g" path="res://assets/score_tooltip/fields0.png" id="9_ci7lu"]
 [ext_resource type="Texture2D" uid="uid://bnrcql3uy3afb" path="res://assets/icons/book.png" id="9_d6nn3"]
+[ext_resource type="Texture2D" uid="uid://diyjmvwygs4vq" path="res://assets/score_tooltip/scoring_fields1.png" id="10_d6nn3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e867d"]
 bg_color = Color(1, 1, 1, 1)
@@ -119,6 +119,7 @@ text = "Mountain"
 horizontal_alignment = 1
 
 [node name="ColorRect" type="ColorRect" parent="Panel2/title" unique_id=1615313368]
+visible = false
 offset_left = -150.0
 offset_top = 51.0
 offset_right = -66.0
@@ -151,9 +152,9 @@ autowrap_mode = 2
 position = Vector2(18, -21)
 
 [node name="Sprite2D7" type="Sprite2D" parent="Panel2/graphic" unique_id=1924229882]
-position = Vector2(71, 134)
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("9_ci7lu")
+position = Vector2(71.25172, 137)
+scale = Vector2(0.16366826, 0.15883668)
+texture = ExtResource("10_d6nn3")
 
 [connection signal="input_event" from="Button" to="." method="_on_button_input_event"]
 [connection signal="mouse_entered" from="Button" to="." method="_on_button_mouse_entered"]
