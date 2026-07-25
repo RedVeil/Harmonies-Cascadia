@@ -175,6 +175,7 @@ mouse_filter = 2
 
 [node name="PointCounter" parent="HUD" unique_id=1020461036 node_paths=PackedStringArray("orchestrator") instance=ExtResource("8_q5ijs")]
 orchestrator = NodePath("../../Orchestrator")
+checkpoint = 250
 
 [node name="QuestManager" parent="HUD" unique_id=409772543 instance=ExtResource("5_w2ew2")]
 
@@ -182,6 +183,7 @@ orchestrator = NodePath("../../Orchestrator")
 orchestrator = NodePath("../../Orchestrator")
 booster_limit = 3
 base_booster_point_cost = 15
+booster_point_multiplier = 1.1
 
 [node name="CardManager" parent="HUD" unique_id=241167023 node_paths=PackedStringArray("orchestrator") instance=ExtResource("2_vg1d4")]
 orchestrator = NodePath("../../Orchestrator")
