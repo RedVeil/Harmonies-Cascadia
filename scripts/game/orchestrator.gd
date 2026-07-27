@@ -10,6 +10,8 @@ class_name Orchestrator
 @export var undo_button:UndoButton
 @export var card_recycling:CardRecycling
 @export var tutorial_overlay:TutorialOverlay
+@export var game_over_overlay:GameOverOverlay
+@export var end_game_button:EndGameButton
 
 @onready var placement_logic:PlacementLogic = $PlacementLogic
 @onready var grouping_logic:GroupingLogic = $GroupingLogic
@@ -18,6 +20,7 @@ var selected_card_id : int = -1
 var cards_paused: bool = false
 var tile_hovered : bool = false
 var selected_coord : Vector2i = Vector2i.ZERO
+var game_over: bool = false
 
 var map_points: int = 0
 
@@ -46,6 +49,8 @@ func _ready() -> void:
 	vp.physics_object_picking = true
 	vp.physics_object_picking_sort = true
 	vp.physics_object_picking_first_only = true
+	if game_over_overlay:
+		game_over_overlay.restart_pressed.connect(restart_run)
 	# show_tutorial()
 
 ## ----- Handle Booster Interactions ----- ##
@@ -57,6 +62,8 @@ func add_hand_card(card:CardData) -> void:
 ## ----- Handle Hand Interactions ----- ##
 
 func select_hand_card(id:int) -> void:
+	if game_over:
+		return
 	var new_selection = id
 	
 	## deselect selection
@@ -93,6 +100,8 @@ func pause_cards() -> void:
 	booster_manager.paused = true
 	
 func unpause_cards() -> void:
+	if game_over:
+		return
 	if map_points > 0:
 		return
 	if card_manager.card_amount > card_manager.card_limit:
@@ -102,6 +111,33 @@ func unpause_cards() -> void:
 	cards_paused = false
 	booster_manager.paused = false
 	card_manager.unpause()
+
+## ----- Game Over ----- ##
+
+func end_game() -> void:
+	if game_over:
+		return
+	game_over = true
+	if selected_card_id != -1:
+		card_manager.deselect_card(selected_card_id)
+		selected_card_id = -1
+		_update_card_recycling_state()
+		booster_manager.reset_preview()
+		if tile_hovered:
+			hex_manager.reset_preview(selected_coord)
+		quest_manager.reset_preview()
+		point_counter.reset_preview()
+		reset_preview()
+	pause_cards()
+	undo_button.disable()
+	if end_game_button:
+		end_game_button.disable()
+	if game_over_overlay:
+		game_over_overlay.open(score_engine.total_score)
+
+func restart_run() -> void:
+	GameSession.begin_run(0)
+	get_tree().call_deferred("reload_current_scene")
 	
 func preview_recycle_card(id:int, amount:int, id_known:bool) -> void:
 	if id_known:

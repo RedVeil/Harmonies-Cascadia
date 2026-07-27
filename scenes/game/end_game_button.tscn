@@ -1,0 +1,92 @@
+[gd_scene format=3 uid="uid://c20rnltrn1aea"]
+
+[ext_resource type="Script" path="res://scripts/game/end_game_button.gd" id="1_end"]
+[ext_resource type="Texture2D" uid="uid://ca2hp56qvfswa" path="res://assets/icons/circle.png" id="2_circle"]
+[ext_resource type="Shader" uid="uid://y4g8ky747mqh" path="res://assets/shader/ui/shadow.gdshader" id="3_shadow"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_end"]
+radius = 14.035668
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_shadow"]
+shader = ExtResource("3_shadow")
+shader_parameter/shadow_color = Color(0, 0, 0, 0.1254902)
+shader_parameter/blur_size = 20.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tooltip"]
+bg_color = Color(0.95686275, 0.8745098, 0.7921569, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.1254902)
+shadow_size = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_arrow"]
+bg_color = Color(0.95686275, 0.8745098, 0.7921569, 1)
+shadow_color = Color(0, 0, 0, 0.1254902)
+shadow_size = 4
+
+[node name="EndGameButton" type="Area2D"]
+monitorable = false
+priority = 2
+script = ExtResource("1_end")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+z_index = 1
+shape = SubResource("CircleShape2D_end")
+
+[node name="background" type="Sprite2D" parent="."]
+scale = Vector2(0.06999999, 0.06999999)
+texture = ExtResource("2_circle")
+
+[node name="shadow" type="Sprite2D" parent="background"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_shadow")
+position = Vector2(0.68392086, 1.1477747)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("2_circle")
+
+[node name="Label" type="Label" parent="."]
+offset_left = -16.0
+offset_top = -10.0
+offset_right = 16.0
+offset_bottom = 10.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 11
+text = "End"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Tooltip" type="Panel" parent="."]
+visible = false
+offset_left = -180.0
+offset_top = -80.0
+offset_right = 20.0
+offset_bottom = -31.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_tooltip")
+
+[node name="Panel" type="Panel" parent="Tooltip"]
+show_behind_parent = true
+layout_mode = 0
+offset_left = 180.0
+offset_top = 29.0
+offset_right = 200.0
+offset_bottom = 49.0
+rotation = 0.7853982
+theme_override_styles/panel = SubResource("StyleBoxFlat_arrow")
+
+[node name="Label" type="Label" parent="Tooltip"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 197.0
+offset_bottom = 42.0
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.4745098, 1)
+theme_override_font_sizes/font_size = 12
+text = "End the game and see your score."
+autowrap_mode = 2
+
+[connection signal="input_event" from="." to="." method="_on_input_event"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

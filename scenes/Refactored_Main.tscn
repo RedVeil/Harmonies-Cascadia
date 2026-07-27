@@ -13,6 +13,8 @@
 [ext_resource type="PackedScene" uid="uid://bv5ofl0j1ktqc" path="res://scenes/game/score_tooltips.tscn" id="11_b2x3j"]
 [ext_resource type="PackedScene" uid="uid://bde4y0iag4uud" path="res://scenes/game/undo_button.tscn" id="12_3qqq0"]
 [ext_resource type="PackedScene" uid="uid://btq3hb02wek7u" path="res://scenes/game/tutorial_overlay.tscn" id="13_tutorial"]
+[ext_resource type="PackedScene" uid="uid://cendgamebtn001" path="res://scenes/game/end_game_button.tscn" id="13_endgame"]
+[ext_resource type="PackedScene" uid="uid://cq8gameover001" path="res://scenes/game/game_over_overlay.tscn" id="13_gameover"]
 [ext_resource type="Texture2D" uid="uid://cr3us6hvwje2s" path="res://assets/tutorial/Folder 1.png" id="14_0bw36"]
 [ext_resource type="Texture2D" uid="uid://b2c5gk5bhrmq6" path="res://assets/tutorial/Folder 2.png" id="15_l72vc"]
 [ext_resource type="Texture2D" uid="uid://c2cvea1126srm" path="res://assets/tutorial/Folder 3.png" id="16_0tef6"]
@@ -66,7 +68,7 @@ map_button = ExtResource("4_5mvym")
 
 [node name="ScoreEngine" parent="." unique_id=271434607 instance=ExtResource("4_xoyem")]
 
-[node name="Orchestrator" parent="." unique_id=1688505566 node_paths=PackedStringArray("booster_manager", "card_manager", "hex_manager", "score_engine", "quest_manager", "point_counter", "undo_button", "card_recycling", "tutorial_overlay") instance=ExtResource("5_71goi")]
+[node name="Orchestrator" parent="." unique_id=1688505566 node_paths=PackedStringArray("booster_manager", "card_manager", "hex_manager", "score_engine", "quest_manager", "point_counter", "undo_button", "card_recycling", "tutorial_overlay", "game_over_overlay", "end_game_button") instance=ExtResource("5_71goi")]
 booster_manager = NodePath("../HUD/BoosterManager")
 card_manager = NodePath("../HUD/CardManager")
 hex_manager = NodePath("../HexManager")
@@ -76,6 +78,8 @@ point_counter = NodePath("../HUD/PointCounter")
 undo_button = NodePath("../HUD/UndoButton")
 card_recycling = NodePath("../HUD/CardRecycling")
 tutorial_overlay = NodePath("../TutorialOverlay")
+game_over_overlay = NodePath("../GameOverOverlay")
+end_game_button = NodePath("../HUD/EndGameButton")
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=469851010]
 script = ExtResource("17_hud")
@@ -174,6 +178,21 @@ grow_horizontal = 0
 grow_vertical = 0
 mouse_filter = 2
 
+[node name="EndGameButtonSlot" type="Control" parent="HUD/Root"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -44.0
+offset_top = -96.0
+offset_right = -44.0
+offset_bottom = -96.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+
 [node name="PointCounter" parent="HUD" unique_id=1020461036 node_paths=PackedStringArray("orchestrator") instance=ExtResource("8_q5ijs")]
 orchestrator = NodePath("../../Orchestrator")
 checkpoint = 300
@@ -203,6 +222,12 @@ z_index = 1
 orchestrator = NodePath("../../Orchestrator")
 recycling_value = 0
 
+[node name="EndGameButton" parent="HUD" node_paths=PackedStringArray("orchestrator") instance=ExtResource("13_endgame")]
+orchestrator = NodePath("../../Orchestrator")
+
 [node name="TutorialOverlay" parent="." unique_id=1580048330 instance=ExtResource("13_tutorial")]
 visible = false
 slides = Array[Texture2D]([ExtResource("14_0bw36"), ExtResource("15_l72vc"), ExtResource("16_0tef6"), ExtResource("18_ucyvv"), ExtResource("19_sk4yt"), ExtResource("20_k5eml"), ExtResource("21_c3d47"), ExtResource("22_tgxom"), ExtResource("23_5xdac"), ExtResource("24_wjfq2"), ExtResource("25_4ml36"), ExtResource("26_l2rhs"), ExtResource("27_6hr1h"), ExtResource("28_uvijx"), ExtResource("29_bbhlo"), ExtResource("30_rmrxj"), ExtResource("31_k1ell"), ExtResource("32_vsh54"), ExtResource("33_h6ck3")])
+
+[node name="GameOverOverlay" parent="." instance=ExtResource("13_gameover")]
+visible = false

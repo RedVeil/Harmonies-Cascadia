@@ -16,6 +16,7 @@ func _ready() -> void:
 		[$Root/ScoreTooltipSlot, $ScoreTooltip],
 		[$Root/UndoButtonSlot, $UndoButton],
 		[$Root/CardRecyclingSlot, $CardRecycling],
+		[$Root/EndGameButtonSlot, $EndGameButton],
 	]
 	get_viewport().size_changed.connect(_relayout)
 	_root.resized.connect(_relayout)
