@@ -1695,7 +1695,7 @@
 			],
 			"amount": 2.0,
 			"draw_chance": 20.0,
-			"element": 5.0,
+			"element": 4.0,
 			"secondary_element": 3.0,
 			"point_score": 7.0,
 			"bonus_points": 4.0,

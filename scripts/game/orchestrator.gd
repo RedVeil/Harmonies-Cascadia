@@ -8,6 +8,7 @@ class_name Orchestrator
 @export var quest_manager:QuestManager
 @export var point_counter:PointCounter
 @export var undo_button:UndoButton
+@export var card_recycling:CardRecycling
 @export var tutorial_overlay:TutorialOverlay
 
 @onready var placement_logic:PlacementLogic = $PlacementLogic
@@ -67,6 +68,7 @@ func select_hand_card(id:int) -> void:
 		card_manager.deselect_card(selected_card_id)
 		
 	selected_card_id = new_selection
+	_update_card_recycling_state()
 	if tile_hovered:
 		if new_selection == -1:
 			booster_manager.reset_preview()
@@ -75,6 +77,16 @@ func select_hand_card(id:int) -> void:
 			point_counter.reset_preview()
 			reset_preview()
 		handle_tile_hover(selected_coord)
+
+func _update_card_recycling_state() -> void:
+	if card_recycling == null:
+		return
+	if selected_card_id != -1:
+		var selected_card := card_manager.cards[selected_card_id]
+		if selected_card != null and selected_card.type == CardData.CARD_TYPE.ANIMAL:
+			card_recycling.enable()
+			return
+	card_recycling.disable()
 
 func pause_cards() -> void:
 	cards_paused = true
@@ -85,6 +97,8 @@ func unpause_cards() -> void:
 		return
 	if card_manager.card_amount > card_manager.card_limit:
 		return
+	if card_manager.animal_amount > card_manager.animal_limit:
+		return
 	cards_paused = false
 	booster_manager.paused = false
 	card_manager.unpause()
@@ -92,19 +106,40 @@ func unpause_cards() -> void:
 func preview_recycle_card(id:int, amount:int, id_known:bool) -> void:
 	if id_known:
 		booster_manager.preview_booster_points(amount)
-	else:
-		if selected_card_id != -1:
-			booster_manager.preview_booster_points(amount)
+		return
+	if selected_card_id == -1:
+		return
+	var selected_card := card_manager.cards[selected_card_id]
+	if selected_card == null or selected_card.type != CardData.CARD_TYPE.ANIMAL:
+		return
+	booster_manager.preview_booster_points(amount * selected_card.amount)
 	
 func apply_recycle_card(id:int, amount:int, id_known:bool) -> void:
-	var card_id = id if id_known else selected_card_id
-	if selected_card_id != -1:
+	var card_id := id if id_known else selected_card_id
+	if card_id < 0 or card_manager.cards[card_id] == null:
+		return
+	
+	if id_known:
 		GameFeedback.play_recycle()
 		booster_manager.apply_booster_points()
 		card_manager.remove_card(card_id)
 		undo_button.disable()
-		if selected_card_id != -1:
-			preview_recycle_card(card_id, card_manager.recycling_value, true)
+		if selected_card_id != -1 and card_manager.cards[selected_card_id] != null:
+			preview_recycle_card(selected_card_id, card_manager.recycling_value, true)
+		return
+	
+	var selected_card := card_manager.cards[card_id]
+	if selected_card.type != CardData.CARD_TYPE.ANIMAL:
+		return
+	
+	var count := selected_card.amount
+	for i in count:
+		GameFeedback.play_recycle()
+		booster_manager.preview_booster_points(amount)
+		booster_manager.apply_booster_points()
+		card_manager.remove_card(card_id)
+	undo_button.disable()
+	_update_card_recycling_state()
 
 func reset_recycle_card_preview() -> void:
 	booster_manager.reset_preview()
@@ -189,11 +224,9 @@ func handle_tile_click(coord: Vector2i) -> void:
 			score_engine.quest_score = score_engine.new_quest_score
 			score_engine.total_score = score_engine.new_element_score + score_engine.new_quest_score + score_engine.animal_score
 		else:
-			var animal_multiplier_score = 0
+			var animal_multiplier_score := _animal_bonus_multiplier_score(selected_card)
 			if score_engine.placed_animals.has(selected_card.id):
-				var animal_amount = score_engine.placed_animals[selected_card.id]
-				animal_multiplier_score = int(animal_amount * selected_card.bonus_points)
-				score_engine.placed_animals[selected_card.id] = animal_amount + 1
+				score_engine.placed_animals[selected_card.id] += 1
 			else:
 				score_engine.placed_animals[selected_card.id] = 1
 			
@@ -292,10 +325,7 @@ func handle_animal_preview(coord:Vector2i, card:CardData) -> TileStatePreview:
 		contributing_coords.assign(placement_res.coords)
 		
 		score_engine.new_quest_score = score_engine.quest_score + quest_manager.preview_animal_quests(card.id)
-		var animal_multiplier_score = 0
-		if score_engine.placed_animals.has(card.id):
-			var animal_amount = score_engine.placed_animals[card.id]
-			animal_multiplier_score = int(animal_amount * card.bonus_points)
+		var animal_multiplier_score := _animal_bonus_multiplier_score(card)
 		
 		return TileStatePreview.new({
 			"is_valid":true,
@@ -312,6 +342,14 @@ func handle_animal_preview(coord:Vector2i, card:CardData) -> TileStatePreview:
 			"points_diff": 0, 
 			"contributing_coords":[]
 			})
+
+## Bonus scales with already-placed count, capped at catalog amount - 1.
+func _animal_bonus_multiplier_score(card: CardData) -> int:
+	if not score_engine.placed_animals.has(card.id):
+		return 0
+	var already_placed: int = score_engine.placed_animals[card.id]
+	var max_scale_count := maxi(CardCatalog.animals[card.id].amount - 1, 0)
+	return int(mini(already_placed, max_scale_count) * card.bonus_points)
 
 ## ----- Undo Logic ----- ##
 

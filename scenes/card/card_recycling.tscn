@@ -49,7 +49,7 @@ scale = Vector2(1.2, 1.2)
 texture = ExtResource("1_f7sw7")
 
 [node name="icon" type="Sprite2D" parent="." unique_id=1411433287]
-self_modulate = Color(0.5686275, 0.5176471, 0.47058824, 1)
+self_modulate = Color(0.74509805, 0.74509805, 0.74509805, 1)
 scale = Vector2(0.22, 0.22)
 texture = ExtResource("2_f7sw7")
 
