@@ -67,7 +67,7 @@ map_button = ExtResource("4_5mvym")
 
 [node name="ScoreEngine" parent="." unique_id=271434607 instance=ExtResource("4_xoyem")]
 
-[node name="Orchestrator" parent="." unique_id=1688505566 node_paths=PackedStringArray("booster_manager", "card_manager", "hex_manager", "score_engine", "quest_manager", "point_counter", "undo_button", "tutorial_overlay") instance=ExtResource("5_71goi")]
+[node name="Orchestrator" parent="." unique_id=1688505566 node_paths=PackedStringArray("booster_manager", "card_manager", "hex_manager", "score_engine", "quest_manager", "point_counter", "undo_button", "card_recycling", "tutorial_overlay") instance=ExtResource("5_71goi")]
 booster_manager = NodePath("../HUD/BoosterManager")
 card_manager = NodePath("../HUD/CardManager")
 hex_manager = NodePath("../HexManager")
@@ -75,6 +75,7 @@ score_engine = NodePath("../ScoreEngine")
 quest_manager = NodePath("../HUD/QuestManager")
 point_counter = NodePath("../HUD/PointCounter")
 undo_button = NodePath("../HUD/UndoButton")
+card_recycling = NodePath("../HUD/CardRecycling")
 tutorial_overlay = NodePath("../TutorialOverlay")
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=469851010]
@@ -193,7 +194,7 @@ mixed_element_weights = Array[float]([25.0, 20.0, 25.0, 20.0, 10.0])
 orchestrator = NodePath("../../Orchestrator")
 card_limit = 8
 card_limit_buffer = 6
-recycling_value = 20
+recycling_value = 0
 
 [node name="ScoreTooltip" parent="HUD" unique_id=33584632 node_paths=PackedStringArray("orchestrator") instance=ExtResource("11_b2x3j")]
 orchestrator = NodePath("../../Orchestrator")
@@ -204,7 +205,7 @@ orchestrator = NodePath("../../Orchestrator")
 [node name="CardRecycling" parent="HUD" unique_id=1759140847 node_paths=PackedStringArray("orchestrator") instance=ExtResource("10_ggq8u")]
 z_index = 1
 orchestrator = NodePath("../../Orchestrator")
-recycling_value = 20
+recycling_value = 0
 
 [node name="TutorialOverlay" parent="." unique_id=1580048330 instance=ExtResource("13_tutorial")]
 visible = false

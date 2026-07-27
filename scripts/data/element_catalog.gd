@@ -30,7 +30,7 @@ func parse_element(element:Dictionary) -> Element:
 	element_data.type = element.id
 	element_data.name = element.name
 	element_data.scoring_rules.assign(element.scoring_rules)
-	
+
 	if element_data.scoring_rules.size() > 0:
 		var rng := GameSession.make_rng("scoring")
 		element_data.active_scoring_rule = element.scoring_rules[rng.randi_range(0, element.scoring_rules.size() - 1)]
