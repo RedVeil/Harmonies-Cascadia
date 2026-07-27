@@ -8,6 +8,7 @@ class_name Orchestrator
 @export var quest_manager:QuestManager
 @export var point_counter:PointCounter
 @export var undo_button:UndoButton
+@export var card_recycling:CardRecycling
 @export var tutorial_overlay:TutorialOverlay
 
 @onready var placement_logic:PlacementLogic = $PlacementLogic
@@ -67,6 +68,7 @@ func select_hand_card(id:int) -> void:
 		card_manager.deselect_card(selected_card_id)
 		
 	selected_card_id = new_selection
+	_update_card_recycling_state()
 	if tile_hovered:
 		if new_selection == -1:
 			booster_manager.reset_preview()
@@ -75,6 +77,16 @@ func select_hand_card(id:int) -> void:
 			point_counter.reset_preview()
 			reset_preview()
 		handle_tile_hover(selected_coord)
+
+func _update_card_recycling_state() -> void:
+	if card_recycling == null:
+		return
+	if selected_card_id != -1:
+		var selected_card := card_manager.cards[selected_card_id]
+		if selected_card != null and selected_card.type == CardData.CARD_TYPE.ANIMAL:
+			card_recycling.enable()
+			return
+	card_recycling.disable()
 
 func pause_cards() -> void:
 	cards_paused = true
@@ -94,19 +106,40 @@ func unpause_cards() -> void:
 func preview_recycle_card(id:int, amount:int, id_known:bool) -> void:
 	if id_known:
 		booster_manager.preview_booster_points(amount)
-	else:
-		if selected_card_id != -1:
-			booster_manager.preview_booster_points(amount)
+		return
+	if selected_card_id == -1:
+		return
+	var selected_card := card_manager.cards[selected_card_id]
+	if selected_card == null or selected_card.type != CardData.CARD_TYPE.ANIMAL:
+		return
+	booster_manager.preview_booster_points(amount * selected_card.amount)
 	
 func apply_recycle_card(id:int, amount:int, id_known:bool) -> void:
-	var card_id = id if id_known else selected_card_id
-	if selected_card_id != -1:
+	var card_id := id if id_known else selected_card_id
+	if card_id < 0 or card_manager.cards[card_id] == null:
+		return
+	
+	if id_known:
 		GameFeedback.play_recycle()
 		booster_manager.apply_booster_points()
 		card_manager.remove_card(card_id)
 		undo_button.disable()
-		if selected_card_id != -1:
-			preview_recycle_card(card_id, card_manager.recycling_value, true)
+		if selected_card_id != -1 and card_manager.cards[selected_card_id] != null:
+			preview_recycle_card(selected_card_id, card_manager.recycling_value, true)
+		return
+	
+	var selected_card := card_manager.cards[card_id]
+	if selected_card.type != CardData.CARD_TYPE.ANIMAL:
+		return
+	
+	var count := selected_card.amount
+	for i in count:
+		GameFeedback.play_recycle()
+		booster_manager.preview_booster_points(amount)
+		booster_manager.apply_booster_points()
+		card_manager.remove_card(card_id)
+	undo_button.disable()
+	_update_card_recycling_state()
 
 func reset_recycle_card_preview() -> void:
 	booster_manager.reset_preview()
