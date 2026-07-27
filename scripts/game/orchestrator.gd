@@ -224,11 +224,9 @@ func handle_tile_click(coord: Vector2i) -> void:
 			score_engine.quest_score = score_engine.new_quest_score
 			score_engine.total_score = score_engine.new_element_score + score_engine.new_quest_score + score_engine.animal_score
 		else:
-			var animal_multiplier_score = 0
+			var animal_multiplier_score := _animal_bonus_multiplier_score(selected_card)
 			if score_engine.placed_animals.has(selected_card.id):
-				var animal_amount = score_engine.placed_animals[selected_card.id]
-				animal_multiplier_score = int(animal_amount * selected_card.bonus_points)
-				score_engine.placed_animals[selected_card.id] = animal_amount + 1
+				score_engine.placed_animals[selected_card.id] += 1
 			else:
 				score_engine.placed_animals[selected_card.id] = 1
 			
@@ -327,10 +325,7 @@ func handle_animal_preview(coord:Vector2i, card:CardData) -> TileStatePreview:
 		contributing_coords.assign(placement_res.coords)
 		
 		score_engine.new_quest_score = score_engine.quest_score + quest_manager.preview_animal_quests(card.id)
-		var animal_multiplier_score = 0
-		if score_engine.placed_animals.has(card.id):
-			var animal_amount = score_engine.placed_animals[card.id]
-			animal_multiplier_score = int(animal_amount * card.bonus_points)
+		var animal_multiplier_score := _animal_bonus_multiplier_score(card)
 		
 		return TileStatePreview.new({
 			"is_valid":true,
@@ -347,6 +342,14 @@ func handle_animal_preview(coord:Vector2i, card:CardData) -> TileStatePreview:
 			"points_diff": 0, 
 			"contributing_coords":[]
 			})
+
+## Bonus scales with already-placed count, capped at catalog amount - 1.
+func _animal_bonus_multiplier_score(card: CardData) -> int:
+	if not score_engine.placed_animals.has(card.id):
+		return 0
+	var already_placed: int = score_engine.placed_animals[card.id]
+	var max_scale_count := maxi(CardCatalog.animals[card.id].amount - 1, 0)
+	return int(mini(already_placed, max_scale_count) * card.bonus_points)
 
 ## ----- Undo Logic ----- ##
 
