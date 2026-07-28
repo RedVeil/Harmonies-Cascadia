@@ -22,12 +22,6 @@
 		"extra_chance": 20.0,
 		"extra_content_options": [
 			{
-				"type": "quest",
-				"id": 0,
-				"amount": 1,
-				"draw_chance": 0.0
-			},
-			{
 				"type": "booster_point",
 				"id": -1,
 				"amount": 1,
@@ -63,12 +57,6 @@
 		],
 		"extra_chance": 10.0,
 		"extra_content_options": [
-			{
-				"type": "quest",
-				"id": 0,
-				"amount": 1,
-				"draw_chance": 0.0
-			},
 			{
 				"type": "booster_point",
 				"id": -1,
@@ -106,12 +94,6 @@
 		"extra_chance": 10.0,
 		"extra_content_options": [
 			{
-				"type": "quest",
-				"id": 0,
-				"amount": 1,
-				"draw_chance": 0.0
-			},
-			{
 				"type": "booster_point",
 				"id": -1,
 				"amount": 1,
@@ -148,12 +130,6 @@
 		"extra_chance": 10.0,
 		"extra_content_options": [
 			{
-				"type": "quest",
-				"id": 0,
-				"amount": 1,
-				"draw_chance": 0.0
-			},
-			{
 				"type": "booster_point",
 				"id": -1,
 				"amount": 1,
@@ -189,12 +165,6 @@
 		],
 		"extra_chance": 50.0,
 		"extra_content_options": [
-			{
-				"type": "quest",
-				"id": 0,
-				"amount": 1,
-				"draw_chance": 0.0
-			},
 			{
 				"type": "booster_point",
 				"id": -1,

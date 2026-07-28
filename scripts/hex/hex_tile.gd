@@ -43,10 +43,13 @@ var _staging_visuals: TileVisuals
 var _showing_preview: bool = false
 var _feedback_tweens: Dictionary = {}
 var _score_pop_playing: bool = false
+var _awaiting_place_feedback: bool = false
 var _hover_info_pending: bool = false
 var _pending_hover_element_tex: Texture2D = null
 var _pending_hover_animal_tex: Texture2D = null
 var _pending_hover_icon_color: Color = Color.WHITE
+
+signal place_feedback_finished
 
 
 func _ready() -> void:
@@ -383,7 +386,9 @@ func hide_outline() -> void:
 ## ----- Animations ----- ##
 
 func play_place_reward(points: int, element: int) -> void:
+	_awaiting_place_feedback = true
 	play_animation(&"place", {"points": points, "element": element})
+	_try_emit_place_feedback_finished()
 
 
 func play_contributor_reward(element: int, delay: float = 0.0) -> void:
@@ -413,6 +418,7 @@ func kill_animations() -> void:
 		_feedback_tweens.erase(key)
 	_reset_celebrate_visuals()
 	_reset_outline_visuals()
+	_try_emit_place_feedback_finished()
 
 
 func _animate_place(points: int, element: int) -> void:
@@ -461,8 +467,10 @@ func _animate_score_pop(points: int) -> void:
 
 func _on_score_pop_finished() -> void:
 	_score_pop_playing = false
+	_feedback_tweens.erase(&"score_pop")
 	_reset_score_pop_visuals()
 	_flush_pending_hover_info()
+	_try_emit_place_feedback_finished()
 
 
 func _animate_outline_flash(delay: float) -> void:
@@ -476,7 +484,7 @@ func _animate_outline_flash(delay: float) -> void:
 		tween.tween_interval(delay)
 	tween.tween_property(outline, "modulate:a", 0.0, outline_flash_fade_duration)\
 		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	tween.finished.connect(_reset_outline_visuals)
+	tween.finished.connect(_on_outline_flash_finished)
 
 
 func _animate_celebrate(strong: bool, delay: float) -> void:
@@ -503,7 +511,38 @@ func _animate_celebrate(strong: bool, delay: float) -> void:
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 	tween.parallel().tween_property(_visuals_root, "scale", Vector3.ONE, settle_duration)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-	tween.finished.connect(_reset_celebrate_visuals)
+	tween.finished.connect(_on_celebrate_finished)
+
+
+func _on_outline_flash_finished() -> void:
+	_feedback_tweens.erase(&"outline")
+	_reset_outline_visuals()
+	_try_emit_place_feedback_finished()
+
+
+func _on_celebrate_finished() -> void:
+	_feedback_tweens.erase(&"celebrate")
+	_reset_celebrate_visuals()
+	_try_emit_place_feedback_finished()
+
+
+func _has_active_place_feedback_tween() -> bool:
+	for key in [&"score_pop", &"outline", &"celebrate"]:
+		if not _feedback_tweens.has(key):
+			continue
+		var tween: Tween = _feedback_tweens[key]
+		if tween != null and tween.is_valid():
+			return true
+	return false
+
+
+func _try_emit_place_feedback_finished() -> void:
+	if not _awaiting_place_feedback:
+		return
+	if _has_active_place_feedback_tween():
+		return
+	_awaiting_place_feedback = false
+	place_feedback_finished.emit()
 
 
 func _reset_score_pop_visuals() -> void:

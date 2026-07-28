@@ -79,7 +79,7 @@ offset_right = 197.0
 offset_bottom = 42.0
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.4745098, 1)
 theme_override_font_sizes/font_size = 12
-text = "Recycle cards to earn additional credits for boosters."
+text = "Recycle animal cards from your hand."
 autowrap_mode = 2
 
 [connection signal="input_event" from="." to="." method="_on_input_event"]

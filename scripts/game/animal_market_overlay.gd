@@ -14,7 +14,7 @@ const BUY_BUTTON_HEIGHT := 28.0
 const REROLL_BUTTON_SIZE := Vector2(160.0, 32.0)
 const PANEL_PADDING := Vector2(32.0, 28.0)
 const TITLE_HEIGHT := 36.0
-const CREDITS_HEIGHT := 28.0
+const SUBTITLE_HEIGHT := 28.0
 const CLOSE_ROW_HEIGHT := 36.0
 const CARD_TO_BUY_GAP := 12.0
 const BUY_TO_REROLL_GAP := 16.0
@@ -23,9 +23,6 @@ const BUY_TO_REROLL_GAP := 16.0
 @export var market_hover_height: float = 12.0
 
 var _offers: Array[CardData] = []
-var _price: int = 1
-var _reroll_price: int = 1
-var _credits: int = 0
 var _offer_roots: Array[Node2D] = []
 var _cards: Array[Card] = []
 var _buy_buttons: Array[Control] = []
@@ -53,11 +50,8 @@ func _ready() -> void:
 
 ## ----- Public API ----- ##
 
-func open(offers: Array[CardData], price: int, credits: int, reroll_price: int = 1) -> void:
+func open(offers: Array[CardData], _price: int = 0, _credits: int = 0, _reroll_price: int = 0) -> void:
 	_offers = offers.duplicate()
-	_price = price
-	_reroll_price = reroll_price
-	_credits = credits
 	_hover_card_id = -1
 	_rebuild_offers()
 	_refresh_labels()
@@ -82,12 +76,8 @@ func replace_offer(offer_index: int, offer: CardData) -> void:
 	_rebuild_single_offer(offer_index)
 	_refresh_offer_button(offer_index)
 
-func update_credits(credits: int) -> void:
-	_credits = credits
-	_refresh_labels()
-	_refresh_reroll_button()
-	for i in _offers.size():
-		_refresh_offer_button(i)
+func update_credits(_credits: int) -> void:
+	pass
 
 func close() -> void:
 	_clear_offers()
@@ -146,7 +136,7 @@ func _layout() -> void:
 	var panel_height := (
 		CLOSE_ROW_HEIGHT
 		+ TITLE_HEIGHT
-		+ CREDITS_HEIGHT
+		+ SUBTITLE_HEIGHT
 		+ column_height
 		+ BUY_TO_REROLL_GAP
 		+ REROLL_BUTTON_SIZE.y
@@ -160,11 +150,11 @@ func _layout() -> void:
 	_title_label.size = Vector2(panel_width - PANEL_PADDING.x * 2.0, TITLE_HEIGHT)
 
 	_credits_label.position = Vector2(-panel_width / 2.0 + PANEL_PADDING.x, -panel_height / 2.0 + CLOSE_ROW_HEIGHT + TITLE_HEIGHT)
-	_credits_label.size = Vector2(panel_width - PANEL_PADDING.x * 2.0, CREDITS_HEIGHT)
+	_credits_label.size = Vector2(panel_width - PANEL_PADDING.x * 2.0, SUBTITLE_HEIGHT)
 
 	_offers_root.position = Vector2(
 		0.0,
-		-panel_height / 2.0 + CLOSE_ROW_HEIGHT + TITLE_HEIGHT + CREDITS_HEIGHT + PANEL_PADDING.y + column_height / 2.0
+		-panel_height / 2.0 + CLOSE_ROW_HEIGHT + TITLE_HEIGHT + SUBTITLE_HEIGHT + PANEL_PADDING.y + column_height / 2.0
 	)
 
 	_set_control_rect(
@@ -276,7 +266,7 @@ func _rebuild_single_offer(offer_index: int) -> void:
 
 func _refresh_labels() -> void:
 	_title_label.text = "Animal Market"
-	_credits_label.text = "Credits: %d  ·  Price: %d each" % [_credits, _price]
+	_credits_label.text = "Pick one animal for free"
 
 func _refresh_offer_button(offer_index: int) -> void:
 	if offer_index < 0 or offer_index >= _buy_buttons.size():
@@ -287,20 +277,18 @@ func _refresh_offer_button(offer_index: int) -> void:
 	var buy_label: Label = buy_button.get_node("Label")
 	var buy_bg: ColorRect = buy_button.get_node("Background")
 
-	var can_afford := _credits >= _price
-	buy_label.text = "Buy (%d)" % _price
-	buy_bg.color = Color.WHITE if can_afford else Color(0.9, 0.88, 0.85, 1)
-	buy_label.add_theme_color_override("font_color", COLOR_BROWN if can_afford else Color(0.75, 0.7, 0.65, 1))
-	buy_button.mouse_filter = Control.MOUSE_FILTER_STOP if can_afford else Control.MOUSE_FILTER_IGNORE
+	buy_label.text = "Take"
+	buy_bg.color = Color.WHITE
+	buy_label.add_theme_color_override("font_color", COLOR_BROWN)
+	buy_button.mouse_filter = Control.MOUSE_FILTER_STOP
 
 func _refresh_reroll_button() -> void:
 	var label: Label = _reroll_button.get_node("Label")
 	var bg: ColorRect = _reroll_button.get_node("Background")
-	var can_afford := _credits >= _reroll_price
-	label.text = "Reroll (%d)" % _reroll_price
-	bg.color = Color.WHITE if can_afford else Color(0.9, 0.88, 0.85, 1)
-	label.add_theme_color_override("font_color", COLOR_BROWN if can_afford else Color(0.75, 0.7, 0.65, 1))
-	_reroll_button.mouse_filter = Control.MOUSE_FILTER_STOP if can_afford else Control.MOUSE_FILTER_IGNORE
+	label.text = "Reroll"
+	bg.color = Color.WHITE
+	label.add_theme_color_override("font_color", COLOR_BROWN)
+	_reroll_button.mouse_filter = Control.MOUSE_FILTER_STOP
 
 ## ----- Input ----- ##
 
@@ -321,8 +309,6 @@ func _on_reroll_gui_input(event: InputEvent) -> void:
 	_handle_gui_click(event, _on_reroll_pressed)
 
 func _on_reroll_pressed() -> void:
-	if _credits < _reroll_price:
-		return
 	GameFeedback.play_click_button()
 	reroll_pressed.emit()
 
@@ -341,8 +327,6 @@ func _on_card_hit_exited(offer_index: int) -> void:
 func _on_buy_pressed(offer_index: int) -> void:
 	if offer_index < 0 or offer_index >= _offers.size():
 		return
-	if _credits < _price:
-		return
 	GameFeedback.play_click_button()
 	buy_pressed.emit(offer_index)
 
@@ -353,8 +337,6 @@ func _on_close_mouse_exited() -> void:
 	_close_button.get_node("Label").add_theme_color_override("font_color", COLOR_BROWN)
 
 func _on_reroll_mouse_entered() -> void:
-	if _credits < _reroll_price:
-		return
 	_reroll_button.get_node("Background").color = COLOR_BROWN
 	_reroll_button.get_node("Label").add_theme_color_override("font_color", Color.WHITE)
 
@@ -363,8 +345,6 @@ func _on_reroll_mouse_exited() -> void:
 
 func _on_buy_mouse_entered(offer_index: int) -> void:
 	if offer_index < 0 or offer_index >= _buy_buttons.size():
-		return
-	if _credits < _price:
 		return
 	var buy_button := _buy_buttons[offer_index]
 	if buy_button == null:
