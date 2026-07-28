@@ -78,7 +78,6 @@ func select_hand_card(id:int) -> void:
 	_update_card_recycling_state()
 	if tile_hovered:
 		if new_selection == -1:
-			booster_manager.reset_preview()
 			hex_manager.reset_preview(selected_coord)
 			quest_manager.reset_preview()
 			point_counter.reset_preview()
@@ -122,7 +121,6 @@ func end_game() -> void:
 		card_manager.deselect_card(selected_card_id)
 		selected_card_id = -1
 		_update_card_recycling_state()
-		booster_manager.reset_preview()
 		if tile_hovered:
 			hex_manager.reset_preview(selected_coord)
 		quest_manager.reset_preview()
@@ -139,29 +137,18 @@ func restart_run() -> void:
 	GameSession.begin_run(0)
 	get_tree().call_deferred("reload_current_scene")
 	
-func preview_recycle_card(id:int, amount:int, id_known:bool) -> void:
-	if id_known:
-		booster_manager.preview_booster_points(amount)
-		return
-	if selected_card_id == -1:
-		return
-	var selected_card := card_manager.cards[selected_card_id]
-	if selected_card == null or selected_card.type != CardData.CARD_TYPE.ANIMAL:
-		return
-	booster_manager.preview_booster_points(amount * selected_card.amount)
+func preview_recycle_card(_id:int, _amount:int, _id_known:bool) -> void:
+	pass
 	
-func apply_recycle_card(id:int, amount:int, id_known:bool) -> void:
+func apply_recycle_card(id:int, _amount:int, id_known:bool) -> void:
 	var card_id := id if id_known else selected_card_id
 	if card_id < 0 or card_manager.cards[card_id] == null:
 		return
 	
 	if id_known:
 		GameFeedback.play_recycle()
-		booster_manager.apply_booster_points()
 		card_manager.remove_card(card_id)
 		undo_button.disable()
-		if selected_card_id != -1 and card_manager.cards[selected_card_id] != null:
-			preview_recycle_card(selected_card_id, card_manager.recycling_value, true)
 		return
 	
 	var selected_card := card_manager.cards[card_id]
@@ -171,14 +158,12 @@ func apply_recycle_card(id:int, amount:int, id_known:bool) -> void:
 	var count := selected_card.amount
 	for i in count:
 		GameFeedback.play_recycle()
-		booster_manager.preview_booster_points(amount)
-		booster_manager.apply_booster_points()
 		card_manager.remove_card(card_id)
 	undo_button.disable()
 	_update_card_recycling_state()
 
 func reset_recycle_card_preview() -> void:
-	booster_manager.reset_preview()
+	pass
 
 ## ----- Handle Tile Interactions ----- ##
 
@@ -200,7 +185,6 @@ func handle_tile_hover(coord:Vector2i) -> void:
 					
 		hex_manager.apply_preview(preview)
 		last_points_diff = preview.points_diff
-		booster_manager.preview_booster_points(preview.points_diff)
 		point_counter.preview_progress(score_engine.total_score + preview.points_diff)
 	else:
 		hex_manager.show_tile_info(coord)
@@ -209,7 +193,6 @@ func handle_tile_exit() -> void:
 	tile_hovered = false
 	_hover_slide_coord = Vector2i(2147483647, 2147483647)
 	
-	booster_manager.reset_preview()
 	hex_manager.hide_tile_info(selected_coord)
 	hex_manager.reset_preview(selected_coord)
 	quest_manager.reset_preview()
@@ -227,6 +210,7 @@ func handle_tile_click(coord: Vector2i) -> void:
 		score_engine.element_score_backup = score_engine.element_score
 		score_engine.animal_score_backup = score_engine.animal_score
 		score_engine.quest_score_backup = score_engine.quest_score
+		quest_manager.prepare_place_undo()
 		
 		if selected_card.type == 0:
 			old_groups_backup = old_groups.duplicate(true)
@@ -257,8 +241,6 @@ func handle_tile_click(coord: Vector2i) -> void:
 				
 			score_engine.points_per_element_group[new_group] = new_group_score
 			score_engine.element_score = score_engine.new_element_score
-			score_engine.quest_score = score_engine.new_quest_score
-			score_engine.total_score = score_engine.new_element_score + score_engine.new_quest_score + score_engine.animal_score
 		else:
 			var animal_multiplier_score := _animal_bonus_multiplier_score(selected_card)
 			if score_engine.placed_animals.has(selected_card.id):
@@ -266,20 +248,33 @@ func handle_tile_click(coord: Vector2i) -> void:
 			else:
 				score_engine.placed_animals[selected_card.id] = 1
 			
-			score_engine.quest_score = score_engine.new_quest_score
 			score_engine.animal_score += selected_card.point_score + animal_multiplier_score
-			score_engine.total_score = score_engine.animal_score + score_engine.new_quest_score + score_engine.element_score
 			
 		hex_manager.tiles[coord] = tile_data_preview
+
+		var quest_points := 0
+		if selected_card.type == 0:
+			quest_points = quest_manager.evaluate_pattern_quests(
+				coord,
+				hex_manager.tiles,
+				placement_logic
+			)
+		score_engine.quest_score += quest_points
+		score_engine.total_score = (
+			score_engine.element_score + score_engine.animal_score + score_engine.quest_score
+		)
+		last_points_diff += quest_points
 					
 		hex_manager.apply_placement(coord)
 		hex_manager.play_placement_reward(coord, last_points_diff, contributing_coords)
 		# Commit HUD score before remove_card: emptying a stack deselects and
 		# would otherwise wipe preview before apply_preview can animate it.
-		booster_manager.apply_booster_points(true)
-		quest_manager.apply_preview()
+		point_counter.preview_progress(score_engine.total_score)
 		point_counter.apply_preview(true)
+		var placed_was_element = selected_card.type == CardData.CARD_TYPE.ELEMENT
 		card_manager.remove_card(selected_card_id)
+		if placed_was_element:
+			booster_manager.notify_element_played()
 		
 		reset_preview()
 		if map_points == 0:
@@ -287,8 +282,11 @@ func handle_tile_click(coord: Vector2i) -> void:
 		
 		if not card_manager.cards[selected_card_id]:
 			selected_card_id = -1
-		if tile_hovered and selected_card_id == -1:
-			hex_manager.show_tile_info(coord)
+
+
+func handle_place_feedback_finished(coord: Vector2i) -> void:
+	if tile_hovered and selected_coord == coord:
+		handle_tile_hover(coord)
 
 
 ## ----- Handle Tile Preview ----- ##
@@ -312,14 +310,6 @@ func handle_element_preview(coord:Vector2i, card:CardData) -> TileStatePreview:
 		
 		new_group_score = score_engine.calc_group_score(coord, contributing_coords, card.id, hex_manager.tiles)
 		score_engine.new_element_score = score_engine.calc_total_group_score(old_groups) + new_group_score
-		score_engine.new_quest_score = score_engine.quest_score + quest_manager.preview_element_quests(
-			card.id, 
-			old_groups,
-			new_group,
-			coord, 
-			contributing_coords, 
-			hex_manager.tiles
-		)
 		
 		## reset tile_data after points calculation
 		hex_manager.tiles[coord].element = prev_element
@@ -330,7 +320,7 @@ func handle_element_preview(coord:Vector2i, card:CardData) -> TileStatePreview:
 			"is_valid":true,
 			"coord":coord, 
 			"tile_data": tile_data_preview,
-			"points_diff": (score_engine.new_element_score - score_engine.element_score) + (score_engine.new_quest_score - score_engine.quest_score), 
+			"points_diff": score_engine.new_element_score - score_engine.element_score, 
 			"contributing_coords":contributing_coords
 			})
 	else:
@@ -360,14 +350,13 @@ func handle_animal_preview(coord:Vector2i, card:CardData) -> TileStatePreview:
 
 		contributing_coords.assign(placement_res.coords)
 		
-		score_engine.new_quest_score = score_engine.quest_score + quest_manager.preview_animal_quests(card.id)
 		var animal_multiplier_score := _animal_bonus_multiplier_score(card)
 		
 		return TileStatePreview.new({
 			"is_valid":true,
 			"coord":coord,
 			"tile_data": tile_data_preview,
-			"points_diff": card.point_score + animal_multiplier_score + (score_engine.new_quest_score - score_engine.quest_score),
+			"points_diff": card.point_score + animal_multiplier_score,
 			"contributing_coords":placement_res.coords
 		})
 	else:
@@ -391,13 +380,14 @@ func _animal_bonus_multiplier_score(card: CardData) -> int:
 
 func undo() -> void:
 	GameFeedback.play_undo()
-	booster_manager.undo() # works
 	quest_manager.undo() # to be tested
 	point_counter.undo() # works
 	# Placement consumes one copy; restore exactly one (not the full pre-place stack).
 	var restore_card := selected_card_backup.duplicate(true)
 	restore_card.amount = 1
 	card_manager.add_card(restore_card)
+	if selected_card_backup.type == CardData.CARD_TYPE.ELEMENT:
+		booster_manager.notify_element_undone()
 	
 	score_engine.element_score = score_engine.element_score_backup
 	score_engine.animal_score = score_engine.animal_score_backup

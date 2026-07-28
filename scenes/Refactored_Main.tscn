@@ -202,8 +202,7 @@ checkpoint = 300
 [node name="BoosterManager" parent="HUD" unique_id=231766619 node_paths=PackedStringArray("orchestrator") instance=ExtResource("1_a7jc5")]
 orchestrator = NodePath("../../Orchestrator")
 booster_limit = 3
-base_booster_point_cost = 15
-booster_point_multiplier = 1.1
+boosters_per_reroll = 3
 
 [node name="CardManager" parent="HUD" unique_id=241167023 node_paths=PackedStringArray("orchestrator") instance=ExtResource("2_vg1d4")]
 orchestrator = NodePath("../../Orchestrator")

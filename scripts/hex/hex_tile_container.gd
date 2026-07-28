@@ -30,6 +30,7 @@ func create_tile(coord: Vector2i) -> void:
 	var tile := hex_tile.instantiate() as HexTile
 	add_child(tile)
 	tile.init(self, coord)
+	tile.place_feedback_finished.connect(_on_place_feedback_finished.bind(coord))
 
 	tile.position = HexCoord.axial_to_world(coord, hex_size)
 	tiles_by_coord[coord] = tile
@@ -58,6 +59,10 @@ func handle_exit(coord: Vector2i) -> void:
 
 func handle_click(coord: Vector2i) -> void:
 	hex_manager.handle_click(coord)
+
+
+func _on_place_feedback_finished(coord: Vector2i) -> void:
+	hex_manager.handle_place_feedback_finished(coord)
 
 
 ## ----- Pass Data Downstream ----- ##

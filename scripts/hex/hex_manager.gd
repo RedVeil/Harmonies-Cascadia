@@ -53,6 +53,9 @@ func handle_exit() -> void:
 func handle_click(coord:Vector2i) -> void:
 	orchestrator.handle_tile_click(coord)
 
+func handle_place_feedback_finished(coord: Vector2i) -> void:
+	orchestrator.handle_place_feedback_finished(coord)
+
 func handle_map_button_click(coord:Vector2i) -> void:
 	orchestrator.handle_map_button_click(coord)
 
