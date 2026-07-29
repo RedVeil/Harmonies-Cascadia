@@ -60,18 +60,16 @@
 		"special_rule_specs": {
 			"points": [
 				0,
-				2,
-				5,
+				4,
 				9,
-				14,
-				18,
+				16,
 				22,
-				27,
-				31,
-				34,
-				37
+				29,
+				35,
+				39,
+				46
 			],
-			"extra_points": 3
+			"extra_points": 5
 		}
 	},
 	{
@@ -93,7 +91,7 @@
 	{
 		"id": 4,
 		"name": "Small Fields",
-		"description": "Each field without any field neighbors scores 5 points.",
+		"description": "Each group of fields scores a flat 5 points. More fields in the group dont earn more points.",
 		"min_group_size": 1,
 		"max_group_size": 1,
 		"points_per_tile_level": [
