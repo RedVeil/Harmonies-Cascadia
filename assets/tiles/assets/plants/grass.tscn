@@ -1,6 +1,9 @@
 [gd_scene format=3 uid="uid://b86i8uul6ivkn"]
 
-[ext_resource type="MultiMesh" uid="uid://bnxtbrft55fkk" path="res://assets/tiles/assets/plants/grass.tres" id="1_dqjrv"]
+[ext_resource type="MultiMesh" uid="uid://dlmqjhosfdr68" path="res://assets/tiles/assets/plants/grass_quad.tres" id="1_mm"]
+[ext_resource type="Material" uid="uid://br8cwoulf667q" path="res://assets/tiles/materials/foliage/plants/MI_Grass_Quad.tres" id="2_mat"]
 
-[node name="grass" type="MultiMeshInstance3D" unique_id=1861785440]
-multimesh = ExtResource("1_dqjrv")
+[node name="grass" type="MultiMeshInstance3D" unique_id=1840000334]
+material_override = ExtResource("2_mat")
+cast_shadow = 0
+multimesh = ExtResource("1_mm")

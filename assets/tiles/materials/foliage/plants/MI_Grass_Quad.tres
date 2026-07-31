@@ -1,0 +1,28 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://br8cwoulf667q"]
+
+[ext_resource type="Shader" uid="uid://b5n8wnydoe60o" path="res://assets/shader/tiles/foliage/M_Grass_Quad.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" uid="uid://23hcwf37mpbq" path="res://palette_01.tres" id="2_lgf2p"]
+[ext_resource type="Texture2D" uid="uid://bfqhnbcedxlkv" path="res://grass_basic_atlas.png" id="3_70vmr"]
+[ext_resource type="Texture2D" uid="uid://xfapwilgylqf" path="res://assets/tiles/materials/T_FoliageNoise.tres" id="3_noise"]
+[ext_resource type="Texture2D" uid="uid://bv36svsi315rl" path="res://grass_basic_02.png" id="4_lgf2p"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_shader")
+shader_parameter/billboard = true
+shader_parameter/shape_texture = ExtResource("4_lgf2p")
+shader_parameter/shape_atlas = ExtResource("3_70vmr")
+shader_parameter/use_atlas = true
+shader_parameter/noise_texture = ExtResource("3_noise")
+shader_parameter/color_gradient = ExtResource("2_lgf2p")
+shader_parameter/random_variation = 0.002
+shader_parameter/cloud_shadow_strength = 0.68999998457712
+shader_parameter/cloud_shadow_scale = 0.035
+shader_parameter/cloud_shadow_speed = 0.02000000095
+shader_parameter/cloud_shadow_contrast = 1.4
+shader_parameter/cloud_shadow_direction = Vector2(1, 0.35)
+shader_parameter/wind_texture = ExtResource("3_noise")
+shader_parameter/wind_velocity = Vector2(1, 0.25)
+shader_parameter/alpha_cut_start = 0.1
+shader_parameter/alpha_cut_end = 0.9
+shader_parameter/alpha_mode = 2

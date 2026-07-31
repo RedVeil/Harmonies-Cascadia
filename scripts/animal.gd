@@ -45,6 +45,13 @@ func freeze() -> void:
 		_ap.speed_scale = 0.0
 
 
+func _exit_tree() -> void:
+	# Scene reload frees tiles while roam awaits are mid-timer/frame.
+	# Invalidate the loop before get_tree() can be called on a detached node.
+	_roaming = false
+	_roam_token += 1
+
+
 func start_roam(
 	path: Path3D,
 	rng_seed: int = 0,
@@ -93,7 +100,19 @@ func detach_from_path() -> void:
 
 
 func _is_roam_active(token: int) -> bool:
-	return _roaming and token == _roam_token and is_instance_valid(self)
+	return (
+		_roaming
+		and token == _roam_token
+		and is_instance_valid(self)
+		and is_inside_tree()
+	)
+
+
+## get_tree() errors when the node is already out of the tree — guard first.
+func _scene_tree() -> SceneTree:
+	if not is_inside_tree():
+		return null
+	return get_tree()
 
 
 func _cache_animation_player() -> void:
@@ -311,7 +330,7 @@ func _play_walk_lap(token: int) -> void:
 	while _is_roam_active(token) and traveled < lap_target:
 		if not _path_follow_is_valid():
 			break
-		var tree := get_tree()
+		var tree := _scene_tree()
 		if tree == null:
 			return
 		await tree.process_frame
@@ -356,10 +375,12 @@ func _play_anim_clip(list: Array[StringName], token: int) -> void:
 	var duration := anim.length if anim != null else _ap.current_animation_length
 	if duration <= 0.0:
 		duration = 1.0
-	var tree := get_tree()
+	var tree := _scene_tree()
 	if tree == null:
 		return
 	await tree.create_timer(duration).timeout
+	if not _is_roam_active(token):
+		return
 
 
 func _play_idle_once() -> void:

@@ -6,14 +6,7 @@ enum ArrowSide {
 	RIGHT = 1,
 }
 
-const _PANEL_SIZE_DEFAULT := Vector2(100, 120)
-const _PANEL_SIZE_WITH_POINTS := Vector2(100, 140)
-const _ARROW_SIZE := Vector2(16, 16)
-
 ## ----- Initialisation ----- ##
-
-func _ready() -> void:
-	return
 
 func init(
 	type: int,
@@ -40,34 +33,13 @@ func set_points_text(text: String) -> void:
 	var label: Label = $Panel/PointsLabel
 	if text.is_empty():
 		label.hide()
-		$Panel.size = _PANEL_SIZE_DEFAULT
-		$Panel.offset_right = _PANEL_SIZE_DEFAULT.x
-		$Panel.offset_bottom = _PANEL_SIZE_DEFAULT.y
 	else:
 		label.text = text
 		label.show()
-		$Panel.size = _PANEL_SIZE_WITH_POINTS
-		$Panel.offset_right = _PANEL_SIZE_WITH_POINTS.x
-		$Panel.offset_bottom = _PANEL_SIZE_WITH_POINTS.y
 
 func set_arrow_side(side: ArrowSide) -> void:
-	var arrow: Panel = $Panel/Arrow
-	var panel_size := Vector2($Panel.offset_right, $Panel.offset_bottom)
-	match side:
-		ArrowSide.BELOW:
-			var x := (panel_size.x - _ARROW_SIZE.x) * 0.5
-			var y := panel_size.y - (_ARROW_SIZE.y * 0.5)
-			arrow.offset_left = x
-			arrow.offset_top = y
-			arrow.offset_right = x + _ARROW_SIZE.x
-			arrow.offset_bottom = y + _ARROW_SIZE.y
-		ArrowSide.RIGHT:
-			var x := -(_ARROW_SIZE.x * 0.5)
-			var y := (panel_size.y - _ARROW_SIZE.y) * 0.5
-			arrow.offset_left = x
-			arrow.offset_top = y
-			arrow.offset_right = x + _ARROW_SIZE.x
-			arrow.offset_bottom = y + _ARROW_SIZE.y
+	$Panel/ArrowDown.visible = (side == ArrowSide.BELOW)
+	$Panel/ArrowRight.visible = (side == ArrowSide.RIGHT)
 
 ## ----- Element Placement Logic ----- ##
 

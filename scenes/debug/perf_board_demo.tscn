@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://g5yukaijmblp"]
+
+[ext_resource type="Script" uid="uid://c1p40ldaa3sy3" path="res://scripts/debug/perf_board_demo.gd" id="1_demo"]
+[ext_resource type="Script" uid="uid://bnb8amv0s2k4k" path="res://scripts/camera/IsometricCameraController.gd" id="2_cam"]
+[ext_resource type="PackedScene" uid="uid://dkeifl0skpmfk" path="res://scenes/hex/hex_manager.tscn" id="3_hex"]
+[ext_resource type="PackedScene" uid="uid://1m8f7nk3gk26" path="res://scenes/hex/map_button.tscn" id="4_mapbtn"]
+
+[sub_resource type="Environment" id="Environment_demo"]
+background_mode = 1
+background_color = Color(0.8186203, 0.7502329, 0.6806915, 1)
+
+[node name="PerfBoardDemo" type="Node3D" unique_id=1174554841 node_paths=PackedStringArray("hex_manager")]
+script = ExtResource("1_demo")
+hex_manager = NodePath("HexManager")
+weight_forest = 1.0
+weight_river = 1.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1211845485]
+environment = SubResource("Environment_demo")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment" unique_id=291490938]
+transform = Transform3D(-0.8660253, -0.43301287, 0.24999996, 0, 0.50000006, 0.86602527, -0.5, 0.7500002, -0.43301257, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1968664431]
+transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 0, 80, 80)
+projection = 1
+current = true
+fov = 60.0
+size = 100.0
+near = 0.1
+far = 1000.0
+script = ExtResource("2_cam")
+move_speed = 24.0
+zoom_min = 50.0
+zoom_max = 150.0
+
+[node name="HexManager" parent="." unique_id=1923798 instance=ExtResource("3_hex")]
+map_button = ExtResource("4_mapbtn")

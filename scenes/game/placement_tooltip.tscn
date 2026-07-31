@@ -216,26 +216,34 @@ offset_right = 100.0
 offset_bottom = 120.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_n22po")
 
-[node name="PointsLabel" type="Label" parent="Panel"]
-visible = false
+[node name="PointsLabel" type="Label" parent="Panel" unique_id=1925528481]
 layout_mode = 0
-anchors_preset = 0
-offset_left = 4.0
 offset_top = 98.0
-offset_right = 96.0
+offset_right = 100.0
 offset_bottom = 118.0
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.4745098, 1)
 theme_override_font_sizes/font_size = 14
+text = "=15"
 horizontal_alignment = 1
 vertical_alignment = 1
-text = "+15"
 
-[node name="Arrow" type="Panel" parent="Panel" unique_id=1752528228]
+[node name="ArrowDown" type="Panel" parent="Panel" unique_id=1752528228]
 show_behind_parent = true
 layout_mode = 0
 offset_left = 49.000008
 offset_top = 109.00001
 offset_right = 65.00001
 offset_bottom = 125.00001
+rotation = 0.7853982
+theme_override_styles/panel = SubResource("StyleBoxFlat_d75bn")
+
+[node name="ArrowRight" type="Panel" parent="Panel" unique_id=748754709]
+visible = false
+show_behind_parent = true
+layout_mode = 0
+offset_left = -0.42640305
+offset_top = 49.722923
+offset_right = 15.573597
+offset_bottom = 65.72292
 rotation = 0.7853982
 theme_override_styles/panel = SubResource("StyleBoxFlat_d75bn")

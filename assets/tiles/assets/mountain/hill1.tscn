@@ -60,6 +60,7 @@ transform = Transform3D(9.5, 0, 0, 0, 9.5, 0, 0, 0, 9.5, 0, 0, 0)
 
 [node name="grass" parent="visuals" unique_id=1861785440 instance=ExtResource("1_r85j5")]
 transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, 0, 9.3, 0)
+cast_shadow = 1
 
 [node name="Pebble_Square_12" parent="visuals" unique_id=1985406226 instance=ExtResource("6_im8ty")]
 transform = Transform3D(-4.7220826, 0, -1.6437566, 0, 10, 0, 1.6437566, 0, -4.7220826, -5.157355, 9.3710575, 1.6311874)
