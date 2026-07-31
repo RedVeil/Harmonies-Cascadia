@@ -45,18 +45,28 @@ func create_map(map_origin: Vector2i) -> void:
 ## ----- Pass Data Upstream ----- ##
 
 func handle_hover(coord:Vector2i) -> void:
+	if orchestrator == null:
+		return
 	orchestrator.handle_tile_hover(coord)
 
 func handle_exit() -> void:
+	if orchestrator == null:
+		return
 	orchestrator.handle_tile_exit()
 
 func handle_click(coord:Vector2i) -> void:
+	if orchestrator == null:
+		return
 	orchestrator.handle_tile_click(coord)
 
 func handle_place_feedback_finished(coord: Vector2i) -> void:
+	if orchestrator == null:
+		return
 	orchestrator.handle_place_feedback_finished(coord)
 
 func handle_map_button_click(coord:Vector2i) -> void:
+	if orchestrator == null:
+		return
 	orchestrator.handle_map_button_click(coord)
 
 ## ----- Pass Data Downstream ----- ##

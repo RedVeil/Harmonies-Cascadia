@@ -48,6 +48,6 @@ rotation = -1.7453293
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("5_bl7d4")
 
-[node name="PlacementTooltip" parent="." instance=ExtResource("6_tooltip")]
+[node name="PlacementTooltip" parent="." unique_id=1015645276 instance=ExtResource("6_tooltip")]
 visible = false
 position = Vector2(35, -60)

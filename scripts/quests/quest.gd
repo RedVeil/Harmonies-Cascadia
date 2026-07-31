@@ -34,7 +34,7 @@ func init(container: QuestContainer, quest: Quest) -> void:
 		1,
 		quest.placement,
 		quest.bonus,
-		"+%d" % quest.points,
+		"=%d" % quest.points,
 		PlacementTooltip.ArrowSide.RIGHT
 	)
 	set_pattern_quest_visuals(quest)

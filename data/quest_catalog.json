@@ -155,7 +155,7 @@
 		"type": 0,
 		"points": 30,
 		"placement": [
-			{ "element": 1, "level": 3, "coords": [0, 0] }
+			{ "element": 1, "level": 2, "coords": [0, 0] }
 		],
 		"bonus": [
 			{ "element": 2, "level": 1, "coords": [1, 0] },

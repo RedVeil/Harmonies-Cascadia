@@ -1,0 +1,9 @@
+[gd_resource type="GradientTexture2D" format=3 uid="uid://23hcwf37mpbq"]
+
+[sub_resource type="Gradient" id="Gradient_0cusm"]
+colors = PackedColorArray(0.34901962, 0.65882355, 0.21568628, 1, 0, 0.24705882, 0.019607844, 1)
+metadata/_snap_enabled = true
+metadata/_snap_count = 12
+
+[resource]
+gradient = SubResource("Gradient_0cusm")
