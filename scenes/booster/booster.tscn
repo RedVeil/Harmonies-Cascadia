@@ -7,7 +7,7 @@
 [ext_resource type="Shader" uid="uid://8wow5a7grc78" path="res://assets/shader/cards/circular_progress_bar.gdshader" id="5_prog"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_430vb"]
-radius = 14.035668
+radius = 20.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_r28fy"]
 shader = ExtResource("3_4cwg5")
@@ -56,11 +56,11 @@ shape = SubResource("CircleShape2D_430vb")
 [node name="ProgressBar" type="Sprite2D" parent="." unique_id=1888000001]
 z_index = -1
 material = SubResource("ShaderMaterial_progress")
-scale = Vector2(0.095, 0.095)
+scale = Vector2(0.135, 0.135)
 texture = ExtResource("2_430vb")
 
 [node name="background" type="Sprite2D" parent="." unique_id=869127976]
-scale = Vector2(0.07, 0.07)
+scale = Vector2(0.1, 0.1)
 texture = ExtResource("2_430vb")
 
 [node name="shadow" type="Sprite2D" parent="background" unique_id=956875904]
@@ -72,15 +72,18 @@ texture = ExtResource("2_430vb")
 
 [node name="icon" type="Sprite2D" parent="." unique_id=1938653007]
 self_modulate = Color(0.5686275, 0.5176471, 0.47058824, 1)
-scale = Vector2(0.25, 0.25)
+scale = Vector2(0.28, 0.28)
 texture = ExtResource("4_430vb")
+
+[node name="ContentDots" type="Node2D" parent="." unique_id=1888000002]
+z_index = 1
 
 [node name="Tooltip" type="Panel" parent="." unique_id=783815431]
 visible = false
 offset_left = -40.0
-offset_top = -101.0
+offset_top = -110.0
 offset_right = 160.0
-offset_bottom = -33.0
+offset_bottom = -42.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_430vb")
 
 [node name="Panel" type="Panel" parent="Tooltip" unique_id=1422591998]

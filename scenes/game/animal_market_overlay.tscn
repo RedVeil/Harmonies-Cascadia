@@ -17,6 +17,7 @@ bg_color = Color(1, 1, 1, 0)
 
 [node name="AnimalMarketOverlay" type="CanvasLayer"]
 layer = 10
+visible = false
 script = ExtResource("1_market")
 card_scene = ExtResource("2_card")
 
@@ -67,7 +68,7 @@ offset_bottom = -96.0
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
 theme_override_font_sizes/font_size = 14
-text = "Pick one animal for free"
+text = "Take animals for free"
 horizontal_alignment = 1
 vertical_alignment = 1
 

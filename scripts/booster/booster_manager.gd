@@ -87,13 +87,12 @@ func select_booster(id: int) -> void:
 	elements_played = 0
 	options_ready = pending_elements <= 0
 	
-	# Only refill shared refresh/animal charge after it has been spent.
+	# Only refill shared refresh charge after it has been spent.
 	if reroll_charges <= 0:
 		buys_since_reroll += 1
 		if buys_since_reroll >= boosters_per_reroll:
 			reroll_charges += 1
 			buys_since_reroll = 0
-			_market_offers = _generate_market_offers()
 	
 	createBooster(id)
 	_refresh_option_ui()
@@ -162,63 +161,102 @@ func _refresh_reroll_ui() -> void:
 	var progress := _reroll_progress()
 	var has_charge := reroll_charges > 0
 	booster_container.set_reroll_progress(progress)
-	booster_container.set_animal_market_progress(progress)
+	booster_container.set_animal_market_progress(1.0)
+	booster_container.enable_animal_market()
 	if has_charge:
 		booster_container.enable_reroll()
-		booster_container.enable_animal_market()
 	else:
 		booster_container.disable_reroll()
-		booster_container.disable_animal_market()
+	if animal_market and animal_market.is_node_ready() and animal_market.visible:
+		animal_market.set_reroll_enabled(has_charge)
 
 ## ----- Animal Market ----- ##
 
 func open_animal_market() -> void:
-	if animal_market == null or reroll_charges <= 0:
+	if animal_market == null:
 		return
 	_ensure_market_offers()
 	orchestrator.pause_cards()
 	animal_market.open(_market_offers)
+	animal_market.set_reroll_enabled(reroll_charges > 0)
+	_refresh_market_buy_ui()
 
 func buy_market_animal(offer_index: int) -> void:
 	if offer_index < 0 or offer_index >= _market_offers.size():
 		return
-	if not _spend_reroll_charge():
-		return
 	var bought := _market_offers[offer_index]
+	if not orchestrator.card_manager.can_accept_animal(bought):
+		_refresh_market_buy_ui()
+		return
 	orchestrator.add_hand_card(bought)
-	_refresh_reroll_ui()
-	close_animal_market()
+	var replacement := _generate_market_offer_at(offer_index, _market_used_ids(offer_index))
+	_market_offers[offer_index] = replacement
+	if animal_market:
+		animal_market.replace_offer(offer_index, replacement)
+	_refresh_market_buy_ui()
 
 func reroll_animal_market() -> void:
 	if animal_market == null:
 		return
+	if not _spend_reroll_charge():
+		return
 	_market_offers = _generate_market_offers()
 	animal_market.refresh_offers(_market_offers)
+	_refresh_reroll_ui()
+	_refresh_market_buy_ui()
 
 func close_animal_market() -> void:
 	if animal_market:
 		animal_market.close()
 	orchestrator.unpause_cards()
 
+func _refresh_market_buy_ui() -> void:
+	if animal_market == null:
+		return
+	var can_buy: Array[bool] = []
+	for offer in _market_offers:
+		can_buy.append(orchestrator.card_manager.can_accept_animal(offer))
+	animal_market.set_buys_enabled(can_buy)
+
 func _ensure_market_offers() -> void:
 	if _market_offers.size() < animal_market_offer_count:
 		_market_offers = _generate_market_offers()
 
-func _generate_market_offers() -> Array[CardData]:
-	var offers: Array[CardData] = []
+func _market_used_ids(exclude_index: int = -1) -> Dictionary:
 	var used_ids: Dictionary = {}
-	var element := 1
+	for i in _market_offers.size():
+		if i == exclude_index:
+			continue
+		var offer := _market_offers[i]
+		if offer != null and offer.amount > 0:
+			used_ids[offer.id] = true
+	return used_ids
+
+func _generate_market_offer_at(slot_index: int, used_ids: Dictionary) -> CardData:
+	var element := (slot_index % 5) + 1
 	var attempts := 0
-	var max_attempts := animal_market_offer_count * 8
-	while offers.size() < animal_market_offer_count and attempts < max_attempts:
+	var max_attempts := 24
+	var fallback := CardData.new()
+	while attempts < max_attempts:
 		attempts += 1
 		var animal := choose_animal(element)
 		element = element % 5 + 1
 		if animal.amount <= 0:
 			continue
+		if fallback.amount <= 0:
+			fallback = animal
 		if used_ids.has(animal.id):
 			continue
-		used_ids[animal.id] = true
+		return animal
+	return fallback
+
+func _generate_market_offers() -> Array[CardData]:
+	var offers: Array[CardData] = []
+	var used_ids: Dictionary = {}
+	for i in animal_market_offer_count:
+		var animal := _generate_market_offer_at(i, used_ids)
+		if animal.amount > 0:
+			used_ids[animal.id] = true
 		offers.append(animal)
 	return offers
 

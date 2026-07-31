@@ -28,6 +28,8 @@ var _cards: Array[Card] = []
 var _buy_buttons: Array[Control] = []
 var _hit_areas: Array[Control] = []
 var _hover_card_id: int = -1
+var _reroll_enabled: bool = true
+var _buys_enabled: Array[bool] = []
 
 @onready var _popup_root: Node2D = $PopupRoot
 @onready var _popup_panel: Panel = $PopupRoot/PopupPanel
@@ -75,6 +77,16 @@ func replace_offer(offer_index: int, offer: CardData) -> void:
 		exit_card(offer_index)
 	_rebuild_single_offer(offer_index)
 	_refresh_offer_button(offer_index)
+
+func set_reroll_enabled(enabled: bool) -> void:
+	_reroll_enabled = enabled
+	_refresh_reroll_button()
+
+func set_buys_enabled(enabled_flags: Array[bool]) -> void:
+	_buys_enabled = enabled_flags.duplicate()
+	_refresh_labels()
+	for i in _buy_buttons.size():
+		_refresh_offer_button(i)
 
 func update_credits(_credits: int) -> void:
 	pass
@@ -266,7 +278,17 @@ func _rebuild_single_offer(offer_index: int) -> void:
 
 func _refresh_labels() -> void:
 	_title_label.text = "Animal Market"
-	_credits_label.text = "Pick one animal for free"
+	if _buys_enabled.size() > 0 and not _buys_enabled.has(true):
+		_credits_label.text = "Animal hand limit reached"
+	else:
+		_credits_label.text = "Take animals for free"
+
+func _is_buy_enabled(offer_index: int) -> bool:
+	if _buys_enabled.is_empty():
+		return true
+	if offer_index < 0 or offer_index >= _buys_enabled.size():
+		return false
+	return _buys_enabled[offer_index]
 
 func _refresh_offer_button(offer_index: int) -> void:
 	if offer_index < 0 or offer_index >= _buy_buttons.size():
@@ -276,19 +298,38 @@ func _refresh_offer_button(offer_index: int) -> void:
 		return
 	var buy_label: Label = buy_button.get_node("Label")
 	var buy_bg: ColorRect = buy_button.get_node("Background")
+	var hit := _hit_areas[offer_index] if offer_index < _hit_areas.size() else null
 
-	buy_label.text = "Take"
-	buy_bg.color = Color.WHITE
-	buy_label.add_theme_color_override("font_color", COLOR_BROWN)
-	buy_button.mouse_filter = Control.MOUSE_FILTER_STOP
+	if _is_buy_enabled(offer_index):
+		buy_label.text = "Take"
+		buy_bg.color = Color.WHITE
+		buy_label.add_theme_color_override("font_color", COLOR_BROWN)
+		buy_button.mouse_filter = Control.MOUSE_FILTER_STOP
+		if hit:
+			hit.mouse_filter = Control.MOUSE_FILTER_STOP
+	else:
+		buy_label.text = "Full"
+		buy_bg.color = Color(0.85, 0.85, 0.85, 1.0)
+		buy_label.add_theme_color_override("font_color", Color.GRAY)
+		buy_button.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		if hit:
+			hit.mouse_filter = Control.MOUSE_FILTER_STOP
 
 func _refresh_reroll_button() -> void:
+	if _reroll_button == null:
+		return
 	var label: Label = _reroll_button.get_node("Label")
 	var bg: ColorRect = _reroll_button.get_node("Background")
-	label.text = "Reroll"
-	bg.color = Color.WHITE
-	label.add_theme_color_override("font_color", COLOR_BROWN)
-	_reroll_button.mouse_filter = Control.MOUSE_FILTER_STOP
+	if _reroll_enabled:
+		label.text = "Refresh"
+		bg.color = Color.WHITE
+		label.add_theme_color_override("font_color", COLOR_BROWN)
+		_reroll_button.mouse_filter = Control.MOUSE_FILTER_STOP
+	else:
+		label.text = "Refresh (cooling down)"
+		bg.color = Color(0.85, 0.85, 0.85, 1.0)
+		label.add_theme_color_override("font_color", Color.GRAY)
+		_reroll_button.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 ## ----- Input ----- ##
 
@@ -309,6 +350,8 @@ func _on_reroll_gui_input(event: InputEvent) -> void:
 	_handle_gui_click(event, _on_reroll_pressed)
 
 func _on_reroll_pressed() -> void:
+	if not _reroll_enabled:
+		return
 	GameFeedback.play_click_button()
 	reroll_pressed.emit()
 
@@ -327,6 +370,8 @@ func _on_card_hit_exited(offer_index: int) -> void:
 func _on_buy_pressed(offer_index: int) -> void:
 	if offer_index < 0 or offer_index >= _offers.size():
 		return
+	if not _is_buy_enabled(offer_index):
+		return
 	GameFeedback.play_click_button()
 	buy_pressed.emit(offer_index)
 
@@ -337,6 +382,8 @@ func _on_close_mouse_exited() -> void:
 	_close_button.get_node("Label").add_theme_color_override("font_color", COLOR_BROWN)
 
 func _on_reroll_mouse_entered() -> void:
+	if not _reroll_enabled:
+		return
 	_reroll_button.get_node("Background").color = COLOR_BROWN
 	_reroll_button.get_node("Label").add_theme_color_override("font_color", Color.WHITE)
 
@@ -345,6 +392,8 @@ func _on_reroll_mouse_exited() -> void:
 
 func _on_buy_mouse_entered(offer_index: int) -> void:
 	if offer_index < 0 or offer_index >= _buy_buttons.size():
+		return
+	if not _is_buy_enabled(offer_index):
 		return
 	var buy_button := _buy_buttons[offer_index]
 	if buy_button == null:

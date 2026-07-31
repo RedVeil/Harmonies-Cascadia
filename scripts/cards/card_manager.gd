@@ -70,6 +70,16 @@ func remove_card(id:int) -> void:
 func cards_over_any_limit() -> bool:
 	return card_amount > card_limit or animal_amount > animal_limit
 
+func can_accept_animal(card: CardData) -> bool:
+	if card == null or card.type != CardData.CARD_TYPE.ANIMAL:
+		return false
+	var matching_card_id := cards.find_custom(
+		func(existing): return existing != null and existing.type == card.type and existing.id == card.id
+	)
+	if matching_card_id != -1:
+		return true
+	return animal_amount < animal_limit
+
 func _refresh_limit_panel() -> void:
 	$Panel.show()
 	if animal_amount > animal_limit:

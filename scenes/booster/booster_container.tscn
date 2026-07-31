@@ -10,17 +10,17 @@ boosters = [NodePath("Booster"), NodePath("Booster2"), NodePath("Booster3"), Nod
 [node name="Booster" parent="." unique_id=321030438 instance=ExtResource("2_swhpq")]
 
 [node name="Booster2" parent="." unique_id=1767161178 instance=ExtResource("2_swhpq")]
-position = Vector2(37, 0)
+position = Vector2(52, 0)
 id = 1
 
 [node name="Booster3" parent="." unique_id=544867222 instance=ExtResource("2_swhpq")]
-position = Vector2(75, 0)
+position = Vector2(104, 0)
 id = 2
 
 [node name="Booster4" parent="." unique_id=1232737516 instance=ExtResource("2_swhpq")]
-position = Vector2(112, 0)
+position = Vector2(156, 0)
 id = 3
 
 [node name="Booster5" parent="." unique_id=1461463527 instance=ExtResource("2_swhpq")]
-position = Vector2(148, 0)
+position = Vector2(208, 0)
 id = 4

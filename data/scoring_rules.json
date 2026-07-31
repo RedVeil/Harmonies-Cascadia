@@ -63,7 +63,7 @@
 		"special_rule": 3.0,
 		"special_rule_specs": {
 			"points": [
-				0.0,
+				2.0,
 				4.0,
 				9.0,
 				16.0,
@@ -85,7 +85,7 @@
 		"points_per_tile_level": [
 			[
 				1.0,
-				0.0
+				1.0
 			]
 		],
 		"flat_points": 10.0,
@@ -103,7 +103,7 @@
 		"points_per_tile_level": [
 			[
 				1.0,
-				5.0
+				6.0
 			]
 		],
 		"flat_points": 0.0,
@@ -121,7 +121,7 @@
 		"points_per_tile_level": [
 			[
 				1.0,
-				0.0
+				2.0
 			]
 		],
 		"flat_points": 20.0,
@@ -139,11 +139,11 @@
 		"points_per_tile_level": [
 			[
 				1.0,
-				2.0
+				3.0
 			],
 			[
 				2.0,
-				5.0
+				6.0
 			],
 			[
 				3.0,
@@ -165,15 +165,15 @@
 		"points_per_tile_level": [
 			[
 				1.0,
-				4.0
+				2.0
 			],
 			[
 				2.0,
-				5.0
+				4.0
 			],
 			[
 				3.0,
-				6.0
+				10.0
 			]
 		],
 		"flat_points": 0.0,
@@ -191,15 +191,15 @@
 		"points_per_tile_level": [
 			[
 				1.0,
-				4.0
-			],
-			[
-				2.0,
 				5.0
 			],
 			[
-				3.0,
+				2.0,
 				6.0
+			],
+			[
+				3.0,
+				7.0
 			]
 		],
 		"flat_points": 0.0,
@@ -224,7 +224,7 @@
 		"special_rule": 1.0,
 		"special_rule_specs": {
 			"points": [
-				0.0,
+				2.0,
 				4.0,
 				9.0,
 				16.0,
@@ -253,7 +253,7 @@
 		"special_rule": 1.0,
 		"special_rule_specs": {
 			"points": [
-				0.0,
+				2.0,
 				5.0,
 				11.0,
 				18.0,
@@ -289,7 +289,7 @@
 		"points_per_tile_level": [
 			[
 				1.0,
-				0.0
+				3.0
 			]
 		],
 		"flat_points": 0.0,
@@ -309,7 +309,7 @@
 		"points_per_tile_level": [
 			[
 				1.0,
-				0.0
+				1.0
 			]
 		],
 		"flat_points": 0.0,
@@ -329,7 +329,7 @@
 		"points_per_tile_level": [
 			[
 				1.0,
-				0.0
+				2.0
 			]
 		],
 		"flat_points": 20.0,

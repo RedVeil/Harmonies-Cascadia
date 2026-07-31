@@ -1,12 +1,17 @@
 extends Area2D
 class_name Booster
 
+const CIRCLE_TEXTURE := preload("res://assets/icons/circle.png")
+const DOT_SCALE := 0.022
+const DOT_RING_RADIUS := 10.0
+
 @export var id: int = 0
 
 @onready var icon: Sprite2D = $icon
 @onready var background: Sprite2D = $background
 @onready var collision: CollisionShape2D = $CollisionShape2D
 @onready var progress_sprite: Sprite2D = $ProgressBar
+@onready var content_dots: Node2D = $ContentDots
 
 var container: BoosterContainer
 var enabled: bool = true
@@ -21,10 +26,10 @@ func _ready() -> void:
 	if progress_sprite and progress_sprite.material:
 		progress_sprite.material = progress_sprite.material.duplicate()
 	if id == 3:
-		$Tooltip/Label.text = "Refresh the three booster options (shares cooldown with animal market)."
+		$Tooltip/Label.text = "Refresh the three booster options (shares cooldown with market refresh)."
 	elif id == 4:
 		icon.texture = load("res://assets/icons/animal.png")
-		$Tooltip/Label.text = "Open the animal market (shares refresh cooldown)."
+		$Tooltip/Label.text = "Open the animal market."
 
 func init(parent: BoosterContainer) -> void:
 	container = parent
@@ -35,11 +40,13 @@ func enable() -> void:
 	enabled = true
 	background.self_modulate = Color.WHITE
 	icon.self_modulate = Color.html("#918478")
+	content_dots.modulate = Color.WHITE
 
 func disable() -> void:
 	enabled = false
 	background.self_modulate = Color.WHITE
 	icon.self_modulate = Color.GRAY
+	content_dots.modulate = Color(1, 1, 1, 0.45)
 	is_hovered = false
 	timer = 0.5
 	$Tooltip.hide()
@@ -77,6 +84,7 @@ func _on_mouse_exited() -> void:
 	timer = 0.5
 	$Tooltip.hide()
 
+
 func _on_input_event(
 	viewport: Viewport,
 	event: InputEvent,
@@ -92,16 +100,22 @@ func _on_input_event(
 
 func set_booster_visuals(boosterData: BoosterData) -> void:
 	if boosterData.type == 7:
+		icon.visible = true
 		icon.texture = load("res://assets/icons/animal.png")
-		$Tooltip/Label.text = "Open the animal market (shares refresh cooldown)."
+		$Tooltip/Label.text = "Open the animal market."
+		_clear_content_dots()
 		return
 	$Tooltip/Label.text = create_tooltip(boosterData)
 	if boosterData.type < 6:
+		icon.visible = true
 		var element = ElementCatalog.elements[boosterData.type]
 		var level = element.levels[element.levels.size() - 1]
 		icon.texture = load(level.icon)
+		_clear_content_dots()
 	elif boosterData.type == 6:
+		icon.visible = false
 		icon.texture = load("res://assets/icons/random.png")
+		_update_content_dots(boosterData)
 
 
 func create_tooltip(boosterData: BoosterData) -> String:
@@ -126,3 +140,45 @@ func create_tooltip(boosterData: BoosterData) -> String:
 		contents.append("%d Map Points" % boosterData.map_points)
 	
 	return "This booster contains:\n" + ", ".join(contents)
+
+
+func _update_content_dots(boosterData: BoosterData) -> void:
+	_clear_content_dots()
+	var element_ids: Array[int] = []
+	for c in boosterData.cards:
+		if c.type == 0:
+			element_ids.append(c.id)
+		else:
+			element_ids.append(c.element)
+	_layout_content_dots(element_ids)
+
+
+func _clear_content_dots() -> void:
+	for child in content_dots.get_children():
+		child.free()
+
+
+func _layout_content_dots(element_ids: Array[int]) -> void:
+	var count := element_ids.size()
+	if count == 0:
+		return
+
+	for i in count:
+		var pos := Vector2.ZERO
+		if count > 1:
+			var angle := -PI * 0.5 + TAU * float(i) / float(count)
+			pos = Vector2(cos(angle), sin(angle)) * DOT_RING_RADIUS
+
+		var element_id: int = element_ids[i]
+		var color := Color.html("#918478")
+		if element_id >= 0 and element_id < ElementCatalog.elements.size():
+			var element: Element = ElementCatalog.elements[element_id]
+			if element.levels.size() > 0:
+				color = Color.html(element.levels[0].color)
+
+		var dot := Sprite2D.new()
+		dot.texture = CIRCLE_TEXTURE
+		dot.scale = Vector2.ONE * DOT_SCALE
+		dot.position = pos
+		dot.self_modulate = color
+		content_dots.add_child(dot)

@@ -70,25 +70,21 @@ func calculate_normal_element_group(
 	rule:ScoringRule,
 	tiles:Dictionary[Vector2i, HexTileData]
 	) -> int:
-	if coords.size() < rule.min_group_size:
-		return 0
-	else:
-		if rule.flat_points > 0:
-			return rule.flat_points
-		else:
-			var levels : Array[int] = []
-			for c in coords:
-				levels.append(tiles[c].level)
-			levels.sort()
-			levels.reverse()
-			
-			if rule.max_group_size < levels.size():
-				levels = levels.slice(0, rule.max_group_size)
-			
-			var score = 0
-			for l in levels:
-				score += rule.points_per_tile_level[l-1][1]
-			return score
+	var levels : Array[int] = []
+	for c in coords:
+		levels.append(tiles[c].level)
+	levels.sort()
+	levels.reverse()
+
+	if rule.max_group_size < levels.size():
+		levels = levels.slice(0, rule.max_group_size)
+
+	var score = 0
+	for l in levels:
+		score += rule.points_per_tile_level[l-1][1]
+	if coords.size() >= rule.min_group_size:
+		score += rule.flat_points
+	return score
 
 
 func calculate_element_special_neighbors(
