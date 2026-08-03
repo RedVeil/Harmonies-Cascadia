@@ -1,6 +1,6 @@
 [gd_resource type="MultiMesh" format=4 uid="uid://cmnyl3dn1el6n"]
 
-[ext_resource type="Material" uid="uid://cwu1hc5pnivip" path="res://Materials/MI_Bark_Birch.tres" id="1_rrwqx"]
+[ext_resource type="Material" uid="uid://cwu1hc5pnivip" path="res://assets/tiles/materials/foliage/bark/MI_Bark_Birch.tres" id="1_rrwqx"]
 [ext_resource type="Shader" uid="uid://pqjwdy5j4q4y" path="res://assets/shader/tiles/foliage/M_Leaves.gdshader" id="2_q08go"]
 [ext_resource type="Texture2D" uid="uid://dy8jtxo48j3yf" path="res://assets/tiles/materials/textures/foliage/Leaves_Birch.png" id="3_e0o8b"]
 

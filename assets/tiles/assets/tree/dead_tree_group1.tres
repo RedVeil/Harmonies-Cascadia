@@ -1,6 +1,6 @@
 [gd_resource type="MultiMesh" format=4 uid="uid://cmesscrujia0t"]
 
-[ext_resource type="Material" uid="uid://bbcpjdj21w7h3" path="res://Materials/MI_Bark_DeadTree.tres" id="1_5h4uq"]
+[ext_resource type="Material" uid="uid://bbcpjdj21w7h3" path="res://assets/tiles/materials/foliage/bark/MI_Bark_DeadTree.tres" id="1_5h4uq"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_hjcja"]
 _surfaces = [{

@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://c70cghxqpd6mi"]
+
+[ext_resource type="PackedScene" uid="uid://b0uxmixkp6hma" path="res://assets/tiles/assets/rocks/Pebble_Round_4.gltf" id="1_mesh"]
+[ext_resource type="Texture2D" uid="uid://drelsndsi4ugv" path="res://assets/tiles/materials/textures/rocks/PathRocks_Diffuse.png" id="2_ps4ii"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gbob7"]
+albedo_color = Color(0.78431374, 0.78431374, 0.78431374, 1)
+albedo_texture = ExtResource("2_ps4ii")
+
+[node name="Pebble_Round_42" unique_id=1307871860 instance=ExtResource("1_mesh")]
+
+[node name="Pebble_Round_4" parent="." index="0" unique_id=2139788020]
+surface_material_override/0 = SubResource("StandardMaterial3D_gbob7")

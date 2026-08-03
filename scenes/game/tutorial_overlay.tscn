@@ -80,12 +80,11 @@ stretch_mode = 5
 
 [node name="Icon" type="Label" parent="PopupRoot/NavButtons/PreviousButton" unique_id=200692037]
 layout_mode = 0
-offset_top = -2.0
 offset_right = 36.0
-offset_bottom = 34.0
+offset_bottom = 36.0
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
 theme_override_font_sizes/font_size = 20
-text = "←"
+text = "<"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -108,12 +107,11 @@ stretch_mode = 5
 
 [node name="Icon" type="Label" parent="PopupRoot/NavButtons/NextButton" unique_id=471593951]
 layout_mode = 0
-offset_top = -2.0
 offset_right = 36.0
-offset_bottom = 34.0
+offset_bottom = 36.0
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
 theme_override_font_sizes/font_size = 20
-text = "→"
+text = ">"
 horizontal_alignment = 1
 vertical_alignment = 1
 

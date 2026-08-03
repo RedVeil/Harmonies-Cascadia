@@ -2,15 +2,15 @@
 
 [ext_resource type="Material" uid="uid://br8cwoulf667q" path="res://assets/tiles/materials/foliage/plants/MI_Grass_Quad.tres" id="3_grassq"]
 [ext_resource type="Material" uid="uid://cdxi2c6lkljle" path="res://assets/tiles/materials/ground/Green.tres" id="4_1llm4"]
-[ext_resource type="PackedScene" uid="uid://c7yry6lfhtido" path="res://addons/stylized-nature/Mesh Scenes/Pebble_Square_6.tscn" id="5_3pr7f"]
-[ext_resource type="PackedScene" uid="uid://dk8b3u7kp73q1" path="res://addons/stylized-nature/Mesh Scenes/Pebble_Square_5.tscn" id="6_dvjis"]
-[ext_resource type="PackedScene" uid="uid://3avtambeoy1l" path="res://addons/stylized-nature/Mesh Scenes/Pebble_Square_1.tscn" id="7_gxox2"]
-[ext_resource type="PackedScene" uid="uid://hdfjecma7tyq" path="res://addons/stylized-nature/Mesh Scenes/Pebble_Round_1.tscn" id="8_wm57w"]
-[ext_resource type="PackedScene" uid="uid://dmugpscerbixi" path="res://addons/stylized-nature/Mesh Scenes/Pebble_Round_2.tscn" id="9_85ypu"]
+[ext_resource type="PackedScene" path="res://assets/tiles/assets/rocks/Pebble_Square_6.tscn" id="5_3pr7f"]
+[ext_resource type="PackedScene" uid="uid://dk8b3u7kp73q1" path="res://assets/tiles/assets/rocks/Pebble_Square_5.tscn" id="6_dvjis"]
+[ext_resource type="PackedScene" path="res://assets/tiles/assets/rocks/Pebble_Square_1.tscn" id="7_gxox2"]
+[ext_resource type="PackedScene" path="res://assets/tiles/assets/rocks/Pebble_Round_1.tscn" id="8_wm57w"]
+[ext_resource type="PackedScene" path="res://assets/tiles/assets/rocks/Pebble_Round_2.tscn" id="9_85ypu"]
 [ext_resource type="PackedScene" uid="uid://b86i8uul6ivkn" path="res://assets/tiles/assets/plants/grass.tscn" id="10_mvoqa"]
-[ext_resource type="Texture2D" uid="uid://dgr7a08pscax2" path="res://addons/stylized-nature/assets/Rocks_Diffuse.png" id="11_1llm4"]
+[ext_resource type="Texture2D" uid="uid://tclk3uv66eet" path="res://assets/tiles/materials/textures/rocks/Rocks_Diffuse.png" id="11_1llm4"]
 [ext_resource type="PackedScene" uid="uid://cv2pqv1761xhe" path="res://assets/tiles/assets/hex_forest_detail.fbx" id="11_mvoqa"]
-[ext_resource type="PackedScene" uid="uid://buefmpjevg222" path="res://addons/stylized-nature/Mesh Scenes/Rock_Medium_2.tscn" id="12_1llm4"]
+[ext_resource type="PackedScene" path="res://assets/tiles/assets/rocks/Rock_Medium_2.tscn" id="12_1llm4"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_grass_quad"]
 size = Vector2(1, 1)

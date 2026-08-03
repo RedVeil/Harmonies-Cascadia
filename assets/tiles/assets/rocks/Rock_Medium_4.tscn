@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://vgy0bgwcv7qb"]
+
+[ext_resource type="PackedScene" uid="uid://cntmanv741imr" path="res://assets/tiles/assets/rocks/Rock_Medium_4.gltf" id="1_mesh"]
+[ext_resource type="Texture2D" uid="uid://tclk3uv66eet" path="res://assets/tiles/materials/textures/rocks/Rocks_Diffuse.png" id="2_tex"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rock"]
+albedo_texture = ExtResource("2_tex")
+
+[node name="Rock_Medium_42" instance=ExtResource("1_mesh")]
+
+[node name="Rock_Medium_4" parent="." index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_rock")

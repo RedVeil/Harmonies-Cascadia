@@ -2,13 +2,13 @@
 
 [ext_resource type="Material" uid="uid://cdxi2c6lkljle" path="res://assets/tiles/materials/ground/Green.tres" id="3_481ta"]
 [ext_resource type="Material" uid="uid://br8cwoulf667q" path="res://assets/tiles/materials/foliage/plants/MI_Grass_Quad.tres" id="3_grassq"]
-[ext_resource type="PackedScene" uid="uid://3avtambeoy1l" path="res://addons/stylized-nature/Mesh Scenes/Pebble_Square_1.tscn" id="6_481ta"]
-[ext_resource type="PackedScene" uid="uid://hdfjecma7tyq" path="res://addons/stylized-nature/Mesh Scenes/Pebble_Round_1.tscn" id="7_4imj8"]
+[ext_resource type="PackedScene" path="res://assets/tiles/assets/rocks/Pebble_Square_1.tscn" id="6_481ta"]
+[ext_resource type="PackedScene" path="res://assets/tiles/assets/rocks/Pebble_Round_1.tscn" id="7_4imj8"]
 [ext_resource type="PackedScene" uid="uid://b86i8uul6ivkn" path="res://assets/tiles/assets/plants/grass.tscn" id="8_4imj8"]
-[ext_resource type="PackedScene" uid="uid://c7yry6lfhtido" path="res://addons/stylized-nature/Mesh Scenes/Pebble_Square_6.tscn" id="8_6sbrq"]
+[ext_resource type="PackedScene" path="res://assets/tiles/assets/rocks/Pebble_Square_6.tscn" id="8_6sbrq"]
 [ext_resource type="PackedScene" uid="uid://cv2pqv1761xhe" path="res://assets/tiles/assets/hex_forest_detail.fbx" id="9_6sbrq"]
-[ext_resource type="PackedScene" uid="uid://dmugpscerbixi" path="res://addons/stylized-nature/Mesh Scenes/Pebble_Round_2.tscn" id="9_yhqfk"]
-[ext_resource type="PackedScene" uid="uid://dk8b3u7kp73q1" path="res://addons/stylized-nature/Mesh Scenes/Pebble_Square_5.tscn" id="10_6sbrq"]
+[ext_resource type="PackedScene" path="res://assets/tiles/assets/rocks/Pebble_Round_2.tscn" id="9_yhqfk"]
+[ext_resource type="PackedScene" uid="uid://dk8b3u7kp73q1" path="res://assets/tiles/assets/rocks/Pebble_Square_5.tscn" id="10_6sbrq"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_grass_quad"]
 size = Vector2(1, 1)
