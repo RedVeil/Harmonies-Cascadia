@@ -6,7 +6,7 @@
 
 [sub_resource type="Gradient" id="Gradient_grass_long"]
 offsets = PackedFloat32Array(0, 0.545045, 1)
-colors = PackedColorArray(0.8977666, 0.34064347, 0.09320182, 1, 0.85646725, 0.49670067, 0.11207495, 1, 0.94100165, 0.71387357, 0.1680183, 1)
+colors = PackedColorArray(0.56658393, 0.45376807, 0.14064324, 1, 0.7195835, 0.5653573, 0.28046492, 1, 0.9278606, 0.7248542, 0.39688748, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_grass_long"]
 gradient = SubResource("Gradient_grass_long")

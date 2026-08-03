@@ -7,7 +7,7 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ecd44"]
 render_priority = 0
 shader = ExtResource("2_q08go")
-shader_parameter/Leaf_Color = Color(0.5481353, 0.75083065, 0.37559026, 1)
+shader_parameter/Leaf_Color = Color(0.38039216, 0.5411765, 0.24705882, 1)
 shader_parameter/ExtraColor = Color(0.13, 0.33, 0.25, 1)
 shader_parameter/Alpha = ExtResource("3_e0o8b")
 shader_parameter/SSS_Color = Color(0.7004964, 0.58599085, 0.25728363, 1)

@@ -8,7 +8,7 @@
 render_priority = 0
 shader = ExtResource("1_cnavy")
 shader_parameter/texture_albedo = ExtResource("3_y2c18")
-shader_parameter/ExtraColor = Color(0.26172394, 0.39569277, 0.18153027, 1)
+shader_parameter/ExtraColor = Color(0.22231877, 0.3125201, 0.2223568, 1)
 shader_parameter/WindSpeed = 2.0
 shader_parameter/WindIntensity = 0.2
 shader_parameter/GeneratedNoise = ExtResource("2_lb1yx")

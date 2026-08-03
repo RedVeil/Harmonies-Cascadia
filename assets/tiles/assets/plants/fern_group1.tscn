@@ -2,5 +2,21 @@
 
 [ext_resource type="MultiMesh" uid="uid://iappgudiov0n" path="res://assets/tiles/assets/plants/fern_group1.tres" id="1_ysf73"]
 
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_m2gly"]
+sky_top_color = Color(0.31354892, 0.44130847, 0.70483696, 1)
+sky_horizon_color = Color(0.63347423, 0.65766406, 0.7145462, 1)
+ground_horizon_color = Color(0.63347423, 0.65766406, 0.7145462, 1)
+
+[sub_resource type="Sky" id="Sky_ysf73"]
+sky_material = SubResource("ProceduralSkyMaterial_m2gly")
+
+[sub_resource type="Environment" id="Environment_3b7xj"]
+background_mode = 2
+sky = SubResource("Sky_ysf73")
+tonemap_mode = 2
+
 [node name="MultiMeshInstance3D5" type="MultiMeshInstance3D" unique_id=86273511]
 multimesh = ExtResource("1_ysf73")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=920830622]
+environment = SubResource("Environment_3b7xj")

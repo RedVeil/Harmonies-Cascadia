@@ -32,6 +32,8 @@
 [sub_resource type="Environment" id="Environment_tbrwv"]
 background_mode = 1
 background_color = Color(0.8186203, 0.7502329, 0.6806915, 1)
+tonemap_agx_white = 2.0
+tonemap_agx_contrast = 1.5
 
 [node name="RefactoredMain" type="Node3D" unique_id=1341387681]
 

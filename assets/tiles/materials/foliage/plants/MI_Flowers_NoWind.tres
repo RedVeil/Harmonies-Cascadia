@@ -2,13 +2,13 @@
 
 [ext_resource type="Shader" uid="uid://bv76cwbqdpugw" path="res://assets/shader/tiles/foliage/M_BaseFoliage.gdshader" id="1_xx8xu"]
 [ext_resource type="Texture2D" uid="uid://xfapwilgylqf" path="res://assets/tiles/materials/T_FoliageNoise.tres" id="2_xx8xu"]
-[ext_resource type="Texture2D" uid="uid://bmjx36bgmv58j" path="res://assets/tiles/materials/textures/foliage/Flowers.png" id="3_88o81"]
+[ext_resource type="Texture2D" uid="uid://bfly8wct3bh1j" path="res://assets/tiles/materials/textures/foliage/Flowers.png" id="3_88o81"]
 
 [resource]
 render_priority = 0
 shader = ExtResource("1_xx8xu")
 shader_parameter/texture_albedo = ExtResource("3_88o81")
-shader_parameter/ExtraColor = Color(1, 1, 1, 1)
+shader_parameter/ExtraColor = Color(0, 0, 0, 1)
 shader_parameter/WindSpeed = 0.641
 shader_parameter/WindIntensity = 0.1
 shader_parameter/GeneratedNoise = ExtResource("2_xx8xu")

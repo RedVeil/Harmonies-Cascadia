@@ -8,7 +8,7 @@
 render_priority = 0
 shader = ExtResource("1_rpof3")
 shader_parameter/texture_albedo = ExtResource("3_41av5")
-shader_parameter/ExtraColor = Color(0.72474945, 0.63178676, 0.214787, 1)
+shader_parameter/ExtraColor = Color(0, 0, 0, 1)
 shader_parameter/WindSpeed = 2.0
 shader_parameter/WindIntensity = 0.02000000095
 shader_parameter/GeneratedNoise = ExtResource("2_wv70w")

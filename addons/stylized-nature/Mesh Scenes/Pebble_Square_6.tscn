@@ -1,5 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://c7yry6lfhtido"]
+[gd_scene format=3 uid="uid://c7yry6lfhtido"]
 
-[ext_resource type="PackedScene" uid="uid://xpnn0tibrru6" path="res://assets/Pebble_Square_6.gltf" id="1_26v2v"]
+[ext_resource type="PackedScene" uid="uid://xpnn0tibrru6" path="res://addons/stylized-nature/assets/Pebble_Square_6.gltf" id="1_26v2v"]
+[ext_resource type="Texture2D" uid="uid://drelsndsi4ugv" path="res://assets/tiles/materials/textures/rocks/PathRocks_Diffuse.png" id="2_20jm2"]
 
-[node name="Pebble_Square_62" instance=ExtResource("1_26v2v")]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ikdi1"]
+albedo_color = Color(0.7204674, 0.7204675, 0.7204674, 1)
+albedo_texture = ExtResource("2_20jm2")
+
+[node name="Pebble_Square_62" unique_id=388382290 instance=ExtResource("1_26v2v")]
+
+[node name="Pebble_Square_6" parent="." index="0" unique_id=438320787]
+surface_material_override/0 = SubResource("StandardMaterial3D_ikdi1")
