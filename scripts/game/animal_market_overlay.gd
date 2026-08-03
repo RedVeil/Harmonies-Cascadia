@@ -30,6 +30,7 @@ var _hit_areas: Array[Control] = []
 var _hover_card_id: int = -1
 var _reroll_enabled: bool = true
 var _buys_enabled: Array[bool] = []
+var _disabled_buy_label: String = "Wait"
 
 @onready var _popup_root: Node2D = $PopupRoot
 @onready var _popup_panel: Panel = $PopupRoot/PopupPanel
@@ -82,11 +83,16 @@ func set_reroll_enabled(enabled: bool) -> void:
 	_reroll_enabled = enabled
 	_refresh_reroll_button()
 
-func set_buys_enabled(enabled_flags: Array[bool]) -> void:
+func set_buys_enabled(enabled_flags: Array[bool], disabled_label: String = "Wait") -> void:
 	_buys_enabled = enabled_flags.duplicate()
-	_refresh_labels()
+	_disabled_buy_label = disabled_label
 	for i in _buy_buttons.size():
 		_refresh_offer_button(i)
+
+func set_status_text(text: String) -> void:
+	if _credits_label == null:
+		return
+	_credits_label.text = text
 
 func update_credits(_credits: int) -> void:
 	pass
@@ -220,30 +226,35 @@ func _rebuild_single_offer(offer_index: int) -> void:
 
 	var offer := _offers[offer_index]
 	var column_height := _offer_column_height()
+	var has_offer := offer != null and offer.amount > 0
 
-	var card := card_scene.instantiate() as Card
-	card.name = "Card"
-	card.hover_height = market_hover_height
-	card.z_index = 2
-	card.position = Vector2(0.0, -column_height / 2.0 + CARD_SIZE.y / 2.0)
-	slot.add_child(card)
-	card.init(offer, self, offer_index)
-	card.set_z(offer_index)
-	card.placement_tooltip.z_index = 20
-	card.input_pickable = false
-	_cards[offer_index] = card
+	if has_offer:
+		var card := card_scene.instantiate() as Card
+		card.name = "Card"
+		card.hover_height = market_hover_height
+		card.z_index = 2
+		card.position = Vector2(0.0, -column_height / 2.0 + CARD_SIZE.y / 2.0)
+		slot.add_child(card)
+		card.init(offer, self, offer_index)
+		card.set_z(offer_index)
+		card.placement_tooltip.z_index = 20
+		card.input_pickable = false
+		_cards[offer_index] = card
 
-	var hit := Control.new()
-	hit.name = "HitArea"
-	hit.mouse_filter = Control.MOUSE_FILTER_STOP
-	hit.z_index = 3
-	hit.position = Vector2(-CARD_SIZE.x / 2.0, -column_height / 2.0)
-	hit.size = CARD_SIZE
-	hit.mouse_entered.connect(_on_card_hit_entered.bind(offer_index))
-	hit.mouse_exited.connect(_on_card_hit_exited.bind(offer_index))
-	hit.gui_input.connect(_on_card_hit_gui_input.bind(offer_index))
-	slot.add_child(hit)
-	_hit_areas[offer_index] = hit
+		var hit := Control.new()
+		hit.name = "HitArea"
+		hit.mouse_filter = Control.MOUSE_FILTER_STOP
+		hit.z_index = 3
+		hit.position = Vector2(-CARD_SIZE.x / 2.0, -column_height / 2.0)
+		hit.size = CARD_SIZE
+		hit.mouse_entered.connect(_on_card_hit_entered.bind(offer_index))
+		hit.mouse_exited.connect(_on_card_hit_exited.bind(offer_index))
+		hit.gui_input.connect(_on_card_hit_gui_input.bind(offer_index))
+		slot.add_child(hit)
+		_hit_areas[offer_index] = hit
+	else:
+		_cards[offer_index] = null
+		_hit_areas[offer_index] = null
 
 	var buy_button := Control.new()
 	buy_button.name = "BuyButton"
@@ -278,15 +289,18 @@ func _rebuild_single_offer(offer_index: int) -> void:
 
 func _refresh_labels() -> void:
 	_title_label.text = "Animal Market"
-	if _buys_enabled.size() > 0 and not _buys_enabled.has(true):
-		_credits_label.text = "Animal hand limit reached"
-	else:
-		_credits_label.text = "Take animals for free"
+	if _credits_label.text.is_empty():
+		_credits_label.text = "Take 1 animal per booster"
 
 func _is_buy_enabled(offer_index: int) -> bool:
+	if offer_index < 0 or offer_index >= _offers.size():
+		return false
+	var offer := _offers[offer_index]
+	if offer == null or offer.amount <= 0:
+		return false
 	if _buys_enabled.is_empty():
 		return true
-	if offer_index < 0 or offer_index >= _buys_enabled.size():
+	if offer_index >= _buys_enabled.size():
 		return false
 	return _buys_enabled[offer_index]
 
@@ -299,6 +313,8 @@ func _refresh_offer_button(offer_index: int) -> void:
 	var buy_label: Label = buy_button.get_node("Label")
 	var buy_bg: ColorRect = buy_button.get_node("Background")
 	var hit := _hit_areas[offer_index] if offer_index < _hit_areas.size() else null
+	var offer := _offers[offer_index] if offer_index < _offers.size() else null
+	var has_offer := offer != null and offer.amount > 0
 
 	if _is_buy_enabled(offer_index):
 		buy_label.text = "Take"
@@ -308,7 +324,7 @@ func _refresh_offer_button(offer_index: int) -> void:
 		if hit:
 			hit.mouse_filter = Control.MOUSE_FILTER_STOP
 	else:
-		buy_label.text = "Full"
+		buy_label.text = "—" if not has_offer else _disabled_buy_label
 		buy_bg.color = Color(0.85, 0.85, 0.85, 1.0)
 		buy_label.add_theme_color_override("font_color", Color.GRAY)
 		buy_button.mouse_filter = Control.MOUSE_FILTER_IGNORE

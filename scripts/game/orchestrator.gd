@@ -51,7 +51,7 @@ func _ready() -> void:
 	vp.physics_object_picking_first_only = true
 	if game_over_overlay:
 		game_over_overlay.restart_pressed.connect(restart_run)
-	# show_tutorial()
+	show_tutorial()
 
 ## ----- Handle Booster Interactions ----- ##
 
@@ -487,5 +487,9 @@ func get_active_rule(type:int) -> ScoringRule:
 ## ----- Score Tutorial ----- ##
 
 func show_tutorial() -> void:
-	if tutorial_overlay:
-		tutorial_overlay.open()
+	if tutorial_overlay == null:
+		return
+	# TutorialOverlay is a later sibling, so it may not have finished _ready yet.
+	if not tutorial_overlay.is_node_ready():
+		await tutorial_overlay.ready
+	tutorial_overlay.open()

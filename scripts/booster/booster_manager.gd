@@ -28,7 +28,10 @@ var options_ready: bool = true
 var reroll_charges: int = 1
 var buys_since_reroll: int = 0
 
+## One new animal take per booster pack; starts ready before the first pack.
+var market_buys_remaining: int = 1
 var _market_offers: Array[CardData] = []
+var _bought_animal_ids: Dictionary = {}
 
 var _rng: RandomNumberGenerator
 
@@ -86,6 +89,7 @@ func select_booster(id: int) -> void:
 	pending_elements = _count_element_cards(booster)
 	elements_played = 0
 	options_ready = pending_elements <= 0
+	market_buys_remaining = 1
 	
 	# Only refill shared refresh charge after it has been spent.
 	if reroll_charges <= 0:
@@ -97,6 +101,7 @@ func select_booster(id: int) -> void:
 	createBooster(id)
 	_refresh_option_ui()
 	_refresh_reroll_ui()
+	_refresh_market_buy_ui()
 
 func _try_reroll() -> void:
 	if not _spend_reroll_charge():
@@ -184,11 +189,19 @@ func open_animal_market() -> void:
 func buy_market_animal(offer_index: int) -> void:
 	if offer_index < 0 or offer_index >= _market_offers.size():
 		return
+	if market_buys_remaining <= 0:
+		_refresh_market_buy_ui()
+		return
 	var bought := _market_offers[offer_index]
+	if not _is_valid_market_offer(bought):
+		_refresh_market_buy_ui()
+		return
 	if not orchestrator.card_manager.can_accept_animal(bought):
 		_refresh_market_buy_ui()
 		return
 	orchestrator.add_hand_card(bought)
+	_bought_animal_ids[bought.id] = true
+	market_buys_remaining = maxi(market_buys_remaining - 1, 0)
 	var replacement := _generate_market_offer_at(offer_index, _market_used_ids(offer_index))
 	_market_offers[offer_index] = replacement
 	if animal_market:
@@ -210,52 +223,85 @@ func close_animal_market() -> void:
 		animal_market.close()
 	orchestrator.unpause_cards()
 
+func _can_buy_market_offer(offer: CardData) -> bool:
+	if market_buys_remaining <= 0:
+		return false
+	if not _is_valid_market_offer(offer):
+		return false
+	return orchestrator.card_manager.can_accept_animal(offer)
+
+func _market_status_text() -> String:
+	if market_buys_remaining <= 0:
+		return "Buy another booster to take an animal"
+	var any_valid := false
+	var any_accept := false
+	for offer in _market_offers:
+		if not _is_valid_market_offer(offer):
+			continue
+		any_valid = true
+		if orchestrator.card_manager.can_accept_animal(offer):
+			any_accept = true
+			break
+	if any_valid and not any_accept:
+		return "Animal hand limit reached"
+	return "Take 1 animal per booster"
+
 func _refresh_market_buy_ui() -> void:
-	if animal_market == null:
+	if animal_market == null or not animal_market.is_node_ready():
+		return
+	if not animal_market.visible:
 		return
 	var can_buy: Array[bool] = []
 	for offer in _market_offers:
-		can_buy.append(orchestrator.card_manager.can_accept_animal(offer))
-	animal_market.set_buys_enabled(can_buy)
+		can_buy.append(_can_buy_market_offer(offer))
+	var disabled_label := "Wait" if market_buys_remaining <= 0 else "Full"
+	animal_market.set_buys_enabled(can_buy, disabled_label)
+	animal_market.set_status_text(_market_status_text())
 
 func _ensure_market_offers() -> void:
 	if _market_offers.size() < animal_market_offer_count:
 		_market_offers = _generate_market_offers()
 
-func _market_used_ids(exclude_index: int = -1) -> Dictionary:
-	var used_ids: Dictionary = {}
+func _is_valid_market_offer(offer: CardData) -> bool:
+	return offer != null and offer.amount > 0
+
+func _market_blocked_ids(exclude_index: int = -1) -> Dictionary:
+	var blocked: Dictionary = _bought_animal_ids.duplicate()
 	for i in _market_offers.size():
 		if i == exclude_index:
 			continue
 		var offer := _market_offers[i]
-		if offer != null and offer.amount > 0:
-			used_ids[offer.id] = true
-	return used_ids
+		if _is_valid_market_offer(offer):
+			blocked[offer.id] = true
+	return blocked
+
+func _market_used_ids(exclude_index: int = -1) -> Dictionary:
+	return _market_blocked_ids(exclude_index)
 
 func _generate_market_offer_at(slot_index: int, used_ids: Dictionary) -> CardData:
+	var blocked: Dictionary = used_ids.duplicate()
+	for bought_id in _bought_animal_ids:
+		blocked[bought_id] = true
 	var element := (slot_index % 5) + 1
 	var attempts := 0
-	var max_attempts := 24
-	var fallback := CardData.new()
+	var max_attempts := 64
 	while attempts < max_attempts:
 		attempts += 1
 		var animal := choose_animal(element)
 		element = element % 5 + 1
-		if animal.amount <= 0:
+		if not _is_valid_market_offer(animal):
 			continue
-		if fallback.amount <= 0:
-			fallback = animal
-		if used_ids.has(animal.id):
+		if blocked.has(animal.id):
 			continue
 		return animal
-	return fallback
+	return CardData.new()
 
 func _generate_market_offers() -> Array[CardData]:
 	var offers: Array[CardData] = []
-	var used_ids: Dictionary = {}
+	var used_ids: Dictionary = _bought_animal_ids.duplicate()
 	for i in animal_market_offer_count:
 		var animal := _generate_market_offer_at(i, used_ids)
-		if animal.amount > 0:
+		if _is_valid_market_offer(animal):
 			used_ids[animal.id] = true
 		offers.append(animal)
 	return offers

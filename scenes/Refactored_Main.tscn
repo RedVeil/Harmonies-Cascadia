@@ -14,28 +14,20 @@
 [ext_resource type="PackedScene" uid="uid://bde4y0iag4uud" path="res://scenes/game/undo_button.tscn" id="12_3qqq0"]
 [ext_resource type="PackedScene" uid="uid://c20rnltrn1aea" path="res://scenes/game/end_game_button.tscn" id="13_endgame"]
 [ext_resource type="PackedScene" uid="uid://d2uy77eljjm3y" path="res://scenes/game/game_over_overlay.tscn" id="13_gameover"]
-[ext_resource type="PackedScene" path="res://scenes/game/animal_market_overlay.tscn" id="13_market"]
+[ext_resource type="PackedScene" uid="uid://bqigxbarpo52k" path="res://scenes/game/animal_market_overlay.tscn" id="13_market"]
 [ext_resource type="PackedScene" uid="uid://btq3hb02wek7u" path="res://scenes/game/tutorial_overlay.tscn" id="13_tutorial"]
-[ext_resource type="Texture2D" uid="uid://cr3us6hvwje2s" path="res://assets/tutorial/Folder 1.png" id="14_0bw36"]
-[ext_resource type="Texture2D" uid="uid://b2c5gk5bhrmq6" path="res://assets/tutorial/Folder 2.png" id="15_l72vc"]
-[ext_resource type="Texture2D" uid="uid://c2cvea1126srm" path="res://assets/tutorial/Folder 3.png" id="16_0tef6"]
+[ext_resource type="Texture2D" uid="uid://ddoc37ud7bky0" path="res://assets/tutorial/t1.png" id="16_4fvlb"]
+[ext_resource type="Texture2D" uid="uid://dwh8atvjn3m26" path="res://assets/tutorial/t2.png" id="17_6ej1e"]
 [ext_resource type="Script" uid="uid://bhhe83k1kifpx" path="res://scripts/game/hud_layout.gd" id="17_hud"]
-[ext_resource type="Texture2D" uid="uid://dgndqpjvcym1i" path="res://assets/tutorial/Folder 4.png" id="18_ucyvv"]
-[ext_resource type="Texture2D" uid="uid://cpa22yo6yyhii" path="res://assets/tutorial/Folder 5.png" id="19_sk4yt"]
-[ext_resource type="Texture2D" uid="uid://cli840xbt5uuc" path="res://assets/tutorial/Folder 6.png" id="20_k5eml"]
-[ext_resource type="Texture2D" uid="uid://bnniu26onqyds" path="res://assets/tutorial/Folder 7.png" id="21_c3d47"]
-[ext_resource type="Texture2D" uid="uid://bpmyv6g7kfimp" path="res://assets/tutorial/Folder 8.png" id="22_tgxom"]
-[ext_resource type="Texture2D" uid="uid://bxncwe52exisc" path="res://assets/tutorial/Folder 9.png" id="23_5xdac"]
-[ext_resource type="Texture2D" uid="uid://d05p8ywaktc0b" path="res://assets/tutorial/Folder 10.png" id="24_wjfq2"]
-[ext_resource type="Texture2D" uid="uid://cretmfj5cq71" path="res://assets/tutorial/Folder 11.png" id="25_4ml36"]
-[ext_resource type="Texture2D" uid="uid://u1w22tu6eafr" path="res://assets/tutorial/Folder 12.png" id="26_l2rhs"]
-[ext_resource type="Texture2D" uid="uid://17b8ujh0b1tx" path="res://assets/tutorial/Folder 13.png" id="27_6hr1h"]
-[ext_resource type="Texture2D" uid="uid://c4va3dm8fujhy" path="res://assets/tutorial/Folder 14.png" id="28_uvijx"]
-[ext_resource type="Texture2D" uid="uid://de0028hx2pmt2" path="res://assets/tutorial/Folder 15.png" id="29_bbhlo"]
-[ext_resource type="Texture2D" uid="uid://bqrlqwncxwgwf" path="res://assets/tutorial/Folder 16.png" id="30_rmrxj"]
-[ext_resource type="Texture2D" uid="uid://b05oj48fw5tom" path="res://assets/tutorial/Folder 17.png" id="31_k1ell"]
-[ext_resource type="Texture2D" uid="uid://s4qaptfydlgh" path="res://assets/tutorial/Folder 18.png" id="32_vsh54"]
-[ext_resource type="Texture2D" uid="uid://f0fbv3m426m7" path="res://assets/tutorial/Folder 19.png" id="33_h6ck3"]
+[ext_resource type="Texture2D" uid="uid://c43o3ab83kvr0" path="res://assets/tutorial/t3.png" id="18_ek3b8"]
+[ext_resource type="Texture2D" uid="uid://dk2vartljuqul" path="res://assets/tutorial/t4.png" id="19_1wyvc"]
+[ext_resource type="Texture2D" uid="uid://bf25e3plan75t" path="res://assets/tutorial/t5.png" id="20_2fdk7"]
+[ext_resource type="Texture2D" uid="uid://bxxx8elmc8v7o" path="res://assets/tutorial/t6.png" id="21_ucyvv"]
+[ext_resource type="Texture2D" uid="uid://bjojbjqmoik5m" path="res://assets/tutorial/t7.png" id="22_sk4yt"]
+[ext_resource type="Texture2D" uid="uid://b70ogndf6lpb8" path="res://assets/tutorial/t8.png" id="23_k5eml"]
+[ext_resource type="Texture2D" uid="uid://1bgw6k068vn5" path="res://assets/tutorial/t9.png" id="24_c3d47"]
+[ext_resource type="Texture2D" uid="uid://bp0v1iwgf5dqy" path="res://assets/tutorial/t10.png" id="25_tgxom"]
+[ext_resource type="Texture2D" uid="uid://degwjrr2xl85y" path="res://assets/tutorial/t11.png" id="26_5xdac"]
 
 [sub_resource type="Environment" id="Environment_tbrwv"]
 background_mode = 1
@@ -229,7 +221,7 @@ orchestrator = NodePath("../../Orchestrator")
 
 [node name="TutorialOverlay" parent="." unique_id=1580048330 instance=ExtResource("13_tutorial")]
 visible = false
-slides = Array[Texture2D]([ExtResource("14_0bw36"), ExtResource("15_l72vc"), ExtResource("16_0tef6"), ExtResource("18_ucyvv"), ExtResource("19_sk4yt"), ExtResource("20_k5eml"), ExtResource("21_c3d47"), ExtResource("22_tgxom"), ExtResource("23_5xdac"), ExtResource("24_wjfq2"), ExtResource("25_4ml36"), ExtResource("26_l2rhs"), ExtResource("27_6hr1h"), ExtResource("28_uvijx"), ExtResource("29_bbhlo"), ExtResource("30_rmrxj"), ExtResource("31_k1ell"), ExtResource("32_vsh54"), ExtResource("33_h6ck3")])
+slides = Array[Texture2D]([ExtResource("16_4fvlb"), ExtResource("17_6ej1e"), ExtResource("18_ek3b8"), ExtResource("19_1wyvc"), ExtResource("20_2fdk7"), ExtResource("21_ucyvv"), ExtResource("22_sk4yt"), ExtResource("23_k5eml"), ExtResource("24_c3d47"), ExtResource("25_tgxom"), ExtResource("26_5xdac")])
 
 [node name="AnimalMarketOverlay" parent="." unique_id=1759004645 instance=ExtResource("13_market")]
 
