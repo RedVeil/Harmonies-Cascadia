@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://n38mvbd6ieml"
-path="res://.godot/imported/LivestockMammal_Sheep_White.png-b172bd7ab2709008f35de9d06b730f0b.ctex"
+path.s3tc="res://.godot/imported/LivestockMammal_Sheep_White.png-b172bd7ab2709008f35de9d06b730f0b.s3tc.ctex"
+path.etc2="res://.godot/imported/LivestockMammal_Sheep_White.png-b172bd7ab2709008f35de9d06b730f0b.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/animals/icons/LivestockMammal_Sheep_White.png"
-dest_files=["res://.godot/imported/LivestockMammal_Sheep_White.png-b172bd7ab2709008f35de9d06b730f0b.ctex"]
+dest_files=["res://.godot/imported/LivestockMammal_Sheep_White.png-b172bd7ab2709008f35de9d06b730f0b.s3tc.ctex", "res://.godot/imported/LivestockMammal_Sheep_White.png-b172bd7ab2709008f35de9d06b730f0b.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

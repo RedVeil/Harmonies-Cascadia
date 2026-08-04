@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://bguxkqqmhki"]
+
+[ext_resource type="Script" path="res://scripts/game/place_accept_button.gd" id="1_accept"]
+[ext_resource type="Texture2D" uid="uid://ca2hp56qvfswa" path="res://assets/icons/circle.png" id="2_circle"]
+[ext_resource type="Shader" uid="uid://y4g8ky747mqh" path="res://assets/shader/ui/shadow.gdshader" id="3_shadow"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_accept"]
+radius = 18.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_shadow"]
+shader = ExtResource("3_shadow")
+shader_parameter/shadow_color = Color(0, 0, 0, 0.1254902)
+shader_parameter/blur_size = 20.0
+
+[node name="PlaceAcceptButton" type="Area2D"]
+visible = false
+monitorable = false
+priority = 3
+script = ExtResource("1_accept")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+z_index = 1
+shape = SubResource("CircleShape2D_accept")
+
+[node name="background" type="Sprite2D" parent="."]
+scale = Vector2(0.09, 0.09)
+texture = ExtResource("2_circle")
+
+[node name="shadow" type="Sprite2D" parent="background"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_shadow")
+position = Vector2(0.68392086, 1.1477747)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("2_circle")
+
+[node name="Label" type="Label" parent="."]
+offset_left = -20.0
+offset_top = -12.0
+offset_right = 20.0
+offset_bottom = 12.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 14
+text = "OK"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="input_event" from="." to="." method="_on_input_event"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

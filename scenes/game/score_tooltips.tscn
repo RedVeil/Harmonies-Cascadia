@@ -2,14 +2,14 @@
 
 [ext_resource type="Script" uid="uid://dggol5cr45w7e" path="res://scripts/game/score_tooltip.gd" id="1_d6nn3"]
 [ext_resource type="Texture2D" uid="uid://2c2kpkccrfy3" path="res://assets/icons/question.png" id="1_e867d"]
-[ext_resource type="Texture2D" uid="uid://jomsgj87ydn8" path="res://assets/elements/a1.png" id="3_44yi1"]
+[ext_resource type="Texture2D" uid="uid://cjulobfnnfiaf" path="res://assets/elements/a0.png" id="3_44yi1"]
 [ext_resource type="PackedScene" uid="uid://ccy33o81w8qpr" path="res://scenes/game/tooltip_icon.tscn" id="3_e6s6x"]
-[ext_resource type="Texture2D" uid="uid://bkdyc7db8om56" path="res://assets/elements/f2.png" id="4_d4g8o"]
-[ext_resource type="Texture2D" uid="uid://boqn0q1xtndms" path="res://assets/elements/m2.png" id="5_ci7lu"]
-[ext_resource type="Texture2D" uid="uid://deto26ef4js8g" path="res://assets/elements/r0.png" id="6_d6nn3"]
-[ext_resource type="Texture2D" uid="uid://bour75pi3njo7" path="res://assets/elements/w0.png" id="8_ci7lu"]
+[ext_resource type="Texture2D" uid="uid://bvwixgsubb5dn" path="res://assets/elements/f1.png" id="4_d4g8o"]
+[ext_resource type="Texture2D" uid="uid://cslq3nxtay7p3" path="res://assets/elements/m2.png" id="5_ci7lu"]
+[ext_resource type="Texture2D" uid="uid://cvdocpei0br0m" path="res://assets/elements/r0.png" id="6_d6nn3"]
+[ext_resource type="Texture2D" uid="uid://fitjq8iuh7ul" path="res://assets/elements/w0.png" id="8_ci7lu"]
 [ext_resource type="Texture2D" uid="uid://bnrcql3uy3afb" path="res://assets/icons/book.png" id="9_d6nn3"]
-[ext_resource type="Texture2D" uid="uid://diyjmvwygs4vq" path="res://assets/score_tooltip/scoring_fields1.png" id="10_d6nn3"]
+[ext_resource type="Texture2D" uid="uid://dngccn0vhtypv" path="res://assets/score_tooltip/a1.webp" id="10_d6nn3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e867d"]
 bg_color = Color(1, 1, 1, 1)

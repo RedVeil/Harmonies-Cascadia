@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ckrxpgw5bucg5"
-path="res://.godot/imported/PetMammal_Cat_Orange.png-9c5dbf7dade251447d782a7ec0c2121b.ctex"
+path.s3tc="res://.godot/imported/PetMammal_Cat_Orange.png-9c5dbf7dade251447d782a7ec0c2121b.s3tc.ctex"
+path.etc2="res://.godot/imported/PetMammal_Cat_Orange.png-9c5dbf7dade251447d782a7ec0c2121b.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/animals/icons/PetMammal_Cat_Orange.png"
-dest_files=["res://.godot/imported/PetMammal_Cat_Orange.png-9c5dbf7dade251447d782a7ec0c2121b.ctex"]
+dest_files=["res://.godot/imported/PetMammal_Cat_Orange.png-9c5dbf7dade251447d782a7ec0c2121b.s3tc.ctex", "res://.godot/imported/PetMammal_Cat_Orange.png-9c5dbf7dade251447d782a7ec0c2121b.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

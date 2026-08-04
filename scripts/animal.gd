@@ -31,6 +31,8 @@ var _resolved_special: Array[StringName] = []
 
 
 func _ready() -> void:
+	set_process(false)
+	set_physics_process(false)
 	_cache_animation_player()
 	# Stay frozen until TileVisuals activates life on commit.
 	freeze()
@@ -43,6 +45,9 @@ func freeze() -> void:
 	if _ap != null:
 		_ap.stop()
 		_ap.speed_scale = 0.0
+		_ap.active = false
+	set_process(false)
+	set_physics_process(false)
 
 
 func _exit_tree() -> void:
@@ -62,6 +67,7 @@ func start_roam(
 	_rng.seed = rng_seed if rng_seed != 0 else hash(get_instance_id())
 	_cache_animation_player()
 	_resolve_animations()
+	_enable_animation_player()
 
 	_path_direction = 1.0 if _rng.randf() < 0.5 else -1.0
 
@@ -70,12 +76,40 @@ func start_roam(
 		_play_idle_once()
 		return
 
-	if _ap != null:
-		_ap.speed_scale = 1.0
-
 	var token := _roam_token
 	_roaming = true
 	_run_roam_loop(token)
+
+
+## Idle / special only: no walk, no path advance, no per-frame awaits.
+## Uses animation length timers (AnimationPlayer advances; GDScript does not _process).
+func start_idle_special_loop(
+	path: Path3D = null,
+	rng_seed: int = 0,
+	start_offset: float = -1.0
+) -> void:
+	_roam_token += 1
+
+	_rng.seed = rng_seed if rng_seed != 0 else hash(get_instance_id())
+	_cache_animation_player()
+	_resolve_animations()
+	_enable_animation_player()
+	set_process(false)
+	set_physics_process(false)
+
+	if path != null:
+		_attach_to_path(path, start_offset)
+
+	if _ap == null:
+		_roaming = false
+		return
+	if _resolved_idle.is_empty() and _resolved_special.is_empty():
+		_roaming = false
+		return
+
+	var token := _roam_token
+	_roaming = true
+	_run_idle_special_loop(token)
 
 
 ## Place on a PathFollow without starting movement (preview / frozen pose).
@@ -97,6 +131,14 @@ func detach_from_path() -> void:
 	_roaming = false
 	_roam_token += 1
 	_detach_from_path_follow()
+
+
+func _enable_animation_player() -> void:
+	_cache_animation_player()
+	if _ap == null:
+		return
+	_ap.active = true
+	_ap.speed_scale = 1.0
 
 
 func _is_roam_active(token: int) -> bool:
@@ -275,6 +317,22 @@ func _run_roam_loop(token: int) -> void:
 			await _play_anim_clip(_resolved_special, token)
 		else:
 			await _play_walk_lap(token)
+
+
+## Stand-in-place loop: after each clip finishes, pick idle or special again.
+func _run_idle_special_loop(token: int) -> void:
+	while _is_roam_active(token):
+		var use_special := (
+			not _resolved_special.is_empty()
+			and (
+				_resolved_idle.is_empty()
+				or _rng.randf() < special_chance
+			)
+		)
+		if use_special:
+			await _play_anim_clip(_resolved_special, token)
+		else:
+			await _play_anim_clip(_resolved_idle, token)
 
 
 func _play_opening_action(token: int) -> void:

@@ -1,6 +1,8 @@
 shader_type spatial;
 
-render_mode cull_disabled,blend_mix,specular_schlick_ggx, depth_prepass_alpha;
+render_mode blend_mix,specular_schlick_ggx;
+
+global uniform float wind_amount;
 
 uniform vec4 Leaf_Color : source_color = vec4(0.45, 0.64, 0.0, 1.0);
 const vec4 ExtraColor = vec4(0.13, 0.33, 0.25, 1.0);
@@ -38,7 +40,7 @@ void vertex() {
     vec3 effective_world_pos = world_pos * contribution;
     float positional_influence = -VERTEX.x + VERTEX.z - effective_world_pos.x + effective_world_pos.z;
     
-    vec3 wind_offset = calculate_wind_effect(VERTEX, TIME, WindSpeed, WindStrength);
+    vec3 wind_offset = calculate_wind_effect(VERTEX, TIME, WindSpeed, WindStrength * wind_amount);
     
     COLOR = vec4(VERTEX.y, positional_influence, 1.0, 1.0);
     VERTEX += wind_offset;

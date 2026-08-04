@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://b6pgh7p314qa5"
 path.s3tc="res://.godot/imported/Bear_02_ColorPalette_1.png-b62a7af0f0a43a2823cfafb98faaa19f.s3tc.ctex"
+path.etc2="res://.godot/imported/Bear_02_ColorPalette_1.png-b62a7af0f0a43a2823cfafb98faaa19f.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/animals/models/raw/Bear_02_ColorPalette_1.png"
-dest_files=["res://.godot/imported/Bear_02_ColorPalette_1.png-b62a7af0f0a43a2823cfafb98faaa19f.s3tc.ctex"]
+dest_files=["res://.godot/imported/Bear_02_ColorPalette_1.png-b62a7af0f0a43a2823cfafb98faaa19f.s3tc.ctex", "res://.godot/imported/Bear_02_ColorPalette_1.png-b62a7af0f0a43a2823cfafb98faaa19f.etc2.ctex"]
 
 [params]
 

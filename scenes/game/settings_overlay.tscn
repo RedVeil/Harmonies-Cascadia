@@ -1,0 +1,171 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/game/settings_overlay.gd" id="1_overlay"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_popup"]
+bg_color = Color(0.95686275, 0.8745098, 0.7921569, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.1254902)
+shadow_size = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dim"]
+bg_color = Color(0, 0, 0, 0.35)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_blocker"]
+bg_color = Color(1, 1, 1, 0)
+
+[node name="SettingsOverlay" type="CanvasLayer"]
+layer = 15
+script = ExtResource("1_overlay")
+
+[node name="Dimmer" type="Panel" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_dim")
+
+[node name="PopupRoot" type="Node2D" parent="."]
+
+[node name="PopupPanel" type="Panel" parent="PopupRoot"]
+offset_left = -220.0
+offset_top = -200.0
+offset_right = 220.0
+offset_bottom = 200.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_popup")
+
+[node name="ClickBlocker" type="Panel" parent="PopupRoot"]
+offset_left = -220.0
+offset_top = -200.0
+offset_right = 220.0
+offset_bottom = 200.0
+mouse_filter = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_blocker")
+
+[node name="TitleLabel" type="Label" parent="PopupRoot"]
+offset_left = -200.0
+offset_top = -180.0
+offset_right = 160.0
+offset_bottom = -148.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 26
+text = "Settings"
+vertical_alignment = 1
+
+[node name="CloseButton" type="Control" parent="PopupRoot"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 168.0
+offset_top = -180.0
+offset_right = 200.0
+offset_bottom = -144.0
+
+[node name="Label" type="Label" parent="PopupRoot/CloseButton"]
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 36.0
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 24
+text = "×"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PresetLabel" type="Label" parent="PopupRoot"]
+offset_left = -200.0
+offset_top = -130.0
+offset_right = 200.0
+offset_bottom = -106.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 16
+text = "Quality"
+
+[node name="PresetRow" type="HBoxContainer" parent="PopupRoot"]
+offset_left = -200.0
+offset_top = -100.0
+offset_right = 200.0
+offset_bottom = -64.0
+theme_override_constants/separation = 8
+
+[node name="LowButton" type="Button" parent="PopupRoot/PresetRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "Low"
+
+[node name="MediumButton" type="Button" parent="PopupRoot/PresetRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "Medium"
+
+[node name="HighButton" type="Button" parent="PopupRoot/PresetRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "High"
+
+[node name="CustomButton" type="Button" parent="PopupRoot/PresetRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+disabled = true
+text = "Custom"
+
+[node name="WindCheck" type="CheckButton" parent="PopupRoot"]
+offset_left = -200.0
+offset_top = -40.0
+offset_right = 200.0
+offset_bottom = -8.0
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+text = "Plant sway"
+
+[node name="CloudsCheck" type="CheckButton" parent="PopupRoot"]
+offset_left = -200.0
+offset_top = 0.0
+offset_right = 200.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+text = "Cloud shadows"
+
+[node name="AnimalLabel" type="Label" parent="PopupRoot"]
+offset_left = -200.0
+offset_top = 48.0
+offset_right = 200.0
+offset_bottom = 72.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 16
+text = "Animal motion"
+
+[node name="AnimalOption" type="OptionButton" parent="PopupRoot"]
+offset_left = -200.0
+offset_top = 76.0
+offset_right = 200.0
+offset_bottom = 108.0
+
+[node name="MsaaLabel" type="Label" parent="PopupRoot"]
+offset_left = -200.0
+offset_top = 120.0
+offset_right = 200.0
+offset_bottom = 144.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 16
+text = "MSAA"
+
+[node name="MsaaOption" type="OptionButton" parent="PopupRoot"]
+offset_left = -200.0
+offset_top = 148.0
+offset_right = 200.0
+offset_bottom = 180.0
+
+[connection signal="gui_input" from="Dimmer" to="." method="_on_dimmer_gui_input"]
+[connection signal="gui_input" from="PopupRoot/CloseButton" to="." method="_on_close_gui_input"]

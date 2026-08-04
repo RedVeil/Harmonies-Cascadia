@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b7wms5dqxm5sg"
-path="res://.godot/imported/Reptile_Crocodile_Green.png-2596c17d4e342b2455fc6e01c7ba0e8d.ctex"
+path.s3tc="res://.godot/imported/Reptile_Crocodile_Green.png-2596c17d4e342b2455fc6e01c7ba0e8d.s3tc.ctex"
+path.etc2="res://.godot/imported/Reptile_Crocodile_Green.png-2596c17d4e342b2455fc6e01c7ba0e8d.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/animals/icons/Reptile_Crocodile_Green.png"
-dest_files=["res://.godot/imported/Reptile_Crocodile_Green.png-2596c17d4e342b2455fc6e01c7ba0e8d.ctex"]
+dest_files=["res://.godot/imported/Reptile_Crocodile_Green.png-2596c17d4e342b2455fc6e01c7ba0e8d.s3tc.ctex", "res://.godot/imported/Reptile_Crocodile_Green.png-2596c17d4e342b2455fc6e01c7ba0e8d.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

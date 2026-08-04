@@ -53,7 +53,7 @@
 			"secondary_element": 0.0,
 			"point_score": 0.0,
 			"bonus_points": 0.0,
-			"icon": "res://assets/elements/f2.png",
+			"icon": "res://assets/elements/f1.png",
 			"models": []
 		},
 		{
@@ -77,7 +77,7 @@
 			"secondary_element": 0.0,
 			"point_score": 0.0,
 			"bonus_points": 0.0,
-			"icon": "res://assets/elements/a1.png",
+			"icon": "res://assets/elements/a0.png",
 			"models": []
 		},
 		{

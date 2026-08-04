@@ -27,12 +27,6 @@
 				"name": "Forest",
 				"color": "#297533",
 				"icon": "res://assets/elements/f1.png"
-			},
-			{
-				"level": 3,
-				"name": "DeepForest",
-				"color": "#195c24",
-				"icon": "res://assets/elements/f2.png"
 			}
 		],
 		"scoring_rules": [
@@ -49,7 +43,7 @@
 				"level": 1,
 				"name": "Field",
 				"color": "#d6bd57",
-				"icon": "res://assets/elements/a1.png"
+				"icon": "res://assets/elements/a0.png"
 			}
 		],
 		"scoring_rules": [

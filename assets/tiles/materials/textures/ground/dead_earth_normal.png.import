@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://6scy0a577q2x"
 path.s3tc="res://.godot/imported/dead_earth_normal.png-47fdda410faa49d005b9ad2fa08132c1.s3tc.ctex"
+path.etc2="res://.godot/imported/dead_earth_normal.png-47fdda410faa49d005b9ad2fa08132c1.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/tiles/materials/textures/ground/dead_earth_normal.png"
-dest_files=["res://.godot/imported/dead_earth_normal.png-47fdda410faa49d005b9ad2fa08132c1.s3tc.ctex"]
+dest_files=["res://.godot/imported/dead_earth_normal.png-47fdda410faa49d005b9ad2fa08132c1.s3tc.ctex", "res://.godot/imported/dead_earth_normal.png-47fdda410faa49d005b9ad2fa08132c1.etc2.ctex"]
 
 [params]
 

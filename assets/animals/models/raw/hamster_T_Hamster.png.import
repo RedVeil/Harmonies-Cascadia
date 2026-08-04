@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bw3jxeb0bss7y"
 path.s3tc="res://.godot/imported/hamster_T_Hamster.png-0512a016fc95d45ac0c3725fd57dca22.s3tc.ctex"
+path.etc2="res://.godot/imported/hamster_T_Hamster.png-0512a016fc95d45ac0c3725fd57dca22.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/animals/models/raw/hamster_T_Hamster.png"
-dest_files=["res://.godot/imported/hamster_T_Hamster.png-0512a016fc95d45ac0c3725fd57dca22.s3tc.ctex"]
+dest_files=["res://.godot/imported/hamster_T_Hamster.png-0512a016fc95d45ac0c3725fd57dca22.s3tc.ctex", "res://.godot/imported/hamster_T_Hamster.png-0512a016fc95d45ac0c3725fd57dca22.etc2.ctex"]
 
 [params]
 

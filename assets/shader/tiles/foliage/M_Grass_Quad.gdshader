@@ -1,5 +1,8 @@
 shader_type spatial;
-render_mode blend_mix, depth_prepass_alpha;
+render_mode blend_mix;
+
+global uniform float wind_amount;
+global uniform float cloud_shadow_amount;
 
 uniform bool billboard = false;
 
@@ -59,11 +62,15 @@ vec3 wind(vec2 uv){
 		wind_noise * (wind_velocity.x),
 		0.0,
 		wind_noise * (wind_velocity.y)) * 0.25;
-	value *= wind_affect;
+	value *= wind_affect * wind_amount;
 	return value;
 }
 
 float cloud_shadow(){
+	if (cloud_shadow_amount <= 0.0001) {
+		return 1.0;
+	}
+
 	vec2 direction = cloud_shadow_direction;
 	if (length(direction) < 0.001) {
 		direction = vec2(1.0, 0.0);
@@ -72,11 +79,12 @@ float cloud_shadow(){
 
 	float shadow_noise = texture(
 		wind_texture,
-		(world_pos.xz * cloud_shadow_scale) - (direction * TIME * cloud_shadow_speed)
+		(world_pos.xz * cloud_shadow_scale) - (direction * TIME * cloud_shadow_speed * cloud_shadow_amount)
 	).r;
 	shadow_noise = clamp((shadow_noise - 0.5) * cloud_shadow_contrast + 0.5, 0.0, 1.0);
 
-	return mix(1.0 - cloud_shadow_strength, 1.0, shadow_noise);
+	float lit = mix(1.0 - cloud_shadow_strength, 1.0, shadow_noise);
+	return mix(1.0, lit, cloud_shadow_amount);
 }
 
 void vertex() {

@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dra047eyuxuba"
 path.s3tc="res://.godot/imported/hex.png-19d332ea7a9d3c4c514c5221b5506d1a.s3tc.ctex"
+path.etc2="res://.godot/imported/hex.png-19d332ea7a9d3c4c514c5221b5506d1a.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/icons/hex.png"
-dest_files=["res://.godot/imported/hex.png-19d332ea7a9d3c4c514c5221b5506d1a.s3tc.ctex"]
+dest_files=["res://.godot/imported/hex.png-19d332ea7a9d3c4c514c5221b5506d1a.s3tc.ctex", "res://.godot/imported/hex.png-19d332ea7a9d3c4c514c5221b5506d1a.etc2.ctex"]
 
 [params]
 

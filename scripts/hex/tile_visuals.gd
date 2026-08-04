@@ -102,6 +102,22 @@ func start_animal_roam() -> void:
 		)
 
 
+func start_animal_idle_loop() -> void:
+	for index in _animal_instances.size():
+		var instance := _animal_instances[index]
+		if not is_instance_valid(instance) or not (instance is Animal):
+			continue
+		var path: Path3D = null
+		if index < _animal_roam_groups.size() and _animal_roam_groups[index] is Path3D:
+			var stored_path := _animal_roam_groups[index] as Path3D
+			if is_instance_valid(stored_path):
+				path = stored_path
+		(instance as Animal).start_idle_special_loop(
+			path,
+			hash("%s|%d" % [str(instance.get_path()), index])
+		)
+
+
 func place_animals_on_paths() -> void:
 	for index in _animal_instances.size():
 		var instance := _animal_instances[index]

@@ -13,21 +13,24 @@
 [ext_resource type="PackedScene" uid="uid://bv5ofl0j1ktqc" path="res://scenes/game/score_tooltips.tscn" id="11_b2x3j"]
 [ext_resource type="PackedScene" uid="uid://bde4y0iag4uud" path="res://scenes/game/undo_button.tscn" id="12_3qqq0"]
 [ext_resource type="PackedScene" uid="uid://c20rnltrn1aea" path="res://scenes/game/end_game_button.tscn" id="13_endgame"]
+[ext_resource type="PackedScene" uid="uid://cplaceaccept001" path="res://scenes/game/place_accept_button.tscn" id="13_placeaccept"]
 [ext_resource type="PackedScene" uid="uid://d2uy77eljjm3y" path="res://scenes/game/game_over_overlay.tscn" id="13_gameover"]
 [ext_resource type="PackedScene" uid="uid://bqigxbarpo52k" path="res://scenes/game/animal_market_overlay.tscn" id="13_market"]
 [ext_resource type="PackedScene" uid="uid://btq3hb02wek7u" path="res://scenes/game/tutorial_overlay.tscn" id="13_tutorial"]
-[ext_resource type="Texture2D" uid="uid://ddoc37ud7bky0" path="res://assets/tutorial/t1.png" id="16_4fvlb"]
-[ext_resource type="Texture2D" uid="uid://dwh8atvjn3m26" path="res://assets/tutorial/t2.png" id="17_6ej1e"]
+[ext_resource type="PackedScene" path="res://scenes/game/settings_overlay.tscn" id="14_settings"]
+[ext_resource type="PackedScene" path="res://scenes/game/settings_button.tscn" id="15_settings_btn"]
+[ext_resource type="Texture2D" uid="uid://o4f6p1i5s7y3" path="res://assets/tutorial/t1.webp" id="16_4fvlb"]
+[ext_resource type="Texture2D" uid="uid://c2sek5m5c4omc" path="res://assets/tutorial/t2.webp" id="17_6ej1e"]
 [ext_resource type="Script" uid="uid://bhhe83k1kifpx" path="res://scripts/game/hud_layout.gd" id="17_hud"]
-[ext_resource type="Texture2D" uid="uid://c43o3ab83kvr0" path="res://assets/tutorial/t3.png" id="18_ek3b8"]
-[ext_resource type="Texture2D" uid="uid://dk2vartljuqul" path="res://assets/tutorial/t4.png" id="19_1wyvc"]
-[ext_resource type="Texture2D" uid="uid://bf25e3plan75t" path="res://assets/tutorial/t5.png" id="20_2fdk7"]
-[ext_resource type="Texture2D" uid="uid://bxxx8elmc8v7o" path="res://assets/tutorial/t6.png" id="21_ucyvv"]
-[ext_resource type="Texture2D" uid="uid://bjojbjqmoik5m" path="res://assets/tutorial/t7.png" id="22_sk4yt"]
-[ext_resource type="Texture2D" uid="uid://b70ogndf6lpb8" path="res://assets/tutorial/t8.png" id="23_k5eml"]
-[ext_resource type="Texture2D" uid="uid://1bgw6k068vn5" path="res://assets/tutorial/t9.png" id="24_c3d47"]
-[ext_resource type="Texture2D" uid="uid://bp0v1iwgf5dqy" path="res://assets/tutorial/t10.png" id="25_tgxom"]
-[ext_resource type="Texture2D" uid="uid://degwjrr2xl85y" path="res://assets/tutorial/t11.png" id="26_5xdac"]
+[ext_resource type="Texture2D" uid="uid://dujfb5n5wck7a" path="res://assets/tutorial/t3.webp" id="18_ek3b8"]
+[ext_resource type="Texture2D" uid="uid://nbu63wnt84nf" path="res://assets/tutorial/t4.webp" id="19_1wyvc"]
+[ext_resource type="Texture2D" uid="uid://bspb2g0mhigoa" path="res://assets/tutorial/t5.webp" id="20_2fdk7"]
+[ext_resource type="Texture2D" uid="uid://bvyoyawgc6jgh" path="res://assets/tutorial/t6.webp" id="21_ucyvv"]
+[ext_resource type="Texture2D" uid="uid://cqkbanq6xj2nj" path="res://assets/tutorial/t7.webp" id="22_sk4yt"]
+[ext_resource type="Texture2D" uid="uid://5440c3mwsbmm" path="res://assets/tutorial/t8.webp" id="23_k5eml"]
+[ext_resource type="Texture2D" uid="uid://c0l3gffjsytrn" path="res://assets/tutorial/t9.webp" id="24_c3d47"]
+[ext_resource type="Texture2D" uid="uid://dusb05p4yjp80" path="res://assets/tutorial/t10.webp" id="25_tgxom"]
+[ext_resource type="Texture2D" uid="uid://pnqe7ys6paej" path="res://assets/tutorial/t11.webp" id="26_5xdac"]
 
 [sub_resource type="Environment" id="Environment_tbrwv"]
 background_mode = 1
@@ -63,7 +66,7 @@ map_button = ExtResource("4_5mvym")
 
 [node name="ScoreEngine" parent="." unique_id=271434607 instance=ExtResource("4_xoyem")]
 
-[node name="Orchestrator" parent="." unique_id=1688505566 node_paths=PackedStringArray("booster_manager", "card_manager", "hex_manager", "score_engine", "quest_manager", "point_counter", "undo_button", "card_recycling", "tutorial_overlay", "game_over_overlay", "end_game_button") instance=ExtResource("5_71goi")]
+[node name="Orchestrator" parent="." unique_id=1688505566 node_paths=PackedStringArray("booster_manager", "card_manager", "hex_manager", "score_engine", "quest_manager", "point_counter", "undo_button", "card_recycling", "tutorial_overlay", "settings_overlay", "game_over_overlay", "end_game_button", "place_accept_button") instance=ExtResource("5_71goi")]
 booster_manager = NodePath("../HUD/BoosterManager")
 card_manager = NodePath("../HUD/CardManager")
 hex_manager = NodePath("../HexManager")
@@ -73,8 +76,10 @@ point_counter = NodePath("../HUD/PointCounter")
 undo_button = NodePath("../HUD/UndoButton")
 card_recycling = NodePath("../HUD/CardRecycling")
 tutorial_overlay = NodePath("../TutorialOverlay")
+settings_overlay = NodePath("../SettingsOverlay")
 game_over_overlay = NodePath("../GameOverOverlay")
 end_game_button = NodePath("../HUD/EndGameButton")
+place_accept_button = NodePath("../HUD/PlaceAcceptButton")
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=469851010]
 script = ExtResource("17_hud")
@@ -143,6 +148,18 @@ offset_right = -70.0
 grow_horizontal = 0
 mouse_filter = 2
 
+[node name="SettingsButtonSlot" type="Control" parent="HUD/Root"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -120.0
+offset_top = 44.0
+offset_right = -120.0
+offset_bottom = 44.0
+grow_horizontal = 0
+mouse_filter = 2
+
 [node name="UndoButtonSlot" type="Control" parent="HUD/Root" unique_id=651653308]
 layout_mode = 1
 anchors_preset = 3
@@ -188,6 +205,21 @@ grow_horizontal = 0
 grow_vertical = 0
 mouse_filter = 2
 
+[node name="PlaceAcceptButtonSlot" type="Control" parent="HUD/Root"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 0.0
+offset_top = -200.0
+offset_right = 0.0
+offset_bottom = -200.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+
 [node name="PointCounter" parent="HUD" unique_id=1020461036 node_paths=PackedStringArray("orchestrator") instance=ExtResource("8_q5ijs")]
 orchestrator = NodePath("../../Orchestrator")
 checkpoint = 1000
@@ -210,6 +242,9 @@ recycling_value = 0
 [node name="ScoreTooltip" parent="HUD" unique_id=33584632 node_paths=PackedStringArray("orchestrator") instance=ExtResource("11_b2x3j")]
 orchestrator = NodePath("../../Orchestrator")
 
+[node name="SettingsButton" parent="HUD" node_paths=PackedStringArray("settings_overlay") instance=ExtResource("15_settings_btn")]
+settings_overlay = NodePath("../../SettingsOverlay")
+
 [node name="UndoButton" parent="HUD" unique_id=997758632 node_paths=PackedStringArray("orchestrator") instance=ExtResource("12_3qqq0")]
 orchestrator = NodePath("../../Orchestrator")
 
@@ -221,9 +256,15 @@ recycling_value = 0
 [node name="EndGameButton" parent="HUD" unique_id=1610947685 node_paths=PackedStringArray("orchestrator") instance=ExtResource("13_endgame")]
 orchestrator = NodePath("../../Orchestrator")
 
+[node name="PlaceAcceptButton" parent="HUD" node_paths=PackedStringArray("orchestrator") instance=ExtResource("13_placeaccept")]
+orchestrator = NodePath("../../Orchestrator")
+
 [node name="TutorialOverlay" parent="." unique_id=1580048330 instance=ExtResource("13_tutorial")]
 visible = false
 slides = Array[Texture2D]([ExtResource("16_4fvlb"), ExtResource("17_6ej1e"), ExtResource("18_ek3b8"), ExtResource("19_1wyvc"), ExtResource("20_2fdk7"), ExtResource("21_ucyvv"), ExtResource("22_sk4yt"), ExtResource("23_k5eml"), ExtResource("24_c3d47"), ExtResource("25_tgxom"), ExtResource("26_5xdac")])
+
+[node name="SettingsOverlay" parent="." instance=ExtResource("14_settings")]
+visible = false
 
 [node name="AnimalMarketOverlay" parent="." unique_id=1759004645 instance=ExtResource("13_market")]
 

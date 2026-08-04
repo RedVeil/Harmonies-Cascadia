@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b28c82b31vbtc"
-path="res://.godot/imported/SavannaMammal_Rhino.png-bcd49fee82538e699914f71a1243df69.ctex"
+path.s3tc="res://.godot/imported/SavannaMammal_Rhino.png-bcd49fee82538e699914f71a1243df69.s3tc.ctex"
+path.etc2="res://.godot/imported/SavannaMammal_Rhino.png-bcd49fee82538e699914f71a1243df69.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/animals/icons/SavannaMammal_Rhino.png"
-dest_files=["res://.godot/imported/SavannaMammal_Rhino.png-bcd49fee82538e699914f71a1243df69.ctex"]
+dest_files=["res://.godot/imported/SavannaMammal_Rhino.png-bcd49fee82538e699914f71a1243df69.s3tc.ctex", "res://.godot/imported/SavannaMammal_Rhino.png-bcd49fee82538e699914f71a1243df69.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

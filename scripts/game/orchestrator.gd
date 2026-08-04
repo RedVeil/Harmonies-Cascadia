@@ -10,8 +10,10 @@ class_name Orchestrator
 @export var undo_button:UndoButton
 @export var card_recycling:CardRecycling
 @export var tutorial_overlay:TutorialOverlay
+@export var settings_overlay:SettingsOverlay
 @export var game_over_overlay:GameOverOverlay
 @export var end_game_button:EndGameButton
+@export var place_accept_button:PlaceAcceptButton
 
 @onready var placement_logic:PlacementLogic = $PlacementLogic
 @onready var grouping_logic:GroupingLogic = $GroupingLogic
@@ -21,6 +23,8 @@ var cards_paused: bool = false
 var tile_hovered : bool = false
 var selected_coord : Vector2i = Vector2i.ZERO
 var game_over: bool = false
+## Sticky tile preview for touch: survives mouse_exit until place/deselect/new tap.
+var touch_preview_locked: bool = false
 
 var map_points: int = 0
 
@@ -51,6 +55,9 @@ func _ready() -> void:
 	vp.physics_object_picking_first_only = true
 	if game_over_overlay:
 		game_over_overlay.restart_pressed.connect(restart_run)
+	if not GameSettings.settings_changed.is_connected(_on_graphics_settings_changed):
+		GameSettings.settings_changed.connect(_on_graphics_settings_changed)
+	call_deferred("_on_graphics_settings_changed")
 	show_tutorial()
 
 ## ----- Handle Booster Interactions ----- ##
@@ -76,13 +83,23 @@ func select_hand_card(id:int) -> void:
 		
 	selected_card_id = new_selection
 	_update_card_recycling_state()
-	if tile_hovered:
-		if new_selection == -1:
+	if new_selection == -1:
+		_clear_touch_preview_lock()
+		if tile_hovered:
+			# Force-clear sticky touch preview (mouse may already have left).
+			tile_hovered = false
+			_hover_slide_coord = Vector2i(2147483647, 2147483647)
+			hex_manager.hide_tile_info(selected_coord)
 			hex_manager.reset_preview(selected_coord)
+			hex_manager.clear_hover_tracking()
 			quest_manager.reset_preview()
 			point_counter.reset_preview()
 			reset_preview()
+			_update_place_accept_button()
+			return
+	elif tile_hovered:
 		handle_tile_hover(selected_coord)
+	_update_place_accept_button()
 
 func _update_card_recycling_state() -> void:
 	if card_recycling == null:
@@ -97,6 +114,7 @@ func _update_card_recycling_state() -> void:
 func pause_cards() -> void:
 	cards_paused = true
 	booster_manager.paused = true
+	_update_place_accept_button()
 	
 func unpause_cards() -> void:
 	if game_over:
@@ -110,6 +128,7 @@ func unpause_cards() -> void:
 	cards_paused = false
 	booster_manager.paused = false
 	card_manager.unpause()
+	_update_place_accept_button()
 
 ## ----- Game Over ----- ##
 
@@ -126,10 +145,12 @@ func end_game() -> void:
 		quest_manager.reset_preview()
 		point_counter.reset_preview()
 		reset_preview()
+	_clear_touch_preview_lock()
 	pause_cards()
 	undo_button.disable()
 	if end_game_button:
 		end_game_button.disable()
+	_update_place_accept_button()
 	if game_over_overlay:
 		game_over_overlay.open(score_engine.total_score)
 
@@ -174,8 +195,11 @@ func handle_tile_hover(coord:Vector2i) -> void:
 	selected_coord = coord
 	
 	if selected_card_id != -1 and !cards_paused:
+		if TouchMode.is_touch():
+			touch_preview_locked = true
 		if entered_new_tile:
 			GameFeedback.run_tile_hover_slide()
+		placement_valid = false
 		var preview:TileStatePreview
 		var selected_card = card_manager.cards[selected_card_id]
 		if selected_card.type == 0:
@@ -188,8 +212,12 @@ func handle_tile_hover(coord:Vector2i) -> void:
 		point_counter.preview_progress(score_engine.total_score + preview.points_diff)
 	else:
 		hex_manager.show_tile_info(coord)
+	_update_place_accept_button()
 
-func handle_tile_exit() -> void:
+func handle_tile_exit() -> bool:
+	if TouchMode.is_touch() and touch_preview_locked:
+		return false
+
 	tile_hovered = false
 	_hover_slide_coord = Vector2i(2147483647, 2147483647)
 	
@@ -198,6 +226,8 @@ func handle_tile_exit() -> void:
 	quest_manager.reset_preview()
 	point_counter.reset_preview()
 	reset_preview()
+	_update_place_accept_button()
+	return true
 
 func handle_tile_click(coord: Vector2i) -> void:
 	if selected_card_id != -1 and placement_valid and !cards_paused:
@@ -276,12 +306,14 @@ func handle_tile_click(coord: Vector2i) -> void:
 		if placed_was_element:
 			booster_manager.notify_element_played()
 		
+		_clear_touch_preview_lock()
 		reset_preview()
 		if map_points == 0:
 			undo_button.enable()
 		
 		if not card_manager.cards[selected_card_id]:
 			selected_card_id = -1
+		_update_place_accept_button()
 
 
 func handle_place_feedback_finished(coord: Vector2i) -> void:
@@ -431,6 +463,34 @@ func reset_preview() -> void:
 	score_engine.new_element_score = 0
 	score_engine.new_quest_score = 0
 
+
+func _clear_touch_preview_lock() -> void:
+	touch_preview_locked = false
+
+
+func _update_place_accept_button() -> void:
+	if place_accept_button == null:
+		return
+	var can_accept := (
+		TouchMode.is_touch()
+		and selected_card_id != -1
+		and placement_valid
+		and not cards_paused
+		and not game_over
+	)
+	if can_accept:
+		place_accept_button.show_accept()
+	else:
+		place_accept_button.hide_accept()
+
+
+func accept_touch_placement() -> void:
+	if not TouchMode.is_touch():
+		return
+	if selected_card_id == -1 or not placement_valid or cards_paused:
+		return
+	handle_tile_click(selected_coord)
+
 func get_neighbor_contributing_coords(group_coords:Array[Vector2i]) -> Array[Vector2i]:
 	var coords : Array[Vector2i] = []
 	if group_coords.size() > 1:
@@ -493,3 +553,30 @@ func show_tutorial() -> void:
 	if not tutorial_overlay.is_node_ready():
 		await tutorial_overlay.ready
 	tutorial_overlay.open()
+
+
+func show_settings() -> void:
+	if settings_overlay == null:
+		return
+	if not settings_overlay.is_node_ready():
+		await settings_overlay.ready
+	settings_overlay.open()
+
+
+func _on_graphics_settings_changed() -> void:
+	if hex_manager == null or hex_manager.hex_container == null:
+		return
+	for tile in hex_manager.hex_container.tiles_by_coord.values():
+		if not is_instance_valid(tile):
+			continue
+		for path in [&"VisualsRoot/current", &"VisualsRoot/previous"]:
+			var visuals := tile.get_node_or_null(NodePath(path)) as TileVisuals
+			if visuals == null:
+				continue
+			match GameSettings.animal_motion:
+				GameSettings.AnimalMotion.FROZEN:
+					visuals.freeze_animals()
+				GameSettings.AnimalMotion.IDLE_SPECIAL:
+					visuals.start_animal_idle_loop()
+				GameSettings.AnimalMotion.FULL_ROAM:
+					visuals.start_animal_roam()

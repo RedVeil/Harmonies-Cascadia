@@ -1,0 +1,45 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/game/settings_button.gd" id="1_btn"]
+[ext_resource type="Texture2D" uid="uid://ca2hp56qvfswa" path="res://assets/icons/circle.png" id="2_circle"]
+[ext_resource type="Shader" uid="uid://y4g8ky747mqh" path="res://assets/shader/ui/shadow.gdshader" id="3_shadow"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hit"]
+radius = 14.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_shadow"]
+shader = ExtResource("3_shadow")
+shader_parameter/shadow_color = Color(0, 0, 0, 0.1254902)
+shader_parameter/blur_size = 20.0
+
+[node name="SettingsButton" type="Area2D"]
+monitorable = false
+priority = 2
+script = ExtResource("1_btn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+z_index = 1
+shape = SubResource("CircleShape2D_hit")
+
+[node name="background" type="Sprite2D" parent="."]
+scale = Vector2(0.07, 0.07)
+texture = ExtResource("2_circle")
+
+[node name="shadow" type="Sprite2D" parent="background"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_shadow")
+position = Vector2(0.7, 1.15)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("2_circle")
+
+[node name="icon" type="Label" parent="."]
+offset_left = -10.0
+offset_top = -12.0
+offset_right = 10.0
+offset_bottom = 12.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 16
+text = "⚙"
+horizontal_alignment = 1
+vertical_alignment = 1

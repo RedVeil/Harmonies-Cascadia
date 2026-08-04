@@ -3,5 +3,7 @@
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_f2m4u"]
 
 [resource]
+width = 256
+height = 256
 noise = SubResource("FastNoiseLite_f2m4u")
 seamless = true

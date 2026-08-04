@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 GameSession="*res://scripts/game/game_session.gd"
+GameSettings="*res://scripts/game/game_settings.gd"
 CardCatalog="*uid://b8oog78vthmvf"
 Enums="*uid://dx4s0agjfg2qs"
 ElementCatalog="*uid://d2wigwbdsvfso"
@@ -27,6 +28,7 @@ BoosterCatalog="*uid://crtpprdxd6gj4"
 RuleCatalog="*uid://tqkcwruu08es"
 QuestCatalog="*uid://dwsmx6x25woub"
 GameFeedback="*res://scenes/effects/game_feedback.tscn"
+TouchMode="*res://scripts/input/touch_mode.gd"
 
 [display]
 
@@ -34,6 +36,7 @@ window/size/viewport_width=1280
 window/size/viewport_height=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+window/vsync/vsync_mode=0
 
 [global_group]
 
@@ -60,11 +63,19 @@ mouse_scroll_down={
 
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
-anti_aliasing/quality/msaa_3d=1
+textures/vram_compression/import_etc2_astc=true
 
 [shader_globals]
 
 mouse_screen_pos={
 "type": "vec2",
 "value": Vector2(0, 0)
+}
+wind_amount={
+"type": "float",
+"value": 1.0
+}
+cloud_shadow_amount={
+"type": "float",
+"value": 1.0
 }

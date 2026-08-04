@@ -76,34 +76,34 @@ func handle_click_toolip(id:int) -> void:
 func get_desc_image(id:int) -> Texture2D:
 	match(id):
 		0:
-			return load("res://assets/score_tooltip/scoring_forest1.png")
+			return load("res://assets/score_tooltip/f1.webp")
 		1:
-			return load("res://assets/score_tooltip/scoring_forest2.png")
+			return load("res://assets/score_tooltip/f2.webp")
 		2:
-			return load("res://assets/score_tooltip/scoring_forest3.png")
+			return load("res://assets/score_tooltip/f3.webp")
 		3:
-			return load("res://assets/score_tooltip/scoring_fields1.png")
+			return load("res://assets/score_tooltip/a1.webp")
 		4:
-			return load("res://assets/score_tooltip/scoring_fields2.png")
+			return load("res://assets/score_tooltip/a2.webp")
 		5:
-			return load("res://assets/score_tooltip/scoring_fields3.png")
+			return load("res://assets/score_tooltip/a3.webp")
 		6:
-			return load("res://assets/score_tooltip/scoring_mountain1.png")
+			return load("res://assets/score_tooltip/m1.webp")
 		7:
-			return load("res://assets/score_tooltip/scoring_mountain2.png")
+			return load("res://assets/score_tooltip/m2.webp")
 		8:
-			return load("res://assets/score_tooltip/scoring_mountain3.png")
+			return load("res://assets/score_tooltip/m3.webp")
 		9:
-			return load("res://assets/score_tooltip/scoring_river1.png")
+			return load("res://assets/score_tooltip/r1.webp")
 		10:
-			return load("res://assets/score_tooltip/scoring_river2.png")
+			return load("res://assets/score_tooltip/r2.webp")
 		11:
-			return load("res://assets/score_tooltip/scoring_river3.png")
+			return load("res://assets/score_tooltip/r3.webp")
 		12:
-			return load("res://assets/score_tooltip/scoring_wetlands1.png")
+			return load("res://assets/score_tooltip/w1.webp")
 		13:
-			return load("res://assets/score_tooltip/scoring_wetlands2.png")
+			return load("res://assets/score_tooltip/w2.webp")
 		14:
-			return load("res://assets/score_tooltip/scoring_wetlands3.png")
+			return load("res://assets/score_tooltip/w3.webp")
 		_:
-			return load("res://assets/score_tooltip/scoring_forest1.png")
+			return load("res://assets/score_tooltip/f1.webp")

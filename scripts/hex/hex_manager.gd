@@ -49,10 +49,13 @@ func handle_hover(coord:Vector2i) -> void:
 		return
 	orchestrator.handle_tile_hover(coord)
 
-func handle_exit() -> void:
+func handle_exit() -> bool:
 	if orchestrator == null:
-		return
-	orchestrator.handle_tile_exit()
+		return true
+	return orchestrator.handle_tile_exit()
+
+func clear_hover_tracking() -> void:
+	hex_container.clear_hover_tracking()
 
 func handle_click(coord:Vector2i) -> void:
 	if orchestrator == null:

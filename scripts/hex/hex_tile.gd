@@ -241,6 +241,8 @@ func _on_mouse_entered() -> void:
 
 
 func _on_mouse_exited() -> void:
+	if _is_touch_preview_locked():
+		return
 	container.handle_exit(coord)
 	hide_outline()
 
@@ -254,7 +256,28 @@ func _on_input_event(
 ) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			# Touch: tap previews only; Accept button commits placement.
+			if TouchMode.is_touch() and _has_selected_card():
+				container.handle_hover(coord)
+				show_outline(Color.WHITE)
+				return
 			container.handle_click(coord)
+
+
+func _orchestrator() -> Orchestrator:
+	if container == null or container.hex_manager == null:
+		return null
+	return container.hex_manager.orchestrator
+
+
+func _is_touch_preview_locked() -> bool:
+	var orch := _orchestrator()
+	return orch != null and orch.touch_preview_locked
+
+
+func _has_selected_card() -> bool:
+	var orch := _orchestrator()
+	return orch != null and orch.selected_card_id != -1
 
 
 ## ----- Points Logic ----- ##

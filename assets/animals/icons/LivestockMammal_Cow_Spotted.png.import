@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b2b0html45arq"
-path="res://.godot/imported/LivestockMammal_Cow_Spotted.png-6eeb70c8602159b97b12d279e7b36322.ctex"
+path.s3tc="res://.godot/imported/LivestockMammal_Cow_Spotted.png-6eeb70c8602159b97b12d279e7b36322.s3tc.ctex"
+path.etc2="res://.godot/imported/LivestockMammal_Cow_Spotted.png-6eeb70c8602159b97b12d279e7b36322.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/animals/icons/LivestockMammal_Cow_Spotted.png"
-dest_files=["res://.godot/imported/LivestockMammal_Cow_Spotted.png-6eeb70c8602159b97b12d279e7b36322.ctex"]
+dest_files=["res://.godot/imported/LivestockMammal_Cow_Spotted.png-6eeb70c8602159b97b12d279e7b36322.s3tc.ctex", "res://.godot/imported/LivestockMammal_Cow_Spotted.png-6eeb70c8602159b97b12d279e7b36322.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

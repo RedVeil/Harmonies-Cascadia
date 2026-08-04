@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bsiu0m46qkxdq"
 path.s3tc="res://.godot/imported/Duck_01_ColorPalette_1.png-da0ae7b6a7a2f3509d83a2c9feca224e.s3tc.ctex"
+path.etc2="res://.godot/imported/Duck_01_ColorPalette_1.png-da0ae7b6a7a2f3509d83a2c9feca224e.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/animals/models/raw/Duck_01_ColorPalette_1.png"
-dest_files=["res://.godot/imported/Duck_01_ColorPalette_1.png-da0ae7b6a7a2f3509d83a2c9feca224e.s3tc.ctex"]
+dest_files=["res://.godot/imported/Duck_01_ColorPalette_1.png-da0ae7b6a7a2f3509d83a2c9feca224e.s3tc.ctex", "res://.godot/imported/Duck_01_ColorPalette_1.png-da0ae7b6a7a2f3509d83a2c9feca224e.etc2.ctex"]
 
 [params]
 
