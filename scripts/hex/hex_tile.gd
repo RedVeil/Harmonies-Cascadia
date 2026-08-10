@@ -5,7 +5,6 @@ const SCORE_POP_BASE_Y := 19.0
 const POINTS_BUBBLE_SCALE := Vector3(1.2, 1.2, 1.2)
 
 @export_group("Place Score Pop Animation")
-@export var score_pop_sounds: Array[AudioStream] = []
 @export var score_pop_rise: float = 1.35
 @export var score_pop_peak_scale: float = 1.5
 @export var score_pop_up_duration: float = 0.18
@@ -14,7 +13,6 @@ const POINTS_BUBBLE_SCALE := Vector3(1.2, 1.2, 1.2)
 @export var score_pop_fade_delay: float = 0.35
 
 @export_group("Outline Flash Animation")
-@export var outline_sounds: Array[AudioStream] = []
 @export var outline_flash_color: Color = Color(1.0, 0.9, 0.45, 1.0)
 @export var outline_flash_fade_duration: float = 0.45
 
@@ -27,7 +25,6 @@ const POINTS_BUBBLE_SCALE := Vector3(1.2, 1.2, 1.2)
 @export var placed_settle_duration: float = 0.3
 
 @export_group("Contributor Celebrate Animation")
-@export var contributor_sounds: Array[AudioStream] = []
 @export var contributor_lift: float = 0.09
 @export var contributor_scale_peak: float = 1.022
 @export var contributor_glow: float = 0.14
@@ -236,6 +233,8 @@ func _resolve_orientation_steps(tile_data: HexTileData) -> int:
 ## ----- Interactions Logic ----- ##
 
 func _on_mouse_entered() -> void:
+	if UiPointerBlock.is_blocked():
+		return
 	container.handle_hover(coord)
 	show_outline(Color.WHITE)
 
@@ -256,10 +255,15 @@ func _on_input_event(
 ) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			# Touch: tap previews only; Accept button commits placement.
-			if TouchMode.is_touch() and _has_selected_card():
-				container.handle_hover(coord)
-				show_outline(Color.WHITE)
+			if UiPointerBlock.is_blocked():
+				return
+			# Touch: single tap previews; double tap places when valid.
+			if TouchMode.is_touch():
+				if event.double_click and _has_selected_card():
+					container.handle_click(coord)
+				else:
+					container.handle_hover(coord)
+					show_outline(Color.WHITE)
 				return
 			container.handle_click(coord)
 
@@ -459,7 +463,6 @@ func _animate_contributor(element: int, delay: float) -> void:
 
 
 func _animate_score_pop(points: int) -> void:
-	FeedbackAnimHelper.play_sounds(score_pop_sounds)
 	_score_pop_playing = true
 	# Hide any visible inspect bubbles without clearing a pending show.
 	$HoverInfo/ElementBubble.hide()
@@ -497,7 +500,6 @@ func _on_score_pop_finished() -> void:
 
 
 func _animate_outline_flash(delay: float) -> void:
-	FeedbackAnimHelper.play_sounds(outline_sounds)
 	var outline: Sprite3D = $outline
 	outline.modulate = outline_flash_color
 	outline.show()
@@ -513,8 +515,6 @@ func _animate_outline_flash(delay: float) -> void:
 func _animate_celebrate(strong: bool, delay: float) -> void:
 	if strong:
 		FeedbackAnimHelper.play_sounds(place_celebrate_sounds)
-	else:
-		FeedbackAnimHelper.play_sounds(contributor_sounds)
 	_cache_visual_nodes()
 
 	var lift := placed_lift if strong else contributor_lift

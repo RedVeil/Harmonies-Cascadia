@@ -2,26 +2,13 @@ shader_type canvas_item;
 
 uniform vec4 shadow_color : source_color = vec4(0.0, 0.0, 0.0, 0.45);
 uniform float blur_size = 2.0;
+uniform float radius : hint_range(0.0, 1.0, 0.001) = 0.85;
 
 void fragment()
 {
-	vec2 texel = TEXTURE_PIXEL_SIZE * blur_size;
-
-	float alpha = 0.0;
-
-	alpha += texture(TEXTURE, UV + vec2(-texel.x, -texel.y)).a;
-	alpha += texture(TEXTURE, UV + vec2( 0.0,     -texel.y)).a;
-	alpha += texture(TEXTURE, UV + vec2( texel.x, -texel.y)).a;
-
-	alpha += texture(TEXTURE, UV + vec2(-texel.x, 0.0)).a;
-	alpha += texture(TEXTURE, UV).a;
-	alpha += texture(TEXTURE, UV + vec2( texel.x, 0.0)).a;
-
-	alpha += texture(TEXTURE, UV + vec2(-texel.x, texel.y)).a;
-	alpha += texture(TEXTURE, UV + vec2( 0.0,     texel.y)).a;
-	alpha += texture(TEXTURE, UV + vec2( texel.x, texel.y)).a;
-
-	alpha /= 9.0;
+	vec2 uv = (UV * 2.0) - 1.0;
+	float softness = clamp(blur_size * 0.02, 0.02, 0.45);
+	float alpha = smoothstep(radius + softness, radius - softness, length(uv));
 
 	COLOR = vec4(shadow_color.rgb, alpha * shadow_color.a);
 }

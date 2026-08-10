@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://600yoppya0go"]
+
+[ext_resource type="Shader" uid="uid://3fa3vm6jd87q" path="res://assets/shader/ui/sdf_hex.gdshader" id="1_shader"]
+
+[resource]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 1.0
+shader_parameter/stroke_width = 0.07
+shader_parameter/roundness = 0.06
+shader_parameter/smoothness = 0.012
+shader_parameter/aspect = 1.142857

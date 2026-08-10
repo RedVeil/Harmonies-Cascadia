@@ -18,6 +18,9 @@ const SUBTITLE_HEIGHT := 28.0
 const CLOSE_ROW_HEIGHT := 36.0
 const CARD_TO_BUY_GAP := 12.0
 const BUY_TO_REROLL_GAP := 16.0
+## Hand cards lift more on select, so their tooltip sits higher in card.tscn.
+## Market hover is smaller — keep the tooltip just above the card.
+const MARKET_TOOLTIP_POSITION := Vector2(-49.0, -280.0)
 
 @export var card_scene: PackedScene
 @export var market_hover_height: float = 12.0
@@ -26,7 +29,6 @@ var _offers: Array[CardData] = []
 var _offer_roots: Array[Node2D] = []
 var _cards: Array[Card] = []
 var _buy_buttons: Array[Control] = []
-var _hit_areas: Array[Control] = []
 var _hover_card_id: int = -1
 var _reroll_enabled: bool = true
 var _buys_enabled: Array[bool] = []
@@ -54,6 +56,7 @@ func _ready() -> void:
 ## ----- Public API ----- ##
 
 func open(offers: Array[CardData], _price: int = 0, _credits: int = 0, _reroll_price: int = 0) -> void:
+	GameFeedback.play_open_popup()
 	_offers = offers.duplicate()
 	_hover_card_id = -1
 	_rebuild_offers()
@@ -98,6 +101,7 @@ func update_credits(_credits: int) -> void:
 	pass
 
 func close() -> void:
+	GameFeedback.play_close_popup()
 	_clear_offers()
 	hide()
 
@@ -122,7 +126,12 @@ func exit_card(id: int) -> void:
 	_cards[id].handle_exit()
 
 func select_card(id: int) -> void:
-	_on_buy_pressed(id)
+	# Card already played click feedback via its HitArea.
+	if id < 0 or id >= _offers.size():
+		return
+	if not _is_buy_enabled(id):
+		return
+	buy_pressed.emit(id)
 
 ## ----- Layout ----- ##
 
@@ -179,7 +188,7 @@ func _layout() -> void:
 		_close_button,
 		Vector2(
 			panel_width / 2.0 - PANEL_PADDING.x - CLOSE_BUTTON_SIZE.x / 2.0,
-			-panel_height / 2.0 + CLOSE_ROW_HEIGHT / 2.0
+			-panel_height / 2.0 + CLOSE_ROW_HEIGHT + TITLE_HEIGHT / 2.0
 		),
 		CLOSE_BUTTON_SIZE
 	)
@@ -196,7 +205,6 @@ func _clear_offers() -> void:
 	_offer_roots.clear()
 	_cards.clear()
 	_buy_buttons.clear()
-	_hit_areas.clear()
 	_hover_card_id = -1
 
 func _rebuild_offers() -> void:
@@ -214,7 +222,6 @@ func _rebuild_offers() -> void:
 		_offer_roots.append(slot)
 		_cards.append(null)
 		_buy_buttons.append(null)
-		_hit_areas.append(null)
 		_rebuild_single_offer(i)
 
 func _rebuild_single_offer(offer_index: int) -> void:
@@ -232,29 +239,16 @@ func _rebuild_single_offer(offer_index: int) -> void:
 		var card := card_scene.instantiate() as Card
 		card.name = "Card"
 		card.hover_height = market_hover_height
-		card.z_index = 2
 		card.position = Vector2(0.0, -column_height / 2.0 + CARD_SIZE.y / 2.0)
 		slot.add_child(card)
 		card.init(offer, self, offer_index)
-		card.set_z(offer_index)
+		# Offset so card 0 stays above PopupPanel; shadow uses relative z_index -1.
+		card.set_z(offer_index + 1)
+		card.placement_tooltip.position = MARKET_TOOLTIP_POSITION
 		card.placement_tooltip.z_index = 20
-		card.input_pickable = false
 		_cards[offer_index] = card
-
-		var hit := Control.new()
-		hit.name = "HitArea"
-		hit.mouse_filter = Control.MOUSE_FILTER_STOP
-		hit.z_index = 3
-		hit.position = Vector2(-CARD_SIZE.x / 2.0, -column_height / 2.0)
-		hit.size = CARD_SIZE
-		hit.mouse_entered.connect(_on_card_hit_entered.bind(offer_index))
-		hit.mouse_exited.connect(_on_card_hit_exited.bind(offer_index))
-		hit.gui_input.connect(_on_card_hit_gui_input.bind(offer_index))
-		slot.add_child(hit)
-		_hit_areas[offer_index] = hit
 	else:
 		_cards[offer_index] = null
-		_hit_areas[offer_index] = null
 
 	var buy_button := Control.new()
 	buy_button.name = "BuyButton"
@@ -312,7 +306,6 @@ func _refresh_offer_button(offer_index: int) -> void:
 		return
 	var buy_label: Label = buy_button.get_node("Label")
 	var buy_bg: ColorRect = buy_button.get_node("Background")
-	var hit := _hit_areas[offer_index] if offer_index < _hit_areas.size() else null
 	var offer := _offers[offer_index] if offer_index < _offers.size() else null
 	var has_offer := offer != null and offer.amount > 0
 
@@ -321,15 +314,11 @@ func _refresh_offer_button(offer_index: int) -> void:
 		buy_bg.color = Color.WHITE
 		buy_label.add_theme_color_override("font_color", COLOR_BROWN)
 		buy_button.mouse_filter = Control.MOUSE_FILTER_STOP
-		if hit:
-			hit.mouse_filter = Control.MOUSE_FILTER_STOP
 	else:
 		buy_label.text = "—" if not has_offer else _disabled_buy_label
 		buy_bg.color = Color(0.85, 0.85, 0.85, 1.0)
 		buy_label.add_theme_color_override("font_color", Color.GRAY)
 		buy_button.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		if hit:
-			hit.mouse_filter = Control.MOUSE_FILTER_STOP
 
 func _refresh_reroll_button() -> void:
 	if _reroll_button == null:
@@ -374,15 +363,6 @@ func _on_reroll_pressed() -> void:
 func _on_buy_gui_input(event: InputEvent, offer_index: int) -> void:
 	_handle_gui_click(event, func (): _on_buy_pressed(offer_index))
 
-func _on_card_hit_gui_input(event: InputEvent, offer_index: int) -> void:
-	_handle_gui_click(event, func (): _on_buy_pressed(offer_index))
-
-func _on_card_hit_entered(offer_index: int) -> void:
-	hover_card(offer_index)
-
-func _on_card_hit_exited(offer_index: int) -> void:
-	exit_card(offer_index)
-
 func _on_buy_pressed(offer_index: int) -> void:
 	if offer_index < 0 or offer_index >= _offers.size():
 		return
@@ -392,6 +372,7 @@ func _on_buy_pressed(offer_index: int) -> void:
 	buy_pressed.emit(offer_index)
 
 func _on_close_mouse_entered() -> void:
+	GameFeedback.play_hover_button()
 	_close_button.get_node("Label").add_theme_color_override("font_color", Color.WHITE)
 
 func _on_close_mouse_exited() -> void:
@@ -400,6 +381,7 @@ func _on_close_mouse_exited() -> void:
 func _on_reroll_mouse_entered() -> void:
 	if not _reroll_enabled:
 		return
+	GameFeedback.play_hover_button()
 	_reroll_button.get_node("Background").color = COLOR_BROWN
 	_reroll_button.get_node("Label").add_theme_color_override("font_color", Color.WHITE)
 
@@ -414,6 +396,7 @@ func _on_buy_mouse_entered(offer_index: int) -> void:
 	var buy_button := _buy_buttons[offer_index]
 	if buy_button == null:
 		return
+	GameFeedback.play_hover_button()
 	buy_button.get_node("Background").color = COLOR_BROWN
 	buy_button.get_node("Label").add_theme_color_override("font_color", Color.WHITE)
 

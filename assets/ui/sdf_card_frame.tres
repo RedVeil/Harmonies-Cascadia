@@ -1,0 +1,17 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://dr4lo0ifvqtd4"]
+
+[ext_resource type="Shader" uid="uid://cig6igui80tvk" path="res://assets/shader/ui/sdf_card_frame.gdshader" id="1_shader"]
+
+[resource]
+shader = ExtResource("1_shader")
+shader_parameter/frame_color = Color(1, 1, 1, 1)
+shader_parameter/border_color = Color(0.04, 0.04, 0.03, 1)
+shader_parameter/body_color = Color(0, 0.4434063, 0.44621128, 1)
+shader_parameter/name_color = Color(0.16, 0.17, 0.253, 1)
+shader_parameter/rect_size = Vector2(100, 174)
+shader_parameter/edge_pad_px = 3.0
+shader_parameter/white_rim_px = 5.5
+shader_parameter/border_width_px = 2.0
+shader_parameter/corner_radius_px = 1.5
+shader_parameter/name_split_px = 150.0
+shader_parameter/smoothness_px = 0.75

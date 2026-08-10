@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://t6daoerkfdds"
-path.s3tc="res://.godot/imported/WaterMammal_Otter.png-52764c311d1f18710458c378425aeba3.s3tc.ctex"
-path.etc2="res://.godot/imported/WaterMammal_Otter.png-52764c311d1f18710458c378425aeba3.etc2.ctex"
+path="res://.godot/imported/WaterMammal_Otter.png-52764c311d1f18710458c378425aeba3.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/animals/icons/WaterMammal_Otter.png"
-dest_files=["res://.godot/imported/WaterMammal_Otter.png-52764c311d1f18710458c378425aeba3.s3tc.ctex", "res://.godot/imported/WaterMammal_Otter.png-52764c311d1f18710458c378425aeba3.etc2.ctex"]
+dest_files=["res://.godot/imported/WaterMammal_Otter.png-52764c311d1f18710458c378425aeba3.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

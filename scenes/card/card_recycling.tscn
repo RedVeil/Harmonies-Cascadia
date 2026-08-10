@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://lvdwmv7ftmml" path="res://scripts/cards/card_recycling.gd" id="1_hxqf6"]
 [ext_resource type="Shader" uid="uid://y4g8ky747mqh" path="res://assets/shader/ui/shadow.gdshader" id="2_0lkaw"]
 [ext_resource type="Texture2D" uid="uid://jyu1cqjul8oy" path="res://assets/icons/recycling.png" id="2_f7sw7"]
+[ext_resource type="ShaderMaterial" path="res://assets/ui/sdf_circle_fill.tres" id="3_fill"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_hxqf6"]
 radius = 14.035668
@@ -12,6 +13,7 @@ radius = 14.035668
 shader = ExtResource("2_0lkaw")
 shader_parameter/shadow_color = Color(0, 0, 0, 0.1254902)
 shader_parameter/blur_size = 20.0
+shader_parameter/radius = 0.85
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hxqf6"]
 bg_color = Color(0.95686275, 0.8745098, 0.7921569, 1)
@@ -38,10 +40,12 @@ scale = Vector2(0.99999994, 0.99999994)
 shape = SubResource("CircleShape2D_hxqf6")
 
 [node name="background" type="Sprite2D" parent="." unique_id=1610738283]
+material = ExtResource("3_fill")
 scale = Vector2(0.06999999, 0.06999999)
 texture = ExtResource("1_f7sw7")
 
 [node name="shadow" type="Sprite2D" parent="background" unique_id=1816452682]
+visible = false
 show_behind_parent = true
 material = SubResource("ShaderMaterial_jrfn7")
 position = Vector2(0.68392086, 1.1477747)

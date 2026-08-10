@@ -30,7 +30,7 @@ static func create_tween(
 	set_tween(tweens, key, tween)
 	return tween
 
-static func play_sounds(sounds: Array[AudioStream]) -> void:
+static func play_sounds(sounds: Array[AudioStream], volume_db: float = 0.0) -> void:
 	if sounds.is_empty():
 		return
-	GameFeedback.play_sounds(sounds)
+	GameFeedback.play_sounds(sounds, volume_db)

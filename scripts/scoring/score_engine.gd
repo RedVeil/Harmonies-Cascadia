@@ -21,12 +21,50 @@ var points_per_element_group_backup: Dictionary[int, int] = {}
 ## ----- Initialisation ----- ##
 
 func _ready() -> void:
+	if GameSession.is_tutorial():
+		_apply_forced_or_random_rules(GameSession.get_tutorial_scoring_rules())
+	elif GameSession.is_puzzle():
+		_apply_forced_or_random_rules(GameSession.get_puzzle_scoring_rules())
+	else:
+		_pick_random_rules()
+
+
+func _pick_random_rules() -> void:
 	var rng := GameSession.make_rng("scoring")
 	for i in range(5):
 		var element = ElementCatalog.elements[i + 1]
 		var rule_id: int = element.scoring_rules[rng.randi() % element.scoring_rules.size()]
-		active_rules[element.type] = RuleCatalog.rules[rule_id]
-		element.active_scoring_rule = rule_id
+		_set_active_rule(element.type, rule_id)
+
+
+## Pins rules from a config dict (element type -> rule id).
+## Missing / invalid entries fall back to a random pick for that element.
+func apply_forced_rules(forced: Dictionary) -> void:
+	var rng := GameSession.make_rng("scoring")
+	for i in range(5):
+		var element = ElementCatalog.elements[i + 1]
+		var type_key := str(element.type)
+		var rule_id := -1
+		if forced.has(type_key):
+			rule_id = int(forced[type_key])
+		elif forced.has(element.type):
+			rule_id = int(forced[element.type])
+		if rule_id < 0 or rule_id >= RuleCatalog.rules.size() or RuleCatalog.rules[rule_id] == null:
+			push_warning("Scoring rule missing/invalid for element %s; using random." % type_key)
+			rule_id = element.scoring_rules[rng.randi() % element.scoring_rules.size()]
+		_set_active_rule(element.type, rule_id)
+
+
+func _apply_forced_or_random_rules(forced: Dictionary) -> void:
+	if forced.is_empty():
+		_pick_random_rules()
+	else:
+		apply_forced_rules(forced)
+
+
+func _set_active_rule(element_type: int, rule_id: int) -> void:
+	active_rules[element_type] = RuleCatalog.rules[rule_id]
+	ElementCatalog.elements[element_type].active_scoring_rule = rule_id
 
 ## ----- Scoring Logic ----- ##
 
@@ -55,7 +93,9 @@ func calc_group_score(
 		var coords_ := coords.duplicate(true)
 		if not coords_.has(coord):
 			coords_.append(coord)
+		# Group-size curve first, then stack points_per_tile_level (and flat_points).
 		result = calculate_element_special_group_size(coords_, rule)
+		result += calculate_normal_element_group(coords_, rule, tiles)
 	else:
 		if coords.has(coord):
 			result = calculate_normal_element_group(coords,rule, tiles)

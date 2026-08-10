@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cyu2snkum5bym"
-path.s3tc="res://.godot/imported/SavannaMammal_Elephant.png-9912870117bcd61a0dfb8e301de1d711.s3tc.ctex"
-path.etc2="res://.godot/imported/SavannaMammal_Elephant.png-9912870117bcd61a0dfb8e301de1d711.etc2.ctex"
+path="res://.godot/imported/SavannaMammal_Elephant.png-9912870117bcd61a0dfb8e301de1d711.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/animals/icons/SavannaMammal_Elephant.png"
-dest_files=["res://.godot/imported/SavannaMammal_Elephant.png-9912870117bcd61a0dfb8e301de1d711.s3tc.ctex", "res://.godot/imported/SavannaMammal_Elephant.png-9912870117bcd61a0dfb8e301de1d711.etc2.ctex"]
+dest_files=["res://.godot/imported/SavannaMammal_Elephant.png-9912870117bcd61a0dfb8e301de1d711.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

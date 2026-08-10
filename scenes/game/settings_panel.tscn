@@ -1,0 +1,91 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/game/settings_panel.gd" id="1_panel"]
+
+[node name="SettingsPanel" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_panel")
+
+[node name="Content" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+
+[node name="TitleLabel" type="Label" parent="Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 26
+text = "Settings"
+vertical_alignment = 1
+
+[node name="PresetLabel" type="Label" parent="Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 16
+text = "Quality"
+
+[node name="PresetRow" type="HBoxContainer" parent="Content"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="LowButton" type="Button" parent="Content/PresetRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "Low"
+
+[node name="MediumButton" type="Button" parent="Content/PresetRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "Medium"
+
+[node name="HighButton" type="Button" parent="Content/PresetRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "High"
+
+[node name="CustomButton" type="Button" parent="Content/PresetRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+disabled = true
+text = "Custom"
+
+[node name="WindCheck" type="CheckButton" parent="Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+text = "Plant sway"
+
+[node name="CloudsCheck" type="CheckButton" parent="Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+text = "Cloud shadows"
+
+[node name="AnimalLabel" type="Label" parent="Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 16
+text = "Animal motion"
+
+[node name="AnimalOption" type="OptionButton" parent="Content"]
+layout_mode = 2
+
+[node name="MsaaLabel" type="Label" parent="Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 16
+text = "MSAA"
+
+[node name="MsaaOption" type="OptionButton" parent="Content"]
+layout_mode = 2

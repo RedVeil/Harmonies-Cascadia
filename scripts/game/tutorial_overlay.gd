@@ -1,6 +1,8 @@
 extends CanvasLayer
 class_name TutorialOverlay
 
+signal closed
+
 var COLOR_BROWN := Color.html("#918478")
 const NAV_BUTTON_SIZE := Vector2(36.0, 36.0)
 const CLOSE_BUTTON_SIZE := Vector2(32.0, 36.0)
@@ -38,12 +40,15 @@ func _ready() -> void:
 func open() -> void:
 	if slides.is_empty():
 		return
+	GameFeedback.play_open_popup()
 	_current_index = 0
 	_refresh_slide()
 	show()
 
 func close() -> void:
+	GameFeedback.play_close_popup()
 	hide()
+	closed.emit()
 
 func show_slide(index: int) -> void:
 	if slides.is_empty():
@@ -156,18 +161,21 @@ func _on_next_pressed() -> void:
 ## ----- Button Hover ----- ##
 
 func _on_close_mouse_entered() -> void:
+	GameFeedback.play_hover_button()
 	_close_button.get_node("Label").add_theme_color_override("font_color", Color.WHITE)
 
 func _on_close_mouse_exited() -> void:
 	_close_button.get_node("Label").add_theme_color_override("font_color", COLOR_BROWN)
 
 func _on_previous_mouse_entered() -> void:
+	GameFeedback.play_hover_button()
 	_set_nav_button_hover(_previous_button, true)
 
 func _on_previous_mouse_exited() -> void:
 	_set_nav_button_hover(_previous_button, false)
 
 func _on_next_mouse_entered() -> void:
+	GameFeedback.play_hover_button()
 	_set_nav_button_hover(_next_button, true)
 
 func _on_next_mouse_exited() -> void:

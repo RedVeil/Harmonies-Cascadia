@@ -24,6 +24,7 @@ var next_group_id_backup:int = 0
 
 func _ready() -> void:
 	hex_container.init(self)
+	map_ring_count = GameSession.get_map_ring_count()
 	create_map(Vector2i.ZERO)
 
 ## ----- Tile Creation Logic ----- ##

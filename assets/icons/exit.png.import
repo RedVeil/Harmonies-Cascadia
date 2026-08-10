@@ -2,22 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://0jwyiei7m1vq"
-path.s3tc="res://.godot/imported/mountain_card.png-1d001be385f51fd0b7beca9902697942.s3tc.ctex"
-path.etc2="res://.godot/imported/mountain_card.png-1d001be385f51fd0b7beca9902697942.etc2.ctex"
+uid="uid://t465tp668w56"
+path="res://.godot/imported/exit.png-8733e34abdb0ffe7c5cf053c294c707a.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/cards/mountain_card.png"
-dest_files=["res://.godot/imported/mountain_card.png-1d001be385f51fd0b7beca9902697942.s3tc.ctex", "res://.godot/imported/mountain_card.png-1d001be385f51fd0b7beca9902697942.etc2.ctex"]
+source_file="res://assets/icons/exit.png"
+dest_files=["res://.godot/imported/exit.png-8733e34abdb0ffe7c5cf053c294c707a.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

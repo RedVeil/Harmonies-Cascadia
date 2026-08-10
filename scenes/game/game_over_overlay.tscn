@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://d2uy77eljjm3y"]
 
 [ext_resource type="Script" path="res://scripts/game/game_over_overlay.gd" id="1_overlay"]
-[ext_resource type="Texture2D" uid="uid://ca2hp56qvfswa" path="res://assets/icons/circle.png" id="2_circle"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_popup"]
 bg_color = Color(0.95686275, 0.8745098, 0.7921569, 1)
@@ -34,37 +33,37 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_dim")
 [node name="PopupRoot" type="Node2D" parent="."]
 
 [node name="PopupPanel" type="Panel" parent="PopupRoot"]
-offset_left = -180.0
-offset_top = -120.0
-offset_right = 180.0
-offset_bottom = 120.0
+offset_left = -200.0
+offset_top = -180.0
+offset_right = 200.0
+offset_bottom = 180.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_popup")
 
 [node name="ClickBlocker" type="Panel" parent="PopupRoot"]
-offset_left = -180.0
-offset_top = -120.0
-offset_right = 180.0
-offset_bottom = 120.0
+offset_left = -200.0
+offset_top = -180.0
+offset_right = 200.0
+offset_bottom = 180.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_blocker")
 
 [node name="TitleLabel" type="Label" parent="PopupRoot"]
-offset_left = -160.0
-offset_top = -100.0
-offset_right = 160.0
-offset_bottom = -60.0
+offset_left = -180.0
+offset_top = -160.0
+offset_right = 180.0
+offset_bottom = -120.0
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
 theme_override_font_sizes/font_size = 28
-text = "Game Over"
+text = "End Game?"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="ScoreLabel" type="Label" parent="PopupRoot"]
-offset_left = -160.0
-offset_top = -40.0
-offset_right = 160.0
-offset_bottom = 0.0
+offset_left = -180.0
+offset_top = -110.0
+offset_right = 180.0
+offset_bottom = -78.0
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
 theme_override_font_sizes/font_size = 20
@@ -72,35 +71,223 @@ text = "Score: 0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="RestartButton" type="Control" parent="PopupRoot"]
+[node name="CompareLabel" type="Label" parent="PopupRoot"]
+visible = false
+offset_left = -180.0
+offset_top = -74.0
+offset_right = 180.0
+offset_bottom = -20.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 16
+text = "Their score: 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="RatingLabel" type="Label" parent="PopupRoot"]
+visible = false
+offset_left = -180.0
+offset_top = -74.0
+offset_right = 180.0
+offset_bottom = 20.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 16
+text = "Bronze!"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="ContinueButton" type="Control" parent="PopupRoot"]
 layout_mode = 3
 anchors_preset = 0
-offset_left = -60.0
+offset_left = -130.0
 offset_top = 40.0
-offset_right = 60.0
-offset_bottom = 84.0
+offset_right = -10.0
+offset_bottom = 72.0
 
-[node name="Background" type="TextureRect" parent="PopupRoot/RestartButton"]
+[node name="Background" type="ColorRect" parent="PopupRoot/ContinueButton"]
 layout_mode = 0
-offset_right = 120.0
-offset_bottom = 44.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("2_circle")
-expand_mode = 1
-stretch_mode = 5
+color = Color(1, 1, 1, 1)
+
+[node name="Label" type="Label" parent="PopupRoot/ContinueButton"]
+layout_mode = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 14
+text = "Continue"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EndButton" type="Control" parent="PopupRoot"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 10.0
+offset_top = 40.0
+offset_right = 130.0
+offset_bottom = 72.0
+
+[node name="Background" type="ColorRect" parent="PopupRoot/EndButton"]
+layout_mode = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 1)
+
+[node name="Label" type="Label" parent="PopupRoot/EndButton"]
+layout_mode = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 14
+text = "End"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LeaveButton" type="Control" parent="PopupRoot"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = -130.0
+offset_top = 40.0
+offset_right = -10.0
+offset_bottom = 72.0
+
+[node name="Background" type="ColorRect" parent="PopupRoot/LeaveButton"]
+layout_mode = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 1)
+
+[node name="Label" type="Label" parent="PopupRoot/LeaveButton"]
+layout_mode = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 14
+text = "Leave"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RestartButton" type="Control" parent="PopupRoot"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 10.0
+offset_top = 40.0
+offset_right = 130.0
+offset_bottom = 72.0
+
+[node name="Background" type="ColorRect" parent="PopupRoot/RestartButton"]
+layout_mode = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 1)
 
 [node name="Label" type="Label" parent="PopupRoot/RestartButton"]
 layout_mode = 0
-offset_right = 120.0
-offset_bottom = 44.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 14
 text = "Restart"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ShareButton" type="Control" parent="PopupRoot"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = -130.0
+offset_top = 88.0
+offset_right = 130.0
+offset_bottom = 120.0
+
+[node name="Background" type="ColorRect" parent="PopupRoot/ShareButton"]
+layout_mode = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 1)
+
+[node name="Label" type="Label" parent="PopupRoot/ShareButton"]
+layout_mode = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 14
+text = "Share highscore"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ShareStatus" type="Label" parent="PopupRoot"]
+offset_left = -180.0
+offset_top = 128.0
+offset_right = 180.0
+offset_bottom = 160.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 14
+text = ""
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [connection signal="gui_input" from="Dimmer" to="." method="_on_blocker_gui_input"]
 [connection signal="gui_input" from="PopupRoot/ClickBlocker" to="." method="_on_blocker_gui_input"]
+[connection signal="gui_input" from="PopupRoot/ContinueButton" to="." method="_on_continue_gui_input"]
+[connection signal="mouse_entered" from="PopupRoot/ContinueButton" to="." method="_on_continue_mouse_entered"]
+[connection signal="mouse_exited" from="PopupRoot/ContinueButton" to="." method="_on_continue_mouse_exited"]
+[connection signal="gui_input" from="PopupRoot/EndButton" to="." method="_on_end_gui_input"]
+[connection signal="mouse_entered" from="PopupRoot/EndButton" to="." method="_on_end_mouse_entered"]
+[connection signal="mouse_exited" from="PopupRoot/EndButton" to="." method="_on_end_mouse_exited"]
+[connection signal="gui_input" from="PopupRoot/LeaveButton" to="." method="_on_leave_gui_input"]
+[connection signal="mouse_entered" from="PopupRoot/LeaveButton" to="." method="_on_leave_mouse_entered"]
+[connection signal="mouse_exited" from="PopupRoot/LeaveButton" to="." method="_on_leave_mouse_exited"]
 [connection signal="gui_input" from="PopupRoot/RestartButton" to="." method="_on_restart_gui_input"]
 [connection signal="mouse_entered" from="PopupRoot/RestartButton" to="." method="_on_restart_mouse_entered"]
 [connection signal="mouse_exited" from="PopupRoot/RestartButton" to="." method="_on_restart_mouse_exited"]
+[connection signal="gui_input" from="PopupRoot/ShareButton" to="." method="_on_share_gui_input"]
+[connection signal="mouse_entered" from="PopupRoot/ShareButton" to="." method="_on_share_mouse_entered"]
+[connection signal="mouse_exited" from="PopupRoot/ShareButton" to="." method="_on_share_mouse_exited"]

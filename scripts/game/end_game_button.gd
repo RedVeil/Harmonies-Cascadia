@@ -30,10 +30,10 @@ func disable() -> void:
 func _refresh_visuals() -> void:
 	if enabled:
 		$background.self_modulate = Color.WHITE
-		$Label.add_theme_color_override("font_color", COLOR_BROWN)
+		$icon.self_modulate = COLOR_BROWN
 	else:
 		$background.self_modulate = Color.WHITE
-		$Label.add_theme_color_override("font_color", Color.GRAY)
+		$icon.self_modulate = Color.GRAY
 
 
 func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
@@ -44,17 +44,20 @@ func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> voi
 
 
 func _on_mouse_entered() -> void:
+	UiPointerBlock.enter(self)
 	if enabled:
+		GameFeedback.play_hover_button()
 		$background.self_modulate = COLOR_BROWN
-		$Label.add_theme_color_override("font_color", Color.WHITE)
+		$icon.self_modulate = Color.WHITE
 		is_hovered = true
 		timer = 0.5
 
 
 func _on_mouse_exited() -> void:
+	UiPointerBlock.exit(self)
 	if enabled:
 		$background.self_modulate = Color.WHITE
-		$Label.add_theme_color_override("font_color", COLOR_BROWN)
+		$icon.self_modulate = COLOR_BROWN
 		is_hovered = false
 		timer = 0.5
 		$Tooltip.hide()

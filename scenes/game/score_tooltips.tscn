@@ -15,8 +15,6 @@
 bg_color = Color(1, 1, 1, 1)
 corner_radius_bottom_right = 12
 corner_radius_bottom_left = 12
-shadow_color = Color(0, 0, 0, 0.1254902)
-shadow_size = 4
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_672qq"]
 size = Vector2(44, 40)

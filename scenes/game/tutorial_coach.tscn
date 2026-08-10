@@ -1,0 +1,118 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/game/tutorial_coach.gd" id="1_coach"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_spotlight"]
+bg_color = Color(1, 1, 1, 0)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.95686275, 0.8745098, 0.7921569, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bubble"]
+bg_color = Color(0.95686275, 0.8745098, 0.7921569, 0.97)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.2)
+shadow_size = 6
+
+[node name="TutorialCoach" type="CanvasLayer"]
+layer = 12
+script = ExtResource("1_coach")
+
+[node name="DimmerRoot" type="Control" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="DimTop" type="ColorRect" parent="DimmerRoot"]
+mouse_filter = 2
+color = Color(0, 0, 0, 0.45)
+
+[node name="DimBottom" type="ColorRect" parent="DimmerRoot"]
+mouse_filter = 2
+color = Color(0, 0, 0, 0.45)
+
+[node name="DimLeft" type="ColorRect" parent="DimmerRoot"]
+mouse_filter = 2
+color = Color(0, 0, 0, 0.45)
+
+[node name="DimRight" type="ColorRect" parent="DimmerRoot"]
+mouse_filter = 2
+color = Color(0, 0, 0, 0.45)
+
+[node name="Spotlight" type="Panel" parent="."]
+visible = false
+offset_right = 100.0
+offset_bottom = 100.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
+
+[node name="Bubble" type="Panel" parent="."]
+offset_left = 40.0
+offset_top = 480.0
+offset_right = 400.0
+offset_bottom = 680.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_bubble")
+
+[node name="Margin" type="MarginContainer" parent="Bubble"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 14
+
+[node name="VBox" type="VBoxContainer" parent="Bubble/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="Bubble/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 20
+text = "Title"
+autowrap_mode = 2
+
+[node name="Body" type="Label" parent="Bubble/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 15
+text = "Body text"
+autowrap_mode = 2
+
+[node name="ButtonRow" type="HBoxContainer" parent="Bubble/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 2
+
+[node name="TipButton" type="Button" parent="Bubble/Margin/VBox/ButtonRow"]
+visible = false
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "Diagram"
+
+[node name="SkipButton" type="Button" parent="Bubble/Margin/VBox/ButtonRow"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "Skip"
+
+[node name="ContinueButton" type="Button" parent="Bubble/Margin/VBox/ButtonRow"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "Continue"

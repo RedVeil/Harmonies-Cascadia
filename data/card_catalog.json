@@ -172,7 +172,7 @@
 	"animals": [
 		{
 			"id": 0.0,
-			"name": "deer",
+			"name": "Deer",
 			"type": 1.0,
 			"placement": [
 				{
@@ -217,7 +217,7 @@
 		},
 		{
 			"id": 1.0,
-			"name": "fox",
+			"name": "Fox",
 			"type": 1.0,
 			"placement": [
 				{
@@ -261,7 +261,7 @@
 		},
 		{
 			"id": 2.0,
-			"name": "cat",
+			"name": "Cat",
 			"type": 1.0,
 			"placement": [
 				{
@@ -308,7 +308,7 @@
 		},
 		{
 			"id": 3.0,
-			"name": "kiwi",
+			"name": "Kiwi",
 			"type": 1.0,
 			"placement": [
 				{
@@ -352,7 +352,7 @@
 		},
 		{
 			"id": 4.0,
-			"name": "giraffe",
+			"name": "Giraffe",
 			"type": 1.0,
 			"placement": [
 				{
@@ -396,7 +396,7 @@
 		},
 		{
 			"id": 5.0,
-			"name": "racoon",
+			"name": "Racoon",
 			"type": 1.0,
 			"placement": [
 				{
@@ -440,7 +440,7 @@
 		},
 		{
 			"id": 6.0,
-			"name": "koala",
+			"name": "Koala",
 			"type": 1.0,
 			"placement": [
 				{
@@ -484,7 +484,7 @@
 		},
 		{
 			"id": 7.0,
-			"name": "elephant",
+			"name": "Elephant",
 			"type": 1.0,
 			"placement": [
 				{
@@ -529,7 +529,7 @@
 		},
 		{
 			"id": 8.0,
-			"name": "panda",
+			"name": "Panda",
 			"type": 1.0,
 			"placement": [
 				{
@@ -573,7 +573,7 @@
 		},
 		{
 			"id": 9.0,
-			"name": "gorilla",
+			"name": "Gorilla",
 			"type": 1.0,
 			"placement": [
 				{
@@ -609,7 +609,7 @@
 		},
 		{
 			"id": 10.0,
-			"name": "bee",
+			"name": "Bee",
 			"type": 1.0,
 			"placement": [
 				{
@@ -653,7 +653,7 @@
 		},
 		{
 			"id": 11.0,
-			"name": "hedgehog",
+			"name": "Hedgehog",
 			"type": 1.0,
 			"placement": [
 				{
@@ -689,7 +689,7 @@
 		},
 		{
 			"id": 12.0,
-			"name": "rabbit",
+			"name": "Rabbit",
 			"type": 1.0,
 			"placement": [
 				{
@@ -725,7 +725,7 @@
 		},
 		{
 			"id": 13.0,
-			"name": "chicken",
+			"name": "Chicken",
 			"type": 1.0,
 			"placement": [
 				{
@@ -771,7 +771,7 @@
 		},
 		{
 			"id": 14.0,
-			"name": "lion",
+			"name": "Lion",
 			"type": 1.0,
 			"placement": [
 				{
@@ -816,7 +816,7 @@
 		},
 		{
 			"id": 15.0,
-			"name": "hippo",
+			"name": "Hippo",
 			"type": 1.0,
 			"placement": [
 				{
@@ -852,7 +852,7 @@
 		},
 		{
 			"id": 16.0,
-			"name": "ladybug",
+			"name": "Ladybug",
 			"type": 1.0,
 			"placement": [
 				{
@@ -896,7 +896,7 @@
 		},
 		{
 			"id": 17.0,
-			"name": "sheep",
+			"name": "Sheep",
 			"type": 1.0,
 			"placement": [
 				{
@@ -942,7 +942,7 @@
 		},
 		{
 			"id": 18.0,
-			"name": "cow",
+			"name": "Cow",
 			"type": 1.0,
 			"placement": [
 				{
@@ -987,7 +987,7 @@
 		},
 		{
 			"id": 19.0,
-			"name": "horse",
+			"name": "Horse",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1033,7 +1033,7 @@
 		},
 		{
 			"id": 20.0,
-			"name": "tiger",
+			"name": "Tiger",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1078,7 +1078,7 @@
 		},
 		{
 			"id": 21.0,
-			"name": "moose",
+			"name": "Moose",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1123,7 +1123,7 @@
 		},
 		{
 			"id": 22.0,
-			"name": "bison",
+			"name": "Bison",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1167,7 +1167,7 @@
 		},
 		{
 			"id": 23.0,
-			"name": "wolf",
+			"name": "Wolf",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1212,7 +1212,7 @@
 		},
 		{
 			"id": 24.0,
-			"name": "llama",
+			"name": "Llama",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1249,7 +1249,7 @@
 		},
 		{
 			"id": 25.0,
-			"name": "hamster",
+			"name": "Hamster",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1293,7 +1293,7 @@
 		},
 		{
 			"id": 26.0,
-			"name": "pigeon",
+			"name": "Pigeon",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1331,7 +1331,7 @@
 		},
 		{
 			"id": 27.0,
-			"name": "monkey",
+			"name": "Monkey",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1376,7 +1376,7 @@
 		},
 		{
 			"id": 28.0,
-			"name": "mountaingoat",
+			"name": "Mountaingoat",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1413,7 +1413,7 @@
 		},
 		{
 			"id": 29.0,
-			"name": "bear",
+			"name": "Bear",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1458,7 +1458,7 @@
 		},
 		{
 			"id": 30.0,
-			"name": "turtle",
+			"name": "Turtle",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1502,7 +1502,7 @@
 		},
 		{
 			"id": 31.0,
-			"name": "swan",
+			"name": "Swan",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1547,7 +1547,7 @@
 		},
 		{
 			"id": 32.0,
-			"name": "crab",
+			"name": "Crab",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1583,7 +1583,7 @@
 		},
 		{
 			"id": 33.0,
-			"name": "frog",
+			"name": "Frog",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1619,7 +1619,7 @@
 		},
 		{
 			"id": 34.0,
-			"name": "otter",
+			"name": "Otter",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1663,7 +1663,7 @@
 		},
 		{
 			"id": 35.0,
-			"name": "rhino",
+			"name": "Rhino",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1707,7 +1707,7 @@
 		},
 		{
 			"id": 36.0,
-			"name": "crocodile",
+			"name": "Crocodile",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1751,7 +1751,7 @@
 		},
 		{
 			"id": 37.0,
-			"name": "cameleon",
+			"name": "Cameleon",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1787,7 +1787,7 @@
 		},
 		{
 			"id": 38.0,
-			"name": "flamingo",
+			"name": "Flamingo",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1831,7 +1831,7 @@
 		},
 		{
 			"id": 39.0,
-			"name": "duck",
+			"name": "Duck",
 			"type": 1.0,
 			"placement": [
 				{

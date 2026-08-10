@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://8i6nf8uvo4dt"
-path.s3tc="res://.godot/imported/LivestockMammal_Llama_Brown.png-e8b65ca5b7e5b2c50cf2455bb0faf057.s3tc.ctex"
-path.etc2="res://.godot/imported/LivestockMammal_Llama_Brown.png-e8b65ca5b7e5b2c50cf2455bb0faf057.etc2.ctex"
+path="res://.godot/imported/LivestockMammal_Llama_Brown.png-e8b65ca5b7e5b2c50cf2455bb0faf057.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/animals/icons/LivestockMammal_Llama_Brown.png"
-dest_files=["res://.godot/imported/LivestockMammal_Llama_Brown.png-e8b65ca5b7e5b2c50cf2455bb0faf057.s3tc.ctex", "res://.godot/imported/LivestockMammal_Llama_Brown.png-e8b65ca5b7e5b2c50cf2455bb0faf057.etc2.ctex"]
+dest_files=["res://.godot/imported/LivestockMammal_Llama_Brown.png-e8b65ca5b7e5b2c50cf2455bb0faf057.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

@@ -2,22 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cyveh5llwxo0g"
-path.s3tc="res://.godot/imported/field_card.png-8d47f0936048e3488269805692c93098.s3tc.ctex"
-path.etc2="res://.godot/imported/field_card.png-8d47f0936048e3488269805692c93098.etc2.ctex"
+uid="uid://dj6bp8tpn3vpt"
+path="res://.godot/imported/settings.png-9e60c86d9b162ed0f32eee17a57d027f.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/cards/field_card.png"
-dest_files=["res://.godot/imported/field_card.png-8d47f0936048e3488269805692c93098.s3tc.ctex", "res://.godot/imported/field_card.png-8d47f0936048e3488269805692c93098.etc2.ctex"]
+source_file="res://assets/icons/settings.png"
+dest_files=["res://.godot/imported/settings.png-9e60c86d9b162ed0f32eee17a57d027f.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

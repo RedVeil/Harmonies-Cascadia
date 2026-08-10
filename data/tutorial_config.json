@@ -1,0 +1,149 @@
+{
+	"run": {
+		"seed": 42,
+		"map_size": "small"
+	},
+	"scoring_rules": {
+		"1": 0,
+		"2": 3,
+		"3": 6,
+		"4": 9,
+		"5": 12
+	},
+	"steps": [
+		{
+			"id": "welcome",
+			"title": "Welcome",
+			"body": "This short tutorial walks you through a turn. Follow the highlights — only the suggested actions will work.",
+			"highlight": { "type": "none" },
+			"gates": { "allow_actions": [] },
+			"complete": { "type": "continue_button" },
+			"tip_slide": 0
+		},
+		{
+			"id": "take_booster",
+			"title": "Take a pack",
+			"body": "Click one of the landscape packs at the bottom-left to add cards to your hand.",
+			"highlight": { "type": "hud", "target": "boosters" },
+			"gates": {
+				"allow_actions": ["take_booster"],
+				"allow_booster_ids": [0, 1, 2]
+			},
+			"complete": { "type": "action", "action": "booster_taken" },
+			"tip_slide": 1
+		},
+		{
+			"id": "select_element",
+			"title": "Select a landscape",
+			"body": "Click a landscape card in your hand to select it.",
+			"highlight": { "type": "hud", "target": "hand" },
+			"gates": {
+				"allow_actions": ["select_card"],
+				"allow_card_filter": "any_element"
+			},
+			"complete": { "type": "action", "action": "card_selected" }
+		},
+		{
+			"id": "place_element",
+			"title": "Place it",
+			"body": "Hover a hex to preview scoring, then click an empty hex to place your landscape.",
+			"highlight": { "type": "hex", "coord": [0, 0] },
+			"gates": {
+				"allow_actions": ["select_card", "place"],
+				"allow_card_filter": "any_element",
+				"allow_coords": "any_empty"
+			},
+			"complete": { "type": "action", "action": "tile_placed" },
+			"tip_slide": 2
+		},
+		{
+			"id": "score_intro",
+			"title": "Score",
+			"body": "Your score updates at the top-left. Landscape groups score using this run's pinned rules — open the book icon anytime for details.",
+			"highlight": { "type": "hud", "target": "score" },
+			"gates": { "allow_actions": [] },
+			"complete": { "type": "continue_button" },
+			"tip_slide": 3
+		},
+		{
+			"id": "undo_intro",
+			"title": "Undo",
+			"body": "Made a mistake? Use Undo (bottom-right) to take back your last placement. Try it now, or press Continue to skip.",
+			"highlight": { "type": "hud", "target": "undo" },
+			"gates": {
+				"allow_actions": ["undo"]
+			},
+			"complete": { "type": "action_or_continue", "action": "undone" }
+		},
+		{
+			"id": "place_again_if_undone",
+			"title": "Place again",
+			"body": "Select a landscape and place it once more so you have a tile on the board.",
+			"highlight": { "type": "hud", "target": "hand" },
+			"gates": {
+				"allow_actions": ["select_card", "place"],
+				"allow_card_filter": "any_element",
+				"allow_coords": "any_empty"
+			},
+			"complete": { "type": "action", "action": "tile_placed" },
+			"skip_if": { "type": "has_placed_tile" }
+		},
+		{
+			"id": "animal_market",
+			"title": "Animals",
+			"body": "Open the animal market (paw pack) and take an animal into your hand.",
+			"highlight": { "type": "hud", "target": "boosters" },
+			"gates": {
+				"allow_actions": ["take_booster", "buy_animal"],
+				"allow_booster_ids": [4]
+			},
+			"complete": { "type": "action", "action": "animal_bought" },
+			"tip_slide": 6
+		},
+		{
+			"id": "select_animal",
+			"title": "Select an animal",
+			"body": "Click the animal card in your hand.",
+			"highlight": { "type": "hud", "target": "hand" },
+			"gates": {
+				"allow_actions": ["select_card"],
+				"allow_card_filter": "any_animal"
+			},
+			"complete": { "type": "action", "action": "card_selected" }
+		},
+		{
+			"id": "place_animal",
+			"title": "Place the animal",
+			"body": "Place the animal on a valid habitat hex (matching its placement rules).",
+			"highlight": { "type": "hud", "target": "hand" },
+			"gates": {
+				"allow_actions": ["select_card", "place"],
+				"allow_card_filter": "any_animal",
+				"allow_coords": "any_valid"
+			},
+			"complete": { "type": "action", "action": "tile_placed" },
+			"tip_slide": 7
+		},
+		{
+			"id": "recycle_intro",
+			"title": "Recycle",
+			"body": "If your hand gets too full, select an animal and use Recycle (under Undo) to discard it. Continue when ready.",
+			"highlight": { "type": "hud", "target": "recycle" },
+			"gates": {
+				"allow_actions": ["select_card", "recycle"],
+				"allow_card_filter": "any_animal"
+			},
+			"complete": { "type": "action_or_continue", "action": "recycled" },
+			"tip_slide": 8
+		},
+		{
+			"id": "done",
+			"title": "You're ready",
+			"body": "That's the core loop: packs → place landscapes → animals → score. The full diagram guide stays available from the book icon.",
+			"highlight": { "type": "none" },
+			"gates": { "allow_actions": [] },
+			"complete": { "type": "continue_button" },
+			"tip_slide": 10
+		}
+	]
+}

@@ -1,6 +1,10 @@
 extends Node
 class_name Orchestrator
 
+const PuzzleSetupScript := preload("res://scripts/game/puzzle_setup.gd")
+
+signal tutorial_action(action: String, payload: Dictionary)
+
 @export var booster_manager:BoosterManager
 @export var card_manager:CardManager
 @export var hex_manager:HexManager
@@ -13,7 +17,6 @@ class_name Orchestrator
 @export var settings_overlay:SettingsOverlay
 @export var game_over_overlay:GameOverOverlay
 @export var end_game_button:EndGameButton
-@export var place_accept_button:PlaceAcceptButton
 
 @onready var placement_logic:PlacementLogic = $PlacementLogic
 @onready var grouping_logic:GroupingLogic = $GroupingLogic
@@ -27,6 +30,10 @@ var game_over: bool = false
 var touch_preview_locked: bool = false
 
 var map_points: int = 0
+
+## Interactive tutorial gates (null / inactive = normal play).
+var tutorial_bridge: TutorialBridge = TutorialBridge.new()
+var _placed_tile_count: int = 0
 
 ## HexTile Preview State
 var placement_valid : bool = false
@@ -53,12 +60,69 @@ func _ready() -> void:
 	vp.physics_object_picking = true
 	vp.physics_object_picking_sort = true
 	vp.physics_object_picking_first_only = true
+	GameFeedback.start_background_music()
+	if not UiPointerBlock.blocked_changed.is_connected(_on_ui_pointer_blocked_changed):
+		UiPointerBlock.blocked_changed.connect(_on_ui_pointer_blocked_changed)
 	if game_over_overlay:
+		game_over_overlay.continue_pressed.connect(continue_game)
+		game_over_overlay.end_pressed.connect(confirm_end_game)
+		game_over_overlay.leave_pressed.connect(leave_to_menu)
 		game_over_overlay.restart_pressed.connect(restart_run)
 	if not GameSettings.settings_changed.is_connected(_on_graphics_settings_changed):
 		GameSettings.settings_changed.connect(_on_graphics_settings_changed)
 	call_deferred("_on_graphics_settings_changed")
-	show_tutorial()
+	_apply_game_mode_ui()
+	if tutorial_bridge and not tutorial_bridge.action_performed.is_connected(_on_tutorial_bridge_action):
+		tutorial_bridge.action_performed.connect(_on_tutorial_bridge_action)
+	# Interactive tutorial owns first-run coaching; keep slideshow for non-tutorial runs / rules library.
+	if not GameSession.is_tutorial() and not GameSession.is_puzzle():
+		show_tutorial()
+	if GameSession.is_puzzle():
+		call_deferred("_apply_puzzle_setup")
+
+
+func _apply_puzzle_setup() -> void:
+	PuzzleSetupScript.apply(
+		GameSession.puzzle_config,
+		hex_manager,
+		score_engine,
+		point_counter
+	)
+
+
+func _on_tutorial_bridge_action(action: String, payload: Dictionary) -> void:
+	tutorial_action.emit(action, payload)
+
+
+func set_tutorial_gates(gates: Dictionary) -> void:
+	tutorial_bridge.set_gates(gates)
+
+
+func clear_tutorial_gates() -> void:
+	tutorial_bridge.clear_gates()
+
+
+func tutorial_allows(action: String) -> bool:
+	return tutorial_bridge.allows_action(action)
+
+
+func tutorial_allows_booster(id: int) -> bool:
+	return tutorial_bridge.allows_booster(id)
+
+
+func has_placed_tile() -> bool:
+	return _placed_tile_count > 0
+
+
+func _apply_game_mode_ui() -> void:
+	if end_game_button == null:
+		return
+	if GameSession.game_mode == GameSession.GameMode.ENDLESS:
+		end_game_button.hide()
+		end_game_button.disable()
+	else:
+		end_game_button.show()
+		end_game_button.enable()
 
 ## ----- Handle Booster Interactions ----- ##
 
@@ -72,15 +136,20 @@ func select_hand_card(id:int) -> void:
 	if game_over:
 		return
 	var new_selection = id
-	
-	## deselect selection
+
+	## deselect selection — always allowed so players can clear a bad pick
 	if selected_card_id == id:
 		new_selection = -1
 		card_manager.deselect_card(id)
-	## deselect previous selection
-	elif selected_card_id != id and new_selection != -1 and selected_card_id != -1:
-		card_manager.deselect_card(selected_card_id)
-		
+	else:
+		if id >= 0 and id < card_manager.cards.size():
+			var card := card_manager.cards[id]
+			if card != null and not tutorial_bridge.allows_card(card):
+				return
+		## deselect previous selection
+		if selected_card_id != id and new_selection != -1 and selected_card_id != -1:
+			card_manager.deselect_card(selected_card_id)
+
 	selected_card_id = new_selection
 	_update_card_recycling_state()
 	if new_selection == -1:
@@ -95,11 +164,11 @@ func select_hand_card(id:int) -> void:
 			quest_manager.reset_preview()
 			point_counter.reset_preview()
 			reset_preview()
-			_update_place_accept_button()
 			return
-	elif tile_hovered:
-		handle_tile_hover(selected_coord)
-	_update_place_accept_button()
+	else:
+		tutorial_bridge.notify("card_selected", {"card_id": new_selection})
+		if tile_hovered:
+			handle_tile_hover(selected_coord)
 
 func _update_card_recycling_state() -> void:
 	if card_recycling == null:
@@ -114,7 +183,6 @@ func _update_card_recycling_state() -> void:
 func pause_cards() -> void:
 	cards_paused = true
 	booster_manager.paused = true
-	_update_place_accept_button()
 	
 func unpause_cards() -> void:
 	if game_over:
@@ -128,14 +196,14 @@ func unpause_cards() -> void:
 	cards_paused = false
 	booster_manager.paused = false
 	card_manager.unpause()
-	_update_place_accept_button()
 
 ## ----- Game Over ----- ##
 
 func end_game() -> void:
 	if game_over:
 		return
-	game_over = true
+	if tutorial_bridge.active and not tutorial_bridge.allows_action("end_game"):
+		return
 	if selected_card_id != -1:
 		card_manager.deselect_card(selected_card_id)
 		selected_card_id = -1
@@ -150,55 +218,110 @@ func end_game() -> void:
 	undo_button.disable()
 	if end_game_button:
 		end_game_button.disable()
-	_update_place_accept_button()
 	if game_over_overlay:
-		game_over_overlay.open(score_engine.total_score)
+		game_over_overlay.open_confirm(score_engine.total_score)
+
+
+func continue_game() -> void:
+	if game_over:
+		return
+	if game_over_overlay:
+		game_over_overlay.close()
+	_apply_game_mode_ui()
+	if map_points == 0:
+		undo_button.enable()
+	unpause_cards()
+
+
+func confirm_end_game() -> void:
+	if game_over:
+		return
+	game_over = true
+	if game_over_overlay:
+		game_over_overlay.show_results(score_engine.total_score)
+
+
+func leave_to_menu() -> void:
+	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+
 
 func restart_run() -> void:
-	GameSession.begin_run(0)
+	if GameSession.game_mode == GameSession.GameMode.DAILY:
+		GameSession.begin_daily_run()
+	elif GameSession.game_mode == GameSession.GameMode.ENDLESS:
+		GameSession.begin_endless_run()
+	elif GameSession.game_mode == GameSession.GameMode.CHALLENGE:
+		GameSession.begin_challenge_run(
+			GameSession.run_seed,
+			GameSession.ring_count,
+			GameSession.reference_score
+		)
+	elif GameSession.game_mode == GameSession.GameMode.TUTORIAL:
+		GameSession.begin_tutorial_run()
+	elif GameSession.game_mode == GameSession.GameMode.PUZZLE:
+		GameSession.begin_puzzle_run(GameSession.puzzle_id)
+	else:
+		GameSession.begin_normal_run(GameSession.map_size)
 	get_tree().call_deferred("reload_current_scene")
-	
+
 func preview_recycle_card(_id:int, _amount:int, _id_known:bool) -> void:
 	pass
 	
 func apply_recycle_card(id:int, _amount:int, id_known:bool) -> void:
+	if tutorial_bridge.active and not tutorial_bridge.allows_action("recycle"):
+		return
 	var card_id := id if id_known else selected_card_id
 	if card_id < 0 or card_manager.cards[card_id] == null:
 		return
-	
+
 	if id_known:
 		GameFeedback.play_recycle()
 		card_manager.remove_card(card_id)
 		undo_button.disable()
+		tutorial_bridge.notify("recycled", {"card_id": card_id})
 		return
-	
+
 	var selected_card := card_manager.cards[card_id]
 	if selected_card.type != CardData.CARD_TYPE.ANIMAL:
 		return
-	
+
 	var count := selected_card.amount
 	for i in count:
 		GameFeedback.play_recycle()
 		card_manager.remove_card(card_id)
 	undo_button.disable()
 	_update_card_recycling_state()
+	tutorial_bridge.notify("recycled", {"card_id": card_id})
 
 func reset_recycle_card_preview() -> void:
 	pass
 
 ## ----- Handle Tile Interactions ----- ##
 
+func _on_ui_pointer_blocked_changed(blocked: bool) -> void:
+	if not blocked:
+		return
+	if tile_hovered:
+		hex_manager.hex_container.handle_exit(selected_coord)
+	for map_btn in hex_manager.map_buttons:
+		if map_btn != null and map_btn.has_method("clear_hover_for_ui"):
+			map_btn.clear_hover_for_ui()
+
+
 func handle_tile_hover(coord:Vector2i) -> void:
+	if UiPointerBlock.is_blocked():
+		return
 	var entered_new_tile := coord != _hover_slide_coord
 	_hover_slide_coord = coord
 	tile_hovered = true
 	selected_coord = coord
-	
+
+	if entered_new_tile:
+		GameFeedback.run_tile_hover_slide()
+
 	if selected_card_id != -1 and !cards_paused:
 		if TouchMode.is_touch():
 			touch_preview_locked = true
-		if entered_new_tile:
-			GameFeedback.run_tile_hover_slide()
 		placement_valid = false
 		var preview:TileStatePreview
 		var selected_card = card_manager.cards[selected_card_id]
@@ -212,7 +335,6 @@ func handle_tile_hover(coord:Vector2i) -> void:
 		point_counter.preview_progress(score_engine.total_score + preview.points_diff)
 	else:
 		hex_manager.show_tile_info(coord)
-	_update_place_accept_button()
 
 func handle_tile_exit() -> bool:
 	if TouchMode.is_touch() and touch_preview_locked:
@@ -226,12 +348,16 @@ func handle_tile_exit() -> bool:
 	quest_manager.reset_preview()
 	point_counter.reset_preview()
 	reset_preview()
-	_update_place_accept_button()
 	return true
 
 func handle_tile_click(coord: Vector2i) -> void:
+	if UiPointerBlock.is_blocked():
+		return
 	if selected_card_id != -1 and placement_valid and !cards_paused:
 		var selected_card = card_manager.cards[selected_card_id]
+		var tile_data: HexTileData = hex_manager.tiles[coord] if hex_manager.tiles.has(coord) else null
+		if not tutorial_bridge.allows_place_coord(coord, tile_data, placement_valid):
+			return
 		
 		selected_card_backup = selected_card.duplicate(true)
 		coord_backup = coord
@@ -310,10 +436,16 @@ func handle_tile_click(coord: Vector2i) -> void:
 		reset_preview()
 		if map_points == 0:
 			undo_button.enable()
-		
+
 		if not card_manager.cards[selected_card_id]:
 			selected_card_id = -1
-		_update_place_accept_button()
+
+		_placed_tile_count += 1
+		tutorial_bridge.notify("tile_placed", {
+			"coord": coord,
+			"card_type": selected_card_backup.type,
+			"card_id": selected_card_backup.id,
+		})
 
 
 func handle_place_feedback_finished(coord: Vector2i) -> void:
@@ -411,7 +543,8 @@ func _animal_bonus_multiplier_score(card: CardData) -> int:
 ## ----- Undo Logic ----- ##
 
 func undo() -> void:
-	GameFeedback.play_undo()
+	if tutorial_bridge.active and not tutorial_bridge.allows_action("undo"):
+		return
 	quest_manager.undo() # to be tested
 	point_counter.undo() # works
 	# Placement consumes one copy; restore exactly one (not the full pre-place stack).
@@ -420,12 +553,12 @@ func undo() -> void:
 	card_manager.add_card(restore_card)
 	if selected_card_backup.type == CardData.CARD_TYPE.ELEMENT:
 		booster_manager.notify_element_undone()
-	
+
 	score_engine.element_score = score_engine.element_score_backup
 	score_engine.animal_score = score_engine.animal_score_backup
 	score_engine.quest_score = score_engine.quest_score_backup
 	score_engine.total_score = score_engine.element_score + score_engine.animal_score + score_engine.quest_score
-	
+
 	if selected_card_backup.type == 0: # works
 		score_engine.points_per_element_group = score_engine.points_per_element_group_backup.duplicate(true)
 		hex_manager.groups = hex_manager.groups_backup.duplicate(true)
@@ -439,11 +572,13 @@ func undo() -> void:
 		if score_engine.placed_animals[selected_card_backup.id] > 1: # works
 			score_engine.placed_animals[selected_card_backup.id] -= 1
 		else: # works
-			score_engine.placed_animals.erase(selected_card_backup.id) 
-		
+			score_engine.placed_animals.erase(selected_card_backup.id)
+
 	hex_manager.tiles[coord_backup] = tile_backup.duplicate(true)
 	hex_manager.undo(coord_backup) # works
 	undo_button.disable() # works
+	_placed_tile_count = maxi(_placed_tile_count - 1, 0)
+	tutorial_bridge.notify("undone", {"coord": coord_backup})
 
 ## ----- Utility Logic ----- ##
 
@@ -467,30 +602,6 @@ func reset_preview() -> void:
 func _clear_touch_preview_lock() -> void:
 	touch_preview_locked = false
 
-
-func _update_place_accept_button() -> void:
-	if place_accept_button == null:
-		return
-	var can_accept := (
-		TouchMode.is_touch()
-		and selected_card_id != -1
-		and placement_valid
-		and not cards_paused
-		and not game_over
-	)
-	if can_accept:
-		place_accept_button.show_accept()
-	else:
-		place_accept_button.hide_accept()
-
-
-func accept_touch_placement() -> void:
-	if not TouchMode.is_touch():
-		return
-	if selected_card_id == -1 or not placement_valid or cards_paused:
-		return
-	handle_tile_click(selected_coord)
-
 func get_neighbor_contributing_coords(group_coords:Array[Vector2i]) -> Array[Vector2i]:
 	var coords : Array[Vector2i] = []
 	if group_coords.size() > 1:
@@ -512,6 +623,8 @@ func get_secondary_elements() -> Array[int]:
 ## ----- Map Point Logic ----- ##
 
 func add_map_points(val:int) -> void:
+	if not GameSession.allows_map_growth() or val <= 0:
+		return
 	map_points += val
 	hex_manager.discard_undo_visuals()
 	hex_manager.show_map_buttons()
@@ -520,15 +633,20 @@ func add_map_points(val:int) -> void:
 	point_counter.show_map_alert()
 
 func handle_map_button_click(coord:Vector2i) -> void:
+	if not GameSession.allows_map_growth():
+		return
+	if tutorial_bridge.active and not tutorial_bridge.allows_action("map_expand"):
+		return
 	map_points -= 1
 	hex_manager.create_map(coord)
 	hex_manager.remove_map_buttons()
-	
+
 	if map_points == 0:
 		point_counter.hide_map_alert()
 		unpause_cards()
 	else:
 		hex_manager.show_map_buttons()
+	tutorial_bridge.notify("map_expanded", {"coord": coord})
 
 ## ----- Quest Logic ----- ##
 

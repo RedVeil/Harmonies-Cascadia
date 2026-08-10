@@ -38,7 +38,9 @@ func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
 			orchestrator.apply_recycle_card(-1, recycling_value, false)
 
 func _on_mouse_entered() -> void:
+	UiPointerBlock.enter(self)
 	if enabled:
+		GameFeedback.play_hover_button()
 		$background.self_modulate = Color.html("#918478")
 		$icon.self_modulate = Color.WHITE
 		orchestrator.preview_recycle_card(-1, recycling_value, false)
@@ -46,6 +48,7 @@ func _on_mouse_entered() -> void:
 		timer = 0.5
 
 func _on_mouse_exited() -> void:
+	UiPointerBlock.exit(self)
 	if enabled:
 		$background.self_modulate = Color.WHITE
 		$icon.self_modulate = Color.html("#918478")

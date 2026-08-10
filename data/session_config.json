@@ -1,0 +1,27 @@
+{
+	"normal": {
+		"checkpoint": 100,
+		"checkpoint_multiplier": 1.0,
+		"checkpoint_flat_increase": 100,
+		"map_growth": false,
+		"map_sizes": {
+			"small": { "ring_count": 3 },
+			"medium": { "ring_count": 4 },
+			"large": { "ring_count": 5 }
+		}
+	},
+	"daily": {
+		"ring_count": 3,
+		"checkpoint": 100,
+		"checkpoint_multiplier": 1.0,
+		"checkpoint_flat_increase": 100,
+		"map_growth": false
+	},
+	"endless": {
+		"ring_count": 3,
+		"checkpoint": 250,
+		"checkpoint_multiplier": 2.0,
+		"checkpoint_flat_increase": 0,
+		"map_growth": true
+	}
+}

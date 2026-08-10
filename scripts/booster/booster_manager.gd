@@ -35,6 +35,10 @@ var _bought_animal_ids: Dictionary = {}
 
 var _rng: RandomNumberGenerator
 
+## Puzzle author queues: remaining entries not yet shown in shop / market slots.
+var _puzzle_booster_queue: Array = []
+var _puzzle_animal_queue: Array = []
+
 ## ----- Initialisation ----- ##
 
 func _ready() -> void:
@@ -49,10 +53,15 @@ func _ready() -> void:
 		animal_market.buy_pressed.connect(buy_market_animal)
 		animal_market.close_pressed.connect(close_animal_market)
 		animal_market.reroll_pressed.connect(reroll_animal_market)
-	_ensure_market_offers()
-	
-	for i in range(booster_limit):
-		createBooster(i)
+
+	if GameSession.is_puzzle():
+		_init_puzzle_queues()
+		_apply_puzzle_market_offers()
+		_apply_puzzle_boosters()
+	else:
+		_ensure_market_offers()
+		for i in range(booster_limit):
+			createBooster(i)
 	createBooster(4)
 	
 	_refresh_option_ui()
@@ -63,21 +72,28 @@ func _ready() -> void:
 func select_booster(id: int) -> void:
 	if paused:
 		return
-	
+	if orchestrator and not orchestrator.tutorial_allows_booster(id):
+		return
+
 	if id == 4:
 		open_animal_market()
 		return
-	
+
 	if id == 3:
+		if orchestrator and orchestrator.tutorial_bridge.active \
+				and not orchestrator.tutorial_allows("reroll"):
+			return
 		_try_reroll()
 		return
-	
+
 	if not options_ready:
 		return
 	if id < 0 or id >= booster_limit:
 		return
-	
+
 	var booster := boosters[id]
+	if booster == null or booster.cards.is_empty():
+		return
 	for card in booster.cards:
 		orchestrator.add_hand_card(card)
 	if booster.map_points > 0:
@@ -85,23 +101,25 @@ func select_booster(id: int) -> void:
 	if booster.quest_ids.size() > 0:
 		for quest_id in booster.quest_ids:
 			orchestrator.add_quest(quest_id)
-	
+
 	pending_elements = _count_element_cards(booster)
 	elements_played = 0
 	options_ready = pending_elements <= 0
 	market_buys_remaining = 1
-	
+
 	# Only refill shared refresh charge after it has been spent.
 	if reroll_charges <= 0:
 		buys_since_reroll += 1
 		if buys_since_reroll >= boosters_per_reroll:
 			reroll_charges += 1
 			buys_since_reroll = 0
-	
+
 	createBooster(id)
 	_refresh_option_ui()
 	_refresh_reroll_ui()
 	_refresh_market_buy_ui()
+	if orchestrator:
+		orchestrator.tutorial_bridge.notify("booster_taken", {"booster_id": id})
 
 func _try_reroll() -> void:
 	if not _spend_reroll_charge():
@@ -159,8 +177,16 @@ func _refresh_option_ui() -> void:
 	booster_container.set_options_progress(progress)
 	if options_ready:
 		booster_container.enable_options()
+		_disable_empty_option_slots()
 	else:
 		booster_container.disable_options()
+
+
+func _disable_empty_option_slots() -> void:
+	for i in range(mini(booster_limit, booster_container.boosters.size())):
+		var data := boosters[i] if i < boosters.size() else null
+		if data == null or data.cards.is_empty():
+			booster_container.boosters[i].disable()
 
 func _refresh_reroll_ui() -> void:
 	var progress := _reroll_progress()
@@ -187,6 +213,9 @@ func open_animal_market() -> void:
 	_refresh_market_buy_ui()
 
 func buy_market_animal(offer_index: int) -> void:
+	if orchestrator and orchestrator.tutorial_bridge.active \
+			and not orchestrator.tutorial_allows("buy_animal"):
+		return
 	if offer_index < 0 or offer_index >= _market_offers.size():
 		return
 	if market_buys_remaining <= 0:
@@ -202,18 +231,27 @@ func buy_market_animal(offer_index: int) -> void:
 	orchestrator.add_hand_card(bought)
 	_bought_animal_ids[bought.id] = true
 	market_buys_remaining = maxi(market_buys_remaining - 1, 0)
-	var replacement := _generate_market_offer_at(offer_index, _market_used_ids(offer_index))
+	var replacement: CardData
+	if GameSession.is_puzzle():
+		replacement = _dequeue_puzzle_animal()
+	else:
+		replacement = _generate_market_offer_at(offer_index, _market_used_ids(offer_index))
 	_market_offers[offer_index] = replacement
 	if animal_market:
 		animal_market.replace_offer(offer_index, replacement)
 	_refresh_market_buy_ui()
+	if orchestrator:
+		orchestrator.tutorial_bridge.notify("animal_bought", {"animal_id": bought.id})
 
 func reroll_animal_market() -> void:
 	if animal_market == null:
 		return
 	if not _spend_reroll_charge():
 		return
-	_market_offers = _generate_market_offers()
+	if GameSession.is_puzzle():
+		_market_offers = _fill_market_from_puzzle_queue()
+	else:
+		_market_offers = _generate_market_offers()
 	animal_market.refresh_offers(_market_offers)
 	_refresh_reroll_ui()
 	_refresh_market_buy_ui()
@@ -316,6 +354,11 @@ func createBooster(idx: int) -> void:
 		booster_container.set_booster_visuals(idx, booster)
 		return
 
+	if GameSession.is_puzzle():
+		boosters[idx] = _dequeue_puzzle_booster()
+		booster_container.set_booster_visuals(idx, boosters[idx])
+		return
+
 	# Shop slots: always exactly N independently weighted element tiles.
 	booster.type = 6
 	booster.cards = _create_mixed_element_pack()
@@ -327,6 +370,77 @@ func createBooster(idx: int) -> void:
 			booster.quest_ids.append(quest_id)
 	boosters[idx] = booster
 	booster_container.set_booster_visuals(idx, booster)
+
+
+func _init_puzzle_queues() -> void:
+	_puzzle_booster_queue.clear()
+	_puzzle_animal_queue.clear()
+	var raw_boosters = GameSession.puzzle_config.get("boosters", [])
+	if typeof(raw_boosters) == TYPE_ARRAY:
+		_puzzle_booster_queue = raw_boosters.duplicate()
+	var raw_animals = GameSession.puzzle_config.get("animal_market", [])
+	if typeof(raw_animals) == TYPE_ARRAY:
+		_puzzle_animal_queue = raw_animals.duplicate()
+
+
+func _apply_puzzle_boosters() -> void:
+	for i in range(booster_limit):
+		boosters[i] = _dequeue_puzzle_booster()
+		booster_container.set_booster_visuals(i, boosters[i])
+
+
+func _dequeue_puzzle_booster() -> BoosterData:
+	if _puzzle_booster_queue.is_empty():
+		return _booster_from_puzzle_entry(null)
+	var entry = _puzzle_booster_queue.pop_front()
+	return _booster_from_puzzle_entry(entry)
+
+
+func _booster_from_puzzle_entry(entry) -> BoosterData:
+	var booster := BoosterData.new()
+	booster.type = 6
+	booster.booster_points = 0
+	booster.map_points = 0
+	if entry == null or typeof(entry) != TYPE_DICTIONARY:
+		return booster
+	booster.map_points = int(entry.get("map_points", 0))
+	var quest_ids = entry.get("quest_ids", [])
+	if typeof(quest_ids) == TYPE_ARRAY:
+		for qid in quest_ids:
+			booster.quest_ids.append(int(qid))
+	var elements = entry.get("elements", [])
+	if typeof(elements) != TYPE_ARRAY:
+		return booster
+	for element_id in elements:
+		var eid := int(element_id)
+		if eid >= 0 and eid < CardCatalog.elements.size():
+			booster.cards.append(CardCatalog.elements[eid])
+	return booster
+
+
+func _apply_puzzle_market_offers() -> void:
+	_market_offers = _fill_market_from_puzzle_queue()
+
+
+func _fill_market_from_puzzle_queue() -> Array[CardData]:
+	var offers: Array[CardData] = []
+	for _i in animal_market_offer_count:
+		offers.append(_dequeue_puzzle_animal())
+	return offers
+
+
+func _dequeue_puzzle_animal() -> CardData:
+	while not _puzzle_animal_queue.is_empty():
+		var entry = _puzzle_animal_queue.pop_front()
+		if entry == null:
+			return CardData.new()
+		var animal_id := int(entry)
+		if animal_id < 0:
+			return CardData.new()
+		if animal_id < CardCatalog.animals.size():
+			return CardCatalog.animals[animal_id]
+		push_warning("Puzzle animal id %d not in catalog; skipping." % animal_id)
+	return CardData.new()
 
 func _load_mixed_element_weights_from_catalog() -> void:
 	if mixed_element_weights.size() < 5:

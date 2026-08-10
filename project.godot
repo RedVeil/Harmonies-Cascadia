@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Harmonies-Cascadia"
 config/version="0.1.0"
-run/main_scene="uid://beawqa3qj40fn"
+run/main_scene="res://scenes/main_menu.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -29,6 +29,8 @@ RuleCatalog="*uid://tqkcwruu08es"
 QuestCatalog="*uid://dwsmx6x25woub"
 GameFeedback="*res://scenes/effects/game_feedback.tscn"
 TouchMode="*res://scripts/input/touch_mode.gd"
+UiPointerBlock="*res://scripts/input/ui_pointer_block.gd"
+PlayerProgress="*res://scripts/game/player_progress.gd"
 
 [display]
 
@@ -64,6 +66,7 @@ mouse_scroll_down={
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true
+anti_aliasing/quality/msaa_2d=2
 
 [shader_globals]
 

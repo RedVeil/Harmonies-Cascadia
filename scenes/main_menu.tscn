@@ -1,0 +1,247 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/game/main_menu.gd" id="1_menu"]
+[ext_resource type="PackedScene" path="res://scenes/game/settings_panel.tscn" id="2_settings"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.95686275, 0.8745098, 0.7921569, 0.92)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.1254902)
+shadow_size = 4
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_menu")
+
+[node name="BackgroundFallback" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.95686275, 0.8745098, 0.7921569, 1)
+
+[node name="BackgroundImage" type="TextureRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Split" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="LeftColumn" type="PanelContainer" parent="Split"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Margin" type="MarginContainer" parent="Split/LeftColumn"]
+layout_mode = 2
+theme_override_constants/margin_left = 36
+theme_override_constants/margin_top = 48
+theme_override_constants/margin_right = 36
+theme_override_constants/margin_bottom = 48
+
+[node name="NavStack" type="VBoxContainer" parent="Split/LeftColumn/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="TitleLabel" type="Label" parent="Split/LeftColumn/Margin/NavStack"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 36
+text = "Harmonies"
+autowrap_mode = 2
+
+[node name="SubtitleLabel" type="Label" parent="Split/LeftColumn/Margin/NavStack"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 18
+text = "Cascadia"
+
+[node name="Spacer" type="Control" parent="Split/LeftColumn/Margin/NavStack"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+
+[node name="RootNav" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="PlayButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/RootNav"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+text = "Play"
+
+[node name="TutorialButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/RootNav"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+text = "Tutorial"
+
+[node name="EnterCodeButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/RootNav"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+text = "Enter Code"
+
+[node name="SettingsButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/RootNav"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+text = "Settings"
+
+[node name="PlayNav" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="BackButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/PlayNav"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+text = "Back"
+
+[node name="DailyButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/PlayNav"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+text = "Daily Challenge"
+
+[node name="NormalBlock" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack/PlayNav"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="NormalButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/PlayNav/NormalBlock"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+text = "Normal"
+
+[node name="MapSizeLabel" type="Label" parent="Split/LeftColumn/Margin/NavStack/PlayNav/NormalBlock"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 14
+text = "Map size"
+
+[node name="MapSizeOption" type="OptionButton" parent="Split/LeftColumn/Margin/NavStack/PlayNav/NormalBlock"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+
+[node name="EndlessButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/PlayNav"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+text = "Endless"
+
+[node name="PuzzleBlock" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack/PlayNav"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="PuzzleButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/PlayNav/PuzzleBlock"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+text = "Puzzle"
+
+[node name="PuzzleLabel" type="Label" parent="Split/LeftColumn/Margin/NavStack/PlayNav/PuzzleBlock"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 14
+text = "Puzzle"
+
+[node name="PuzzleOption" type="OptionButton" parent="Split/LeftColumn/Margin/NavStack/PlayNav/PuzzleBlock"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+
+[node name="CodeNav" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="CodeBackButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/CodeNav"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+text = "Back"
+
+[node name="CodeHint" type="Label" parent="Split/LeftColumn/Margin/NavStack/CodeNav"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 14
+text = "Paste a share code to replay that session."
+autowrap_mode = 2
+
+[node name="CodeInput" type="LineEdit" parent="Split/LeftColumn/Margin/NavStack/CodeNav"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+placeholder_text = "HC1-..."
+caret_blink = true
+
+[node name="StartCodeButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/CodeNav"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+text = "Start"
+
+[node name="CodeStatus" type="Label" parent="Split/LeftColumn/Margin/NavStack/CodeNav"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 14
+text = ""
+autowrap_mode = 2
+
+[node name="RightColumn" type="Control" parent="Split"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+mouse_filter = 2
+
+[node name="SettingsHost" type="PanelContainer" parent="Split/RightColumn"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 48.0
+offset_right = -48.0
+offset_bottom = -48.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Margin" type="MarginContainer" parent="Split/RightColumn/SettingsHost"]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 28
+
+[node name="SettingsPanel" parent="Split/RightColumn/SettingsHost/Margin" instance=ExtResource("2_settings")]
+layout_mode = 2
+
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/RootNav/PlayButton" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/RootNav/TutorialButton" to="." method="_on_tutorial_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/RootNav/EnterCodeButton" to="." method="_on_enter_code_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/RootNav/SettingsButton" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/BackButton" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/DailyButton" to="." method="_on_daily_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/NormalBlock/NormalButton" to="." method="_on_normal_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/EndlessButton" to="." method="_on_endless_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/PuzzleBlock/PuzzleButton" to="." method="_on_puzzle_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/CodeNav/CodeBackButton" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/CodeNav/StartCodeButton" to="." method="_on_start_code_pressed"]
+[connection signal="text_submitted" from="Split/LeftColumn/Margin/NavStack/CodeNav/CodeInput" to="." method="_on_code_submitted"]

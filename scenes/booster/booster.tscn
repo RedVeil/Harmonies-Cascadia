@@ -5,29 +5,32 @@
 [ext_resource type="Shader" uid="uid://y4g8ky747mqh" path="res://assets/shader/ui/shadow.gdshader" id="3_4cwg5"]
 [ext_resource type="Texture2D" uid="uid://cx4mwoth33xa6" path="res://assets/icons/random.png" id="4_430vb"]
 [ext_resource type="Shader" uid="uid://8wow5a7grc78" path="res://assets/shader/cards/circular_progress_bar.gdshader" id="5_prog"]
+[ext_resource type="Material" uid="uid://cn853ytgoxks6" path="res://assets/ui/sdf_circle_fill.tres" id="6_fill"]
+[ext_resource type="Texture2D" uid="uid://dyhhergikys8s" path="res://assets/ui/sdf_quad_circle.tres" id="7_quad"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_430vb"]
 radius = 20.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_progress"]
+shader = ExtResource("5_prog")
+shader_parameter/primary_color = Color(0, 0.81278217, 0.8193065, 1)
+shader_parameter/secondary_color = Color(1, 1, 1, 1)
+shader_parameter/third_color = Color(1, 1, 1, 1)
+shader_parameter/outline_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+shader_parameter/unfilled_color = Color(1, 1, 1, 1)
+shader_parameter/current_value = 0.52999998815344
+shader_parameter/lerp_value = 1.0
+shader_parameter/third_value = 0.0
+shader_parameter/smooth_ = 0.005
+shader_parameter/width_in = 0.0
+shader_parameter/width_out = 0.9
+shader_parameter/border_width = 0.05
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_r28fy"]
 shader = ExtResource("3_4cwg5")
 shader_parameter/shadow_color = Color(0, 0, 0, 0.1254902)
 shader_parameter/blur_size = 20.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_progress"]
-shader = ExtResource("5_prog")
-shader_parameter/primary_color = Color(0.7176471, 0.8509804, 0.8745098, 1)
-shader_parameter/secondary_color = Color(0.43529412, 0.7019608, 0.7490196, 1)
-shader_parameter/third_color = Color(0.7176471, 0.8509804, 0.8745098, 1)
-shader_parameter/outline_color = Color(1, 1, 1, 1)
-shader_parameter/unfilled_color = Color(1, 1, 1, 1)
-shader_parameter/current_value = 0.0
-shader_parameter/lerp_value = 1.0
-shader_parameter/third_value = 0.0
-shader_parameter/smooth_ = 0.005
-shader_parameter/width_in = 0.78
-shader_parameter/width_out = 0.95
-shader_parameter/border_width = 0.03
+shader_parameter/radius = 0.85
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_430vb"]
 bg_color = Color(0.95686275, 0.8745098, 0.7921569, 1)
@@ -57,9 +60,10 @@ shape = SubResource("CircleShape2D_430vb")
 z_index = -1
 material = SubResource("ShaderMaterial_progress")
 scale = Vector2(0.135, 0.135)
-texture = ExtResource("2_430vb")
+texture = ExtResource("7_quad")
 
 [node name="background" type="Sprite2D" parent="." unique_id=869127976]
+material = ExtResource("6_fill")
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("2_430vb")
 
@@ -67,7 +71,7 @@ texture = ExtResource("2_430vb")
 show_behind_parent = true
 material = SubResource("ShaderMaterial_r28fy")
 position = Vector2(0.68392086, 1.1477747)
-scale = Vector2(1.2, 1.2)
+scale = Vector2(1.5, 1.5)
 texture = ExtResource("2_430vb")
 
 [node name="icon" type="Sprite2D" parent="." unique_id=1938653007]

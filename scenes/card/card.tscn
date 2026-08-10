@@ -3,11 +3,12 @@
 [ext_resource type="Script" uid="uid://bax2whoai3nus" path="res://scripts/cards/card.gd" id="1_73nwn"]
 [ext_resource type="PackedScene" uid="uid://uspta7a1yqhh" path="res://scenes/game/placement_tooltip.tscn" id="2_ri62e"]
 [ext_resource type="Texture2D" uid="uid://co3kap4vk0tie" path="res://assets/animals/icons/Amphibian_Frog_Green.png" id="3_b2sko"]
-[ext_resource type="Texture2D" uid="uid://ca2hp56qvfswa" path="res://assets/icons/circle.png" id="3_kaf1t"]
-[ext_resource type="Texture2D" uid="uid://cyveh5llwxo0g" path="res://assets/cards/field_card.png" id="3_ri62e"]
+[ext_resource type="Texture2D" uid="uid://dyhhergikys8s" path="res://assets/ui/sdf_quad_circle.tres" id="3_kaf1t"]
 [ext_resource type="Shader" uid="uid://8wow5a7grc78" path="res://assets/shader/cards/circular_progress_bar.gdshader" id="4_v07qs"]
-[ext_resource type="Texture2D" uid="uid://boqn0q1xtndms" path="res://assets/elements/m2.png" id="6_0iqnq"]
+[ext_resource type="Texture2D" uid="uid://fitjq8iuh7ul" path="res://assets/elements/w0.png" id="5_b2sko"]
 [ext_resource type="AudioStream" uid="uid://ftrpl5416bkc" path="res://assets/audio/bookFlip2.ogg" id="7_draw"]
+[ext_resource type="Material" uid="uid://dr4lo0ifvqtd4" path="res://assets/ui/sdf_card_frame.tres" id="8_frame"]
+[ext_resource type="Material" path="res://assets/ui/sdf_card_shadow.tres" id="9_shadow"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jl6rh"]
 size = Vector2(94, 168)
@@ -17,15 +18,15 @@ shader = ExtResource("4_v07qs")
 shader_parameter/primary_color = Color(1, 0, 0, 1)
 shader_parameter/secondary_color = Color(0.4, 0, 0, 1)
 shader_parameter/third_color = Color(0.8, 0.5, 0, 1)
-shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_color = Color(1, 1, 1, 1)
 shader_parameter/unfilled_color = Color(0.443, 0.443, 0.443, 1)
 shader_parameter/current_value = 0.0
 shader_parameter/lerp_value = 0.0
 shader_parameter/third_value = 0.0
 shader_parameter/smooth_ = 0.005
 shader_parameter/width_in = 0.0
-shader_parameter/width_out = 0.95
-shader_parameter/border_width = 0.03
+shader_parameter/width_out = 0.9
+shader_parameter/border_width = 0.1
 
 [node name="card" type="Area2D" unique_id=321030438]
 monitorable = false
@@ -44,113 +45,162 @@ y_sort_enabled = true
 shape = SubResource("RectangleShape2D_jl6rh")
 debug_color = Color(4.042983e-06, 0.5881858, 0.68830764, 0.41960785)
 
+[node name="HitArea" type="Control" parent="." unique_id=1561032188]
+z_index = 10
+layout_mode = 3
+anchors_preset = 0
+offset_left = -47.0
+offset_top = -84.0
+offset_right = 47.0
+offset_bottom = 84.0
+
 [node name="visuals" type="Node2D" parent="." unique_id=1650819141]
 
-[node name="Label" type="Label" parent="visuals" unique_id=1692518054]
-z_index = 1
-offset_left = -47.0
-offset_top = -103.0
-offset_right = 47.0
-offset_bottom = -86.0
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 2
-theme_override_font_sizes/font_size = 12
-text = "x 4"
-horizontal_alignment = 1
-
-[node name="background" type="TextureRect" parent="visuals" unique_id=56098699]
-offset_left = -47.0
-offset_top = -83.0
-offset_right = 894.0
-offset_bottom = 1589.0
-scale = Vector2(0.1, 0.1)
-texture = ExtResource("3_ri62e")
-
-[node name="background2" type="TextureRect" parent="visuals/background" unique_id=921696448]
-modulate = Color(0, 0, 0, 0.19900002)
+[node name="Shadow" type="TextureRect" parent="visuals" unique_id=56098690]
+modulate = Color(0, 0, 0, 0.28)
 z_index = -1
-layout_mode = 0
-offset_left = 70.0
-offset_top = 90.0
-offset_right = 1011.0
-offset_bottom = 1762.0
-texture = ExtResource("3_ri62e")
-
-[node name="animal" type="TextureRect" parent="visuals" unique_id=1229719425]
-visible = false
-z_index = 1
-offset_left = -26.000004
-offset_top = -22.000008
-offset_right = 974.0
-offset_bottom = 978.0
-scale = Vector2(0.05, 0.05)
-texture = ExtResource("3_b2sko")
-
-[node name="element" type="TextureRect" parent="visuals" unique_id=276021613]
-z_index = 1
-material = SubResource("ShaderMaterial_s65g1")
-offset_left = -39.0
-offset_top = -75.0
-offset_right = 361.0
-offset_bottom = 325.0
-scale = Vector2(0.05, 0.05)
+material = ExtResource("9_shadow")
+offset_left = -44.0
+offset_top = -78.0
+offset_right = 58.0
+offset_bottom = 98.0
+mouse_filter = 2
 texture = ExtResource("3_kaf1t")
+expand_mode = 1
 
-[node name="icon" type="TextureRect" parent="visuals/element" unique_id=1735806140]
-layout_mode = 0
-offset_left = -2.2888182e-05
-offset_top = 2.0980835e-05
-offset_right = 99.99998
-offset_bottom = 100.00002
-scale = Vector2(4, 4)
-texture = ExtResource("6_0iqnq")
+[node name="Frame4" type="TextureRect" parent="visuals" unique_id=768587695]
+visible = false
+material = ExtResource("8_frame")
+offset_left = -50.0
+offset_top = -122.0
+offset_right = 50.0
+offset_bottom = 52.0
+mouse_filter = 2
+texture = ExtResource("3_kaf1t")
+expand_mode = 1
 
-[node name="points" type="Node2D" parent="visuals" unique_id=274107084]
+[node name="Frame3" type="TextureRect" parent="visuals" unique_id=620110457]
+visible = false
+material = ExtResource("8_frame")
+offset_left = -50.0
+offset_top = -110.0
+offset_right = 50.0
+offset_bottom = 64.0
+mouse_filter = 2
+texture = ExtResource("3_kaf1t")
+expand_mode = 1
+
+[node name="Frame2" type="TextureRect" parent="visuals" unique_id=1615533266]
+visible = false
+material = ExtResource("8_frame")
+offset_left = -50.0
+offset_top = -98.0
+offset_right = 50.0
+offset_bottom = 76.0
+mouse_filter = 2
+texture = ExtResource("3_kaf1t")
+expand_mode = 1
+
+[node name="Frame" type="TextureRect" parent="visuals" unique_id=56098691]
+material = ExtResource("8_frame")
+offset_left = -50.0
+offset_top = -86.0
+offset_right = 50.0
+offset_bottom = 88.0
+mouse_filter = 2
+texture = ExtResource("3_kaf1t")
+expand_mode = 1
+
+[node name="CardLabel" type="Label" parent="visuals" unique_id=178676616]
 z_index = 1
-position = Vector2(-39, -53)
-
-[node name="Label" type="Label" parent="visuals/points" unique_id=748622240]
-z_index = 1
-offset_top = -0.9999962
-offset_right = 20.0
-offset_bottom = 22.000004
+offset_left = -39.0
+offset_top = 63.0
+offset_right = 39.0
+offset_bottom = 78.0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 2
-theme_override_font_sizes/font_size = 14
-text = "6"
+theme_override_font_sizes/font_size = 8
+text = "Elephant"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="icon" type="TextureRect" parent="visuals" unique_id=1229719425]
+z_index = 1
+offset_left = -35.0
+offset_top = -34.0
+offset_right = 965.0
+offset_bottom = 966.0
+scale = Vector2(0.07, 0.07)
+mouse_filter = 2
+texture = ExtResource("3_b2sko")
+
+[node name="elementicon" type="TextureRect" parent="visuals" unique_id=25438168]
+visible = false
+z_index = 1
+offset_left = 14.999992
+offset_top = -76.0
+offset_right = 415.0
+offset_bottom = 324.0
+scale = Vector2(0.06, 0.06)
+mouse_filter = 2
+texture = ExtResource("5_b2sko")
+metadata/_edit_use_anchors_ = true
+
+[node name="points" type="Node2D" parent="visuals" unique_id=274107084]
+visible = false
+z_index = 1
+position = Vector2(-39, -77)
+
+[node name="Label" type="Label" parent="visuals/points" unique_id=748622240]
+z_index = 1
+offset_left = -1.0
+offset_top = -1.9999962
+offset_right = 19.0
+offset_bottom = 21.000004
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 20
+text = "6"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
 [node name="background" type="TextureRect" parent="visuals/points" unique_id=175734822]
+visible = false
 material = SubResource("ShaderMaterial_s65g1")
 offset_right = 400.0
 offset_bottom = 400.0
 scale = Vector2(0.05, 0.05)
+mouse_filter = 2
 texture = ExtResource("3_kaf1t")
+metadata/_edit_use_anchors_ = true
 
 [node name="bonus_points" type="Node2D" parent="visuals" unique_id=842128323]
 visible = false
 z_index = 1
-position = Vector2(-39, -31)
+position = Vector2(-43, -64)
 
 [node name="Label" type="Label" parent="visuals/bonus_points" unique_id=1156241679]
 z_index = 1
-offset_top = -1.0
-offset_right = 20.0
-offset_bottom = 22.0
+offset_left = 2.0
+offset_top = 7.0
+offset_right = 22.0
+offset_bottom = 30.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 2
-theme_override_font_sizes/font_size = 12
-text = "6"
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 10
+text = "+3"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="background" type="TextureRect" parent="visuals/bonus_points" unique_id=1442000280]
+visible = false
 material = SubResource("ShaderMaterial_s65g1")
 offset_right = 400.0
 offset_bottom = 400.0
 scale = Vector2(0.05, 0.05)
+mouse_filter = 2
 texture = ExtResource("3_kaf1t")
 
 [node name="PlacementTooltip" parent="." unique_id=1404822029 instance=ExtResource("2_ri62e")]

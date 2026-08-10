@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://d3iu7t4cukitx" path="res://scripts/game/tutorial_overlay.gd" id="1_tutorial"]
 [ext_resource type="Texture2D" uid="uid://ca2hp56qvfswa" path="res://assets/icons/circle.png" id="2_circle"]
+[ext_resource type="ShaderMaterial" path="res://assets/ui/sdf_circle_fill.tres" id="3_fill"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_popup"]
 bg_color = Color(0.95686275, 0.8745098, 0.7921569, 1)
@@ -70,6 +71,7 @@ offset_right = -10.0
 offset_bottom = 18.0
 
 [node name="Background" type="TextureRect" parent="PopupRoot/NavButtons/PreviousButton" unique_id=881059201]
+material = ExtResource("3_fill")
 layout_mode = 0
 offset_right = 36.0
 offset_bottom = 36.0
@@ -97,6 +99,7 @@ offset_right = 18.0
 offset_bottom = 18.0
 
 [node name="Background" type="TextureRect" parent="PopupRoot/NavButtons/NextButton" unique_id=103589912]
+material = ExtResource("3_fill")
 layout_mode = 0
 offset_right = 36.0
 offset_bottom = 36.0

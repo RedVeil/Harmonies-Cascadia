@@ -42,9 +42,11 @@ func init(container: QuestContainer, quest: Quest) -> void:
 ## ----- Interactions Logic ----- ##
 
 func _on_mouse_entered() -> void:
+	UiPointerBlock.enter(self)
 	placement_tooltip.show()
 
 func _on_mouse_exited() -> void:
+	UiPointerBlock.exit(self)
 	placement_tooltip.hide()
 
 ## ----- Down stream Logic ----- ##

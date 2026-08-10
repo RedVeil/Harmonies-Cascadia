@@ -2,22 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c314gchdqnjem"
-path.s3tc="res://.godot/imported/wetland_card.png-ae003bb0b8c524d1b193056d36010185.s3tc.ctex"
-path.etc2="res://.godot/imported/wetland_card.png-ae003bb0b8c524d1b193056d36010185.etc2.ctex"
+uid="uid://40xdk7axqy8p"
+path="res://.godot/imported/card_bg.png-2c57ac772d70d05eccb526832b9e401e.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/cards/wetland_card.png"
-dest_files=["res://.godot/imported/wetland_card.png-ae003bb0b8c524d1b193056d36010185.s3tc.ctex", "res://.godot/imported/wetland_card.png-ae003bb0b8c524d1b193056d36010185.etc2.ctex"]
+source_file="res://assets/cards/card_bg.png"
+dest_files=["res://.godot/imported/card_bg.png-2c57ac772d70d05eccb526832b9e401e.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

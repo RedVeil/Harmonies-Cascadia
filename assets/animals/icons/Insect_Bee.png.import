@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dy16wq13ekuil"
-path.s3tc="res://.godot/imported/Insect_Bee.png-d063b0bdc30b664d224ab2ef010bcebd.s3tc.ctex"
-path.etc2="res://.godot/imported/Insect_Bee.png-d063b0bdc30b664d224ab2ef010bcebd.etc2.ctex"
+path="res://.godot/imported/Insect_Bee.png-d063b0bdc30b664d224ab2ef010bcebd.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/animals/icons/Insect_Bee.png"
-dest_files=["res://.godot/imported/Insect_Bee.png-d063b0bdc30b664d224ab2ef010bcebd.s3tc.ctex", "res://.godot/imported/Insect_Bee.png-d063b0bdc30b664d224ab2ef010bcebd.etc2.ctex"]
+dest_files=["res://.godot/imported/Insect_Bee.png-d063b0bdc30b664d224ab2ef010bcebd.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

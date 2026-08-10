@@ -3,12 +3,14 @@
 [ext_resource type="Texture2D" uid="uid://ca2hp56qvfswa" path="res://assets/icons/circle.png" id="1_daw8n"]
 [ext_resource type="Texture2D" uid="uid://cjulobfnnfiaf" path="res://assets/elements/a0.png" id="2_d6sgi"]
 [ext_resource type="Script" uid="uid://d0jwsrs15ny0f" path="res://scripts/game/tooltip_icon.gd" id="2_qbs20"]
+[ext_resource type="ShaderMaterial" path="res://assets/ui/sdf_circle_fill.tres" id="3_fill"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_daw8n"]
 radius = 199.99998
 
 [node name="TooltipIcon" type="Sprite2D" unique_id=978343123]
 self_modulate = Color(0.95686275, 0.8745098, 0.7921569, 1)
+material = ExtResource("3_fill")
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("1_daw8n")
 script = ExtResource("2_qbs20")

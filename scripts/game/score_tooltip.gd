@@ -9,6 +9,7 @@ var scale_speed : float = 10.0
 
 @export var orchestrator : Orchestrator
 var active_tooltip : int = -1
+var _strip_blocking: bool = false
 
 ## ----- Initialisation ----- ##
 
@@ -29,10 +30,23 @@ func _process(delta: float) -> void:
 			icon.show()
 		else:
 			icon.hide()
+	_update_pointer_block()
+
+func _update_pointer_block() -> void:
+	# Panel uses mouse_filter IGNORE so Area2D icons still pick; manually block tiles under the strip/popup.
+	var mouse := get_viewport().get_mouse_position()
+	var over = $Panel.get_global_rect().has_point(mouse)
+	if $Panel2.visible:
+		over = over or $Panel2.get_global_rect().has_point(mouse)
+	if over == _strip_blocking:
+		return
+	_strip_blocking = over
+	UiPointerBlock.set_hovering(self, over)
 
 ## ----- Interactions Logic ----- ##
 
 func _on_button_mouse_entered() -> void:
+	GameFeedback.play_hover_button()
 	$Panel.get_theme_stylebox("panel").bg_color = Color.html("#918478")
 	$Button/Sprite2D.self_modulate = Color.WHITE
 
@@ -45,24 +59,32 @@ func _on_button_input_event(viewport: Node, event: InputEvent, shape_idx: int) -
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			GameFeedback.play_click_button()
 			if target_position.y == 0.0:
+				GameFeedback.play_open_popup()
 				target_position = Vector2(0.0,321.0)
 				target_size = Vector2(44.0, 360.0)
 			else:
+				GameFeedback.play_close_popup()
 				target_position = Vector2(0.0,0.0)
 				target_size = Vector2(44.0, 40.0)
+				if active_tooltip != -1:
+					active_tooltip = -1
 				$Panel2.hide()
 
 func handle_click_toolip(id:int) -> void:
 	if id == 5:
+		if active_tooltip != -1:
+			GameFeedback.play_close_popup()
 		active_tooltip = -1
 		$Panel2.hide()
 		orchestrator.show_tutorial()
 		return
 
 	if active_tooltip == id:
+		GameFeedback.play_close_popup()
 		$Panel2.hide()
 		active_tooltip = -1
 	else:
+		GameFeedback.play_open_popup()
 		active_tooltip = id
 		$Panel2.show()
 		$Panel2/Panel.position.y = (id*50.0) + 4.0

@@ -2,6 +2,7 @@ extends Area2D
 class_name Booster
 
 const CIRCLE_TEXTURE := preload("res://assets/icons/circle.png")
+const CIRCLE_FILL_MATERIAL := preload("res://assets/ui/sdf_circle_fill.tres")
 const DOT_SCALE := 0.022
 const DOT_RING_RADIUS := 10.0
 
@@ -38,18 +39,14 @@ func init(parent: BoosterContainer) -> void:
 
 func enable() -> void:
 	enabled = true
-	background.self_modulate = Color.WHITE
-	icon.self_modulate = Color.html("#918478")
 	content_dots.modulate = Color.WHITE
+	_apply_hover_visuals()
 
 func disable() -> void:
 	enabled = false
 	background.self_modulate = Color.WHITE
 	icon.self_modulate = Color.GRAY
 	content_dots.modulate = Color(1, 1, 1, 0.45)
-	is_hovered = false
-	timer = 0.5
-	$Tooltip.hide()
 
 func set_progress(value: float) -> void:
 	if progress_sprite == null or progress_sprite.material == null:
@@ -68,21 +65,30 @@ func _process(delta: float) -> void:
 			$Tooltip.show()
 
 func _on_mouse_entered() -> void:
-	if not enabled:
-		return
-	background.self_modulate = Color.html("#918478")
-	icon.self_modulate = Color.WHITE
+	UiPointerBlock.enter(self)
+	GameFeedback.play_hover_button()
 	is_hovered = true
 	timer = 0.5
+	_apply_hover_visuals()
 
 func _on_mouse_exited() -> void:
-	if not enabled:
-		return
-	background.self_modulate = Color.WHITE
-	icon.self_modulate = Color.html("#918478")
+	UiPointerBlock.exit(self)
 	is_hovered = false
 	timer = 0.5
 	$Tooltip.hide()
+	_apply_hover_visuals()
+
+func _apply_hover_visuals() -> void:
+	if not enabled:
+		background.self_modulate = Color.WHITE
+		icon.self_modulate = Color.GRAY
+		return
+	if is_hovered:
+		background.self_modulate = Color.html("#918478")
+		icon.self_modulate = Color.WHITE
+	else:
+		background.self_modulate = Color.WHITE
+		icon.self_modulate = Color.html("#918478")
 
 
 func _on_input_event(
@@ -103,6 +109,12 @@ func set_booster_visuals(boosterData: BoosterData) -> void:
 		icon.visible = true
 		icon.texture = load("res://assets/icons/animal.png")
 		$Tooltip/Label.text = "Open the animal market."
+		_clear_content_dots()
+		return
+	if boosterData.cards.is_empty():
+		icon.visible = true
+		icon.texture = load("res://assets/icons/random.png")
+		$Tooltip/Label.text = "Empty pack slot."
 		_clear_content_dots()
 		return
 	$Tooltip/Label.text = create_tooltip(boosterData)
@@ -178,6 +190,8 @@ func _layout_content_dots(element_ids: Array[int]) -> void:
 
 		var dot := Sprite2D.new()
 		dot.texture = CIRCLE_TEXTURE
+		# Duplicate so shared fill material state cannot leak across boosters/dots.
+		dot.material = CIRCLE_FILL_MATERIAL.duplicate()
 		dot.scale = Vector2.ONE * DOT_SCALE
 		dot.position = pos
 		dot.self_modulate = color

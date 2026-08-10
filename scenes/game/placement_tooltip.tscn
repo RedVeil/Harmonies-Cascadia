@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://32xqs6qfvsxg" path="res://scripts/game/placement_tooltip.gd" id="1_kjs7j"]
 [ext_resource type="Texture2D" uid="uid://dj0cp3fpxsnh2" path="res://assets/icons/hex_outline_thin.png" id="2_n22po"]
 [ext_resource type="Texture2D" uid="uid://dra047eyuxuba" path="res://assets/icons/hex.png" id="3_d75bn"]
-[ext_resource type="Texture2D" uid="uid://ba4wr1s7la27a" path="res://assets/elements/a0.png" id="4_n22po"]
+[ext_resource type="Texture2D" uid="uid://cjulobfnnfiaf" path="res://assets/elements/a0.png" id="4_n22po"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n22po"]
 bg_color = Color(0.9137255, 0.8352941, 0.7607843, 1)
@@ -218,12 +218,14 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_n22po")
 
 [node name="PointsLabel" type="Label" parent="Panel" unique_id=1925528481]
 layout_mode = 0
-offset_top = 110.0
+offset_top = 102.0
 offset_right = 100.0
-offset_bottom = 130.0
+offset_bottom = 128.0
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.4745098, 1)
-theme_override_font_sizes/font_size = 14
-text = "=15"
+theme_override_colors/font_outline_color = Color(0.5686275, 0.5176471, 0.4745098, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 18
+text = "15"
 horizontal_alignment = 1
 vertical_alignment = 1
 

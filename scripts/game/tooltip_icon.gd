@@ -18,10 +18,13 @@ func init(idx:int, parent: ScoringTooltip) -> void:
 ## ----- Interactions Logic ----- ##
 
 func _on_area_2d_mouse_entered() -> void:
+	UiPointerBlock.enter(self)
+	GameFeedback.play_hover_button()
 	self.self_modulate = Color.html("#918478")
 	$Sprite2D.self_modulate = Color.html("#f4dfca")
 
 func _on_area_2d_mouse_exited() -> void:
+	UiPointerBlock.exit(self)
 	self.self_modulate = Color.html("#f4dfca")
 	$Sprite2D.self_modulate = Color.html("#918478")
 
