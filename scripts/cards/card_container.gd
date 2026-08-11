@@ -15,6 +15,7 @@ var parent : Node
 var cards: Array[Node2D] = []
 var card_amount : int = 0
 var hover_card_id : int = -1
+var recycle_hover_id : int = -1
 var _relayout_queued : bool = false
 
 ## ----- Initialisation ----- ##
@@ -29,9 +30,17 @@ func select_card(id:int) -> void:
 	cards[id].select()
 	parent.select_card(id)
 
+func recycle_card(id: int) -> void:
+	if parent.has_method("recycle_card"):
+		parent.recycle_card(id)
+
 ## ----- Pass Data Downstream ----- ##
 
 func deselect_card(id) -> void:
+	if id == null or int(id) < 0 or int(id) >= cards.size():
+		return
+	if cards[id] == null:
+		return
 	cards[id].deselect()
 
 func add_card(card_data:CardData, id:int) -> void:
@@ -47,7 +56,12 @@ func add_card(card_data:CardData, id:int) -> void:
 
 func remove_card(id:int) -> void:
 	card_amount -= 1
-	cards[id].remove_card()
+	if hover_card_id == id:
+		hover_card_id = -1
+	if recycle_hover_id == id:
+		recycle_hover_id = -1
+	if cards[id] != null:
+		cards[id].remove_card()
 	cards[id] = null
 	
 	_queue_layout()
@@ -72,11 +86,35 @@ func hover_card(id:int) -> void:
 			cards[hover_card_id].handle_exit()
 			cards[id].handle_hover()
 			hover_card_id = id
+	_refresh_recycle_button(id)
 
 func exit_card(id:int) -> void:
+	# Keep hover while pointer moves onto this card's recycle X.
+	if recycle_hover_id == id:
+		return
 	if hover_card_id == id:
 		hover_card_id = -1
 	cards[id].handle_exit()
+	_refresh_recycle_button(id)
+
+func set_recycle_hover(id: int, hovering: bool) -> void:
+	if hovering:
+		recycle_hover_id = id
+		if hover_card_id != id and id >= 0 and id < cards.size() and cards[id] != null:
+			if hover_card_id != -1 and cards[hover_card_id] != null:
+				cards[hover_card_id].handle_exit()
+			hover_card_id = id
+			cards[id].handle_hover()
+	elif recycle_hover_id == id:
+		recycle_hover_id = -1
+	_refresh_recycle_button(id)
+
+func _refresh_recycle_button(id: int) -> void:
+	if id < 0 or id >= cards.size() or cards[id] == null:
+		return
+	var card := cards[id] as Card
+	if card != null and card.has_method("refresh_recycle_button"):
+		card.refresh_recycle_button(hover_card_id == id or recycle_hover_id == id)
 
 ## ----- Layout Logic ----- ##
 

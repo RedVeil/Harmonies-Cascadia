@@ -255,3 +255,50 @@ func reconstruct_path(end_coord: Vector2i, came_from: Dictionary) -> Array[Vecto
 	
 	path.reverse()
 	return path
+
+
+## ----- Endless Continue Apply Helpers ----- ##
+func apply_saved_state(scoring_state: Dictionary) -> void:
+	if scoring_state.is_empty():
+		return
+
+	# Rebuild active rules.
+	active_rules.clear()
+	var raw_rules = scoring_state.get("active_rules", {})
+	for k in raw_rules.keys():
+		var element_type := int(k)
+		var rule_id := int(raw_rules[k])
+		if rule_id < 0 or rule_id >= RuleCatalog.rules.size():
+			continue
+		var rule: ScoringRule = RuleCatalog.rules[rule_id]
+		if rule == null:
+			continue
+		active_rules[element_type] = rule
+		# Keep catalog state in sync (some UI/tooling may rely on it).
+		if element_type >= 0 and element_type < ElementCatalog.elements.size():
+			ElementCatalog.elements[element_type].active_scoring_rule = rule_id
+
+	# Restore per-group element scoring.
+	points_per_element_group.clear()
+	var raw_points = scoring_state.get("points_per_element_group", {})
+	if typeof(raw_points) == TYPE_DICTIONARY:
+		for kk in raw_points.keys():
+			points_per_element_group[int(kk)] = int(raw_points[kk])
+
+	# Restore already-placed animals counts.
+	placed_animals.clear()
+	var raw_animals = scoring_state.get("placed_animals", {})
+	if typeof(raw_animals) == TYPE_DICTIONARY:
+		for kk in raw_animals.keys():
+			placed_animals[int(kk)] = int(raw_animals[kk])
+
+	element_score = int(scoring_state.get("element_score", 0))
+	animal_score = int(scoring_state.get("animal_score", 0))
+	quest_score = int(scoring_state.get("quest_score", 0))
+	total_score = int(scoring_state.get("total_score", 0))
+
+	# Sync undo backups so an immediate undo after Continue behaves sensibly.
+	element_score_backup = element_score
+	animal_score_backup = animal_score
+	quest_score_backup = quest_score
+	points_per_element_group_backup = points_per_element_group.duplicate(true)

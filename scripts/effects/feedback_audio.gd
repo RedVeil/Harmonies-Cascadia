@@ -57,12 +57,15 @@ class_name FeedbackAudio
 var _players: Array[AudioStreamPlayer] = []
 var _next_player_index: int = 0
 var _music_player: AudioStreamPlayer
+var _user_music_linear: float = 0.5
+var _user_sfx_linear: float = 0.5
 
 ## ----- Initialisation ----- ##
 
 func _ready() -> void:
 	_build_player_pool()
 	_build_music_player()
+	apply_user_volumes()
 	start_background_music()
 
 ## ----- Player Pool ----- ##
@@ -90,6 +93,23 @@ func _acquire_sfx_player() -> AudioStreamPlayer:
 	_next_player_index = (_next_player_index + 1) % _players.size()
 	return _players[_next_player_index]
 
+## ----- User volume (0..1 linear) ----- ##
+
+func apply_user_volumes() -> void:
+	_user_music_linear = clampf(GameSettings.music_volume, 0.0, 1.0)
+	_user_sfx_linear = clampf(GameSettings.sfx_volume, 0.0, 1.0)
+	_refresh_music_volume()
+
+func _linear_gain_db(linear: float) -> float:
+	if linear <= 0.0001:
+		return -80.0
+	return linear_to_db(linear)
+
+func _refresh_music_volume() -> void:
+	if _music_player == null:
+		return
+	_music_player.volume_db = music_volume_db + _linear_gain_db(_user_music_linear)
+
 ## ----- Internal Playback ----- ##
 
 func _play_on_player(
@@ -100,10 +120,12 @@ func _play_on_player(
 ) -> void:
 	if stream == null or player == null:
 		return
+	if _user_sfx_linear <= 0.0001:
+		return
 	player.stop()
 	player.stream = stream
 	player.pitch_scale = pitch_scale
-	player.volume_db = volume_db + master_volume_offset_db
+	player.volume_db = volume_db + master_volume_offset_db + _linear_gain_db(_user_sfx_linear)
 	player.play()
 
 func play_stream(
@@ -229,7 +251,7 @@ func start_background_music() -> void:
 	_ensure_stream_loops(background_music)
 	_music_player.stream = background_music
 	_music_player.pitch_scale = 1.0
-	_music_player.volume_db = music_volume_db
+	_refresh_music_volume()
 	_music_player.play()
 
 func stop_background_music() -> void:

@@ -18,15 +18,15 @@ const POINTS_BUBBLE_SCALE := Vector3(1.2, 1.2, 1.2)
 
 @export_group("Place Celebrate Animation")
 @export var place_celebrate_sounds: Array[AudioStream] = []
-@export var placed_lift: float = 0.15
-@export var placed_scale_peak: float = 1.04
+@export var placed_lift: float = 0.42
+@export var placed_scale_peak: float = 1.085
 @export var placed_glow: float = 0.24
 @export var placed_rise_duration: float = 0.24
 @export var placed_settle_duration: float = 0.3
 
 @export_group("Contributor Celebrate Animation")
-@export var contributor_lift: float = 0.09
-@export var contributor_scale_peak: float = 1.022
+@export var contributor_lift: float = 0.16
+@export var contributor_scale_peak: float = 1.045
 @export var contributor_glow: float = 0.14
 @export var contributor_rise_duration: float = 0.2
 @export var contributor_settle_duration: float = 0.26
@@ -290,15 +290,16 @@ func show_points(points: int) -> void:
 	if _score_pop_playing:
 		return
 	hide_hover_info()
-	$Sprite3D/Label3D.text = "%d" % points
-	$Sprite3D.scale = POINTS_BUBBLE_SCALE
 	if points > 0:
+		$Sprite3D/Label3D.text = "+%d" % points
 		$Sprite3D.modulate = Color.GOLD
 	elif points < 0:
+		$Sprite3D/Label3D.text = "%d" % points
 		$Sprite3D.modulate = Color.CRIMSON
 	else:
+		$Sprite3D/Label3D.text = "%d" % points
 		$Sprite3D.modulate = Color.WHITE
-
+	$Sprite3D.scale = POINTS_BUBBLE_SCALE
 	$Sprite3D.show()
 
 
@@ -434,17 +435,23 @@ func play_animation(name: StringName, params: Dictionary) -> void:
 
 
 func kill_animations() -> void:
-	# Score pop runs to completion; hover/exit/preview resets must not cut it off.
+	# Place feedback (score pop / celebrate / outline) runs to completion;
+	# hover/exit/preview resets must not cut it off.
+	var spare_place_feedback := _awaiting_place_feedback
 	var keys := _feedback_tweens.keys()
 	for key in keys:
 		if key == &"score_pop":
+			continue
+		if spare_place_feedback and (key == &"celebrate" or key == &"outline"):
 			continue
 		var tween: Tween = _feedback_tweens[key]
 		if tween.is_valid():
 			tween.kill()
 		_feedback_tweens.erase(key)
-	_reset_celebrate_visuals()
-	_reset_outline_visuals()
+	if not spare_place_feedback or not _feedback_tweens.has(&"celebrate"):
+		_reset_celebrate_visuals()
+	if not spare_place_feedback or not _feedback_tweens.has(&"outline"):
+		_reset_outline_visuals()
 	_try_emit_place_feedback_finished()
 
 
@@ -480,6 +487,8 @@ func _animate_score_pop(points: int) -> void:
 	sprite.visible = true
 	sprite.position.y = SCORE_POP_BASE_Y
 	sprite.scale = POINTS_BUBBLE_SCALE
+	# Alpha-cut discards the bubble mid-fade while Label3D keeps drawing; disable for the pop.
+	sprite.alpha_cut = SpriteBase3D.ALPHA_CUT_DISABLED
 
 	var tween := FeedbackAnimHelper.create_tween(self, _feedback_tweens, &"score_pop", true)
 	tween.tween_property(sprite, "scale", Vector3.ONE * score_pop_peak_scale, score_pop_up_duration)\
@@ -574,6 +583,7 @@ func _reset_score_pop_visuals() -> void:
 	sprite.modulate = Color.WHITE
 	sprite.position.y = SCORE_POP_BASE_Y
 	sprite.scale = POINTS_BUBBLE_SCALE
+	sprite.alpha_cut = SpriteBase3D.ALPHA_CUT_DISCARD
 
 
 func _reset_outline_visuals() -> void:

@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://e4s0qxa8vcde"]
 
 [ext_resource type="Script" uid="uid://sqxpvfibv4ge" path="res://scripts/game/orchestrator.gd" id="1_62hif"]
-[ext_resource type="Script" path="res://scripts/game/placement_logic.gd" id="2_c8j3c"]
-[ext_resource type="Script" path="res://scripts/game/grouping_logic.gd" id="3_0ytbq"]
+[ext_resource type="Script" uid="uid://bgb8ewxgxnsuh" path="res://scripts/game/placement_logic.gd" id="2_c8j3c"]
+[ext_resource type="Script" uid="uid://kof2i7ejvrtd" path="res://scripts/game/grouping_logic.gd" id="3_0ytbq"]
 
 [node name="Orchestrator" type="Node" unique_id=1688505566]
 script = ExtResource("1_62hif")

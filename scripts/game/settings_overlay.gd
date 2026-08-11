@@ -21,6 +21,7 @@ func _on_close_mouse_entered() -> void:
 func open() -> void:
 	GameFeedback.play_open_popup()
 	if _settings_panel:
+		_settings_panel.reset_to_root()
 		_settings_panel.refresh()
 	show()
 

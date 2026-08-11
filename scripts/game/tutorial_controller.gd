@@ -148,6 +148,7 @@ func _hud_rect(target: String) -> Rect2:
 			node = hud_undo
 		"recycle":
 			node = hud_recycle
+			# Recycle is per-animal X on hand cards now.
 		"quests":
 			node = hud_quests
 	if node == null or not is_instance_valid(node):
@@ -158,9 +159,11 @@ func _hud_rect(target: String) -> Rect2:
 	match target:
 		"boosters":
 			origin += Vector2(0, -size.y)
-		"hand":
+		"hand", "recycle":
 			origin += Vector2(0, -size.y * 0.35)
-		"undo", "recycle":
+			if target == "recycle":
+				size = _hud_sizes.get("hand", size)
+		"undo":
 			origin += Vector2(-size.x * 0.5, -size.y * 0.5)
 		"score":
 			origin += Vector2(-20, -20)

@@ -1,5 +1,5 @@
 extends Node
-## Persistent graphics quality settings. Apply at boot and from SettingsOverlay.
+## Persistent graphics + audio settings. Apply at boot and from SettingsPanel.
 
 signal settings_changed
 
@@ -9,6 +9,7 @@ enum MsaaMode { OFF, X2, X4 }
 
 const SAVE_PATH := "user://graphics_settings.cfg"
 const SECTION := "graphics"
+const AUDIO_SECTION := "audio"
 
 var preset: Preset = Preset.HIGH
 var wind_enabled: bool = true
@@ -16,12 +17,15 @@ var clouds_enabled: bool = true
 var animal_motion: AnimalMotion = AnimalMotion.FULL_ROAM
 var msaa_mode: MsaaMode = MsaaMode.X4
 
+var music_volume: float = 0.5
+var sfx_volume: float = 0.5
+
 var _applying_ui_sync: bool = false
 
 
 func _ready() -> void:
 	load_from_disk()
-	# Defer so the root viewport exists.
+	# Defer so the root viewport / GameFeedback exist.
 	call_deferred("apply")
 
 
@@ -35,6 +39,8 @@ func load_from_disk() -> void:
 	clouds_enabled = bool(cfg.get_value(SECTION, "clouds_enabled", true))
 	animal_motion = int(cfg.get_value(SECTION, "animal_motion", AnimalMotion.FULL_ROAM)) as AnimalMotion
 	msaa_mode = int(cfg.get_value(SECTION, "msaa_mode", MsaaMode.X4)) as MsaaMode
+	music_volume = clampf(float(cfg.get_value(AUDIO_SECTION, "music_volume", 0.5)), 0.0, 1.0)
+	sfx_volume = clampf(float(cfg.get_value(AUDIO_SECTION, "sfx_volume", 0.5)), 0.0, 1.0)
 
 
 func save_to_disk() -> void:
@@ -44,6 +50,8 @@ func save_to_disk() -> void:
 	cfg.set_value(SECTION, "clouds_enabled", clouds_enabled)
 	cfg.set_value(SECTION, "animal_motion", int(animal_motion))
 	cfg.set_value(SECTION, "msaa_mode", int(msaa_mode))
+	cfg.set_value(AUDIO_SECTION, "music_volume", music_volume)
+	cfg.set_value(AUDIO_SECTION, "sfx_volume", sfx_volume)
 	cfg.save(SAVE_PATH)
 
 
@@ -116,6 +124,30 @@ func set_msaa_mode(value: MsaaMode) -> void:
 	_mark_custom_and_apply()
 
 
+func set_music_volume(value: float) -> void:
+	var clamped := clampf(value, 0.0, 1.0)
+	if _applying_ui_sync:
+		music_volume = clamped
+		return
+	if is_equal_approx(music_volume, clamped):
+		return
+	music_volume = clamped
+	apply_audio()
+	save_to_disk()
+
+
+func set_sfx_volume(value: float) -> void:
+	var clamped := clampf(value, 0.0, 1.0)
+	if _applying_ui_sync:
+		sfx_volume = clamped
+		return
+	if is_equal_approx(sfx_volume, clamped):
+		return
+	sfx_volume = clamped
+	apply_audio()
+	save_to_disk()
+
+
 ## Used by SettingsOverlay when refreshing controls from stored state.
 func begin_ui_sync() -> void:
 	_applying_ui_sync = true
@@ -139,7 +171,13 @@ func apply() -> void:
 	WindControl.set_wind_enabled(wind_enabled)
 	WindControl.set_cloud_enabled(clouds_enabled)
 	_apply_msaa()
+	apply_audio()
 	settings_changed.emit()
+
+
+func apply_audio() -> void:
+	if GameFeedback != null and GameFeedback.has_method("apply_user_volumes"):
+		GameFeedback.apply_user_volumes()
 
 
 func _apply_msaa() -> void:

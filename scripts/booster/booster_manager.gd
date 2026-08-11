@@ -4,13 +4,13 @@ class_name BoosterManager
 @onready var booster_container : BoosterContainer = $booster_container
 
 @export var orchestrator : Orchestrator
-@export var animal_market : AnimalMarketOverlay
+@export var animal_market : AnimalMarketPanel
 
 @export var booster_limit: int = 0
 @export var boosters_per_reroll: int = 3
 @export var random_secondary_chance: float = 50.0
 @export var guaranteed_animal_boosters: int = 0
-@export var animal_market_offer_count: int = 4
+@export var animal_market_offer_count: int = 3
 @export var mixed_pack_card_count: int = 4
 ## Weights for elements 1–5 (Forest, Field, Mountain, River, Wetland). Sum should be ~100.
 @export var mixed_element_weights: Array[float] = [30.0, 20.0, 18.0, 22.0, 10.0]
@@ -25,10 +25,11 @@ var pending_elements: int = 0
 var elements_played: int = 0
 var options_ready: bool = true
 
-var reroll_charges: int = 1
-var buys_since_reroll: int = 0
+## 0 = reroll ready; >0 = pack/animal takes remaining until ready again.
+var booster_reroll_progress: Array[int] = []
+var market_reroll_progress: Array[int] = []
 
-## One new animal take per booster pack; starts ready before the first pack.
+## One animal take after each finished booster; ready before the first pack.
 var market_buys_remaining: int = 1
 var _market_offers: Array[CardData] = []
 var _bought_animal_ids: Dictionary = {}
@@ -45,14 +46,17 @@ func _ready() -> void:
 	_rng = GameSession.make_rng("booster")
 	_load_mixed_element_weights_from_catalog()
 	
-	boosters.resize(booster_limit + 2)
+	boosters.resize(booster_limit)
+	_init_reroll_progress()
 	_guaranteed_animals_remaining = guaranteed_animal_boosters
 	
 	booster_container.init(self)
+	if animal_market == null and has_node("AnimalMarketPanel"):
+		animal_market = $AnimalMarketPanel as AnimalMarketPanel
 	if animal_market:
 		animal_market.buy_pressed.connect(buy_market_animal)
-		animal_market.close_pressed.connect(close_animal_market)
-		animal_market.reroll_pressed.connect(reroll_animal_market)
+		animal_market.toggle_pressed.connect(toggle_animal_market)
+		animal_market.reroll_pressed.connect(reroll_market_slot)
 
 	if GameSession.is_puzzle():
 		_init_puzzle_queues()
@@ -62,10 +66,19 @@ func _ready() -> void:
 		_ensure_market_offers()
 		for i in range(booster_limit):
 			createBooster(i)
-	createBooster(4)
 	
 	_refresh_option_ui()
 	_refresh_reroll_ui()
+
+func _init_reroll_progress() -> void:
+	booster_reroll_progress.clear()
+	booster_reroll_progress.resize(booster_limit)
+	for i in booster_limit:
+		booster_reroll_progress[i] = 0
+	market_reroll_progress.clear()
+	market_reroll_progress.resize(animal_market_offer_count)
+	for i in animal_market_offer_count:
+		market_reroll_progress[i] = 0
 
 ## ----- Pass Data Upstream ----- ##
 
@@ -76,14 +89,7 @@ func select_booster(id: int) -> void:
 		return
 
 	if id == 4:
-		open_animal_market()
-		return
-
-	if id == 3:
-		if orchestrator and orchestrator.tutorial_bridge.active \
-				and not orchestrator.tutorial_allows("reroll"):
-			return
-		_try_reroll()
+		toggle_animal_market()
 		return
 
 	if not options_ready:
@@ -105,14 +111,10 @@ func select_booster(id: int) -> void:
 	pending_elements = _count_element_cards(booster)
 	elements_played = 0
 	options_ready = pending_elements <= 0
-	market_buys_remaining = 1
+	if options_ready:
+		market_buys_remaining = 1
 
-	# Only refill shared refresh charge after it has been spent.
-	if reroll_charges <= 0:
-		buys_since_reroll += 1
-		if buys_since_reroll >= boosters_per_reroll:
-			reroll_charges += 1
-			buys_since_reroll = 0
+	_tick_reroll_cooldowns()
 
 	createBooster(id)
 	_refresh_option_ui()
@@ -121,19 +123,64 @@ func select_booster(id: int) -> void:
 	if orchestrator:
 		orchestrator.tutorial_bridge.notify("booster_taken", {"booster_id": id})
 
-func _try_reroll() -> void:
-	if not _spend_reroll_charge():
-		return
-	for i in range(booster_limit):
-		createBooster(i)
-	_refresh_reroll_ui()
-
-func _spend_reroll_charge() -> bool:
-	if reroll_charges <= 0:
+func can_reroll_booster(id: int) -> bool:
+	if id < 0 or id >= booster_reroll_progress.size():
 		return false
-	reroll_charges -= 1
-	buys_since_reroll = 0
-	return true
+	return booster_reroll_progress[id] <= 0
+
+func can_reroll_market(offer_index: int) -> bool:
+	if offer_index < 0 or offer_index >= market_reroll_progress.size():
+		return false
+	return market_reroll_progress[offer_index] <= 0
+
+func reroll_booster_slot(id: int) -> void:
+	if paused:
+		return
+	if orchestrator and orchestrator.tutorial_bridge.active \
+			and not orchestrator.tutorial_allows("reroll"):
+		return
+	if not can_reroll_booster(id):
+		return
+	if id < 0 or id >= booster_limit:
+		return
+	createBooster(id)
+	booster_reroll_progress[id] = maxi(boosters_per_reroll, 1)
+	_refresh_option_ui()
+	_refresh_reroll_ui()
+	if orchestrator:
+		orchestrator.tutorial_bridge.notify("booster_rerolled", {"booster_id": id})
+
+func reroll_market_slot(offer_index: int) -> void:
+	if paused:
+		return
+	if animal_market == null:
+		return
+	if orchestrator and orchestrator.tutorial_bridge.active \
+			and not orchestrator.tutorial_allows("reroll"):
+		return
+	if not can_reroll_market(offer_index):
+		return
+	if offer_index < 0 or offer_index >= _market_offers.size():
+		return
+	var replacement: CardData
+	if GameSession.is_puzzle():
+		replacement = _dequeue_puzzle_animal()
+	else:
+		replacement = _generate_market_offer_at(offer_index, _market_used_ids(offer_index))
+	_market_offers[offer_index] = replacement
+	animal_market.replace_offer(offer_index, replacement)
+	if offer_index < market_reroll_progress.size():
+		market_reroll_progress[offer_index] = maxi(boosters_per_reroll, 1)
+	_refresh_reroll_ui()
+	_refresh_market_buy_ui()
+
+func _tick_reroll_cooldowns() -> void:
+	for i in booster_reroll_progress.size():
+		if booster_reroll_progress[i] > 0:
+			booster_reroll_progress[i] -= 1
+	for i in market_reroll_progress.size():
+		if market_reroll_progress[i] > 0:
+			market_reroll_progress[i] -= 1
 
 ## ----- Play / Undo Progress ----- ##
 
@@ -143,7 +190,9 @@ func notify_element_played() -> void:
 	elements_played = mini(elements_played + 1, pending_elements)
 	if elements_played >= pending_elements:
 		options_ready = true
+		market_buys_remaining = 1
 	_refresh_option_ui()
+	_refresh_market_buy_ui()
 
 func notify_element_undone() -> void:
 	if pending_elements <= 0:
@@ -152,6 +201,7 @@ func notify_element_undone() -> void:
 	if elements_played < pending_elements:
 		options_ready = false
 	_refresh_option_ui()
+	_refresh_market_buy_ui()
 
 func _count_element_cards(booster: BoosterData) -> int:
 	var count := 0
@@ -165,13 +215,6 @@ func _option_progress() -> float:
 		return 1.0
 	return float(elements_played) / float(pending_elements)
 
-func _reroll_progress() -> float:
-	if reroll_charges > 0:
-		return 1.0
-	if boosters_per_reroll <= 0:
-		return 1.0
-	return float(buys_since_reroll) / float(boosters_per_reroll)
-
 func _refresh_option_ui() -> void:
 	var progress := _option_progress()
 	booster_container.set_options_progress(progress)
@@ -180,6 +223,7 @@ func _refresh_option_ui() -> void:
 		_disable_empty_option_slots()
 	else:
 		booster_container.disable_options()
+	_refresh_reroll_ui()
 
 
 func _disable_empty_option_slots() -> void:
@@ -189,27 +233,34 @@ func _disable_empty_option_slots() -> void:
 			booster_container.boosters[i].disable()
 
 func _refresh_reroll_ui() -> void:
-	var progress := _reroll_progress()
-	var has_charge := reroll_charges > 0
-	booster_container.set_reroll_progress(progress)
-	booster_container.set_animal_market_progress(1.0)
-	booster_container.enable_animal_market()
-	if has_charge:
-		booster_container.enable_reroll()
-	else:
-		booster_container.disable_reroll()
-	if animal_market and animal_market.is_node_ready() and animal_market.visible:
-		animal_market.set_reroll_enabled(has_charge)
+	for i in range(mini(booster_limit, booster_container.boosters.size())):
+		booster_container.set_booster_reroll_ready(i, can_reroll_booster(i))
+	if animal_market and animal_market.is_node_ready():
+		var flags: Array[bool] = []
+		for i in animal_market_offer_count:
+			flags.append(can_reroll_market(i))
+		animal_market.set_reroll_ready_flags(flags)
 
 ## ----- Animal Market ----- ##
+
+func toggle_animal_market() -> void:
+	if paused:
+		return
+	if orchestrator and not orchestrator.tutorial_allows_booster(4):
+		return
+	if animal_market != null and animal_market.is_open():
+		close_animal_market()
+	else:
+		open_animal_market()
 
 func open_animal_market() -> void:
 	if animal_market == null:
 		return
+	if orchestrator and not orchestrator.tutorial_allows_booster(4):
+		return
 	_ensure_market_offers()
-	orchestrator.pause_cards()
 	animal_market.open(_market_offers)
-	animal_market.set_reroll_enabled(reroll_charges > 0)
+	_refresh_reroll_ui()
 	_refresh_market_buy_ui()
 
 func buy_market_animal(offer_index: int) -> void:
@@ -239,29 +290,19 @@ func buy_market_animal(offer_index: int) -> void:
 	_market_offers[offer_index] = replacement
 	if animal_market:
 		animal_market.replace_offer(offer_index, replacement)
+	_tick_reroll_cooldowns()
+	_refresh_reroll_ui()
 	_refresh_market_buy_ui()
 	if orchestrator:
 		orchestrator.tutorial_bridge.notify("animal_bought", {"animal_id": bought.id})
 
-func reroll_animal_market() -> void:
-	if animal_market == null:
-		return
-	if not _spend_reroll_charge():
-		return
-	if GameSession.is_puzzle():
-		_market_offers = _fill_market_from_puzzle_queue()
-	else:
-		_market_offers = _generate_market_offers()
-	animal_market.refresh_offers(_market_offers)
-	_refresh_reroll_ui()
-	_refresh_market_buy_ui()
-
 func close_animal_market() -> void:
 	if animal_market:
 		animal_market.close()
-	orchestrator.unpause_cards()
 
 func _can_buy_market_offer(offer: CardData) -> bool:
+	if not options_ready:
+		return false
 	if market_buys_remaining <= 0:
 		return false
 	if not _is_valid_market_offer(offer):
@@ -269,8 +310,10 @@ func _can_buy_market_offer(offer: CardData) -> bool:
 	return orchestrator.card_manager.can_accept_animal(offer)
 
 func _market_status_text() -> String:
+	if not options_ready:
+		return "Finish the current booster first"
 	if market_buys_remaining <= 0:
-		return "Buy another booster to take an animal"
+		return "Finish another booster to take an animal"
 	var any_valid := false
 	var any_accept := false
 	for offer in _market_offers:
@@ -287,17 +330,17 @@ func _market_status_text() -> String:
 func _refresh_market_buy_ui() -> void:
 	if animal_market == null or not animal_market.is_node_ready():
 		return
-	if not animal_market.visible:
+	if not animal_market.is_open():
 		return
 	var can_buy: Array[bool] = []
 	for offer in _market_offers:
 		can_buy.append(_can_buy_market_offer(offer))
-	var disabled_label := "Wait" if market_buys_remaining <= 0 else "Full"
+	var disabled_label := "Full" if options_ready and market_buys_remaining > 0 else "Wait"
 	animal_market.set_buys_enabled(can_buy, disabled_label)
 	animal_market.set_status_text(_market_status_text())
 
 func _ensure_market_offers() -> void:
-	if _market_offers.size() < animal_market_offer_count:
+	if _market_offers.size() != animal_market_offer_count:
 		_market_offers = _generate_market_offers()
 
 func _is_valid_market_offer(offer: CardData) -> bool:
@@ -348,12 +391,6 @@ func _generate_market_offers() -> Array[CardData]:
 
 func createBooster(idx: int) -> void:
 	var booster = BoosterData.new()
-	if idx == 4:
-		booster.type = 7
-		boosters[idx] = booster
-		booster_container.set_booster_visuals(idx, booster)
-		return
-
 	if GameSession.is_puzzle():
 		boosters[idx] = _dequeue_puzzle_booster()
 		booster_container.set_booster_visuals(idx, boosters[idx])
@@ -552,3 +589,124 @@ func choose_animal(element: int) -> CardData:
 
 func _pick_random(options: Array) -> Variant:
 	return options[_rng.randi_range(0, options.size() - 1)]
+
+
+## ----- Endless Continue Apply Helpers ----- ##
+func apply_saved_state(booster_state: Dictionary) -> void:
+	if booster_state.is_empty():
+		return
+
+	# Paused state gates input; Orchestrator also restores `cards_paused`.
+	paused = bool(booster_state.get("paused", paused))
+
+	# Restore booster cards.
+	var saved_boosters: Array = booster_state.get("boosters", [])
+	for i in range(booster_limit):
+		var entry = saved_boosters[i] if i < saved_boosters.size() else null
+		if entry == null:
+			# Booster visuals: fall back to a safe empty BoosterData.
+			var empty := BoosterData.new()
+			empty.type = 0
+			empty.booster_points = 0
+			empty.map_points = 0
+			empty.quest_ids = []
+			empty.cards = []
+			boosters[i] = empty
+			booster_container.set_booster_visuals(i, empty)
+			continue
+
+		var b := BoosterData.new()
+		b.type = int(entry.get("type", 0))
+		b.booster_points = int(entry.get("booster_points", 0))
+		b.map_points = int(entry.get("map_points", 0))
+		b.quest_ids = []
+		var qids: Array = entry.get("quest_ids", [])
+		if typeof(qids) == TYPE_ARRAY:
+			for qid in qids:
+				b.quest_ids.append(int(qid))
+
+		b.cards = []
+		var saved_cards: Array = entry.get("cards", [])
+		if typeof(saved_cards) == TYPE_ARRAY:
+			for c_entry in saved_cards:
+				if c_entry == null or typeof(c_entry) != TYPE_DICTIONARY:
+					continue
+				var ctype := int(c_entry.get("type", CardData.CARD_TYPE.ELEMENT))
+				var cid := int(c_entry.get("id", 0))
+				var amt := int(c_entry.get("amount", 0))
+
+				var template := _find_card_template(ctype, cid)
+				if template == null:
+					continue
+				var card := template.duplicate(true) as CardData
+				card.amount = amt
+				b.cards.append(card)
+
+		boosters[i] = b
+		booster_container.set_booster_visuals(i, b)
+
+	# Restore reroll / market state arrays.
+	booster_reroll_progress.assign(booster_state.get("booster_reroll_progress", booster_reroll_progress))
+	market_reroll_progress.assign(booster_state.get("market_reroll_progress", market_reroll_progress))
+
+	# Ensure arrays have expected lengths.
+	booster_reroll_progress.resize(booster_limit)
+	booster_reroll_progress.fill(0)
+	if market_reroll_progress.size() != animal_market_offer_count:
+		market_reroll_progress.resize(animal_market_offer_count)
+	market_reroll_progress.fill(0)
+
+	market_buys_remaining = int(booster_state.get("market_buys_remaining", market_buys_remaining))
+	options_ready = bool(booster_state.get("options_ready", options_ready))
+	pending_elements = int(booster_state.get("pending_elements", pending_elements))
+	elements_played = int(booster_state.get("elements_played", elements_played))
+
+	# Restore market offers + bought tracking.
+	var saved_offers: Array = booster_state.get("market_offers", [])
+	_market_offers = []
+	if typeof(saved_offers) == TYPE_ARRAY:
+		for o_entry in saved_offers:
+			if o_entry == null or typeof(o_entry) != TYPE_DICTIONARY:
+				_market_offers.append(null)
+				continue
+			var ctype := int(o_entry.get("type", CardData.CARD_TYPE.ELEMENT))
+			var cid := int(o_entry.get("id", 0))
+			var amt := int(o_entry.get("amount", 0))
+			var template := _find_card_template(ctype, cid)
+			if template == null:
+				_market_offers.append(null)
+				continue
+			var card := template.duplicate(true) as CardData
+			card.amount = amt
+			_market_offers.append(card)
+
+	_bought_animal_ids = {}
+	var saved_bought: Dictionary = booster_state.get("bought_animal_ids", {})
+	if typeof(saved_bought) == TYPE_DICTIONARY:
+		for k in saved_bought.keys():
+			_bought_animal_ids[int(k)] = true
+
+	# Restore paused-time visuals for marker timers.
+	_refresh_option_ui()
+	_refresh_reroll_ui()
+	_refresh_market_buy_ui()
+
+	# If market panel is open, update it immediately.
+	if animal_market and animal_market.is_node_ready():
+		animal_market.refresh_offers(_market_offers)
+
+
+func _find_card_template(card_type: int, card_id: int) -> CardData:
+	if card_type == CardData.CARD_TYPE.ELEMENT:
+		for c in CardCatalog.elements:
+			if c != null and c.id == card_id:
+				return c
+		return null
+
+	if card_type == CardData.CARD_TYPE.ANIMAL:
+		for c in CardCatalog.animals:
+			if c != null and c.id == card_id:
+				return c
+		return null
+
+	return null

@@ -7,9 +7,21 @@
 [ext_resource type="Shader" uid="uid://8wow5a7grc78" path="res://assets/shader/cards/circular_progress_bar.gdshader" id="5_prog"]
 [ext_resource type="Material" uid="uid://cn853ytgoxks6" path="res://assets/ui/sdf_circle_fill.tres" id="6_fill"]
 [ext_resource type="Texture2D" uid="uid://dyhhergikys8s" path="res://assets/ui/sdf_quad_circle.tres" id="7_quad"]
+[ext_resource type="Material" uid="uid://dr4lo0ifvqtd4" path="res://assets/ui/sdf_card_frame.tres" id="8_frame"]
+[ext_resource type="Material" path="res://assets/ui/sdf_card_shadow.tres" id="9_shadow"]
+[ext_resource type="FontFile" uid="uid://cjgc8hhsb6xtr" path="res://assets/fonts/Dangrek-Regular.ttf" id="10_font"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_430vb"]
-radius = 20.0
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pack"]
+size = Vector2(78, 140)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_reroll"]
+radius = 14.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_reroll_shadow"]
+shader = ExtResource("3_4cwg5")
+shader_parameter/shadow_color = Color(0, 0, 0, 0.28)
+shader_parameter/blur_size = 16.0
+shader_parameter/radius = 0.85
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_progress"]
 shader = ExtResource("5_prog")
@@ -32,20 +44,6 @@ shader_parameter/shadow_color = Color(0, 0, 0, 0.1254902)
 shader_parameter/blur_size = 20.0
 shader_parameter/radius = 0.85
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_430vb"]
-bg_color = Color(0.95686275, 0.8745098, 0.7921569, 1)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
-shadow_color = Color(0, 0, 0, 0.1254902)
-shadow_size = 4
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4cwg5"]
-bg_color = Color(0.95686275, 0.8745098, 0.7921569, 1)
-shadow_color = Color(0, 0, 0, 0.1254902)
-shadow_size = 4
-
 [node name="Booster" type="Area2D" unique_id=321030438]
 monitorable = false
 priority = 1
@@ -54,15 +52,107 @@ script = ExtResource("1_r28fy")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=800364982]
 visible = false
 z_index = 1
-shape = SubResource("CircleShape2D_430vb")
+shape = SubResource("RectangleShape2D_pack")
+
+[node name="StackVisuals" type="Node2D" parent="." unique_id=1441552771]
+scale = Vector2(0.75, 0.75)
+
+[node name="Shadow" type="TextureRect" parent="StackVisuals" unique_id=1173635571]
+modulate = Color(0, 0, 0, 0.28)
+z_index = -1
+material = ExtResource("9_shadow")
+offset_left = -44.0
+offset_top = -78.0
+offset_right = 58.0
+offset_bottom = 98.0
+mouse_filter = 2
+texture = ExtResource("7_quad")
+expand_mode = 1
+
+[node name="Frame3" type="TextureRect" parent="StackVisuals" unique_id=1028962242]
+visible = false
+material = ExtResource("8_frame")
+offset_left = -50.0
+offset_top = -110.0
+offset_right = 50.0
+offset_bottom = 64.0
+mouse_filter = 2
+texture = ExtResource("7_quad")
+expand_mode = 1
+
+[node name="Frame2" type="TextureRect" parent="StackVisuals" unique_id=1265954754]
+visible = false
+material = ExtResource("8_frame")
+offset_left = -50.0
+offset_top = -98.0
+offset_right = 50.0
+offset_bottom = 76.0
+mouse_filter = 2
+texture = ExtResource("7_quad")
+expand_mode = 1
+
+[node name="Frame" type="TextureRect" parent="StackVisuals" unique_id=777573626]
+material = ExtResource("8_frame")
+offset_left = -50.0
+offset_top = -86.0
+offset_right = 50.0
+offset_bottom = 88.0
+mouse_filter = 2
+texture = ExtResource("7_quad")
+expand_mode = 1
+
+[node name="ElementIcon" type="TextureRect" parent="StackVisuals" unique_id=1290417604]
+z_index = 1
+offset_left = -32.0
+offset_top = -48.0
+offset_right = 32.0
+offset_bottom = 16.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HoverButton" type="Area2D" parent="StackVisuals" unique_id=1583002112]
+z_index = 2
+position = Vector2(0, -86)
+monitorable = false
+priority = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StackVisuals/HoverButton" unique_id=1889437002]
+shape = SubResource("CircleShape2D_reroll")
+
+[node name="Shadow" type="Sprite2D" parent="StackVisuals/HoverButton" unique_id=799092591]
+z_index = -1
+material = SubResource("ShaderMaterial_reroll_shadow")
+position = Vector2(1.5, 2.5)
+scale = Vector2(0.085, 0.085)
+texture = ExtResource("2_430vb")
+
+[node name="Circle" type="Sprite2D" parent="StackVisuals/HoverButton" unique_id=2100593392]
+material = ExtResource("6_fill")
+scale = Vector2(0.07, 0.07)
+texture = ExtResource("2_430vb")
+
+[node name="Label" type="Label" parent="StackVisuals/HoverButton" unique_id=296435737]
+offset_left = -12.666668
+offset_top = -16.333336
+offset_right = 15.333332
+offset_bottom = 16.666664
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_fonts/font = ExtResource("10_font")
+theme_override_font_sizes/font_size = 18
+text = "X"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="ProgressBar" type="Sprite2D" parent="." unique_id=1888000001]
+visible = false
 z_index = -1
 material = SubResource("ShaderMaterial_progress")
 scale = Vector2(0.135, 0.135)
 texture = ExtResource("7_quad")
 
 [node name="background" type="Sprite2D" parent="." unique_id=869127976]
+visible = false
 material = ExtResource("6_fill")
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("2_430vb")
@@ -75,42 +165,14 @@ scale = Vector2(1.5, 1.5)
 texture = ExtResource("2_430vb")
 
 [node name="icon" type="Sprite2D" parent="." unique_id=1938653007]
+visible = false
 self_modulate = Color(0.5686275, 0.5176471, 0.47058824, 1)
 scale = Vector2(0.28, 0.28)
 texture = ExtResource("4_430vb")
 
-[node name="ContentDots" type="Node2D" parent="." unique_id=1888000002]
-z_index = 1
-
-[node name="Tooltip" type="Panel" parent="." unique_id=783815431]
-visible = false
-offset_left = -40.0
-offset_top = -110.0
-offset_right = 160.0
-offset_bottom = -42.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_430vb")
-
-[node name="Panel" type="Panel" parent="Tooltip" unique_id=1422591998]
-show_behind_parent = true
-layout_mode = 0
-offset_left = 40.0
-offset_top = 53.0
-offset_right = 60.0
-offset_bottom = 73.0
-rotation = 0.7853982
-theme_override_styles/panel = SubResource("StyleBoxFlat_4cwg5")
-
-[node name="Label" type="Label" parent="Tooltip" unique_id=1041448701]
-layout_mode = 0
-offset_left = 5.0
-offset_right = 196.0
-offset_bottom = 67.0
-theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.4745098, 1)
-theme_override_font_sizes/font_size = 12
-text = "Buy this booster to add its cards to your hand."
-vertical_alignment = 1
-autowrap_mode = 2
-
 [connection signal="input_event" from="." to="." method="_on_input_event"]
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
+[connection signal="input_event" from="StackVisuals/HoverButton" to="." method="_on_reroll_input_event"]
+[connection signal="mouse_entered" from="StackVisuals/HoverButton" to="." method="_on_reroll_mouse_entered"]
+[connection signal="mouse_exited" from="StackVisuals/HoverButton" to="." method="_on_reroll_mouse_exited"]

@@ -44,3 +44,6 @@ func start_background_music() -> void:
 
 func stop_background_music() -> void:
 	_audio().stop_background_music()
+
+func apply_user_volumes() -> void:
+	_audio().apply_user_volumes()

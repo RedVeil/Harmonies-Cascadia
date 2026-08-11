@@ -1,10 +1,13 @@
 extends Area2D
 class_name Booster
 
-const CIRCLE_TEXTURE := preload("res://assets/icons/circle.png")
-const CIRCLE_FILL_MATERIAL := preload("res://assets/ui/sdf_circle_fill.tres")
-const DOT_SCALE := 0.022
-const DOT_RING_RADIUS := 10.0
+const FRAME_MATERIAL := preload("res://assets/ui/sdf_card_frame.tres")
+const STACK_SCALE := 0.75 # 75% of hand-card size
+const HOVER_LIFT_PX := 14.0
+const HOVER_TWEEN_SEC := 0.12
+const DESATURATE_AMOUNT := 0.45
+var FALLBACK_COLOR := Color(0.5686275, 0.5176471, 0.47058824, 1.0)
+var COLOR_BROWN := Color.html("#918478")
 
 @export var id: int = 0
 
@@ -12,43 +15,95 @@ const DOT_RING_RADIUS := 10.0
 @onready var background: Sprite2D = $background
 @onready var collision: CollisionShape2D = $CollisionShape2D
 @onready var progress_sprite: Sprite2D = $ProgressBar
-@onready var content_dots: Node2D = $ContentDots
+@onready var stack_visuals: Node2D = $StackVisuals
+@onready var frame: TextureRect = $StackVisuals/Frame
+@onready var frame_2: TextureRect = $StackVisuals/Frame2
+@onready var frame_3: TextureRect = $StackVisuals/Frame3
+@onready var shadow: TextureRect = $StackVisuals/Shadow
+@onready var element_icon: TextureRect = $StackVisuals/ElementIcon
+@onready var hover_button: Area2D = $StackVisuals/HoverButton
+@onready var hover_button_circle: Sprite2D = $StackVisuals/HoverButton/Circle
+@onready var hover_button_label: Label = $StackVisuals/HoverButton/Label
 
 var container: BoosterContainer
 var enabled: bool = true
-
 var is_hovered: bool = false
-var timer: float = 0.5
+var _reroll_ready: bool = true
+var _reroll_hovered: bool = false
+
+var _stack_frames: Array[TextureRect] = []
+var _base_body_colors: Array[Color] = []
+var _hover_tween: Tween
+var _stack_base_y: float = 0.0
 
 ## ----- Initialisation ----- ##
 
 func _ready() -> void:
 	input_pickable = true
+	_stack_frames = [frame, frame_2, frame_3]
+	_stack_base_y = stack_visuals.position.y
 	if progress_sprite and progress_sprite.material:
 		progress_sprite.material = progress_sprite.material.duplicate()
-	if id == 3:
-		$Tooltip/Label.text = "Refresh the three booster options (shares cooldown with market refresh)."
-	elif id == 4:
+	_configure_mode_chrome()
+	if id == 4:
 		icon.texture = load("res://assets/icons/animal.png")
-		$Tooltip/Label.text = "Open the animal market."
 
 func init(parent: BoosterContainer) -> void:
 	container = parent
+
+func is_stack_mode() -> bool:
+	return id < 3
+
+func set_reroll_ready(ready: bool) -> void:
+	_reroll_ready = ready
+	_apply_hover_visuals()
+
+func _configure_mode_chrome() -> void:
+	if is_stack_mode():
+		stack_visuals.visible = true
+		background.visible = false
+		icon.visible = false
+		progress_sprite.visible = false
+		stack_visuals.scale = Vector2(STACK_SCALE, STACK_SCALE)
+		var rect := RectangleShape2D.new()
+		# Hand card is 100x174; packs are STACK_SCALE of that, plus peek.
+		rect.size = Vector2(100.0 * STACK_SCALE + 3.0, 174.0 * STACK_SCALE + 20.0)
+		collision.shape = rect
+		# Origin at card center so the bottom half sits off-screen.
+		collision.position = Vector2(0, -8)
+	else:
+		stack_visuals.visible = false
+		background.visible = false
+		icon.visible = false
+		progress_sprite.visible = false
+		hover_button.visible = false
+		var circle := CircleShape2D.new()
+		circle.radius = 20.0
+		collision.shape = circle
+		collision.position = Vector2.ZERO
 
 ## ----- State Logic ----- ##
 
 func enable() -> void:
 	enabled = true
-	content_dots.modulate = Color.WHITE
+	if is_stack_mode():
+		_apply_stack_saturation(false)
 	_apply_hover_visuals()
 
 func disable() -> void:
 	enabled = false
-	background.self_modulate = Color.WHITE
-	icon.self_modulate = Color.GRAY
-	content_dots.modulate = Color(1, 1, 1, 0.45)
+	if is_stack_mode():
+		_kill_hover_tween()
+		stack_visuals.position.y = _stack_base_y
+		hover_button.visible = false
+		_apply_stack_saturation(true)
+	else:
+		background.self_modulate = Color.WHITE
+		icon.self_modulate = Color.GRAY
 
 func set_progress(value: float) -> void:
+	if is_stack_mode():
+		return
 	if progress_sprite == null or progress_sprite.material == null:
 		return
 	var mat := progress_sprite.material as ShaderMaterial
@@ -58,27 +113,21 @@ func set_progress(value: float) -> void:
 
 ## ----- Interactions Logic ----- ##
 
-func _process(delta: float) -> void:
-	if is_hovered:
-		timer -= delta
-		if timer <= 0.0:
-			$Tooltip.show()
-
 func _on_mouse_entered() -> void:
 	UiPointerBlock.enter(self)
 	GameFeedback.play_hover_button()
 	is_hovered = true
-	timer = 0.5
 	_apply_hover_visuals()
 
 func _on_mouse_exited() -> void:
 	UiPointerBlock.exit(self)
 	is_hovered = false
-	timer = 0.5
-	$Tooltip.hide()
 	_apply_hover_visuals()
 
 func _apply_hover_visuals() -> void:
+	if is_stack_mode():
+		_apply_stack_hover_visuals()
+		return
 	if not enabled:
 		background.self_modulate = Color.WHITE
 		icon.self_modulate = Color.GRAY
@@ -90,109 +139,171 @@ func _apply_hover_visuals() -> void:
 		background.self_modulate = Color.WHITE
 		icon.self_modulate = Color.html("#918478")
 
+func _apply_stack_hover_visuals() -> void:
+	var show_x := enabled and _reroll_ready and (is_hovered or _reroll_hovered)
+	hover_button.visible = show_x
+	hover_button.input_pickable = show_x
+	if not enabled or (not is_hovered and not _reroll_hovered):
+		_tween_stack_y(_stack_base_y)
+		return
+	_tween_stack_y(_stack_base_y - HOVER_LIFT_PX)
+
+func _tween_stack_y(target_y: float) -> void:
+	_kill_hover_tween()
+	_hover_tween = create_tween()
+	_hover_tween.tween_property(stack_visuals, "position:y", target_y, HOVER_TWEEN_SEC) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+func _kill_hover_tween() -> void:
+	if _hover_tween and _hover_tween.is_valid():
+		_hover_tween.kill()
+	_hover_tween = null
 
 func _on_input_event(
 	viewport: Viewport,
 	event: InputEvent,
-	shape_idx: int
+	_shape_idx: int
 ) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed and enabled:
+			if _reroll_hovered:
+				return
 			GameFeedback.play_click_button()
 			container.select_booster(id)
 			viewport.set_input_as_handled()
 
+func _on_reroll_input_event(
+	viewport: Viewport,
+	event: InputEvent,
+	_shape_idx: int
+) -> void:
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			if not enabled or not _reroll_ready:
+				return
+			GameFeedback.play_click_button()
+			container.reroll_booster(id)
+			viewport.set_input_as_handled()
+
+func _on_reroll_mouse_entered() -> void:
+	_reroll_hovered = true
+	UiPointerBlock.enter(hover_button)
+	if _reroll_ready:
+		GameFeedback.play_hover_button()
+		hover_button_circle.self_modulate = COLOR_BROWN
+		hover_button_label.add_theme_color_override("font_color", Color.WHITE)
+
+func _on_reroll_mouse_exited() -> void:
+	_reroll_hovered = false
+	UiPointerBlock.exit(hover_button)
+	hover_button_circle.self_modulate = Color.WHITE
+	hover_button_label.add_theme_color_override("font_color", COLOR_BROWN)
+
 ## ----- Booster Visual Logic ----- ##
 
 func set_booster_visuals(boosterData: BoosterData) -> void:
-	if boosterData.type == 7:
-		icon.visible = true
-		icon.texture = load("res://assets/icons/animal.png")
-		$Tooltip/Label.text = "Open the animal market."
-		_clear_content_dots()
+	if not is_stack_mode():
+		if boosterData.type == 7:
+			icon.visible = true
+			icon.texture = load("res://assets/icons/animal.png")
 		return
-	if boosterData.cards.is_empty():
-		icon.visible = true
-		icon.texture = load("res://assets/icons/random.png")
-		$Tooltip/Label.text = "Empty pack slot."
-		_clear_content_dots()
-		return
-	$Tooltip/Label.text = create_tooltip(boosterData)
-	if boosterData.type < 6:
-		icon.visible = true
-		var element = ElementCatalog.elements[boosterData.type]
-		var level = element.levels[element.levels.size() - 1]
-		icon.texture = load(level.icon)
-		_clear_content_dots()
-	elif boosterData.type == 6:
-		icon.visible = false
-		icon.texture = load("res://assets/icons/random.png")
-		_update_content_dots(boosterData)
 
+	var element_ids := _collect_element_ids(boosterData)
+	_apply_stack_colors(element_ids)
+	if not enabled:
+		_apply_stack_saturation(true)
 
-func create_tooltip(boosterData: BoosterData) -> String:
-	var element_cards := [0, 0, 0, 0, 0, 0]
-	var animal_cards := [0, 0, 0, 0, 0, 0]
-	for c in boosterData.cards:
-		if c.type == 0:
-			element_cards[c.id] += 1
-		else:
-			animal_cards[c.element] += 1
-	
-	var contents: Array[String] = []
-	for i in element_cards.size():
-		if element_cards[i] > 0:
-			contents.append("%d %ss" % [element_cards[i], Enums.ELEMENT_NAMES[i]])
-	for i in animal_cards.size():
-		if animal_cards[i] > 0:
-			contents.append("%d %s Animals" % [animal_cards[i], Enums.ELEMENT_NAMES[i]])
-	if boosterData.quest_ids.size() > 0:
-		contents.append("%d Quests" % boosterData.quest_ids.size())
-	if boosterData.map_points > 0:
-		contents.append("%d Map Points" % boosterData.map_points)
-	
-	return "This booster contains:\n" + ", ".join(contents)
-
-
-func _update_content_dots(boosterData: BoosterData) -> void:
-	_clear_content_dots()
+func _collect_element_ids(boosterData: BoosterData) -> Array[int]:
 	var element_ids: Array[int] = []
+	if boosterData == null:
+		return element_ids
+	if boosterData.type > 0 and boosterData.type < 6 and boosterData.cards.is_empty():
+		element_ids.append(boosterData.type)
+		return element_ids
 	for c in boosterData.cards:
 		if c.type == 0:
 			element_ids.append(c.id)
 		else:
 			element_ids.append(c.element)
-	_layout_content_dots(element_ids)
+	return element_ids
 
-
-func _clear_content_dots() -> void:
-	for child in content_dots.get_children():
-		child.free()
-
-
-func _layout_content_dots(element_ids: Array[int]) -> void:
-	var count := element_ids.size()
-	if count == 0:
+func _apply_stack_colors(element_ids: Array[int]) -> void:
+	_base_body_colors.clear()
+	var depth := mini(element_ids.size(), _stack_frames.size())
+	if depth <= 0:
+		# Empty pack: single muted frame.
+		_base_body_colors.append(FALLBACK_COLOR)
+		depth = 1
+		_set_frame_color(frame, FALLBACK_COLOR)
+		frame.visible = true
+		frame_2.visible = false
+		frame_3.visible = false
+		_set_front_element_icon(-1)
+		_update_shadow_for_depth(1)
 		return
 
-	for i in count:
-		var pos := Vector2.ZERO
-		if count > 1:
-			var angle := -PI * 0.5 + TAU * float(i) / float(count)
-			pos = Vector2(cos(angle), sin(angle)) * DOT_RING_RADIUS
+	# Front frame = first element; Frame2/Frame3 peek behind (later pack cards).
+	for i in _stack_frames.size():
+		var layer: TextureRect = _stack_frames[i]
+		if i >= depth:
+			layer.visible = false
+			continue
+		var color := _color_for_element(element_ids[i])
+		_base_body_colors.append(color)
+		_set_frame_color(layer, color)
+		layer.visible = true
+	_set_front_element_icon(element_ids[0])
+	_update_shadow_for_depth(depth)
 
-		var element_id: int = element_ids[i]
-		var color := Color.html("#918478")
-		if element_id >= 0 and element_id < ElementCatalog.elements.size():
-			var element: Element = ElementCatalog.elements[element_id]
-			if element.levels.size() > 0:
-				color = Color.html(element.levels[0].color)
+func _set_front_element_icon(element_id: int) -> void:
+	if element_id < 0 or element_id >= ElementCatalog.elements.size():
+		element_icon.visible = false
+		element_icon.texture = null
+		return
+	var element: Element = ElementCatalog.elements[element_id]
+	if element.levels.is_empty():
+		element_icon.visible = false
+		element_icon.texture = null
+		return
+	element_icon.texture = load(element.levels.back().icon)
+	element_icon.visible = true
+	element_icon.modulate = Color.WHITE if enabled else Color(0.7, 0.7, 0.7, 1.0)
 
-		var dot := Sprite2D.new()
-		dot.texture = CIRCLE_TEXTURE
-		# Duplicate so shared fill material state cannot leak across boosters/dots.
-		dot.material = CIRCLE_FILL_MATERIAL.duplicate()
-		dot.scale = Vector2.ONE * DOT_SCALE
-		dot.position = pos
-		dot.self_modulate = color
-		content_dots.add_child(dot)
+func _color_for_element(element_id: int) -> Color:
+	if element_id >= 0 and element_id < ElementCatalog.elements.size():
+		var element: Element = ElementCatalog.elements[element_id]
+		if element.levels.size() > 0:
+			return Color.html(element.levels.back().color)
+	return FALLBACK_COLOR
+
+func _set_frame_color(layer: TextureRect, color: Color) -> void:
+	var mat := FRAME_MATERIAL.duplicate() as ShaderMaterial
+	mat.set_shader_parameter("body_color", color)
+	# Flatten name plate so mini stacks read as solid colored cards.
+	mat.set_shader_parameter("name_color", color)
+	layer.material = mat
+
+func _update_shadow_for_depth(depth: int) -> void:
+	# Match card stack: extra top peek shifts shadow upward.
+	var extra := float(maxi(depth - 1, 0)) * 12.0
+	shadow.offset_top = -78.0 - extra
+
+func _apply_stack_saturation(desaturate: bool) -> void:
+	for i in _stack_frames.size():
+		var layer: TextureRect = _stack_frames[i]
+		if not layer.visible:
+			continue
+		var mat := layer.material as ShaderMaterial
+		if mat == null:
+			continue
+		var base := FALLBACK_COLOR
+		if i < _base_body_colors.size():
+			base = _base_body_colors[i]
+		var color := base
+		if desaturate:
+			var gray := Color(base.get_luminance(), base.get_luminance(), base.get_luminance(), base.a)
+			color = base.lerp(gray, DESATURATE_AMOUNT)
+		mat.set_shader_parameter("body_color", color)
+		mat.set_shader_parameter("name_color", color)
+	if element_icon.visible:
+		element_icon.modulate = Color(0.7, 0.7, 0.7, 1.0) if desaturate else Color.WHITE

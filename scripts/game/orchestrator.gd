@@ -16,7 +16,8 @@ signal tutorial_action(action: String, payload: Dictionary)
 @export var tutorial_overlay:TutorialOverlay
 @export var settings_overlay:SettingsOverlay
 @export var game_over_overlay:GameOverOverlay
-@export var end_game_button:EndGameButton
+@export var in_game_menu:InGameMenu
+@export var menu_button:MainMenuButton
 
 @onready var placement_logic:PlacementLogic = $PlacementLogic
 @onready var grouping_logic:GroupingLogic = $GroupingLogic
@@ -68,17 +69,41 @@ func _ready() -> void:
 		game_over_overlay.end_pressed.connect(confirm_end_game)
 		game_over_overlay.leave_pressed.connect(leave_to_menu)
 		game_over_overlay.restart_pressed.connect(restart_run)
+	if in_game_menu:
+		in_game_menu.restart_pressed.connect(restart_run)
+		in_game_menu.end_pressed.connect(_on_in_game_menu_end)
+		in_game_menu.back_pressed.connect(_on_in_game_menu_back)
 	if not GameSettings.settings_changed.is_connected(_on_graphics_settings_changed):
 		GameSettings.settings_changed.connect(_on_graphics_settings_changed)
 	call_deferred("_on_graphics_settings_changed")
 	_apply_game_mode_ui()
+
+	# Endless “Continue” flow: restore run state after the scene loads.
+	var pending_state = EndlessRunSave.consume_pending_state_or_null()
+	if pending_state != null and GameSession.game_mode == GameSession.GameMode.ENDLESS:
+		# Defer by 1 frame so all managers' @onready vars (e.g. QuestContainer)
+		# are initialized before we apply state.
+		call_deferred("_apply_pending_endless_state_deferred", pending_state)
+
 	if tutorial_bridge and not tutorial_bridge.action_performed.is_connected(_on_tutorial_bridge_action):
 		tutorial_bridge.action_performed.connect(_on_tutorial_bridge_action)
 	# Interactive tutorial owns first-run coaching; keep slideshow for non-tutorial runs / rules library.
-	if not GameSession.is_tutorial() and not GameSession.is_puzzle():
-		show_tutorial()
+	#if not GameSession.is_tutorial() and not GameSession.is_puzzle():
+		#show_tutorial()
 	if GameSession.is_puzzle():
 		call_deferred("_apply_puzzle_setup")
+
+func _apply_pending_endless_state_deferred(pending_state: Variant) -> void:
+	if pending_state == null:
+		return
+	if GameSession.game_mode != GameSession.GameMode.ENDLESS:
+		return
+	var state := pending_state as Dictionary
+	EndlessRunSave.apply_state_to_orchestrator(self, state)
+	# The saved state may have been captured while the in-game menu was open,
+	# leaving `cards_paused` and `booster_manager.paused` enabled.
+	# We want Continue to resume play, so run normal "close menu" unpause logic.
+	close_in_game_menu()
 
 
 func _apply_puzzle_setup() -> void:
@@ -115,14 +140,50 @@ func has_placed_tile() -> bool:
 
 
 func _apply_game_mode_ui() -> void:
-	if end_game_button == null:
+	pass
+
+
+func open_in_game_menu() -> void:
+	if in_game_menu == null or score_engine == null:
 		return
+	if selected_card_id != -1:
+		card_manager.deselect_card(selected_card_id)
+		selected_card_id = -1
+		_update_card_recycling_state()
+		if tile_hovered:
+			hex_manager.reset_preview(selected_coord)
+		quest_manager.reset_preview()
+		point_counter.reset_preview()
+		reset_preview()
+	_clear_touch_preview_lock()
+	pause_cards()
+	undo_button.disable()
+	in_game_menu.open(score_engine.total_score, game_over)
+
+
+func close_in_game_menu() -> void:
+	game_over = false
+	if in_game_menu:
+		in_game_menu.close()
+	if map_points == 0:
+		undo_button.enable()
+	unpause_cards()
+
+
+func _on_in_game_menu_back() -> void:
+	close_in_game_menu()
+
+
+func _on_in_game_menu_end() -> void:
+	if game_over:
+		return
+	if tutorial_bridge.active and not tutorial_bridge.allows_action("end_game"):
+		return
+	game_over = true
 	if GameSession.game_mode == GameSession.GameMode.ENDLESS:
-		end_game_button.hide()
-		end_game_button.disable()
-	else:
-		end_game_button.show()
-		end_game_button.enable()
+		EndlessRunSave.save_from_orchestrator(self)
+	leave_to_menu()
+
 
 ## ----- Handle Booster Interactions ----- ##
 
@@ -135,6 +196,26 @@ func add_hand_card(card:CardData) -> void:
 func select_hand_card(id:int) -> void:
 	if game_over:
 		return
+
+	## Clear selection (e.g. card removed / recycle). Never deselect_card(-1).
+	if id < 0:
+		if selected_card_id != -1:
+			card_manager.deselect_card(selected_card_id)
+		selected_card_id = -1
+		_update_card_recycling_state()
+		_clear_touch_preview_lock()
+		if tile_hovered:
+			# Force-clear sticky touch preview (mouse may already have left).
+			tile_hovered = false
+			_hover_slide_coord = Vector2i(2147483647, 2147483647)
+			hex_manager.hide_tile_info(selected_coord)
+			hex_manager.reset_preview(selected_coord)
+			hex_manager.clear_hover_tracking()
+			quest_manager.reset_preview()
+			point_counter.reset_preview()
+			reset_preview()
+		return
+
 	var new_selection = id
 
 	## deselect selection — always allowed so players can clear a bad pick
@@ -204,22 +285,7 @@ func end_game() -> void:
 		return
 	if tutorial_bridge.active and not tutorial_bridge.allows_action("end_game"):
 		return
-	if selected_card_id != -1:
-		card_manager.deselect_card(selected_card_id)
-		selected_card_id = -1
-		_update_card_recycling_state()
-		if tile_hovered:
-			hex_manager.reset_preview(selected_coord)
-		quest_manager.reset_preview()
-		point_counter.reset_preview()
-		reset_preview()
-	_clear_touch_preview_lock()
-	pause_cards()
-	undo_button.disable()
-	if end_game_button:
-		end_game_button.disable()
-	if game_over_overlay:
-		game_over_overlay.open_confirm(score_engine.total_score)
+	open_in_game_menu()
 
 
 func continue_game() -> void:
@@ -227,17 +293,16 @@ func continue_game() -> void:
 		return
 	if game_over_overlay:
 		game_over_overlay.close()
-	_apply_game_mode_ui()
-	if map_points == 0:
-		undo_button.enable()
-	unpause_cards()
+	close_in_game_menu()
 
 
 func confirm_end_game() -> void:
 	if game_over:
 		return
 	game_over = true
-	if game_over_overlay:
+	if in_game_menu:
+		in_game_menu.open(score_engine.total_score, true)
+	elif game_over_overlay:
 		game_over_overlay.show_results(score_engine.total_score)
 
 
@@ -281,11 +346,18 @@ func apply_recycle_card(id:int, _amount:int, id_known:bool) -> void:
 		tutorial_bridge.notify("recycled", {"card_id": card_id})
 		return
 
-	var selected_card := card_manager.cards[card_id]
-	if selected_card.type != CardData.CARD_TYPE.ANIMAL:
-		return
+	recycle_hand_animal(card_id)
 
-	var count := selected_card.amount
+## Recycle a specific hand animal (full stack), e.g. from its per-card X button.
+func recycle_hand_animal(card_id: int) -> void:
+	if tutorial_bridge.active and not tutorial_bridge.allows_action("recycle"):
+		return
+	if card_id < 0 or card_id >= card_manager.cards.size():
+		return
+	var card := card_manager.cards[card_id]
+	if card == null or card.type != CardData.CARD_TYPE.ANIMAL:
+		return
+	var count := card.amount
 	for i in count:
 		GameFeedback.play_recycle()
 		card_manager.remove_card(card_id)
@@ -674,6 +746,10 @@ func show_tutorial() -> void:
 
 
 func show_settings() -> void:
+	open_in_game_menu()
+	if in_game_menu:
+		in_game_menu.open_settings_panel()
+		return
 	if settings_overlay == null:
 		return
 	if not settings_overlay.is_node_ready():

@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://bc7k250db7n42"]
+
+[ext_resource type="Script" uid="uid://boskmedmpjmjh" path="res://scripts/booster/animal_market_panel.gd" id="1_panel"]
+[ext_resource type="PackedScene" uid="uid://0fu8v3fe2jgj" path="res://scenes/card/card.tscn" id="2_card"]
+[ext_resource type="Texture2D" uid="uid://de8xqj04oa2hw" path="res://assets/icons/ArrowBrownOuline23.webp" id="3_obics"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1klby"]
+size = Vector2(24, 52)
+
+[node name="AnimalMarketPanel" type="Node2D" unique_id=1353906806]
+script = ExtResource("1_panel")
+card_scene = ExtResource("2_card")
+
+[node name="OffersRoot" type="Node2D" parent="." unique_id=1578338233]
+visible = false
+position = Vector2(0, -170.5)
+
+[node name="ExpandArrow" type="Area2D" parent="." unique_id=598911452]
+position = Vector2(-26.5, -170.5)
+monitorable = false
+priority = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExpandArrow" unique_id=1242310773]
+shape = SubResource("RectangleShape2D_1klby")
+
+[node name="Icon" type="Sprite2D" parent="ExpandArrow" unique_id=1357026683]
+position = Vector2(-1, 0)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("3_obics")
+
+[node name="Icon" type="Sprite2D" parent="ExpandArrow/Icon" unique_id=713817234]
+modulate = Color(0, 0, 0, 0.097)
+show_behind_parent = true
+position = Vector2(6.666664, 6.666687)
+texture = ExtResource("3_obics")
+
+[node name="CollapseArrow" type="Area2D" parent="." unique_id=1017714051]
+position = Vector2(247.5, -170.5)
+input_pickable = false
+monitorable = false
+priority = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollapseArrow" unique_id=1156241679]
+position = Vector2(5, 0)
+shape = SubResource("RectangleShape2D_1klby")
+
+[node name="Icon" type="Sprite2D" parent="CollapseArrow" unique_id=1439643392]
+position = Vector2(5, 0)
+rotation = 3.1415927
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("3_obics")
+
+[node name="Icon" type="Sprite2D" parent="CollapseArrow/Icon" unique_id=1579914909]
+modulate = Color(0, 0, 0, 0.097)
+show_behind_parent = true
+position = Vector2(-6.666588, -6.666687)
+texture = ExtResource("3_obics")

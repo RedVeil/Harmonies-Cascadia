@@ -19,47 +19,30 @@ func init(parent_: Node) -> void:
 func select_booster(id: int) -> void:
 	parent.select_booster(id)
 
+func reroll_booster(id: int) -> void:
+	if parent and parent.has_method("reroll_booster_slot"):
+		parent.reroll_booster_slot(id)
+
 ## ----- Pass Interactions and Data Downstream ----- ##
 
 func set_booster_visuals(id: int, boosterData: BoosterData) -> void:
-	if id == 3:
-		return
 	if id < 0 or id >= boosters.size():
 		return
 	boosters[id].set_booster_visuals(boosterData)
 
 func enable_options() -> void:
-	for i in range(mini(3, boosters.size())):
-		boosters[i].enable()
+	for b in boosters:
+		b.enable()
 
 func disable_options() -> void:
-	for i in range(mini(3, boosters.size())):
-		boosters[i].disable()
+	for b in boosters:
+		b.disable()
 
 func set_options_progress(value: float) -> void:
-	for i in range(mini(3, boosters.size())):
-		boosters[i].set_progress(value)
+	for b in boosters:
+		b.set_progress(value)
 
-func enable_reroll() -> void:
-	if boosters.size() > 3:
-		boosters[3].enable()
-
-func disable_reroll() -> void:
-	if boosters.size() > 3:
-		boosters[3].disable()
-
-func set_reroll_progress(value: float) -> void:
-	if boosters.size() > 3:
-		boosters[3].set_progress(value)
-
-func enable_animal_market() -> void:
-	if boosters.size() > 4:
-		boosters[4].enable()
-
-func disable_animal_market() -> void:
-	if boosters.size() > 4:
-		boosters[4].disable()
-
-func set_animal_market_progress(value: float) -> void:
-	if boosters.size() > 4:
-		boosters[4].set_progress(value)
+func set_booster_reroll_ready(id: int, ready: bool) -> void:
+	if id < 0 or id >= boosters.size():
+		return
+	boosters[id].set_reroll_ready(ready)

@@ -1,18 +1,40 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene format=3 uid="uid://b7d8fgysy5ude"]
 
-[ext_resource type="Script" path="res://scripts/game/main_menu.gd" id="1_menu"]
-[ext_resource type="PackedScene" path="res://scenes/game/settings_panel.tscn" id="2_settings"]
+[ext_resource type="Script" uid="uid://dwuyo8tml1kyc" path="res://scripts/game/main_menu.gd" id="1_menu"]
+[ext_resource type="PackedScene" uid="uid://ckwpm5wl7l4a3" path="res://scenes/game/settings_panel.tscn" id="2_settings"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
-bg_color = Color(0.95686275, 0.8745098, 0.7921569, 0.92)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
-shadow_color = Color(0, 0, 0, 0.1254902)
-shadow_size = 4
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_left"]
+bg_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
 
-[node name="MainMenu" type="Control"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_text"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_chip"]
+content_margin_left = 16.0
+content_margin_top = 2.0
+content_margin_right = 16.0
+content_margin_bottom = 2.0
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_chip_hover"]
+content_margin_left = 16.0
+content_margin_top = 2.0
+content_margin_right = 16.0
+content_margin_bottom = 2.0
+bg_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_code_input"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+
+[node name="MainMenu" type="Control" unique_id=736225247]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -21,7 +43,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_menu")
 
-[node name="BackgroundFallback" type="ColorRect" parent="."]
+[node name="BackgroundFallback" type="ColorRect" parent="." unique_id=814047771]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -29,9 +51,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.95686275, 0.8745098, 0.7921569, 1)
+color = Color(0.8235294, 0.7607843, 0.6784314, 1)
 
-[node name="BackgroundImage" type="TextureRect" parent="."]
+[node name="BackgroundImage" type="TextureRect" parent="." unique_id=1840893296]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -43,7 +65,7 @@ mouse_filter = 2
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Split" type="HBoxContainer" parent="."]
+[node name="Split" type="HBoxContainer" parent="." unique_id=348996866]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -52,196 +74,527 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 0
 
-[node name="LeftColumn" type="PanelContainer" parent="Split"]
+[node name="LeftColumn" type="PanelContainer" parent="Split" unique_id=877968953]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 1.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+theme_override_styles/panel = SubResource("StyleBoxFlat_left")
 
-[node name="Margin" type="MarginContainer" parent="Split/LeftColumn"]
+[node name="Margin" type="MarginContainer" parent="Split/LeftColumn" unique_id=1760950830]
 layout_mode = 2
 theme_override_constants/margin_left = 36
 theme_override_constants/margin_top = 48
 theme_override_constants/margin_right = 36
 theme_override_constants/margin_bottom = 48
 
-[node name="NavStack" type="VBoxContainer" parent="Split/LeftColumn/Margin"]
+[node name="NavStack" type="VBoxContainer" parent="Split/LeftColumn/Margin" unique_id=1329204290]
 layout_mode = 2
-theme_override_constants/separation = 16
+size_flags_vertical = 3
+theme_override_constants/separation = 20
 
-[node name="TitleLabel" type="Label" parent="Split/LeftColumn/Margin/NavStack"]
+[node name="TitleLabel" type="Label" parent="Split/LeftColumn/Margin/NavStack" unique_id=2072497958]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-theme_override_font_sizes/font_size = 36
-text = "Harmonies"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 42
+text = "HARMONIES"
 autowrap_mode = 2
 
-[node name="SubtitleLabel" type="Label" parent="Split/LeftColumn/Margin/NavStack"]
+[node name="Spacer" type="Control" parent="Split/LeftColumn/Margin/NavStack" unique_id=556082255]
+custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-theme_override_font_sizes/font_size = 18
-text = "Cascadia"
 
-[node name="Spacer" type="Control" parent="Split/LeftColumn/Margin/NavStack"]
+[node name="RootNav" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack" unique_id=1337161300]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 24
+
+[node name="PlayBlock" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack/RootNav" unique_id=166241096]
+layout_mode = 2
+theme_override_constants/separation = -10
+
+[node name="PlayButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/RootNav/PlayBlock" unique_id=2017643394]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
+theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBoxEmpty_text")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_text")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_text")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_text")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_text")
+text = "PLAY"
+flat = true
+alignment = 0
+
+[node name="PlayDesc" type="Label" parent="Split/LeftColumn/Margin/NavStack/RootNav/PlayBlock" unique_id=576457856]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.7)
+theme_override_constants/line_spacing = -5
+theme_override_font_sizes/font_size = 13
+text = "Choose a game mode and start a new session"
+autowrap_mode = 2
+
+[node name="TutorialBlock" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack/RootNav" unique_id=319705785]
+layout_mode = 2
+theme_override_constants/separation = -5
+
+[node name="TutorialButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/RootNav/TutorialBlock" unique_id=247655967]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
+theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBoxEmpty_text")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_text")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_text")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_text")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_text")
+text = "TUTORIAL"
+flat = true
+alignment = 0
+
+[node name="TutorialDesc" type="Label" parent="Split/LeftColumn/Margin/NavStack/RootNav/TutorialBlock" unique_id=1819895731]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.7)
+theme_override_constants/line_spacing = -5
+theme_override_font_sizes/font_size = 13
+text = "Learn the rules and how to play Harmonies."
+autowrap_mode = 2
+
+[node name="SettingsBlock" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack/RootNav" unique_id=350496018]
+layout_mode = 2
+theme_override_constants/separation = -10
+
+[node name="SettingsButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/RootNav/SettingsBlock" unique_id=477077838]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
+theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBoxEmpty_text")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_text")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_text")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_text")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_text")
+text = "SETTINGS"
+flat = true
+alignment = 0
+
+[node name="SettingsDesc" type="Label" parent="Split/LeftColumn/Margin/NavStack/RootNav/SettingsBlock" unique_id=570623378]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.7)
+theme_override_constants/line_spacing = -5
+theme_override_font_sizes/font_size = 13
+text = "Adjust audio, graphics, and other preferences to suit your play style"
+autowrap_mode = 2
+
+[node name="EnterCodeBlock" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack/RootNav" unique_id=1190215281]
+layout_mode = 2
+theme_override_constants/separation = -10
+
+[node name="EnterCodeButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/RootNav/EnterCodeBlock" unique_id=2118968345]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
+theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBoxEmpty_text")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_text")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_text")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_text")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_text")
+text = "ENTER CODE"
+flat = true
+alignment = 0
+
+[node name="EnterCodeDesc" type="Label" parent="Split/LeftColumn/Margin/NavStack/RootNav/EnterCodeBlock" unique_id=168594846]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.7)
+theme_override_constants/line_spacing = -5
+theme_override_font_sizes/font_size = 13
+text = "Paste a share code to replay that session."
+autowrap_mode = 2
+
+[node name="FooterSpacer" type="Control" parent="Split/LeftColumn/Margin/NavStack/RootNav" unique_id=198559532]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="ExitButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/RootNav" unique_id=1369697865]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
+theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBoxEmpty_text")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_text")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_text")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_text")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_text")
+text = "EXIT"
+flat = true
+alignment = 0
+
+[node name="PlayNav" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack" unique_id=254245351]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 24
+
+[node name="DailyBlock" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack/PlayNav" unique_id=515550165]
+layout_mode = 2
+theme_override_constants/separation = -10
+
+[node name="DailyButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock" unique_id=67050899]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
+theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBoxEmpty_text")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_text")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_text")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_text")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_text")
+text = "DAILY CHALLENGE"
+flat = true
+alignment = 0
+
+[node name="DailyDesc" type="Label" parent="Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock" unique_id=1941923993]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.7)
+theme_override_constants/line_spacing = -5
+theme_override_font_sizes/font_size = 13
+text = "Complete the daily session and compete for the high score"
+autowrap_mode = 2
+
+[node name="QuickSessionBlock" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack/PlayNav" unique_id=70167912]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TitleDesc" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock" unique_id=778500284]
+layout_mode = 2
+theme_override_constants/separation = -5
+
+[node name="QuickSessionButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc" unique_id=73445984]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
+theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBoxEmpty_text")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_text")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_text")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_text")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_text")
+text = "QUICK SESSION"
+flat = true
+alignment = 0
+
+[node name="QuickSessionDesc" type="Label" parent="Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc" unique_id=957763590]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.7)
+theme_override_constants/line_spacing = -5
+theme_override_font_sizes/font_size = 13
+text = "Play a quick round of harmonies with limited tile space."
+autowrap_mode = 2
+
+[node name="MapSizeRow" type="HBoxContainer" parent="Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc" unique_id=2071344124]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="SmallButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow" unique_id=379431080]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_focus_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_chip")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
+theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
+text = "SMALL"
 
-[node name="RootNav" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack"]
+[node name="MediumButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow" unique_id=428368077]
+custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
-theme_override_constants/separation = 12
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_focus_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_chip")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
+theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
+text = "MEDIUM"
 
-[node name="PlayButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/RootNav"]
-custom_minimum_size = Vector2(0, 44)
+[node name="LargeButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow" unique_id=233759086]
+custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
-text = "Play"
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_focus_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_chip")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
+theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
+text = "LARGE"
 
-[node name="TutorialButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/RootNav"]
-custom_minimum_size = Vector2(0, 44)
+[node name="EndlessBlock" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack/PlayNav" unique_id=78474879]
 layout_mode = 2
-text = "Tutorial"
+theme_override_constants/separation = -10
 
-[node name="EnterCodeButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/RootNav"]
-custom_minimum_size = Vector2(0, 44)
+[node name="EndlessButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock" unique_id=1167473653]
 layout_mode = 2
-text = "Enter Code"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
+theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBoxEmpty_text")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_text")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_text")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_text")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_text")
+text = "ENDLESS MODE"
+flat = true
+alignment = 0
 
-[node name="SettingsButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/RootNav"]
-custom_minimum_size = Vector2(0, 44)
+[node name="EndlessDesc" type="Label" parent="Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock" unique_id=1954200089]
 layout_mode = 2
-text = "Settings"
+theme_override_colors/font_color = Color(1, 1, 1, 0.7)
+theme_override_constants/line_spacing = -5
+theme_override_font_sizes/font_size = 13
+text = "Play in endless mode where you unlock more space the better you play and see how far you can go"
+autowrap_mode = 2
 
-[node name="PlayNav" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack"]
+[node name="EndlessInlineButtons" type="HBoxContainer" parent="Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock" unique_id=2100000000]
 visible = false
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 12
 
-[node name="BackButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/PlayNav"]
-custom_minimum_size = Vector2(0, 36)
+[node name="ContinueButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessInlineButtons" unique_id=2100000001]
+custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
-text = "Back"
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_focus_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_chip")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
+theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
+text = "CONTINUE"
 
-[node name="DailyButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/PlayNav"]
-custom_minimum_size = Vector2(0, 44)
+[node name="NewButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessInlineButtons" unique_id=2100000002]
+custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
-text = "Daily Challenge"
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_focus_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_chip")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
+theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
+text = "NEW"
 
-[node name="NormalBlock" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack/PlayNav"]
+[node name="PuzzleBlock" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack/PlayNav" unique_id=1875619359]
 layout_mode = 2
-theme_override_constants/separation = 6
+theme_override_constants/separation = -10
 
-[node name="NormalButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/PlayNav/NormalBlock"]
-custom_minimum_size = Vector2(0, 44)
+[node name="PuzzleButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/PlayNav/PuzzleBlock" unique_id=1932326354]
 layout_mode = 2
-text = "Normal"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
+theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBoxEmpty_text")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_text")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_text")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_text")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_text")
+text = "PUZZLES"
+flat = true
+alignment = 0
 
-[node name="MapSizeLabel" type="Label" parent="Split/LeftColumn/Margin/NavStack/PlayNav/NormalBlock"]
+[node name="PuzzleDesc" type="Label" parent="Split/LeftColumn/Margin/NavStack/PlayNav/PuzzleBlock" unique_id=44257558]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-theme_override_font_sizes/font_size = 14
-text = "Map size"
+theme_override_colors/font_color = Color(1, 1, 1, 0.7)
+theme_override_constants/line_spacing = -5
+theme_override_font_sizes/font_size = 13
+text = "Play through various puzzle challenges to test your skills."
+autowrap_mode = 2
 
-[node name="MapSizeOption" type="OptionButton" parent="Split/LeftColumn/Margin/NavStack/PlayNav/NormalBlock"]
-custom_minimum_size = Vector2(0, 36)
+[node name="FooterSpacer" type="Control" parent="Split/LeftColumn/Margin/NavStack/PlayNav" unique_id=1043412114]
 layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
 
-[node name="EndlessButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/PlayNav"]
-custom_minimum_size = Vector2(0, 44)
+[node name="BackButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/PlayNav" unique_id=205466954]
 layout_mode = 2
-text = "Endless"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
+theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBoxEmpty_text")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_text")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_text")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_text")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_text")
+text = "BACK"
+flat = true
+alignment = 0
 
-[node name="PuzzleBlock" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack/PlayNav"]
-layout_mode = 2
-theme_override_constants/separation = 6
-
-[node name="PuzzleButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/PlayNav/PuzzleBlock"]
-custom_minimum_size = Vector2(0, 44)
-layout_mode = 2
-text = "Puzzle"
-
-[node name="PuzzleLabel" type="Label" parent="Split/LeftColumn/Margin/NavStack/PlayNav/PuzzleBlock"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-theme_override_font_sizes/font_size = 14
-text = "Puzzle"
-
-[node name="PuzzleOption" type="OptionButton" parent="Split/LeftColumn/Margin/NavStack/PlayNav/PuzzleBlock"]
-custom_minimum_size = Vector2(0, 36)
-layout_mode = 2
-
-[node name="CodeNav" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack"]
+[node name="CodeNav" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack" unique_id=1718501482]
 visible = false
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_constants/separation = 12
 
-[node name="CodeBackButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/CodeNav"]
-custom_minimum_size = Vector2(0, 36)
+[node name="CodeHint" type="Label" parent="Split/LeftColumn/Margin/NavStack/CodeNav" unique_id=292693924]
 layout_mode = 2
-text = "Back"
-
-[node name="CodeHint" type="Label" parent="Split/LeftColumn/Margin/NavStack/CodeNav"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 0.7)
 theme_override_font_sizes/font_size = 14
 text = "Paste a share code to replay that session."
 autowrap_mode = 2
 
-[node name="CodeInput" type="LineEdit" parent="Split/LeftColumn/Margin/NavStack/CodeNav"]
+[node name="CodeInput" type="LineEdit" parent="Split/LeftColumn/Margin/NavStack/CodeNav" unique_id=761528994]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_placeholder_color = Color(1, 1, 1, 0.55)
+theme_override_styles/normal = SubResource("StyleBoxFlat_code_input")
+theme_override_styles/read_only = SubResource("StyleBoxFlat_code_input")
+theme_override_styles/focus = SubResource("StyleBoxFlat_code_input")
 placeholder_text = "HC1-..."
 caret_blink = true
 
-[node name="StartCodeButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/CodeNav"]
-custom_minimum_size = Vector2(0, 44)
+[node name="StartCodeButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/CodeNav" unique_id=1889895944]
 layout_mode = 2
-text = "Start"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
+theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBoxEmpty_text")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_text")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_text")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_text")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_text")
+text = "START"
+flat = true
+alignment = 0
 
-[node name="CodeStatus" type="Label" parent="Split/LeftColumn/Margin/NavStack/CodeNav"]
+[node name="CodeStatus" type="Label" parent="Split/LeftColumn/Margin/NavStack/CodeNav" unique_id=1372856251]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 0.7)
 theme_override_font_sizes/font_size = 14
-text = ""
 autowrap_mode = 2
 
-[node name="RightColumn" type="Control" parent="Split"]
+[node name="FooterSpacer" type="Control" parent="Split/LeftColumn/Margin/NavStack/CodeNav" unique_id=1141330671]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="CodeBackButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/CodeNav" unique_id=1938425973]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
+theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBoxEmpty_text")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_text")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_text")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_text")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_text")
+text = "BACK"
+flat = true
+alignment = 0
+
+[node name="SettingsNav" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack" unique_id=1512249364]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 24
+
+[node name="SettingsScroll" type="ScrollContainer" parent="Split/LeftColumn/Margin/NavStack/SettingsNav" unique_id=1992944264]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="SettingsPanel" parent="Split/LeftColumn/Margin/NavStack/SettingsNav/SettingsScroll" unique_id=546359623 instance=ExtResource("2_settings")]
+custom_minimum_size = Vector2(0, 320)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SettingsBackButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/SettingsNav" unique_id=883496814]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
+theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBoxEmpty_text")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_text")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_text")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_text")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_text")
+text = "BACK"
+flat = true
+alignment = 0
+
+[node name="RightColumn" type="Control" parent="Split" unique_id=564831013]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
 mouse_filter = 2
 
-[node name="SettingsHost" type="PanelContainer" parent="Split/RightColumn"]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 24.0
-offset_top = 48.0
-offset_right = -48.0
-offset_bottom = -48.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
-
-[node name="Margin" type="MarginContainer" parent="Split/RightColumn/SettingsHost"]
-layout_mode = 2
-theme_override_constants/margin_left = 28
-theme_override_constants/margin_top = 28
-theme_override_constants/margin_right = 28
-theme_override_constants/margin_bottom = 28
-
-[node name="SettingsPanel" parent="Split/RightColumn/SettingsHost/Margin" instance=ExtResource("2_settings")]
-layout_mode = 2
-
-[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/RootNav/PlayButton" to="." method="_on_play_pressed"]
-[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/RootNav/TutorialButton" to="." method="_on_tutorial_pressed"]
-[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/RootNav/EnterCodeButton" to="." method="_on_enter_code_pressed"]
-[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/RootNav/SettingsButton" to="." method="_on_settings_pressed"]
-[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/BackButton" to="." method="_on_back_pressed"]
-[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/DailyButton" to="." method="_on_daily_pressed"]
-[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/NormalBlock/NormalButton" to="." method="_on_normal_pressed"]
-[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/EndlessButton" to="." method="_on_endless_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/RootNav/PlayBlock/PlayButton" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/RootNav/TutorialBlock/TutorialButton" to="." method="_on_tutorial_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/RootNav/SettingsBlock/SettingsButton" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/RootNav/EnterCodeBlock/EnterCodeButton" to="." method="_on_enter_code_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/RootNav/ExitButton" to="." method="_on_exit_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyButton" to="." method="_on_daily_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickSessionButton" to="." method="_on_quick_session_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow/SmallButton" to="." method="_on_map_size_small_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow/MediumButton" to="." method="_on_map_size_medium_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow/LargeButton" to="." method="_on_map_size_large_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessButton" to="." method="_on_endless_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessInlineButtons/ContinueButton" to="." method="_on_endless_continue_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessInlineButtons/NewButton" to="." method="_on_endless_new_pressed"]
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/PuzzleBlock/PuzzleButton" to="." method="_on_puzzle_pressed"]
-[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/CodeNav/CodeBackButton" to="." method="_on_back_pressed"]
-[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/CodeNav/StartCodeButton" to="." method="_on_start_code_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/BackButton" to="." method="_on_back_pressed"]
 [connection signal="text_submitted" from="Split/LeftColumn/Margin/NavStack/CodeNav/CodeInput" to="." method="_on_code_submitted"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/CodeNav/StartCodeButton" to="." method="_on_start_code_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/CodeNav/CodeBackButton" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/SettingsNav/SettingsBackButton" to="." method="_on_back_pressed"]

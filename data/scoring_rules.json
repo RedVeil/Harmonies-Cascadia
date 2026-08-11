@@ -133,7 +133,7 @@
 	{
 		"id": 6.0,
 		"name": "Mountains",
-		"description": "Mountains score only if they are connected to another mountain. A level 1 mountain scores 2 points, a level 2 mountain scores 5 points and a level 3 mountain scores 9 points.",
+		"description": "Mountains score if they are connected to another mountain. They score more when leveled up to higher levels.",
 		"min_group_size": 2.0,
 		"max_group_size": 100000.0,
 		"points_per_tile_level": [
@@ -159,7 +159,7 @@
 	{
 		"id": 7.0,
 		"name": "Tall Mountains",
-		"description": "Mountains score only if they are connected to another mountain. A level 1 mountain scores 4 points, a level 2 mountain scores 5 points and a level 3 mountain scores 6 points.",
+		"description": "Mountains score if they are connected to another mountain. They score exponentially more when leveled up to higher levels.",
 		"min_group_size": 2.0,
 		"max_group_size": 100000.0,
 		"points_per_tile_level": [
@@ -185,7 +185,7 @@
 	{
 		"id": 8.0,
 		"name": "Isolated Mountains",
-		"description": "Mountains score only if they are NOT connected to another mountain. A level 1 mountain scores 4 points, a level 2 mountain scores 5 points and a level 3 mountain scores 6 points.",
+		"description": "Mountains score if they are NOT connected to another mountain. They score more when leveled up to higher levels.",
 		"min_group_size": 1.0,
 		"max_group_size": 1.0,
 		"points_per_tile_level": [

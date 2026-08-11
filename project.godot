@@ -44,6 +44,10 @@ window/vsync/vsync_mode=0
 
 interactable=""
 
+[gui]
+
+theme/custom="uid://cs5hd8narwh52"
+
 [input]
 
 mouse_scroll_up={

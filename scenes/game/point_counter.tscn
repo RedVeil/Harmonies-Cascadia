@@ -20,20 +20,6 @@ shader_parameter/rotation_offset = 1.55
 [sub_resource type="CircleShape2D" id="CircleShape2D_ci8s0"]
 radius = 60.133186
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ci8s0"]
-bg_color = Color(0.95686275, 0.8745098, 0.7921569, 1)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
-shadow_color = Color(0, 0, 0, 0.1254902)
-shadow_size = 4
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3qcl6"]
-bg_color = Color(0.95686275, 0.8745098, 0.7921569, 1)
-shadow_color = Color(0, 0, 0, 0.1254902)
-shadow_size = 4
-
 [node name="PointCounter" type="Node2D" unique_id=1020461036]
 script = ExtResource("1_iwanl")
 score_reward_sounds = Array[AudioStream]([ExtResource("5_score")])
@@ -68,37 +54,6 @@ priority = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1334500712]
 shape = SubResource("CircleShape2D_ci8s0")
-
-[node name="Tooltip" type="Panel" parent="." unique_id=1536247392]
-visible = false
-layout_mode = 0
-offset_left = 80.0
-offset_top = -39.0
-offset_right = 258.0
-offset_bottom = 38.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_ci8s0")
-
-[node name="Panel" type="Panel" parent="Tooltip" unique_id=1468885251]
-show_behind_parent = true
-layout_mode = 0
-offset_top = 25.0
-offset_right = 20.0
-offset_bottom = 45.0
-rotation = 0.7853982
-theme_override_styles/panel = SubResource("StyleBoxFlat_3qcl6")
-
-[node name="Label" type="Label" parent="Tooltip" unique_id=1109697109]
-layout_mode = 0
-offset_left = 7.0
-offset_top = 5.0
-offset_right = 171.0
-offset_bottom = 72.0
-theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.4745098, 1)
-theme_override_constants/line_spacing = -1
-theme_override_font_sizes/font_size = 12
-text = "This is you score. Earn enough points to unlock additional tiles to play with.
-(1/10)"
-autowrap_mode = 2
 
 [node name="MapAlert" type="Panel" parent="."]
 visible = false

@@ -20,9 +20,14 @@ class_name Card
 
 const STACK_STEP_PX := 10.0
 const STACK_VISUAL_CAP := 4
+const DESATURATE_AMOUNT := 0.45
+var COLOR_BROWN := Color.html("#918478")
 
 @onready var visuals : Node2D = $visuals
 @onready var hit_area : Control = $HitArea
+@onready var recycle_btn: Control = $HitArea/RecycleButton
+@onready var recycle_circle: Sprite2D = $HitArea/RecycleButton/Circle
+@onready var recycle_label: Label = $HitArea/RecycleButton/Label
 @onready var placement_tooltip : PlacementTooltip = $PlacementTooltip
 @onready var frame : TextureRect = $visuals/Frame
 @onready var frame_2 : TextureRect = $visuals/Frame2
@@ -51,6 +56,8 @@ var base_z_index : int = 0
 
 var element_id : int = 0
 var is_animal:bool = false
+var _base_body_color: Color = Color.WHITE
+var _desaturated: bool = false
 
 var _spawn_active : bool = false
 var _redraw_active : bool = false
@@ -58,6 +65,9 @@ var _spawn_layout_pending : bool = false
 var _feedback_tweens: Dictionary = {}
 ## Sticky hover for touch: survives mouse_exit until another card is hovered or selected.
 var _touch_hover_sticky: bool = false
+var _recycle_enabled: bool = false
+var _recycle_hovered: bool = false
+var _recycle_base_position: Vector2 = Vector2.ZERO
 
 ## ----- Initialisation ----- ##
 
@@ -70,6 +80,12 @@ func _ready() -> void:
 	hit_area.mouse_entered.connect(_on_mouse_entered)
 	hit_area.mouse_exited.connect(_on_mouse_exited)
 	hit_area.gui_input.connect(_on_gui_input)
+	_recycle_base_position = recycle_btn.position
+	recycle_btn.visible = false
+	recycle_btn.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	recycle_btn.gui_input.connect(_on_recycle_gui_input)
+	recycle_btn.mouse_entered.connect(_on_recycle_mouse_entered)
+	recycle_btn.mouse_exited.connect(_on_recycle_mouse_exited)
 	
 func init(cardData:CardData, parent:Node, idx:int) -> void:
 	if parent is CardContainer:
@@ -82,16 +98,18 @@ func init(cardData:CardData, parent:Node, idx:int) -> void:
 	element_id = cardData.element
 	is_animal = cardData.type == 1
 
+	_base_body_color = Color.html(ElementCatalog.elements[cardData.element].levels.back().color)
 	var mat = $visuals/points/background.material.duplicate()
-	mat.set_shader_parameter("unfilled_color", Color.html(ElementCatalog.elements[cardData.element].levels.back().color))
+	mat.set_shader_parameter("unfilled_color", _base_body_color)
 	$visuals/points/background.material = mat
 	var frame_mat = frame.material.duplicate()
-	frame_mat.set_shader_parameter("body_color", Color.html(ElementCatalog.elements[cardData.element].levels.back().color))
+	frame_mat.set_shader_parameter("body_color", _base_body_color)
 	frame_mat.set_shader_parameter("name_color", Color(0.16, 0.17, 0.253, 1))
 	frame.material = frame_mat
 	frame_2.material = frame_mat
 	frame_3.material = frame_mat
 	frame_4.material = frame_mat
+	_desaturated = false
 	
 	placement_tooltip.init(cardData.type, cardData.placement, cardData.bonus)
 	$visuals/points/Label.text = "%d" % cardData.point_score
@@ -100,15 +118,25 @@ func init(cardData:CardData, parent:Node, idx:int) -> void:
 	
 	$visuals/icon.texture = load(cardData.icon)
 	$visuals/icon.show()
-	
+
 	if cardData.type == 1:
 		$visuals/bonus_points/background.material = mat
 		$visuals/bonus_points/Label.text = "+%d" % cardData.bonus_points
 		$visuals/bonus_points.show()
 		$visuals/points.show()
-		
-		$visuals/elementicon.texture = load(ElementCatalog.elements[cardData.element].levels[cardData.placement[0].level-1].icon)
+
+		var elem = ElementCatalog.elements[cardData.element]
+		var symbol_path: String
+		if cardData.placement.size() > 0:
+			symbol_path = elem.levels[cardData.placement[0].level - 1].icon
+		else:
+			symbol_path = elem.levels.back().icon
+		$visuals/elementicon.texture = load(symbol_path)
 		$visuals/elementicon.show()
+		_recycle_enabled = (
+			parent is CardContainer
+			or (parent != null and parent.has_method("reroll_card"))
+		)
 
 
 ## ----- Layout Logic ----- ##
@@ -145,6 +173,8 @@ func _on_mouse_exited() -> void:
 func _on_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			if _recycle_hovered:
+				return
 			if TouchMode.is_touch():
 				if event.double_click:
 					_touch_hover_sticky = false
@@ -191,20 +221,24 @@ func _apply_stack_visuals() -> void:
 	hit_area.pivot_offset = hit_area.size * 0.5
 	_hit_area_base_position = hit_area.position
 	_sync_hit_area_to_visuals()
+	_sync_recycle_button_stack_offset()
 
 ## ----- Other Logic ----- ##
 
 func handle_hover() -> void:
-	placement_tooltip.show()
+	if is_animal:
+		placement_tooltip.show()
 	if !is_active:
 		GameFeedback.play_hover_card()
 		set_select_visuals()
+	refresh_recycle_button(true)
 
 func handle_exit() -> void:
 	_touch_hover_sticky = false
 	placement_tooltip.hide()
 	if !is_active:
 		reset_select_visuals()
+	refresh_recycle_button(false)
 
 func select() -> void:
 	is_active = true
@@ -237,6 +271,33 @@ func reset_select_visuals() -> void:
 func set_z(z:int) -> void:
 	base_z_index = z
 	self.z_index = base_z_index
+
+
+## Match booster pack disable: muted frame + dimmed icons.
+func set_desaturated(desaturate: bool) -> void:
+	_desaturated = desaturate
+	var color := _base_body_color
+	if desaturate:
+		var lum := color.get_luminance()
+		color = _base_body_color.lerp(Color(lum, lum, lum, color.a), DESATURATE_AMOUNT)
+	var frame_mat := frame.material as ShaderMaterial
+	if frame_mat != null:
+		frame_mat.set_shader_parameter("body_color", color)
+	var points_mat := $visuals/points/background.material as ShaderMaterial
+	if points_mat != null:
+		points_mat.set_shader_parameter("unfilled_color", color)
+	if is_animal and $visuals/bonus_points.visible:
+		var bonus_mat := $visuals/bonus_points/background.material as ShaderMaterial
+		if bonus_mat != null:
+			bonus_mat.set_shader_parameter("unfilled_color", color)
+	var icon_mod := Color(0.7, 0.7, 0.7, 1.0) if desaturate else Color.WHITE
+	$visuals/icon.modulate = icon_mod
+	$visuals/CardLabel.modulate = icon_mod
+	$visuals/points.modulate = icon_mod
+	$visuals/bonus_points.modulate = icon_mod
+	if $visuals/elementicon.visible:
+		$visuals/elementicon.modulate = icon_mod
+
 
 ## ----- Animations ----- ##
 
@@ -289,6 +350,67 @@ func _process(delta: float) -> void:
 func _sync_hit_area_to_visuals() -> void:
 	hit_area.scale = visuals.scale
 	hit_area.position = _hit_area_base_position + visuals.position
+
+
+## ----- Recycle X (animals only; node in card.tscn → HitArea/RecycleButton) ----- ##
+
+## Keeps editor X/Y; only shifts Y when HitArea grows for stacked cards.
+func _sync_recycle_button_stack_offset() -> void:
+	recycle_btn.position = _recycle_base_position + Vector2(
+		0.0,
+		_hit_area_base_offset_top - hit_area.offset_top
+	)
+
+
+func refresh_recycle_button(show: bool) -> void:
+	var visible := show and _recycle_enabled and is_animal
+	recycle_btn.visible = visible
+	recycle_btn.mouse_filter = (
+		Control.MOUSE_FILTER_STOP if visible else Control.MOUSE_FILTER_IGNORE
+	)
+	if not visible:
+		_recycle_hovered = false
+		_reset_recycle_button_colors()
+
+
+func _on_recycle_gui_input(event: InputEvent) -> void:
+	if not _recycle_enabled:
+		return
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			GameFeedback.play_click_button()
+			if container != null and container.has_method("recycle_card"):
+				container.recycle_card(id)
+			elif _interaction_host != null and _interaction_host.has_method("reroll_card"):
+				_interaction_host.reroll_card(id)
+			elif _interaction_host != null and _interaction_host.has_method("recycle_card"):
+				_interaction_host.recycle_card(id)
+			get_viewport().set_input_as_handled()
+
+
+func _on_recycle_mouse_entered() -> void:
+	if not _recycle_enabled:
+		return
+	_recycle_hovered = true
+	UiPointerBlock.enter(recycle_btn)
+	GameFeedback.play_hover_button()
+	recycle_circle.self_modulate = COLOR_BROWN
+	recycle_label.add_theme_color_override("font_color", Color.WHITE)
+	if _interaction_host != null and _interaction_host.has_method("set_recycle_hover"):
+		_interaction_host.set_recycle_hover(id, true)
+
+
+func _on_recycle_mouse_exited() -> void:
+	_recycle_hovered = false
+	UiPointerBlock.exit(recycle_btn)
+	_reset_recycle_button_colors()
+	if _interaction_host != null and _interaction_host.has_method("set_recycle_hover"):
+		_interaction_host.set_recycle_hover(id, false)
+
+
+func _reset_recycle_button_colors() -> void:
+	recycle_circle.self_modulate = Color.WHITE
+	recycle_label.add_theme_color_override("font_color", COLOR_BROWN)
 
 func _animate_spawn(target_pos: Vector2, target_angle: float, z: int) -> void:
 	FeedbackAnimHelper.play_sounds(spawn_sounds, spawn_sound_volume_db)

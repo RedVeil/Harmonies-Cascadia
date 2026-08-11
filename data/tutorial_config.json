@@ -91,7 +91,7 @@
 		{
 			"id": "animal_market",
 			"title": "Animals",
-			"body": "Open the animal market (paw pack) and take an animal into your hand.",
+			"body": "Open the animal market (arrow above the packs) and take an animal into your hand.",
 			"highlight": { "type": "hud", "target": "boosters" },
 			"gates": {
 				"allow_actions": ["take_booster", "buy_animal"],

@@ -47,8 +47,10 @@ point_count = 4
 [node name="HexTile" type="StaticBody3D" unique_id=1124611875]
 script = ExtResource("1_pcuo8")
 place_celebrate_sounds = Array[AudioStream]([ExtResource("5_place")])
-placed_lift = 0.5
-placed_scale_peak = 1.1
+placed_lift = 0.42
+placed_scale_peak = 1.085
+contributor_lift = 0.16
+contributor_scale_peak = 1.045
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1831272945]
 shape = SubResource("ConvexPolygonShape3D_vyrwg")

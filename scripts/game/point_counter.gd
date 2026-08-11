@@ -29,9 +29,6 @@ var target : int = 0
 var current: int = 0
 var preview: int = 0
 
-var is_hovered : bool = false
-var timer : float = 0.5
-
 var current_backup: int = 0
 var target_backup: int = 0
 
@@ -56,7 +53,6 @@ func _ready() -> void:
 	$ProgressBar.material.set_shader_parameter("lerp_value", 0.0)
 	$ProgressBar.material.set_shader_parameter("third_value", 0.0)
 	$Label.text = "%d" % current
-	_set_tooltip_text(0, target)
 	_setup_gain_label()
 	score_label = $Label
 	progress_sprite = $ProgressBar
@@ -108,7 +104,6 @@ func preview_progress(val:int) -> void:
 			$ProgressBar.material.set_shader_parameter("current_value",  float(preview) / float(target))
 		
 		$Label.text = "%d" % current
-		_set_tooltip_text(preview, target)
 
 func apply_preview(animate_reward: bool = false) -> void:
 	current_backup = current
@@ -151,24 +146,13 @@ func undo() -> void:
 	target = target_backup
 	apply_current_style()
 
-## ----- Tooltip Logic ----- ##
-
-func _process(delta:float) -> void:
-	if is_hovered:
-		timer -= delta
-		if timer <= 0.0:
-			$Tooltip.show()
+## ----- Interactions Logic ----- ##
 
 func _on_mouse_entered() -> void:
 	UiPointerBlock.enter(self)
-	is_hovered = true
-	timer = 0.5
 
 func _on_mouse_exited() -> void:
 	UiPointerBlock.exit(self)
-	is_hovered = false
-	timer = 0.5
-	$Tooltip.hide()
 
 ## ----- Animations ----- ##
 
@@ -262,7 +246,6 @@ func _set_animated_score_display(value: float) -> void:
 	$ProgressBar.material.set_shader_parameter("third_value", 0.0)
 	$ProgressBar.material.set_shader_parameter("current_value", 0.0)
 	$ProgressBar.material.set_shader_parameter("lerp_value", progress)
-	_set_tooltip_text(shown, target)
 
 func _finish_gain_popup() -> void:
 	gain_label.visible = false
@@ -288,10 +271,13 @@ func apply_current_style() -> void:
 	$ProgressBar.material.set_shader_parameter("current_value",  0.0)
 	$ProgressBar.material.set_shader_parameter("lerp_value",  float(current) / float(target))
 	$Label.text = "%d" % current
-	_set_tooltip_text(current, target)
 
-func _set_tooltip_text(score: int, goal: int) -> void:
-	if GameSession.allows_map_growth():
-		$Tooltip/Label.text = "This is your score. Earn enough points to unlock additional tiles to play with.\n(%d / %d)" % [score, goal]
-	else:
-		$Tooltip/Label.text = "This is your highscore"
+
+## ----- Endless Continue Apply Helpers ----- ##
+func apply_saved_state(progress_state: Dictionary) -> void:
+	if progress_state.is_empty():
+		return
+	current = int(progress_state.get("current", current))
+	target = int(progress_state.get("target", target))
+	preview = int(progress_state.get("preview", preview))
+	apply_current_style()

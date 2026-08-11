@@ -120,3 +120,39 @@ func pick_quest(_type: int, element: int) -> int:
 	)
 	var pool: Array = options_by_element if not options_by_element.is_empty() else options_filtered
 	return pool[_rng.randi_range(0, pool.size() - 1)].id
+
+
+## ----- Endless Continue Apply Helpers ----- ##
+func apply_saved_state(quests_state: Dictionary) -> void:
+	if quests_state.is_empty():
+		return
+
+	var saved_active: Array = quests_state.get("active_quests", [])
+	var saved_completed: Array = quests_state.get("completed_quests", [])
+
+	# Normalize arrays to quest_limit size.
+	for i in range(active_quests.size()):
+		active_quests[i] = -1
+
+	for i in range(min(saved_active.size(), active_quests.size())):
+		active_quests[i] = int(saved_active[i])
+
+	completed_quests.assign(saved_completed.duplicate(true))
+
+	# Rebuild quest UI nodes from scratch.
+	for i in range(quest_container.quests.size()):
+		if quest_container.quests[i] != null:
+			quest_container.remove_quest(i)
+
+	for i in range(active_quests.size()):
+		var qid := int(active_quests[i])
+		if qid == -1:
+			continue
+		if qid < 0 or qid >= QuestCatalog.quest_options.size():
+			continue
+		quest_container.add_quest(i, QuestCatalog.quest_options[qid])
+
+	# Keep undo snapshots in sync.
+	active_quests_backup = active_quests.duplicate(true)
+	completed_quests_backup = completed_quests.duplicate(true)
+	completed_slot_indices.clear()

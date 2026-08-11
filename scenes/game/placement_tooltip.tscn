@@ -11,13 +11,13 @@ corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
-shadow_color = Color(0, 0, 0, 0.32156864)
-shadow_size = 8
+shadow_color = Color(0, 0, 0, 0.078)
+shadow_size = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d75bn"]
 bg_color = Color(0.9137255, 0.8352941, 0.7607843, 1)
-shadow_color = Color(0, 0, 0, 0.32156864)
-shadow_size = 8
+shadow_color = Color(0, 0, 0, 0.078)
+shadow_size = 4
 
 [node name="PlacementTooltip" type="Node2D" unique_id=1404822029]
 script = ExtResource("1_kjs7j")
@@ -218,9 +218,9 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_n22po")
 
 [node name="PointsLabel" type="Label" parent="Panel" unique_id=1925528481]
 layout_mode = 0
-offset_top = 102.0
+offset_top = 97.0
 offset_right = 100.0
-offset_bottom = 128.0
+offset_bottom = 130.0
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.4745098, 1)
 theme_override_colors/font_outline_color = Color(0.5686275, 0.5176471, 0.4745098, 1)
 theme_override_constants/outline_size = 1

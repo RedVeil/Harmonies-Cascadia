@@ -9,9 +9,19 @@
 [ext_resource type="AudioStream" uid="uid://ftrpl5416bkc" path="res://assets/audio/bookFlip2.ogg" id="7_draw"]
 [ext_resource type="Material" uid="uid://dr4lo0ifvqtd4" path="res://assets/ui/sdf_card_frame.tres" id="8_frame"]
 [ext_resource type="Material" path="res://assets/ui/sdf_card_shadow.tres" id="9_shadow"]
+[ext_resource type="Texture2D" uid="uid://ca2hp56qvfswa" path="res://assets/icons/circle.png" id="10_circle"]
+[ext_resource type="Material" uid="uid://cn853ytgoxks6" path="res://assets/ui/sdf_circle_fill.tres" id="11_fill"]
+[ext_resource type="Shader" uid="uid://y4g8ky747mqh" path="res://assets/shader/ui/shadow.gdshader" id="12_shadow_shader"]
+[ext_resource type="FontFile" uid="uid://cjgc8hhsb6xtr" path="res://assets/fonts/Dangrek-Regular.ttf" id="13_font"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jl6rh"]
 size = Vector2(94, 168)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_recycle_shadow"]
+shader = ExtResource("12_shadow_shader")
+shader_parameter/shadow_color = Color(0, 0, 0, 0.28)
+shader_parameter/blur_size = 16.0
+shader_parameter/radius = 0.85
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_s65g1"]
 shader = ExtResource("4_v07qs")
@@ -53,6 +63,42 @@ offset_left = -47.0
 offset_top = -84.0
 offset_right = 47.0
 offset_bottom = 84.0
+
+[node name="RecycleButton" type="Control" parent="HitArea" unique_id=428326451]
+visible = false
+z_index = 40
+anchors_preset = 0
+offset_left = 33.0
+offset_top = -16.0
+offset_right = 61.0
+offset_bottom = 12.0
+mouse_filter = 2
+
+[node name="Shadow" type="Sprite2D" parent="HitArea/RecycleButton" unique_id=1401233581]
+z_index = -1
+material = SubResource("ShaderMaterial_recycle_shadow")
+position = Vector2(15.5, 16.5)
+scale = Vector2(0.085, 0.085)
+texture = ExtResource("10_circle")
+
+[node name="Circle" type="Sprite2D" parent="HitArea/RecycleButton" unique_id=1644193754]
+material = ExtResource("11_fill")
+position = Vector2(14, 14)
+scale = Vector2(0.07, 0.07)
+texture = ExtResource("10_circle")
+
+[node name="Label" type="Label" parent="HitArea/RecycleButton" unique_id=380243379]
+layout_mode = 0
+offset_left = 1.0
+offset_top = -2.0
+offset_right = 29.0
+offset_bottom = 31.0
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_fonts/font = ExtResource("13_font")
+theme_override_font_sizes/font_size = 18
+text = "X"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="visuals" type="Node2D" parent="." unique_id=1650819141]
 
@@ -137,13 +183,14 @@ texture = ExtResource("3_b2sko")
 [node name="elementicon" type="TextureRect" parent="visuals" unique_id=25438168]
 visible = false
 z_index = 1
-offset_left = 14.999992
-offset_top = -76.0
-offset_right = 415.0
-offset_bottom = 324.0
-scale = Vector2(0.06, 0.06)
+offset_left = 14.0
+offset_top = -74.0
+offset_right = 38.0
+offset_bottom = -42.5
 mouse_filter = 2
 texture = ExtResource("5_b2sko")
+expand_mode = 1
+stretch_mode = 5
 metadata/_edit_use_anchors_ = true
 
 [node name="points" type="Node2D" parent="visuals" unique_id=274107084]
