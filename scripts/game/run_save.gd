@@ -1,32 +1,76 @@
 extends Node
-class_name EndlessRunSave
+class_name RunSave
 
-## Endless run persistence for the “Continue / New” flow.
+## Mode-aware run persistence for the Continue / New flow (endless, daily, quick).
 ##
 ## Design:
-## - Saves are written to `user://endless_run_save.json` when the user ends an endless run.
-## - The “Continue” button loads the save to an in-memory pending state, then swaps scenes.
+## - Saves are written when the user ends a supported run from the in-game menu.
+## - Continue loads the save to an in-memory pending state, then swaps scenes.
 ## - After the game scene loads, Orchestrator consumes the pending state and applies it.
 
-const SAVE_PATH := "user://endless_run_save.json"
+const PATH_ENDLESS := "user://endless_run_save.json"
+const PATH_DAILY := "user://daily_run_save.json"
+const PATH_NORMAL := "user://normal_run_save.json"
 
 # In-memory payload used between scene loads (main menu -> game scene).
 static var _has_pending_state: bool = false
 static var _pending_state: Dictionary = {}
 
 
-static func has_save() -> bool:
-	return FileAccess.file_exists(SAVE_PATH)
+static func path_for_mode(mode: int) -> String:
+	match mode:
+		GameSession.GameMode.DAILY:
+			return PATH_DAILY
+		GameSession.GameMode.NORMAL:
+			return PATH_NORMAL
+		GameSession.GameMode.ENDLESS:
+			return PATH_ENDLESS
+		_:
+			return ""
 
 
-static func clear_save() -> void:
-	# FileAccess.remove returns an Error; ignore.
-	if FileAccess.file_exists(SAVE_PATH):
-		# DirAccess removal is an *instance* method in this Godot version.
-		var dir := DirAccess.open("user://")
-		if dir == null:
-			return
-		dir.remove(SAVE_PATH.get_file())
+static func supports_mode(mode: int) -> bool:
+	return (
+		mode == GameSession.GameMode.DAILY
+		or mode == GameSession.GameMode.NORMAL
+		or mode == GameSession.GameMode.ENDLESS
+	)
+
+
+static func has_save(mode: int) -> bool:
+	var path := path_for_mode(mode)
+	if path.is_empty():
+		return false
+	if not FileAccess.file_exists(path):
+		return false
+	if mode == GameSession.GameMode.DAILY:
+		return is_daily_save_valid(load_save(mode))
+	return true
+
+
+static func is_daily_save_valid(state: Dictionary) -> bool:
+	if state.is_empty():
+		return false
+	var saved_seed := int(state.get("run_seed", 0))
+	return saved_seed != 0 and saved_seed == GameSession.get_daily_seed()
+
+
+static func clear_expired_daily_save() -> void:
+	if not FileAccess.file_exists(PATH_DAILY):
+		return
+	var state := load_save(GameSession.GameMode.DAILY)
+	if not is_daily_save_valid(state):
+		clear_save(GameSession.GameMode.DAILY)
+
+
+static func clear_save(mode: int) -> void:
+	var path := path_for_mode(mode)
+	if path.is_empty() or not FileAccess.file_exists(path):
+		return
+	var dir := DirAccess.open("user://")
+	if dir == null:
+		return
+	dir.remove(path.get_file())
 
 
 static func set_pending_state(state: Dictionary) -> void:
@@ -51,14 +95,7 @@ static func _coord_to_arr(c: Vector2i) -> Array[int]:
 	return [c.x, c.y]
 
 
-static func _coord_from_arr(a: Array) -> Vector2i:
-	if a.size() < 2:
-		return Vector2i.ZERO
-	return Vector2i(int(a[0]), int(a[1]))
-
-
 static func _tile_to_dict(t: Object) -> Dictionary:
-	# HexTileData is a Resource; store only exported fields we need.
 	if t == null:
 		return {}
 	return {
@@ -72,16 +109,9 @@ static func _tile_to_dict(t: Object) -> Dictionary:
 	}
 
 
-static func _tile_from_dict(d: Dictionary) -> Dictionary:
-	# NOTE: We deserialize into a plain dict; the hex/tile apply logic will convert to HexTileData.
-	# Keeping it as dict avoids early dependency on resource constructors in this module.
-	return d
-
-
 static func _serialize_board(hex_manager: Object) -> Dictionary:
 	if hex_manager == null:
 		return {}
-	var tiles := {}
 	var tiles_out: Array[Dictionary] = []
 	for coord in hex_manager.tiles.keys():
 		var tile_data = hex_manager.tiles[coord]
@@ -118,7 +148,6 @@ static func _serialize_scoring(score_engine: Object) -> Dictionary:
 		return {}
 
 	var rules_out: Dictionary = {}
-	# active_rules: Dictionary[int, ScoringRule]
 	for element_type in score_engine.active_rules.keys():
 		var rule: Object = score_engine.active_rules[element_type]
 		if rule == null:
@@ -159,7 +188,6 @@ static func _serialize_hand(card_manager: Object) -> Dictionary:
 	if card_manager == null:
 		return {}
 	var hand_out: Array[Variant] = []
-	# card_manager.cards is an Array[CardData] (with nulls).
 	for i in range(card_manager.cards.size()):
 		var c = card_manager.cards[i]
 		if c == null:
@@ -195,7 +223,6 @@ static func _serialize_boosters(booster_manager: Object) -> Dictionary:
 			"quest_ids": b.quest_ids.duplicate(true),
 			"cards": [],
 		}
-		# BoosterData.cards: Array[CardData]
 		for c in b.cards:
 			if c == null:
 				continue
@@ -207,7 +234,6 @@ static func _serialize_boosters(booster_manager: Object) -> Dictionary:
 		boosters_out.append(booster_entry)
 
 	var market_offers_out: Array[Variant] = []
-	# _market_offers is used for animal market panel in non-puzzle mode.
 	var market_offers: Array = booster_manager._market_offers if booster_manager != null else []
 
 	for o in market_offers:
@@ -220,7 +246,6 @@ static func _serialize_boosters(booster_manager: Object) -> Dictionary:
 				"amount": int(o.amount),
 			})
 
-	# _bought_animal_ids tracks which animals are already bought (Dictionary[int,bool]).
 	var bought_ids_out: Dictionary = {}
 	for k in booster_manager._bought_animal_ids.keys():
 		bought_ids_out[str(k)] = true
@@ -244,12 +269,17 @@ static func _serialize_boosters(booster_manager: Object) -> Dictionary:
 static func save_from_orchestrator(orchestrator: Object) -> void:
 	if orchestrator == null:
 		return
+	if not supports_mode(GameSession.game_mode):
+		return
 
-	# State is captured from current in-memory game components.
+	var path := path_for_mode(GameSession.game_mode)
+	if path.is_empty():
+		return
 
 	var state := {
 		"run_seed": int(GameSession.run_seed),
 		"game_mode": int(GameSession.game_mode),
+		"map_size": int(GameSession.map_size),
 		"ring_count": int(GameSession.ring_count),
 		"checkpoint": int(GameSession.checkpoint),
 		"checkpoint_multiplier": float(GameSession.checkpoint_multiplier),
@@ -267,32 +297,31 @@ static func save_from_orchestrator(orchestrator: Object) -> void:
 	}
 
 	var json := JSON.stringify(state)
-	var f := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
+	var f := FileAccess.open(path, FileAccess.WRITE)
 	if f == null:
-		push_error("EndlessRunSave: failed to open save file: %s" % SAVE_PATH)
+		push_error("RunSave: failed to open save file: %s" % path)
 		return
 	f.store_string(json)
 	f.flush()
 	f.close()
 
 
-static func load_save() -> Dictionary:
-	if not has_save():
+static func load_save(mode: int) -> Dictionary:
+	var path := path_for_mode(mode)
+	if path.is_empty() or not FileAccess.file_exists(path):
 		return {}
-	var parsed = JSON.parse_string(FileAccess.get_file_as_string(SAVE_PATH))
+	var parsed = JSON.parse_string(FileAccess.get_file_as_string(path))
 	if typeof(parsed) != TYPE_DICTIONARY:
 		return {}
 	return parsed
 
 
 static func apply_state_to_orchestrator(orchestrator: Object, state: Dictionary) -> void:
-	# This method is intentionally defensive and calls into helper methods
-	# if they exist. The actual per-system “apply_saved_state” helpers are
-	# added in later to-dos.
 	if orchestrator == null or state.is_empty():
 		return
 
-	# Run config (must happen before gameplay randomness; main menu sets run_seed before scene load for Continue).
+	if state.has("map_size"):
+		GameSession.map_size = int(state["map_size"]) as GameSession.MapSize
 	if state.has("ring_count"):
 		GameSession.ring_count = int(state["ring_count"])
 	if state.has("checkpoint"):
@@ -304,7 +333,6 @@ static func apply_state_to_orchestrator(orchestrator: Object, state: Dictionary)
 	if state.has("map_growth_enabled"):
 		GameSession.map_growth_enabled = bool(state["map_growth_enabled"])
 
-	# Core orchestration vars.
 	if state.has("map_points"):
 		orchestrator.map_points = int(state["map_points"])
 	if state.has("placed_tile_count"):

@@ -6,6 +6,18 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_left"]
 bg_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_code_input"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_text"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_chip"]
@@ -21,18 +33,6 @@ content_margin_top = 2.0
 content_margin_right = 16.0
 content_margin_bottom = 2.0
 bg_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_code_input"]
-content_margin_left = 12.0
-content_margin_top = 8.0
-content_margin_right = 12.0
-content_margin_bottom = 8.0
-bg_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(1, 1, 1, 1)
 
 [node name="MainMenu" type="Control" unique_id=736225247]
 layout_mode = 3
@@ -94,13 +94,50 @@ theme_override_constants/separation = 20
 [node name="TitleLabel" type="Label" parent="Split/LeftColumn/Margin/NavStack" unique_id=2072497958]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 42
-text = "HARMONIES"
+theme_override_colors/font_outline_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 72
+text = "SYMBIA"
 autowrap_mode = 2
 
-[node name="Spacer" type="Control" parent="Split/LeftColumn/Margin/NavStack" unique_id=556082255]
-custom_minimum_size = Vector2(0, 16)
+[node name="NameNav" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack" unique_id=-2094967296]
+visible = false
 layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+
+[node name="NameHint" type="Label" parent="Split/LeftColumn/Margin/NavStack/NameNav" unique_id=-2094967295]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.7)
+theme_override_font_sizes/font_size = 14
+text = "Choose a player name"
+autowrap_mode = 2
+
+[node name="NameInput" type="LineEdit" parent="Split/LeftColumn/Margin/NavStack/NameNav" unique_id=-2094967294]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_placeholder_color = Color(1, 1, 1, 0.55)
+theme_override_styles/normal = SubResource("StyleBoxFlat_code_input")
+theme_override_styles/read_only = SubResource("StyleBoxFlat_code_input")
+theme_override_styles/focus = SubResource("StyleBoxFlat_code_input")
+placeholder_text = "Your name"
+caret_blink = true
+
+[node name="NameAcceptButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/NameNav" unique_id=-2094967293]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
+theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBoxEmpty_text")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_text")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_text")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_text")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_text")
+text = "ACCEPT"
+flat = true
+alignment = 0
 
 [node name="RootNav" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack" unique_id=1337161300]
 visible = false
@@ -274,6 +311,44 @@ theme_override_font_sizes/font_size = 13
 text = "Complete the daily session and compete for the high score"
 autowrap_mode = 2
 
+[node name="DailyInlineButtons" type="HBoxContainer" parent="Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock" unique_id=2100000010]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="ContinueButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyInlineButtons" unique_id=2100000011]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_focus_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_chip")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
+theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
+text = "CONTINUE"
+
+[node name="NewButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyInlineButtons" unique_id=2100000012]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_focus_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_chip")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
+theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
+text = "NEW"
+
 [node name="QuickSessionBlock" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack/PlayNav" unique_id=70167912]
 layout_mode = 2
 theme_override_constants/separation = 10
@@ -305,6 +380,44 @@ theme_override_constants/line_spacing = -5
 theme_override_font_sizes/font_size = 13
 text = "Play a quick round of harmonies with limited tile space."
 autowrap_mode = 2
+
+[node name="QuickInlineButtons" type="HBoxContainer" parent="Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc" unique_id=2100000020]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="ContinueButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickInlineButtons" unique_id=2100000021]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_focus_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_chip")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
+theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
+text = "CONTINUE"
+
+[node name="NewButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickInlineButtons" unique_id=2100000022]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_focus_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_chip")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
+theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
+text = "NEW"
 
 [node name="MapSizeRow" type="HBoxContainer" parent="Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc" unique_id=2071344124]
 visible = false
@@ -579,13 +692,19 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
 mouse_filter = 2
 
+[connection signal="text_submitted" from="Split/LeftColumn/Margin/NavStack/NameNav/NameInput" to="." method="_on_name_submitted"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/NameNav/NameAcceptButton" to="." method="_on_name_accept_pressed"]
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/RootNav/PlayBlock/PlayButton" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/RootNav/TutorialBlock/TutorialButton" to="." method="_on_tutorial_pressed"]
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/RootNav/SettingsBlock/SettingsButton" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/RootNav/EnterCodeBlock/EnterCodeButton" to="." method="_on_enter_code_pressed"]
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/RootNav/ExitButton" to="." method="_on_exit_pressed"]
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyButton" to="." method="_on_daily_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyInlineButtons/ContinueButton" to="." method="_on_daily_continue_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyInlineButtons/NewButton" to="." method="_on_daily_new_pressed"]
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickSessionButton" to="." method="_on_quick_session_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickInlineButtons/ContinueButton" to="." method="_on_quick_continue_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickInlineButtons/NewButton" to="." method="_on_quick_new_pressed"]
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow/SmallButton" to="." method="_on_map_size_small_pressed"]
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow/MediumButton" to="." method="_on_map_size_medium_pressed"]
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow/LargeButton" to="." method="_on_map_size_large_pressed"]

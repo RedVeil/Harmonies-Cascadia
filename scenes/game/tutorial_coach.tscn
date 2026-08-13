@@ -1,14 +1,14 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://khskqjho5hxb"]
 
-[ext_resource type="Script" path="res://scripts/game/tutorial_coach.gd" id="1_coach"]
+[ext_resource type="Script" uid="uid://u63h3vtt6r68" path="res://scripts/game/tutorial_coach.gd" id="1_coach"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_spotlight"]
-bg_color = Color(1, 1, 1, 0)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.95686275, 0.8745098, 0.7921569, 1)
+bg_color = Color(1, 1, 0.6350498, 0)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(1, 1, 0.6350498, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
@@ -23,11 +23,26 @@ corner_radius_bottom_left = 12
 shadow_color = Color(0, 0, 0, 0.2)
 shadow_size = 6
 
-[node name="TutorialCoach" type="CanvasLayer"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_chip"]
+content_margin_left = 16.0
+content_margin_top = 2.0
+content_margin_right = 16.0
+content_margin_bottom = 2.0
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_chip_hover"]
+content_margin_left = 16.0
+content_margin_top = 2.0
+content_margin_right = 16.0
+content_margin_bottom = 2.0
+bg_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+
+[node name="TutorialCoach" type="CanvasLayer" unique_id=1049361088]
 layer = 12
 script = ExtResource("1_coach")
 
-[node name="DimmerRoot" type="Control" parent="."]
+[node name="Highlights" type="Control" parent="." unique_id=1830237816]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -35,37 +50,348 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="DimTop" type="ColorRect" parent="DimmerRoot"]
-mouse_filter = 2
-color = Color(0, 0, 0, 0.45)
-
-[node name="DimBottom" type="ColorRect" parent="DimmerRoot"]
-mouse_filter = 2
-color = Color(0, 0, 0, 0.45)
-
-[node name="DimLeft" type="ColorRect" parent="DimmerRoot"]
-mouse_filter = 2
-color = Color(0, 0, 0, 0.45)
-
-[node name="DimRight" type="ColorRect" parent="DimmerRoot"]
-mouse_filter = 2
-color = Color(0, 0, 0, 0.45)
-
-[node name="Spotlight" type="Panel" parent="."]
+[node name="boosters" type="Panel" parent="Highlights" unique_id=1239422822]
 visible = false
-offset_right = 100.0
-offset_bottom = 100.0
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 9.0
+offset_top = -101.0
+offset_right = 314.0
+grow_vertical = 0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
 
-[node name="Bubble" type="Panel" parent="."]
+[node name="card_expanded" type="Panel" parent="Highlights" unique_id=432044396]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -71.0
+offset_top = -386.0
+offset_right = 69.0
+offset_bottom = 5.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
+
+[node name="card" type="Panel" parent="Highlights" unique_id=1499682675]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -71.0
+offset_top = -252.0
+offset_right = 69.0
+offset_bottom = 5.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
+
+[node name="hand_expanded" type="Panel" parent="Highlights" unique_id=2066890696]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -179.0
+offset_top = -161.0
+offset_right = 185.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
+
+[node name="hand" type="Panel" parent="Highlights" unique_id=1919726371]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -145.0
+offset_top = -161.0
+offset_right = 147.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
+
+[node name="animal_button" type="Panel" parent="Highlights" unique_id=2054818584]
+visible = false
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = -205.0
+offset_right = 58.0
+offset_bottom = -137.0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
+
+[node name="animals" type="Panel" parent="Highlights" unique_id=1115332346]
+visible = false
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = -300.0
+offset_right = 333.0
+offset_bottom = -93.0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
+
+[node name="quests_expanded" type="Panel" parent="Highlights" unique_id=647956649]
+visible = false
+layout_mode = 0
+offset_left = 53.0
+offset_top = 89.0
+offset_right = 230.0
+offset_bottom = 245.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
+
+[node name="quests" type="Panel" parent="Highlights" unique_id=711441317]
+visible = false
+layout_mode = 1
+offset_left = 53.0
+offset_top = 137.0
+offset_right = 108.0
+offset_bottom = 189.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
+
+[node name="score" type="Panel" parent="Highlights" unique_id=930974492]
+visible = false
+layout_mode = 1
+offset_left = 14.0
+offset_top = 10.0
+offset_right = 147.0
+offset_bottom = 149.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
+
+[node name="undo" type="Panel" parent="Highlights" unique_id=1182907737]
+visible = false
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -71.0
+offset_top = -70.0
+offset_right = -10.0
+offset_bottom = -9.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
+
+[node name="menu" type="Panel" parent="Highlights" unique_id=1398115736]
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -119.0
+offset_top = -20.0
+offset_right = -71.0
+offset_bottom = 45.0
+grow_horizontal = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
+
+[node name="scoring_menu" type="Panel" parent="Highlights" unique_id=1504129074]
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -80.0
+offset_top = -10.0
+offset_right = -16.0
+offset_bottom = 49.0
+grow_horizontal = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
+
+[node name="scoring_forest_icon" type="Panel" parent="Highlights" unique_id=1274665929]
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -76.0
+offset_top = 11.0
+offset_right = -20.0
+offset_bottom = 68.0
+grow_horizontal = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
+
+[node name="scoring_forest" type="Panel" parent="Highlights" unique_id=1998798009]
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -280.0
+offset_top = 2.0
+offset_right = -80.0
+offset_bottom = 331.0
+grow_horizontal = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
+
+[node name="scoring_book" type="Panel" parent="Highlights" unique_id=1847263901]
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -76.0
+offset_top = 261.0
+offset_right = -20.0
+offset_bottom = 318.0
+grow_horizontal = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
+
+[node name="tutorial_modal" type="Panel" parent="Highlights" unique_id=1847263902]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -440.0
+offset_top = -274.0
+offset_right = 440.0
+offset_bottom = 274.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
+
+[node name="hex_0_0" type="Panel" parent="Highlights" unique_id=65274186]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -101.0
+offset_top = -141.0
+offset_right = 99.0
+offset_bottom = 39.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
+
+[node name="hex_0_1" type="Panel" parent="Highlights" unique_id=2057134410]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -101.0
+offset_top = -47.0
+offset_right = 99.0
+offset_bottom = 133.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
+
+[node name="hex_1_-1" type="Panel" parent="Highlights" unique_id=1343763971]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 18.0
+offset_top = -190.0
+offset_right = 218.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
+
+[node name="hex_-1_0" type="Panel" parent="Highlights" unique_id=439219209]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -221.0
+offset_top = -190.0
+offset_right = -21.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
+
+[node name="end_session" type="Panel" parent="Highlights" unique_id=1072985061]
+visible = false
+layout_mode = 1
+offset_left = 22.0
+offset_top = 140.0
+offset_right = 196.0
+offset_bottom = 186.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
+
+[node name="share" type="Panel" parent="Highlights" unique_id=1156647822]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.333333
+offset_left = 21.0
+offset_top = 215.0
+offset_right = -21.0
+offset_bottom = 275.0
+grow_horizontal = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
+
+[node name="Bubble" type="Panel" parent="." unique_id=645156050]
 offset_left = 40.0
 offset_top = 480.0
 offset_right = 400.0
 offset_bottom = 680.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_bubble")
 
-[node name="Margin" type="MarginContainer" parent="Bubble"]
+[node name="Margin" type="MarginContainer" parent="Bubble" unique_id=1647177289]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -77,42 +403,59 @@ theme_override_constants/margin_top = 14
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 14
 
-[node name="VBox" type="VBoxContainer" parent="Bubble/Margin"]
+[node name="VBox" type="VBoxContainer" parent="Bubble/Margin" unique_id=859966539]
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 0
 
-[node name="Title" type="Label" parent="Bubble/Margin/VBox"]
+[node name="Title" type="Label" parent="Bubble/Margin/VBox" unique_id=1530813466]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
 theme_override_font_sizes/font_size = 20
 text = "Title"
 autowrap_mode = 2
 
-[node name="Body" type="Label" parent="Bubble/Margin/VBox"]
+[node name="Body" type="Label" parent="Bubble/Margin/VBox" unique_id=1868794361]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-theme_override_font_sizes/font_size = 15
-text = "Body text"
+theme_override_constants/line_spacing = -5
+theme_override_font_sizes/font_size = 14
+text = "This short tutorial walks you through a turn. Follow the highlights — only the suggested actions will work."
 autowrap_mode = 2
 
-[node name="ButtonRow" type="HBoxContainer" parent="Bubble/Margin/VBox"]
+[node name="ButtonRow" type="HBoxContainer" parent="Bubble/Margin/VBox" unique_id=1374659599]
 layout_mode = 2
-theme_override_constants/separation = 8
-alignment = 2
+theme_override_constants/separation = 10
+alignment = 1
 
-[node name="TipButton" type="Button" parent="Bubble/Margin/VBox/ButtonRow"]
-visible = false
-custom_minimum_size = Vector2(0, 32)
+[node name="SkipButton" type="Button" parent="Bubble/Margin/VBox/ButtonRow" unique_id=2060048505]
+custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
-text = "Diagram"
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_focus_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_chip")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
+theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
+text = "Skip Tutorial"
 
-[node name="SkipButton" type="Button" parent="Bubble/Margin/VBox/ButtonRow"]
-custom_minimum_size = Vector2(0, 32)
+[node name="ContinueButton" type="Button" parent="Bubble/Margin/VBox/ButtonRow" unique_id=1933904140]
+custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
-text = "Skip"
-
-[node name="ContinueButton" type="Button" parent="Bubble/Margin/VBox/ButtonRow"]
-custom_minimum_size = Vector2(0, 32)
-layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_focus_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_chip")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
+theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
 text = "Continue"

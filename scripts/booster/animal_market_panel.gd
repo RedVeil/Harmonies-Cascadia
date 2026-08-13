@@ -157,9 +157,6 @@ func _apply_buy_visuals() -> void:
 		if card == null:
 			continue
 		card.set_desaturated(not _is_buy_enabled(i))
-		if not _is_buy_enabled(i) and _hover_card_id == i and _reroll_hover_id != i:
-			_hover_card_id = -1
-			card.handle_exit()
 	_refresh_reroll_button_visibility()
 
 
@@ -169,8 +166,6 @@ func hover_card(id: int) -> void:
 	if not _expanded:
 		return
 	if id < 0 or id >= _cards.size() or _cards[id] == null:
-		return
-	if not _is_buy_enabled(id):
 		return
 	if _hover_card_id == -1:
 		_hover_card_id = id

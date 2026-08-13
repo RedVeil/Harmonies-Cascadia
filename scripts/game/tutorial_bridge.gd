@@ -9,6 +9,8 @@ var active: bool = false
 var allow_actions: Array = []
 var allow_booster_ids: Array = []
 var allow_card_filter: String = ""
+var allow_element_ids: Array[int] = []
+var allow_animal_ids: Array[int] = []
 var allow_coords_mode: String = ""
 var allow_coords: Array[Vector2i] = []
 
@@ -22,8 +24,15 @@ func set_gates(gates: Dictionary) -> void:
 	if typeof(allow_booster_ids) != TYPE_ARRAY:
 		allow_booster_ids = []
 	allow_card_filter = str(gates.get("allow_card_filter", ""))
+	allow_element_ids.assign(gates.get("allow_element_ids", []))
+	if typeof(allow_element_ids) != TYPE_ARRAY:
+		allow_element_ids = []
+	allow_animal_ids.assign(gates.get("allow_animal_ids", []))
+	if typeof(allow_animal_ids) != TYPE_ARRAY:
+		allow_animal_ids = []
 	allow_coords.clear()
-	allow_coords_mode = ""
+	allow_coords_mode = str(gates.get("allow_coords_mode", ""))
+	# Back-compat: older configs use `allow_coords: "any_empty"` etc.
 	var coords_raw = gates.get("allow_coords", null)
 	if typeof(coords_raw) == TYPE_STRING:
 		allow_coords_mode = str(coords_raw)
@@ -40,6 +49,8 @@ func clear_gates() -> void:
 	allow_actions = []
 	allow_booster_ids = []
 	allow_card_filter = ""
+	allow_element_ids.clear()
+	allow_animal_ids.clear()
 	allow_coords_mode = ""
 	allow_coords.clear()
 
@@ -50,11 +61,21 @@ func allows_action(action: String) -> bool:
 	return allow_actions.has(action)
 
 
+func allows_animal_buy(animal_id: int) -> bool:
+	if not active:
+		return true
+	if allow_animal_ids.is_empty():
+		return true
+	return allow_animal_ids.has(animal_id)
+
+
 func allows_booster(id: int) -> bool:
 	if not active:
 		return true
 	if id == 4:
 		# Opening the animal market.
+		if allows_action("open_animal_market"):
+			return _booster_id_allowed(id)
 		if allows_action("buy_animal"):
 			return _booster_id_allowed(id)
 		if allows_action("take_booster"):
@@ -83,11 +104,18 @@ func allows_card(card: CardData) -> bool:
 		return true
 	match allow_card_filter:
 		"any_element":
-			return card != null and card.type == CardData.CARD_TYPE.ELEMENT
+			if card == null or card.type != CardData.CARD_TYPE.ELEMENT:
+				return false
+			return allow_element_ids.is_empty() or allow_element_ids.has(int(card.id))
 		"any_animal":
 			return card != null and card.type == CardData.CARD_TYPE.ANIMAL
 		_:
-			return true
+			if card == null:
+				return false
+			if allow_element_ids.is_empty():
+				return true
+			# Best-effort: only element cards have meaningful `id` filtering.
+			return card.type == CardData.CARD_TYPE.ELEMENT and allow_element_ids.has(int(card.id))
 
 
 func allows_place_coord(coord: Vector2i, tile_data: HexTileData, placement_valid: bool) -> bool:
@@ -95,8 +123,8 @@ func allows_place_coord(coord: Vector2i, tile_data: HexTileData, placement_valid
 		return true
 	if not allows_action("place"):
 		return false
-	if not allow_coords.is_empty():
-		return allow_coords.has(coord)
+	if not allow_coords.is_empty() and not allow_coords.has(coord):
+		return false
 	match allow_coords_mode:
 		"any_empty":
 			return tile_data != null and int(tile_data.element) == 0

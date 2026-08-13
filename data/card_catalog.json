@@ -543,7 +543,7 @@
 			],
 			"bonus": [
 				{
-					"element": 2.0,
+					"element": 1.0,
 					"level": 1.0,
 					"coords": [
 						0.0,
@@ -551,7 +551,7 @@
 					]
 				},
 				{
-					"element": 1.0,
+					"element": 2.0,
 					"level": 1.0,
 					"coords": [
 						1.0,
@@ -624,7 +624,7 @@
 			"bonus": [
 				{
 					"element": 1.0,
-					"level": 2.0,
+					"level": 1.0,
 					"coords": [
 						0.0,
 						1.0
@@ -635,7 +635,7 @@
 					"level": 1.0,
 					"coords": [
 						1.0,
-						-1.0
+						0.0
 					]
 				}
 			],
@@ -1269,17 +1269,9 @@
 						0.0,
 						1.0
 					]
-				},
-				{
-					"element": 2.0,
-					"level": 1.0,
-					"coords": [
-						1.0,
-						0.0
-					]
 				}
 			],
-			"amount": 3.0,
+			"amount": 4.0,
 			"draw_chance": 10.0,
 			"element": 3.0,
 			"secondary_element": 2.0,
@@ -1516,7 +1508,7 @@
 			],
 			"bonus": [
 				{
-					"element": 2.0,
+					"element": 4.0,
 					"level": 1.0,
 					"coords": [
 						0.0,

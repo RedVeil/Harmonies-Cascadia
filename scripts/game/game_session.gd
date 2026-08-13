@@ -148,6 +148,30 @@ func is_puzzle() -> bool:
 	return game_mode == GameMode.PUZZLE
 
 
+## Puzzle mode always; tutorial when boosters/animal_market queues are authored.
+func uses_scripted_shop() -> bool:
+	if is_puzzle():
+		return true
+	if not is_tutorial():
+		return false
+	if tutorial_config.is_empty():
+		_load_tutorial_config()
+	var boosters = tutorial_config.get("boosters", [])
+	var animals = tutorial_config.get("animal_market", [])
+	return (typeof(boosters) == TYPE_ARRAY and not boosters.is_empty()) \
+		or (typeof(animals) == TYPE_ARRAY and not animals.is_empty())
+
+
+func get_scripted_shop_config() -> Dictionary:
+	if is_puzzle():
+		return puzzle_config
+	if is_tutorial():
+		if tutorial_config.is_empty():
+			_load_tutorial_config()
+		return tutorial_config
+	return {}
+
+
 func allows_map_growth() -> bool:
 	return map_growth_enabled
 
@@ -355,6 +379,10 @@ func _parse_map_size(key: String) -> MapSize:
 			return MapSize.LARGE
 		_:
 			return MapSize.MEDIUM
+
+
+func get_daily_seed() -> int:
+	return _daily_seed()
 
 
 func _daily_seed() -> int:

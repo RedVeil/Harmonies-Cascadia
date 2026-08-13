@@ -141,7 +141,7 @@ func remove_map_buttons() -> void:
 ## ----- Endless Continue Apply Helpers ----- ##
 ##
 ## Rebuild board + tile visuals from serialized state.
-## Called by `EndlessRunSave.apply_state_to_orchestrator()` after scene load.
+## Called by `RunSave.apply_state_to_orchestrator()` after scene load.
 func apply_saved_state(board_state: Dictionary) -> void:
 	if board_state.is_empty():
 		return

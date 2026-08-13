@@ -57,11 +57,17 @@ func _on_button_mouse_exited() -> void:
 func _on_button_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			var expanding := target_position.y == 0.0
+			if orchestrator and orchestrator.tutorial_bridge.active:
+				if not orchestrator.tutorial_bridge.allows_action("open_scoring"):
+					return
 			GameFeedback.play_click_button()
-			if target_position.y == 0.0:
+			if expanding:
 				GameFeedback.play_open_popup()
 				target_position = Vector2(0.0,321.0)
 				target_size = Vector2(44.0, 360.0)
+				if orchestrator:
+					orchestrator.tutorial_bridge.notify("scoring_opened")
 			else:
 				GameFeedback.play_close_popup()
 				target_position = Vector2(0.0,0.0)
@@ -72,17 +78,31 @@ func _on_button_input_event(viewport: Node, event: InputEvent, shape_idx: int) -
 
 func handle_click_toolip(id:int) -> void:
 	if id == 5:
+		if orchestrator and orchestrator.tutorial_bridge.active:
+			if not orchestrator.tutorial_bridge.allows_action("open_tutorial"):
+				return
 		if active_tooltip != -1:
 			GameFeedback.play_close_popup()
 		active_tooltip = -1
 		$Panel2.hide()
 		orchestrator.show_tutorial()
+		if orchestrator:
+			orchestrator.tutorial_bridge.notify("tutorial_opened")
 		return
+
+	if orchestrator and orchestrator.tutorial_bridge.active:
+		if not orchestrator.tutorial_bridge.allows_action("open_scoring_rule"):
+			return
+		# Tutorial forest step only unlocks the Forest icon (id 0).
+		if id != 0:
+			return
 
 	if active_tooltip == id:
 		GameFeedback.play_close_popup()
 		$Panel2.hide()
 		active_tooltip = -1
+		if orchestrator:
+			orchestrator.tutorial_bridge.notify("scoring_rule_closes", {"rule_icon_id": id})
 	else:
 		GameFeedback.play_open_popup()
 		active_tooltip = id
@@ -92,6 +112,8 @@ func handle_click_toolip(id:int) -> void:
 		$Panel2/title/Label.text = orchestrator.get_active_rule(id+1).name
 		$Panel2/description/Label.text = orchestrator.get_active_rule(id+1).description
 		$Panel2/graphic/Sprite2D7.texture = get_desc_image(orchestrator.get_active_rule(id+1).id)
+		if orchestrator:
+			orchestrator.tutorial_bridge.notify("scoring_rule_opened", {"rule_icon_id": id})
 
 ## ----- Tooltip Content Logic ----- ##
 

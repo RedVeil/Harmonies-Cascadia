@@ -78,12 +78,12 @@ func _ready() -> void:
 	call_deferred("_on_graphics_settings_changed")
 	_apply_game_mode_ui()
 
-	# Endless “Continue” flow: restore run state after the scene loads.
-	var pending_state = EndlessRunSave.consume_pending_state_or_null()
-	if pending_state != null and GameSession.game_mode == GameSession.GameMode.ENDLESS:
+	# Continue flow: restore run state after the scene loads.
+	var pending_state = RunSave.consume_pending_state_or_null()
+	if pending_state != null and RunSave.supports_mode(GameSession.game_mode):
 		# Defer by 1 frame so all managers' @onready vars (e.g. QuestContainer)
 		# are initialized before we apply state.
-		call_deferred("_apply_pending_endless_state_deferred", pending_state)
+		call_deferred("_apply_pending_run_state_deferred", pending_state)
 
 	if tutorial_bridge and not tutorial_bridge.action_performed.is_connected(_on_tutorial_bridge_action):
 		tutorial_bridge.action_performed.connect(_on_tutorial_bridge_action)
@@ -93,13 +93,13 @@ func _ready() -> void:
 	if GameSession.is_puzzle():
 		call_deferred("_apply_puzzle_setup")
 
-func _apply_pending_endless_state_deferred(pending_state: Variant) -> void:
+func _apply_pending_run_state_deferred(pending_state: Variant) -> void:
 	if pending_state == null:
 		return
-	if GameSession.game_mode != GameSession.GameMode.ENDLESS:
+	if not RunSave.supports_mode(GameSession.game_mode):
 		return
 	var state := pending_state as Dictionary
-	EndlessRunSave.apply_state_to_orchestrator(self, state)
+	RunSave.apply_state_to_orchestrator(self, state)
 	# The saved state may have been captured while the in-game menu was open,
 	# leaving `cards_paused` and `booster_manager.paused` enabled.
 	# We want Continue to resume play, so run normal "close menu" unpause logic.
@@ -146,6 +146,8 @@ func _apply_game_mode_ui() -> void:
 func open_in_game_menu() -> void:
 	if in_game_menu == null or score_engine == null:
 		return
+	if tutorial_bridge.active and not tutorial_bridge.allows_action("open_menu"):
+		return
 	if selected_card_id != -1:
 		card_manager.deselect_card(selected_card_id)
 		selected_card_id = -1
@@ -159,6 +161,7 @@ func open_in_game_menu() -> void:
 	pause_cards()
 	undo_button.disable()
 	in_game_menu.open(score_engine.total_score, game_over)
+	tutorial_bridge.notify("menu_opened")
 
 
 func close_in_game_menu() -> void:
@@ -180,8 +183,8 @@ func _on_in_game_menu_end() -> void:
 	if tutorial_bridge.active and not tutorial_bridge.allows_action("end_game"):
 		return
 	game_over = true
-	if GameSession.game_mode == GameSession.GameMode.ENDLESS:
-		EndlessRunSave.save_from_orchestrator(self)
+	if RunSave.supports_mode(GameSession.game_mode):
+		RunSave.save_from_orchestrator(self)
 	leave_to_menu()
 
 
@@ -358,6 +361,13 @@ func recycle_hand_animal(card_id: int) -> void:
 	if card == null or card.type != CardData.CARD_TYPE.ANIMAL:
 		return
 	var count := card.amount
+	# #region agent log
+	_dbg87("E", "orchestrator.gd:recycle_hand_animal", "recycling hand animal", {
+		"card_id": card_id,
+		"amount": count,
+		"catalog_id": card.id,
+	})
+	# #endregion
 	for i in count:
 		GameFeedback.play_recycle()
 		card_manager.remove_card(card_id)
@@ -500,6 +510,14 @@ func handle_tile_click(coord: Vector2i) -> void:
 		point_counter.preview_progress(score_engine.total_score)
 		point_counter.apply_preview(true)
 		var placed_was_element = selected_card.type == CardData.CARD_TYPE.ELEMENT
+		# #region agent log
+		_dbg87("E", "orchestrator.gd:place", "removing placed card from hand", {
+			"selected_card_id": selected_card_id,
+			"card_type": selected_card.type,
+			"catalog_id": selected_card.id,
+			"amount_before": selected_card.amount,
+		})
+		# #endregion
 		card_manager.remove_card(selected_card_id)
 		if placed_was_element:
 			booster_manager.notify_element_played()
@@ -774,3 +792,24 @@ func _on_graphics_settings_changed() -> void:
 					visuals.start_animal_idle_loop()
 				GameSettings.AnimalMotion.FULL_ROAM:
 					visuals.start_animal_roam()
+
+# #region agent log
+func _dbg87(hyp: String, loc: String, msg: String, data: Dictionary) -> void:
+	var payload := {
+		"sessionId": "87ce77",
+		"hypothesisId": hyp,
+		"location": loc,
+		"message": msg,
+		"data": data,
+		"timestamp": int(Time.get_unix_time_from_system() * 1000.0),
+	}
+	var path := "c:/Users/leonn/Documents/Harmonies-Cascadia/debug-87ce77.log"
+	var f := FileAccess.open(path, FileAccess.READ_WRITE)
+	if f == null:
+		f = FileAccess.open(path, FileAccess.WRITE)
+	else:
+		f.seek_end()
+	if f != null:
+		f.store_line(JSON.stringify(payload))
+		f.close()
+# #endregion

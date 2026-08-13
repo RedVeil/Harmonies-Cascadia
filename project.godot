@@ -30,7 +30,6 @@ QuestCatalog="*uid://dwsmx6x25woub"
 GameFeedback="*res://scenes/effects/game_feedback.tscn"
 TouchMode="*res://scripts/input/touch_mode.gd"
 UiPointerBlock="*res://scripts/input/ui_pointer_block.gd"
-PlayerProgress="*res://scripts/game/player_progress.gd"
 
 [display]
 

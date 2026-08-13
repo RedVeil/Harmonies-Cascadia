@@ -1,5 +1,5 @@
 extends Node
-## Persistent graphics + audio settings. Apply at boot and from SettingsPanel.
+## Persistent configuration: player identity, tutorial flags, graphics/audio. Apply at boot and from SettingsPanel.
 
 signal settings_changed
 
@@ -7,9 +7,15 @@ enum Preset { LOW, MEDIUM, HIGH, CUSTOM }
 enum AnimalMotion { FROZEN, IDLE_SPECIAL, FULL_ROAM }
 enum MsaaMode { OFF, X2, X4 }
 
-const SAVE_PATH := "user://graphics_settings.cfg"
+const SAVE_PATH := "user://configuration.json"
+const LEGACY_SAVE_PATH := "user://graphics_settings.cfg"
 const SECTION := "graphics"
 const AUDIO_SECTION := "audio"
+
+var player_id: String = ""
+var player_name: String = ""
+var tutorial_played: bool = false
+var tutorial_completed: bool = false
 
 var preset: Preset = Preset.HIGH
 var wind_enabled: bool = true
@@ -30,8 +36,53 @@ func _ready() -> void:
 
 
 func load_from_disk() -> void:
+	if FileAccess.file_exists(SAVE_PATH):
+		_load_from_json()
+	elif FileAccess.file_exists(LEGACY_SAVE_PATH):
+		_load_from_legacy_cfg()
+	else:
+		apply_preset(Preset.HIGH, false)
+
+	var identity_dirty := false
+	if player_id.is_empty():
+		player_id = _generate_player_id()
+		identity_dirty = true
+	var tutorial_dirty := _migrate_player_progress()
+	if identity_dirty or tutorial_dirty or not FileAccess.file_exists(SAVE_PATH):
+		save_to_disk()
+
+
+func _load_from_json() -> void:
+	var parsed = JSON.parse_string(FileAccess.get_file_as_string(SAVE_PATH))
+	if typeof(parsed) != TYPE_DICTIONARY:
+		apply_preset(Preset.HIGH, false)
+		return
+
+	var data: Dictionary = parsed
+	player_id = str(data.get("player_id", ""))
+	player_name = str(data.get("player_name", ""))
+	tutorial_played = bool(data.get("tutorial_played", false))
+	tutorial_completed = bool(data.get("tutorial_completed", false))
+
+	var graphics: Dictionary = data.get("graphics", {})
+	if typeof(graphics) != TYPE_DICTIONARY:
+		graphics = {}
+	preset = int(graphics.get("preset", Preset.HIGH)) as Preset
+	wind_enabled = bool(graphics.get("wind_enabled", true))
+	clouds_enabled = bool(graphics.get("clouds_enabled", true))
+	animal_motion = int(graphics.get("animal_motion", AnimalMotion.FULL_ROAM)) as AnimalMotion
+	msaa_mode = int(graphics.get("msaa_mode", MsaaMode.X4)) as MsaaMode
+
+	var audio: Dictionary = data.get("audio", {})
+	if typeof(audio) != TYPE_DICTIONARY:
+		audio = {}
+	music_volume = clampf(float(audio.get("music_volume", 0.5)), 0.0, 1.0)
+	sfx_volume = clampf(float(audio.get("sfx_volume", 0.5)), 0.0, 1.0)
+
+
+func _load_from_legacy_cfg() -> void:
 	var cfg := ConfigFile.new()
-	if cfg.load(SAVE_PATH) != OK:
+	if cfg.load(LEGACY_SAVE_PATH) != OK:
 		apply_preset(Preset.HIGH, false)
 		return
 	preset = int(cfg.get_value(SECTION, "preset", Preset.HIGH)) as Preset
@@ -44,15 +95,95 @@ func load_from_disk() -> void:
 
 
 func save_to_disk() -> void:
+	var data := {
+		"player_id": player_id,
+		"player_name": player_name,
+		"tutorial_played": tutorial_played,
+		"tutorial_completed": tutorial_completed,
+		"graphics": {
+			"preset": int(preset),
+			"wind_enabled": wind_enabled,
+			"clouds_enabled": clouds_enabled,
+			"animal_motion": int(animal_motion),
+			"msaa_mode": int(msaa_mode),
+		},
+		"audio": {
+			"music_volume": music_volume,
+			"sfx_volume": sfx_volume,
+		},
+	}
+	var json := JSON.stringify(data)
+	var f := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
+	if f == null:
+		push_error("GameSettings: failed to open configuration file: %s" % SAVE_PATH)
+		return
+	f.store_string(json)
+	f.flush()
+	f.close()
+
+
+func set_player_name(new_name: String) -> void:
+	if player_name == new_name:
+		return
+	player_name = new_name
+	save_to_disk()
+
+
+func mark_tutorial_played() -> void:
+	if tutorial_played:
+		return
+	tutorial_played = true
+	save_to_disk()
+
+
+func mark_tutorial_completed() -> void:
+	if tutorial_completed:
+		return
+	tutorial_completed = true
+	tutorial_played = true
+	save_to_disk()
+
+
+func _migrate_player_progress() -> bool:
+	const LEGACY_PROGRESS_PATH := "user://player_progress.cfg"
+	if not FileAccess.file_exists(LEGACY_PROGRESS_PATH):
+		return false
 	var cfg := ConfigFile.new()
-	cfg.set_value(SECTION, "preset", int(preset))
-	cfg.set_value(SECTION, "wind_enabled", wind_enabled)
-	cfg.set_value(SECTION, "clouds_enabled", clouds_enabled)
-	cfg.set_value(SECTION, "animal_motion", int(animal_motion))
-	cfg.set_value(SECTION, "msaa_mode", int(msaa_mode))
-	cfg.set_value(AUDIO_SECTION, "music_volume", music_volume)
-	cfg.set_value(AUDIO_SECTION, "sfx_volume", sfx_volume)
-	cfg.save(SAVE_PATH)
+	var dirty := false
+	if cfg.load(LEGACY_PROGRESS_PATH) == OK:
+		var completed := bool(cfg.get_value("progress", "tutorial_completed", false))
+		if completed and not tutorial_completed:
+			tutorial_completed = true
+			dirty = true
+		if completed and not tutorial_played:
+			tutorial_played = true
+			dirty = true
+	var dir := DirAccess.open("user://")
+	if dir != null:
+		dir.remove("player_progress.cfg")
+	return dirty
+
+
+func _platform_tag() -> String:
+	if OS.has_feature("web"):
+		return "web"
+	if OS.has_feature("mobile"):
+		return "mobile"
+	return "desktop"
+
+
+func _random_token() -> String:
+	return "%08x%08x%08x%08x" % [randi(), randi(), randi(), randi()]
+
+
+func _generate_player_id() -> String:
+	var platform := _platform_tag()
+	var device := OS.get_unique_id()
+	if device.is_empty():
+		device = _random_token()
+	var token := _random_token()
+	var ctx := "%s|%s|%s" % [platform, device, token]
+	return ctx.sha256_text()
 
 
 func apply_preset(new_preset: Preset, do_save: bool = true) -> void:

@@ -7,6 +7,8 @@ signal restart_pressed
 signal end_pressed
 signal back_pressed
 
+@export var orchestrator: Orchestrator
+
 @onready var _root_nav: VBoxContainer = $Root/Split/LeftColumn/Margin/NavStack/RootNav
 @onready var _end_session_block: VBoxContainer = $Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock
 @onready var _settings_block: ScrollContainer = $Root/Split/LeftColumn/Margin/NavStack/SettingsBlock
@@ -43,6 +45,22 @@ func _setup_hover_sounds() -> void:
 
 func _on_button_mouse_entered() -> void:
 	GameFeedback.play_hover_button()
+
+
+func _tutorial_active() -> bool:
+	return orchestrator != null and orchestrator.tutorial_bridge != null and orchestrator.tutorial_bridge.active
+
+
+func _allows(action: String) -> bool:
+	if not _tutorial_active():
+		return true
+	return orchestrator.tutorial_bridge.allows_action(action)
+
+
+func _notify(action: String, payload: Dictionary = {}) -> void:
+	if orchestrator == null:
+		return
+	orchestrator.tutorial_bridge.notify(action, payload)
 
 
 func _show_view(view: View) -> void:
@@ -89,6 +107,8 @@ func open_settings_panel() -> void:
 
 
 func _on_settings_pressed() -> void:
+	if _tutorial_active():
+		return
 	GameFeedback.play_click_button()
 	if _settings_panel:
 		_settings_panel.apply_sidebar_style()
@@ -99,32 +119,44 @@ func _on_settings_pressed() -> void:
 
 
 func _on_end_session_pressed() -> void:
+	if not _allows("open_end_session"):
+		return
 	GameFeedback.play_click_button()
 	GameFeedback.play_open_popup()
 	_share_status.text = ""
 	_score_label.text = "You have %d Points!" % _score
 	_sub_label.text = "Take a break or wrap up your session."
 	_show_view(View.END_SESSION)
+	_notify("end_session_opened")
 
 
 func _on_restart_pressed() -> void:
+	if _tutorial_active():
+		return
 	GameFeedback.play_click_button()
 	restart_pressed.emit()
 
 
 func _on_end_pressed() -> void:
+	if _tutorial_active() and not _allows("end_game"):
+		return
 	GameFeedback.play_click_button()
 	end_pressed.emit()
 
 
 func _on_share_pressed() -> void:
+	if not _allows("share_code"):
+		return
 	GameFeedback.play_click_button()
 	var code := ShareCode.encode(GameSession.run_seed, GameSession.ring_count, _score)
 	DisplayServer.clipboard_set(code)
 	_share_status.text = "Code copied"
+	_notify("code_shared")
 
 
 func _on_back_pressed() -> void:
+	if _tutorial_active():
+		return
 	GameFeedback.play_click_button()
 	if _view == View.SETTINGS and _settings_panel != null and _settings_panel.handle_back():
 		return

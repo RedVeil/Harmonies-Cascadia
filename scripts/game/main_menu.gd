@@ -7,6 +7,8 @@ var COLOR_RIGHT := Color.html("#D2C2AD")
 
 @onready var _bg_fallback: ColorRect = $BackgroundFallback
 @onready var _bg_image: TextureRect = $BackgroundImage
+@onready var _name_nav: VBoxContainer = $Split/LeftColumn/Margin/NavStack/NameNav
+@onready var _name_input: LineEdit = $Split/LeftColumn/Margin/NavStack/NameNav/NameInput
 @onready var _root_nav: VBoxContainer = $Split/LeftColumn/Margin/NavStack/RootNav
 @onready var _play_nav: VBoxContainer = $Split/LeftColumn/Margin/NavStack/PlayNav
 @onready var _code_nav: VBoxContainer = $Split/LeftColumn/Margin/NavStack/CodeNav
@@ -18,31 +20,38 @@ var COLOR_RIGHT := Color.html("#D2C2AD")
 @onready var _code_input: LineEdit = $Split/LeftColumn/Margin/NavStack/CodeNav/CodeInput
 @onready var _code_status: Label = $Split/LeftColumn/Margin/NavStack/CodeNav/CodeStatus
 
+@onready var _daily_desc: Label = $Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyDesc
+@onready var _daily_inline_buttons: HBoxContainer = $Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyInlineButtons
+
+@onready var _quick_inline_buttons: HBoxContainer = $Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickInlineButtons
+
 @onready var _endless_desc: Label = $Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessDesc
 @onready var _endless_inline_buttons: HBoxContainer = $Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessInlineButtons
-
-@onready var _endless_continue_button: Button = $Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessInlineButtons/ContinueButton
-@onready var _endless_new_button: Button = $Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessInlineButtons/NewButton
 
 var _puzzle_ids: Array[String] = []
 
 
 func _ready() -> void:
+	if not GameSettings.tutorial_played:
+		GameSession.begin_tutorial_run()
+		get_tree().change_scene_to_file(GAME_SCENE)
+		return
 	_setup_background()
 	_setup_puzzle_ids()
 	_setup_button_hover_sounds()
-	_show_root_nav()
 	_code_status.text = ""
 	if _settings_panel:
 		_settings_panel.apply_sidebar_style()
-	if _endless_inline_buttons:
-		_endless_inline_buttons.hide()
-	if _endless_desc:
-		_endless_desc.show()
+	_reset_mode_inline_ui()
+	if GameSettings.tutorial_completed and GameSettings.player_name.strip_edges().is_empty():
+		_show_name_nav()
+	else:
+		_show_root_nav()
 
 
 func _setup_button_hover_sounds() -> void:
 	var buttons: Array[Control] = [
+		$Split/LeftColumn/Margin/NavStack/NameNav/NameAcceptButton,
 		$Split/LeftColumn/Margin/NavStack/RootNav/PlayBlock/PlayButton,
 		$Split/LeftColumn/Margin/NavStack/RootNav/TutorialBlock/TutorialButton,
 		$Split/LeftColumn/Margin/NavStack/RootNav/SettingsBlock/SettingsButton,
@@ -50,7 +59,11 @@ func _setup_button_hover_sounds() -> void:
 		$Split/LeftColumn/Margin/NavStack/RootNav/ExitButton,
 		$Split/LeftColumn/Margin/NavStack/PlayNav/BackButton,
 		$Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyButton,
+		$Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyInlineButtons/ContinueButton,
+		$Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyInlineButtons/NewButton,
 		$Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickSessionButton,
+		$Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickInlineButtons/ContinueButton,
+		$Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickInlineButtons/NewButton,
 		$Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow/SmallButton,
 		$Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow/MediumButton,
 		$Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow/LargeButton,
@@ -92,50 +105,97 @@ func _setup_puzzle_ids() -> void:
 	_puzzle_button.disabled = _puzzle_ids.is_empty()
 
 
+func _reset_mode_inline_ui() -> void:
+	if _daily_inline_buttons:
+		_daily_inline_buttons.hide()
+	if _daily_desc:
+		_daily_desc.show()
+	if _quick_inline_buttons:
+		_quick_inline_buttons.hide()
+	if _endless_inline_buttons:
+		_endless_inline_buttons.hide()
+	if _endless_desc:
+		_endless_desc.show()
+	_hide_map_size_row()
+
+
 func _hide_map_size_row() -> void:
 	_map_size_row.hide()
 	_quick_session_desc.show()
 
 
+func _show_name_nav() -> void:
+	_name_nav.show()
+	_root_nav.hide()
+	_play_nav.hide()
+	_code_nav.hide()
+	_settings_nav.hide()
+	_reset_mode_inline_ui()
+	_name_input.grab_focus()
+
+
 func _show_root_nav() -> void:
+	_name_nav.hide()
 	_root_nav.show()
 	_play_nav.hide()
 	_code_nav.hide()
 	_settings_nav.hide()
-	_hide_map_size_row()
+	_reset_mode_inline_ui()
 
 
 func _show_play_nav() -> void:
 	GameFeedback.play_open_popup()
+	RunSave.clear_expired_daily_save()
+	_name_nav.hide()
 	_root_nav.hide()
 	_play_nav.show()
 	_code_nav.hide()
 	_settings_nav.hide()
-	_hide_map_size_row()
+	_reset_mode_inline_ui()
 
 
 func _show_code_nav() -> void:
 	GameFeedback.play_open_popup()
+	_name_nav.hide()
 	_root_nav.hide()
 	_play_nav.hide()
 	_code_nav.show()
 	_settings_nav.hide()
-	_hide_map_size_row()
+	_reset_mode_inline_ui()
 	_code_status.text = ""
 	_code_input.grab_focus()
 
 
 func _show_settings_nav() -> void:
 	GameFeedback.play_open_popup()
+	_name_nav.hide()
 	_root_nav.hide()
 	_play_nav.hide()
 	_code_nav.hide()
 	_settings_nav.show()
-	_hide_map_size_row()
+	_reset_mode_inline_ui()
 	if _settings_panel:
 		_settings_panel.apply_sidebar_style()
 		_settings_panel.reset_to_root()
 		_settings_panel.refresh()
+
+
+func _on_name_accept_pressed() -> void:
+	GameFeedback.play_click_button()
+	_try_accept_player_name(_name_input.text)
+
+
+func _on_name_submitted(text: String) -> void:
+	_try_accept_player_name(text)
+
+
+func _try_accept_player_name(text: String) -> void:
+	var new_name := text.strip_edges()
+	if new_name.is_empty():
+		_name_input.grab_focus()
+		return
+	GameSettings.set_player_name(new_name)
+	_show_root_nav()
 
 
 func _on_play_pressed() -> void:
@@ -174,16 +234,73 @@ func _on_exit_pressed() -> void:
 
 func _on_daily_pressed() -> void:
 	GameFeedback.play_click_button()
-	if _start_tutorial_if_needed():
+	RunSave.clear_expired_daily_save()
+	if RunSave.has_save(GameSession.GameMode.DAILY):
+		_daily_inline_buttons.visible = not _daily_inline_buttons.visible
+		_daily_desc.visible = not _daily_inline_buttons.visible
 		return
+
+	GameSession.begin_daily_run()
+	get_tree().change_scene_to_file(GAME_SCENE)
+
+
+func _on_daily_continue_pressed() -> void:
+	GameFeedback.play_click_button()
+	var state := RunSave.load_save(GameSession.GameMode.DAILY)
+	if state.is_empty() or not RunSave.is_daily_save_valid(state):
+		RunSave.clear_save(GameSession.GameMode.DAILY)
+		GameSession.begin_daily_run()
+		get_tree().change_scene_to_file(GAME_SCENE)
+		return
+	_continue_from_state(state, GameSession.GameMode.DAILY)
+	if _daily_inline_buttons:
+		_daily_inline_buttons.hide()
+
+
+func _on_daily_new_pressed() -> void:
+	GameFeedback.play_click_button()
+	RunSave.clear_save(GameSession.GameMode.DAILY)
+	if _daily_inline_buttons:
+		_daily_inline_buttons.hide()
+	if _daily_desc:
+		_daily_desc.show()
 	GameSession.begin_daily_run()
 	get_tree().change_scene_to_file(GAME_SCENE)
 
 
 func _on_quick_session_pressed() -> void:
 	GameFeedback.play_click_button()
+	if RunSave.has_save(GameSession.GameMode.NORMAL):
+		var showing := not _quick_inline_buttons.visible
+		_quick_inline_buttons.visible = showing
+		_map_size_row.hide()
+		_quick_session_desc.visible = not showing
+		return
+
+	_quick_inline_buttons.hide()
 	_map_size_row.visible = not _map_size_row.visible
 	_quick_session_desc.visible = not _map_size_row.visible
+
+
+func _on_quick_continue_pressed() -> void:
+	GameFeedback.play_click_button()
+	var state := RunSave.load_save(GameSession.GameMode.NORMAL)
+	if state.is_empty():
+		GameSession.begin_normal_run(GameSession.MapSize.MEDIUM)
+		get_tree().change_scene_to_file(GAME_SCENE)
+		return
+	_continue_from_state(state, GameSession.GameMode.NORMAL)
+	if _quick_inline_buttons:
+		_quick_inline_buttons.hide()
+
+
+func _on_quick_new_pressed() -> void:
+	GameFeedback.play_click_button()
+	RunSave.clear_save(GameSession.GameMode.NORMAL)
+	if _quick_inline_buttons:
+		_quick_inline_buttons.hide()
+	_map_size_row.show()
+	_quick_session_desc.hide()
 
 
 func _on_map_size_small_pressed() -> void:
@@ -200,17 +317,14 @@ func _on_map_size_large_pressed() -> void:
 
 func _start_normal_run(size: GameSession.MapSize) -> void:
 	GameFeedback.play_click_button()
-	if _start_tutorial_if_needed():
-		return
+	RunSave.clear_save(GameSession.GameMode.NORMAL)
 	GameSession.begin_normal_run(size)
 	get_tree().change_scene_to_file(GAME_SCENE)
 
 
 func _on_endless_pressed() -> void:
 	GameFeedback.play_click_button()
-	if _start_tutorial_if_needed():
-		return
-	if EndlessRunSave.has_save():
+	if RunSave.has_save(GameSession.GameMode.ENDLESS):
 		_endless_inline_buttons.visible = not _endless_inline_buttons.visible
 		_endless_desc.visible = not _endless_inline_buttons.visible
 		return
@@ -218,43 +332,46 @@ func _on_endless_pressed() -> void:
 	GameSession.begin_endless_run()
 	get_tree().change_scene_to_file(GAME_SCENE)
 
+
 func _on_endless_continue_pressed() -> void:
 	GameFeedback.play_click_button()
-	var state := EndlessRunSave.load_save()
+	var state := RunSave.load_save(GameSession.GameMode.ENDLESS)
 	if state.is_empty():
-		# Save vanished; fall back to a fresh run.
 		GameSession.begin_endless_run()
 		get_tree().change_scene_to_file(GAME_SCENE)
 		return
+	_continue_from_state(state, GameSession.GameMode.ENDLESS)
+	if _endless_inline_buttons:
+		_endless_inline_buttons.hide()
 
-	EndlessRunSave.set_pending_state(state)
 
-	# Set run config before the game scene loads (ScoreEngine picks rules in _ready()).
-	GameSession.game_mode = GameSession.GameMode.ENDLESS
-	GameSession.map_size = GameSession.MapSize.MEDIUM
+func _on_endless_new_pressed() -> void:
+	GameFeedback.play_click_button()
+	RunSave.clear_save(GameSession.GameMode.ENDLESS)
+	if _endless_inline_buttons:
+		_endless_inline_buttons.hide()
+	if _endless_desc:
+		_endless_desc.show()
+	GameSession.begin_endless_run()
+	get_tree().change_scene_to_file(GAME_SCENE)
+
+
+func _continue_from_state(state: Dictionary, mode: GameSession.GameMode) -> void:
+	RunSave.set_pending_state(state)
+
+	GameSession.game_mode = mode
+	GameSession.map_size = int(state.get("map_size", GameSession.MapSize.MEDIUM)) as GameSession.MapSize
 	GameSession.ring_count = int(state.get("ring_count", GameSession.ring_count))
 	GameSession.checkpoint = int(state.get("checkpoint", GameSession.checkpoint))
 	GameSession.checkpoint_multiplier = float(state.get("checkpoint_multiplier", GameSession.checkpoint_multiplier))
 	GameSession.checkpoint_flat_increase = int(state.get("checkpoint_flat_increase", GameSession.checkpoint_flat_increase))
 	GameSession.map_growth_enabled = bool(state.get("map_growth_enabled", GameSession.map_growth_enabled))
 	GameSession.checkpoint_targets.clear()
+	GameSession.clear_challenge()
+	GameSession.clear_puzzle()
 
-	var seed := int(state.get("run_seed", 1))
-	GameSession.begin_run(seed, true)
-
-	if _endless_inline_buttons:
-		_endless_inline_buttons.hide()
-	get_tree().change_scene_to_file(GAME_SCENE)
-
-
-func _on_endless_new_pressed() -> void:
-	GameFeedback.play_click_button()
-	EndlessRunSave.clear_save()
-	if _endless_inline_buttons:
-		_endless_inline_buttons.hide()
-	if _endless_desc:
-		_endless_desc.show()
-	GameSession.begin_endless_run()
+	var run_seed_value := int(state.get("run_seed", 1))
+	GameSession.begin_run(run_seed_value, true)
 	get_tree().change_scene_to_file(GAME_SCENE)
 
 
@@ -265,14 +382,6 @@ func _on_puzzle_pressed() -> void:
 	if not GameSession.begin_puzzle_run(_puzzle_ids[0]):
 		return
 	get_tree().change_scene_to_file(GAME_SCENE)
-
-
-func _start_tutorial_if_needed() -> bool:
-	if PlayerProgress.tutorial_completed:
-		return false
-	GameSession.begin_tutorial_run()
-	get_tree().change_scene_to_file(GAME_SCENE)
-	return true
 
 
 func _on_start_code_pressed() -> void:

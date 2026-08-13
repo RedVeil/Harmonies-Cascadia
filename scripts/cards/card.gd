@@ -81,6 +81,16 @@ func _ready() -> void:
 	hit_area.mouse_exited.connect(_on_mouse_exited)
 	hit_area.gui_input.connect(_on_gui_input)
 	_recycle_base_position = recycle_btn.position
+	# #region agent log
+	_dbg_recycle("C", "card.gd:_ready", "captured recycle/hit bases", {
+		"card_id": id,
+		"recycle_pos": {"x": recycle_btn.position.x, "y": recycle_btn.position.y},
+		"recycle_base": {"x": _recycle_base_position.x, "y": _recycle_base_position.y},
+		"hit_offset_top": hit_area.offset_top,
+		"hit_base_offset_top": _hit_area_base_offset_top,
+		"hit_pos": {"x": hit_area.position.x, "y": hit_area.position.y},
+	})
+	# #endregion
 	recycle_btn.visible = false
 	recycle_btn.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	recycle_btn.gui_input.connect(_on_recycle_gui_input)
@@ -152,8 +162,8 @@ func consume_spawn_layout() -> bool:
 ## ----- Interactions Logic ----- ##
 
 func _on_mouse_entered() -> void:
-	UiPointerBlock.enter(self)
 	is_mouse_inside = true
+	_sync_ui_pointer_block()
 	# Touch uses tap-to-hover; skip enter-driven hover so single tap stays distinct.
 	if TouchMode.is_touch():
 		return
@@ -162,8 +172,25 @@ func _on_mouse_entered() -> void:
 	
 
 func _on_mouse_exited() -> void:
-	UiPointerBlock.exit(self)
 	is_mouse_inside = false
+	# #region agent log
+	_agent_dbg("A", "card.gd:_on_mouse_exited", "mouse_exited fired", {
+		"card_id": id,
+		"card_in_tree": is_inside_tree(),
+		"card_vp_null": get_viewport() == null,
+		"hit_in_tree": hit_area != null and hit_area.is_inside_tree(),
+		"hit_vp_null": hit_area != null and hit_area.get_viewport() == null,
+		"recycle_in_tree": recycle_btn != null and recycle_btn.is_inside_tree(),
+		"recycle_vp_null": recycle_btn != null and recycle_btn.get_viewport() == null,
+		"recycle_visible": recycle_btn != null and recycle_btn.visible,
+		"hit_visible": hit_area != null and hit_area.visible,
+	})
+	# #endregion
+	# Child STOP X fires parent exit first; keep hover/block until recycle owns it.
+	if _is_pointer_over_recycle():
+		_sync_ui_pointer_block()
+		return
+	_sync_ui_pointer_block()
 	if TouchMode.is_touch() and _touch_hover_sticky:
 		return
 	if _interaction_host and _interaction_host.has_method("exit_card"):
@@ -197,6 +224,20 @@ func _on_gui_input(event: InputEvent) -> void:
 func set_stack_amount(amount: int, animate: bool = true) -> void:
 	if stack_amount == amount:
 		return
+	# #region agent log
+	_dbg_recycle("A", "card.gd:set_stack_amount", "stack amount changing", {
+		"card_id": id,
+		"is_animal": is_animal,
+		"from": stack_amount,
+		"to": amount,
+		"is_active": is_active,
+		"is_mouse_inside": is_mouse_inside,
+		"visuals_pos_y": visuals.position.y,
+		"target_visuals_y": target_visuals_position.y,
+		"hit_offset_top": hit_area.offset_top,
+		"recycle_pos_y": recycle_btn.position.y,
+	})
+	# #endregion
 	stack_amount = amount
 	_apply_stack_visuals()
 	if animate:
@@ -220,8 +261,34 @@ func _apply_stack_visuals() -> void:
 	hit_area.offset_top = _hit_area_base_offset_top - extra
 	hit_area.pivot_offset = hit_area.size * 0.5
 	_hit_area_base_position = hit_area.position
+	# #region agent log
+	_dbg_recycle("A", "card.gd:_apply_stack_visuals", "before hit/recycle sync", {
+		"card_id": id,
+		"is_animal": is_animal,
+		"stack_amount": stack_amount,
+		"depth": depth,
+		"extra": extra,
+		"is_active": is_active,
+		"visuals_pos_y": visuals.position.y,
+		"hit_offset_top_after_stack": hit_area.offset_top,
+		"hit_base_offset_top": _hit_area_base_offset_top,
+		"hit_base_pos_y": _hit_area_base_position.y,
+		"recycle_pos_y_before": recycle_btn.position.y,
+		"recycle_base_y": _recycle_base_position.y,
+	})
+	# #endregion
 	_sync_hit_area_to_visuals()
 	_sync_recycle_button_stack_offset()
+	# #region agent log
+	_dbg_recycle("D", "card.gd:_apply_stack_visuals", "after hit/recycle sync", {
+		"card_id": id,
+		"hit_offset_top": hit_area.offset_top,
+		"hit_pos_y": hit_area.position.y,
+		"visuals_pos_y": visuals.position.y,
+		"recycle_pos_y": recycle_btn.position.y,
+		"baked_delta_y": _hit_area_base_offset_top - hit_area.offset_top,
+	})
+	# #endregion
 
 ## ----- Other Logic ----- ##
 
@@ -255,8 +322,32 @@ func deselect() -> void:
 	placement_tooltip.hide()
 
 func remove_card() -> void:
+	# #region agent log
+	_agent_dbg("A", "card.gd:remove_card", "remove_card called", {
+		"card_id": id,
+		"card_in_tree": is_inside_tree(),
+		"is_mouse_inside": is_mouse_inside,
+		"recycle_visible": recycle_btn != null and recycle_btn.visible,
+	})
+	# #endregion
+	UiPointerBlock.exit(self)
+	UiPointerBlock.exit(recycle_btn)
 	kill_animations()
 	queue_free()
+
+
+func _exit_tree() -> void:
+	# #region agent log
+	_agent_dbg("E", "card.gd:_exit_tree", "card leaving tree", {
+		"card_id": id,
+		"is_mouse_inside": is_mouse_inside,
+		"recycle_visible": recycle_btn != null and recycle_btn.visible,
+		"vp_null": get_viewport() == null,
+	})
+	# #endregion
+	UiPointerBlock.exit(self)
+	if recycle_btn != null:
+		UiPointerBlock.exit(recycle_btn)
 
 func set_select_visuals() -> void:
 	self.z_index = base_z_index + 20
@@ -345,6 +436,7 @@ func _process(delta: float) -> void:
 		elif visuals.position.distance_squared_to(target_visuals_position) >= 0.01 * 0.01:
 			visuals.position = visuals.position.lerp(target_visuals_position, delta * scale_speed)
 	_sync_hit_area_to_visuals()
+	_sync_ui_pointer_block()
 
 
 func _sync_hit_area_to_visuals() -> void:
@@ -352,25 +444,97 @@ func _sync_hit_area_to_visuals() -> void:
 	hit_area.position = _hit_area_base_position + visuals.position
 
 
+func _control_has_mouse(control: Control) -> bool:
+	if control == null or not control.visible:
+		return false
+	var in_tree := control.is_inside_tree()
+	var vp_null := control.get_viewport() == null
+	if not in_tree or vp_null:
+		# #region agent log
+		_agent_dbg("A", "card.gd:_control_has_mouse", "unsafe mouse query", {
+			"card_id": id,
+			"control_name": str(control.name),
+			"in_tree": in_tree,
+			"vp_null": vp_null,
+			"card_in_tree": is_inside_tree(),
+			"visible": control.visible,
+			"runId": "post-fix",
+		})
+		# #endregion
+		return false
+	return control.get_global_rect().has_point(control.get_global_mouse_position())
+
+
+func _is_pointer_over_recycle() -> bool:
+	return recycle_btn.visible and _control_has_mouse(recycle_btn)
+
+
+func _is_pointer_over_card_ui() -> bool:
+	return _control_has_mouse(hit_area) or _is_pointer_over_recycle()
+
+
+func _sync_ui_pointer_block() -> void:
+	UiPointerBlock.set_hovering(self, _is_pointer_over_card_ui())
+	if not _is_pointer_over_recycle():
+		UiPointerBlock.exit(recycle_btn)
+
+
 ## ----- Recycle X (animals only; node in card.tscn → HitArea/RecycleButton) ----- ##
 
 ## Keeps editor X/Y; only shifts Y when HitArea grows for stacked cards.
+## Uses stack depth, not live offset_top — hover sync overwrites offset_top.
 func _sync_recycle_button_stack_offset() -> void:
-	recycle_btn.position = _recycle_base_position + Vector2(
-		0.0,
-		_hit_area_base_offset_top - hit_area.offset_top
-	)
+	var depth := mini(maxi(stack_amount, 1), STACK_VISUAL_CAP)
+	var delta_y := float(depth - 1) * STACK_STEP_PX
+	# #region agent log
+	_dbg_recycle("B", "card.gd:_sync_recycle_button_stack_offset", "reposition recycle", {
+		"card_id": id,
+		"recycle_base_y": _recycle_base_position.y,
+		"delta_y": delta_y,
+		"new_recycle_y": _recycle_base_position.y + delta_y,
+		"hit_offset_top": hit_area.offset_top,
+		"hit_base_offset_top": _hit_area_base_offset_top,
+		"visuals_pos_y": visuals.position.y,
+		"stack_amount": stack_amount,
+		"contaminated_delta_y": _hit_area_base_offset_top - hit_area.offset_top,
+	})
+	# #endregion
+	recycle_btn.position = _recycle_base_position + Vector2(0.0, delta_y)
 
 
 func refresh_recycle_button(show: bool) -> void:
 	var visible := show and _recycle_enabled and is_animal
+	# #region agent log
+	if recycle_btn.visible and not visible:
+		_agent_dbg("B", "card.gd:refresh_recycle_button", "hiding recycle button", {
+			"card_id": id,
+			"card_in_tree": is_inside_tree(),
+			"vp_null": get_viewport() == null,
+			"is_mouse_inside": is_mouse_inside,
+		})
+	# #endregion
 	recycle_btn.visible = visible
+	# #region agent log
+	if visible:
+		_dbg_recycle("E", "card.gd:refresh_recycle_button", "showing recycle button", {
+			"card_id": id,
+			"recycle_pos_y": recycle_btn.position.y,
+			"recycle_base_y": _recycle_base_position.y,
+			"hit_offset_top": hit_area.offset_top,
+			"hit_pos_y": hit_area.position.y,
+			"visuals_pos_y": visuals.position.y,
+			"stack_amount": stack_amount,
+			"is_active": is_active,
+		})
+	# #endregion
 	recycle_btn.mouse_filter = (
 		Control.MOUSE_FILTER_STOP if visible else Control.MOUSE_FILTER_IGNORE
 	)
 	if not visible:
 		_recycle_hovered = false
 		_reset_recycle_button_colors()
+		UiPointerBlock.exit(recycle_btn)
+	_sync_ui_pointer_block()
 
 
 func _on_recycle_gui_input(event: InputEvent) -> void:
@@ -379,6 +543,15 @@ func _on_recycle_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			GameFeedback.play_click_button()
+			# #region agent log
+			_dbg87("A", "card.gd:_on_recycle_gui_input", "recycle X clicked", {
+				"card_id": id,
+				"is_animal": is_animal,
+				"in_tree": is_inside_tree(),
+				"queued_free": is_queued_for_deletion(),
+				"recycle_visible": recycle_btn != null and recycle_btn.visible,
+			})
+			# #endregion
 			if container != null and container.has_method("recycle_card"):
 				container.recycle_card(id)
 			elif _interaction_host != null and _interaction_host.has_method("reroll_card"):
@@ -393,6 +566,7 @@ func _on_recycle_mouse_entered() -> void:
 		return
 	_recycle_hovered = true
 	UiPointerBlock.enter(recycle_btn)
+	_sync_ui_pointer_block()
 	GameFeedback.play_hover_button()
 	recycle_circle.self_modulate = COLOR_BROWN
 	recycle_label.add_theme_color_override("font_color", Color.WHITE)
@@ -401,16 +575,98 @@ func _on_recycle_mouse_entered() -> void:
 
 
 func _on_recycle_mouse_exited() -> void:
+	# #region agent log
+	_dbg87("A", "card.gd:_on_recycle_mouse_exited", "recycle mouse exited", {
+		"card_id": id,
+		"is_animal": is_animal,
+		"in_tree": is_inside_tree(),
+		"queued_free": is_queued_for_deletion(),
+		"recycle_visible": recycle_btn != null and recycle_btn.visible,
+		"hit_has_mouse": _control_has_mouse(hit_area),
+		"host_valid": _interaction_host != null and is_instance_valid(_interaction_host),
+	})
+	# #endregion
 	_recycle_hovered = false
 	UiPointerBlock.exit(recycle_btn)
 	_reset_recycle_button_colors()
 	if _interaction_host != null and _interaction_host.has_method("set_recycle_hover"):
 		_interaction_host.set_recycle_hover(id, false)
+	_sync_ui_pointer_block()
+	# Left X into empty space (not back onto the card body).
+	if not _control_has_mouse(hit_area):
+		is_mouse_inside = false
+		if TouchMode.is_touch() and _touch_hover_sticky:
+			return
+		# Recycle already removed this card; skip hover-exit on a freed slot.
+		if is_queued_for_deletion():
+			return
+		if _interaction_host != null and _interaction_host.has_method("exit_card"):
+			_interaction_host.exit_card(id)
 
 
 func _reset_recycle_button_colors() -> void:
 	recycle_circle.self_modulate = Color.WHITE
 	recycle_label.add_theme_color_override("font_color", COLOR_BROWN)
+
+# #region agent log
+func _dbg_recycle(hyp: String, loc: String, msg: String, data: Dictionary) -> void:
+	var payload := {
+		"sessionId": "3fc6cd",
+		"runId": "post-fix",
+		"hypothesisId": hyp,
+		"location": loc,
+		"message": msg,
+		"data": data,
+		"timestamp": int(Time.get_unix_time_from_system() * 1000.0),
+	}
+	var path := "c:/Users/leonn/Documents/Harmonies-Cascadia/debug-3fc6cd.log"
+	var f := FileAccess.open(path, FileAccess.READ_WRITE)
+	if f == null:
+		f = FileAccess.open(path, FileAccess.WRITE)
+	else:
+		f.seek_end()
+	if f != null:
+		f.store_line(JSON.stringify(payload))
+		f.close()
+
+func _dbg87(hyp: String, loc: String, msg: String, data: Dictionary) -> void:
+	var payload := {
+		"sessionId": "87ce77",
+		"hypothesisId": hyp,
+		"location": loc,
+		"message": msg,
+		"data": data,
+		"timestamp": int(Time.get_unix_time_from_system() * 1000.0),
+	}
+	var path := "c:/Users/leonn/Documents/Harmonies-Cascadia/debug-87ce77.log"
+	var f := FileAccess.open(path, FileAccess.READ_WRITE)
+	if f == null:
+		f = FileAccess.open(path, FileAccess.WRITE)
+	else:
+		f.seek_end()
+	if f != null:
+		f.store_line(JSON.stringify(payload))
+		f.close()
+
+func _agent_dbg(hyp: String, loc: String, msg: String, data: Dictionary) -> void:
+	var payload := {
+		"sessionId": "22fdc4",
+		"hypothesisId": hyp,
+		"location": loc,
+		"message": msg,
+		"data": data,
+		"timestamp": int(Time.get_unix_time_from_system() * 1000.0),
+	}
+	var path := "c:/Users/leonn/Documents/Harmonies-Cascadia/debug-22fdc4.log"
+	var f := FileAccess.open(path, FileAccess.READ_WRITE)
+	if f == null:
+		f = FileAccess.open(path, FileAccess.WRITE)
+	else:
+		f.seek_end()
+	if f != null:
+		f.store_line(JSON.stringify(payload))
+		f.close()
+# #endregion
 
 func _animate_spawn(target_pos: Vector2, target_angle: float, z: int) -> void:
 	FeedbackAnimHelper.play_sounds(spawn_sounds, spawn_sound_volume_db)

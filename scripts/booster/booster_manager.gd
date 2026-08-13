@@ -29,7 +29,7 @@ var options_ready: bool = true
 var booster_reroll_progress: Array[int] = []
 var market_reroll_progress: Array[int] = []
 
-## One animal take after each finished booster; ready before the first pack.
+## One animal take per picked booster; available at game start.
 var market_buys_remaining: int = 1
 var _market_offers: Array[CardData] = []
 var _bought_animal_ids: Dictionary = {}
@@ -58,7 +58,7 @@ func _ready() -> void:
 		animal_market.toggle_pressed.connect(toggle_animal_market)
 		animal_market.reroll_pressed.connect(reroll_market_slot)
 
-	if GameSession.is_puzzle():
+	if GameSession.uses_scripted_shop():
 		_init_puzzle_queues()
 		_apply_puzzle_market_offers()
 		_apply_puzzle_boosters()
@@ -111,8 +111,7 @@ func select_booster(id: int) -> void:
 	pending_elements = _count_element_cards(booster)
 	elements_played = 0
 	options_ready = pending_elements <= 0
-	if options_ready:
-		market_buys_remaining = 1
+	market_buys_remaining = 1
 
 	_tick_reroll_cooldowns()
 
@@ -163,7 +162,7 @@ func reroll_market_slot(offer_index: int) -> void:
 	if offer_index < 0 or offer_index >= _market_offers.size():
 		return
 	var replacement: CardData
-	if GameSession.is_puzzle():
+	if GameSession.uses_scripted_shop():
 		replacement = _dequeue_puzzle_animal()
 	else:
 		replacement = _generate_market_offer_at(offer_index, _market_used_ids(offer_index))
@@ -190,7 +189,6 @@ func notify_element_played() -> void:
 	elements_played = mini(elements_played + 1, pending_elements)
 	if elements_played >= pending_elements:
 		options_ready = true
-		market_buys_remaining = 1
 	_refresh_option_ui()
 	_refresh_market_buy_ui()
 
@@ -262,6 +260,8 @@ func open_animal_market() -> void:
 	animal_market.open(_market_offers)
 	_refresh_reroll_ui()
 	_refresh_market_buy_ui()
+	if orchestrator:
+		orchestrator.tutorial_bridge.notify("animal_market_opened", {})
 
 func buy_market_animal(offer_index: int) -> void:
 	if orchestrator and orchestrator.tutorial_bridge.active \
@@ -276,6 +276,9 @@ func buy_market_animal(offer_index: int) -> void:
 	if not _is_valid_market_offer(bought):
 		_refresh_market_buy_ui()
 		return
+	if orchestrator and orchestrator.tutorial_bridge.active \
+			and not orchestrator.tutorial_bridge.allows_animal_buy(bought.id):
+		return
 	if not orchestrator.card_manager.can_accept_animal(bought):
 		_refresh_market_buy_ui()
 		return
@@ -283,7 +286,7 @@ func buy_market_animal(offer_index: int) -> void:
 	_bought_animal_ids[bought.id] = true
 	market_buys_remaining = maxi(market_buys_remaining - 1, 0)
 	var replacement: CardData
-	if GameSession.is_puzzle():
+	if GameSession.uses_scripted_shop():
 		replacement = _dequeue_puzzle_animal()
 	else:
 		replacement = _generate_market_offer_at(offer_index, _market_used_ids(offer_index))
@@ -301,8 +304,6 @@ func close_animal_market() -> void:
 		animal_market.close()
 
 func _can_buy_market_offer(offer: CardData) -> bool:
-	if not options_ready:
-		return false
 	if market_buys_remaining <= 0:
 		return false
 	if not _is_valid_market_offer(offer):
@@ -310,10 +311,8 @@ func _can_buy_market_offer(offer: CardData) -> bool:
 	return orchestrator.card_manager.can_accept_animal(offer)
 
 func _market_status_text() -> String:
-	if not options_ready:
-		return "Finish the current booster first"
 	if market_buys_remaining <= 0:
-		return "Finish another booster to take an animal"
+		return "Take another booster to take an animal"
 	var any_valid := false
 	var any_accept := false
 	for offer in _market_offers:
@@ -335,7 +334,7 @@ func _refresh_market_buy_ui() -> void:
 	var can_buy: Array[bool] = []
 	for offer in _market_offers:
 		can_buy.append(_can_buy_market_offer(offer))
-	var disabled_label := "Full" if options_ready and market_buys_remaining > 0 else "Wait"
+	var disabled_label := "Full" if market_buys_remaining > 0 else "Wait"
 	animal_market.set_buys_enabled(can_buy, disabled_label)
 	animal_market.set_status_text(_market_status_text())
 
@@ -391,7 +390,7 @@ func _generate_market_offers() -> Array[CardData]:
 
 func createBooster(idx: int) -> void:
 	var booster = BoosterData.new()
-	if GameSession.is_puzzle():
+	if GameSession.uses_scripted_shop():
 		boosters[idx] = _dequeue_puzzle_booster()
 		booster_container.set_booster_visuals(idx, boosters[idx])
 		return
@@ -412,10 +411,11 @@ func createBooster(idx: int) -> void:
 func _init_puzzle_queues() -> void:
 	_puzzle_booster_queue.clear()
 	_puzzle_animal_queue.clear()
-	var raw_boosters = GameSession.puzzle_config.get("boosters", [])
+	var shop_cfg: Dictionary = GameSession.get_scripted_shop_config()
+	var raw_boosters = shop_cfg.get("boosters", [])
 	if typeof(raw_boosters) == TYPE_ARRAY:
 		_puzzle_booster_queue = raw_boosters.duplicate()
-	var raw_animals = GameSession.puzzle_config.get("animal_market", [])
+	var raw_animals = shop_cfg.get("animal_market", [])
 	if typeof(raw_animals) == TYPE_ARRAY:
 		_puzzle_animal_queue = raw_animals.duplicate()
 

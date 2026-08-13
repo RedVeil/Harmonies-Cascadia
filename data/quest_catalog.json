@@ -151,16 +151,16 @@
 	{
 		"id": 10,
 		"name": "DeepCanopy",
-		"description": "Form a Forest L3 with Field L1 on three alternating neighbors to score 30 points.",
+		"description": "Form a Forest L2 with Field L1 on three triangle neighbors to score 30 points.",
 		"type": 0,
 		"points": 30,
 		"placement": [
 			{ "element": 1, "level": 2, "coords": [0, 0] }
 		],
 		"bonus": [
-			{ "element": 2, "level": 1, "coords": [1, 0] },
-			{ "element": 2, "level": 1, "coords": [0, -1] },
-			{ "element": 2, "level": 1, "coords": [-1, 1] }
+			{ "element": 2, "level": 1, "coords": [0, 1] },
+			{ "element": 2, "level": 1, "coords": [1, -1] },
+			{ "element": 2, "level": 1, "coords": [-1, 0] }
 		]
 	},
 	{

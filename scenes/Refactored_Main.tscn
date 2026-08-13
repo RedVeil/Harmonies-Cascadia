@@ -11,24 +11,14 @@
 [ext_resource type="PackedScene" uid="uid://b8oeyth2j2arg" path="res://scenes/game/point_counter.tscn" id="8_q5ijs"]
 [ext_resource type="PackedScene" uid="uid://bv5ofl0j1ktqc" path="res://scenes/game/score_tooltips.tscn" id="11_b2x3j"]
 [ext_resource type="PackedScene" uid="uid://bde4y0iag4uud" path="res://scenes/game/undo_button.tscn" id="12_3qqq0"]
-[ext_resource type="PackedScene" path="res://scenes/game/tutorial_coach.tscn" id="13_coach"]
+[ext_resource type="PackedScene" uid="uid://khskqjho5hxb" path="res://scenes/game/tutorial_coach.tscn" id="13_coach"]
 [ext_resource type="PackedScene" uid="uid://d2uy77eljjm3y" path="res://scenes/game/game_over_overlay.tscn" id="13_gameover"]
 [ext_resource type="PackedScene" uid="uid://btq3hb02wek7u" path="res://scenes/game/tutorial_overlay.tscn" id="13_tutorial"]
 [ext_resource type="Script" uid="uid://bqqk5ualgatlr" path="res://scripts/game/tutorial_controller.gd" id="13_tutorial_ctrl"]
 [ext_resource type="PackedScene" path="res://scenes/game/settings_overlay.tscn" id="14_settings"]
 [ext_resource type="PackedScene" path="res://scenes/game/in_game_menu.tscn" id="15_in_game_menu"]
 [ext_resource type="PackedScene" uid="uid://dfujx1wir7he5" path="res://scenes/game/menu_button.tscn" id="15_menu_btn"]
-[ext_resource type="Texture2D" uid="uid://o4f6p1i5s7y3" path="res://assets/tutorial/t1.webp" id="16_4fvlb"]
-[ext_resource type="Texture2D" uid="uid://c2sek5m5c4omc" path="res://assets/tutorial/t2.webp" id="17_6ej1e"]
 [ext_resource type="Script" uid="uid://bhhe83k1kifpx" path="res://scripts/game/hud_layout.gd" id="17_hud"]
-[ext_resource type="Texture2D" uid="uid://dujfb5n5wck7a" path="res://assets/tutorial/t3.webp" id="18_ek3b8"]
-[ext_resource type="Texture2D" uid="uid://nbu63wnt84nf" path="res://assets/tutorial/t4.webp" id="19_1wyvc"]
-[ext_resource type="Texture2D" uid="uid://bspb2g0mhigoa" path="res://assets/tutorial/t5.webp" id="20_2fdk7"]
-[ext_resource type="Texture2D" uid="uid://bvyoyawgc6jgh" path="res://assets/tutorial/t6.webp" id="21_ucyvv"]
-[ext_resource type="Texture2D" uid="uid://cqkbanq6xj2nj" path="res://assets/tutorial/t7.webp" id="22_sk4yt"]
-[ext_resource type="Texture2D" uid="uid://5440c3mwsbmm" path="res://assets/tutorial/t8.webp" id="23_k5eml"]
-[ext_resource type="Texture2D" uid="uid://c0l3gffjsytrn" path="res://assets/tutorial/t9.webp" id="24_c3d47"]
-[ext_resource type="Texture2D" uid="uid://dusb05p4yjp80" path="res://assets/tutorial/t10.webp" id="25_tgxom"]
 [ext_resource type="Texture2D" uid="uid://pnqe7ys6paej" path="res://assets/tutorial/t11.webp" id="26_5xdac"]
 
 [sub_resource type="Environment" id="Environment_tbrwv"]
@@ -80,6 +70,7 @@ in_game_menu = NodePath("../InGameMenu")
 menu_button = NodePath("../HUD/MenuButton")
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=469851010]
+visible = false
 script = ExtResource("17_hud")
 
 [node name="Root" type="Control" parent="HUD" unique_id=284994878]
@@ -198,26 +189,17 @@ orchestrator = NodePath("../../Orchestrator")
 [node name="UndoButton" parent="HUD" unique_id=997758632 node_paths=PackedStringArray("orchestrator") instance=ExtResource("12_3qqq0")]
 orchestrator = NodePath("../../Orchestrator")
 
-[node name="TutorialOverlay" parent="." unique_id=1580048330 instance=ExtResource("13_tutorial")]
-visible = false
-slides = Array[Texture2D]([ExtResource("16_4fvlb"), ExtResource("17_6ej1e"), ExtResource("18_ek3b8"), ExtResource("19_1wyvc"), ExtResource("20_2fdk7"), ExtResource("21_ucyvv"), ExtResource("22_sk4yt"), ExtResource("23_k5eml"), ExtResource("24_c3d47"), ExtResource("25_tgxom"), ExtResource("26_5xdac")])
+[node name="TutorialOverlay" parent="." unique_id=1580048330 node_paths=PackedStringArray("orchestrator") instance=ExtResource("13_tutorial")]
+orchestrator = NodePath("../Orchestrator")
+image = ExtResource("26_5xdac")
 
 [node name="TutorialCoach" parent="." unique_id=1708724581 instance=ExtResource("13_coach")]
 visible = false
 
-[node name="TutorialController" type="Node" parent="." unique_id=589751562 node_paths=PackedStringArray("orchestrator", "coach", "tutorial_overlay", "camera", "hud_boosters", "hud_hand", "hud_score", "hud_undo", "hud_recycle", "hud_quests", "hex_manager")]
+[node name="TutorialController" type="Node" parent="." unique_id=589751562 node_paths=PackedStringArray("orchestrator", "coach")]
 script = ExtResource("13_tutorial_ctrl")
 orchestrator = NodePath("../Orchestrator")
 coach = NodePath("../TutorialCoach")
-tutorial_overlay = NodePath("../TutorialOverlay")
-camera = NodePath("../Camera3D")
-hud_boosters = NodePath("../HUD/BoosterManager")
-hud_hand = NodePath("../HUD/CardManager")
-hud_score = NodePath("../HUD/PointCounter")
-hud_undo = NodePath("../HUD/UndoButton")
-hud_recycle = NodePath("../HUD/CardManager")
-hud_quests = NodePath("../HUD/QuestManager")
-hex_manager = NodePath("../HexManager")
 
 [node name="SettingsOverlay" parent="." unique_id=1801243761 instance=ExtResource("14_settings")]
 visible = false
@@ -225,5 +207,6 @@ visible = false
 [node name="GameOverOverlay" parent="." unique_id=601633269 instance=ExtResource("13_gameover")]
 visible = false
 
-[node name="InGameMenu" parent="." unique_id=1354484537 instance=ExtResource("15_in_game_menu")]
+[node name="InGameMenu" parent="." unique_id=1354484537 node_paths=PackedStringArray("orchestrator") instance=ExtResource("15_in_game_menu")]
 visible = false
+orchestrator = NodePath("../Orchestrator")
