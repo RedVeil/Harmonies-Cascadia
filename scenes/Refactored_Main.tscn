@@ -70,7 +70,6 @@ in_game_menu = NodePath("../InGameMenu")
 menu_button = NodePath("../HUD/MenuButton")
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=469851010]
-visible = false
 script = ExtResource("17_hud")
 
 [node name="Root" type="Control" parent="HUD" unique_id=284994878]

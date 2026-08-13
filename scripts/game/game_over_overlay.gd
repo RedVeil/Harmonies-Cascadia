@@ -150,8 +150,9 @@ func _on_restart_pressed() -> void:
 
 func _on_share_pressed() -> void:
 	GameFeedback.play_click_button()
-	var code := ShareCode.encode(GameSession.run_seed, GameSession.ring_count, _final_score)
-	DisplayServer.clipboard_set(code)
+	DisplayServer.clipboard_set(
+		ShareCode.clipboard_message(GameSession.run_seed, GameSession.ring_count, _final_score)
+	)
 	_share_status.text = "Code copied"
 
 
