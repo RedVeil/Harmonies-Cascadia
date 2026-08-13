@@ -1,7 +1,7 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene format=3 uid="uid://yohtubn30g0x"]
 
-[ext_resource type="Script" path="res://scripts/game/in_game_menu.gd" id="1_menu"]
-[ext_resource type="PackedScene" path="res://scenes/game/settings_panel.tscn" id="2_settings"]
+[ext_resource type="Script" uid="uid://bf1gj3v1fnm2f" path="res://scripts/game/in_game_menu.gd" id="1_menu"]
+[ext_resource type="PackedScene" uid="uid://ckwpm5wl7l4a3" path="res://scenes/game/settings_panel.tscn" id="2_settings"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_left"]
 bg_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
@@ -9,24 +9,24 @@ bg_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_text"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_chip"]
-bg_color = Color(1, 1, 1, 1)
 content_margin_left = 12.0
 content_margin_top = 2.0
 content_margin_right = 12.0
 content_margin_bottom = 2.0
+bg_color = Color(1, 1, 1, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_chip_hover"]
-bg_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
 content_margin_left = 12.0
 content_margin_top = 2.0
 content_margin_right = 12.0
 content_margin_bottom = 2.0
+bg_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
 
-[node name="InGameMenu" type="CanvasLayer"]
+[node name="InGameMenu" type="CanvasLayer" unique_id=203096472]
 layer = 18
 script = ExtResource("1_menu")
 
-[node name="Root" type="Control" parent="."]
+[node name="Root" type="Control" parent="." unique_id=1999474474]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -35,82 +35,81 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Split" type="HBoxContainer" parent="Root"]
+[node name="Split" type="HBoxContainer" parent="Root" unique_id=494629020]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 0
 mouse_filter = 2
+theme_override_constants/separation = 0
 
-[node name="LeftColumn" type="PanelContainer" parent="Root/Split"]
+[node name="LeftColumn" type="PanelContainer" parent="Root/Split" unique_id=296944139]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 1.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_left")
 
-[node name="Margin" type="MarginContainer" parent="Root/Split/LeftColumn"]
+[node name="Margin" type="MarginContainer" parent="Root/Split/LeftColumn" unique_id=492964586]
 layout_mode = 2
 theme_override_constants/margin_left = 36
 theme_override_constants/margin_top = 48
 theme_override_constants/margin_right = 36
 theme_override_constants/margin_bottom = 48
 
-[node name="NavStack" type="VBoxContainer" parent="Root/Split/LeftColumn/Margin"]
+[node name="NavStack" type="VBoxContainer" parent="Root/Split/LeftColumn/Margin" unique_id=704589143]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 16
 
-[node name="TitleLabel" type="Label" parent="Root/Split/LeftColumn/Margin/NavStack"]
+[node name="TitleLabel" type="Label" parent="Root/Split/LeftColumn/Margin/NavStack" unique_id=97993096]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 42
-text = "HARMONIES"
+theme_override_font_sizes/font_size = 72
+text = "SYMBIA"
 
-[node name="RootNav" type="VBoxContainer" parent="Root/Split/LeftColumn/Margin/NavStack"]
+[node name="RootNav" type="VBoxContainer" parent="Root/Split/LeftColumn/Margin/NavStack" unique_id=1960448338]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="EndSessionButton" type="Button" parent="Root/Split/LeftColumn/Margin/NavStack/RootNav"]
+[node name="EndSessionButton" type="Button" parent="Root/Split/LeftColumn/Margin/NavStack/RootNav" unique_id=982309331]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
 theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
+theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
 theme_override_font_sizes/font_size = 26
 theme_override_styles/normal = SubResource("StyleBoxEmpty_text")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_text")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_text")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_text")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_text")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_text")
-alignment = 0
+theme_override_styles/focus = SubResource("StyleBoxEmpty_text")
 text = "END SESSION"
 flat = true
+alignment = 0
 
-[node name="SettingsButton" type="Button" parent="Root/Split/LeftColumn/Margin/NavStack/RootNav"]
+[node name="SettingsButton" type="Button" parent="Root/Split/LeftColumn/Margin/NavStack/RootNav" unique_id=1956696140]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
 theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
+theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
 theme_override_font_sizes/font_size = 26
 theme_override_styles/normal = SubResource("StyleBoxEmpty_text")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_text")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_text")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_text")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_text")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_text")
-alignment = 0
+theme_override_styles/focus = SubResource("StyleBoxEmpty_text")
 text = "SETTINGS"
 flat = true
+alignment = 0
 
-[node name="EndSessionBlock" type="VBoxContainer" parent="Root/Split/LeftColumn/Margin/NavStack"]
+[node name="EndSessionBlock" type="VBoxContainer" parent="Root/Split/LeftColumn/Margin/NavStack" unique_id=1407410737]
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="ScoreLabel" type="Label" parent="Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock"]
+[node name="ScoreLabel" type="Label" parent="Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock" unique_id=451325161]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_constants/line_spacing = -5
@@ -118,7 +117,7 @@ theme_override_font_sizes/font_size = 18
 text = "You have 0 Points!"
 autowrap_mode = 2
 
-[node name="SubLabel" type="Label" parent="Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock"]
+[node name="SubLabel" type="Label" parent="Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock" unique_id=1516326300]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.7)
 theme_override_constants/line_spacing = -5
@@ -126,104 +125,103 @@ theme_override_font_sizes/font_size = 16
 text = "Take a break or wrap up your session."
 autowrap_mode = 2
 
-[node name="ActionRow" type="HBoxContainer" parent="Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock"]
+[node name="ActionRow" type="HBoxContainer" parent="Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock" unique_id=2075283546]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="RestartButton" type="Button" parent="Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock/ActionRow"]
+[node name="RestartButton" type="Button" parent="Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock/ActionRow" unique_id=1933804111]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
-theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
-theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
 theme_override_colors/font_focus_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxFlat_chip")
-theme_override_styles/hover = SubResource("StyleBoxFlat_chip_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_chip_hover")
-theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
+theme_override_styles/hover = SubResource("StyleBoxFlat_chip_hover")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
+theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
 text = "RESTART"
 
-[node name="EndButton" type="Button" parent="Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock/ActionRow"]
+[node name="EndButton" type="Button" parent="Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock/ActionRow" unique_id=1249332192]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
-theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
-theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
 theme_override_colors/font_focus_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxFlat_chip")
-theme_override_styles/hover = SubResource("StyleBoxFlat_chip_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_chip_hover")
-theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
+theme_override_styles/hover = SubResource("StyleBoxFlat_chip_hover")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
+theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
 text = "END"
 
-[node name="ShareButton" type="Button" parent="Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock/ActionRow"]
+[node name="ShareButton" type="Button" parent="Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock/ActionRow" unique_id=1242654730]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
-theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
-theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
 theme_override_colors/font_focus_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxFlat_chip")
-theme_override_styles/hover = SubResource("StyleBoxFlat_chip_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_chip_hover")
-theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
+theme_override_styles/hover = SubResource("StyleBoxFlat_chip_hover")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
+theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
 text = "SHARE"
 
-[node name="ShareStatus" type="Label" parent="Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock"]
+[node name="ShareStatus" type="Label" parent="Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock" unique_id=1094553937]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.7)
 theme_override_font_sizes/font_size = 13
-text = ""
 
-[node name="SettingsBlock" type="ScrollContainer" parent="Root/Split/LeftColumn/Margin/NavStack"]
+[node name="SettingsBlock" type="ScrollContainer" parent="Root/Split/LeftColumn/Margin/NavStack" unique_id=302998996]
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="SettingsPanel" parent="Root/Split/LeftColumn/Margin/NavStack/SettingsBlock" instance=ExtResource("2_settings")]
+[node name="SettingsPanel" parent="Root/Split/LeftColumn/Margin/NavStack/SettingsBlock" unique_id=134602438 instance=ExtResource("2_settings")]
 custom_minimum_size = Vector2(0, 320)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="FooterSpacer" type="Control" parent="Root/Split/LeftColumn/Margin/NavStack"]
+[node name="FooterSpacer" type="Control" parent="Root/Split/LeftColumn/Margin/NavStack" unique_id=1342546753]
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
 
-[node name="BackButton" type="Button" parent="Root/Split/LeftColumn/Margin/NavStack"]
+[node name="BackButton" type="Button" parent="Root/Split/LeftColumn/Margin/NavStack" unique_id=1274001881]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
 theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
+theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
 theme_override_font_sizes/font_size = 26
 theme_override_styles/normal = SubResource("StyleBoxEmpty_text")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_text")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_text")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_text")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_text")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_text")
-alignment = 0
+theme_override_styles/focus = SubResource("StyleBoxEmpty_text")
 text = "BACK"
 flat = true
+alignment = 0
 
-[node name="RightColumn" type="Control" parent="Root/Split"]
+[node name="RightColumn" type="Control" parent="Root/Split" unique_id=1575349139]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
 mouse_filter = 2
 
-[connection signal="pressed" from="Root/Split/LeftColumn/Margin/NavStack/RootNav/SettingsButton" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="Root/Split/LeftColumn/Margin/NavStack/RootNav/EndSessionButton" to="." method="_on_end_session_pressed"]
+[connection signal="pressed" from="Root/Split/LeftColumn/Margin/NavStack/RootNav/SettingsButton" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock/ActionRow/RestartButton" to="." method="_on_restart_pressed"]
 [connection signal="pressed" from="Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock/ActionRow/EndButton" to="." method="_on_end_pressed"]
 [connection signal="pressed" from="Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock/ActionRow/ShareButton" to="." method="_on_share_pressed"]

@@ -27,6 +27,58 @@ static func clipboard_message(seed: int, ring_count: int, score: int) -> String:
 	return "I got %d in Symbia — can you beat it?\nPlay it here: %s and just enter my code: %s." % [score, ITCH_URL, code]
 
 
+## Copies text to the system clipboard. On web, uses JavaScriptBridge (with a DOM
+## fallback when the itch iframe blocks the Clipboard API). Returns true if copy
+## succeeded silently; false if a manual Ctrl+C overlay was left on the page.
+static func copy_to_clipboard(text: String) -> bool:
+	if OS.has_feature("web"):
+		return _copy_to_clipboard_web(text)
+	DisplayServer.clipboard_set(text)
+	return true
+
+
+static func _copy_to_clipboard_web(text: String) -> bool:
+	var js_text := JSON.stringify(text)
+	var code := """
+(function(text) {
+	var old = document.getElementById('symbia-share-overlay');
+	if (old) { old.remove(); }
+	var wrap = document.createElement('div');
+	wrap.id = 'symbia-share-overlay';
+	wrap.style.cssText = 'position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,0.55);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;font-family:sans-serif;';
+	var ta = document.createElement('textarea');
+	ta.value = text;
+	ta.setAttribute('readonly', '');
+	ta.style.cssText = 'width:min(560px,100%%);height:160px;font-size:14px;padding:12px;box-sizing:border-box;resize:none;';
+	var hint = document.createElement('div');
+	hint.textContent = 'Press Ctrl+C (Cmd+C on Mac) to copy, then Close';
+	hint.style.cssText = 'color:#fff;margin:12px 0 8px;font-size:14px;text-align:center;';
+	var btn = document.createElement('button');
+	btn.textContent = 'Close';
+	btn.style.cssText = 'padding:8px 20px;font-size:14px;cursor:pointer;';
+	btn.onclick = function() { wrap.remove(); };
+	wrap.appendChild(ta);
+	wrap.appendChild(hint);
+	wrap.appendChild(btn);
+	document.body.appendChild(wrap);
+	ta.focus();
+	ta.select();
+	var ok = false;
+	try { ok = document.execCommand('copy'); } catch (e) {}
+	if (!ok && navigator.clipboard && navigator.clipboard.writeText) {
+		try { navigator.clipboard.writeText(text); } catch (e2) {}
+	}
+	if (ok) {
+		wrap.remove();
+		return true;
+	}
+	return false;
+})(%s);
+""" % js_text
+	var result = JavaScriptBridge.eval(code)
+	return bool(result)
+
+
 ## Returns { "ok": bool, "seed": int, "ring_count": int, "score": int, "error": String }
 static func decode(code: String) -> Dictionary:
 	var raw := _extract_code(code)

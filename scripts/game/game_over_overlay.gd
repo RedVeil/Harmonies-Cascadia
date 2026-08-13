@@ -150,10 +150,11 @@ func _on_restart_pressed() -> void:
 
 func _on_share_pressed() -> void:
 	GameFeedback.play_click_button()
-	DisplayServer.clipboard_set(
-		ShareCode.clipboard_message(GameSession.run_seed, GameSession.ring_count, _final_score)
-	)
-	_share_status.text = "Code copied"
+	var msg := ShareCode.clipboard_message(GameSession.run_seed, GameSession.ring_count, _final_score)
+	if ShareCode.copy_to_clipboard(msg):
+		_share_status.text = "Code copied"
+	else:
+		_share_status.text = "Press Ctrl+C to copy"
 
 
 func _reset_button_hovers() -> void:

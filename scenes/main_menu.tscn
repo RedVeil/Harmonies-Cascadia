@@ -94,7 +94,6 @@ theme_override_constants/separation = 20
 [node name="TitleLabel" type="Label" parent="Split/LeftColumn/Margin/NavStack" unique_id=2072497958]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
 theme_override_font_sizes/font_size = 72
 text = "SYMBIA"
 autowrap_mode = 2
