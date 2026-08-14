@@ -21,6 +21,7 @@ class_name Card
 const STACK_STEP_PX := 10.0
 const STACK_VISUAL_CAP := 4
 const DESATURATE_AMOUNT := 0.45
+const TOUCH_LONG_PRESS_SEC := 0.45
 var COLOR_BROWN := Color.html("#918478")
 
 @onready var visuals : Node2D = $visuals
@@ -68,6 +69,9 @@ var _touch_hover_sticky: bool = false
 var _recycle_enabled: bool = false
 var _recycle_hovered: bool = false
 var _recycle_base_position: Vector2 = Vector2.ZERO
+var _long_press_timer: Timer
+var _touch_press_active: bool = false
+var _long_press_fired: bool = false
 
 ## ----- Initialisation ----- ##
 
@@ -96,7 +100,11 @@ func _ready() -> void:
 	recycle_btn.gui_input.connect(_on_recycle_gui_input)
 	recycle_btn.mouse_entered.connect(_on_recycle_mouse_entered)
 	recycle_btn.mouse_exited.connect(_on_recycle_mouse_exited)
-	
+	_long_press_timer = Timer.new()
+	_long_press_timer.one_shot = true
+	_long_press_timer.wait_time = TOUCH_LONG_PRESS_SEC
+	_long_press_timer.timeout.connect(_on_long_press_timeout)
+	add_child(_long_press_timer)
 func init(cardData:CardData, parent:Node, idx:int) -> void:
 	if parent is CardContainer:
 		container = parent
@@ -198,26 +206,59 @@ func _on_mouse_exited() -> void:
 	
 
 func _on_gui_input(event: InputEvent) -> void:
+	if _recycle_hovered:
+		return
+	if TouchMode.is_touch():
+		_handle_touch_gui_input(event)
+		return
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			if _recycle_hovered:
-				return
-			if TouchMode.is_touch():
-				if event.double_click:
-					_touch_hover_sticky = false
-					GameFeedback.play_click_card()
-					if _interaction_host and _interaction_host.has_method("select_card"):
-						_interaction_host.select_card(id)
-				else:
-					_touch_hover_sticky = true
-					if _interaction_host and _interaction_host.has_method("hover_card"):
-						_interaction_host.hover_card(id)
-				get_viewport().set_input_as_handled()
-				return
 			GameFeedback.play_click_card()
 			if _interaction_host and _interaction_host.has_method("select_card"):
 				_interaction_host.select_card(id)
 			get_viewport().set_input_as_handled()
+
+
+func _handle_touch_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and TouchMode.is_emulated_mouse_event(event):
+		return
+	var is_press := false
+	var is_release := false
+	if event is InputEventScreenTouch:
+		is_press = event.pressed
+		is_release = not event.pressed
+	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		is_press = event.pressed
+		is_release = not event.pressed
+	if not is_press and not is_release:
+		return
+	if is_press:
+		_touch_press_active = true
+		_long_press_fired = false
+		_long_press_timer.start()
+		get_viewport().set_input_as_handled()
+		return
+	if not _touch_press_active:
+		return
+	_touch_press_active = false
+	_long_press_timer.stop()
+	if _long_press_fired:
+		_long_press_fired = false
+		get_viewport().set_input_as_handled()
+		return
+	GameFeedback.play_click_card()
+	if _interaction_host and _interaction_host.has_method("select_card"):
+		_interaction_host.select_card(id)
+	get_viewport().set_input_as_handled()
+
+
+func _on_long_press_timeout() -> void:
+	if not _touch_press_active:
+		return
+	_long_press_fired = true
+	_touch_hover_sticky = true
+	if _interaction_host and _interaction_host.has_method("hover_card"):
+		_interaction_host.hover_card(id)
 
 ## ----- Stack Logic ----- ##
 

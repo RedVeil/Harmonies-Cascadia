@@ -41,9 +41,12 @@ func _setup_hover_sounds() -> void:
 	for button in buttons:
 		if button != null and not button.mouse_entered.is_connected(_on_button_mouse_entered):
 			button.mouse_entered.connect(_on_button_mouse_entered)
+	WebInstantButton.wire_many(buttons)
 
 
 func _on_button_mouse_entered() -> void:
+	if WebInstantButton.skip_hover():
+		return
 	GameFeedback.play_hover_button()
 
 
@@ -71,6 +74,15 @@ func _show_view(view: View) -> void:
 	# Settings scroll takes the expand space; otherwise footer spacer pushes BACK down.
 	_footer_spacer.visible = view != View.SETTINGS
 	_settings_block.size_flags_vertical = Control.SIZE_EXPAND_FILL if view == View.SETTINGS else 0
+	_sync_view_input_filters()
+
+
+func _sync_view_input_filters() -> void:
+	_root_nav.mouse_filter = Control.MOUSE_FILTER_STOP if _view == View.ROOT else Control.MOUSE_FILTER_IGNORE
+	_end_session_block.mouse_filter = Control.MOUSE_FILTER_STOP if _view == View.END_SESSION else Control.MOUSE_FILTER_IGNORE
+	_settings_block.mouse_filter = Control.MOUSE_FILTER_STOP if _view == View.SETTINGS else Control.MOUSE_FILTER_IGNORE
+	if OS.has_feature("web"):
+		TouchMode.clear_stuck_gui_hover()
 
 
 func open(score: int, _results: bool = false) -> void:

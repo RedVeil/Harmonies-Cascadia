@@ -38,4 +38,5 @@ func set_hovering(owner: Object, hovering: bool) -> void:
 func is_blocked() -> bool:
 	if not _hover_ids.is_empty():
 		return true
-	return get_viewport().gui_get_hovered_control() != null
+	var hovered := get_viewport().gui_get_hovered_control()
+	return hovered != null and hovered.is_visible_in_tree()

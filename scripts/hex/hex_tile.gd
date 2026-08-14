@@ -253,19 +253,36 @@ func _on_input_event(
 	_normal: Vector3,
 	_shape_idx: int
 ) -> void:
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			if UiPointerBlock.is_blocked():
-				return
-			# Touch: single tap previews; double tap places when valid.
-			if TouchMode.is_touch():
-				if event.double_click and _has_selected_card():
-					container.handle_click(coord)
-				else:
-					container.handle_hover(coord)
-					show_outline(Color.WHITE)
-				return
+	if UiPointerBlock.is_blocked():
+		return
+	var pressed := false
+	if event is InputEventScreenTouch:
+		pressed = event.pressed
+	elif event is InputEventMouseButton:
+		if event.button_index != MOUSE_BUTTON_LEFT or not event.pressed:
+			return
+		if TouchMode.is_touch() and TouchMode.is_emulated_mouse_event(event):
+			return
+		pressed = true
+	if not pressed:
+		return
+	if TouchMode.is_touch():
+		_handle_touch_tap()
+		return
+	container.handle_click(coord)
+
+
+func _handle_touch_tap() -> void:
+	var orch := _orchestrator()
+	if orch != null and orch.touch_preview_locked and _has_selected_card():
+		if orch.selected_coord == coord and orch.placement_valid:
 			container.handle_click(coord)
+		else:
+			container.handle_hover(coord)
+			show_outline(Color.WHITE)
+		return
+	container.handle_hover(coord)
+	show_outline(Color.WHITE)
 
 
 func _orchestrator() -> Orchestrator:
