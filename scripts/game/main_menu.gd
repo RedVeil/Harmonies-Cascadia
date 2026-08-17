@@ -29,7 +29,6 @@ var COLOR_RIGHT := Color.html("#D2C2AD")
 @onready var _endless_inline_buttons: HBoxContainer = $Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessInlineButtons
 
 var _puzzle_ids: Array[String] = []
-var _web_text: WebTextPrompt
 
 
 func _ready() -> void:
@@ -40,7 +39,6 @@ func _ready() -> void:
 	_setup_background()
 	_setup_puzzle_ids()
 	_setup_button_hover_sounds()
-	_setup_web_text_inputs()
 	_code_status.text = ""
 	if _settings_panel:
 		_settings_panel.apply_sidebar_style()
@@ -49,15 +47,6 @@ func _ready() -> void:
 		_show_name_nav()
 	else:
 		_show_root_nav()
-
-
-func _setup_web_text_inputs() -> void:
-	if not OS.has_feature("web"):
-		return
-	_web_text = WebTextPrompt.new()
-	_web_text.setup()
-	_web_text.bind_line_edit(_name_input, "Your name")
-	_web_text.bind_line_edit(_code_input, "Paste a share code")
 
 
 func _setup_button_hover_sounds() -> void:
@@ -89,12 +78,9 @@ func _setup_button_hover_sounds() -> void:
 	for button in buttons:
 		if button != null and not button.mouse_entered.is_connected(_on_nav_button_mouse_entered):
 			button.mouse_entered.connect(_on_nav_button_mouse_entered)
-	WebInstantButton.wire_many(buttons)
 
 
 func _on_nav_button_mouse_entered() -> void:
-	if WebInstantButton.skip_hover():
-		return
 	GameFeedback.play_hover_button()
 
 
@@ -146,8 +132,6 @@ func _sync_nav_input_filters(active: Control) -> void:
 			nav.mouse_filter = Control.MOUSE_FILTER_STOP
 		else:
 			nav.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	if OS.has_feature("web"):
-		TouchMode.clear_stuck_gui_hover()
 
 
 func _show_name_nav() -> void:
@@ -158,8 +142,7 @@ func _show_name_nav() -> void:
 	_settings_nav.hide()
 	_reset_mode_inline_ui()
 	_sync_nav_input_filters(_name_nav)
-	if not OS.has_feature("web"):
-		_name_input.grab_focus()
+	_name_input.grab_focus()
 
 
 func _show_root_nav() -> void:
@@ -194,8 +177,7 @@ func _show_code_nav() -> void:
 	_reset_mode_inline_ui()
 	_sync_nav_input_filters(_code_nav)
 	_code_status.text = ""
-	if not OS.has_feature("web"):
-		_code_input.grab_focus()
+	_code_input.grab_focus()
 
 
 func _show_settings_nav() -> void:
@@ -225,8 +207,7 @@ func _on_name_submitted(text: String) -> void:
 func _try_accept_player_name(text: String) -> void:
 	var new_name := text.strip_edges()
 	if new_name.is_empty():
-		if not OS.has_feature("web"):
-			_name_input.grab_focus()
+		_name_input.grab_focus()
 		return
 	GameSettings.set_player_name(new_name)
 	_show_root_nav()

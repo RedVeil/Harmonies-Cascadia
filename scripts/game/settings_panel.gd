@@ -257,22 +257,9 @@ func _wire_signals() -> void:
 	]:
 		if control != null and not control.mouse_entered.is_connected(_on_control_mouse_entered):
 			control.mouse_entered.connect(_on_control_mouse_entered)
-	WebInstantButton.wire_many([
-		_graphics_button,
-		_audio_button,
-		_preset_low,
-		_preset_medium,
-		_preset_high,
-		_wind_check,
-		_clouds_check,
-		_animal_option,
-		_msaa_option,
-	])
 
 
 func _on_control_mouse_entered() -> void:
-	if WebInstantButton.skip_hover():
-		return
 	GameFeedback.play_hover_button()
 
 

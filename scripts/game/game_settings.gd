@@ -167,8 +167,6 @@ func _migrate_player_progress() -> bool:
 func _platform_tag() -> String:
 	if OS.has_feature("web"):
 		return "web"
-	if OS.has_feature("mobile"):
-		return "mobile"
 	return "desktop"
 
 

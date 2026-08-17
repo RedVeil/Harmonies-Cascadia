@@ -27,8 +27,6 @@ var cards_paused: bool = false
 var tile_hovered : bool = false
 var selected_coord : Vector2i = Vector2i.ZERO
 var game_over: bool = false
-## Sticky tile preview for touch: survives mouse_exit until place/deselect/new tap.
-var touch_preview_locked: bool = false
 
 var map_points: int = 0
 
@@ -157,7 +155,6 @@ func open_in_game_menu() -> void:
 		quest_manager.reset_preview()
 		point_counter.reset_preview()
 		reset_preview()
-	_clear_touch_preview_lock()
 	pause_cards()
 	undo_button.disable()
 	in_game_menu.open(score_engine.total_score, game_over)
@@ -206,17 +203,7 @@ func select_hand_card(id:int) -> void:
 			card_manager.deselect_card(selected_card_id)
 		selected_card_id = -1
 		_update_card_recycling_state()
-		_clear_touch_preview_lock()
-		if tile_hovered:
-			# Force-clear sticky touch preview (mouse may already have left).
-			tile_hovered = false
-			_hover_slide_coord = Vector2i(2147483647, 2147483647)
-			hex_manager.hide_tile_info(selected_coord)
-			hex_manager.reset_preview(selected_coord)
-			hex_manager.clear_hover_tracking()
-			quest_manager.reset_preview()
-			point_counter.reset_preview()
-			reset_preview()
+		_restore_hovered_tile_info()
 		return
 
 	var new_selection = id
@@ -237,18 +224,7 @@ func select_hand_card(id:int) -> void:
 	selected_card_id = new_selection
 	_update_card_recycling_state()
 	if new_selection == -1:
-		_clear_touch_preview_lock()
-		if tile_hovered:
-			# Force-clear sticky touch preview (mouse may already have left).
-			tile_hovered = false
-			_hover_slide_coord = Vector2i(2147483647, 2147483647)
-			hex_manager.hide_tile_info(selected_coord)
-			hex_manager.reset_preview(selected_coord)
-			hex_manager.clear_hover_tracking()
-			quest_manager.reset_preview()
-			point_counter.reset_preview()
-			reset_preview()
-			return
+		_restore_hovered_tile_info()
 	else:
 		tutorial_bridge.notify("card_selected", {"card_id": new_selection})
 		if tile_hovered:
@@ -402,8 +378,6 @@ func handle_tile_hover(coord:Vector2i) -> void:
 		GameFeedback.run_tile_hover_slide()
 
 	if selected_card_id != -1 and !cards_paused:
-		if TouchMode.is_touch():
-			touch_preview_locked = true
 		placement_valid = false
 		var preview:TileStatePreview
 		var selected_card = card_manager.cards[selected_card_id]
@@ -419,9 +393,6 @@ func handle_tile_hover(coord:Vector2i) -> void:
 		hex_manager.show_tile_info(coord)
 
 func handle_tile_exit() -> bool:
-	if TouchMode.is_touch() and touch_preview_locked:
-		return false
-
 	tile_hovered = false
 	_hover_slide_coord = Vector2i(2147483647, 2147483647)
 	
@@ -522,7 +493,6 @@ func handle_tile_click(coord: Vector2i) -> void:
 		if placed_was_element:
 			booster_manager.notify_element_played()
 		
-		_clear_touch_preview_lock()
 		reset_preview()
 		if map_points == 0:
 			undo_button.enable()
@@ -689,8 +659,15 @@ func reset_preview() -> void:
 	score_engine.new_quest_score = 0
 
 
-func _clear_touch_preview_lock() -> void:
-	touch_preview_locked = false
+func _restore_hovered_tile_info() -> void:
+	if not tile_hovered:
+		return
+	hex_manager.reset_preview(selected_coord)
+	quest_manager.reset_preview()
+	point_counter.reset_preview()
+	reset_preview()
+	handle_tile_hover(selected_coord)
+
 
 func get_neighbor_contributing_coords(group_coords:Array[Vector2i]) -> Array[Vector2i]:
 	var coords : Array[Vector2i] = []

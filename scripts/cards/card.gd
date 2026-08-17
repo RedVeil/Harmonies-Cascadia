@@ -21,7 +21,6 @@ class_name Card
 const STACK_STEP_PX := 10.0
 const STACK_VISUAL_CAP := 4
 const DESATURATE_AMOUNT := 0.45
-const TOUCH_LONG_PRESS_SEC := 0.45
 var COLOR_BROWN := Color.html("#918478")
 
 @onready var visuals : Node2D = $visuals
@@ -64,14 +63,9 @@ var _spawn_active : bool = false
 var _redraw_active : bool = false
 var _spawn_layout_pending : bool = false
 var _feedback_tweens: Dictionary = {}
-## Sticky hover for touch: survives mouse_exit until another card is hovered or selected.
-var _touch_hover_sticky: bool = false
 var _recycle_enabled: bool = false
 var _recycle_hovered: bool = false
 var _recycle_base_position: Vector2 = Vector2.ZERO
-var _long_press_timer: Timer
-var _touch_press_active: bool = false
-var _long_press_fired: bool = false
 
 ## ----- Initialisation ----- ##
 
@@ -100,11 +94,7 @@ func _ready() -> void:
 	recycle_btn.gui_input.connect(_on_recycle_gui_input)
 	recycle_btn.mouse_entered.connect(_on_recycle_mouse_entered)
 	recycle_btn.mouse_exited.connect(_on_recycle_mouse_exited)
-	_long_press_timer = Timer.new()
-	_long_press_timer.one_shot = true
-	_long_press_timer.wait_time = TOUCH_LONG_PRESS_SEC
-	_long_press_timer.timeout.connect(_on_long_press_timeout)
-	add_child(_long_press_timer)
+
 func init(cardData:CardData, parent:Node, idx:int) -> void:
 	if parent is CardContainer:
 		container = parent
@@ -172,9 +162,6 @@ func consume_spawn_layout() -> bool:
 func _on_mouse_entered() -> void:
 	is_mouse_inside = true
 	_sync_ui_pointer_block()
-	# Touch uses tap-to-hover; skip enter-driven hover so single tap stays distinct.
-	if TouchMode.is_touch():
-		return
 	if _interaction_host and _interaction_host.has_method("hover_card"):
 		_interaction_host.hover_card(id)
 	
@@ -199,8 +186,6 @@ func _on_mouse_exited() -> void:
 		_sync_ui_pointer_block()
 		return
 	_sync_ui_pointer_block()
-	if TouchMode.is_touch() and _touch_hover_sticky:
-		return
 	if _interaction_host and _interaction_host.has_method("exit_card"):
 		_interaction_host.exit_card(id)
 	
@@ -208,57 +193,12 @@ func _on_mouse_exited() -> void:
 func _on_gui_input(event: InputEvent) -> void:
 	if _recycle_hovered:
 		return
-	if TouchMode.is_touch():
-		_handle_touch_gui_input(event)
-		return
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			GameFeedback.play_click_card()
 			if _interaction_host and _interaction_host.has_method("select_card"):
 				_interaction_host.select_card(id)
 			get_viewport().set_input_as_handled()
-
-
-func _handle_touch_gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and TouchMode.is_emulated_mouse_event(event):
-		return
-	var is_press := false
-	var is_release := false
-	if event is InputEventScreenTouch:
-		is_press = event.pressed
-		is_release = not event.pressed
-	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		is_press = event.pressed
-		is_release = not event.pressed
-	if not is_press and not is_release:
-		return
-	if is_press:
-		_touch_press_active = true
-		_long_press_fired = false
-		_long_press_timer.start()
-		get_viewport().set_input_as_handled()
-		return
-	if not _touch_press_active:
-		return
-	_touch_press_active = false
-	_long_press_timer.stop()
-	if _long_press_fired:
-		_long_press_fired = false
-		get_viewport().set_input_as_handled()
-		return
-	GameFeedback.play_click_card()
-	if _interaction_host and _interaction_host.has_method("select_card"):
-		_interaction_host.select_card(id)
-	get_viewport().set_input_as_handled()
-
-
-func _on_long_press_timeout() -> void:
-	if not _touch_press_active:
-		return
-	_long_press_fired = true
-	_touch_hover_sticky = true
-	if _interaction_host and _interaction_host.has_method("hover_card"):
-		_interaction_host.hover_card(id)
 
 ## ----- Stack Logic ----- ##
 
@@ -342,7 +282,6 @@ func handle_hover() -> void:
 	refresh_recycle_button(true)
 
 func handle_exit() -> void:
-	_touch_hover_sticky = false
 	placement_tooltip.hide()
 	if !is_active:
 		reset_select_visuals()
@@ -350,14 +289,12 @@ func handle_exit() -> void:
 
 func select() -> void:
 	is_active = true
-	_touch_hover_sticky = false
 	self.z_index = base_z_index + 100
 	if target_visuals_position == base_visuals_position:
 		set_select_visuals()
 
 func deselect() -> void:
 	is_active = false
-	_touch_hover_sticky = false
 	self.z_index = base_z_index
 	reset_select_visuals()
 	placement_tooltip.hide()
@@ -636,8 +573,6 @@ func _on_recycle_mouse_exited() -> void:
 	# Left X into empty space (not back onto the card body).
 	if not _control_has_mouse(hit_area):
 		is_mouse_inside = false
-		if TouchMode.is_touch() and _touch_hover_sticky:
-			return
 		# Recycle already removed this card; skip hover-exit on a freed slot.
 		if is_queued_for_deletion():
 			return

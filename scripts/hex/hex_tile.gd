@@ -240,8 +240,6 @@ func _on_mouse_entered() -> void:
 
 
 func _on_mouse_exited() -> void:
-	if _is_touch_preview_locked():
-		return
 	container.handle_exit(coord)
 	hide_outline()
 
@@ -255,50 +253,10 @@ func _on_input_event(
 ) -> void:
 	if UiPointerBlock.is_blocked():
 		return
-	var pressed := false
-	if event is InputEventScreenTouch:
-		pressed = event.pressed
-	elif event is InputEventMouseButton:
+	if event is InputEventMouseButton:
 		if event.button_index != MOUSE_BUTTON_LEFT or not event.pressed:
 			return
-		if TouchMode.is_touch() and TouchMode.is_emulated_mouse_event(event):
-			return
-		pressed = true
-	if not pressed:
-		return
-	if TouchMode.is_touch():
-		_handle_touch_tap()
-		return
-	container.handle_click(coord)
-
-
-func _handle_touch_tap() -> void:
-	var orch := _orchestrator()
-	if orch != null and orch.touch_preview_locked and _has_selected_card():
-		if orch.selected_coord == coord and orch.placement_valid:
-			container.handle_click(coord)
-		else:
-			container.handle_hover(coord)
-			show_outline(Color.WHITE)
-		return
-	container.handle_hover(coord)
-	show_outline(Color.WHITE)
-
-
-func _orchestrator() -> Orchestrator:
-	if container == null or container.hex_manager == null:
-		return null
-	return container.hex_manager.orchestrator
-
-
-func _is_touch_preview_locked() -> bool:
-	var orch := _orchestrator()
-	return orch != null and orch.touch_preview_locked
-
-
-func _has_selected_card() -> bool:
-	var orch := _orchestrator()
-	return orch != null and orch.selected_card_id != -1
+		container.handle_click(coord)
 
 
 ## ----- Points Logic ----- ##
