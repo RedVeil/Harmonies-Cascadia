@@ -1,0 +1,334 @@
+[gd_scene format=3 uid="uid://cqtglrm4b1h5x"]
+
+[ext_resource type="Script" uid="uid://bmmpy4ihllt1h" path="res://scripts/cards/card_placement.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://dj0cp3fpxsnh2" path="res://assets/icons/hex_outline_thin.png" id="2_thin"]
+[ext_resource type="Texture2D" uid="uid://dra047eyuxuba" path="res://assets/icons/hex.png" id="3_hex"]
+[ext_resource type="Texture2D" uid="uid://bjp5bww3iy6kb" path="res://assets/elements/n0.png" id="4_n0"]
+[ext_resource type="Texture2D" uid="uid://c7gps0kx5akgg" path="res://assets/elements/f0.png" id="5_f0"]
+[ext_resource type="Texture2D" uid="uid://dgvc21cmq8yv8" path="res://assets/elements/m0.png" id="8_m0"]
+[ext_resource type="Texture2D" uid="uid://desxxehso65c" path="res://assets/elements/m1.png" id="9_m1"]
+
+[node name="CardPlacement" type="Node2D" unique_id=2113458911]
+script = ExtResource("1_script")
+
+[node name="element" type="Node2D" parent="." unique_id=281213970]
+z_index = 1
+scale = Vector2(0.1, 0.1)
+
+[node name="DeadEarth" type="Node2D" parent="element" unique_id=435217751]
+visible = false
+
+[node name="0" type="Sprite2D" parent="element/DeadEarth" unique_id=1326485086]
+texture = ExtResource("2_thin")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/DeadEarth/0" unique_id=1525928829]
+self_modulate = Color(0.360784, 0.278431, 0.219608, 1)
+show_behind_parent = true
+texture = ExtResource("3_hex")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/DeadEarth/0/Sprite2D" unique_id=1708381643]
+scale = Vector2(3, 3)
+texture = ExtResource("4_n0")
+
+[node name="Field" type="Node2D" parent="element" unique_id=1735985952]
+visible = false
+
+[node name="0" type="Sprite2D" parent="element/Field" unique_id=128955781]
+texture = ExtResource("2_thin")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/Field/0" unique_id=1661740573]
+self_modulate = Color(0.36078432, 0.2784314, 0.21960784, 1)
+show_behind_parent = true
+texture = ExtResource("3_hex")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/Field/0/Sprite2D" unique_id=160720859]
+scale = Vector2(3, 3)
+texture = ExtResource("4_n0")
+
+[node name="River" type="Node2D" parent="element" unique_id=279927905]
+visible = false
+
+[node name="0" type="Sprite2D" parent="element/River" unique_id=1218587964]
+texture = ExtResource("2_thin")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/River/0" unique_id=466841813]
+self_modulate = Color(0.36078432, 0.2784314, 0.21960784, 1)
+show_behind_parent = true
+texture = ExtResource("3_hex")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/River/0/Sprite2D" unique_id=765839599]
+scale = Vector2(3, 3)
+texture = ExtResource("4_n0")
+
+[node name="Wetland" type="Node2D" parent="element" unique_id=2140637862]
+visible = false
+
+[node name="0" type="Sprite2D" parent="element/Wetland" unique_id=1885033729]
+texture = ExtResource("2_thin")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/Wetland/0" unique_id=1499508905]
+self_modulate = Color(0.36078432, 0.2784314, 0.21960784, 1)
+show_behind_parent = true
+texture = ExtResource("3_hex")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/Wetland/0/Sprite2D" unique_id=981036450]
+scale = Vector2(3, 3)
+texture = ExtResource("4_n0")
+
+[node name="Forest" type="Node2D" parent="element" unique_id=756410279]
+visible = false
+
+[node name="0" type="Sprite2D" parent="element/Forest" unique_id=1707899282]
+position = Vector2(-340, 0)
+texture = ExtResource("2_thin")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/Forest/0" unique_id=1906813616]
+self_modulate = Color(0.360784, 0.278431, 0.219608, 1)
+show_behind_parent = true
+texture = ExtResource("3_hex")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/Forest/0/Sprite2D" unique_id=1421988783]
+scale = Vector2(3, 3)
+texture = ExtResource("4_n0")
+
+[node name="1" type="Sprite2D" parent="element/Forest" unique_id=289587076]
+position = Vector2(340.00024, 0)
+texture = ExtResource("2_thin")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/Forest/1" unique_id=1447386643]
+self_modulate = Color(0.219608, 0.521569, 0.219608, 1)
+show_behind_parent = true
+texture = ExtResource("3_hex")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/Forest/1/Sprite2D" unique_id=1848807307]
+scale = Vector2(3, 3)
+texture = ExtResource("5_f0")
+
+[node name="ColorRect" type="ColorRect" parent="element/Forest" unique_id=884504000]
+offset_top = -366.0
+offset_right = 40.0
+offset_bottom = -326.0
+rotation = 1.5707964
+scale = Vector2(17.08, 0.2)
+
+[node name="Mountain" type="Node2D" parent="element" unique_id=973491124]
+scale = Vector2(0.8, 0.8)
+
+[node name="0" type="Sprite2D" parent="element/Mountain" unique_id=1727155060]
+position = Vector2(-540, 0)
+texture = ExtResource("2_thin")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/Mountain/0" unique_id=467566841]
+self_modulate = Color(0.360784, 0.278431, 0.219608, 1)
+show_behind_parent = true
+texture = ExtResource("3_hex")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/Mountain/0/Sprite2D" unique_id=398798715]
+scale = Vector2(3, 3)
+texture = ExtResource("4_n0")
+
+[node name="1" type="Sprite2D" parent="element/Mountain" unique_id=295996141]
+texture = ExtResource("2_thin")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/Mountain/1" unique_id=908842706]
+self_modulate = Color(0.478431, 0.478431, 0.521569, 1)
+show_behind_parent = true
+texture = ExtResource("3_hex")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/Mountain/1/Sprite2D" unique_id=460276390]
+scale = Vector2(3, 3)
+texture = ExtResource("8_m0")
+
+[node name="2" type="Sprite2D" parent="element/Mountain" unique_id=426185720]
+position = Vector2(560, 0)
+texture = ExtResource("2_thin")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/Mountain/2" unique_id=577601897]
+self_modulate = Color(0.380392, 0.380392, 0.419608, 1)
+show_behind_parent = true
+texture = ExtResource("3_hex")
+
+[node name="Sprite2D" type="Sprite2D" parent="element/Mountain/2/Sprite2D" unique_id=102084301]
+scale = Vector2(3, 3)
+texture = ExtResource("9_m1")
+
+[node name="ColorRect" type="ColorRect" parent="element/Mountain" unique_id=25787553]
+offset_left = -260.0
+offset_top = -366.0
+offset_right = -220.0
+offset_bottom = -326.0
+rotation = 1.5707964
+scale = Vector2(17.08, 0.2)
+
+[node name="ColorRect2" type="ColorRect" parent="element/Mountain" unique_id=948801236]
+offset_left = 273.2
+offset_top = -366.0
+offset_right = 313.2
+offset_bottom = -326.0
+rotation = 1.5707964
+scale = Vector2(17.08, 0.2)
+
+[node name="animal" type="Node2D" parent="." unique_id=911569210]
+z_index = 1
+scale = Vector2(0.09, 0.09)
+
+[node name="pair" type="Node2D" parent="animal" unique_id=2006039524]
+visible = false
+rotation = -0.5061455
+
+[node name="(0,0)" type="Sprite2D" parent="animal/pair" unique_id=1347635981]
+position = Vector2(164.70764, 80.91077)
+texture = ExtResource("2_thin")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/pair/(0,0)" unique_id=1602376553]
+show_behind_parent = true
+texture = ExtResource("3_hex")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/pair/(0,0)/Sprite2D" unique_id=1380344102]
+rotation = 0.5061455
+
+[node name="(0,1)" type="Sprite2D" parent="animal/pair" unique_id=1413717266]
+position = Vector2(-157.07031, -96.86694)
+texture = ExtResource("2_thin")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/pair/(0,1)" unique_id=2111287471]
+show_behind_parent = true
+texture = ExtResource("3_hex")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/pair/(0,1)/Sprite2D" unique_id=54165045]
+rotation = 0.5061455
+
+[node name="line" type="Node2D" parent="animal" unique_id=1253518202]
+visible = false
+rotation = 0.5061455
+
+[node name="(0,0)" type="Sprite2D" parent="animal/line" unique_id=348236234]
+position = Vector2(322.22192, -177.77759)
+texture = ExtResource("2_thin")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/line/(0,0)" unique_id=993626472]
+show_behind_parent = true
+texture = ExtResource("3_hex")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/line/(0,0)/Sprite2D" unique_id=1180671735]
+rotation = -0.5061455
+
+[node name="(0,1)" type="Sprite2D" parent="animal/line" unique_id=517398568]
+position = Vector2(0.00018310547, 0)
+texture = ExtResource("2_thin")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/line/(0,1)" unique_id=1517801727]
+show_behind_parent = true
+texture = ExtResource("3_hex")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/line/(0,1)/Sprite2D" unique_id=988122087]
+rotation = -0.5061455
+
+[node name="(0,2)" type="Sprite2D" parent="animal/line" unique_id=1278628027]
+position = Vector2(-322.22388, 177.77783)
+texture = ExtResource("2_thin")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/line/(0,2)" unique_id=210425433]
+show_behind_parent = true
+texture = ExtResource("3_hex")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/line/(0,2)/Sprite2D" unique_id=285571996]
+rotation = -0.5061455
+
+[node name="wedge" type="Node2D" parent="animal" unique_id=1321383955]
+visible = false
+
+[node name="(0,0)" type="Sprite2D" parent="animal/wedge" unique_id=612939243]
+position = Vector2(166.66675, 0)
+texture = ExtResource("2_thin")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/wedge/(0,0)" unique_id=1232850859]
+show_behind_parent = true
+texture = ExtResource("3_hex")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/wedge/(0,0)/Sprite2D" unique_id=1683664281]
+
+[node name="(0,1)" type="Sprite2D" parent="animal/wedge" unique_id=768447186]
+position = Vector2(-155.55566, 182.22144)
+texture = ExtResource("2_thin")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/wedge/(0,1)" unique_id=1008920937]
+show_behind_parent = true
+texture = ExtResource("3_hex")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/wedge/(0,1)/Sprite2D" unique_id=847743031]
+
+[node name="(-1,1)" type="Sprite2D" parent="animal/wedge" unique_id=346515743]
+position = Vector2(-154.44495, -175.55566)
+texture = ExtResource("2_thin")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/wedge/(-1,1)" unique_id=862841837]
+show_behind_parent = true
+texture = ExtResource("3_hex")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/wedge/(-1,1)/Sprite2D" unique_id=1385566986]
+
+[node name="spread" type="Node2D" parent="animal" unique_id=989361988]
+visible = false
+
+[node name="(0,0)" type="Sprite2D" parent="animal/spread" unique_id=565724136]
+texture = ExtResource("2_thin")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/spread/(0,0)" unique_id=1179629190]
+show_behind_parent = true
+texture = ExtResource("3_hex")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/spread/(0,0)/Sprite2D" unique_id=1183993569]
+
+[node name="(0,1)" type="Sprite2D" parent="animal/spread" unique_id=596499147]
+position = Vector2(322.2224, 171.11084)
+texture = ExtResource("2_thin")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/spread/(0,1)" unique_id=1955233187]
+show_behind_parent = true
+texture = ExtResource("3_hex")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/spread/(0,1)/Sprite2D" unique_id=103245096]
+
+[node name="(-1,0)" type="Sprite2D" parent="animal/spread" unique_id=1443600106]
+position = Vector2(-321.11108, 175.55566)
+texture = ExtResource("2_thin")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/spread/(-1,0)" unique_id=966207642]
+show_behind_parent = true
+texture = ExtResource("3_hex")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/spread/(-1,0)/Sprite2D" unique_id=35239489]
+
+[node name="diag" type="Node2D" parent="animal" unique_id=302512268]
+visible = false
+
+[node name="(0,0)" type="Sprite2D" parent="animal/diag" unique_id=601546733]
+position = Vector2(322.22217, 0)
+texture = ExtResource("2_thin")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/diag/(0,0)" unique_id=464995755]
+show_behind_parent = true
+texture = ExtResource("3_hex")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/diag/(0,0)/Sprite2D" unique_id=1589272654]
+
+[node name="(-1,1)" type="Sprite2D" parent="animal/diag" unique_id=1618350099]
+position = Vector2(1.1108093, -175.55566)
+texture = ExtResource("2_thin")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/diag/(-1,1)" unique_id=1702491804]
+show_behind_parent = true
+texture = ExtResource("3_hex")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/diag/(-1,1)/Sprite2D" unique_id=743395434]
+
+[node name="(-1,2)" type="Sprite2D" parent="animal/diag" unique_id=1214749564]
+position = Vector2(-321.11133, 6.666626)
+texture = ExtResource("2_thin")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/diag/(-1,2)" unique_id=1454700425]
+show_behind_parent = true
+texture = ExtResource("3_hex")
+
+[node name="Sprite2D" type="Sprite2D" parent="animal/diag/(-1,2)/Sprite2D" unique_id=543766880]

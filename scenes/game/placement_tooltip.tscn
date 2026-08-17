@@ -130,6 +130,7 @@ scale = Vector2(0.09, 0.09)
 
 [node name="(0,0)" type="Sprite2D" parent="animal" unique_id=1735063232]
 visible = false
+position = Vector2(0, 6.1035156e-05)
 texture = ExtResource("2_n22po")
 
 [node name="Sprite2D" type="Sprite2D" parent="animal/(0,0)" unique_id=1954690576]
@@ -141,7 +142,7 @@ texture = ExtResource("4_n22po")
 
 [node name="(-1,1)" type="Sprite2D" parent="animal" unique_id=1014776336]
 visible = false
-position = Vector2(-310, -180)
+position = Vector2(-321.11108, 180)
 scale = Vector2(0.99999976, 0.99999976)
 texture = ExtResource("2_n22po")
 
@@ -153,7 +154,7 @@ texture = ExtResource("3_d75bn")
 
 [node name="(0,1)" type="Sprite2D" parent="animal" unique_id=247670815]
 visible = false
-position = Vector2(4.7683716e-07, -360.00003)
+position = Vector2(0, 360.0005)
 scale = Vector2(0.99999976, 0.99999976)
 texture = ExtResource("2_n22po")
 
@@ -165,7 +166,7 @@ texture = ExtResource("3_d75bn")
 
 [node name="(-1,0)" type="Sprite2D" parent="animal" unique_id=213873289]
 visible = false
-position = Vector2(-310, 180.00003)
+position = Vector2(-321.11108, -179.99988)
 scale = Vector2(0.99999976, 0.99999976)
 texture = ExtResource("2_n22po")
 
@@ -177,7 +178,7 @@ texture = ExtResource("3_d75bn")
 
 [node name="(0,-1)" type="Sprite2D" parent="animal" unique_id=1970963938]
 visible = false
-position = Vector2(0, 360)
+position = Vector2(0, -360)
 scale = Vector2(0.99999994, 0.99999994)
 texture = ExtResource("2_n22po")
 
@@ -189,7 +190,7 @@ texture = ExtResource("3_d75bn")
 
 [node name="(1,-1)" type="Sprite2D" parent="animal" unique_id=464856756]
 visible = false
-position = Vector2(310, 179.99998)
+position = Vector2(321.11133, -179.99988)
 scale = Vector2(0.99999994, 0.99999994)
 texture = ExtResource("2_n22po")
 
@@ -201,7 +202,7 @@ texture = ExtResource("3_d75bn")
 
 [node name="(1,0)" type="Sprite2D" parent="animal" unique_id=1946438329]
 visible = false
-position = Vector2(310, -180)
+position = Vector2(321.11133, 180)
 scale = Vector2(0.99999994, 0.99999994)
 texture = ExtResource("2_n22po")
 

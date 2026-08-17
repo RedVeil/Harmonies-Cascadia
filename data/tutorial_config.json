@@ -368,7 +368,7 @@
 		{
 			"id": "animal_cards",
 			"title": "Animal cards",
-			"body": "The background color shows you on what type of landscape the animal can be placed. The icon in the top right corner shows you which stack of that landscape the animal needs.",
+			"body": "The background color shows you on what type of landscape the animal can be placed. The hexes in the top right show the exact tiles and stacks the animal needs.",
 			"highlight": "card",
 			"gates": {
 				"allow_actions": []
@@ -404,7 +404,7 @@
 		{
 			"id": "animal_tooltip_explain",
 			"title": "Animal placement",
-			"body": "Hover the Hedgehog card to see the placement tooltip. Here you see what pattern of tiles is needed to place the animal. The highlighted tile is where you need to place the animal itself. These placement patterns can be rotated and mirrored.",
+			"body": "The hexes in the top right show the pattern of tiles needed to place the animal. The highlighted tile is where you need to place the animal itself. These placement patterns can be rotated and mirrored.",
 			"highlight": "card_expanded",
 			"bubble_side": "left",
 			"gates": {

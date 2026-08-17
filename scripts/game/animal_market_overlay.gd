@@ -18,9 +18,6 @@ const SUBTITLE_HEIGHT := 28.0
 const CLOSE_ROW_HEIGHT := 36.0
 const CARD_TO_BUY_GAP := 12.0
 const BUY_TO_REROLL_GAP := 16.0
-## Hand cards lift more on select, so their tooltip sits higher in card.tscn.
-## Market hover is smaller — keep the tooltip just above the card.
-const MARKET_TOOLTIP_POSITION := Vector2(-49.0, -280.0)
 
 @export var card_scene: PackedScene
 @export var market_hover_height: float = 12.0
@@ -244,8 +241,6 @@ func _rebuild_single_offer(offer_index: int) -> void:
 		card.init(offer, self, offer_index)
 		# Offset so card 0 stays above PopupPanel; shadow uses relative z_index -1.
 		card.set_z(offer_index + 1)
-		card.placement_tooltip.position = MARKET_TOOLTIP_POSITION
-		card.placement_tooltip.z_index = 20
 		_cards[offer_index] = card
 	else:
 		_cards[offer_index] = null

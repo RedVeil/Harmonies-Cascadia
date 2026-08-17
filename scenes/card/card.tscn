@@ -1,10 +1,9 @@
 [gd_scene format=3 uid="uid://0fu8v3fe2jgj"]
 
 [ext_resource type="Script" uid="uid://bax2whoai3nus" path="res://scripts/cards/card.gd" id="1_73nwn"]
-[ext_resource type="PackedScene" uid="uid://uspta7a1yqhh" path="res://scenes/game/placement_tooltip.tscn" id="2_ri62e"]
+[ext_resource type="PackedScene" uid="uid://cqtglrm4b1h5x" path="res://scenes/card/card_placement.tscn" id="2_ri62e"]
 [ext_resource type="Texture2D" uid="uid://co3kap4vk0tie" path="res://assets/animals/icons/Amphibian_Frog_Green.png" id="3_b2sko"]
 [ext_resource type="Texture2D" uid="uid://dyhhergikys8s" path="res://assets/ui/sdf_quad_circle.tres" id="3_kaf1t"]
-[ext_resource type="Shader" uid="uid://8wow5a7grc78" path="res://assets/shader/cards/circular_progress_bar.gdshader" id="4_v07qs"]
 [ext_resource type="Texture2D" uid="uid://fitjq8iuh7ul" path="res://assets/elements/w0.png" id="5_b2sko"]
 [ext_resource type="AudioStream" uid="uid://ftrpl5416bkc" path="res://assets/audio/bookFlip2.ogg" id="7_draw"]
 [ext_resource type="Material" uid="uid://dr4lo0ifvqtd4" path="res://assets/ui/sdf_card_frame.tres" id="8_frame"]
@@ -14,46 +13,19 @@
 [ext_resource type="Shader" uid="uid://y4g8ky747mqh" path="res://assets/shader/ui/shadow.gdshader" id="12_shadow_shader"]
 [ext_resource type="FontFile" uid="uid://cjgc8hhsb6xtr" path="res://assets/fonts/Dangrek-Regular.ttf" id="13_font"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_jl6rh"]
-size = Vector2(94, 168)
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_recycle_shadow"]
 shader = ExtResource("12_shadow_shader")
 shader_parameter/shadow_color = Color(0, 0, 0, 0.28)
 shader_parameter/blur_size = 16.0
 shader_parameter/radius = 0.85
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_s65g1"]
-shader = ExtResource("4_v07qs")
-shader_parameter/primary_color = Color(1, 0, 0, 1)
-shader_parameter/secondary_color = Color(0.4, 0, 0, 1)
-shader_parameter/third_color = Color(0.8, 0.5, 0, 1)
-shader_parameter/outline_color = Color(1, 1, 1, 1)
-shader_parameter/unfilled_color = Color(0.443, 0.443, 0.443, 1)
-shader_parameter/current_value = 0.0
-shader_parameter/lerp_value = 0.0
-shader_parameter/third_value = 0.0
-shader_parameter/smooth_ = 0.005
-shader_parameter/width_in = 0.0
-shader_parameter/width_out = 0.9
-shader_parameter/border_width = 0.1
-
-[node name="card" type="Area2D" unique_id=321030438]
-monitorable = false
-priority = 1
+[node name="card" type="Node2D" unique_id=1490211396]
 script = ExtResource("1_73nwn")
 scale_speed = 8.0
 hover_scale = 1.2
 hover_height = 50.0
 spawn_sounds = Array[AudioStream]([ExtResource("7_draw")])
 redraw_sounds = Array[AudioStream]([ExtResource("7_draw")])
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1382946366]
-visible = false
-z_index = 1
-y_sort_enabled = true
-shape = SubResource("RectangleShape2D_jl6rh")
-debug_color = Color(4.042983e-06, 0.5881858, 0.68830764, 0.41960785)
 
 [node name="HitArea" type="Control" parent="." unique_id=1561032188]
 z_index = 10
@@ -152,12 +124,13 @@ material = ExtResource("8_frame")
 offset_left = -50.0
 offset_top = -86.0
 offset_right = 50.0
-offset_bottom = 88.0
+offset_bottom = 94.0
 mouse_filter = 2
 texture = ExtResource("3_kaf1t")
 expand_mode = 1
 
 [node name="CardLabel" type="Label" parent="visuals" unique_id=178676616]
+visible = false
 z_index = 1
 offset_left = -39.0
 offset_top = 63.0
@@ -172,21 +145,22 @@ vertical_alignment = 1
 
 [node name="icon" type="TextureRect" parent="visuals" unique_id=1229719425]
 z_index = 1
-offset_left = -35.0
-offset_top = -34.0
-offset_right = 965.0
-offset_bottom = 966.0
-scale = Vector2(0.07, 0.07)
+offset_left = -40.0
+offset_top = -47.99999
+offset_right = 960.0
+offset_bottom = 952.0
+scale = Vector2(0.08, 0.08)
 mouse_filter = 2
 texture = ExtResource("3_b2sko")
 
 [node name="elementicon" type="TextureRect" parent="visuals" unique_id=25438168]
 visible = false
 z_index = 1
-offset_left = 14.0
-offset_top = -74.0
-offset_right = 38.0
-offset_bottom = -42.5
+offset_left = -36.0
+offset_top = -52.0
+offset_right = -12.0
+offset_bottom = -20.5
+scale = Vector2(3, 3)
 mouse_filter = 2
 texture = ExtResource("5_b2sko")
 expand_mode = 1
@@ -196,7 +170,7 @@ metadata/_edit_use_anchors_ = true
 [node name="points" type="Node2D" parent="visuals" unique_id=274107084]
 visible = false
 z_index = 1
-position = Vector2(-39, -77)
+position = Vector2(-40, -83)
 
 [node name="Label" type="Label" parent="visuals/points" unique_id=748622240]
 z_index = 1
@@ -206,50 +180,33 @@ offset_right = 19.0
 offset_bottom = 21.000004
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 24
 text = "6"
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="background" type="TextureRect" parent="visuals/points" unique_id=175734822]
-visible = false
-material = SubResource("ShaderMaterial_s65g1")
-offset_right = 400.0
-offset_bottom = 400.0
-scale = Vector2(0.05, 0.05)
-mouse_filter = 2
-texture = ExtResource("3_kaf1t")
-metadata/_edit_use_anchors_ = true
-
 [node name="bonus_points" type="Node2D" parent="visuals" unique_id=842128323]
 visible = false
 z_index = 1
-position = Vector2(-43, -64)
+position = Vector2(-26, -87)
 
 [node name="Label" type="Label" parent="visuals/bonus_points" unique_id=1156241679]
 z_index = 1
 offset_left = 2.0
-offset_top = 7.0
+offset_top = 14.0
 offset_right = 22.0
-offset_bottom = 30.0
+offset_bottom = 41.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 3
-theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/font_size = 14
 text = "+3"
 horizontal_alignment = 1
 vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
 
-[node name="background" type="TextureRect" parent="visuals/bonus_points" unique_id=1442000280]
-visible = false
-material = SubResource("ShaderMaterial_s65g1")
-offset_right = 400.0
-offset_bottom = 400.0
-scale = Vector2(0.05, 0.05)
-mouse_filter = 2
-texture = ExtResource("3_kaf1t")
-
-[node name="PlacementTooltip" parent="." unique_id=1404822029 instance=ExtResource("2_ri62e")]
-visible = false
-position = Vector2(-49, -320)
+[node name="CardPlacement" parent="visuals" unique_id=855870636 instance=ExtResource("2_ri62e")]
+z_index = -1
+position = Vector2(4.887581e-06, 59.000008)
+scale = Vector2(0.7, 0.7)

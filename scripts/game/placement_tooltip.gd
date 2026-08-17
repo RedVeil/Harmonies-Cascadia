@@ -11,6 +11,10 @@ const POINTS_AREA_HEIGHT := 20.0
 const HEX_OUTLINE_THIN := preload("res://assets/icons/hex_outline_thin.png")
 const HEX_OUTLINE_BOLD := preload("res://assets/icons/hex_outline_bold.png")
 
+var _element_base_position: Vector2
+var _animal_base_position: Vector2
+var _pattern_bases_captured := false
+
 ## ----- Initialisation ----- ##
 
 func init(
@@ -20,6 +24,9 @@ func init(
 	points_text: String = "",
 	arrow_side: ArrowSide = ArrowSide.BELOW
 ) -> void:
+	_capture_pattern_bases()
+	$Panel.show()
+
 	if type == 0:
 		$element.show()
 		$animal.hide()
@@ -36,6 +43,13 @@ func init(
 		_center_pattern($element)
 	else:
 		_center_pattern($animal)
+
+func _capture_pattern_bases() -> void:
+	if _pattern_bases_captured:
+		return
+	_element_base_position = $element.position
+	_animal_base_position = $animal.position
+	_pattern_bases_captured = true
 
 ## ----- Points / Arrow ----- ##
 
@@ -90,6 +104,11 @@ func _collect_hex_centers(node: Node, centers: Array[Vector2]) -> void:
 		_collect_hex_centers(child, centers)
 
 func _center_pattern(root: Node2D) -> void:
+	if root == $element:
+		root.position = _element_base_position
+	elif root == $animal:
+		root.position = _animal_base_position
+
 	var centers := _visible_hex_centers(root)
 	if centers.is_empty():
 		return

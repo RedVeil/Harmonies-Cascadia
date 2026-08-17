@@ -1,4 +1,4 @@
-extends Area2D
+extends Node2D
 class_name Card
 
 @export var scale_speed : float = 1.0
@@ -28,7 +28,7 @@ var COLOR_BROWN := Color.html("#918478")
 @onready var recycle_btn: Control = $HitArea/RecycleButton
 @onready var recycle_circle: Sprite2D = $HitArea/RecycleButton/Circle
 @onready var recycle_label: Label = $HitArea/RecycleButton/Label
-@onready var placement_tooltip : PlacementTooltip = $PlacementTooltip
+@onready var card_placement : CardPlacement = $visuals/CardPlacement
 @onready var frame : TextureRect = $visuals/Frame
 @onready var frame_2 : TextureRect = $visuals/Frame2
 @onready var frame_3 : TextureRect = $visuals/Frame3
@@ -70,7 +70,6 @@ var _recycle_base_position: Vector2 = Vector2.ZERO
 ## ----- Initialisation ----- ##
 
 func _ready() -> void:
-	input_pickable = false
 	_hit_area_base_offset_top = hit_area.offset_top
 	_shadow_base_offset_top = shadow.offset_top
 	_hit_area_base_position = hit_area.position
@@ -107,9 +106,7 @@ func init(cardData:CardData, parent:Node, idx:int) -> void:
 	is_animal = cardData.type == 1
 
 	_base_body_color = Color.html(ElementCatalog.elements[cardData.element].levels.back().color)
-	var mat = $visuals/points/background.material.duplicate()
-	mat.set_shader_parameter("unfilled_color", _base_body_color)
-	$visuals/points/background.material = mat
+	
 	var frame_mat = frame.material.duplicate()
 	frame_mat.set_shader_parameter("body_color", _base_body_color)
 	frame_mat.set_shader_parameter("name_color", Color(0.16, 0.17, 0.253, 1))
@@ -119,7 +116,6 @@ func init(cardData:CardData, parent:Node, idx:int) -> void:
 	frame_4.material = frame_mat
 	_desaturated = false
 	
-	placement_tooltip.init(cardData.type, cardData.placement, cardData.bonus)
 	$visuals/points/Label.text = "%d" % cardData.point_score
 	$visuals/CardLabel.text = cardData.name
 	_apply_stack_visuals()
@@ -127,20 +123,14 @@ func init(cardData:CardData, parent:Node, idx:int) -> void:
 	$visuals/icon.texture = load(cardData.icon)
 	$visuals/icon.show()
 
+	card_placement.init(cardData)
+	card_placement.show()
+
 	if cardData.type == 1:
-		$visuals/bonus_points/background.material = mat
 		$visuals/bonus_points/Label.text = "+%d" % cardData.bonus_points
 		$visuals/bonus_points.show()
 		$visuals/points.show()
-
-		var elem = ElementCatalog.elements[cardData.element]
-		var symbol_path: String
-		if cardData.placement.size() > 0:
-			symbol_path = elem.levels[cardData.placement[0].level - 1].icon
-		else:
-			symbol_path = elem.levels.back().icon
-		$visuals/elementicon.texture = load(symbol_path)
-		$visuals/elementicon.show()
+		
 		_recycle_enabled = (
 			parent is CardContainer
 			or (parent != null and parent.has_method("reroll_card"))
@@ -274,15 +264,12 @@ func _apply_stack_visuals() -> void:
 ## ----- Other Logic ----- ##
 
 func handle_hover() -> void:
-	if is_animal:
-		placement_tooltip.show()
 	if !is_active:
 		GameFeedback.play_hover_card()
 		set_select_visuals()
 	refresh_recycle_button(true)
 
 func handle_exit() -> void:
-	placement_tooltip.hide()
 	if !is_active:
 		reset_select_visuals()
 	refresh_recycle_button(false)
@@ -297,7 +284,6 @@ func deselect() -> void:
 	is_active = false
 	self.z_index = base_z_index
 	reset_select_visuals()
-	placement_tooltip.hide()
 
 func remove_card() -> void:
 	# #region agent log
@@ -352,20 +338,13 @@ func set_desaturated(desaturate: bool) -> void:
 	var frame_mat := frame.material as ShaderMaterial
 	if frame_mat != null:
 		frame_mat.set_shader_parameter("body_color", color)
-	var points_mat := $visuals/points/background.material as ShaderMaterial
-	if points_mat != null:
-		points_mat.set_shader_parameter("unfilled_color", color)
-	if is_animal and $visuals/bonus_points.visible:
-		var bonus_mat := $visuals/bonus_points/background.material as ShaderMaterial
-		if bonus_mat != null:
-			bonus_mat.set_shader_parameter("unfilled_color", color)
 	var icon_mod := Color(0.7, 0.7, 0.7, 1.0) if desaturate else Color.WHITE
 	$visuals/icon.modulate = icon_mod
 	$visuals/CardLabel.modulate = icon_mod
 	$visuals/points.modulate = icon_mod
 	$visuals/bonus_points.modulate = icon_mod
-	if $visuals/elementicon.visible:
-		$visuals/elementicon.modulate = icon_mod
+	if card_placement.visible:
+		card_placement.modulate = icon_mod
 
 
 ## ----- Animations ----- ##

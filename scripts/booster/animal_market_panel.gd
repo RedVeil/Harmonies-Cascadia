@@ -20,7 +20,6 @@ const ARROW_HALF_W := CARD_WIDTH_PX * MARKET_SCALE * 0.5
 const EXPAND_ARROW_X := -26.5
 ## Collapse: left-arrow past pack 3 right edge.
 const COLLAPSE_ARROW_X := 2.0 * BOOSTER_SPACING + ARROW_HALF_W + 10.0
-const MARKET_TOOLTIP_POSITION := Vector2(-49.0, -280.0)
 const FADE_DURATION := 0.18
 const FADE_STAGGER := 0.09
 
@@ -290,8 +289,6 @@ func _rebuild_single_offer(offer_index: int) -> void:
 	slot.add_child(card)
 	card.init(offer, self, offer_index)
 	card.set_z(offer_index + 1)
-	card.placement_tooltip.position = MARKET_TOOLTIP_POSITION
-	card.placement_tooltip.z_index = 20
 	card.set_desaturated(not _is_buy_enabled(offer_index))
 	_cards[offer_index] = card
 

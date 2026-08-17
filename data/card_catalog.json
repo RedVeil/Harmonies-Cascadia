@@ -3,6 +3,7 @@
 		{
 			"id": 0.0,
 			"name": "DeadEarth",
+			"pattern": "DeadEarth",
 			"type": 0.0,
 			"placement": [
 				{
@@ -27,6 +28,7 @@
 		{
 			"id": 1.0,
 			"name": "Forest",
+			"pattern": "Forest",
 			"type": 0.0,
 			"placement": [
 				{
@@ -59,6 +61,7 @@
 		{
 			"id": 2.0,
 			"name": "Field",
+			"pattern": "Field",
 			"type": 0.0,
 			"placement": [
 				{
@@ -83,6 +86,7 @@
 		{
 			"id": 3.0,
 			"name": "Mountain",
+			"pattern": "Mountain",
 			"type": 0.0,
 			"placement": [
 				{
@@ -123,6 +127,7 @@
 		{
 			"id": 4.0,
 			"name": "River",
+			"pattern": "River",
 			"type": 0.0,
 			"placement": [
 				{
@@ -147,6 +152,7 @@
 		{
 			"id": 5.0,
 			"name": "Wetland",
+			"pattern": "Wetland",
 			"type": 0.0,
 			"placement": [
 				{
@@ -173,6 +179,7 @@
 		{
 			"id": 0.0,
 			"name": "Deer",
+			"pattern": "diag",
 			"type": 1.0,
 			"placement": [
 				{
@@ -218,6 +225,7 @@
 		{
 			"id": 1.0,
 			"name": "Fox",
+			"pattern": "line",
 			"type": 1.0,
 			"placement": [
 				{
@@ -262,6 +270,7 @@
 		{
 			"id": 2.0,
 			"name": "Cat",
+			"pattern": "spread",
 			"type": 1.0,
 			"placement": [
 				{
@@ -286,8 +295,8 @@
 					"element": 3.0,
 					"level": 1.0,
 					"coords": [
-						1.0,
-						-1.0
+						-1.0,
+						0.0
 					]
 				}
 			],
@@ -309,6 +318,7 @@
 		{
 			"id": 3.0,
 			"name": "Kiwi",
+			"pattern": "wedge",
 			"type": 1.0,
 			"placement": [
 				{
@@ -333,8 +343,8 @@
 					"element": 4.0,
 					"level": 1.0,
 					"coords": [
-						1.0,
-						0.0
+						-1.0,
+						1.0
 					]
 				}
 			],
@@ -353,6 +363,7 @@
 		{
 			"id": 4.0,
 			"name": "Giraffe",
+			"pattern": "wedge",
 			"type": 1.0,
 			"placement": [
 				{
@@ -377,8 +388,8 @@
 					"element": 2.0,
 					"level": 1.0,
 					"coords": [
-						1.0,
-						0.0
+						-1.0,
+						1.0
 					]
 				}
 			],
@@ -397,6 +408,7 @@
 		{
 			"id": 5.0,
 			"name": "Racoon",
+			"pattern": "spread",
 			"type": 1.0,
 			"placement": [
 				{
@@ -421,8 +433,8 @@
 					"element": 2.0,
 					"level": 1.0,
 					"coords": [
-						1.0,
-						-1.0
+						-1.0,
+						0.0
 					]
 				}
 			],
@@ -441,6 +453,7 @@
 		{
 			"id": 6.0,
 			"name": "Koala",
+			"pattern": "wedge",
 			"type": 1.0,
 			"placement": [
 				{
@@ -465,8 +478,8 @@
 					"element": 3.0,
 					"level": 1.0,
 					"coords": [
-						1.0,
-						0.0
+						-1.0,
+						1.0
 					]
 				}
 			],
@@ -485,6 +498,7 @@
 		{
 			"id": 7.0,
 			"name": "Elephant",
+			"pattern": "line",
 			"type": 1.0,
 			"placement": [
 				{
@@ -530,6 +544,7 @@
 		{
 			"id": 8.0,
 			"name": "Panda",
+			"pattern": "spread",
 			"type": 1.0,
 			"placement": [
 				{
@@ -554,8 +569,8 @@
 					"element": 2.0,
 					"level": 1.0,
 					"coords": [
-						1.0,
-						-1.0
+						-1.0,
+						0.0
 					]
 				}
 			],
@@ -574,6 +589,7 @@
 		{
 			"id": 9.0,
 			"name": "Gorilla",
+			"pattern": "pair",
 			"type": 1.0,
 			"placement": [
 				{
@@ -610,6 +626,7 @@
 		{
 			"id": 10.0,
 			"name": "Bee",
+			"pattern": "wedge",
 			"type": 1.0,
 			"placement": [
 				{
@@ -634,8 +651,8 @@
 					"element": 4.0,
 					"level": 1.0,
 					"coords": [
-						1.0,
-						0.0
+						-1.0,
+						1.0
 					]
 				}
 			],
@@ -654,6 +671,7 @@
 		{
 			"id": 11.0,
 			"name": "Hedgehog",
+			"pattern": "pair",
 			"type": 1.0,
 			"placement": [
 				{
@@ -690,6 +708,7 @@
 		{
 			"id": 12.0,
 			"name": "Rabbit",
+			"pattern": "pair",
 			"type": 1.0,
 			"placement": [
 				{
@@ -726,6 +745,7 @@
 		{
 			"id": 13.0,
 			"name": "Chicken",
+			"pattern": "line",
 			"type": 1.0,
 			"placement": [
 				{
@@ -772,6 +792,7 @@
 		{
 			"id": 14.0,
 			"name": "Lion",
+			"pattern": "wedge",
 			"type": 1.0,
 			"placement": [
 				{
@@ -796,8 +817,8 @@
 					"element": 3.0,
 					"level": 2.0,
 					"coords": [
-						1.0,
-						0.0
+						-1.0,
+						1.0
 					]
 				}
 			],
@@ -817,6 +838,7 @@
 		{
 			"id": 15.0,
 			"name": "Hippo",
+			"pattern": "pair",
 			"type": 1.0,
 			"placement": [
 				{
@@ -853,6 +875,7 @@
 		{
 			"id": 16.0,
 			"name": "Ladybug",
+			"pattern": "spread",
 			"type": 1.0,
 			"placement": [
 				{
@@ -877,8 +900,8 @@
 					"element": 4.0,
 					"level": 1.0,
 					"coords": [
-						1.0,
-						-1.0
+						-1.0,
+						0.0
 					]
 				}
 			],
@@ -897,6 +920,7 @@
 		{
 			"id": 17.0,
 			"name": "Sheep",
+			"pattern": "wedge",
 			"type": 1.0,
 			"placement": [
 				{
@@ -921,8 +945,8 @@
 					"element": 4.0,
 					"level": 1.0,
 					"coords": [
-						1.0,
-						0.0
+						-1.0,
+						1.0
 					]
 				}
 			],
@@ -943,6 +967,7 @@
 		{
 			"id": 18.0,
 			"name": "Cow",
+			"pattern": "line",
 			"type": 1.0,
 			"placement": [
 				{
@@ -988,6 +1013,7 @@
 		{
 			"id": 19.0,
 			"name": "Horse",
+			"pattern": "line",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1034,6 +1060,7 @@
 		{
 			"id": 20.0,
 			"name": "Tiger",
+			"pattern": "line",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1079,6 +1106,7 @@
 		{
 			"id": 21.0,
 			"name": "Moose",
+			"pattern": "wedge",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1103,8 +1131,8 @@
 					"element": 4.0,
 					"level": 1.0,
 					"coords": [
-						1.0,
-						0.0
+						-1.0,
+						1.0
 					]
 				}
 			],
@@ -1124,6 +1152,7 @@
 		{
 			"id": 22.0,
 			"name": "Bison",
+			"pattern": "spread",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1148,8 +1177,8 @@
 					"element": 4.0,
 					"level": 1.0,
 					"coords": [
-						1.0,
-						-1.0
+						-1.0,
+						0.0
 					]
 				}
 			],
@@ -1168,6 +1197,7 @@
 		{
 			"id": 23.0,
 			"name": "Wolf",
+			"pattern": "line",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1213,6 +1243,7 @@
 		{
 			"id": 24.0,
 			"name": "Llama",
+			"pattern": "pair",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1250,6 +1281,7 @@
 		{
 			"id": 25.0,
 			"name": "Hamster",
+			"pattern": "pair",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1286,6 +1318,7 @@
 		{
 			"id": 26.0,
 			"name": "Pigeon",
+			"pattern": "pair",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1324,6 +1357,7 @@
 		{
 			"id": 27.0,
 			"name": "Monkey",
+			"pattern": "spread",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1348,8 +1382,8 @@
 					"element": 1.0,
 					"level": 2.0,
 					"coords": [
-						1.0,
-						-1.0
+						-1.0,
+						0.0
 					]
 				}
 			],
@@ -1369,6 +1403,7 @@
 		{
 			"id": 28.0,
 			"name": "Mountaingoat",
+			"pattern": "pair",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1406,6 +1441,7 @@
 		{
 			"id": 29.0,
 			"name": "Bear",
+			"pattern": "wedge",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1430,8 +1466,8 @@
 					"element": 1.0,
 					"level": 2.0,
 					"coords": [
-						1.0,
-						0.0
+						-1.0,
+						1.0
 					]
 				}
 			],
@@ -1451,6 +1487,7 @@
 		{
 			"id": 30.0,
 			"name": "Turtle",
+			"pattern": "spread",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1475,8 +1512,8 @@
 					"element": 1.0,
 					"level": 1.0,
 					"coords": [
-						1.0,
-						-1.0
+						-1.0,
+						0.0
 					]
 				}
 			],
@@ -1495,6 +1532,7 @@
 		{
 			"id": 31.0,
 			"name": "Swan",
+			"pattern": "wedge",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1519,8 +1557,8 @@
 					"element": 2.0,
 					"level": 1.0,
 					"coords": [
-						1.0,
-						0.0
+						-1.0,
+						1.0
 					]
 				}
 			],
@@ -1540,6 +1578,7 @@
 		{
 			"id": 32.0,
 			"name": "Crab",
+			"pattern": "pair",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1576,6 +1615,7 @@
 		{
 			"id": 33.0,
 			"name": "Frog",
+			"pattern": "pair",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1612,6 +1652,7 @@
 		{
 			"id": 34.0,
 			"name": "Otter",
+			"pattern": "line",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1656,6 +1697,7 @@
 		{
 			"id": 35.0,
 			"name": "Rhino",
+			"pattern": "wedge",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1680,8 +1722,8 @@
 					"element": 3.0,
 					"level": 1.0,
 					"coords": [
-						1.0,
-						0.0
+						-1.0,
+						1.0
 					]
 				}
 			],
@@ -1700,6 +1742,7 @@
 		{
 			"id": 36.0,
 			"name": "Crocodile",
+			"pattern": "line",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1744,6 +1787,7 @@
 		{
 			"id": 37.0,
 			"name": "Cameleon",
+			"pattern": "pair",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1780,6 +1824,7 @@
 		{
 			"id": 38.0,
 			"name": "Flamingo",
+			"pattern": "wedge",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1804,8 +1849,8 @@
 					"element": 2.0,
 					"level": 1.0,
 					"coords": [
-						1.0,
-						0.0
+						-1.0,
+						1.0
 					]
 				}
 			],
@@ -1824,6 +1869,7 @@
 		{
 			"id": 39.0,
 			"name": "Duck",
+			"pattern": "spread",
 			"type": 1.0,
 			"placement": [
 				{
@@ -1848,8 +1894,8 @@
 					"element": 4.0,
 					"level": 1.0,
 					"coords": [
-						1.0,
-						-1.0
+						-1.0,
+						0.0
 					]
 				}
 			],

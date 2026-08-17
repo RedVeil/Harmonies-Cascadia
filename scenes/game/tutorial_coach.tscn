@@ -362,12 +362,11 @@ mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
 
 [node name="end_session" type="Panel" parent="Highlights" unique_id=1072985061]
-visible = false
 layout_mode = 1
 offset_left = 22.0
-offset_top = 140.0
+offset_top = 180.0
 offset_right = 196.0
-offset_bottom = 186.0
+offset_bottom = 226.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
 
