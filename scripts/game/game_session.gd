@@ -28,6 +28,8 @@ var reference_score: int = -1
 
 ## Cached tutorial_config.json (run options, scoring pins, steps).
 var tutorial_config: Dictionary = {}
+## Empty starts at the first part. Set by begin_tutorial_run(part_id).
+var tutorial_start_part: String = ""
 
 ## Active puzzle definition (data/puzzles/*.json). Empty when not in puzzle mode.
 var puzzle_id: String = ""
@@ -97,11 +99,12 @@ func begin_challenge_run(seed: int, rings: int, ref_score: int) -> void:
 	begin_run(seed, true)
 
 
-func begin_tutorial_run() -> void:
+func begin_tutorial_run(part_id: String = "") -> void:
 	clear_challenge()
 	clear_puzzle()
 	game_mode = GameMode.TUTORIAL
 	_load_tutorial_config()
+	tutorial_start_part = part_id
 	var run_cfg: Dictionary = tutorial_config.get("run", {})
 	map_size = _parse_map_size(str(run_cfg.get("map_size", "small")))
 	# Tutorial uses normal small-map ring count / checkpoint tuning.
@@ -188,6 +191,38 @@ func get_tutorial_steps() -> Array:
 		_load_tutorial_config()
 	var raw = tutorial_config.get("steps", [])
 	return raw if typeof(raw) == TYPE_ARRAY else []
+
+
+func get_tutorial_parts() -> Array:
+	if tutorial_config.is_empty():
+		_load_tutorial_config()
+	var raw = tutorial_config.get("parts", [])
+	return raw if typeof(raw) == TYPE_ARRAY else []
+
+
+func get_tutorial_part(part_id: String) -> Dictionary:
+	if part_id.is_empty():
+		return {}
+	for part in get_tutorial_parts():
+		if typeof(part) == TYPE_DICTIONARY and str(part.get("id", "")) == part_id:
+			return part
+	return {}
+
+
+func get_tutorial_start_step_index() -> int:
+	var steps := get_tutorial_steps()
+	if steps.is_empty():
+		return 0
+	var part := get_tutorial_part(tutorial_start_part)
+	if part.is_empty():
+		return 0
+	var start_id := str(part.get("start", ""))
+	if start_id.is_empty():
+		return 0
+	for i in steps.size():
+		if typeof(steps[i]) == TYPE_DICTIONARY and str(steps[i].get("id", "")) == start_id:
+			return i
+	return 0
 
 
 func get_puzzle_scoring_rules() -> Dictionary:

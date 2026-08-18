@@ -122,6 +122,27 @@ func select_booster(id: int) -> void:
 	if orchestrator:
 		orchestrator.tutorial_bridge.notify("booster_taken", {"booster_id": id})
 
+
+## Used when jumping into a later tutorial part: take a pack's quests and refill the slot without adding cards.
+func consume_booster_without_hand(id: int) -> void:
+	if id < 0 or id >= booster_limit:
+		return
+	var booster := boosters[id]
+	if booster == null:
+		return
+	if booster.quest_ids.size() > 0 and orchestrator:
+		for quest_id in booster.quest_ids:
+			orchestrator.add_quest(quest_id)
+	pending_elements = 0
+	elements_played = 0
+	options_ready = true
+	market_buys_remaining = 1
+	_tick_reroll_cooldowns()
+	createBooster(id)
+	_refresh_option_ui()
+	_refresh_reroll_ui()
+	_refresh_market_buy_ui()
+
 func can_reroll_booster(id: int) -> bool:
 	if id < 0 or id >= booster_reroll_progress.size():
 		return false
@@ -182,6 +203,15 @@ func _tick_reroll_cooldowns() -> void:
 			market_reroll_progress[i] -= 1
 
 ## ----- Play / Undo Progress ----- ##
+
+## Tutorial starting hand: gray packs until these landscape cards are placed.
+func seed_pending_elements(count: int) -> void:
+	pending_elements = maxi(count, 0)
+	elements_played = 0
+	options_ready = pending_elements <= 0
+	_refresh_option_ui()
+	_refresh_market_buy_ui()
+
 
 func notify_element_played() -> void:
 	if options_ready or pending_elements <= 0:

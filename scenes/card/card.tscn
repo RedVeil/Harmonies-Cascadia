@@ -28,13 +28,14 @@ spawn_sounds = Array[AudioStream]([ExtResource("7_draw")])
 redraw_sounds = Array[AudioStream]([ExtResource("7_draw")])
 
 [node name="HitArea" type="Control" parent="." unique_id=1561032188]
+self_modulate = Color(1, 0.71112853, 1, 1)
 z_index = 10
 layout_mode = 3
 anchors_preset = 0
-offset_left = -47.0
-offset_top = -84.0
-offset_right = 47.0
-offset_bottom = 84.0
+offset_left = -50.0
+offset_top = -85.0
+offset_right = 50.0
+offset_bottom = 93.0
 
 [node name="RecycleButton" type="Control" parent="HitArea" unique_id=428326451]
 visible = false

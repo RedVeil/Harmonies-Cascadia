@@ -586,6 +586,145 @@ text = "BACK"
 flat = true
 alignment = 0
 
+[node name="TutorialNav" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack" unique_id=1718501483]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 24
+
+[node name="LandscapesBlock" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack/TutorialNav" unique_id=1718501484]
+layout_mode = 2
+theme_override_constants/separation = -10
+
+[node name="LandscapesButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/TutorialNav/LandscapesBlock" unique_id=1718501485]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
+theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBoxEmpty_text")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_text")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_text")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_text")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_text")
+text = "LANDSCAPES"
+flat = true
+alignment = 0
+
+[node name="LandscapesDesc" type="Label" parent="Split/LeftColumn/Margin/NavStack/TutorialNav/LandscapesBlock" unique_id=1718501486]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.7)
+theme_override_constants/line_spacing = -5
+theme_override_font_sizes/font_size = 13
+text = "Placing tiles, stacking, and scoring rules."
+autowrap_mode = 2
+
+[node name="ScoringBlock" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack/TutorialNav" unique_id=1718501487]
+layout_mode = 2
+theme_override_constants/separation = -10
+
+[node name="ScoringButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/TutorialNav/ScoringBlock" unique_id=1718501488]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
+theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBoxEmpty_text")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_text")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_text")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_text")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_text")
+text = "PACKS"
+flat = true
+alignment = 0
+
+[node name="ScoringDesc" type="Label" parent="Split/LeftColumn/Margin/NavStack/TutorialNav/ScoringBlock" unique_id=1718501489]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.7)
+theme_override_constants/line_spacing = -5
+theme_override_font_sizes/font_size = 13
+text = "Taking landscape packs, cooldown, and reroll."
+autowrap_mode = 2
+
+[node name="AnimalsBlock" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack/TutorialNav" unique_id=1718501490]
+layout_mode = 2
+theme_override_constants/separation = -10
+
+[node name="AnimalsButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/TutorialNav/AnimalsBlock" unique_id=1718501491]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
+theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBoxEmpty_text")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_text")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_text")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_text")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_text")
+text = "ANIMALS"
+flat = true
+alignment = 0
+
+[node name="AnimalsDesc" type="Label" parent="Split/LeftColumn/Margin/NavStack/TutorialNav/AnimalsBlock" unique_id=1718501492]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.7)
+theme_override_constants/line_spacing = -5
+theme_override_font_sizes/font_size = 13
+text = "The animal market and placing animals."
+autowrap_mode = 2
+
+[node name="QuestsBlock" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack/TutorialNav" unique_id=1718501493]
+layout_mode = 2
+theme_override_constants/separation = -10
+
+[node name="QuestsButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/TutorialNav/QuestsBlock" unique_id=1718501494]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
+theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBoxEmpty_text")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_text")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_text")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_text")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_text")
+text = "QUESTS"
+flat = true
+alignment = 0
+
+[node name="QuestsDesc" type="Label" parent="Split/LeftColumn/Margin/NavStack/TutorialNav/QuestsBlock" unique_id=1718501495]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.7)
+theme_override_constants/line_spacing = -5
+theme_override_font_sizes/font_size = 13
+text = "Completing quests and bonus points."
+autowrap_mode = 2
+
+[node name="FooterSpacer" type="Control" parent="Split/LeftColumn/Margin/NavStack/TutorialNav" unique_id=1718501496]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="TutorialBackButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/TutorialNav" unique_id=1718501497]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
+theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBoxEmpty_text")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_text")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_text")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_text")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_text")
+text = "BACK"
+flat = true
+alignment = 0
+
 [node name="CodeNav" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack" unique_id=1718501482]
 visible = false
 layout_mode = 2
@@ -712,6 +851,11 @@ mouse_filter = 2
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessInlineButtons/NewButton" to="." method="_on_endless_new_pressed"]
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/PuzzleBlock/PuzzleButton" to="." method="_on_puzzle_pressed"]
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/BackButton" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/TutorialNav/LandscapesBlock/LandscapesButton" to="." method="_on_tutorial_landscapes_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/TutorialNav/ScoringBlock/ScoringButton" to="." method="_on_tutorial_scoring_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/TutorialNav/AnimalsBlock/AnimalsButton" to="." method="_on_tutorial_animals_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/TutorialNav/QuestsBlock/QuestsButton" to="." method="_on_tutorial_quests_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/TutorialNav/TutorialBackButton" to="." method="_on_back_pressed"]
 [connection signal="text_submitted" from="Split/LeftColumn/Margin/NavStack/CodeNav/CodeInput" to="." method="_on_code_submitted"]
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/CodeNav/StartCodeButton" to="." method="_on_start_code_pressed"]
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/CodeNav/CodeBackButton" to="." method="_on_back_pressed"]

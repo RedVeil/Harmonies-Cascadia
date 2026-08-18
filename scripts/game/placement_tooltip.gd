@@ -9,7 +9,6 @@ enum ArrowSide {
 const PANEL_SIZE := Vector2(100, 130)
 const POINTS_AREA_HEIGHT := 20.0
 const HEX_OUTLINE_THIN := preload("res://assets/icons/hex_outline_thin.png")
-const HEX_OUTLINE_BOLD := preload("res://assets/icons/hex_outline_bold.png")
 
 var _element_base_position: Vector2
 var _animal_base_position: Vector2
@@ -150,27 +149,23 @@ func set_animal_placement(center: Array[Placement], bonus: Array[Placement]) -> 
 			break
 
 	if push_direction == Vector2i.ZERO:
-		apply_animal_tile_style(center[0], true)
+		apply_animal_tile_style(center[0])
 		for b in bonus:
-			apply_animal_tile_style(b, false)
+			apply_animal_tile_style(b)
 	else:
 		var new_center = center[0].duplicate(true)
 		new_center.coords += push_direction
-		apply_animal_tile_style(new_center, true)
+		apply_animal_tile_style(new_center)
 		for b in bonus:
 			var new_b = b.duplicate(true)
 			new_b.coords += push_direction
-			apply_animal_tile_style(new_b, false)
+			apply_animal_tile_style(new_b)
 
 
-func apply_animal_tile_style(placement: Placement, is_center: bool) -> void:
+func apply_animal_tile_style(placement: Placement) -> void:
 		var outline: Sprite2D = get_node("animal/(%d,%d)" % [placement.coords.x, placement.coords.y])
-		if is_center:
-			outline.self_modulate = Color.WHITE
-			outline.texture = HEX_OUTLINE_BOLD
-		else:
-			outline.self_modulate = Color.TRANSPARENT
-			outline.texture = HEX_OUTLINE_THIN
+		outline.self_modulate = Color.TRANSPARENT
+		outline.texture = HEX_OUTLINE_THIN
 
 		var levels: Array = ElementCatalog.elements[placement.element].levels
 		var level_index := clampi(placement.level - 1, 0, levels.size() - 1)

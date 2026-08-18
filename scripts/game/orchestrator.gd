@@ -113,6 +113,69 @@ func _apply_puzzle_setup() -> void:
 	)
 
 
+func apply_tutorial_part_setup(part: Dictionary) -> void:
+	if part.is_empty():
+		return
+	var setup = part.get("setup", {})
+	if typeof(setup) != TYPE_DICTIONARY or setup.is_empty():
+		return
+	var consumed := int(setup.get("boosters_consumed", 0))
+	if booster_manager and consumed > 0:
+		for _i in consumed:
+			booster_manager.consume_booster_without_hand(0)
+	PuzzleSetupScript.apply(setup, hex_manager, score_engine, point_counter)
+	var raw_tiles = setup.get("tiles", [])
+	if typeof(raw_tiles) == TYPE_ARRAY:
+		_placed_tile_count = maxi(_placed_tile_count, raw_tiles.size())
+	var raw_animals = setup.get("hand_animal_ids", [])
+	if typeof(raw_animals) == TYPE_ARRAY:
+		for animal_id in raw_animals:
+			var card := _tutorial_animal_card(int(animal_id))
+			if card != null:
+				add_hand_card(card)
+	var raw_elements = setup.get("hand_element_ids", [])
+	var seeded_elements := 0
+	if typeof(raw_elements) == TYPE_ARRAY:
+		for element_id in raw_elements:
+			var card := _tutorial_element_card(int(element_id))
+			if card != null:
+				add_hand_card(card)
+				seeded_elements += 1
+	if booster_manager and seeded_elements > 0:
+		booster_manager.seed_pending_elements(seeded_elements)
+
+
+func apply_tutorial_part_tiles(part: Dictionary) -> void:
+	if part.is_empty():
+		return
+	var setup = part.get("setup", {})
+	if typeof(setup) != TYPE_DICTIONARY or setup.is_empty():
+		return
+	var tiles_only := {"tiles": setup.get("tiles", [])}
+	PuzzleSetupScript.apply(tiles_only, hex_manager, score_engine, point_counter)
+	var raw_tiles = setup.get("tiles", [])
+	if typeof(raw_tiles) == TYPE_ARRAY:
+		_placed_tile_count = maxi(_placed_tile_count, raw_tiles.size())
+
+
+func _tutorial_animal_card(animal_id: int) -> CardData:
+	for animal in CardCatalog.animals:
+		if animal != null and animal.id == animal_id:
+			return animal
+	if animal_id >= 0 and animal_id < CardCatalog.animals.size():
+		return CardCatalog.animals[animal_id]
+	return null
+
+
+func _tutorial_element_card(element_id: int) -> CardData:
+	for element in CardCatalog.elements:
+		if element != null and element.id == element_id:
+			return element
+	if element_id >= 0 and element_id < CardCatalog.elements.size():
+		return CardCatalog.elements[element_id]
+	return null
+
+
 func _on_tutorial_bridge_action(action: String, payload: Dictionary) -> void:
 	tutorial_action.emit(action, payload)
 
@@ -301,7 +364,7 @@ func restart_run() -> void:
 			GameSession.reference_score
 		)
 	elif GameSession.game_mode == GameSession.GameMode.TUTORIAL:
-		GameSession.begin_tutorial_run()
+		GameSession.begin_tutorial_run(GameSession.tutorial_start_part)
 	elif GameSession.game_mode == GameSession.GameMode.PUZZLE:
 		GameSession.begin_puzzle_run(GameSession.puzzle_id)
 	else:
@@ -686,6 +749,16 @@ func get_secondary_elements() -> Array[int]:
 		if card != null and card.type == 0:
 			elements[card.id] += card.amount
 	return elements
+
+
+func hand_element_count() -> int:
+	if card_manager == null:
+		return 0
+	var count := 0
+	for card in card_manager.cards:
+		if card != null and card.type == CardData.CARD_TYPE.ELEMENT:
+			count += maxi(card.amount, 0)
+	return count
 
 ## ----- Map Point Logic ----- ##
 

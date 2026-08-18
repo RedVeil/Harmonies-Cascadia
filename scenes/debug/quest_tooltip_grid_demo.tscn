@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://bm1s1rbbdr3ic"]
+
+[ext_resource type="Script" uid="uid://c8n1l12nkia8k" path="res://scripts/debug/quest_tooltip_grid_demo.gd" id="1_demo"]
+
+[node name="QuestTooltipGridDemo" type="Node2D" unique_id=741356090]
+script = ExtResource("1_demo")
+columns = 10
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1102737957]

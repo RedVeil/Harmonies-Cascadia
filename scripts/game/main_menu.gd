@@ -11,6 +11,7 @@ var COLOR_RIGHT := Color.html("#D2C2AD")
 @onready var _name_input: LineEdit = $Split/LeftColumn/Margin/NavStack/NameNav/NameInput
 @onready var _root_nav: VBoxContainer = $Split/LeftColumn/Margin/NavStack/RootNav
 @onready var _play_nav: VBoxContainer = $Split/LeftColumn/Margin/NavStack/PlayNav
+@onready var _tutorial_nav: VBoxContainer = $Split/LeftColumn/Margin/NavStack/TutorialNav
 @onready var _code_nav: VBoxContainer = $Split/LeftColumn/Margin/NavStack/CodeNav
 @onready var _settings_nav: VBoxContainer = $Split/LeftColumn/Margin/NavStack/SettingsNav
 @onready var _settings_panel: SettingsPanel = $Split/LeftColumn/Margin/NavStack/SettingsNav/SettingsScroll/SettingsPanel
@@ -58,6 +59,11 @@ func _setup_button_hover_sounds() -> void:
 		$Split/LeftColumn/Margin/NavStack/RootNav/EnterCodeBlock/EnterCodeButton,
 		$Split/LeftColumn/Margin/NavStack/RootNav/ExitButton,
 		$Split/LeftColumn/Margin/NavStack/PlayNav/BackButton,
+		$Split/LeftColumn/Margin/NavStack/TutorialNav/LandscapesBlock/LandscapesButton,
+		$Split/LeftColumn/Margin/NavStack/TutorialNav/ScoringBlock/ScoringButton,
+		$Split/LeftColumn/Margin/NavStack/TutorialNav/AnimalsBlock/AnimalsButton,
+		$Split/LeftColumn/Margin/NavStack/TutorialNav/QuestsBlock/QuestsButton,
+		$Split/LeftColumn/Margin/NavStack/TutorialNav/TutorialBackButton,
 		$Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyButton,
 		$Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyInlineButtons/ContinueButton,
 		$Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyInlineButtons/NewButton,
@@ -125,7 +131,7 @@ func _hide_map_size_row() -> void:
 
 
 func _sync_nav_input_filters(active: Control) -> void:
-	for nav in [_name_nav, _root_nav, _play_nav, _code_nav, _settings_nav]:
+	for nav in [_name_nav, _root_nav, _play_nav, _tutorial_nav, _code_nav, _settings_nav]:
 		if nav == null:
 			continue
 		if nav == active:
@@ -138,6 +144,7 @@ func _show_name_nav() -> void:
 	_name_nav.show()
 	_root_nav.hide()
 	_play_nav.hide()
+	_tutorial_nav.hide()
 	_code_nav.hide()
 	_settings_nav.hide()
 	_reset_mode_inline_ui()
@@ -149,6 +156,7 @@ func _show_root_nav() -> void:
 	_name_nav.hide()
 	_root_nav.show()
 	_play_nav.hide()
+	_tutorial_nav.hide()
 	_code_nav.hide()
 	_settings_nav.hide()
 	_reset_mode_inline_ui()
@@ -161,10 +169,23 @@ func _show_play_nav() -> void:
 	_name_nav.hide()
 	_root_nav.hide()
 	_play_nav.show()
+	_tutorial_nav.hide()
 	_code_nav.hide()
 	_settings_nav.hide()
 	_reset_mode_inline_ui()
 	_sync_nav_input_filters(_play_nav)
+
+
+func _show_tutorial_nav() -> void:
+	GameFeedback.play_open_popup()
+	_name_nav.hide()
+	_root_nav.hide()
+	_play_nav.hide()
+	_tutorial_nav.show()
+	_code_nav.hide()
+	_settings_nav.hide()
+	_reset_mode_inline_ui()
+	_sync_nav_input_filters(_tutorial_nav)
 
 
 func _show_code_nav() -> void:
@@ -172,6 +193,7 @@ func _show_code_nav() -> void:
 	_name_nav.hide()
 	_root_nav.hide()
 	_play_nav.hide()
+	_tutorial_nav.hide()
 	_code_nav.show()
 	_settings_nav.hide()
 	_reset_mode_inline_ui()
@@ -185,6 +207,7 @@ func _show_settings_nav() -> void:
 	_name_nav.hide()
 	_root_nav.hide()
 	_play_nav.hide()
+	_tutorial_nav.hide()
 	_code_nav.hide()
 	_settings_nav.show()
 	_reset_mode_inline_ui()
@@ -220,7 +243,28 @@ func _on_play_pressed() -> void:
 
 func _on_tutorial_pressed() -> void:
 	GameFeedback.play_click_button()
-	GameSession.begin_tutorial_run()
+	_show_tutorial_nav()
+
+
+func _on_tutorial_landscapes_pressed() -> void:
+	_start_tutorial_part("landscapes")
+
+
+func _on_tutorial_scoring_pressed() -> void:
+	_start_tutorial_part("boosters")
+
+
+func _on_tutorial_animals_pressed() -> void:
+	_start_tutorial_part("animals")
+
+
+func _on_tutorial_quests_pressed() -> void:
+	_start_tutorial_part("quests")
+
+
+func _start_tutorial_part(part_id: String) -> void:
+	GameFeedback.play_click_button()
+	GameSession.begin_tutorial_run(part_id)
 	get_tree().change_scene_to_file(GAME_SCENE)
 
 

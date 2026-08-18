@@ -6,11 +6,13 @@ class_name TutorialController
 @export var coach: TutorialCoach
 
 var _steps: Array = []
+var _parts: Array = []
 var _index: int = -1
 var _current: Dictionary = {}
 var _waiting_action: String = ""
 var _active: bool = false
 var _advance_timer: Timer
+var _break_shown_for_index: int = -1
 
 
 func _ready() -> void:
@@ -31,11 +33,22 @@ func _ready() -> void:
 func start() -> void:
 	GameSettings.mark_tutorial_played()
 	_steps = GameSession.get_tutorial_steps()
+	_parts = GameSession.get_tutorial_parts()
 	if _steps.is_empty():
 		push_warning("TutorialController: no steps in tutorial_config.json")
 		return
 	_active = true
-	_index = -1
+	_break_shown_for_index = -1
+	var start_index := GameSession.get_tutorial_start_step_index()
+	_index = start_index - 1
+	# Jumping into a later part must not treat the previous part's last step as a break.
+	if _index >= 0:
+		_break_shown_for_index = _index
+	if orchestrator:
+		var part := GameSession.get_tutorial_part(GameSession.tutorial_start_part)
+		if part.is_empty() and not _parts.is_empty() and typeof(_parts[0]) == TYPE_DICTIONARY:
+			part = _parts[0]
+		orchestrator.apply_tutorial_part_setup(part)
 	_advance()
 
 
@@ -43,6 +56,7 @@ func stop(mark_completed: bool = true) -> void:
 	_active = false
 	_waiting_action = ""
 	_current = {}
+	_break_shown_for_index = -1
 	if _advance_timer:
 		_advance_timer.stop()
 	if orchestrator:
@@ -55,8 +69,13 @@ func stop(mark_completed: bool = true) -> void:
 
 
 func _advance() -> void:
+	if _should_show_part_break():
+		_break_shown_for_index = _index
+		_show_part_break()
+		return
 	_index += 1
 	while _index < _steps.size():
+		_maybe_apply_entering_part_tiles(_index)
 		var step: Dictionary = _steps[_index]
 		if _should_skip(step):
 			_index += 1
@@ -64,6 +83,90 @@ func _advance() -> void:
 		_enter_step(step)
 		return
 	_finish()
+
+
+func _should_show_part_break() -> bool:
+	if _index < 0 or _index >= _steps.size():
+		return false
+	if _break_shown_for_index == _index:
+		return false
+	if _parts.is_empty():
+		return false
+	var part := _part_for_step_index(_index)
+	if part.is_empty():
+		return false
+	var part_index := _part_index_of(str(part.get("id", "")))
+	if part_index < 0 or part_index >= _parts.size() - 1:
+		return false
+	var end_id := str(part.get("end", ""))
+	if end_id.is_empty():
+		return false
+	return str(_steps[_index].get("id", "")) == end_id
+
+
+func _show_part_break() -> void:
+	var part := _part_for_step_index(_index)
+	var step := {
+		"id": "part_break",
+		"title": str(part.get("break_title", "Part complete")),
+		"body": str(part.get("break_body", "Continue to the next lesson, or end the tutorial.")),
+		"highlight": "none",
+		"gates": {"allow_actions": []},
+		"complete": {
+			"type": "continue_button",
+			"label": "Continue",
+			"skip_label": "End",
+		},
+	}
+	_enter_step(step)
+
+
+func _maybe_apply_entering_part_tiles(step_index: int) -> void:
+	if orchestrator == null:
+		return
+	var part := _part_for_step_index(step_index)
+	if part.is_empty():
+		return
+	var start_id := str(part.get("start", ""))
+	if start_id.is_empty():
+		return
+	if str(_steps[step_index].get("id", "")) != start_id:
+		return
+	orchestrator.apply_tutorial_part_tiles(part)
+
+
+func _part_for_step_index(step_index: int) -> Dictionary:
+	if step_index < 0 or step_index >= _steps.size() or _parts.is_empty():
+		return {}
+	for i in _parts.size():
+		var part: Dictionary = _parts[i]
+		if typeof(part) != TYPE_DICTIONARY:
+			continue
+		var start_id := str(part.get("start", ""))
+		var end_id := str(part.get("end", ""))
+		var start_index := _first_step_index(start_id)
+		var end_index := _first_step_index(end_id, start_index)
+		if start_index < 0 or end_index < 0:
+			continue
+		if step_index >= start_index and step_index <= end_index:
+			return part
+	return {}
+
+
+func _part_index_of(part_id: String) -> int:
+	for i in _parts.size():
+		if typeof(_parts[i]) == TYPE_DICTIONARY and str(_parts[i].get("id", "")) == part_id:
+			return i
+	return -1
+
+
+func _first_step_index(step_id: String, from_index: int = 0) -> int:
+	if step_id.is_empty():
+		return -1
+	for i in range(maxi(from_index, 0), _steps.size()):
+		if typeof(_steps[i]) == TYPE_DICTIONARY and str(_steps[i].get("id", "")) == step_id:
+			return i
+	return -1
 
 
 func _should_skip(step: Dictionary) -> bool:
@@ -111,9 +214,22 @@ func _on_tutorial_action(action: String, _payload: Dictionary) -> void:
 	if _waiting_action.is_empty():
 		return
 	if action == _waiting_action:
+		if not _complete_when_met():
+			return
 		if action == "code_shared" and orchestrator:
 			orchestrator.close_in_game_menu()
 		_schedule_advance()
+
+
+func _complete_when_met() -> bool:
+	var complete: Dictionary = _current.get("complete", {})
+	if typeof(complete) != TYPE_DICTIONARY:
+		return true
+	match str(complete.get("when", "")):
+		"hand_elements_empty":
+			return orchestrator != null and orchestrator.hand_element_count() <= 0
+		_:
+			return true
 
 
 func _schedule_advance() -> void:

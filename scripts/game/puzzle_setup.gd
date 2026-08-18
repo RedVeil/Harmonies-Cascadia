@@ -45,10 +45,11 @@ static func _apply_tiles(puzzle: Dictionary, hex_manager: HexManager) -> void:
 		data.animal_id = -1
 		data.animal_amount = 0
 
-		if animal_id >= 0 and animal_id < CardCatalog.animals.size():
-			var animal: CardData = CardCatalog.animals[animal_id]
-			data.animal_id = animal.id
-			data.animal_amount = maxi(1, animal.visual_amount)
+		if animal_id >= 0:
+			var animal := _animal_by_id(animal_id)
+			if animal != null:
+				data.animal_id = animal.id
+				data.animal_amount = maxi(1, animal.visual_amount)
 
 		filled.append(coord)
 
@@ -74,6 +75,15 @@ static func _commit_tile_visual(hex_manager: HexManager, coord: Vector2i) -> voi
 	if data.element == GameEnums.ELEMENT.RIVER:
 		river_neighbors = container.get_element_neighbors(coord, GameEnums.ELEMENT.RIVER)
 	tile.commit_preview_from_tile_data(data, river_neighbors)
+
+
+static func _animal_by_id(animal_id: int) -> CardData:
+	for animal in CardCatalog.animals:
+		if animal != null and animal.id == animal_id:
+			return animal
+	if animal_id >= 0 and animal_id < CardCatalog.animals.size():
+		return CardCatalog.animals[animal_id]
+	return null
 
 
 static func _rebuild_groups_and_scores(hex_manager: HexManager, score_engine: ScoreEngine) -> void:

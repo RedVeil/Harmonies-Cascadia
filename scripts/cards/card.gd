@@ -47,8 +47,10 @@ var base_scale: Vector2 = Vector2.ONE
 var target_scale : Vector2 =  Vector2.ONE
 var base_visuals_position : Vector2 = Vector2.ZERO
 var target_visuals_position : Vector2 = Vector2.ZERO
-var _hit_area_base_position: Vector2 = Vector2.ZERO
-var _hit_area_base_offset_top: float = 0.0
+var _hit_area_rest_offset_left: float = 0.0
+var _hit_area_rest_offset_top: float = 0.0
+var _hit_area_rest_offset_right: float = 0.0
+var _hit_area_rest_offset_bottom: float = 0.0
 var _shadow_base_offset_top: float = 0.0
 var stack_amount : int = 0
 var background_color : Color
@@ -70,9 +72,12 @@ var _recycle_base_position: Vector2 = Vector2.ZERO
 ## ----- Initialisation ----- ##
 
 func _ready() -> void:
-	_hit_area_base_offset_top = hit_area.offset_top
+	_hit_area_rest_offset_left = hit_area.offset_left
+	_hit_area_rest_offset_top = hit_area.offset_top
+	_hit_area_rest_offset_right = hit_area.offset_right
+	_hit_area_rest_offset_bottom = hit_area.offset_bottom
 	_shadow_base_offset_top = shadow.offset_top
-	_hit_area_base_position = hit_area.position
+	hit_area.scale = Vector2.ONE
 	hit_area.pivot_offset = hit_area.size * 0.5
 	hit_area.mouse_entered.connect(_on_mouse_entered)
 	hit_area.mouse_exited.connect(_on_mouse_exited)
@@ -84,7 +89,7 @@ func _ready() -> void:
 		"recycle_pos": {"x": recycle_btn.position.x, "y": recycle_btn.position.y},
 		"recycle_base": {"x": _recycle_base_position.x, "y": _recycle_base_position.y},
 		"hit_offset_top": hit_area.offset_top,
-		"hit_base_offset_top": _hit_area_base_offset_top,
+		"hit_rest_offset_top": _hit_area_rest_offset_top,
 		"hit_pos": {"x": hit_area.position.x, "y": hit_area.position.y},
 	})
 	# #endregion
@@ -227,11 +232,9 @@ func _apply_stack_visuals() -> void:
 	frame_3.visible = depth >= 3
 	frame_4.visible = depth >= 4
 
-	var extra := float(depth - 1) * STACK_STEP_PX
+	var extra := _stack_extra_px()
 	shadow.offset_top = _shadow_base_offset_top - extra
-	hit_area.offset_top = _hit_area_base_offset_top - extra
-	hit_area.pivot_offset = hit_area.size * 0.5
-	_hit_area_base_position = hit_area.position
+	_sync_hit_area_to_visuals()
 	# #region agent log
 	_dbg_recycle("A", "card.gd:_apply_stack_visuals", "before hit/recycle sync", {
 		"card_id": id,
@@ -242,13 +245,12 @@ func _apply_stack_visuals() -> void:
 		"is_active": is_active,
 		"visuals_pos_y": visuals.position.y,
 		"hit_offset_top_after_stack": hit_area.offset_top,
-		"hit_base_offset_top": _hit_area_base_offset_top,
-		"hit_base_pos_y": _hit_area_base_position.y,
+		"hit_rest_offset_top": _hit_area_rest_offset_top,
+		"hit_pos_y": hit_area.position.y,
 		"recycle_pos_y_before": recycle_btn.position.y,
 		"recycle_base_y": _recycle_base_position.y,
 	})
 	# #endregion
-	_sync_hit_area_to_visuals()
 	_sync_recycle_button_stack_offset()
 	# #region agent log
 	_dbg_recycle("D", "card.gd:_apply_stack_visuals", "after hit/recycle sync", {
@@ -257,7 +259,6 @@ func _apply_stack_visuals() -> void:
 		"hit_pos_y": hit_area.position.y,
 		"visuals_pos_y": visuals.position.y,
 		"recycle_pos_y": recycle_btn.position.y,
-		"baked_delta_y": _hit_area_base_offset_top - hit_area.offset_top,
 	})
 	# #endregion
 
@@ -396,9 +397,26 @@ func _process(delta: float) -> void:
 	_sync_ui_pointer_block()
 
 
+func _stack_extra_px() -> float:
+	var depth := mini(maxi(stack_amount, 1), STACK_VISUAL_CAP)
+	return float(depth - 1) * STACK_STEP_PX
+
+
+## Rest + stack extra + current visuals transform. Always computed from stored
+## rest offsets so a place-while-selected cannot bake hover into the hit box.
 func _sync_hit_area_to_visuals() -> void:
+	var extra := _stack_extra_px()
+	var dx := visuals.position.x
+	var dy := visuals.position.y
+	hit_area.offset_left = _hit_area_rest_offset_left + dx
+	hit_area.offset_top = _hit_area_rest_offset_top - extra + dy
+	hit_area.offset_right = _hit_area_rest_offset_right + dx
+	hit_area.offset_bottom = _hit_area_rest_offset_bottom + dy
 	hit_area.scale = visuals.scale
-	hit_area.position = _hit_area_base_position + visuals.position
+	hit_area.pivot_offset = Vector2(
+		-_hit_area_rest_offset_left,
+		-(_hit_area_rest_offset_top - extra)
+	)
 
 
 func _control_has_mouse(control: Control) -> bool:
@@ -439,24 +457,22 @@ func _sync_ui_pointer_block() -> void:
 ## ----- Recycle X (animals only; node in card.tscn → HitArea/RecycleButton) ----- ##
 
 ## Keeps editor X/Y; only shifts Y when HitArea grows for stacked cards.
-## Uses stack depth, not live offset_top — hover sync overwrites offset_top.
+## Hover lift/scale is inherited from HitArea, so do not add visuals.position.
 func _sync_recycle_button_stack_offset() -> void:
-	var depth := mini(maxi(stack_amount, 1), STACK_VISUAL_CAP)
-	var delta_y := float(depth - 1) * STACK_STEP_PX
+	var extra := _stack_extra_px()
 	# #region agent log
 	_dbg_recycle("B", "card.gd:_sync_recycle_button_stack_offset", "reposition recycle", {
 		"card_id": id,
 		"recycle_base_y": _recycle_base_position.y,
-		"delta_y": delta_y,
-		"new_recycle_y": _recycle_base_position.y + delta_y,
+		"delta_y": extra,
+		"new_recycle_y": _recycle_base_position.y + extra,
 		"hit_offset_top": hit_area.offset_top,
-		"hit_base_offset_top": _hit_area_base_offset_top,
+		"hit_rest_offset_top": _hit_area_rest_offset_top,
 		"visuals_pos_y": visuals.position.y,
 		"stack_amount": stack_amount,
-		"contaminated_delta_y": _hit_area_base_offset_top - hit_area.offset_top,
 	})
 	# #endregion
-	recycle_btn.position = _recycle_base_position + Vector2(0.0, delta_y)
+	recycle_btn.position = _recycle_base_position + Vector2(0.0, extra)
 
 
 func refresh_recycle_button(show: bool) -> void:

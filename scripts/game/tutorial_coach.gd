@@ -9,6 +9,12 @@ const COACH_LAYER_DEFAULT := 12
 const COACH_LAYER_MENU := 20
 const MENU_HIGHLIGHTS := ["end_session", "share"]
 
+@export_group("Hex Highlight")
+## Pixels to shift every hex spotlight up (positive = up). Tune on TutorialCoach.
+@export var hex_highlight_up: float = 48.0
+## Extra pixels around the projected tile.
+@export var hex_highlight_pad: float = 10.0
+
 @onready var _highlights: Control = $Highlights
 @onready var _bubble: Panel = $Bubble
 @onready var _title: Label = $Bubble/Margin/VBox/Title
@@ -18,6 +24,9 @@ const MENU_HIGHLIGHTS := ["end_session", "share"]
 
 var _visible_highlight: Control = null
 var _bubble_side: String = ""
+var _track_hex: bool = false
+var _tracked_hex_coord := Vector2i.ZERO
+var _hex_container: HexTileContainer = null
 
 
 func _ready() -> void:
@@ -29,6 +38,12 @@ func _ready() -> void:
 	_skip_button.pressed.connect(_on_skip)
 	_skip_button.mouse_entered.connect(_on_button_mouse_entered)
 	get_viewport().size_changed.connect(_on_viewport_resized)
+
+
+func _process(_delta: float) -> void:
+	if not visible or not _track_hex:
+		return
+	_sync_hex_highlight()
 
 
 func _on_button_mouse_entered() -> void:
@@ -53,6 +68,8 @@ func show_step(step: Dictionary, highlight_name: String, show_continue: bool) ->
 	else:
 		layer = COACH_LAYER_DEFAULT
 	_show_highlight(highlight_name)
+	if _track_hex:
+		_sync_hex_highlight()
 	_place_bubble(_highlight_rect())
 	show()
 	# #region agent log
@@ -70,6 +87,7 @@ func _show_highlight(highlight_name: String) -> void:
 	if _visible_highlight:
 		_visible_highlight.hide()
 		_visible_highlight = null
+	_track_hex = false
 	if highlight_name.is_empty() or highlight_name == "none":
 		return
 	var node := _highlights.get_node_or_null(NodePath(highlight_name)) as Control
@@ -78,15 +96,80 @@ func _show_highlight(highlight_name: String) -> void:
 		return
 	node.show()
 	_visible_highlight = node
+	_track_hex = _parse_hex_highlight(highlight_name)
 
 
 func _hide_all_highlights() -> void:
 	_visible_highlight = null
+	_track_hex = false
 	if _highlights == null:
 		return
 	for child in _highlights.get_children():
 		if child is CanvasItem:
 			(child as CanvasItem).hide()
+
+
+func _parse_hex_highlight(highlight_name: String) -> bool:
+	if not highlight_name.begins_with("hex_"):
+		return false
+	var parts := highlight_name.split("_")
+	if parts.size() != 3 or not parts[1].is_valid_int() or not parts[2].is_valid_int():
+		return false
+	_tracked_hex_coord = Vector2i(int(parts[1]), int(parts[2]))
+	return true
+
+
+func _sync_hex_highlight() -> void:
+	if _visible_highlight == null or not is_instance_valid(_visible_highlight):
+		return
+	var rect := _hex_screen_rect(_tracked_hex_coord)
+	if rect.size.x < 1.0 or rect.size.y < 1.0:
+		return
+	_visible_highlight.anchor_left = 0.0
+	_visible_highlight.anchor_top = 0.0
+	_visible_highlight.anchor_right = 0.0
+	_visible_highlight.anchor_bottom = 0.0
+	_visible_highlight.offset_left = rect.position.x
+	_visible_highlight.offset_top = rect.position.y
+	_visible_highlight.offset_right = rect.end.x
+	_visible_highlight.offset_bottom = rect.end.y
+
+
+func _hex_screen_rect(coord: Vector2i) -> Rect2:
+	var container := _resolve_hex_container()
+	var camera := get_viewport().get_camera_3d()
+	if container == null or camera == null:
+		return Rect2()
+	var center := Vector3.ZERO
+	if container.tiles_by_coord.has(coord):
+		center = container.tiles_by_coord[coord].global_position
+	else:
+		center = container.to_global(HexCoord.axial_to_world(coord, container.hex_size))
+	var radius := container.hex_size
+	var min_p := Vector2(INF, INF)
+	var max_p := Vector2(-INF, -INF)
+	for height in [0.0, radius * 0.45]:
+		for i in 6:
+			var angle := deg_to_rad(60.0 * float(i))
+			var world := center + Vector3(cos(angle) * radius, height, sin(angle) * radius)
+			var screen := camera.unproject_position(world)
+			min_p.x = minf(min_p.x, screen.x)
+			min_p.y = minf(min_p.y, screen.y)
+			max_p.x = maxf(max_p.x, screen.x)
+			max_p.y = maxf(max_p.y, screen.y)
+	if not is_finite(min_p.x) or not is_finite(max_p.x):
+		return Rect2()
+	var origin := min_p - Vector2(hex_highlight_pad, hex_highlight_pad + hex_highlight_up)
+	var size := (max_p - min_p) + Vector2(hex_highlight_pad * 2.0, hex_highlight_pad * 2.0)
+	return Rect2(origin, size)
+
+
+func _resolve_hex_container() -> HexTileContainer:
+	if _hex_container != null and is_instance_valid(_hex_container):
+		return _hex_container
+	var node := get_tree().root.find_child("HexTileContainer", true, false)
+	_hex_container = node as HexTileContainer
+	return _hex_container
 
 
 func _highlight_rect() -> Rect2:
@@ -115,6 +198,16 @@ func _place_bubble(highlight_rect: Rect2) -> void:
 			"above":
 				pos = Vector2(
 					clampf(highlight_rect.get_center().x - bubble_size.x * 0.5, 16.0, vp.x - bubble_size.x - 16.0),
+					clampf(highlight_rect.position.y - bubble_size.y - 16.0, 16.0, vp.y - bubble_size.y - 16.0)
+				)
+			"above_left":
+				pos = Vector2(
+					clampf(highlight_rect.position.x - bubble_size.x - 16.0, 16.0, vp.x - bubble_size.x - 16.0),
+					clampf(highlight_rect.position.y - bubble_size.y - 16.0, 16.0, vp.y - bubble_size.y - 16.0)
+				)
+			"above_right":
+				pos = Vector2(
+					clampf(highlight_rect.end.x + 16.0, 16.0, vp.x - bubble_size.x - 16.0),
 					clampf(highlight_rect.position.y - bubble_size.y - 16.0, 16.0, vp.y - bubble_size.y - 16.0)
 				)
 			"below":

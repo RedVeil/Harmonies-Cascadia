@@ -40,6 +40,7 @@ bg_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
 [node name="TutorialCoach" type="CanvasLayer" unique_id=1049361088]
 layer = 12
 script = ExtResource("1_coach")
+hex_highlight_up = 40.0
 
 [node name="Highlights" type="Control" parent="." unique_id=1830237816]
 layout_mode = 3
@@ -284,9 +285,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -440.0
+offset_left = -471.0
 offset_top = -274.0
-offset_right = 440.0
+offset_right = 471.0
 offset_bottom = 274.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -302,9 +303,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -101.0
-offset_top = -141.0
+offset_top = -43.0
 offset_right = 99.0
-offset_bottom = 39.0
+offset_bottom = 137.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -344,6 +345,23 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
 
+[node name="hex_1_0" type="Panel" parent="Highlights" unique_id=1343763972]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 18.0
+offset_top = -47.0
+offset_right = 218.0
+offset_bottom = 133.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
+
 [node name="hex_-1_0" type="Panel" parent="Highlights" unique_id=439219209]
 visible = false
 layout_mode = 1
@@ -362,11 +380,12 @@ mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
 
 [node name="end_session" type="Panel" parent="Highlights" unique_id=1072985061]
+visible = false
 layout_mode = 1
 offset_left = 22.0
-offset_top = 180.0
+offset_top = 195.0
 offset_right = 196.0
-offset_bottom = 226.0
+offset_bottom = 241.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
 
@@ -376,9 +395,9 @@ layout_mode = 1
 anchors_preset = -1
 anchor_right = 0.333333
 offset_left = 21.0
-offset_top = 215.0
+offset_top = 268.0
 offset_right = -21.0
-offset_bottom = 275.0
+offset_bottom = 328.0
 grow_horizontal = 0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
