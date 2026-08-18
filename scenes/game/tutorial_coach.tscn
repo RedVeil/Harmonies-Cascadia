@@ -228,26 +228,24 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -80.0
-offset_top = -10.0
-offset_right = -16.0
-offset_bottom = 49.0
+offset_left = -64.0
+offset_top = 2.0
+offset_bottom = 61.0
 grow_horizontal = 0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
 
 [node name="scoring_book" type="Panel" parent="Highlights" unique_id=1847263901]
-visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 416.0
-offset_top = 216.0
-offset_right = 472.0
-offset_bottom = 272.0
+offset_left = 436.0
+offset_top = 169.0
+offset_right = 492.0
+offset_bottom = 225.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -417,72 +415,72 @@ theme_override_font_sizes/font_size = 14
 text = "This short tutorial walks you through a turn. Follow the highlights — only the suggested actions will work."
 autowrap_mode = 2
 
-[node name="StarsRow" type="HBoxContainer" parent="Bubble/Margin/VBox"]
+[node name="StarsRow" type="HBoxContainer" parent="Bubble/Margin/VBox" unique_id=815827882]
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 20
 alignment = 1
 
-[node name="StarCol1" type="VBoxContainer" parent="Bubble/Margin/VBox/StarsRow"]
+[node name="StarCol1" type="VBoxContainer" parent="Bubble/Margin/VBox/StarsRow" unique_id=906794928]
 layout_mode = 2
 theme_override_constants/separation = 2
 alignment = 1
 
-[node name="Icon" type="TextureRect" parent="Bubble/Margin/VBox/StarsRow/StarCol1"]
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
-size_flags_horizontal = 4
-mouse_filter = 2
+[node name="Icon" type="TextureRect" parent="Bubble/Margin/VBox/StarsRow/StarCol1" unique_id=866363022]
 modulate = Color(0.7686275, 0.47058824, 0.23137255, 1)
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
 texture = ExtResource("2_star")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Points" type="Label" parent="Bubble/Margin/VBox/StarsRow/StarCol1"]
+[node name="Points" type="Label" parent="Bubble/Margin/VBox/StarsRow/StarCol1" unique_id=221639583]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
 theme_override_font_sizes/font_size = 14
 text = "0"
 horizontal_alignment = 1
 
-[node name="StarCol2" type="VBoxContainer" parent="Bubble/Margin/VBox/StarsRow"]
+[node name="StarCol2" type="VBoxContainer" parent="Bubble/Margin/VBox/StarsRow" unique_id=1087450574]
 layout_mode = 2
 theme_override_constants/separation = 2
 alignment = 1
 
-[node name="Icon" type="TextureRect" parent="Bubble/Margin/VBox/StarsRow/StarCol2"]
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
-size_flags_horizontal = 4
-mouse_filter = 2
+[node name="Icon" type="TextureRect" parent="Bubble/Margin/VBox/StarsRow/StarCol2" unique_id=1143811738]
 modulate = Color(0.78431374, 0.78431374, 0.8, 1)
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
 texture = ExtResource("2_star")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Points" type="Label" parent="Bubble/Margin/VBox/StarsRow/StarCol2"]
+[node name="Points" type="Label" parent="Bubble/Margin/VBox/StarsRow/StarCol2" unique_id=1187974067]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
 theme_override_font_sizes/font_size = 14
 text = "0"
 horizontal_alignment = 1
 
-[node name="StarCol3" type="VBoxContainer" parent="Bubble/Margin/VBox/StarsRow"]
+[node name="StarCol3" type="VBoxContainer" parent="Bubble/Margin/VBox/StarsRow" unique_id=360590197]
 layout_mode = 2
 theme_override_constants/separation = 2
 alignment = 1
 
-[node name="Icon" type="TextureRect" parent="Bubble/Margin/VBox/StarsRow/StarCol3"]
+[node name="Icon" type="TextureRect" parent="Bubble/Margin/VBox/StarsRow/StarCol3" unique_id=328656603]
+modulate = Color(0.9490196, 0.6901961, 0.36078432, 1)
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_horizontal = 4
 mouse_filter = 2
-modulate = Color(0.9490196, 0.6901961, 0.36078432, 1)
 texture = ExtResource("2_star")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Points" type="Label" parent="Bubble/Margin/VBox/StarsRow/StarCol3"]
+[node name="Points" type="Label" parent="Bubble/Margin/VBox/StarsRow/StarCol3" unique_id=1818381597]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
 theme_override_font_sizes/font_size = 14
