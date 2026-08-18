@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://eyrt27yj02tt"
 path.s3tc="res://.godot/imported/frog_T_Frog.png-a4c42c8a7687df2d46003b00e61afc3e.s3tc.ctex"
+path.etc2="res://.godot/imported/frog_T_Frog.png-a4c42c8a7687df2d46003b00e61afc3e.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/animals/models/raw/frog_T_Frog.png"
-dest_files=["res://.godot/imported/frog_T_Frog.png-a4c42c8a7687df2d46003b00e61afc3e.s3tc.ctex"]
+dest_files=["res://.godot/imported/frog_T_Frog.png-a4c42c8a7687df2d46003b00e61afc3e.s3tc.ctex", "res://.godot/imported/frog_T_Frog.png-a4c42c8a7687df2d46003b00e61afc3e.etc2.ctex"]
 
 [params]
 

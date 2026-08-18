@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://r00uum6f0jui"
 path.s3tc="res://.godot/imported/otter2_T_Otter.png-c68221cd41d078945eea93694dc5db35.s3tc.ctex"
+path.etc2="res://.godot/imported/otter2_T_Otter.png-c68221cd41d078945eea93694dc5db35.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/animals/models/raw/otter2_T_Otter.png"
-dest_files=["res://.godot/imported/otter2_T_Otter.png-c68221cd41d078945eea93694dc5db35.s3tc.ctex"]
+dest_files=["res://.godot/imported/otter2_T_Otter.png-c68221cd41d078945eea93694dc5db35.s3tc.ctex", "res://.godot/imported/otter2_T_Otter.png-c68221cd41d078945eea93694dc5db35.etc2.ctex"]
 
 [params]
 

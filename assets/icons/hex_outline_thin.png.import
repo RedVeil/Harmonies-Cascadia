@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dj0cp3fpxsnh2"
 path.s3tc="res://.godot/imported/hex_outline_thin.png-a3caeeca05023cdfe00cde6e765f9934.s3tc.ctex"
+path.etc2="res://.godot/imported/hex_outline_thin.png-a3caeeca05023cdfe00cde6e765f9934.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/icons/hex_outline_thin.png"
-dest_files=["res://.godot/imported/hex_outline_thin.png-a3caeeca05023cdfe00cde6e765f9934.s3tc.ctex"]
+dest_files=["res://.godot/imported/hex_outline_thin.png-a3caeeca05023cdfe00cde6e765f9934.s3tc.ctex", "res://.godot/imported/hex_outline_thin.png-a3caeeca05023cdfe00cde6e765f9934.etc2.ctex"]
 
 [params]
 

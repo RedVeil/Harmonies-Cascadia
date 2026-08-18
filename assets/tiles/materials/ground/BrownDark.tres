@@ -2,8 +2,6 @@
 
 [resource]
 resource_name = "BrownDark"
-vertex_color_use_as_albedo = true
-albedo_color = Color(0.60714114, 0.35174924, 0.27003974, 1)
-emission_enabled = true
+albedo_color = Color(0.39055157, 0.2627228, 0.17833865, 1)
 emission = Color(0.60714114, 0.35174924, 0.27003974, 1)
 emission_energy_multiplier = 0.0

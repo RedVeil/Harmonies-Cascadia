@@ -24,6 +24,9 @@ func _ready() -> void:
 func select_card(id:int) -> void:
 	orchestrator.select_hand_card(id)
 
+func recycle_card(id: int) -> void:
+	orchestrator.recycle_hand_animal(id)
+
 ## ----- Pass Data Downstream ----- ##
 
 func deselect_card(id:int) -> void:
@@ -61,7 +64,8 @@ func remove_card(id:int) -> void:
 		card_amount -= 1
 		if was_animal:
 			animal_amount -= 1
-		orchestrator.select_hand_card(-1)
+		if orchestrator.selected_card_id == id:
+			orchestrator.select_hand_card(-1)
 		if card_amount <= card_limit and animal_amount <= animal_limit:
 			orchestrator.unpause_cards()
 		elif cards_over_any_limit():
@@ -69,6 +73,16 @@ func remove_card(id:int) -> void:
 
 func cards_over_any_limit() -> bool:
 	return card_amount > card_limit or animal_amount > animal_limit
+
+func can_accept_animal(card: CardData) -> bool:
+	if card == null or card.type != CardData.CARD_TYPE.ANIMAL:
+		return false
+	var matching_card_id := cards.find_custom(
+		func(existing): return existing != null and existing.type == card.type and existing.id == card.id
+	)
+	if matching_card_id != -1:
+		return true
+	return animal_amount < animal_limit
 
 func _refresh_limit_panel() -> void:
 	$Panel.show()
@@ -79,3 +93,73 @@ func _refresh_limit_panel() -> void:
 
 func unpause() -> void:
 	$Panel.hide()
+
+
+## ----- Endless Continue Apply Helpers ----- ##
+##
+## Restores hand stack state from the serialized endless save payload.
+func apply_saved_state(hand_state: Dictionary) -> void:
+	reset_hand_from_state(hand_state)
+
+
+func reset_hand_from_state(hand_state: Dictionary) -> void:
+	if hand_state.is_empty():
+		return
+
+	# Remove existing card visuals.
+	for i in range(cards.size()):
+		if cards[i] != null:
+			card_container.remove_card(i)
+			cards[i] = null
+
+	card_amount = 0
+	animal_amount = 0
+	$Panel.hide()
+
+	var saved_cards: Array = hand_state.get("cards", [])
+	var max_slots = min(saved_cards.size(), cards.size())
+
+	for i in range(max_slots):
+		var entry = saved_cards[i]
+		if entry == null:
+			continue
+
+		var ctype := int(entry.get("type", CardData.CARD_TYPE.ELEMENT))
+		var id := int(entry.get("id", 0))
+		var amount := int(entry.get("amount", 0))
+
+		var template := _find_card_template(ctype, id)
+		if template == null:
+			continue
+
+		var new_card := template.duplicate(true) as CardData
+		new_card.amount = amount
+
+		cards[i] = new_card
+		card_container.add_card(new_card, i)
+
+	# Restore stored counts (they track filled slots, not copies).
+	card_amount = int(hand_state.get("card_amount", card_amount))
+	animal_amount = int(hand_state.get("animal_amount", animal_amount))
+
+	# Match limit UI state.
+	if card_amount > card_limit or animal_amount > animal_limit:
+		_refresh_limit_panel()
+	else:
+		$Panel.hide()
+
+
+func _find_card_template(card_type: int, card_id: int) -> CardData:
+	if card_type == CardData.CARD_TYPE.ELEMENT:
+		for c in CardCatalog.elements:
+			if c != null and c.id == card_id:
+				return c
+		return null
+
+	if card_type == CardData.CARD_TYPE.ANIMAL:
+		for c in CardCatalog.animals:
+			if c != null and c.id == card_id:
+				return c
+		return null
+
+	return null

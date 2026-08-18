@@ -30,6 +30,7 @@ func create_tile(coord: Vector2i) -> void:
 	var tile := hex_tile.instantiate() as HexTile
 	add_child(tile)
 	tile.init(self, coord)
+	tile.place_feedback_finished.connect(_on_place_feedback_finished.bind(coord))
 
 	tile.position = HexCoord.axial_to_world(coord, hex_size)
 	tiles_by_coord[coord] = tile
@@ -49,7 +50,8 @@ func handle_hover(coord: Vector2i) -> void:
 
 func handle_exit(coord: Vector2i) -> void:
 	if has_hover && hover_target == coord:
-		hex_manager.handle_exit()
+		if not hex_manager.handle_exit():
+			return
 		reset_contributing_tiles()
 		reset_tile_visuals(hover_target)
 		has_hover = false
@@ -58,6 +60,15 @@ func handle_exit(coord: Vector2i) -> void:
 
 func handle_click(coord: Vector2i) -> void:
 	hex_manager.handle_click(coord)
+
+
+func clear_hover_tracking() -> void:
+	has_hover = false
+	hover_target = Vector2i.MAX
+
+
+func _on_place_feedback_finished(coord: Vector2i) -> void:
+	hex_manager.handle_place_feedback_finished(coord)
 
 
 ## ----- Pass Data Downstream ----- ##

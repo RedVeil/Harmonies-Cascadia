@@ -5,7 +5,6 @@ const SCORE_POP_BASE_Y := 19.0
 const POINTS_BUBBLE_SCALE := Vector3(1.2, 1.2, 1.2)
 
 @export_group("Place Score Pop Animation")
-@export var score_pop_sounds: Array[AudioStream] = []
 @export var score_pop_rise: float = 1.35
 @export var score_pop_peak_scale: float = 1.5
 @export var score_pop_up_duration: float = 0.18
@@ -14,22 +13,20 @@ const POINTS_BUBBLE_SCALE := Vector3(1.2, 1.2, 1.2)
 @export var score_pop_fade_delay: float = 0.35
 
 @export_group("Outline Flash Animation")
-@export var outline_sounds: Array[AudioStream] = []
 @export var outline_flash_color: Color = Color(1.0, 0.9, 0.45, 1.0)
 @export var outline_flash_fade_duration: float = 0.45
 
 @export_group("Place Celebrate Animation")
 @export var place_celebrate_sounds: Array[AudioStream] = []
-@export var placed_lift: float = 0.15
-@export var placed_scale_peak: float = 1.04
+@export var placed_lift: float = 0.42
+@export var placed_scale_peak: float = 1.085
 @export var placed_glow: float = 0.24
 @export var placed_rise_duration: float = 0.24
 @export var placed_settle_duration: float = 0.3
 
 @export_group("Contributor Celebrate Animation")
-@export var contributor_sounds: Array[AudioStream] = []
-@export var contributor_lift: float = 0.09
-@export var contributor_scale_peak: float = 1.022
+@export var contributor_lift: float = 0.16
+@export var contributor_scale_peak: float = 1.045
 @export var contributor_glow: float = 0.14
 @export var contributor_rise_duration: float = 0.2
 @export var contributor_settle_duration: float = 0.26
@@ -43,10 +40,13 @@ var _staging_visuals: TileVisuals
 var _showing_preview: bool = false
 var _feedback_tweens: Dictionary = {}
 var _score_pop_playing: bool = false
+var _awaiting_place_feedback: bool = false
 var _hover_info_pending: bool = false
 var _pending_hover_element_tex: Texture2D = null
 var _pending_hover_animal_tex: Texture2D = null
 var _pending_hover_icon_color: Color = Color.WHITE
+
+signal place_feedback_finished
 
 
 func _ready() -> void:
@@ -233,6 +233,8 @@ func _resolve_orientation_steps(tile_data: HexTileData) -> int:
 ## ----- Interactions Logic ----- ##
 
 func _on_mouse_entered() -> void:
+	if UiPointerBlock.is_blocked():
+		return
 	container.handle_hover(coord)
 	show_outline(Color.WHITE)
 
@@ -249,9 +251,12 @@ func _on_input_event(
 	_normal: Vector3,
 	_shape_idx: int
 ) -> void:
+	if UiPointerBlock.is_blocked():
+		return
 	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			container.handle_click(coord)
+		if event.button_index != MOUSE_BUTTON_LEFT or not event.pressed:
+			return
+		container.handle_click(coord)
 
 
 ## ----- Points Logic ----- ##
@@ -260,15 +265,16 @@ func show_points(points: int) -> void:
 	if _score_pop_playing:
 		return
 	hide_hover_info()
-	$Sprite3D/Label3D.text = "%d" % points
-	$Sprite3D.scale = POINTS_BUBBLE_SCALE
 	if points > 0:
+		$Sprite3D/Label3D.text = "+%d" % points
 		$Sprite3D.modulate = Color.GOLD
 	elif points < 0:
+		$Sprite3D/Label3D.text = "%d" % points
 		$Sprite3D.modulate = Color.CRIMSON
 	else:
+		$Sprite3D/Label3D.text = "%d" % points
 		$Sprite3D.modulate = Color.WHITE
-
+	$Sprite3D.scale = POINTS_BUBBLE_SCALE
 	$Sprite3D.show()
 
 
@@ -383,7 +389,9 @@ func hide_outline() -> void:
 ## ----- Animations ----- ##
 
 func play_place_reward(points: int, element: int) -> void:
+	_awaiting_place_feedback = true
 	play_animation(&"place", {"points": points, "element": element})
+	_try_emit_place_feedback_finished()
 
 
 func play_contributor_reward(element: int, delay: float = 0.0) -> void:
@@ -402,17 +410,24 @@ func play_animation(name: StringName, params: Dictionary) -> void:
 
 
 func kill_animations() -> void:
-	# Score pop runs to completion; hover/exit/preview resets must not cut it off.
+	# Place feedback (score pop / celebrate / outline) runs to completion;
+	# hover/exit/preview resets must not cut it off.
+	var spare_place_feedback := _awaiting_place_feedback
 	var keys := _feedback_tweens.keys()
 	for key in keys:
 		if key == &"score_pop":
+			continue
+		if spare_place_feedback and (key == &"celebrate" or key == &"outline"):
 			continue
 		var tween: Tween = _feedback_tweens[key]
 		if tween.is_valid():
 			tween.kill()
 		_feedback_tweens.erase(key)
-	_reset_celebrate_visuals()
-	_reset_outline_visuals()
+	if not spare_place_feedback or not _feedback_tweens.has(&"celebrate"):
+		_reset_celebrate_visuals()
+	if not spare_place_feedback or not _feedback_tweens.has(&"outline"):
+		_reset_outline_visuals()
+	_try_emit_place_feedback_finished()
 
 
 func _animate_place(points: int, element: int) -> void:
@@ -430,7 +445,6 @@ func _animate_contributor(element: int, delay: float) -> void:
 
 
 func _animate_score_pop(points: int) -> void:
-	FeedbackAnimHelper.play_sounds(score_pop_sounds)
 	_score_pop_playing = true
 	# Hide any visible inspect bubbles without clearing a pending show.
 	$HoverInfo/ElementBubble.hide()
@@ -448,6 +462,8 @@ func _animate_score_pop(points: int) -> void:
 	sprite.visible = true
 	sprite.position.y = SCORE_POP_BASE_Y
 	sprite.scale = POINTS_BUBBLE_SCALE
+	# Alpha-cut discards the bubble mid-fade while Label3D keeps drawing; disable for the pop.
+	sprite.alpha_cut = SpriteBase3D.ALPHA_CUT_DISABLED
 
 	var tween := FeedbackAnimHelper.create_tween(self, _feedback_tweens, &"score_pop", true)
 	tween.tween_property(sprite, "scale", Vector3.ONE * score_pop_peak_scale, score_pop_up_duration)\
@@ -461,12 +477,13 @@ func _animate_score_pop(points: int) -> void:
 
 func _on_score_pop_finished() -> void:
 	_score_pop_playing = false
+	_feedback_tweens.erase(&"score_pop")
 	_reset_score_pop_visuals()
 	_flush_pending_hover_info()
+	_try_emit_place_feedback_finished()
 
 
 func _animate_outline_flash(delay: float) -> void:
-	FeedbackAnimHelper.play_sounds(outline_sounds)
 	var outline: Sprite3D = $outline
 	outline.modulate = outline_flash_color
 	outline.show()
@@ -476,14 +493,12 @@ func _animate_outline_flash(delay: float) -> void:
 		tween.tween_interval(delay)
 	tween.tween_property(outline, "modulate:a", 0.0, outline_flash_fade_duration)\
 		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	tween.finished.connect(_reset_outline_visuals)
+	tween.finished.connect(_on_outline_flash_finished)
 
 
 func _animate_celebrate(strong: bool, delay: float) -> void:
 	if strong:
 		FeedbackAnimHelper.play_sounds(place_celebrate_sounds)
-	else:
-		FeedbackAnimHelper.play_sounds(contributor_sounds)
 	_cache_visual_nodes()
 
 	var lift := placed_lift if strong else contributor_lift
@@ -503,7 +518,38 @@ func _animate_celebrate(strong: bool, delay: float) -> void:
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 	tween.parallel().tween_property(_visuals_root, "scale", Vector3.ONE, settle_duration)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-	tween.finished.connect(_reset_celebrate_visuals)
+	tween.finished.connect(_on_celebrate_finished)
+
+
+func _on_outline_flash_finished() -> void:
+	_feedback_tweens.erase(&"outline")
+	_reset_outline_visuals()
+	_try_emit_place_feedback_finished()
+
+
+func _on_celebrate_finished() -> void:
+	_feedback_tweens.erase(&"celebrate")
+	_reset_celebrate_visuals()
+	_try_emit_place_feedback_finished()
+
+
+func _has_active_place_feedback_tween() -> bool:
+	for key in [&"score_pop", &"outline", &"celebrate"]:
+		if not _feedback_tweens.has(key):
+			continue
+		var tween: Tween = _feedback_tweens[key]
+		if tween != null and tween.is_valid():
+			return true
+	return false
+
+
+func _try_emit_place_feedback_finished() -> void:
+	if not _awaiting_place_feedback:
+		return
+	if _has_active_place_feedback_tween():
+		return
+	_awaiting_place_feedback = false
+	place_feedback_finished.emit()
 
 
 func _reset_score_pop_visuals() -> void:
@@ -512,6 +558,7 @@ func _reset_score_pop_visuals() -> void:
 	sprite.modulate = Color.WHITE
 	sprite.position.y = SCORE_POP_BASE_Y
 	sprite.scale = POINTS_BUBBLE_SCALE
+	sprite.alpha_cut = SpriteBase3D.ALPHA_CUT_DISCARD
 
 
 func _reset_outline_visuals() -> void:

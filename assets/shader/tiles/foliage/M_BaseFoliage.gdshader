@@ -1,5 +1,7 @@
 shader_type spatial;
-render_mode cull_disabled, diffuse_lambert, specular_schlick_ggx, depth_prepass_alpha;
+render_mode cull_disabled, diffuse_lambert, specular_schlick_ggx;
+
+global uniform float wind_amount;
 
 uniform sampler2D texture_albedo : source_color;
 uniform vec4 ExtraColor : source_color  = vec4(1.0, 1.0, 1.0, 1.0);
@@ -18,7 +20,7 @@ void vertex() {
     world_uv = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xz * 0.1; // Scale down for better noise sampling
     
     float wind_time = TIME * WindSpeed;
-    float wind_strength = WindIntensity * COLOR.r;
+    float wind_strength = WindIntensity * COLOR.r * wind_amount;
     vec3 generated_noise = texture(GeneratedNoise, world_uv).rgb;
     
     vec3 wind_offset = vec3(

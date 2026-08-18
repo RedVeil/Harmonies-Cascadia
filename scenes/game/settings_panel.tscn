@@ -1,0 +1,165 @@
+[gd_scene format=3 uid="uid://ckwpm5wl7l4a3"]
+
+[ext_resource type="Script" uid="uid://bl4ndt7tp2pg5" path="res://scripts/game/settings_panel.gd" id="1_panel"]
+
+[node name="SettingsPanel" type="Control" unique_id=1627405394]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_panel")
+
+[node name="Content" type="VBoxContainer" parent="." unique_id=371653836]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+
+[node name="RootView" type="VBoxContainer" parent="Content" unique_id=72768527]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="GraphicsButton" type="Button" parent="Content/RootView" unique_id=280447167]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_colors/font_pressed_color = Color(0.5686275, 0.5176471, 0.47058824, 0.6)
+theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 0.7)
+theme_override_font_sizes/font_size = 26
+text = "GRAPHICS"
+flat = true
+alignment = 0
+
+[node name="AudioButton" type="Button" parent="Content/RootView" unique_id=919675704]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_colors/font_pressed_color = Color(0.5686275, 0.5176471, 0.47058824, 0.6)
+theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 0.7)
+theme_override_font_sizes/font_size = 26
+text = "AUDIO"
+flat = true
+alignment = 0
+
+[node name="GraphicsView" type="VBoxContainer" parent="Content" unique_id=413313601]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="PresetLabel" type="Label" parent="Content/GraphicsView" unique_id=589506292]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 16
+text = "Quality"
+
+[node name="PresetRow" type="HBoxContainer" parent="Content/GraphicsView" unique_id=2099003882]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="LowButton" type="Button" parent="Content/GraphicsView/PresetRow" unique_id=78838831]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "Low"
+
+[node name="MediumButton" type="Button" parent="Content/GraphicsView/PresetRow" unique_id=1657606107]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "Medium"
+
+[node name="HighButton" type="Button" parent="Content/GraphicsView/PresetRow" unique_id=1287479196]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "High"
+
+[node name="CustomButton" type="Button" parent="Content/GraphicsView/PresetRow" unique_id=1454025661]
+layout_mode = 2
+size_flags_horizontal = 3
+disabled = true
+toggle_mode = true
+text = "Custom"
+
+[node name="WindCheck" type="CheckButton" parent="Content/GraphicsView" unique_id=1395253361]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+text = "Plant sway"
+
+[node name="CloudsCheck" type="CheckButton" parent="Content/GraphicsView" unique_id=437615923]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+text = "Cloud shadows"
+
+[node name="AnimalLabel" type="Label" parent="Content/GraphicsView" unique_id=1900806232]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 16
+text = "Animal motion"
+
+[node name="AnimalOption" type="OptionButton" parent="Content/GraphicsView" unique_id=1983895235]
+layout_mode = 2
+
+[node name="MsaaLabel" type="Label" parent="Content/GraphicsView" unique_id=1247359068]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 16
+text = "MSAA"
+
+[node name="MsaaOption" type="OptionButton" parent="Content/GraphicsView" unique_id=2079348319]
+layout_mode = 2
+
+[node name="AudioView" type="VBoxContainer" parent="Content" unique_id=1756797146]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="MusicHeader" type="HBoxContainer" parent="Content/AudioView" unique_id=78992098]
+layout_mode = 2
+
+[node name="MusicLabel" type="Label" parent="Content/AudioView/MusicHeader" unique_id=155679761]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 16
+text = "Music"
+
+[node name="MusicValue" type="Label" parent="Content/AudioView/MusicHeader" unique_id=1099852660]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 16
+text = "50"
+horizontal_alignment = 2
+
+[node name="MusicSlider" type="HSlider" parent="Content/AudioView" unique_id=273104857]
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+value = 0.5
+
+[node name="EffectsHeader" type="HBoxContainer" parent="Content/AudioView" unique_id=407467777]
+layout_mode = 2
+
+[node name="EffectsLabel" type="Label" parent="Content/AudioView/EffectsHeader" unique_id=1917127517]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 16
+text = "Effects"
+
+[node name="EffectsValue" type="Label" parent="Content/AudioView/EffectsHeader" unique_id=1674209578]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 16
+text = "50"
+horizontal_alignment = 2
+
+[node name="EffectsSlider" type="HSlider" parent="Content/AudioView" unique_id=125291750]
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+value = 0.5

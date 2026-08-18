@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://d1kl4f0htu3c"
 path.s3tc="res://.godot/imported/Deer_01_ColorPalette_1.png-cc7efae76dcfc198b87bd3e94011fd7d.s3tc.ctex"
+path.etc2="res://.godot/imported/Deer_01_ColorPalette_1.png-cc7efae76dcfc198b87bd3e94011fd7d.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/animals/models/raw/Deer_01_ColorPalette_1.png"
-dest_files=["res://.godot/imported/Deer_01_ColorPalette_1.png-cc7efae76dcfc198b87bd3e94011fd7d.s3tc.ctex"]
+dest_files=["res://.godot/imported/Deer_01_ColorPalette_1.png-cc7efae76dcfc198b87bd3e94011fd7d.s3tc.ctex", "res://.godot/imported/Deer_01_ColorPalette_1.png-cc7efae76dcfc198b87bd3e94011fd7d.etc2.ctex"]
 
 [params]
 

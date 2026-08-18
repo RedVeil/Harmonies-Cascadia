@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://btq3hb02wek7u"]
 
 [ext_resource type="Script" uid="uid://d3iu7t4cukitx" path="res://scripts/game/tutorial_overlay.gd" id="1_tutorial"]
-[ext_resource type="Texture2D" uid="uid://ca2hp56qvfswa" path="res://assets/icons/circle.png" id="2_circle"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_popup"]
 bg_color = Color(0.95686275, 0.8745098, 0.7921569, 1)
@@ -15,10 +14,24 @@ shadow_size = 4
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_blocker"]
 bg_color = Color(1, 1, 1, 0)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_chip"]
+content_margin_left = 16.0
+content_margin_top = 2.0
+content_margin_right = 16.0
+content_margin_bottom = 2.0
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_chip_hover"]
+content_margin_left = 16.0
+content_margin_top = 2.0
+content_margin_right = 16.0
+content_margin_bottom = 2.0
+bg_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+
 [node name="TutorialOverlay" type="CanvasLayer" unique_id=383445874]
 layer = 10
 script = ExtResource("1_tutorial")
-panel_padding = Vector2(0, 8)
+panel_padding = Vector2(8, 24)
 
 [node name="PopupRoot" type="Node2D" parent="." unique_id=1448785795]
 
@@ -40,90 +53,24 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_blocker")
 [node name="ImageDisplay" type="Sprite2D" parent="PopupRoot" unique_id=594319098]
 position = Vector2(0, -40)
 
-[node name="CloseButton" type="Control" parent="PopupRoot" unique_id=2015260018]
-layout_mode = 3
-anchors_preset = 0
-offset_left = 408.0
-offset_top = -266.0
-offset_right = 440.0
-offset_bottom = -230.0
-
-[node name="Label" type="Label" parent="PopupRoot/CloseButton" unique_id=481670153]
-layout_mode = 0
-offset_right = 32.0
-offset_bottom = 36.0
-theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-theme_override_font_sizes/font_size = 24
-text = "×"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="NavButtons" type="Node2D" parent="PopupRoot" unique_id=541132190]
-position = Vector2(0, 228)
-
-[node name="PreviousButton" type="Control" parent="PopupRoot/NavButtons" unique_id=1016674844]
-layout_mode = 3
-anchors_preset = 0
-offset_left = -46.0
-offset_top = -18.0
-offset_right = -10.0
-offset_bottom = 18.0
-
-[node name="Background" type="TextureRect" parent="PopupRoot/NavButtons/PreviousButton" unique_id=881059201]
-layout_mode = 0
-offset_right = 36.0
-offset_bottom = 36.0
-mouse_filter = 2
-texture = ExtResource("2_circle")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Icon" type="Label" parent="PopupRoot/NavButtons/PreviousButton" unique_id=200692037]
-layout_mode = 0
-offset_top = -2.0
-offset_right = 36.0
-offset_bottom = 34.0
-theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-theme_override_font_sizes/font_size = 20
-text = "←"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="NextButton" type="Control" parent="PopupRoot/NavButtons" unique_id=673168359]
-layout_mode = 3
-anchors_preset = 0
-offset_left = -18.0
-offset_top = -18.0
-offset_right = 18.0
-offset_bottom = 18.0
-
-[node name="Background" type="TextureRect" parent="PopupRoot/NavButtons/NextButton" unique_id=103589912]
-layout_mode = 0
-offset_right = 36.0
-offset_bottom = 36.0
-mouse_filter = 2
-texture = ExtResource("2_circle")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Icon" type="Label" parent="PopupRoot/NavButtons/NextButton" unique_id=471593951]
-layout_mode = 0
-offset_top = -2.0
-offset_right = 36.0
-offset_bottom = 34.0
-theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-theme_override_font_sizes/font_size = 20
-text = "→"
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="CloseButton" type="Button" parent="PopupRoot" unique_id=2015260018]
+custom_minimum_size = Vector2(0, 24)
+offset_left = -48.0
+offset_top = 228.0
+offset_right = 48.0
+offset_bottom = 252.0
+theme_override_colors/font_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_focus_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_chip")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
+theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
+text = "CLOSE"
 
 [connection signal="gui_input" from="PopupRoot/ClickBlocker" to="." method="_on_blocker_gui_input"]
-[connection signal="gui_input" from="PopupRoot/CloseButton" to="." method="_on_close_gui_input"]
 [connection signal="mouse_entered" from="PopupRoot/CloseButton" to="." method="_on_close_mouse_entered"]
-[connection signal="mouse_exited" from="PopupRoot/CloseButton" to="." method="_on_close_mouse_exited"]
-[connection signal="gui_input" from="PopupRoot/NavButtons/PreviousButton" to="." method="_on_previous_gui_input"]
-[connection signal="mouse_entered" from="PopupRoot/NavButtons/PreviousButton" to="." method="_on_previous_mouse_entered"]
-[connection signal="mouse_exited" from="PopupRoot/NavButtons/PreviousButton" to="." method="_on_previous_mouse_exited"]
-[connection signal="gui_input" from="PopupRoot/NavButtons/NextButton" to="." method="_on_next_gui_input"]
-[connection signal="mouse_entered" from="PopupRoot/NavButtons/NextButton" to="." method="_on_next_mouse_entered"]
-[connection signal="mouse_exited" from="PopupRoot/NavButtons/NextButton" to="." method="_on_next_mouse_exited"]
+[connection signal="pressed" from="PopupRoot/CloseButton" to="." method="_on_close_pressed"]

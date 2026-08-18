@@ -1,0 +1,20 @@
+---
+description: Never declare Color values as const; use var instead
+alwaysApply: true
+---
+
+# Colors are never constants
+
+Do not declare `Color` values with `const`. Use `var` so colors can be tuned at runtime or in the inspector without fighting const restrictions.
+
+```gdscript
+# BAD
+const COLOR_BROWN := Color.html("#918478")
+const FALLBACK_COLOR := Color(0.57, 0.52, 0.47, 1.0)
+
+# GOOD
+var COLOR_BROWN := Color.html("#918478")
+var FALLBACK_COLOR := Color(0.57, 0.52, 0.47, 1.0)
+```
+
+Non-color constants (sizes, paths, preloads, ints/floats) may still use `const`.

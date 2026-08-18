@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dbmjso5rktngb"
 path.s3tc="res://.godot/imported/hedgehog_T_Hedgehog.png-6b79f3918c8ae8fef870981f17ab6024.s3tc.ctex"
+path.etc2="res://.godot/imported/hedgehog_T_Hedgehog.png-6b79f3918c8ae8fef870981f17ab6024.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/animals/models/raw/hedgehog_T_Hedgehog.png"
-dest_files=["res://.godot/imported/hedgehog_T_Hedgehog.png-6b79f3918c8ae8fef870981f17ab6024.s3tc.ctex"]
+dest_files=["res://.godot/imported/hedgehog_T_Hedgehog.png-6b79f3918c8ae8fef870981f17ab6024.s3tc.ctex", "res://.godot/imported/hedgehog_T_Hedgehog.png-6b79f3918c8ae8fef870981f17ab6024.etc2.ctex"]
 
 [params]
 

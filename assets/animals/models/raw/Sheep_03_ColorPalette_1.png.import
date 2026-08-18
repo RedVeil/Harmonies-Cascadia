@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://c2s0ql0b2pu6t"
 path.s3tc="res://.godot/imported/Sheep_03_ColorPalette_1.png-129b4104703a5debfca43b310d27f243.s3tc.ctex"
+path.etc2="res://.godot/imported/Sheep_03_ColorPalette_1.png-129b4104703a5debfca43b310d27f243.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/animals/models/raw/Sheep_03_ColorPalette_1.png"
-dest_files=["res://.godot/imported/Sheep_03_ColorPalette_1.png-129b4104703a5debfca43b310d27f243.s3tc.ctex"]
+dest_files=["res://.godot/imported/Sheep_03_ColorPalette_1.png-129b4104703a5debfca43b310d27f243.s3tc.ctex", "res://.godot/imported/Sheep_03_ColorPalette_1.png-129b4104703a5debfca43b310d27f243.etc2.ctex"]
 
 [params]
 

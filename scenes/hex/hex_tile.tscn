@@ -47,8 +47,10 @@ point_count = 4
 [node name="HexTile" type="StaticBody3D" unique_id=1124611875]
 script = ExtResource("1_pcuo8")
 place_celebrate_sounds = Array[AudioStream]([ExtResource("5_place")])
-placed_lift = 0.5
-placed_scale_peak = 1.1
+placed_lift = 0.42
+placed_scale_peak = 1.085
+contributor_lift = 0.16
+contributor_scale_peak = 1.045
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1831272945]
 shape = SubResource("ConvexPolygonShape3D_vyrwg")
@@ -72,12 +74,15 @@ texture = ExtResource("4_nn350")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19, 0)
 visible = false
 billboard = 1
+alpha_cut = 1
+cast_shadow = 0
 render_priority = 2
 texture = ExtResource("2_nn350")
 
 [node name="Label3D" type="Label3D" parent="Sprite3D" unique_id=1816411517]
 transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, 0, 0, 0)
 billboard = 1
+cast_shadow = 0
 render_priority = 3
 modulate = Color(0, 0, 0, 1)
 text = "+10 "
@@ -91,12 +96,15 @@ transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, -4, 19, 0)
 visible = false
 modulate = Color(0.956863, 0.87451, 0.792157, 1)
 billboard = 1
+alpha_cut = 1
+cast_shadow = 0
 render_priority = 2
 texture = ExtResource("2_nn350")
 
 [node name="Icon" type="Sprite3D" parent="HoverInfo/ElementBubble" unique_id=1904800637]
 modulate = Color(0.568627, 0.517647, 0.470588, 1)
 billboard = 1
+cast_shadow = 0
 render_priority = 3
 
 [node name="AnimalBubble" type="Sprite3D" parent="HoverInfo" unique_id=349752291]
@@ -104,13 +112,17 @@ transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 4, 19, 0)
 visible = false
 modulate = Color(0.956863, 0.87451, 0.792157, 1)
 billboard = 1
+alpha_cut = 1
+cast_shadow = 0
 render_priority = 2
 texture = ExtResource("2_nn350")
 
 [node name="Icon" type="Sprite3D" parent="HoverInfo/AnimalBubble" unique_id=1618460968]
 modulate = Color(0.568627, 0.517647, 0.470588, 1)
 billboard = 1
+cast_shadow = 0
 render_priority = 3
+
 
 [node name="walk_markers" type="Node3D" parent="." unique_id=866209579]
 

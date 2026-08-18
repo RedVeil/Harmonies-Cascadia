@@ -1,14 +1,13 @@
 [gd_scene format=3 uid="uid://bnu0x45ef4n2e"]
 
 [ext_resource type="PackedScene" uid="uid://b86i8uul6ivkn" path="res://assets/tiles/assets/plants/grass.tscn" id="1_r85j5"]
-[ext_resource type="PackedScene" uid="uid://3avtambeoy1l" path="res://addons/stylized-nature/Mesh Scenes/Pebble_Square_1.tscn" id="6_im8ty"]
-[ext_resource type="PackedScene" uid="uid://bynhn453vst5d" path="res://addons/stylized-nature/Mesh Scenes/Pebble_Square_4.tscn" id="6_r85j5"]
-[ext_resource type="PackedScene" uid="uid://c7yry6lfhtido" path="res://addons/stylized-nature/Mesh Scenes/Pebble_Square_6.tscn" id="7_fkt64"]
-[ext_resource type="PackedScene" uid="uid://dk8b3u7kp73q1" path="res://addons/stylized-nature/Mesh Scenes/Pebble_Square_5.tscn" id="7_im8ty"]
-[ext_resource type="PackedScene" uid="uid://b3vvtc1h10aw7" path="res://addons/stylized-nature/Mesh Scenes/Pebble_Round_5.tscn" id="7_lobp7"]
-[ext_resource type="PackedScene" uid="uid://c70cghxqpd6mi" path="res://addons/stylized-nature/Mesh Scenes/Pebble_Round_4.tscn" id="8_blm4y"]
-[ext_resource type="PackedScene" uid="uid://hdfjecma7tyq" path="res://addons/stylized-nature/Mesh Scenes/Pebble_Round_1.tscn" id="8_lobp7"]
-[ext_resource type="PackedScene" uid="uid://dmugpscerbixi" path="res://addons/stylized-nature/Mesh Scenes/Pebble_Round_2.tscn" id="9_blm4y"]
+[ext_resource type="PackedScene" path="res://assets/tiles/assets/rocks/Pebble_Square_1.tscn" id="6_im8ty"]
+[ext_resource type="PackedScene" path="res://assets/tiles/assets/rocks/Pebble_Square_6.tscn" id="7_fkt64"]
+[ext_resource type="PackedScene" uid="uid://dk8b3u7kp73q1" path="res://assets/tiles/assets/rocks/Pebble_Square_5.tscn" id="7_im8ty"]
+[ext_resource type="PackedScene" path="res://assets/tiles/assets/rocks/Pebble_Round_5.tscn" id="7_lobp7"]
+[ext_resource type="PackedScene" uid="uid://bynhn453vst5d" path="res://assets/tiles/assets/rocks/Pebble_Square_4.tscn" id="8_blm4y"]
+[ext_resource type="PackedScene" path="res://assets/tiles/assets/rocks/Pebble_Round_1.tscn" id="8_lobp7"]
+[ext_resource type="PackedScene" path="res://assets/tiles/assets/rocks/Pebble_Round_2.tscn" id="9_blm4y"]
 [ext_resource type="PackedScene" uid="uid://cv2pqv1761xhe" path="res://assets/tiles/assets/hex_forest_detail.fbx" id="10_im8ty"]
 
 [sub_resource type="Curve3D" id="Curve3D_walk1"]
@@ -60,6 +59,7 @@ transform = Transform3D(9.5, 0, 0, 0, 9.5, 0, 0, 0, 9.5, 0, 0, 0)
 
 [node name="grass" parent="visuals" unique_id=1861785440 instance=ExtResource("1_r85j5")]
 transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, 0, 9.3, 0)
+cast_shadow = 1
 
 [node name="Pebble_Square_12" parent="visuals" unique_id=1985406226 instance=ExtResource("6_im8ty")]
 transform = Transform3D(-4.7220826, 0, -1.6437566, 0, 10, 0, 1.6437566, 0, -4.7220826, -5.157355, 9.3710575, 1.6311874)
@@ -82,7 +82,7 @@ transform = Transform3D(15, 0, 0, 0, 12, 0, 0, 0, 15, -3.0364742, 9.574503, -4.5
 [node name="Pebble_Square_63" parent="visuals" unique_id=1598090705 instance=ExtResource("7_fkt64")]
 transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, -4.34098, 9.662619, 4.4859834)
 
-[node name="Pebble_Square_42" parent="visuals" unique_id=66073111 instance=ExtResource("6_r85j5")]
+[node name="Pebble_Square_42" parent="visuals" unique_id=66073111 instance=ExtResource("8_blm4y")]
 transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0.11898804, 8.749518, 7.4035463)
 
 [node name="Pebble_Round_52" parent="visuals" unique_id=740043400 instance=ExtResource("7_lobp7")]

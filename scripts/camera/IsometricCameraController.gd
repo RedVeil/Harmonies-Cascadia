@@ -21,32 +21,35 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	size = clampf(size + zoom_delta, zoom_min, zoom_max)
 
-## ----- Camera Movement ----- ##
 
-func _process(delta: float) -> void:
-	var input_vector := Vector2.ZERO
-
-	if Input.is_key_pressed(KEY_W):
-		input_vector.y += 1.0
-	if Input.is_key_pressed(KEY_S):
-		input_vector.y -= 1.0
-	if Input.is_key_pressed(KEY_A):
-		input_vector.x -= 1.0
-	if Input.is_key_pressed(KEY_D):
-		input_vector.x += 1.0
-
+func _move_on_ground_plane(input_vector: Vector2) -> void:
 	if input_vector == Vector2.ZERO:
 		return
-
-	input_vector = input_vector.normalized()
-
-	# Move only along the horizontal plane while keeping fixed isometric rotation.
 	var right := global_basis.x
 	var forward := -global_basis.z
 	right.y = 0.0
 	forward.y = 0.0
 	right = right.normalized()
 	forward = forward.normalized()
-
 	var move_direction := (right * input_vector.x) + (forward * input_vector.y)
-	global_position += move_direction * move_speed * delta
+	global_position += move_direction
+
+## ----- Camera Movement ----- ##
+
+func _process(delta: float) -> void:
+	var input_vector := Vector2.ZERO
+
+	if Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP):
+		input_vector.y += 1.0
+	if Input.is_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN):
+		input_vector.y -= 1.0
+	if Input.is_key_pressed(KEY_A) or Input.is_key_pressed(KEY_LEFT):
+		input_vector.x -= 1.0
+	if Input.is_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT):
+		input_vector.x += 1.0
+
+	if input_vector == Vector2.ZERO:
+		return
+
+	input_vector = input_vector.normalized()
+	_move_on_ground_plane(input_vector * move_speed * delta)

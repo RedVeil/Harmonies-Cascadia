@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://dd2yqnd5346b5"]
 
 [ext_resource type="PackedScene" uid="uid://cv2pqv1761xhe" path="res://assets/tiles/assets/hex_forest_detail.fbx" id="1_jkn4w"]
+[ext_resource type="MultiMesh" uid="uid://dlmqjhosfdr68" path="res://assets/tiles/assets/plants/grass_quad.tres" id="2_xywaw"]
+[ext_resource type="Material" uid="uid://br8cwoulf667q" path="res://assets/tiles/materials/foliage/plants/MI_Grass_Quad.tres" id="4_c02we"]
 
 [sub_resource type="Curve3D" id="Curve3D_walk1"]
 closed = true
@@ -73,3 +75,8 @@ curve = SubResource("Curve3D_walk2")
 [node name="Path6" type="Path3D" parent="walk_markers/walk_paths" unique_id=1401567363]
 transform = Transform3D(0.9657857, 0, 0.25934166, 0, 1, 0, -0.25934166, 0, 0.9657857, -0.14229749, 0, -0.32604945)
 curve = SubResource("Curve3D_walk1")
+
+[node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="." unique_id=1216933829]
+visible = false
+material_override = ExtResource("4_c02we")
+multimesh = ExtResource("2_xywaw")

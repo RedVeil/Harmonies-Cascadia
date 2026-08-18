@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bfly8wct3bh1j"
 path.s3tc="res://.godot/imported/Flowers.png-676c193f9a1f6f5f050983247178af99.s3tc.ctex"
+path.etc2="res://.godot/imported/Flowers.png-676c193f9a1f6f5f050983247178af99.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/tiles/materials/textures/foliage/Flowers.png"
-dest_files=["res://.godot/imported/Flowers.png-676c193f9a1f6f5f050983247178af99.s3tc.ctex"]
+dest_files=["res://.godot/imported/Flowers.png-676c193f9a1f6f5f050983247178af99.s3tc.ctex", "res://.godot/imported/Flowers.png-676c193f9a1f6f5f050983247178af99.etc2.ctex"]
 
 [params]
 

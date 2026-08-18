@@ -21,12 +21,50 @@ var points_per_element_group_backup: Dictionary[int, int] = {}
 ## ----- Initialisation ----- ##
 
 func _ready() -> void:
+	if GameSession.is_tutorial():
+		_apply_forced_or_random_rules(GameSession.get_tutorial_scoring_rules())
+	elif GameSession.is_puzzle():
+		_apply_forced_or_random_rules(GameSession.get_puzzle_scoring_rules())
+	else:
+		_pick_random_rules()
+
+
+func _pick_random_rules() -> void:
 	var rng := GameSession.make_rng("scoring")
 	for i in range(5):
 		var element = ElementCatalog.elements[i + 1]
 		var rule_id: int = element.scoring_rules[rng.randi() % element.scoring_rules.size()]
-		active_rules[element.type] = RuleCatalog.rules[rule_id]
-		element.active_scoring_rule = rule_id
+		_set_active_rule(element.type, rule_id)
+
+
+## Pins rules from a config dict (element type -> rule id).
+## Missing / invalid entries fall back to a random pick for that element.
+func apply_forced_rules(forced: Dictionary) -> void:
+	var rng := GameSession.make_rng("scoring")
+	for i in range(5):
+		var element = ElementCatalog.elements[i + 1]
+		var type_key := str(element.type)
+		var rule_id := -1
+		if forced.has(type_key):
+			rule_id = int(forced[type_key])
+		elif forced.has(element.type):
+			rule_id = int(forced[element.type])
+		if rule_id < 0 or rule_id >= RuleCatalog.rules.size() or RuleCatalog.rules[rule_id] == null:
+			push_warning("Scoring rule missing/invalid for element %s; using random." % type_key)
+			rule_id = element.scoring_rules[rng.randi() % element.scoring_rules.size()]
+		_set_active_rule(element.type, rule_id)
+
+
+func _apply_forced_or_random_rules(forced: Dictionary) -> void:
+	if forced.is_empty():
+		_pick_random_rules()
+	else:
+		apply_forced_rules(forced)
+
+
+func _set_active_rule(element_type: int, rule_id: int) -> void:
+	active_rules[element_type] = RuleCatalog.rules[rule_id]
+	ElementCatalog.elements[element_type].active_scoring_rule = rule_id
 
 ## ----- Scoring Logic ----- ##
 
@@ -55,7 +93,9 @@ func calc_group_score(
 		var coords_ := coords.duplicate(true)
 		if not coords_.has(coord):
 			coords_.append(coord)
+		# Group-size curve first, then stack points_per_tile_level (and flat_points).
 		result = calculate_element_special_group_size(coords_, rule)
+		result += calculate_normal_element_group(coords_, rule, tiles)
 	else:
 		if coords.has(coord):
 			result = calculate_normal_element_group(coords,rule, tiles)
@@ -70,25 +110,21 @@ func calculate_normal_element_group(
 	rule:ScoringRule,
 	tiles:Dictionary[Vector2i, HexTileData]
 	) -> int:
-	if coords.size() < rule.min_group_size:
-		return 0
-	else:
-		if rule.flat_points > 0:
-			return rule.flat_points
-		else:
-			var levels : Array[int] = []
-			for c in coords:
-				levels.append(tiles[c].level)
-			levels.sort()
-			levels.reverse()
-			
-			if rule.max_group_size < levels.size():
-				levels = levels.slice(0, rule.max_group_size)
-			
-			var score = 0
-			for l in levels:
-				score += rule.points_per_tile_level[l-1][1]
-			return score
+	var levels : Array[int] = []
+	for c in coords:
+		levels.append(tiles[c].level)
+	levels.sort()
+	levels.reverse()
+
+	if rule.max_group_size < levels.size():
+		levels = levels.slice(0, rule.max_group_size)
+
+	var score = 0
+	for l in levels:
+		score += rule.points_per_tile_level[l-1][1]
+	if coords.size() >= rule.min_group_size:
+		score += rule.flat_points
+	return score
 
 
 func calculate_element_special_neighbors(
@@ -219,3 +255,50 @@ func reconstruct_path(end_coord: Vector2i, came_from: Dictionary) -> Array[Vecto
 	
 	path.reverse()
 	return path
+
+
+## ----- Endless Continue Apply Helpers ----- ##
+func apply_saved_state(scoring_state: Dictionary) -> void:
+	if scoring_state.is_empty():
+		return
+
+	# Rebuild active rules.
+	active_rules.clear()
+	var raw_rules = scoring_state.get("active_rules", {})
+	for k in raw_rules.keys():
+		var element_type := int(k)
+		var rule_id := int(raw_rules[k])
+		if rule_id < 0 or rule_id >= RuleCatalog.rules.size():
+			continue
+		var rule: ScoringRule = RuleCatalog.rules[rule_id]
+		if rule == null:
+			continue
+		active_rules[element_type] = rule
+		# Keep catalog state in sync (some UI/tooling may rely on it).
+		if element_type >= 0 and element_type < ElementCatalog.elements.size():
+			ElementCatalog.elements[element_type].active_scoring_rule = rule_id
+
+	# Restore per-group element scoring.
+	points_per_element_group.clear()
+	var raw_points = scoring_state.get("points_per_element_group", {})
+	if typeof(raw_points) == TYPE_DICTIONARY:
+		for kk in raw_points.keys():
+			points_per_element_group[int(kk)] = int(raw_points[kk])
+
+	# Restore already-placed animals counts.
+	placed_animals.clear()
+	var raw_animals = scoring_state.get("placed_animals", {})
+	if typeof(raw_animals) == TYPE_DICTIONARY:
+		for kk in raw_animals.keys():
+			placed_animals[int(kk)] = int(raw_animals[kk])
+
+	element_score = int(scoring_state.get("element_score", 0))
+	animal_score = int(scoring_state.get("animal_score", 0))
+	quest_score = int(scoring_state.get("quest_score", 0))
+	total_score = int(scoring_state.get("total_score", 0))
+
+	# Sync undo backups so an immediate undo after Continue behaves sensibly.
+	element_score_backup = element_score
+	animal_score_backup = animal_score
+	quest_score_backup = quest_score
+	points_per_element_group_backup = points_per_element_group.duplicate(true)

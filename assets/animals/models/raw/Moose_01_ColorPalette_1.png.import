@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://g31inv442pw3"
 path.s3tc="res://.godot/imported/Moose_01_ColorPalette_1.png-f98c3d715f99bc49a9ace0da9436bda4.s3tc.ctex"
+path.etc2="res://.godot/imported/Moose_01_ColorPalette_1.png-f98c3d715f99bc49a9ace0da9436bda4.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/animals/models/raw/Moose_01_ColorPalette_1.png"
-dest_files=["res://.godot/imported/Moose_01_ColorPalette_1.png-f98c3d715f99bc49a9ace0da9436bda4.s3tc.ctex"]
+dest_files=["res://.godot/imported/Moose_01_ColorPalette_1.png-f98c3d715f99bc49a9ace0da9436bda4.s3tc.ctex", "res://.godot/imported/Moose_01_ColorPalette_1.png-f98c3d715f99bc49a9ace0da9436bda4.etc2.ctex"]
 
 [params]
 

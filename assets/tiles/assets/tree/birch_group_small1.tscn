@@ -1,6 +1,0 @@
-[gd_scene format=3 uid="uid://cir31xp64wah4"]
-
-[ext_resource type="MultiMesh" uid="uid://c6tpcbo5tdrap" path="res://assets/tiles/assets/tree/birch_group_small1.tres" id="1_4dkvc"]
-
-[node name="MultiMeshInstance3D" type="MultiMeshInstance3D" unique_id=1539483186]
-multimesh = ExtResource("1_4dkvc")

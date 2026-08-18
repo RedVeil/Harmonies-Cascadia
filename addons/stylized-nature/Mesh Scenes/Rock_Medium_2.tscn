@@ -1,5 +1,0 @@
-[gd_scene format=3 uid="uid://buefmpjevg222"]
-
-[ext_resource type="PackedScene" uid="uid://mtcchodmcla7" path="res://addons/stylized-nature/assets/Rock_Medium_2.gltf" id="1_uwci2"]
-
-[node name="Rock_Medium_22" unique_id=273135278 instance=ExtResource("1_uwci2")]

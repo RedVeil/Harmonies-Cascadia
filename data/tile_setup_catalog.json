@@ -27,7 +27,7 @@
 		],
 		"multi_mesh_layers": [
 			[
-				"res://assets/tiles/assets/plants/grass.tres"
+				"res://assets/tiles/assets/plants/grass.tscn"
 			],
 			[
 				"res://assets/tiles/assets/plants/flower1_group1.tres",
@@ -76,7 +76,7 @@
 		],
 		"multi_mesh_layers": [
 			[
-				"res://assets/tiles/assets/plants/grass.tres"
+				"res://assets/tiles/assets/plants/grass.tscn"
 			],
 			[
 				"res://assets/tiles/assets/plants/flower1_group1.tres",
@@ -125,7 +125,7 @@
 		],
 		"multi_mesh_layers": [
 			[
-				"res://assets/tiles/assets/plants/grass.tres"
+				"res://assets/tiles/assets/plants/grass.tscn"
 			],
 			[
 				"res://assets/tiles/assets/plants/flower1_group1.tres",
@@ -174,10 +174,7 @@
 		],
 		"multi_mesh_layers": [
 			[
-				"res://assets/tiles/assets/plants/grass.tres"
-			],
-			[
-				"res://assets/tiles/assets/plants/grass_long.tres"
+				"res://assets/tiles/assets/plants/grass_long.tscn"
 			],
 			[
 				"res://assets/tiles/assets/plants/flower1_group1.tres",

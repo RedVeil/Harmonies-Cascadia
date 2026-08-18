@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bqh4bwq5hiykw"
 path.s3tc="res://.godot/imported/Elephant_02_ColorPalette_1.png-b630cfa7c0248a49baef5a813527d898.s3tc.ctex"
+path.etc2="res://.godot/imported/Elephant_02_ColorPalette_1.png-b630cfa7c0248a49baef5a813527d898.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/animals/models/raw/Elephant_02_ColorPalette_1.png"
-dest_files=["res://.godot/imported/Elephant_02_ColorPalette_1.png-b630cfa7c0248a49baef5a813527d898.s3tc.ctex"]
+dest_files=["res://.godot/imported/Elephant_02_ColorPalette_1.png-b630cfa7c0248a49baef5a813527d898.s3tc.ctex", "res://.godot/imported/Elephant_02_ColorPalette_1.png-b630cfa7c0248a49baef5a813527d898.etc2.ctex"]
 
 [params]
 

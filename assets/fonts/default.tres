@@ -1,0 +1,6 @@
+[gd_resource type="Theme" format=3 uid="uid://cs5hd8narwh52"]
+
+[ext_resource type="FontFile" uid="uid://cjgc8hhsb6xtr" path="res://assets/fonts/Dangrek-Regular.ttf" id="1_udeu7"]
+
+[resource]
+default_font = ExtResource("1_udeu7")

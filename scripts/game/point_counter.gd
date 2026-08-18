@@ -29,9 +29,6 @@ var target : int = 0
 var current: int = 0
 var preview: int = 0
 
-var is_hovered : bool = false
-var timer : float = 0.5
-
 var current_backup: int = 0
 var target_backup: int = 0
 
@@ -48,12 +45,14 @@ var gain_label : Label
 ## ----- Initialisation ----- ##
 
 func _ready() -> void:
+	checkpoint = GameSession.checkpoint
+	checkpoint_multiplier = GameSession.checkpoint_multiplier
+	checkpoint_flat_increase = GameSession.checkpoint_flat_increase
 	target = checkpoint
 	$ProgressBar.material.set_shader_parameter("current_value", 0.0)
 	$ProgressBar.material.set_shader_parameter("lerp_value", 0.0)
 	$ProgressBar.material.set_shader_parameter("third_value", 0.0)
 	$Label.text = "%d" % current
-	$Tooltip/Label.text = "This is you Point Score. Earn enough points to unlock additional tiles to play with.\n(0 / %d)" % target
 	_setup_gain_label()
 	score_label = $Label
 	progress_sprite = $ProgressBar
@@ -105,7 +104,6 @@ func preview_progress(val:int) -> void:
 			$ProgressBar.material.set_shader_parameter("current_value",  float(preview) / float(target))
 		
 		$Label.text = "%d" % current
-		$Tooltip/Label.text = "This is you Point Score. Earn enough points to unlock additional tiles to play with.\n(%d / %d)" % [preview, target]
 
 func apply_preview(animate_reward: bool = false) -> void:
 	current_backup = current
@@ -113,8 +111,11 @@ func apply_preview(animate_reward: bool = false) -> void:
 	var gained := preview - current_backup
 	current = preview
 	
-	if current >= target:
-		target = ceili((float(target) + float(checkpoint_flat_increase)) * checkpoint_multiplier)
+	var crossed := false
+	while current >= target and target > 0:
+		advance_target()
+		crossed = true
+	if crossed and GameSession.allows_map_growth():
 		orchestrator.add_map_points(1)
 	
 	if animate_reward and gained != 0:
@@ -125,6 +126,10 @@ func apply_preview(animate_reward: bool = false) -> void:
 		})
 	elif not _is_score_reward_playing():
 		apply_current_style()
+
+## Advance to the next checkpoint (explicit list, else formula).
+func advance_target() -> void:
+	target = GameSession.next_checkpoint(target)
 
 func reset_preview() -> void:
 	preview = current
@@ -141,22 +146,13 @@ func undo() -> void:
 	target = target_backup
 	apply_current_style()
 
-## ----- Tooltip Logic ----- ##
-
-func _process(delta:float) -> void:
-	if is_hovered:
-		timer -= delta
-		if timer <= 0.0:
-			$Tooltip.show()
+## ----- Interactions Logic ----- ##
 
 func _on_mouse_entered() -> void:
-	is_hovered = true
-	timer = 0.5
+	UiPointerBlock.enter(self)
 
 func _on_mouse_exited() -> void:
-	is_hovered = false
-	timer = 0.5
-	$Tooltip.hide()
+	UiPointerBlock.exit(self)
 
 ## ----- Animations ----- ##
 
@@ -250,7 +246,6 @@ func _set_animated_score_display(value: float) -> void:
 	$ProgressBar.material.set_shader_parameter("third_value", 0.0)
 	$ProgressBar.material.set_shader_parameter("current_value", 0.0)
 	$ProgressBar.material.set_shader_parameter("lerp_value", progress)
-	$Tooltip/Label.text = "This is you score. Earn enough points to unlock additional tiles to play with.\n(%d / %d)" % [shown, target]
 
 func _finish_gain_popup() -> void:
 	gain_label.visible = false
@@ -276,5 +271,13 @@ func apply_current_style() -> void:
 	$ProgressBar.material.set_shader_parameter("current_value",  0.0)
 	$ProgressBar.material.set_shader_parameter("lerp_value",  float(current) / float(target))
 	$Label.text = "%d" % current
-	
-	$Tooltip/Label.text = "This is you score. Earn enough points to unlock additional tiles to play with.\n(%d / %d)" % [current, target]
+
+
+## ----- Endless Continue Apply Helpers ----- ##
+func apply_saved_state(progress_state: Dictionary) -> void:
+	if progress_state.is_empty():
+		return
+	current = int(progress_state.get("current", current))
+	target = int(progress_state.get("target", target))
+	preview = int(progress_state.get("preview", preview))
+	apply_current_style()

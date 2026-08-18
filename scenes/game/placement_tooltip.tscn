@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://32xqs6qfvsxg" path="res://scripts/game/placement_tooltip.gd" id="1_kjs7j"]
 [ext_resource type="Texture2D" uid="uid://dj0cp3fpxsnh2" path="res://assets/icons/hex_outline_thin.png" id="2_n22po"]
 [ext_resource type="Texture2D" uid="uid://dra047eyuxuba" path="res://assets/icons/hex.png" id="3_d75bn"]
-[ext_resource type="Texture2D" uid="uid://ba4wr1s7la27a" path="res://assets/elements/a0.png" id="4_n22po"]
+[ext_resource type="Texture2D" uid="uid://cjulobfnnfiaf" path="res://assets/elements/a0.png" id="4_n22po"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n22po"]
 bg_color = Color(0.9137255, 0.8352941, 0.7607843, 1)
@@ -11,13 +11,13 @@ corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
-shadow_color = Color(0, 0, 0, 0.32156864)
-shadow_size = 8
+shadow_color = Color(0, 0, 0, 0.078)
+shadow_size = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d75bn"]
 bg_color = Color(0.9137255, 0.8352941, 0.7607843, 1)
-shadow_color = Color(0, 0, 0, 0.32156864)
-shadow_size = 8
+shadow_color = Color(0, 0, 0, 0.078)
+shadow_size = 4
 
 [node name="PlacementTooltip" type="Node2D" unique_id=1404822029]
 script = ExtResource("1_kjs7j")
@@ -130,6 +130,7 @@ scale = Vector2(0.09, 0.09)
 
 [node name="(0,0)" type="Sprite2D" parent="animal" unique_id=1735063232]
 visible = false
+position = Vector2(0, 6.1035156e-05)
 texture = ExtResource("2_n22po")
 
 [node name="Sprite2D" type="Sprite2D" parent="animal/(0,0)" unique_id=1954690576]
@@ -141,7 +142,7 @@ texture = ExtResource("4_n22po")
 
 [node name="(-1,1)" type="Sprite2D" parent="animal" unique_id=1014776336]
 visible = false
-position = Vector2(-310, -180)
+position = Vector2(-321.11108, 180)
 scale = Vector2(0.99999976, 0.99999976)
 texture = ExtResource("2_n22po")
 
@@ -153,7 +154,7 @@ texture = ExtResource("3_d75bn")
 
 [node name="(0,1)" type="Sprite2D" parent="animal" unique_id=247670815]
 visible = false
-position = Vector2(4.7683716e-07, -360.00003)
+position = Vector2(0, 360.0005)
 scale = Vector2(0.99999976, 0.99999976)
 texture = ExtResource("2_n22po")
 
@@ -165,7 +166,7 @@ texture = ExtResource("3_d75bn")
 
 [node name="(-1,0)" type="Sprite2D" parent="animal" unique_id=213873289]
 visible = false
-position = Vector2(-310, 180.00003)
+position = Vector2(-321.11108, -179.99988)
 scale = Vector2(0.99999976, 0.99999976)
 texture = ExtResource("2_n22po")
 
@@ -177,7 +178,7 @@ texture = ExtResource("3_d75bn")
 
 [node name="(0,-1)" type="Sprite2D" parent="animal" unique_id=1970963938]
 visible = false
-position = Vector2(0, 360)
+position = Vector2(0, -360)
 scale = Vector2(0.99999994, 0.99999994)
 texture = ExtResource("2_n22po")
 
@@ -189,7 +190,7 @@ texture = ExtResource("3_d75bn")
 
 [node name="(1,-1)" type="Sprite2D" parent="animal" unique_id=464856756]
 visible = false
-position = Vector2(310, 179.99998)
+position = Vector2(321.11133, -179.99988)
 scale = Vector2(0.99999994, 0.99999994)
 texture = ExtResource("2_n22po")
 
@@ -201,7 +202,7 @@ texture = ExtResource("3_d75bn")
 
 [node name="(1,0)" type="Sprite2D" parent="animal" unique_id=1946438329]
 visible = false
-position = Vector2(310, -180)
+position = Vector2(321.11133, 180)
 scale = Vector2(0.99999994, 0.99999994)
 texture = ExtResource("2_n22po")
 
@@ -213,15 +214,39 @@ texture = ExtResource("3_d75bn")
 
 [node name="Panel" type="Panel" parent="." unique_id=558093077]
 offset_right = 100.0
-offset_bottom = 120.0
+offset_bottom = 130.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_n22po")
 
-[node name="Panel" type="Panel" parent="Panel" unique_id=1752528228]
+[node name="PointsLabel" type="Label" parent="Panel" unique_id=1925528481]
+layout_mode = 0
+offset_top = 97.0
+offset_right = 100.0
+offset_bottom = 130.0
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.4745098, 1)
+theme_override_colors/font_outline_color = Color(0.5686275, 0.5176471, 0.4745098, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 18
+text = "15"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ArrowDown" type="Panel" parent="Panel" unique_id=1752528228]
 show_behind_parent = true
 layout_mode = 0
-offset_left = 49.000008
-offset_top = 109.00001
-offset_right = 65.00001
-offset_bottom = 125.00001
+offset_left = 49.00001
+offset_top = 118.0
+offset_right = 65.000015
+offset_bottom = 134.0
+rotation = 0.7853982
+theme_override_styles/panel = SubResource("StyleBoxFlat_d75bn")
+
+[node name="ArrowRight" type="Panel" parent="Panel" unique_id=748754709]
+visible = false
+show_behind_parent = true
+layout_mode = 0
+offset_left = -0.42640305
+offset_top = 49.722923
+offset_right = 15.573597
+offset_bottom = 65.72292
 rotation = 0.7853982
 theme_override_styles/panel = SubResource("StyleBoxFlat_d75bn")

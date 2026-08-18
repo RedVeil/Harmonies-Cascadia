@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://xeygloiw2218"
 path.s3tc="res://.godot/imported/Lama_01_ColorPalette_1.png-12c45cb8521668aa2388c2d5e045b287.s3tc.ctex"
+path.etc2="res://.godot/imported/Lama_01_ColorPalette_1.png-12c45cb8521668aa2388c2d5e045b287.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/animals/models/raw/Lama_01_ColorPalette_1.png"
-dest_files=["res://.godot/imported/Lama_01_ColorPalette_1.png-12c45cb8521668aa2388c2d5e045b287.s3tc.ctex"]
+dest_files=["res://.godot/imported/Lama_01_ColorPalette_1.png-12c45cb8521668aa2388c2d5e045b287.s3tc.ctex", "res://.godot/imported/Lama_01_ColorPalette_1.png-12c45cb8521668aa2388c2d5e045b287.etc2.ctex"]
 
 [params]
 

@@ -5,6 +5,9 @@
 [ext_resource type="AudioStream" uid="uid://v6wew65rnbvl" path="res://assets/audio/bookFlip3.ogg" id="4_nqyak"]
 [ext_resource type="AudioStream" uid="uid://ccr3psxlvuh85" path="res://assets/audio/bookOpen.ogg" id="5_7iqj8"]
 [ext_resource type="AudioStream" uid="uid://brhqwqlv25ehf" path="res://assets/audio/chips-stack-4.ogg" id="6_85gjx"]
+[ext_resource type="AudioStream" uid="uid://b07e3jxsvqt0o" path="res://assets/audio/Etirwer (Looped).ogg" id="7_bgm"]
+[ext_resource type="AudioStream" uid="uid://cti1hsp8tdxgt" path="res://assets/audio/handleSmallLeather2.ogg" id="8_popup"]
+[ext_resource type="AudioStream" uid="uid://ftrpl5416bkc" path="res://assets/audio/bookFlip2.ogg" id="9_draw"]
 
 [node name="GameFeedback" type="Node" unique_id=1741717147]
 script = ExtResource("1_gf")
@@ -12,7 +15,16 @@ script = ExtResource("1_gf")
 [node name="FeedbackAudio" type="Node" parent="." unique_id=2051303084]
 script = ExtResource("2_fa")
 hover_card_sounds = Array[AudioStream]([ExtResource("4_nqyak")])
-hover_card_extra_volume_db = -10.0
+hover_card_extra_volume_db = -20.0
 click_card_sounds = Array[AudioStream]([ExtResource("5_7iqj8")])
 hover_tile_sounds = Array[AudioStream]([ExtResource("6_85gjx")])
-hover_tile_extra_volume_db = -20.0
+hover_tile_extra_volume_db = -28.0
+recycle_sounds = Array[AudioStream]([ExtResource("9_draw")])
+recycle_extra_volume_db = -10.0
+click_button_sounds = Array[AudioStream]([ExtResource("5_7iqj8")])
+hover_button_sounds = Array[AudioStream]([ExtResource("4_nqyak")])
+hover_button_extra_volume_db = -20.0
+open_popup_sounds = Array[AudioStream]([ExtResource("8_popup")])
+close_popup_sounds = Array[AudioStream]([ExtResource("8_popup")])
+background_music = ExtResource("7_bgm")
+music_volume_db = -20.0

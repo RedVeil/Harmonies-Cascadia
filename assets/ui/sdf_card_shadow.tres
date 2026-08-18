@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/shader/ui/sdf_card_shadow.gdshader" id="1_shader"]
+
+[resource]
+shader = ExtResource("1_shader")
+shader_parameter/rect_size = Vector2(102, 176)
+shader_parameter/edge_pad_px = 8.0
+shader_parameter/corner_radius_px = 2.0
+shader_parameter/softness_px = 10.0

@@ -1,5 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://vgy0bgwcv7qb"]
-
-[ext_resource type="PackedScene" uid="uid://bx00evheqafep" path="res://assets/Rock_Medium_4.gltf" id="1_b6hlt"]
-
-[node name="Rock_Medium_42" instance=ExtResource("1_b6hlt")]

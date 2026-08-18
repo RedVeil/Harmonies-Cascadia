@@ -11,14 +11,14 @@ enum SpecialRule {
 @export var id:int = 0
 @export var name:String = ""
 @export var description:String = ""
-# whats the minimum amount of tiles in the group to count?
+# minimum group size required to earn flat_points
 @export var min_group_size: int = 0
-# whats the maximum amount of tiles in the group to count?
+# max tiles that count toward points_per_tile_level (highest levels first)
 @export var max_group_size: int = 0
-# how many points does each level earn? 
-# zero is allowed since it could just award flat points
+# points each placed tile earns by level (always applied)
+# zero is allowed when a rule awards only flat_points (or none per tile)
 @export var points_per_tile_level: Array[Vector2i] = []
-# does it give flat points if min/max and special rule are satisfied?
+# flat bonus added only when min_group_size is met (stacks with points_per_tile_level)
 @export var flat_points: int = 0
 # an enum to switch to special scoring rules
 @export var special_rule: SpecialRule = SpecialRule.NONE

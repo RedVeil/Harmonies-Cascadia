@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://cn853ytgoxks6"]
+
+[ext_resource type="Shader" uid="uid://b3fmbj41yx441" path="res://assets/shader/ui/sdf_circle.gdshader" id="1_shader"]
+
+[resource]
+shader = ExtResource("1_shader")
+shader_parameter/radius = 0.98
+shader_parameter/smoothness = 0.01

@@ -1,0 +1,33 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://c1gl2ei1l84lw"]
+
+[ext_resource type="Shader" uid="uid://b5n8wnydoe60o" path="res://assets/shader/tiles/foliage/M_Grass_Quad.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" uid="uid://xfapwilgylqf" path="res://assets/tiles/materials/T_FoliageNoise.tres" id="3_noise"]
+[ext_resource type="Texture2D" uid="uid://c0jnk38n875rq" path="res://sprite_0017.png" id="3_p62g2"]
+
+[sub_resource type="Gradient" id="Gradient_grass_long"]
+offsets = PackedFloat32Array(0, 0.545045, 1)
+colors = PackedColorArray(0.56658393, 0.45376807, 0.14064324, 1, 0.7195835, 0.5653573, 0.28046492, 1, 0.9278606, 0.7248542, 0.39688748, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_grass_long"]
+gradient = SubResource("Gradient_grass_long")
+width = 64
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_shader")
+shader_parameter/billboard = true
+shader_parameter/shape_texture = ExtResource("3_p62g2")
+shader_parameter/use_atlas = false
+shader_parameter/noise_texture = ExtResource("3_noise")
+shader_parameter/color_gradient = SubResource("GradientTexture1D_grass_long")
+shader_parameter/random_variation = 0.002
+shader_parameter/cloud_shadow_strength = 0.25
+shader_parameter/cloud_shadow_scale = 0.035
+shader_parameter/cloud_shadow_speed = 0.02
+shader_parameter/cloud_shadow_contrast = 1.4
+shader_parameter/cloud_shadow_direction = Vector2(1, 0.35)
+shader_parameter/wind_texture = ExtResource("3_noise")
+shader_parameter/wind_velocity = Vector2(1.2, 0.35)
+shader_parameter/alpha_cut_start = 0.70000001043084
+shader_parameter/alpha_cut_end = 0.70000001043084
+shader_parameter/alpha_mode = 2

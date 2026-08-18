@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cm2klf5ptgr1v"
 path.s3tc="res://.godot/imported/Rhinoceros_01_ColorPalette_1.png-36460853a8c52c4ecde42a8aa6a95061.s3tc.ctex"
+path.etc2="res://.godot/imported/Rhinoceros_01_ColorPalette_1.png-36460853a8c52c4ecde42a8aa6a95061.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/animals/models/raw/Rhinoceros_01_ColorPalette_1.png"
-dest_files=["res://.godot/imported/Rhinoceros_01_ColorPalette_1.png-36460853a8c52c4ecde42a8aa6a95061.s3tc.ctex"]
+dest_files=["res://.godot/imported/Rhinoceros_01_ColorPalette_1.png-36460853a8c52c4ecde42a8aa6a95061.s3tc.ctex", "res://.godot/imported/Rhinoceros_01_ColorPalette_1.png-36460853a8c52c4ecde42a8aa6a95061.etc2.ctex"]
 
 [params]
 

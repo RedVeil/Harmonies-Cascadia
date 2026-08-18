@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://ben21yhmar0j1"
 path.s3tc="res://.godot/imported/Pigeon_03_ColorPalette_1.png-fc96b4328ea7e9b6afe13c5b59c451dd.s3tc.ctex"
+path.etc2="res://.godot/imported/Pigeon_03_ColorPalette_1.png-fc96b4328ea7e9b6afe13c5b59c451dd.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/animals/models/raw/Pigeon_03_ColorPalette_1.png"
-dest_files=["res://.godot/imported/Pigeon_03_ColorPalette_1.png-fc96b4328ea7e9b6afe13c5b59c451dd.s3tc.ctex"]
+dest_files=["res://.godot/imported/Pigeon_03_ColorPalette_1.png-fc96b4328ea7e9b6afe13c5b59c451dd.s3tc.ctex", "res://.godot/imported/Pigeon_03_ColorPalette_1.png-fc96b4328ea7e9b6afe13c5b59c451dd.etc2.ctex"]
 
 [params]
 

@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bf8mmdmv5co74"
 path.s3tc="res://.godot/imported/Chicken_03_ColorPalette_1.png-2e22e6d5ca6cf4a8a2446512ef2fa970.s3tc.ctex"
+path.etc2="res://.godot/imported/Chicken_03_ColorPalette_1.png-2e22e6d5ca6cf4a8a2446512ef2fa970.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/animals/models/raw/Chicken_03_ColorPalette_1.png"
-dest_files=["res://.godot/imported/Chicken_03_ColorPalette_1.png-2e22e6d5ca6cf4a8a2446512ef2fa970.s3tc.ctex"]
+dest_files=["res://.godot/imported/Chicken_03_ColorPalette_1.png-2e22e6d5ca6cf4a8a2446512ef2fa970.s3tc.ctex", "res://.godot/imported/Chicken_03_ColorPalette_1.png-2e22e6d5ca6cf4a8a2446512ef2fa970.etc2.ctex"]
 
 [params]
 

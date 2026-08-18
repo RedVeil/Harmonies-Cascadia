@@ -2,5 +2,4 @@
 
 [resource]
 resource_name = "Green"
-vertex_color_use_as_albedo = true
-albedo_color = Color(0.4, 0.58431375, 0.27058825, 1)
+albedo_color = Color(0.2347041, 0.41416398, 0.21927905, 1)

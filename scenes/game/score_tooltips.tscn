@@ -1,21 +1,21 @@
 [gd_scene format=3 uid="uid://bv5ofl0j1ktqc"]
 
 [ext_resource type="Script" uid="uid://dggol5cr45w7e" path="res://scripts/game/score_tooltip.gd" id="1_d6nn3"]
-[ext_resource type="Texture2D" uid="uid://2c2kpkccrfy3" path="res://assets/icons/question.png" id="1_e867d"]
-[ext_resource type="Texture2D" uid="uid://jomsgj87ydn8" path="res://assets/elements/a1.png" id="3_44yi1"]
+[ext_resource type="Texture2D" uid="uid://gjrnqosd4hds" path="res://assets/icons/IconsFlat19_64px.png" id="2_d6nn3"]
+[ext_resource type="Texture2D" uid="uid://cjulobfnnfiaf" path="res://assets/elements/a0.png" id="3_44yi1"]
 [ext_resource type="PackedScene" uid="uid://ccy33o81w8qpr" path="res://scenes/game/tooltip_icon.tscn" id="3_e6s6x"]
-[ext_resource type="Texture2D" uid="uid://bkdyc7db8om56" path="res://assets/elements/f2.png" id="4_d4g8o"]
-[ext_resource type="Texture2D" uid="uid://boqn0q1xtndms" path="res://assets/elements/m2.png" id="5_ci7lu"]
-[ext_resource type="Texture2D" uid="uid://deto26ef4js8g" path="res://assets/elements/r0.png" id="6_d6nn3"]
-[ext_resource type="Texture2D" uid="uid://bour75pi3njo7" path="res://assets/elements/w0.png" id="8_ci7lu"]
+[ext_resource type="Texture2D" uid="uid://bvwixgsubb5dn" path="res://assets/elements/f1.png" id="4_d4g8o"]
+[ext_resource type="Texture2D" uid="uid://cslq3nxtay7p3" path="res://assets/elements/m2.png" id="5_ci7lu"]
+[ext_resource type="Texture2D" uid="uid://cvdocpei0br0m" path="res://assets/elements/r0.png" id="6_d6nn3"]
+[ext_resource type="Texture2D" uid="uid://fitjq8iuh7ul" path="res://assets/elements/w0.png" id="8_ci7lu"]
 [ext_resource type="Texture2D" uid="uid://bnrcql3uy3afb" path="res://assets/icons/book.png" id="9_d6nn3"]
-[ext_resource type="Texture2D" uid="uid://diyjmvwygs4vq" path="res://assets/score_tooltip/scoring_fields1.png" id="10_d6nn3"]
+[ext_resource type="Texture2D" uid="uid://dngccn0vhtypv" path="res://assets/score_tooltip/a1.webp" id="10_d6nn3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e867d"]
 bg_color = Color(1, 1, 1, 1)
 corner_radius_bottom_right = 12
 corner_radius_bottom_left = 12
-shadow_color = Color(0, 0, 0, 0.1254902)
+shadow_color = Color(0, 0, 0, 0.078)
 shadow_size = 4
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_672qq"]
@@ -56,9 +56,9 @@ shape = SubResource("RectangleShape2D_672qq")
 
 [node name="Sprite2D" type="Sprite2D" parent="Button" unique_id=2077933624]
 self_modulate = Color(0.5686275, 0.5176471, 0.47058824, 1)
-position = Vector2(22.000002, 18)
-scale = Vector2(0.32000005, 0.29333338)
-texture = ExtResource("1_e867d")
+position = Vector2(22.5, 19.234375)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("2_d6nn3")
 
 [node name="icons" type="Node2D" parent="." unique_id=1708123780]
 
@@ -115,6 +115,7 @@ offset_bottom = 52.0
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
 theme_override_colors/font_outline_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
 theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 20
 text = "Mountain"
 horizontal_alignment = 1
 
@@ -130,6 +131,7 @@ color = Color(0.5686275, 0.5176471, 0.47058824, 1)
 position = Vector2(0, -28)
 
 [node name="ColorRect" type="ColorRect" parent="Panel2/description" unique_id=846609058]
+visible = false
 offset_left = 4.0
 offset_top = 228.0
 offset_right = 175.0
@@ -137,15 +139,16 @@ offset_bottom = 230.0
 color = Color(0.5686275, 0.5176471, 0.47058824, 1)
 
 [node name="Label" type="Label" parent="Panel2/description" unique_id=146333483]
-offset_top = 236.0
-offset_right = 179.0
-offset_bottom = 329.0
+offset_left = 9.0
+offset_top = 217.0
+offset_right = 170.0
+offset_bottom = 332.0
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
 theme_override_colors/font_outline_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-theme_override_font_sizes/font_size = 10
+theme_override_constants/line_spacing = -5
+theme_override_font_sizes/font_size = 14
 text = "Rivers score by the length of a river.
 The score calculation will always take the shortest route from end to end. "
-horizontal_alignment = 1
 autowrap_mode = 2
 
 [node name="graphic" type="Node2D" parent="Panel2" unique_id=723530522]

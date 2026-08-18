@@ -1,4 +1,4 @@
-extends Area2D
+extends Node2D
 class_name Card
 
 @export var scale_speed : float = 1.0
@@ -10,17 +10,33 @@ class_name Card
 @export var spawn_duration: float = 0.35
 @export var spawn_origin: Vector2 = Vector2.ZERO
 @export var spawn_sounds: Array[AudioStream] = []
+@export var spawn_sound_volume_db: float = -10.0
 
 @export_group("Redraw Animation")
 @export var redraw_duration: float = 0.22
 @export var redraw_peak_scale: float = 1.12
 @export var redraw_sounds: Array[AudioStream] = []
+@export var redraw_sound_volume_db: float = -10.0
+
+const STACK_STEP_PX := 10.0
+const STACK_VISUAL_CAP := 4
+const DESATURATE_AMOUNT := 0.45
+var COLOR_BROWN := Color.html("#918478")
 
 @onready var visuals : Node2D = $visuals
-@onready var collision : CollisionShape2D = $CollisionShape2D
-@onready var placement_tooltip : PlacementTooltip = $PlacementTooltip
+@onready var hit_area : Control = $HitArea
+@onready var recycle_btn: Control = $HitArea/RecycleButton
+@onready var recycle_circle: Sprite2D = $HitArea/RecycleButton/Circle
+@onready var recycle_label: Label = $HitArea/RecycleButton/Label
+@onready var card_placement : CardPlacement = $visuals/CardPlacement
+@onready var frame : TextureRect = $visuals/Frame
+@onready var frame_2 : TextureRect = $visuals/Frame2
+@onready var frame_3 : TextureRect = $visuals/Frame3
+@onready var frame_4 : TextureRect = $visuals/Frame4
+@onready var shadow : TextureRect = $visuals/Shadow
 
 var container : CardContainer
+var _interaction_host: Node = null
 var id : int = 0
 
 var is_mouse_inside : bool = false
@@ -31,61 +47,100 @@ var base_scale: Vector2 = Vector2.ONE
 var target_scale : Vector2 =  Vector2.ONE
 var base_visuals_position : Vector2 = Vector2.ZERO
 var target_visuals_position : Vector2 = Vector2.ZERO
+var _hit_area_rest_offset_left: float = 0.0
+var _hit_area_rest_offset_top: float = 0.0
+var _hit_area_rest_offset_right: float = 0.0
+var _hit_area_rest_offset_bottom: float = 0.0
+var _shadow_base_offset_top: float = 0.0
 var stack_amount : int = 0
 var background_color : Color
 var base_z_index : int = 0
 
 var element_id : int = 0
 var is_animal:bool = false
+var _base_body_color: Color = Color.WHITE
+var _desaturated: bool = false
 
 var _spawn_active : bool = false
 var _redraw_active : bool = false
 var _spawn_layout_pending : bool = false
 var _feedback_tweens: Dictionary = {}
+var _recycle_enabled: bool = false
+var _recycle_hovered: bool = false
+var _recycle_base_position: Vector2 = Vector2.ZERO
 
 ## ----- Initialisation ----- ##
 
 func _ready() -> void:
-	input_pickable = true
-	mouse_entered.connect(_on_mouse_entered)
-	mouse_exited.connect(_on_mouse_exited)
-	input_event.connect(_on_input_event)
-	
-	# $visuals/background.material = $visuals/background.material.duplicate(true)
+	_hit_area_rest_offset_left = hit_area.offset_left
+	_hit_area_rest_offset_top = hit_area.offset_top
+	_hit_area_rest_offset_right = hit_area.offset_right
+	_hit_area_rest_offset_bottom = hit_area.offset_bottom
+	_shadow_base_offset_top = shadow.offset_top
+	hit_area.scale = Vector2.ONE
+	hit_area.pivot_offset = hit_area.size * 0.5
+	hit_area.mouse_entered.connect(_on_mouse_entered)
+	hit_area.mouse_exited.connect(_on_mouse_exited)
+	hit_area.gui_input.connect(_on_gui_input)
+	_recycle_base_position = recycle_btn.position
+	# #region agent log
+	_dbg_recycle("C", "card.gd:_ready", "captured recycle/hit bases", {
+		"card_id": id,
+		"recycle_pos": {"x": recycle_btn.position.x, "y": recycle_btn.position.y},
+		"recycle_base": {"x": _recycle_base_position.x, "y": _recycle_base_position.y},
+		"hit_offset_top": hit_area.offset_top,
+		"hit_rest_offset_top": _hit_area_rest_offset_top,
+		"hit_pos": {"x": hit_area.position.x, "y": hit_area.position.y},
+	})
+	# #endregion
+	recycle_btn.visible = false
+	recycle_btn.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	recycle_btn.gui_input.connect(_on_recycle_gui_input)
+	recycle_btn.mouse_entered.connect(_on_recycle_mouse_entered)
+	recycle_btn.mouse_exited.connect(_on_recycle_mouse_exited)
 
-func init(cardData:CardData, parent:CardContainer, idx:int) -> void:
-	container = parent
+func init(cardData:CardData, parent:Node, idx:int) -> void:
+	if parent is CardContainer:
+		container = parent
+	_interaction_host = parent
 	id = idx
 	
 	stack_amount = cardData.amount
 	
 	element_id = cardData.element
 	is_animal = cardData.type == 1
-	
-	$visuals/background.texture = load(get_card_background(cardData.element))
-	
-	var mat = $visuals/element.material.duplicate()
-	mat.set_shader_parameter("unfilled_color", Color.html(ElementCatalog.elements[cardData.element].levels.back().color))
-	$visuals/element.material = mat
-	$visuals/points/background.material = mat
-	
-	if cardData.type == 1 and cardData.icon != "":
-		var icon : Texture2D = load(cardData.icon)
-		$visuals/animal.texture = icon
-		$visuals/animal.show()
-		
-		$visuals/element/icon.texture = load(ElementCatalog.elements[cardData.element].levels[cardData.placement[0].level-1].icon)
-		
-		$visuals/bonus_points/background.material = mat
-		$visuals/bonus_points/Label.text = "%d" % cardData.bonus_points if cardData.bonus_points > 0.5 else "1/2"
-		$visuals/bonus_points.show()
-	else:
-		$visuals/element/icon.texture = load(ElementCatalog.elements[cardData.element].levels.back().icon)
 
-	placement_tooltip.init(cardData.type, cardData.placement, cardData.bonus)
-	$visuals/points/Label.text = "?" if cardData.type == 0 else "%d" % cardData.point_score
+	_base_body_color = Color.html(ElementCatalog.elements[cardData.element].levels.back().color)
 	
-	$visuals/Label.text = "x %d" % stack_amount
+	var frame_mat = frame.material.duplicate()
+	frame_mat.set_shader_parameter("body_color", _base_body_color)
+	frame_mat.set_shader_parameter("name_color", Color(0.16, 0.17, 0.253, 1))
+	frame.material = frame_mat
+	frame_2.material = frame_mat
+	frame_3.material = frame_mat
+	frame_4.material = frame_mat
+	_desaturated = false
+	
+	$visuals/points/Label.text = "%d" % cardData.point_score
+	$visuals/CardLabel.text = cardData.name
+	_apply_stack_visuals()
+	
+	$visuals/icon.texture = load(cardData.icon)
+	$visuals/icon.show()
+
+	card_placement.init(cardData)
+	card_placement.show()
+
+	if cardData.type == 1:
+		$visuals/bonus_points/Label.text = "+%d" % cardData.bonus_points
+		$visuals/bonus_points.show()
+		$visuals/points.show()
+		
+		_recycle_enabled = (
+			parent is CardContainer
+			or (parent != null and parent.has_method("reroll_card"))
+		)
+
 
 ## ----- Layout Logic ----- ##
 
@@ -101,43 +156,66 @@ func consume_spawn_layout() -> bool:
 
 func _on_mouse_entered() -> void:
 	is_mouse_inside = true
-	container.hover_card(id)
+	_sync_ui_pointer_block()
+	if _interaction_host and _interaction_host.has_method("hover_card"):
+		_interaction_host.hover_card(id)
 	
 
 func _on_mouse_exited() -> void:
 	is_mouse_inside = false
-	container.exit_card(id)
-	#setNormalState()
+	# #region agent log
+	_agent_dbg("A", "card.gd:_on_mouse_exited", "mouse_exited fired", {
+		"card_id": id,
+		"card_in_tree": is_inside_tree(),
+		"card_vp_null": get_viewport() == null,
+		"hit_in_tree": hit_area != null and hit_area.is_inside_tree(),
+		"hit_vp_null": hit_area != null and hit_area.get_viewport() == null,
+		"recycle_in_tree": recycle_btn != null and recycle_btn.is_inside_tree(),
+		"recycle_vp_null": recycle_btn != null and recycle_btn.get_viewport() == null,
+		"recycle_visible": recycle_btn != null and recycle_btn.visible,
+		"hit_visible": hit_area != null and hit_area.visible,
+	})
+	# #endregion
+	# Child STOP X fires parent exit first; keep hover/block until recycle owns it.
+	if _is_pointer_over_recycle():
+		_sync_ui_pointer_block()
+		return
+	_sync_ui_pointer_block()
+	if _interaction_host and _interaction_host.has_method("exit_card"):
+		_interaction_host.exit_card(id)
 	
 
-func _on_input_event(
-	viewport: Viewport,
-	event: InputEvent,
-	shape_idx: int
-) -> void:
+func _on_gui_input(event: InputEvent) -> void:
+	if _recycle_hovered:
+		return
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			GameFeedback.play_click_card()
-			container.select_card(id)
-			viewport.set_input_as_handled()
-	
-	#if event is InputEventMouseMotion and is_mouse_inside:
-		#var mouse_position = event.position
-		#var relative_mouse_position = mouse_position - global_position
-		#
-		##divide by scale to make independant of scale
-		##subtract by size/2.0 to center the mouse pos
-		## var centred_mouse_postion = relative_mouse_position/scale - $visuals/background.size/2.0
-		#
-		#$visuals/background.material.set_shader_parameter("_mousePos", relative_mouse_position)
+			if _interaction_host and _interaction_host.has_method("select_card"):
+				_interaction_host.select_card(id)
+			get_viewport().set_input_as_handled()
 
 ## ----- Stack Logic ----- ##
 
 func set_stack_amount(amount: int, animate: bool = true) -> void:
 	if stack_amount == amount:
 		return
+	# #region agent log
+	_dbg_recycle("A", "card.gd:set_stack_amount", "stack amount changing", {
+		"card_id": id,
+		"is_animal": is_animal,
+		"from": stack_amount,
+		"to": amount,
+		"is_active": is_active,
+		"is_mouse_inside": is_mouse_inside,
+		"visuals_pos_y": visuals.position.y,
+		"target_visuals_y": target_visuals_position.y,
+		"hit_offset_top": hit_area.offset_top,
+		"recycle_pos_y": recycle_btn.position.y,
+	})
+	# #endregion
 	stack_amount = amount
-	$visuals/Label.text = "x %d" % stack_amount
+	_apply_stack_visuals()
 	if animate:
 		play_redraw_animation()
 
@@ -148,18 +226,54 @@ func decrement() -> void:
 	if stack_amount > 0:
 		set_stack_amount(stack_amount - 1, false)
 
+func _apply_stack_visuals() -> void:
+	var depth := mini(maxi(stack_amount, 1), STACK_VISUAL_CAP)
+	frame_2.visible = depth >= 2
+	frame_3.visible = depth >= 3
+	frame_4.visible = depth >= 4
+
+	var extra := _stack_extra_px()
+	shadow.offset_top = _shadow_base_offset_top - extra
+	_sync_hit_area_to_visuals()
+	# #region agent log
+	_dbg_recycle("A", "card.gd:_apply_stack_visuals", "before hit/recycle sync", {
+		"card_id": id,
+		"is_animal": is_animal,
+		"stack_amount": stack_amount,
+		"depth": depth,
+		"extra": extra,
+		"is_active": is_active,
+		"visuals_pos_y": visuals.position.y,
+		"hit_offset_top_after_stack": hit_area.offset_top,
+		"hit_rest_offset_top": _hit_area_rest_offset_top,
+		"hit_pos_y": hit_area.position.y,
+		"recycle_pos_y_before": recycle_btn.position.y,
+		"recycle_base_y": _recycle_base_position.y,
+	})
+	# #endregion
+	_sync_recycle_button_stack_offset()
+	# #region agent log
+	_dbg_recycle("D", "card.gd:_apply_stack_visuals", "after hit/recycle sync", {
+		"card_id": id,
+		"hit_offset_top": hit_area.offset_top,
+		"hit_pos_y": hit_area.position.y,
+		"visuals_pos_y": visuals.position.y,
+		"recycle_pos_y": recycle_btn.position.y,
+	})
+	# #endregion
+
 ## ----- Other Logic ----- ##
 
 func handle_hover() -> void:
-	placement_tooltip.show()
 	if !is_active:
 		GameFeedback.play_hover_card()
 		set_select_visuals()
+	refresh_recycle_button(true)
 
 func handle_exit() -> void:
-	placement_tooltip.hide()
 	if !is_active:
 		reset_select_visuals()
+	refresh_recycle_button(false)
 
 func select() -> void:
 	is_active = true
@@ -173,26 +287,66 @@ func deselect() -> void:
 	reset_select_visuals()
 
 func remove_card() -> void:
+	# #region agent log
+	_agent_dbg("A", "card.gd:remove_card", "remove_card called", {
+		"card_id": id,
+		"card_in_tree": is_inside_tree(),
+		"is_mouse_inside": is_mouse_inside,
+		"recycle_visible": recycle_btn != null and recycle_btn.visible,
+	})
+	# #endregion
+	UiPointerBlock.exit(self)
+	UiPointerBlock.exit(recycle_btn)
 	kill_animations()
 	queue_free()
+
+
+func _exit_tree() -> void:
+	# #region agent log
+	_agent_dbg("E", "card.gd:_exit_tree", "card leaving tree", {
+		"card_id": id,
+		"is_mouse_inside": is_mouse_inside,
+		"recycle_visible": recycle_btn != null and recycle_btn.visible,
+		"vp_null": get_viewport() == null,
+	})
+	# #endregion
+	UiPointerBlock.exit(self)
+	if recycle_btn != null:
+		UiPointerBlock.exit(recycle_btn)
 
 func set_select_visuals() -> void:
 	self.z_index = base_z_index + 20
 	target_scale = base_scale * hover_scale
-	collision.scale = target_scale
-	# placement_tooltip.scale = target_scale
-	target_visuals_position = visuals.position - Vector2(0.0, hover_height)
+	target_visuals_position = base_visuals_position - Vector2(0.0, hover_height)
 
 func reset_select_visuals() -> void:
 	self.z_index = base_z_index
 	target_scale = base_scale
-	collision.scale = target_scale
-	# placement_tooltip.scale = target_scale
 	target_visuals_position = base_visuals_position
 
 func set_z(z:int) -> void:
 	base_z_index = z
 	self.z_index = base_z_index
+
+
+## Match booster pack disable: muted frame + dimmed icons.
+func set_desaturated(desaturate: bool) -> void:
+	_desaturated = desaturate
+	var color := _base_body_color
+	if desaturate:
+		var lum := color.get_luminance()
+		color = _base_body_color.lerp(Color(lum, lum, lum, color.a), DESATURATE_AMOUNT)
+	var frame_mat := frame.material as ShaderMaterial
+	if frame_mat != null:
+		frame_mat.set_shader_parameter("body_color", color)
+	var icon_mod := Color(0.7, 0.7, 0.7, 1.0) if desaturate else Color.WHITE
+	$visuals/icon.modulate = icon_mod
+	$visuals/CardLabel.modulate = icon_mod
+	$visuals/points.modulate = icon_mod
+	$visuals/bonus_points.modulate = icon_mod
+	if card_placement.visible:
+		card_placement.modulate = icon_mod
+
 
 ## ----- Animations ----- ##
 
@@ -233,15 +387,260 @@ func apply_layout(target_pos: Vector2, target_angle: float, z: int) -> void:
 	rotation_degrees = target_angle
 
 func _process(delta: float) -> void:
-	if _spawn_active or _redraw_active:
+	if not (_spawn_active or _redraw_active):
+		if visuals.scale.distance_squared_to(target_scale) >= 0.001 * 0.001:
+			visuals.scale = visuals.scale.lerp(target_scale, delta * scale_speed)
+			visuals.position = visuals.position.lerp(target_visuals_position, delta * scale_speed)
+		elif visuals.position.distance_squared_to(target_visuals_position) >= 0.01 * 0.01:
+			visuals.position = visuals.position.lerp(target_visuals_position, delta * scale_speed)
+	_sync_hit_area_to_visuals()
+	_sync_ui_pointer_block()
+
+
+func _stack_extra_px() -> float:
+	var depth := mini(maxi(stack_amount, 1), STACK_VISUAL_CAP)
+	return float(depth - 1) * STACK_STEP_PX
+
+
+## Rest + stack extra + current visuals transform. Always computed from stored
+## rest offsets so a place-while-selected cannot bake hover into the hit box.
+func _sync_hit_area_to_visuals() -> void:
+	var extra := _stack_extra_px()
+	var dx := visuals.position.x
+	var dy := visuals.position.y
+	hit_area.offset_left = _hit_area_rest_offset_left + dx
+	hit_area.offset_top = _hit_area_rest_offset_top - extra + dy
+	hit_area.offset_right = _hit_area_rest_offset_right + dx
+	hit_area.offset_bottom = _hit_area_rest_offset_bottom + dy
+	hit_area.scale = visuals.scale
+	hit_area.pivot_offset = Vector2(
+		-_hit_area_rest_offset_left,
+		-(_hit_area_rest_offset_top - extra)
+	)
+
+
+func _control_has_mouse(control: Control) -> bool:
+	if control == null or not control.visible:
+		return false
+	var in_tree := control.is_inside_tree()
+	var vp_null := control.get_viewport() == null
+	if not in_tree or vp_null:
+		# #region agent log
+		_agent_dbg("A", "card.gd:_control_has_mouse", "unsafe mouse query", {
+			"card_id": id,
+			"control_name": str(control.name),
+			"in_tree": in_tree,
+			"vp_null": vp_null,
+			"card_in_tree": is_inside_tree(),
+			"visible": control.visible,
+			"runId": "post-fix",
+		})
+		# #endregion
+		return false
+	return control.get_global_rect().has_point(control.get_global_mouse_position())
+
+
+func _is_pointer_over_recycle() -> bool:
+	return recycle_btn.visible and _control_has_mouse(recycle_btn)
+
+
+func _is_pointer_over_card_ui() -> bool:
+	return _control_has_mouse(hit_area) or _is_pointer_over_recycle()
+
+
+func _sync_ui_pointer_block() -> void:
+	UiPointerBlock.set_hovering(self, _is_pointer_over_card_ui())
+	if not _is_pointer_over_recycle():
+		UiPointerBlock.exit(recycle_btn)
+
+
+## ----- Recycle X (animals only; node in card.tscn → HitArea/RecycleButton) ----- ##
+
+## Keeps editor X/Y; only shifts Y when HitArea grows for stacked cards.
+## Hover lift/scale is inherited from HitArea, so do not add visuals.position.
+func _sync_recycle_button_stack_offset() -> void:
+	var extra := _stack_extra_px()
+	# #region agent log
+	_dbg_recycle("B", "card.gd:_sync_recycle_button_stack_offset", "reposition recycle", {
+		"card_id": id,
+		"recycle_base_y": _recycle_base_position.y,
+		"delta_y": extra,
+		"new_recycle_y": _recycle_base_position.y + extra,
+		"hit_offset_top": hit_area.offset_top,
+		"hit_rest_offset_top": _hit_area_rest_offset_top,
+		"visuals_pos_y": visuals.position.y,
+		"stack_amount": stack_amount,
+	})
+	# #endregion
+	recycle_btn.position = _recycle_base_position + Vector2(0.0, extra)
+
+
+func refresh_recycle_button(show: bool) -> void:
+	var visible := show and _recycle_enabled and is_animal
+	# #region agent log
+	if recycle_btn.visible and not visible:
+		_agent_dbg("B", "card.gd:refresh_recycle_button", "hiding recycle button", {
+			"card_id": id,
+			"card_in_tree": is_inside_tree(),
+			"vp_null": get_viewport() == null,
+			"is_mouse_inside": is_mouse_inside,
+		})
+	# #endregion
+	recycle_btn.visible = visible
+	# #region agent log
+	if visible:
+		_dbg_recycle("E", "card.gd:refresh_recycle_button", "showing recycle button", {
+			"card_id": id,
+			"recycle_pos_y": recycle_btn.position.y,
+			"recycle_base_y": _recycle_base_position.y,
+			"hit_offset_top": hit_area.offset_top,
+			"hit_pos_y": hit_area.position.y,
+			"visuals_pos_y": visuals.position.y,
+			"stack_amount": stack_amount,
+			"is_active": is_active,
+		})
+	# #endregion
+	recycle_btn.mouse_filter = (
+		Control.MOUSE_FILTER_STOP if visible else Control.MOUSE_FILTER_IGNORE
+	)
+	if not visible:
+		_recycle_hovered = false
+		_reset_recycle_button_colors()
+		UiPointerBlock.exit(recycle_btn)
+	_sync_ui_pointer_block()
+
+
+func _on_recycle_gui_input(event: InputEvent) -> void:
+	if not _recycle_enabled:
 		return
-	if visuals.scale.distance_squared_to(target_scale) >= 0.001 * 0.001:
-		visuals.scale = visuals.scale.lerp(target_scale, delta * scale_speed)
-		visuals.position = visuals.position.lerp(target_visuals_position, delta * scale_speed)
-		collision.position = collision.position.lerp(target_visuals_position, delta * scale_speed)
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			GameFeedback.play_click_button()
+			# #region agent log
+			_dbg87("A", "card.gd:_on_recycle_gui_input", "recycle X clicked", {
+				"card_id": id,
+				"is_animal": is_animal,
+				"in_tree": is_inside_tree(),
+				"queued_free": is_queued_for_deletion(),
+				"recycle_visible": recycle_btn != null and recycle_btn.visible,
+			})
+			# #endregion
+			if container != null and container.has_method("recycle_card"):
+				container.recycle_card(id)
+			elif _interaction_host != null and _interaction_host.has_method("reroll_card"):
+				_interaction_host.reroll_card(id)
+			elif _interaction_host != null and _interaction_host.has_method("recycle_card"):
+				_interaction_host.recycle_card(id)
+			get_viewport().set_input_as_handled()
+
+
+func _on_recycle_mouse_entered() -> void:
+	if not _recycle_enabled:
+		return
+	_recycle_hovered = true
+	UiPointerBlock.enter(recycle_btn)
+	_sync_ui_pointer_block()
+	GameFeedback.play_hover_button()
+	recycle_circle.self_modulate = COLOR_BROWN
+	recycle_label.add_theme_color_override("font_color", Color.WHITE)
+	if _interaction_host != null and _interaction_host.has_method("set_recycle_hover"):
+		_interaction_host.set_recycle_hover(id, true)
+
+
+func _on_recycle_mouse_exited() -> void:
+	# #region agent log
+	_dbg87("A", "card.gd:_on_recycle_mouse_exited", "recycle mouse exited", {
+		"card_id": id,
+		"is_animal": is_animal,
+		"in_tree": is_inside_tree(),
+		"queued_free": is_queued_for_deletion(),
+		"recycle_visible": recycle_btn != null and recycle_btn.visible,
+		"hit_has_mouse": _control_has_mouse(hit_area),
+		"host_valid": _interaction_host != null and is_instance_valid(_interaction_host),
+	})
+	# #endregion
+	_recycle_hovered = false
+	UiPointerBlock.exit(recycle_btn)
+	_reset_recycle_button_colors()
+	if _interaction_host != null and _interaction_host.has_method("set_recycle_hover"):
+		_interaction_host.set_recycle_hover(id, false)
+	_sync_ui_pointer_block()
+	# Left X into empty space (not back onto the card body).
+	if not _control_has_mouse(hit_area):
+		is_mouse_inside = false
+		# Recycle already removed this card; skip hover-exit on a freed slot.
+		if is_queued_for_deletion():
+			return
+		if _interaction_host != null and _interaction_host.has_method("exit_card"):
+			_interaction_host.exit_card(id)
+
+
+func _reset_recycle_button_colors() -> void:
+	recycle_circle.self_modulate = Color.WHITE
+	recycle_label.add_theme_color_override("font_color", COLOR_BROWN)
+
+# #region agent log
+func _dbg_recycle(hyp: String, loc: String, msg: String, data: Dictionary) -> void:
+	var payload := {
+		"sessionId": "3fc6cd",
+		"runId": "post-fix",
+		"hypothesisId": hyp,
+		"location": loc,
+		"message": msg,
+		"data": data,
+		"timestamp": int(Time.get_unix_time_from_system() * 1000.0),
+	}
+	var path := "c:/Users/leonn/Documents/Harmonies-Cascadia/debug-3fc6cd.log"
+	var f := FileAccess.open(path, FileAccess.READ_WRITE)
+	if f == null:
+		f = FileAccess.open(path, FileAccess.WRITE)
+	else:
+		f.seek_end()
+	if f != null:
+		f.store_line(JSON.stringify(payload))
+		f.close()
+
+func _dbg87(hyp: String, loc: String, msg: String, data: Dictionary) -> void:
+	var payload := {
+		"sessionId": "87ce77",
+		"hypothesisId": hyp,
+		"location": loc,
+		"message": msg,
+		"data": data,
+		"timestamp": int(Time.get_unix_time_from_system() * 1000.0),
+	}
+	var path := "c:/Users/leonn/Documents/Harmonies-Cascadia/debug-87ce77.log"
+	var f := FileAccess.open(path, FileAccess.READ_WRITE)
+	if f == null:
+		f = FileAccess.open(path, FileAccess.WRITE)
+	else:
+		f.seek_end()
+	if f != null:
+		f.store_line(JSON.stringify(payload))
+		f.close()
+
+func _agent_dbg(hyp: String, loc: String, msg: String, data: Dictionary) -> void:
+	var payload := {
+		"sessionId": "22fdc4",
+		"hypothesisId": hyp,
+		"location": loc,
+		"message": msg,
+		"data": data,
+		"timestamp": int(Time.get_unix_time_from_system() * 1000.0),
+	}
+	var path := "c:/Users/leonn/Documents/Harmonies-Cascadia/debug-22fdc4.log"
+	var f := FileAccess.open(path, FileAccess.READ_WRITE)
+	if f == null:
+		f = FileAccess.open(path, FileAccess.WRITE)
+	else:
+		f.seek_end()
+	if f != null:
+		f.store_line(JSON.stringify(payload))
+		f.close()
+# #endregion
 
 func _animate_spawn(target_pos: Vector2, target_angle: float, z: int) -> void:
-	FeedbackAnimHelper.play_sounds(spawn_sounds)
+	FeedbackAnimHelper.play_sounds(spawn_sounds, spawn_sound_volume_db)
 
 	_spawn_active = true
 	set_z(z)
@@ -267,7 +666,7 @@ func _animate_spawn(target_pos: Vector2, target_angle: float, z: int) -> void:
 	)
 
 func _animate_redraw() -> void:
-	FeedbackAnimHelper.play_sounds(redraw_sounds)
+	FeedbackAnimHelper.play_sounds(redraw_sounds, redraw_sound_volume_db)
 
 	_redraw_active = true
 	var peak_scale := base_scale * redraw_peak_scale
@@ -279,20 +678,3 @@ func _animate_redraw() -> void:
 	tween.finished.connect(func() -> void:
 		_redraw_active = false
 	)
-
-## ----- Utility Logic ----- ##
-
-func get_card_background(element:int) -> String:
-	match(element):
-		1:
-			return "res://assets/cards/forest_card.png"
-		2:
-			return "res://assets/cards/field_card.png"
-		3:
-			return "res://assets/cards/mountain_card.png"
-		4:
-			return "res://assets/cards/river_card.png"
-		5:
-			return "res://assets/cards/wetland_card.png"
-		_:
-			return "res://assets/cards/forest_card.png"

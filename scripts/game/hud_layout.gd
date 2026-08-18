@@ -14,9 +14,8 @@ func _ready() -> void:
 		[$Root/BoosterManagerSlot, $BoosterManager],
 		[$Root/CardManagerSlot, $CardManager],
 		[$Root/ScoreTooltipSlot, $ScoreTooltip],
+		[$Root/MenuButtonSlot, $MenuButton],
 		[$Root/UndoButtonSlot, $UndoButton],
-		[$Root/CardRecyclingSlot, $CardRecycling],
-		[$Root/EndGameButtonSlot, $EndGameButton],
 	]
 	get_viewport().size_changed.connect(_relayout)
 	_root.resized.connect(_relayout)

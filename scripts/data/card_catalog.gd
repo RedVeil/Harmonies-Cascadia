@@ -44,6 +44,7 @@ func parse_card(card:Dictionary) -> CardData:
 	card_data.models.assign(card.get("models", []))
 	card_data.element = card.element
 	card_data.secondary_element = card.secondary_element
+	card_data.pattern = str(card.get("pattern", ""))
 	
 	var placement : Array[Placement] = []
 	for p in card.placement:

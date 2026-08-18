@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dbtf4bwkfnc7k"
 path.s3tc="res://.godot/imported/Gorilla_01_ColorPalette_1.png-47ccd6fa7d9b4aea35e12ce7ee6990ce.s3tc.ctex"
+path.etc2="res://.godot/imported/Gorilla_01_ColorPalette_1.png-47ccd6fa7d9b4aea35e12ce7ee6990ce.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/animals/models/raw/Gorilla_01_ColorPalette_1.png"
-dest_files=["res://.godot/imported/Gorilla_01_ColorPalette_1.png-47ccd6fa7d9b4aea35e12ce7ee6990ce.s3tc.ctex"]
+dest_files=["res://.godot/imported/Gorilla_01_ColorPalette_1.png-47ccd6fa7d9b4aea35e12ce7ee6990ce.s3tc.ctex", "res://.godot/imported/Gorilla_01_ColorPalette_1.png-47ccd6fa7d9b4aea35e12ce7ee6990ce.etc2.ctex"]
 
 [params]
 

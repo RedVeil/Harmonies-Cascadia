@@ -92,13 +92,18 @@ func _on_input_event(
 ) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			if UiPointerBlock.is_blocked():
+				return
 			GameFeedback.play_click_button()
 			hex_manager.handle_map_button_click(my_coord)
 
 
 func _on_mouse_entered() -> void:
+	if UiPointerBlock.is_blocked():
+		return
 	_hover_count += 1
 	if _hover_count == 1:
+		GameFeedback.play_hover_button()
 		_set_highlight(true)
 
 
@@ -106,6 +111,11 @@ func _on_mouse_exited() -> void:
 	_hover_count = maxi(_hover_count - 1, 0)
 	if _hover_count == 0:
 		_set_highlight(false)
+
+
+func clear_hover_for_ui() -> void:
+	_hover_count = 0
+	_set_highlight(false)
 
 
 func _set_highlight(hovered: bool) -> void:

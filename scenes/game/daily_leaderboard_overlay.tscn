@@ -1,0 +1,160 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/game/daily_leaderboard_overlay.gd" id="1_overlay"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_chip"]
+content_margin_left = 16.0
+content_margin_top = 2.0
+content_margin_right = 16.0
+content_margin_bottom = 2.0
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_chip_hover"]
+content_margin_left = 16.0
+content_margin_top = 2.0
+content_margin_right = 16.0
+content_margin_bottom = 2.0
+bg_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.95686275, 0.8745098, 0.7921569, 0.94)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[node name="DailyLeaderboardOverlay" type="Control"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_overlay")
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 36.0
+offset_right = -24.0
+offset_bottom = -36.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Margin" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Layout" type="VBoxContainer" parent="Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TitleLabel" type="Label" parent="Panel/Margin/Layout"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 28
+text = "DAILY LEADERBOARD"
+
+[node name="HeaderRow" type="HBoxContainer" parent="Panel/Margin/Layout"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="RankHeader" type="Label" parent="Panel/Margin/Layout/HeaderRow"]
+custom_minimum_size = Vector2(56, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 0.75)
+theme_override_font_sizes/font_size = 13
+text = "RANK"
+
+[node name="NameHeader" type="Label" parent="Panel/Margin/Layout/HeaderRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 0.75)
+theme_override_font_sizes/font_size = 13
+text = "NAME"
+
+[node name="PointsHeader" type="Label" parent="Panel/Margin/Layout/HeaderRow"]
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 0.75)
+theme_override_font_sizes/font_size = 13
+text = "POINTS"
+horizontal_alignment = 2
+
+[node name="Scroll" type="ScrollContainer" parent="Panel/Margin/Layout"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="RowList" type="VBoxContainer" parent="Panel/Margin/Layout/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="StatusLabel" type="Label" parent="Panel/Margin/Layout"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 0.75)
+theme_override_font_sizes/font_size = 14
+autowrap_mode = 2
+
+[node name="ButtonRow" type="HBoxContainer" parent="Panel/Margin/Layout"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ShowMeButton" type="Button" parent="Panel/Margin/Layout/ButtonRow"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_focus_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.7058824, 0.64705884, 0.5803922, 0.4)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_chip")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
+theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
+text = "SHOW ME"
+
+[node name="ShowTopButton" type="Button" parent="Panel/Margin/Layout/ButtonRow"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_focus_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_chip")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
+theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
+text = "SHOW TOP"
+
+[node name="CloseButton" type="Button" parent="Panel/Margin/Layout/ButtonRow"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_focus_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_chip")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
+theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
+text = "CLOSE"

@@ -1,13 +1,13 @@
 [gd_scene format=3 uid="uid://qsn7b1lfqc63"]
 
-[ext_resource type="PackedScene" uid="uid://hdfjecma7tyq" path="res://addons/stylized-nature/Mesh Scenes/Pebble_Round_1.tscn" id="6_tcnn6"]
+[ext_resource type="PackedScene" path="res://assets/tiles/assets/rocks/Pebble_Round_1.tscn" id="6_tcnn6"]
 [ext_resource type="PackedScene" uid="uid://cv2pqv1761xhe" path="res://assets/tiles/assets/hex_forest_detail.fbx" id="7_anwxg"]
-[ext_resource type="PackedScene" uid="uid://c7yry6lfhtido" path="res://addons/stylized-nature/Mesh Scenes/Pebble_Square_6.tscn" id="7_fwuus"]
+[ext_resource type="PackedScene" path="res://assets/tiles/assets/rocks/Pebble_Square_6.tscn" id="7_fwuus"]
 [ext_resource type="PackedScene" uid="uid://b86i8uul6ivkn" path="res://assets/tiles/assets/plants/grass.tscn" id="8_ped48"]
-[ext_resource type="PackedScene" uid="uid://dmugpscerbixi" path="res://addons/stylized-nature/Mesh Scenes/Pebble_Round_2.tscn" id="8_t3icp"]
-[ext_resource type="PackedScene" uid="uid://dk8b3u7kp73q1" path="res://addons/stylized-nature/Mesh Scenes/Pebble_Square_5.tscn" id="9_fb0ig"]
-[ext_resource type="PackedScene" uid="uid://r6htar24c0fs" path="res://addons/stylized-nature/Mesh Scenes/Rock_Medium_1.tscn" id="12_ldd4a"]
-[ext_resource type="PackedScene" uid="uid://vgy0bgwcv7qb" path="res://addons/stylized-nature/Mesh Scenes/Rock_Medium_4.tscn" id="12_lu8n0"]
+[ext_resource type="PackedScene" path="res://assets/tiles/assets/rocks/Pebble_Round_2.tscn" id="8_t3icp"]
+[ext_resource type="PackedScene" uid="uid://dk8b3u7kp73q1" path="res://assets/tiles/assets/rocks/Pebble_Square_5.tscn" id="9_fb0ig"]
+[ext_resource type="PackedScene" uid="uid://ck6qqbw0u4u0q" path="res://assets/tiles/assets/rocks/Rock_Medium_1.gltf" id="12_ldd4a"]
+[ext_resource type="PackedScene" path="res://assets/tiles/assets/rocks/Rock_Medium_4.tscn" id="12_lu8n0"]
 
 [sub_resource type="Curve3D" id="Curve3D_walk1"]
 closed = true

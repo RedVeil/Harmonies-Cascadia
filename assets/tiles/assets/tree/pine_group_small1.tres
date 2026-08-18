@@ -1,6 +1,6 @@
 [gd_resource type="MultiMesh" format=4 uid="uid://8bckdj7df2rr"]
 
-[ext_resource type="Material" uid="uid://salx13f41xn5" path="res://Materials/MI_Bark_NormalTree.tres" id="1_wlfv7"]
+[ext_resource type="Material" uid="uid://salx13f41xn5" path="res://assets/tiles/materials/foliage/bark/MI_Bark_NormalTree.tres" id="1_wlfv7"]
 [ext_resource type="Material" uid="uid://edm3d5ibv8k4" path="res://assets/tiles/materials/foliage/leaves/MI_Leaves_Pine.tres" id="2_jq63i"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_5jjxu"]

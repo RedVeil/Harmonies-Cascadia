@@ -15,6 +15,7 @@ var parent : Node
 var cards: Array[Node2D] = []
 var card_amount : int = 0
 var hover_card_id : int = -1
+var recycle_hover_id : int = -1
 var _relayout_queued : bool = false
 
 ## ----- Initialisation ----- ##
@@ -29,9 +30,17 @@ func select_card(id:int) -> void:
 	cards[id].select()
 	parent.select_card(id)
 
+func recycle_card(id: int) -> void:
+	if parent.has_method("recycle_card"):
+		parent.recycle_card(id)
+
 ## ----- Pass Data Downstream ----- ##
 
 func deselect_card(id) -> void:
+	if id == null or int(id) < 0 or int(id) >= cards.size():
+		return
+	if cards[id] == null:
+		return
 	cards[id].deselect()
 
 func add_card(card_data:CardData, id:int) -> void:
@@ -46,8 +55,22 @@ func add_card(card_data:CardData, id:int) -> void:
 	_queue_layout()
 
 func remove_card(id:int) -> void:
+	# #region agent log
+	_dbg87("A", "card_container.gd:remove_card", "removing hand slot", {
+		"id": id,
+		"slot_null_before": cards[id] == null,
+		"hover_card_id": hover_card_id,
+		"recycle_hover_id": recycle_hover_id,
+		"card_amount": card_amount,
+	})
+	# #endregion
 	card_amount -= 1
-	cards[id].remove_card()
+	if hover_card_id == id:
+		hover_card_id = -1
+	if recycle_hover_id == id:
+		recycle_hover_id = -1
+	if cards[id] != null:
+		cards[id].remove_card()
 	cards[id] = null
 	
 	_queue_layout()
@@ -72,11 +95,49 @@ func hover_card(id:int) -> void:
 			cards[hover_card_id].handle_exit()
 			cards[id].handle_hover()
 			hover_card_id = id
+	_refresh_recycle_button(id)
 
 func exit_card(id:int) -> void:
+	# #region agent log
+	var slot_null := id < 0 or id >= cards.size() or cards[id] == null
+	_dbg87("C", "card_container.gd:exit_card", "exit_card called", {
+		"id": id,
+		"slot_null": slot_null,
+		"id_in_range": id >= 0 and id < cards.size(),
+		"hover_card_id": hover_card_id,
+		"recycle_hover_id": recycle_hover_id,
+		"card_amount": card_amount,
+	})
+	# #endregion
+	# Keep hover while pointer moves onto this card's recycle X.
+	if recycle_hover_id == id:
+		return
 	if hover_card_id == id:
 		hover_card_id = -1
+	# Recycle queue_free() can fire mouse_exited after the slot is already cleared.
+	if id < 0 or id >= cards.size() or cards[id] == null:
+		return
 	cards[id].handle_exit()
+	_refresh_recycle_button(id)
+
+func set_recycle_hover(id: int, hovering: bool) -> void:
+	if hovering:
+		recycle_hover_id = id
+		if hover_card_id != id and id >= 0 and id < cards.size() and cards[id] != null:
+			if hover_card_id != -1 and cards[hover_card_id] != null:
+				cards[hover_card_id].handle_exit()
+			hover_card_id = id
+			cards[id].handle_hover()
+	elif recycle_hover_id == id:
+		recycle_hover_id = -1
+	_refresh_recycle_button(id)
+
+func _refresh_recycle_button(id: int) -> void:
+	if id < 0 or id >= cards.size() or cards[id] == null:
+		return
+	var card := cards[id] as Card
+	if card != null and card.has_method("refresh_recycle_button"):
+		card.refresh_recycle_button(hover_card_id == id or recycle_hover_id == id)
 
 ## ----- Layout Logic ----- ##
 
@@ -157,3 +218,24 @@ func _center_out_slot(i: int) -> int:
 		return step # right
 	else:
 		return -step # left
+
+# #region agent log
+func _dbg87(hyp: String, loc: String, msg: String, data: Dictionary) -> void:
+	var payload := {
+		"sessionId": "87ce77",
+		"hypothesisId": hyp,
+		"location": loc,
+		"message": msg,
+		"data": data,
+		"timestamp": int(Time.get_unix_time_from_system() * 1000.0),
+	}
+	var path := "c:/Users/leonn/Documents/Harmonies-Cascadia/debug-87ce77.log"
+	var f := FileAccess.open(path, FileAccess.READ_WRITE)
+	if f == null:
+		f = FileAccess.open(path, FileAccess.WRITE)
+	else:
+		f.seek_end()
+	if f != null:
+		f.store_line(JSON.stringify(payload))
+		f.close()
+# #endregion
