@@ -11,6 +11,7 @@ var COLOR_ROW_ME := Color.html("#E8C9A8")
 @onready var _scroll: ScrollContainer = $Panel/Margin/Layout/Scroll
 @onready var _row_list: VBoxContainer = $Panel/Margin/Layout/Scroll/RowList
 @onready var _status: Label = $Panel/Margin/Layout/StatusLabel
+@onready var _update: Button = $Panel/Margin/Layout/ButtonRow/UpdateButton
 @onready var _show_me: Button = $Panel/Margin/Layout/ButtonRow/ShowMeButton
 @onready var _show_top: Button = $Panel/Margin/Layout/ButtonRow/ShowTopButton
 @onready var _close: Button = $Panel/Margin/Layout/ButtonRow/CloseButton
@@ -36,10 +37,11 @@ func _ready() -> void:
 	_apply_panel_style()
 	_row_normal = _make_row_style(COLOR_ROW)
 	_row_me = _make_row_style(COLOR_ROW_ME)
+	_update.pressed.connect(_on_update_pressed)
 	_show_me.pressed.connect(_on_show_me_pressed)
 	_show_top.pressed.connect(_on_show_top_pressed)
 	_close.pressed.connect(_on_close_pressed)
-	for button in [_show_me, _show_top, _close]:
+	for button in [_update, _show_me, _show_top, _close]:
 		if not button.mouse_entered.is_connected(_on_button_hover):
 			button.mouse_entered.connect(_on_button_hover)
 	var bar := _scroll.get_v_scroll_bar()
@@ -61,7 +63,7 @@ func open() -> void:
 
 func close() -> void:
 	_load_gen += 1
-	_loading = false
+	_set_busy(false)
 	hide()
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_clear_rows()
@@ -93,9 +95,16 @@ func _make_row_style(color: Color) -> StyleBoxFlat:
 	return box
 
 
+func _set_busy(busy: bool) -> void:
+	_loading = busy
+	if is_instance_valid(_update):
+		_update.disabled = busy
+
+
 func _open_async() -> void:
 	_load_gen += 1
 	var gen := _load_gen
+	_set_busy(true)
 	_clear_rows()
 	_loaded_start = 0
 	_loaded_end = 0
@@ -108,6 +117,7 @@ func _open_async() -> void:
 
 	if not SupabaseClient.is_configured():
 		_status.text = "Leaderboard is not configured."
+		_set_busy(false)
 		return
 
 	var entry: Dictionary = await SupabaseClient.fetch_player_entry(_date, _player_id)
@@ -134,11 +144,11 @@ func _centered_offset(rank: int) -> int:
 
 
 func _replace_with_page(offset: int, gen: int = _load_gen) -> bool:
-	_loading = true
+	_set_busy(true)
 	var rows: Array = await SupabaseClient.fetch_page(_date, offset, page_size)
-	_loading = false
 	if gen != _load_gen:
 		return false
+	_set_busy(false)
 	_clear_rows()
 	_loaded_start = offset
 	_append_rows(rows)
@@ -277,11 +287,11 @@ func _load_next() -> void:
 	if _loading:
 		return
 	var gen := _load_gen
-	_loading = true
+	_set_busy(true)
 	var rows: Array = await SupabaseClient.fetch_page(_date, _loaded_end, page_size)
-	_loading = false
 	if gen != _load_gen:
 		return
+	_set_busy(false)
 	_append_rows(rows)
 	_sync_loaded_range()
 	_has_more_below = rows.size() >= page_size
@@ -294,15 +304,15 @@ func _load_previous() -> void:
 	var gen := _load_gen
 	var offset := maxi(_loaded_start - page_size, 0)
 	var count := _loaded_start - offset
-	_loading = true
+	_set_busy(true)
 	_suspend_scroll_load = true
 	var old_scroll := _scroll.scroll_vertical
 	var old_height := _row_list.size.y
 	var rows: Array = await SupabaseClient.fetch_page(_date, offset, count)
-	_loading = false
 	if gen != _load_gen:
 		_suspend_scroll_load = false
 		return
+	_set_busy(false)
 	if rows.is_empty():
 		_suspend_scroll_load = false
 		return
@@ -314,6 +324,131 @@ func _load_previous() -> void:
 	_scroll.scroll_vertical = old_scroll + int(new_height - old_height)
 	await get_tree().process_frame
 	_suspend_scroll_load = false
+
+
+func _on_update_pressed() -> void:
+	GameFeedback.play_click_button()
+	if _loading:
+		return
+	if _row_list.get_child_count() == 0:
+		_open_async()
+		return
+	await _update_merge_async()
+
+
+func _update_merge_async() -> void:
+	_load_gen += 1
+	var gen := _load_gen
+	_set_busy(true)
+	_status.text = "Updating..."
+
+	var entry: Dictionary = await SupabaseClient.fetch_player_entry(_date, _player_id)
+	if gen != _load_gen:
+		return
+	if not entry.is_empty():
+		_player_rank = int(entry.get("rank", 0))
+		_show_me.disabled = _player_rank <= 0
+	else:
+		_player_rank = 0
+		_show_me.disabled = true
+
+	var offset := _loaded_start
+	var count := maxi(_loaded_end - _loaded_start, page_size)
+	var fetched: Array = []
+	var remaining := count
+	var page_offset := offset
+	while remaining > 0:
+		var take := mini(remaining, page_size)
+		var page: Array = await SupabaseClient.fetch_page(_date, page_offset, take)
+		if gen != _load_gen:
+			return
+		if page.is_empty():
+			break
+		fetched.append_array(page)
+		if page.size() < take:
+			break
+		page_offset += page.size()
+		remaining -= page.size()
+
+	if gen != _load_gen:
+		return
+	_set_busy(false)
+
+	if fetched.is_empty() and offset == 0:
+		_merge_rows(fetched)
+		if not SupabaseClient.last_error.is_empty():
+			_status.text = SupabaseClient.last_error
+		else:
+			_status.text = "No scores yet today."
+		return
+	if fetched.is_empty() and not SupabaseClient.last_error.is_empty():
+		_status.text = SupabaseClient.last_error
+		return
+
+	_has_more_below = fetched.size() >= count
+	_merge_rows(fetched)
+	_status.text = ""
+
+
+func _merge_rows(fetched: Array) -> void:
+	var by_id: Dictionary = {}
+	for child in _row_list.get_children():
+		var pid := str(child.get_meta("player_id", ""))
+		if not pid.is_empty():
+			by_id[pid] = child
+
+	var seen: Dictionary = {}
+	for item in fetched:
+		if typeof(item) != TYPE_DICTIONARY:
+			continue
+		var pid := str(item.get("player_id", ""))
+		if pid.is_empty():
+			continue
+		seen[pid] = true
+		if by_id.has(pid):
+			_update_row(by_id[pid], item)
+		else:
+			var row := _make_row(item)
+			_row_list.add_child(row)
+			by_id[pid] = row
+
+	var to_remove: Array = []
+	for child in _row_list.get_children():
+		if not seen.has(str(child.get_meta("player_id", ""))):
+			to_remove.append(child)
+	for child in to_remove:
+		_row_list.remove_child(child)
+		child.queue_free()
+
+	_sort_rows_by_rank()
+	_sync_loaded_range()
+	_sync_row_list_width()
+
+
+func _update_row(row: PanelContainer, entry: Dictionary) -> void:
+	var rank := int(entry.get("rank", 0))
+	var player_id := str(entry.get("player_id", ""))
+	var is_me := player_id == _player_id and not player_id.is_empty()
+	row.add_theme_stylebox_override("panel", _row_me if is_me else _row_normal)
+	row.set_meta("player_id", player_id)
+	row.set_meta("rank", rank)
+	if row.get_child_count() == 0:
+		return
+	var cols := row.get_child(0) as HBoxContainer
+	if cols == null or cols.get_child_count() < 3:
+		return
+	(cols.get_child(0) as Label).text = "%d" % rank
+	(cols.get_child(1) as Label).text = str(entry.get("name", ""))
+	(cols.get_child(2) as Label).text = "%d" % int(entry.get("points", 0))
+
+
+func _sort_rows_by_rank() -> void:
+	var children := _row_list.get_children()
+	children.sort_custom(func(a: Node, b: Node) -> bool:
+		return int(a.get_meta("rank", 0)) < int(b.get_meta("rank", 0))
+	)
+	for i in children.size():
+		_row_list.move_child(children[i], i)
 
 
 func _on_show_me_pressed() -> void:

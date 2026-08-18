@@ -110,6 +110,23 @@ autowrap_mode = 2
 layout_mode = 2
 theme_override_constants/separation = 12
 
+[node name="UpdateButton" type="Button" parent="Panel/Margin/Layout/ButtonRow"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_focus_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.7058824, 0.64705884, 0.5803922, 0.4)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_chip")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
+theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
+text = "UPDATE"
+
 [node name="ShowMeButton" type="Button" parent="Panel/Margin/Layout/ButtonRow"]
 custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
