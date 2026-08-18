@@ -26,6 +26,8 @@ var msaa_mode: MsaaMode = MsaaMode.X4
 
 var music_volume: float = 0.5
 var sfx_volume: float = 0.5
+## puzzle_id -> { "best_score": int }
+var puzzle_progress: Dictionary = {}
 
 var _applying_ui_sync: bool = false
 
@@ -84,6 +86,12 @@ func _load_from_json() -> void:
 	music_volume = clampf(float(audio.get("music_volume", 0.5)), 0.0, 1.0)
 	sfx_volume = clampf(float(audio.get("sfx_volume", 0.5)), 0.0, 1.0)
 
+	var progress = data.get("puzzle_progress", {})
+	if typeof(progress) == TYPE_DICTIONARY:
+		puzzle_progress = progress.duplicate(true)
+	else:
+		puzzle_progress = {}
+
 
 func _load_from_legacy_cfg() -> void:
 	var cfg := ConfigFile.new()
@@ -116,6 +124,7 @@ func save_to_disk() -> void:
 			"music_volume": music_volume,
 			"sfx_volume": sfx_volume,
 		},
+		"puzzle_progress": puzzle_progress,
 	}
 	var json := JSON.stringify(data)
 	var f := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
@@ -154,6 +163,25 @@ func mark_tutorial_completed() -> void:
 		return
 	tutorial_completed = true
 	tutorial_played = true
+	save_to_disk()
+
+
+func get_puzzle_best_score(id: String) -> int:
+	if id.is_empty():
+		return 0
+	var entry = puzzle_progress.get(id, {})
+	if typeof(entry) != TYPE_DICTIONARY:
+		return 0
+	return int(entry.get("best_score", 0))
+
+
+func record_puzzle_score(id: String, score: int) -> void:
+	if id.is_empty():
+		return
+	var previous := get_puzzle_best_score(id)
+	if score <= previous:
+		return
+	puzzle_progress[id] = { "best_score": score }
 	save_to_disk()
 
 

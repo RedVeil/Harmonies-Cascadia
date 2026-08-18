@@ -28,7 +28,6 @@ spawn_sounds = Array[AudioStream]([ExtResource("7_draw")])
 redraw_sounds = Array[AudioStream]([ExtResource("7_draw")])
 
 [node name="HitArea" type="Control" parent="." unique_id=1561032188]
-self_modulate = Color(1, 0.71112853, 1, 1)
 z_index = 10
 layout_mode = 3
 anchors_preset = 0

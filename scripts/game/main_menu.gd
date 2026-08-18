@@ -2,6 +2,7 @@ extends Control
 
 const GAME_SCENE := "res://scenes/Refactored_Main.tscn"
 const BG_PATH := "res://assets/ui/menu_bg.webp"
+const PUZZLE_SLOT_SCENE := preload("res://scenes/game/puzzle_slot.tscn")
 
 var COLOR_RIGHT := Color.html("#D2C2AD")
 
@@ -19,7 +20,7 @@ var COLOR_RIGHT := Color.html("#D2C2AD")
 @onready var _quick_session_desc: Label = $Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickSessionDesc
 @onready var _puzzle_button: Button = $Split/LeftColumn/Margin/NavStack/PlayNav/PuzzleBlock/PuzzleButton
 @onready var _puzzle_nav: VBoxContainer = $Split/LeftColumn/Margin/NavStack/PuzzleNav
-@onready var _puzzle_list: VBoxContainer = $Split/LeftColumn/Margin/NavStack/PuzzleNav/PuzzleList
+@onready var _puzzle_grid: GridContainer = $Split/LeftColumn/Margin/NavStack/PuzzleNav/PuzzleScroll/PuzzleGrid
 @onready var _code_input: LineEdit = $Split/LeftColumn/Margin/NavStack/CodeNav/CodeInput
 @onready var _code_status: Label = $Split/LeftColumn/Margin/NavStack/CodeNav/CodeStatus
 
@@ -118,47 +119,41 @@ func _setup_puzzle_ids() -> void:
 	_rebuild_puzzle_list(puzzles)
 
 
+func _is_puzzle_unlocked(index: int, puzzles: Array[Dictionary]) -> bool:
+	if index <= 0:
+		return true
+	var previous: Dictionary = puzzles[index - 1]
+	var prev_id := str(previous.get("id", ""))
+	var ratings: Dictionary = previous.get("ratings", {})
+	if typeof(ratings) != TYPE_DICTIONARY:
+		ratings = {}
+	var best := GameSettings.get_puzzle_best_score(prev_id)
+	var rating := GameSession.rating_for_score(best, ratings)
+	return not rating.is_empty()
+
+
 func _rebuild_puzzle_list(puzzles: Array[Dictionary]) -> void:
-	if _puzzle_list == null:
+	if _puzzle_grid == null:
 		return
-	for child in _puzzle_list.get_children():
+	for child in _puzzle_grid.get_children():
+		_puzzle_grid.remove_child(child)
 		child.queue_free()
-	for puzzle in puzzles:
+	for i in puzzles.size():
+		var puzzle: Dictionary = puzzles[i]
 		var id := str(puzzle.get("id", ""))
 		if id.is_empty():
 			continue
-		var block := VBoxContainer.new()
-		block.add_theme_constant_override("separation", -10)
-
-		var button := Button.new()
-		button.text = str(puzzle.get("title", id)).to_upper()
-		button.flat = true
-		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		button.add_theme_color_override("font_color", Color(1, 1, 1, 1))
-		button.add_theme_color_override("font_focus_color", Color(1, 1, 1, 1))
-		button.add_theme_color_override("font_pressed_color", Color(1, 1, 1, 0.6))
-		button.add_theme_color_override("font_hover_color", Color(0.5686275, 0.5176471, 0.47058824, 1))
-		button.add_theme_font_size_override("font_size", 26)
-		var empty := StyleBoxEmpty.new()
-		button.add_theme_stylebox_override("normal", empty)
-		button.add_theme_stylebox_override("pressed", empty)
-		button.add_theme_stylebox_override("hover", empty)
-		button.add_theme_stylebox_override("disabled", empty)
-		button.add_theme_stylebox_override("focus", empty)
-		button.pressed.connect(_on_puzzle_selected.bind(id))
-		if not button.mouse_entered.is_connected(_on_nav_button_mouse_entered):
-			button.mouse_entered.connect(_on_nav_button_mouse_entered)
-
-		var desc := Label.new()
-		desc.text = str(puzzle.get("description", ""))
-		desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		desc.add_theme_color_override("font_color", Color(1, 1, 1, 0.7))
-		desc.add_theme_constant_override("line_spacing", -5)
-		desc.add_theme_font_size_override("font_size", 13)
-
-		block.add_child(button)
-		block.add_child(desc)
-		_puzzle_list.add_child(block)
+		var unlocked := _is_puzzle_unlocked(i, puzzles)
+		var ratings: Dictionary = puzzle.get("ratings", {})
+		if typeof(ratings) != TYPE_DICTIONARY:
+			ratings = {}
+		var best := GameSettings.get_puzzle_best_score(id)
+		var rating := GameSession.rating_for_score(best, ratings)
+		var slot: PuzzleSlot = PUZZLE_SLOT_SCENE.instantiate()
+		_puzzle_grid.add_child(slot)
+		slot.setup(id, i + 1, unlocked, rating)
+		if unlocked:
+			slot.selected.connect(_on_puzzle_selected)
 
 
 func _reset_mode_inline_ui() -> void:
@@ -245,6 +240,7 @@ func _show_tutorial_nav() -> void:
 
 func _show_puzzle_nav() -> void:
 	GameFeedback.play_open_popup()
+	_setup_puzzle_ids()
 	_name_nav.hide()
 	_root_nav.hide()
 	_play_nav.hide()

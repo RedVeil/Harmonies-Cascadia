@@ -12,8 +12,10 @@ signal tutorial_action(action: String, payload: Dictionary)
 @export var quest_manager:QuestManager
 @export var point_counter:PointCounter
 @export var undo_button:UndoButton
+@export var play_counter:PlayCounter
 @export var card_recycling:CardRecycling
 @export var tutorial_overlay:TutorialOverlay
+@export var tutorial_coach:TutorialCoach
 @export var settings_overlay:SettingsOverlay
 @export var game_over_overlay:GameOverOverlay
 @export var in_game_menu:InGameMenu
@@ -33,6 +35,8 @@ var map_points: int = 0
 ## Interactive tutorial gates (null / inactive = normal play).
 var tutorial_bridge: TutorialBridge = TutorialBridge.new()
 var _placed_tile_count: int = 0
+var _puzzle_plays: int = 0
+var _puzzle_intro_open: bool = false
 
 ## HexTile Preview State
 var placement_valid : bool = false
@@ -67,6 +71,7 @@ func _ready() -> void:
 		game_over_overlay.end_pressed.connect(confirm_end_game)
 		game_over_overlay.leave_pressed.connect(leave_to_menu)
 		game_over_overlay.restart_pressed.connect(restart_run)
+		game_over_overlay.next_pressed.connect(start_next_puzzle)
 	if in_game_menu:
 		in_game_menu.restart_pressed.connect(restart_run)
 		in_game_menu.end_pressed.connect(_on_in_game_menu_end)
@@ -113,6 +118,9 @@ func _apply_puzzle_setup() -> void:
 		point_counter
 	)
 	_seed_scripted_hand(puzzle)
+	_puzzle_plays = 0
+	_refresh_play_counter()
+	_show_puzzle_intro()
 
 
 func apply_tutorial_part_setup(part: Dictionary) -> void:
@@ -209,11 +217,13 @@ func has_placed_tile() -> bool:
 
 
 func _apply_game_mode_ui() -> void:
-	pass
+	_refresh_play_counter()
 
 
 func open_in_game_menu() -> void:
 	if in_game_menu == null or score_engine == null:
+		return
+	if game_over or _puzzle_intro_open:
 		return
 	if tutorial_bridge.active and not tutorial_bridge.allows_action("open_menu"):
 		return
@@ -233,9 +243,16 @@ func open_in_game_menu() -> void:
 
 
 func close_in_game_menu() -> void:
+	if game_over:
+		if in_game_menu:
+			in_game_menu.close()
+		return
 	game_over = false
 	if in_game_menu:
 		in_game_menu.close()
+	if _puzzle_intro_open:
+		pause_cards()
+		return
 	if map_points == 0:
 		undo_button.enable()
 	unpause_cards()
@@ -252,6 +269,8 @@ func _on_in_game_menu_end() -> void:
 		return
 	game_over = true
 	_submit_daily_score_if_needed()
+	if score_engine:
+		GameSession.record_puzzle_result(score_engine.total_score)
 	if RunSave.supports_mode(GameSession.game_mode):
 		RunSave.save_from_orchestrator(self)
 	leave_to_menu()
@@ -266,7 +285,7 @@ func add_hand_card(card:CardData) -> void:
 ## ----- Handle Hand Interactions ----- ##
 
 func select_hand_card(id:int) -> void:
-	if game_over:
+	if game_over or _puzzle_intro_open:
 		return
 
 	## Clear selection (e.g. card removed / recycle). Never deselect_card(-1).
@@ -352,10 +371,74 @@ func confirm_end_game() -> void:
 		return
 	game_over = true
 	_submit_daily_score_if_needed()
+	if score_engine:
+		GameSession.record_puzzle_result(score_engine.total_score)
 	if in_game_menu:
 		in_game_menu.open(score_engine.total_score, true)
 	elif game_over_overlay:
 		game_over_overlay.show_results(score_engine.total_score)
+
+
+func _complete_puzzle() -> void:
+	if game_over:
+		return
+	game_over = true
+	if selected_card_id != -1:
+		card_manager.deselect_card(selected_card_id)
+		selected_card_id = -1
+		_update_card_recycling_state()
+		if tile_hovered:
+			hex_manager.reset_preview(selected_coord)
+		quest_manager.reset_preview()
+		point_counter.reset_preview()
+		reset_preview()
+	pause_cards()
+	undo_button.disable()
+	if score_engine:
+		GameSession.record_puzzle_result(score_engine.total_score)
+	if game_over_overlay:
+		game_over_overlay.show_results(score_engine.total_score)
+
+
+func _puzzle_plays_exhausted() -> bool:
+	var cap := GameSession.get_max_plays()
+	return cap >= 0 and _puzzle_plays >= cap
+
+
+func get_puzzle_plays_remaining() -> int:
+	var cap := GameSession.get_max_plays()
+	if cap < 0:
+		return -1
+	return maxi(cap - _puzzle_plays, 0)
+
+
+func _refresh_play_counter() -> void:
+	if play_counter == null:
+		return
+	play_counter.set_remaining(get_puzzle_plays_remaining())
+
+
+func _show_puzzle_intro() -> void:
+	if tutorial_coach == null:
+		return
+	pause_cards()
+	_puzzle_intro_open = true
+	if not tutorial_coach.continue_pressed.is_connected(_on_puzzle_intro_start):
+		tutorial_coach.continue_pressed.connect(_on_puzzle_intro_start)
+	var title := str(GameSession.puzzle_config.get("title", "Puzzle"))
+	var desc := str(GameSession.puzzle_config.get("description", "")).strip_edges()
+	tutorial_coach.show_centered_modal(title, desc, "Start", GameSession.get_puzzle_ratings())
+
+
+func _on_puzzle_intro_start() -> void:
+	if not _puzzle_intro_open:
+		return
+	_puzzle_intro_open = false
+	if tutorial_coach:
+		if tutorial_coach.continue_pressed.is_connected(_on_puzzle_intro_start):
+			tutorial_coach.continue_pressed.disconnect(_on_puzzle_intro_start)
+		tutorial_coach.hide_coach()
+	unpause_cards()
 
 
 func _submit_daily_score_if_needed() -> void:
@@ -391,6 +474,15 @@ func restart_run() -> void:
 		GameSession.begin_puzzle_run(GameSession.puzzle_id)
 	else:
 		GameSession.begin_normal_run(GameSession.map_size)
+	get_tree().call_deferred("reload_current_scene")
+
+
+func start_next_puzzle() -> void:
+	var next_id := GameSession.get_next_puzzle_id()
+	if next_id.is_empty():
+		return
+	if not GameSession.begin_puzzle_run(next_id):
+		return
 	get_tree().call_deferred("reload_current_scene")
 
 func preview_recycle_card(_id:int, _amount:int, _id_known:bool) -> void:
@@ -491,6 +583,8 @@ func handle_tile_exit() -> bool:
 func handle_tile_click(coord: Vector2i) -> void:
 	if UiPointerBlock.is_blocked():
 		return
+	if game_over or _puzzle_intro_open:
+		return
 	if selected_card_id != -1 and placement_valid and !cards_paused:
 		var selected_card = card_manager.cards[selected_card_id]
 		var tile_data: HexTileData = hex_manager.tiles[coord] if hex_manager.tiles.has(coord) else null
@@ -579,13 +673,20 @@ func handle_tile_click(coord: Vector2i) -> void:
 			booster_manager.notify_element_played()
 		
 		reset_preview()
-		if map_points == 0:
-			undo_button.enable()
-
 		if not card_manager.cards[selected_card_id]:
 			selected_card_id = -1
 
 		_placed_tile_count += 1
+		if GameSession.is_puzzle() and GameSession.get_max_plays() >= 0:
+			_puzzle_plays += 1
+			_refresh_play_counter()
+			if _puzzle_plays_exhausted():
+				_complete_puzzle()
+			elif map_points == 0:
+				undo_button.enable()
+		elif map_points == 0:
+			undo_button.enable()
+
 		tutorial_bridge.notify("tile_placed", {
 			"coord": coord,
 			"card_type": selected_card_backup.type,
@@ -688,6 +789,8 @@ func _animal_bonus_multiplier_score(card: CardData) -> int:
 ## ----- Undo Logic ----- ##
 
 func undo() -> void:
+	if game_over or _puzzle_intro_open:
+		return
 	if tutorial_bridge.active and not tutorial_bridge.allows_action("undo"):
 		return
 	quest_manager.undo() # to be tested
@@ -723,6 +826,9 @@ func undo() -> void:
 	hex_manager.undo(coord_backup) # works
 	undo_button.disable() # works
 	_placed_tile_count = maxi(_placed_tile_count - 1, 0)
+	if GameSession.is_puzzle() and GameSession.get_max_plays() >= 0:
+		_puzzle_plays = maxi(_puzzle_plays - 1, 0)
+		_refresh_play_counter()
 	tutorial_bridge.notify("undone", {"coord": coord_backup})
 
 ## ----- Utility Logic ----- ##

@@ -91,6 +91,7 @@ func open(score: int, _results: bool = false) -> void:
 
 
 func show_results(final_score: int) -> void:
+	GameFeedback.play_open_popup()
 	_score = final_score
 	_score_label.text = "You earned %d Points!" % final_score
 	_sub_label.text = "Well done!"

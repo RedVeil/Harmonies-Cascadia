@@ -15,6 +15,7 @@ func _ready() -> void:
 		[$Root/CardManagerSlot, $CardManager],
 		[$Root/ScoreTooltipSlot, $ScoreTooltip],
 		[$Root/MenuButtonSlot, $MenuButton],
+		[$Root/PlayCounterSlot, $PlayCounter],
 		[$Root/UndoButtonSlot, $UndoButton],
 	]
 	get_viewport().size_changed.connect(_relayout)
@@ -25,4 +26,6 @@ func _relayout() -> void:
 	for pair in _pairs:
 		var slot: Control = pair[0]
 		var widget: Node2D = pair[1]
+		if slot == null or widget == null:
+			continue
 		widget.global_position = slot.global_position

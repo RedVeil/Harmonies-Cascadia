@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://btrpwtm1kk5ey"]
+
+[ext_resource type="Script" path="res://scripts/game/puzzle_slot.gd" id="1_slot"]
+[ext_resource type="Texture2D" uid="uid://bngwl2igqsrof" path="res://assets/icons/IconsFlat15_64px.png" id="2_star"]
+
+[node name="PuzzleSlot" type="VBoxContainer"]
+custom_minimum_size = Vector2(72, 0)
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+script = ExtResource("1_slot")
+
+[node name="NumberButton" type="Button" parent="."]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 36
+text = "1"
+flat = false
+
+[node name="Stars" type="HBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="Star1" type="TextureRect" parent="Stars"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+texture = ExtResource("2_star")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Star2" type="TextureRect" parent="Stars"]
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+texture = ExtResource("2_star")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Star3" type="TextureRect" parent="Stars"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+texture = ExtResource("2_star")
+expand_mode = 1
+stretch_mode = 5

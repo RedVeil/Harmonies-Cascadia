@@ -1,6 +1,9 @@
 [gd_scene format=3 uid="uid://d2uy77eljjm3y"]
 
 [ext_resource type="Script" path="res://scripts/game/game_over_overlay.gd" id="1_overlay"]
+[ext_resource type="Texture2D" uid="uid://bngwl2igqsrof" path="res://assets/icons/IconsFlat15_64px.png" id="2_star"]
+[ext_resource type="AudioStream" uid="uid://d4nxe12i1lx46" path="res://assets/audio/chime_sound.mp3" id="3_chime"]
+[ext_resource type="AudioStream" uid="uid://brhqwqlv25ehf" path="res://assets/audio/chips-stack-4.ogg" id="4_chip"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_popup"]
 bg_color = Color(0.95686275, 0.8745098, 0.7921569, 1)
@@ -20,6 +23,8 @@ bg_color = Color(1, 1, 1, 0)
 [node name="GameOverOverlay" type="CanvasLayer"]
 layer = 20
 script = ExtResource("1_overlay")
+star_chime_sounds = Array[AudioStream]([ExtResource("3_chime")])
+score_tick_sounds = Array[AudioStream]([ExtResource("4_chip")])
 
 [node name="Dimmer" type="Panel" parent="."]
 anchors_preset = 15
@@ -33,18 +38,18 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_dim")
 [node name="PopupRoot" type="Node2D" parent="."]
 
 [node name="PopupPanel" type="Panel" parent="PopupRoot"]
-offset_left = -200.0
-offset_top = -180.0
-offset_right = 200.0
-offset_bottom = 180.0
+offset_left = -190.0
+offset_top = -140.0
+offset_right = 190.0
+offset_bottom = 140.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_popup")
 
 [node name="ClickBlocker" type="Panel" parent="PopupRoot"]
-offset_left = -200.0
-offset_top = -180.0
-offset_right = 200.0
-offset_bottom = 180.0
+offset_left = -190.0
+offset_top = -140.0
+offset_right = 190.0
+offset_bottom = 140.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_blocker")
 
 [node name="TitleLabel" type="Label" parent="PopupRoot"]
@@ -98,6 +103,24 @@ text = "Bronze!"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
+
+[node name="StarsRow" type="Node2D" parent="PopupRoot"]
+visible = false
+position = Vector2(0, -48)
+
+[node name="StarBronze" type="Sprite2D" parent="PopupRoot/StarsRow"]
+position = Vector2(-48, 0)
+scale = Vector2(0.45, 0.45)
+texture = ExtResource("2_star")
+
+[node name="StarSilver" type="Sprite2D" parent="PopupRoot/StarsRow"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_star")
+
+[node name="StarGold" type="Sprite2D" parent="PopupRoot/StarsRow"]
+position = Vector2(48, 0)
+scale = Vector2(0.45, 0.45)
+texture = ExtResource("2_star")
 
 [node name="ContinueButton" type="Control" parent="PopupRoot"]
 layout_mode = 3
@@ -229,6 +252,39 @@ text = "Restart"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="NextButton" type="Control" parent="PopupRoot"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 64.0
+offset_top = 72.0
+offset_right = 174.0
+offset_bottom = 104.0
+
+[node name="Background" type="ColorRect" parent="PopupRoot/NextButton"]
+layout_mode = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 1)
+
+[node name="Label" type="Label" parent="PopupRoot/NextButton"]
+layout_mode = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 14
+text = "Next"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="ShareButton" type="Control" parent="PopupRoot"]
 visible = false
 layout_mode = 3
@@ -288,6 +344,9 @@ vertical_alignment = 1
 [connection signal="gui_input" from="PopupRoot/RestartButton" to="." method="_on_restart_gui_input"]
 [connection signal="mouse_entered" from="PopupRoot/RestartButton" to="." method="_on_restart_mouse_entered"]
 [connection signal="mouse_exited" from="PopupRoot/RestartButton" to="." method="_on_restart_mouse_exited"]
+[connection signal="gui_input" from="PopupRoot/NextButton" to="." method="_on_next_gui_input"]
+[connection signal="mouse_entered" from="PopupRoot/NextButton" to="." method="_on_next_mouse_entered"]
+[connection signal="mouse_exited" from="PopupRoot/NextButton" to="." method="_on_next_mouse_exited"]
 [connection signal="gui_input" from="PopupRoot/ShareButton" to="." method="_on_share_gui_input"]
 [connection signal="mouse_entered" from="PopupRoot/ShareButton" to="." method="_on_share_mouse_entered"]
 [connection signal="mouse_exited" from="PopupRoot/ShareButton" to="." method="_on_share_mouse_exited"]

@@ -733,14 +733,18 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 24
 
-[node name="PuzzleList" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack/PuzzleNav" unique_id=2200000101]
+[node name="PuzzleScroll" type="ScrollContainer" parent="Split/LeftColumn/Margin/NavStack/PuzzleNav" unique_id=2200000101]
 layout_mode = 2
-theme_override_constants/separation = 24
-
-[node name="FooterSpacer" type="Control" parent="Split/LeftColumn/Margin/NavStack/PuzzleNav" unique_id=2200000102]
-layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
-mouse_filter = 2
+horizontal_scroll_mode = 0
+
+[node name="PuzzleGrid" type="GridContainer" parent="Split/LeftColumn/Margin/NavStack/PuzzleNav/PuzzleScroll" unique_id=2200000104]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 20
+columns = 3
 
 [node name="PuzzleBackButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/PuzzleNav" unique_id=2200000103]
 layout_mode = 2

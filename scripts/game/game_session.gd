@@ -4,7 +4,7 @@ extends Node
 
 const CONFIG_PATH := "res://data/session_config.json"
 const TUTORIAL_CONFIG_PATH := "res://data/tutorial_config.json"
-const PUZZLES_DIR := "res://data/puzzles"
+const PUZZLES_PATH := "res://data/puzzles.json"
 
 enum GameMode { DAILY, NORMAL, ENDLESS, CHALLENGE, TUTORIAL, PUZZLE }
 enum MapSize { SMALL, MEDIUM, LARGE }
@@ -31,16 +31,18 @@ var tutorial_config: Dictionary = {}
 ## Empty starts at the first part. Set by begin_tutorial_run(part_id).
 var tutorial_start_part: String = ""
 
-## Active puzzle definition (data/puzzles/*.json). Empty when not in puzzle mode.
+## Active puzzle definition (data/puzzles.json). Empty when not in puzzle mode.
 var puzzle_id: String = ""
 var puzzle_config: Dictionary = {}
 
 var _config: Dictionary = {}
+var _puzzles: Array = []
 
 
 func _ready() -> void:
 	_load_config()
 	_load_tutorial_config()
+	_load_puzzles()
 	begin_run(0)
 	_apply_mode_config(GameMode.NORMAL, MapSize.MEDIUM)
 	clear_challenge()
@@ -231,7 +233,11 @@ func get_puzzle_scoring_rules() -> Dictionary:
 
 
 func get_puzzle_ratings() -> Dictionary:
-	var raw = puzzle_config.get("ratings", {})
+	return _ratings_from_puzzle(puzzle_config)
+
+
+func _ratings_from_puzzle(puzzle: Dictionary) -> Dictionary:
+	var raw = puzzle.get("ratings", {})
 	if typeof(raw) != TYPE_DICTIONARY:
 		return {}
 	return {
@@ -250,65 +256,95 @@ func get_max_pack_takes() -> int:
 	return int(puzzle_config.get("max_pack_takes", -1))
 
 
-## Returns "gold" / "silver" / "bronze" / "" for the highest tier reached.
-func rating_for_score(score: int) -> String:
+## -1 means unlimited placements (open puzzles / non-puzzle modes).
+func get_max_plays() -> int:
+	if not is_puzzle():
+		return -1
+	if not puzzle_config.has("max_plays"):
+		return -1
+	return int(puzzle_config.get("max_plays", -1))
+
+
+func get_puzzle_rating_line() -> String:
 	var ratings := get_puzzle_ratings()
 	if ratings.is_empty():
 		return ""
-	var gold := int(ratings.get("gold", 0))
-	var silver := int(ratings.get("silver", 0))
-	var bronze := int(ratings.get("bronze", 0))
-	if score >= gold:
+	return "Bronze %d  ·  Silver %d  ·  Gold %d" % [
+		int(ratings.get("bronze", 0)),
+		int(ratings.get("silver", 0)),
+		int(ratings.get("gold", 0)),
+	]
+
+
+## Returns "gold" / "silver" / "bronze" / "" for the highest tier reached.
+func rating_for_score(score: int, ratings: Dictionary = {}) -> String:
+	var resolved: Dictionary = ratings
+	if resolved.is_empty():
+		resolved = get_puzzle_ratings()
+	if resolved.is_empty():
+		return ""
+	var gold := int(resolved.get("gold", 0))
+	var silver := int(resolved.get("silver", 0))
+	var bronze := int(resolved.get("bronze", 0))
+	if gold > 0 and score >= gold:
 		return "gold"
-	if score >= silver:
+	if silver > 0 and score >= silver:
 		return "silver"
-	if score >= bronze:
+	if bronze > 0 and score >= bronze:
 		return "bronze"
 	return ""
 
 
+func record_puzzle_result(score: int) -> void:
+	if not is_puzzle() or puzzle_id.is_empty():
+		return
+	GameSettings.record_puzzle_score(puzzle_id, score)
+
+
+## Catalog entry after the current puzzle, or empty if this is the last.
+func get_next_puzzle_id() -> String:
+	if puzzle_id.is_empty():
+		return ""
+	var puzzles := list_puzzles()
+	for i in puzzles.size():
+		if str(puzzles[i].get("id", "")) != puzzle_id:
+			continue
+		if i + 1 >= puzzles.size():
+			return ""
+		return str(puzzles[i + 1].get("id", ""))
+	return ""
+
+
 func list_puzzles() -> Array[Dictionary]:
+	if _puzzles.is_empty():
+		_load_puzzles()
 	var out: Array[Dictionary] = []
-	var dir := DirAccess.open(PUZZLES_DIR)
-	if dir == null:
-		return out
-	dir.list_dir_begin()
-	var file_name := dir.get_next()
-	while file_name != "":
-		if not dir.current_is_dir() and file_name.ends_with(".json"):
-			var id := file_name.get_basename()
-			var puzzle := load_puzzle(id)
-			if not puzzle.is_empty():
-				out.append({
-					"id": str(puzzle.get("id", id)),
-					"title": str(puzzle.get("title", id)),
-					"description": str(puzzle.get("description", "")),
-					"order": int(puzzle.get("order", 1000)),
-				})
-		file_name = dir.get_next()
-	dir.list_dir_end()
-	out.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
-		var order_a := int(a.get("order", 1000))
-		var order_b := int(b.get("order", 1000))
-		if order_a != order_b:
-			return order_a < order_b
-		return str(a.get("title", "")) < str(b.get("title", ""))
-	)
+	for puzzle in _puzzles:
+		if typeof(puzzle) != TYPE_DICTIONARY:
+			continue
+		var id := str(puzzle.get("id", ""))
+		if id.is_empty():
+			continue
+		out.append({
+			"id": id,
+			"title": str(puzzle.get("title", id)),
+			"description": str(puzzle.get("description", "")),
+			"order": int(puzzle.get("order", 1000)),
+			"ratings": _ratings_from_puzzle(puzzle),
+		})
 	return out
 
 
 func load_puzzle(id: String) -> Dictionary:
-	var path := "%s/%s.json" % [PUZZLES_DIR, id]
-	if not FileAccess.file_exists(path):
-		push_warning("Puzzle not found: %s" % path)
+	if id.is_empty():
 		return {}
-	var parsed = JSON.parse_string(FileAccess.get_file_as_string(path))
-	if typeof(parsed) != TYPE_DICTIONARY:
-		push_error("Invalid puzzle JSON: %s" % path)
-		return {}
-	if not parsed.has("id"):
-		parsed["id"] = id
-	return parsed
+	if _puzzles.is_empty():
+		_load_puzzles()
+	for puzzle in _puzzles:
+		if typeof(puzzle) == TYPE_DICTIONARY and str(puzzle.get("id", "")) == id:
+			return puzzle
+	push_warning("Puzzle not found: %s" % id)
+	return {}
 
 
 func clear_puzzle() -> void:
@@ -369,6 +405,25 @@ func _load_tutorial_config() -> void:
 		tutorial_config = {}
 		return
 	tutorial_config = parsed
+
+
+func _load_puzzles() -> void:
+	_puzzles = []
+	if not FileAccess.file_exists(PUZZLES_PATH):
+		push_warning("Puzzle catalog not found: %s" % PUZZLES_PATH)
+		return
+	var parsed = JSON.parse_string(FileAccess.get_file_as_string(PUZZLES_PATH))
+	var raw: Array = []
+	if typeof(parsed) == TYPE_DICTIONARY:
+		var listed = parsed.get("puzzles", [])
+		if typeof(listed) == TYPE_ARRAY:
+			raw = listed
+	elif typeof(parsed) == TYPE_ARRAY:
+		raw = parsed
+	else:
+		push_error("Invalid puzzle catalog JSON: %s" % PUZZLES_PATH)
+		return
+	_puzzles = raw
 
 
 func _apply_mode_config(mode: GameMode, size: MapSize) -> void:

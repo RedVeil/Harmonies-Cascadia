@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://khskqjho5hxb"]
 
 [ext_resource type="Script" uid="uid://u63h3vtt6r68" path="res://scripts/game/tutorial_coach.gd" id="1_coach"]
+[ext_resource type="Texture2D" uid="uid://bngwl2igqsrof" path="res://assets/icons/IconsFlat15_64px.png" id="2_star"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_spotlight"]
 bg_color = Color(1, 1, 0.6350498, 0)
@@ -440,6 +441,78 @@ theme_override_constants/line_spacing = -5
 theme_override_font_sizes/font_size = 14
 text = "This short tutorial walks you through a turn. Follow the highlights — only the suggested actions will work."
 autowrap_mode = 2
+
+[node name="StarsRow" type="HBoxContainer" parent="Bubble/Margin/VBox"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="StarCol1" type="VBoxContainer" parent="Bubble/Margin/VBox/StarsRow"]
+layout_mode = 2
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="Icon" type="TextureRect" parent="Bubble/Margin/VBox/StarsRow/StarCol1"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+modulate = Color(0.7686275, 0.47058824, 0.23137255, 1)
+texture = ExtResource("2_star")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Points" type="Label" parent="Bubble/Margin/VBox/StarsRow/StarCol1"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 14
+text = "0"
+horizontal_alignment = 1
+
+[node name="StarCol2" type="VBoxContainer" parent="Bubble/Margin/VBox/StarsRow"]
+layout_mode = 2
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="Icon" type="TextureRect" parent="Bubble/Margin/VBox/StarsRow/StarCol2"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+modulate = Color(0.78431374, 0.78431374, 0.8, 1)
+texture = ExtResource("2_star")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Points" type="Label" parent="Bubble/Margin/VBox/StarsRow/StarCol2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 14
+text = "0"
+horizontal_alignment = 1
+
+[node name="StarCol3" type="VBoxContainer" parent="Bubble/Margin/VBox/StarsRow"]
+layout_mode = 2
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="Icon" type="TextureRect" parent="Bubble/Margin/VBox/StarsRow/StarCol3"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+modulate = Color(0.9490196, 0.6901961, 0.36078432, 1)
+texture = ExtResource("2_star")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Points" type="Label" parent="Bubble/Margin/VBox/StarsRow/StarCol3"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 14
+text = "0"
+horizontal_alignment = 1
 
 [node name="ButtonRow" type="HBoxContainer" parent="Bubble/Margin/VBox" unique_id=1374659599]
 layout_mode = 2

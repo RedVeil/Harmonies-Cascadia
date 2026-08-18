@@ -1,0 +1,148 @@
+{
+	"puzzles": [
+		{
+			"id": "first",
+			"title": "First Puzzle",
+			"description": "Puzzles are small challenges that test your knowledge of the game. Each puzzle has a limited number of actions. For each placed tile or animal the counter in the bottom right corner reduces. Once it reaches 0 the puzzle is over. Reach atleast bronze to unlock the next puzzle.",
+			"order": 1,
+			"seed": 2001,
+			"ring_count": 3,
+			"map_growth": false,
+			"max_pack_takes": 0,
+			"max_plays": 3,
+			"ratings": {
+				"bronze": 14,
+				"silver": 21,
+				"gold": 24
+			},
+			"scoring_rules": {
+				"1": 1,
+				"2": 3,
+				"3": 6,
+				"4": 11,
+				"5": 12
+			},
+			"tiles": [
+				{ "q": 0, "r": 0, "element": 1, "level": 1 },
+				{ "q": 2, "r": -1, "element": 2, "level": 1 },
+				{ "q": -1, "r": 1, "element": 3, "level": 1 },
+				{ "q": 0, "r": 1, "element": 3, "level": 1 }
+			],
+			"hand_element_ids": [1, 1, 2],
+			"boosters": [null, null, null],
+			"animal_market": [-1, -1, -1]
+		},
+		{
+			"id": "one_pack",
+			"title": "One Pack",
+			"description": "Only one of these packs is worth taking. Place it well.",
+			"order": 2,
+			"seed": 2002,
+			"ring_count": 3,
+			"map_growth": false,
+			"max_pack_takes": 1,
+			"max_plays": 3,
+			"ratings": {
+				"bronze": 31,
+				"silver": 34,
+				"gold": 40
+			},
+			"scoring_rules": {
+				"1": 0,
+				"2": 3,
+				"3": 8,
+				"4": 9,
+				"5": 12
+			},
+			"tiles": [
+				{ "q": 0, "r": -3, "element": 4, "level": 1 },
+				{ "q": 1, "r": -3, "element": 4, "level": 1 },
+				{ "q": 2, "r": -3, "element": 4, "level": 1 },
+				{ "q": 2, "r": 1, "element": 2, "level": 1 },
+				{ "q": -2, "r": 2, "element": 3, "level": 2 }
+			],
+			"boosters": [
+				{ "elements": [4, 4, 2] },
+				{ "elements": [3, 3, 3] },
+				{ "elements": [5, 1, 1] }
+			],
+			"animal_market": [-1, -1, -1]
+		},
+		{
+			"id": "watering_hole",
+			"title": "The Watering Hole",
+			"description": "The right pack, the right tiles, and the right animal.",
+			"order": 3,
+			"seed": 2003,
+			"ring_count": 3,
+			"map_growth": false,
+			"max_pack_takes": 1,
+			"max_plays": 4,
+			"ratings": {
+				"bronze": 39,
+				"silver": 44,
+				"gold": 50
+			},
+			"scoring_rules": {
+				"1": 0,
+				"2": 3,
+				"3": 8,
+				"4": 9,
+				"5": 12
+			},
+			"tiles": [
+				{ "q": 0, "r": 0, "element": 1, "level": 2 },
+				{ "q": 2, "r": 0, "element": 2, "level": 1 },
+				{ "q": 3, "r": -3, "element": 4, "level": 1 },
+				{ "q": 2, "r": -2, "element": 4, "level": 1 },
+				{ "q": 1, "r": -1, "element": 4, "level": 1 },
+				{ "q": -2, "r": 2, "element": 3, "level": 1 }
+			],
+			"boosters": [
+				{ "elements": [5, 4, 4] },
+				{ "elements": [1, 2, 2] },
+				{ "elements": [3, 3, 3] }
+			],
+			"animal_market": [15, 11, 1]
+		},
+		{
+			"id": "starter_grove",
+			"title": "Starter Grove",
+			"description": "A small forest foothold. Reach bronze, silver, or gold before ending the game.",
+			"order": 4,
+			"seed": 1001,
+			"ring_count": 3,
+			"map_growth": false,
+			"max_plays": 12,
+			"ratings": {
+				"bronze": 80,
+				"silver": 160,
+				"gold": 260
+			},
+			"scoring_rules": {
+				"1": 0,
+				"2": 3,
+				"3": 6,
+				"4": 9,
+				"5": 12
+			},
+			"tiles": [
+				{ "q": 0, "r": 0, "element": 1, "level": 2 },
+				{ "q": 1, "r": 0, "element": 1, "level": 1 },
+				{ "q": 0, "r": -1, "element": 1, "level": 1 },
+				{ "q": -1, "r": 1, "element": 2, "level": 1 },
+				{ "q": 1, "r": -1, "element": 4, "level": 1 },
+				{ "q": 2, "r": -1, "element": 4, "level": 1 }
+			],
+			"boosters": [
+				{ "elements": [1, 1, 2] },
+				{ "elements": [3, 4, 5] },
+				{ "elements": [2, 2, 4] },
+				{ "elements": [1, 3, 5] },
+				{ "elements": [4, 4, 4] },
+				null
+			],
+			"animal_market": [0, 1, 2, 5, 3, 4, 6, -1]
+		}
+	]
+}

@@ -21,12 +21,18 @@ const MENU_HIGHLIGHTS := ["end_session", "share"]
 @onready var _body: Label = $Bubble/Margin/VBox/Body
 @onready var _continue_button: Button = $Bubble/Margin/VBox/ButtonRow/ContinueButton
 @onready var _skip_button: Button = $Bubble/Margin/VBox/ButtonRow/SkipButton
+@onready var _stars_row: HBoxContainer = $Bubble/Margin/VBox/StarsRow
+
+var COLOR_STAR_BRONZE := Color.html("#C4783B")
+var COLOR_STAR_SILVER := Color.html("#C8C8CC")
+var COLOR_STAR_GOLD := Color.html("#F2B05C")
 
 var _visible_highlight: Control = null
 var _bubble_side: String = ""
 var _track_hex: bool = false
 var _tracked_hex_coord := Vector2i.ZERO
 var _hex_container: HexTileContainer = null
+var _modal_bubble_size := Vector2.ZERO
 
 
 func _ready() -> void:
@@ -38,6 +44,8 @@ func _ready() -> void:
 	_skip_button.pressed.connect(_on_skip)
 	_skip_button.mouse_entered.connect(_on_button_mouse_entered)
 	get_viewport().size_changed.connect(_on_viewport_resized)
+	if _stars_row:
+		_stars_row.hide()
 
 
 func _process(_delta: float) -> void:
@@ -50,7 +58,19 @@ func _on_button_mouse_entered() -> void:
 	GameFeedback.play_hover_button()
 
 
+func show_centered_modal(title: String, body: String, button_label: String, ratings: Dictionary = {}) -> void:
+	_modal_bubble_size = Vector2(380, 280)
+	GameFeedback.play_open_popup()
+	show_step({
+		"title": title,
+		"body": body,
+		"complete": {"label": button_label},
+	}, "none", true)
+	_apply_rating_stars(ratings)
+
+
 func show_step(step: Dictionary, highlight_name: String, show_continue: bool) -> void:
+	_apply_rating_stars({})
 	_title.text = str(step.get("title", ""))
 	_body.text = str(step.get("body", ""))
 	_continue_button.visible = show_continue
@@ -79,8 +99,41 @@ func show_step(step: Dictionary, highlight_name: String, show_continue: bool) ->
 
 func hide_coach() -> void:
 	layer = COACH_LAYER_DEFAULT
+	_modal_bubble_size = Vector2.ZERO
+	_apply_rating_stars({})
 	_hide_all_highlights()
 	hide()
+
+
+func _apply_rating_stars(ratings: Dictionary) -> void:
+	if _stars_row == null:
+		return
+	if ratings.is_empty():
+		_stars_row.hide()
+		return
+	var values: Array[int] = [
+		int(ratings.get("bronze", 0)),
+		int(ratings.get("silver", 0)),
+		int(ratings.get("gold", 0)),
+	]
+	var colors: Array[Color] = [
+		COLOR_STAR_BRONZE,
+		COLOR_STAR_SILVER,
+		COLOR_STAR_GOLD,
+	]
+	var cols := _stars_row.get_children()
+	for i in mini(values.size(), cols.size()):
+		var col := cols[i] as Control
+		if col == null:
+			continue
+		var icon := col.get_node_or_null("Icon") as TextureRect
+		var points := col.get_node_or_null("Points") as Label
+		if icon:
+			icon.custom_minimum_size = Vector2(32, 32)
+			icon.modulate = colors[i]
+		if points:
+			points.text = str(values[i])
+	_stars_row.show()
 
 
 func _show_highlight(highlight_name: String) -> void:
@@ -180,7 +233,7 @@ func _highlight_rect() -> Rect2:
 
 func _place_bubble(highlight_rect: Rect2) -> void:
 	var vp := get_viewport().get_visible_rect().size
-	var bubble_size := Vector2(360, 200)
+	var bubble_size := _modal_bubble_size if _modal_bubble_size != Vector2.ZERO else Vector2(360, 200)
 	_bubble.custom_minimum_size = bubble_size
 	var pos := Vector2((vp.x - bubble_size.x) * 0.5, (vp.y - bubble_size.y) * 0.5)
 	if highlight_rect.size.x > 1.0:

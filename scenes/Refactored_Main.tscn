@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://b8oeyth2j2arg" path="res://scenes/game/point_counter.tscn" id="8_q5ijs"]
 [ext_resource type="PackedScene" uid="uid://bv5ofl0j1ktqc" path="res://scenes/game/score_tooltips.tscn" id="11_b2x3j"]
 [ext_resource type="PackedScene" uid="uid://bde4y0iag4uud" path="res://scenes/game/undo_button.tscn" id="12_3qqq0"]
+[ext_resource type="PackedScene" uid="uid://bqplaycounter01" path="res://scenes/game/play_counter.tscn" id="12_play"]
 [ext_resource type="PackedScene" uid="uid://khskqjho5hxb" path="res://scenes/game/tutorial_coach.tscn" id="13_coach"]
 [ext_resource type="PackedScene" uid="uid://d2uy77eljjm3y" path="res://scenes/game/game_over_overlay.tscn" id="13_gameover"]
 [ext_resource type="PackedScene" uid="uid://btq3hb02wek7u" path="res://scenes/game/tutorial_overlay.tscn" id="13_tutorial"]
@@ -55,7 +56,7 @@ map_button = ExtResource("4_5mvym")
 
 [node name="ScoreEngine" parent="." unique_id=271434607 instance=ExtResource("4_xoyem")]
 
-[node name="Orchestrator" parent="." unique_id=1688505566 node_paths=PackedStringArray("booster_manager", "card_manager", "hex_manager", "score_engine", "quest_manager", "point_counter", "undo_button", "tutorial_overlay", "settings_overlay", "game_over_overlay", "in_game_menu", "menu_button") instance=ExtResource("5_71goi")]
+[node name="Orchestrator" parent="." unique_id=1688505566 node_paths=PackedStringArray("booster_manager", "card_manager", "hex_manager", "score_engine", "quest_manager", "point_counter", "undo_button", "play_counter", "tutorial_overlay", "tutorial_coach", "settings_overlay", "game_over_overlay", "in_game_menu", "menu_button") instance=ExtResource("5_71goi")]
 booster_manager = NodePath("../HUD/BoosterManager")
 card_manager = NodePath("../HUD/CardManager")
 hex_manager = NodePath("../HexManager")
@@ -63,7 +64,9 @@ score_engine = NodePath("../ScoreEngine")
 quest_manager = NodePath("../HUD/QuestManager")
 point_counter = NodePath("../HUD/PointCounter")
 undo_button = NodePath("../HUD/UndoButton")
+play_counter = NodePath("../HUD/PlayCounter")
 tutorial_overlay = NodePath("../TutorialOverlay")
+tutorial_coach = NodePath("../TutorialCoach")
 settings_overlay = NodePath("../SettingsOverlay")
 game_over_overlay = NodePath("../GameOverOverlay")
 in_game_menu = NodePath("../InGameMenu")
@@ -146,6 +149,21 @@ offset_bottom = 18.0
 grow_horizontal = 0
 mouse_filter = 2
 
+[node name="PlayCounterSlot" type="Control" parent="HUD/Root"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -92.0
+offset_top = -39.0
+offset_right = -92.0
+offset_bottom = -39.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+
 [node name="UndoButtonSlot" type="Control" parent="HUD/Root" unique_id=651653308]
 layout_mode = 1
 anchors_preset = 3
@@ -184,6 +202,9 @@ orchestrator = NodePath("../../Orchestrator")
 
 [node name="MenuButton" parent="HUD" unique_id=228408610 node_paths=PackedStringArray("orchestrator") instance=ExtResource("15_menu_btn")]
 orchestrator = NodePath("../../Orchestrator")
+
+[node name="PlayCounter" parent="HUD" instance=ExtResource("12_play")]
+visible = false
 
 [node name="UndoButton" parent="HUD" unique_id=997758632 node_paths=PackedStringArray("orchestrator") instance=ExtResource("12_3qqq0")]
 orchestrator = NodePath("../../Orchestrator")
