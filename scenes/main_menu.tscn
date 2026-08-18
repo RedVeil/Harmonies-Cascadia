@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dwuyo8tml1kyc" path="res://scripts/game/main_menu.gd" id="1_menu"]
 [ext_resource type="PackedScene" uid="uid://ckwpm5wl7l4a3" path="res://scenes/game/settings_panel.tscn" id="2_settings"]
+[ext_resource type="PackedScene" path="res://scenes/game/daily_leaderboard_overlay.tscn" id="3_leaderboard"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_left"]
 bg_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
@@ -120,6 +121,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_code_input")
 theme_override_styles/read_only = SubResource("StyleBoxFlat_code_input")
 theme_override_styles/focus = SubResource("StyleBoxFlat_code_input")
 placeholder_text = "Your name"
+max_length = 12
 caret_blink = true
 
 [node name="NameAcceptButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/NameNav" unique_id=-2094967293]
@@ -316,7 +318,7 @@ layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 12
 
-[node name="ContinueButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyInlineButtons" unique_id=2100000011]
+[node name="PlayButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyInlineButtons" unique_id=2100000011]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -330,9 +332,9 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_chip_hover")
 theme_override_styles/hover = SubResource("StyleBoxFlat_chip_hover")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
 theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
-text = "CONTINUE"
+text = "PLAY"
 
-[node name="NewButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyInlineButtons" unique_id=2100000012]
+[node name="LeaderboardsButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyInlineButtons" unique_id=2100000012]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -346,7 +348,7 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_chip_hover")
 theme_override_styles/hover = SubResource("StyleBoxFlat_chip_hover")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
 theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
-text = "NEW"
+text = "LEADERBOARDS"
 
 [node name="QuickSessionBlock" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack/PlayNav" unique_id=70167912]
 layout_mode = 2
@@ -725,6 +727,37 @@ text = "BACK"
 flat = true
 alignment = 0
 
+[node name="PuzzleNav" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack" unique_id=2200000100]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 24
+
+[node name="PuzzleList" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack/PuzzleNav" unique_id=2200000101]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="FooterSpacer" type="Control" parent="Split/LeftColumn/Margin/NavStack/PuzzleNav" unique_id=2200000102]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="PuzzleBackButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/PuzzleNav" unique_id=2200000103]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
+theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBoxEmpty_text")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_text")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_text")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_text")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_text")
+text = "BACK"
+flat = true
+alignment = 0
+
 [node name="CodeNav" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack" unique_id=1718501482]
 visible = false
 layout_mode = 2
@@ -830,6 +863,14 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
 mouse_filter = 2
 
+[node name="DailyLeaderboardOverlay" parent="Split/RightColumn" instance=ExtResource("3_leaderboard")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [connection signal="text_submitted" from="Split/LeftColumn/Margin/NavStack/NameNav/NameInput" to="." method="_on_name_submitted"]
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/NameNav/NameAcceptButton" to="." method="_on_name_accept_pressed"]
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/RootNav/PlayBlock/PlayButton" to="." method="_on_play_pressed"]
@@ -838,8 +879,8 @@ mouse_filter = 2
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/RootNav/EnterCodeBlock/EnterCodeButton" to="." method="_on_enter_code_pressed"]
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/RootNav/ExitButton" to="." method="_on_exit_pressed"]
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyButton" to="." method="_on_daily_pressed"]
-[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyInlineButtons/ContinueButton" to="." method="_on_daily_continue_pressed"]
-[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyInlineButtons/NewButton" to="." method="_on_daily_new_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyInlineButtons/PlayButton" to="." method="_on_daily_play_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyInlineButtons/LeaderboardsButton" to="." method="_on_daily_leaderboards_pressed"]
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickSessionButton" to="." method="_on_quick_session_pressed"]
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickInlineButtons/ContinueButton" to="." method="_on_quick_continue_pressed"]
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickInlineButtons/NewButton" to="." method="_on_quick_new_pressed"]
@@ -856,6 +897,7 @@ mouse_filter = 2
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/TutorialNav/AnimalsBlock/AnimalsButton" to="." method="_on_tutorial_animals_pressed"]
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/TutorialNav/QuestsBlock/QuestsButton" to="." method="_on_tutorial_quests_pressed"]
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/TutorialNav/TutorialBackButton" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PuzzleNav/PuzzleBackButton" to="." method="_on_back_pressed"]
 [connection signal="text_submitted" from="Split/LeftColumn/Margin/NavStack/CodeNav/CodeInput" to="." method="_on_code_submitted"]
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/CodeNav/StartCodeButton" to="." method="_on_start_code_pressed"]
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/CodeNav/CodeBackButton" to="." method="_on_back_pressed"]

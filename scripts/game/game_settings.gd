@@ -11,6 +11,7 @@ const SAVE_PATH := "user://configuration.json"
 const LEGACY_SAVE_PATH := "user://graphics_settings.cfg"
 const SECTION := "graphics"
 const AUDIO_SECTION := "audio"
+const PLAYER_NAME_MAX_LENGTH := 12
 
 var player_id: String = ""
 var player_name: String = ""
@@ -46,6 +47,10 @@ func load_from_disk() -> void:
 	var identity_dirty := false
 	if player_id.is_empty():
 		player_id = _generate_player_id()
+		identity_dirty = true
+	var sanitized_name := _sanitize_player_name(player_name)
+	if sanitized_name != player_name:
+		player_name = sanitized_name
 		identity_dirty = true
 	var tutorial_dirty := _migrate_player_progress()
 	if identity_dirty or tutorial_dirty or not FileAccess.file_exists(SAVE_PATH):
@@ -123,10 +128,18 @@ func save_to_disk() -> void:
 
 
 func set_player_name(new_name: String) -> void:
-	if player_name == new_name:
+	var sanitized := _sanitize_player_name(new_name)
+	if player_name == sanitized:
 		return
-	player_name = new_name
+	player_name = sanitized
 	save_to_disk()
+
+
+func _sanitize_player_name(value: String) -> String:
+	var n := value.strip_edges()
+	if n.length() > PLAYER_NAME_MAX_LENGTH:
+		return n.substr(0, PLAYER_NAME_MAX_LENGTH)
+	return n
 
 
 func mark_tutorial_played() -> void:

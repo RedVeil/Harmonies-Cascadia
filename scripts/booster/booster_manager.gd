@@ -39,6 +39,8 @@ var _rng: RandomNumberGenerator
 ## Puzzle author queues: remaining entries not yet shown in shop / market slots.
 var _puzzle_booster_queue: Array = []
 var _puzzle_animal_queue: Array = []
+## Packs taken this run; used with puzzle `max_pack_takes`.
+var _pack_takes: int = 0
 
 ## ----- Initialisation ----- ##
 
@@ -62,6 +64,10 @@ func _ready() -> void:
 		_init_puzzle_queues()
 		_apply_puzzle_market_offers()
 		_apply_puzzle_boosters()
+		if _max_pack_takes() >= 0:
+			market_buys_remaining = 0
+		if _pack_take_limit_reached():
+			_clear_all_boosters()
 	else:
 		_ensure_market_offers()
 		for i in range(booster_limit):
@@ -94,6 +100,8 @@ func select_booster(id: int) -> void:
 
 	if not options_ready:
 		return
+	if _pack_take_limit_reached():
+		return
 	if id < 0 or id >= booster_limit:
 		return
 
@@ -112,10 +120,14 @@ func select_booster(id: int) -> void:
 	elements_played = 0
 	options_ready = pending_elements <= 0
 	market_buys_remaining = 1
+	_pack_takes += 1
 
 	_tick_reroll_cooldowns()
 
-	createBooster(id)
+	if _pack_take_limit_reached():
+		_clear_all_boosters()
+	else:
+		createBooster(id)
 	_refresh_option_ui()
 	_refresh_reroll_ui()
 	_refresh_market_buy_ui()
@@ -144,11 +156,15 @@ func consume_booster_without_hand(id: int) -> void:
 	_refresh_market_buy_ui()
 
 func can_reroll_booster(id: int) -> bool:
+	if _max_pack_takes() >= 0:
+		return false
 	if id < 0 or id >= booster_reroll_progress.size():
 		return false
 	return booster_reroll_progress[id] <= 0
 
 func can_reroll_market(offer_index: int) -> bool:
+	if _max_pack_takes() >= 0:
+		return false
 	if offer_index < 0 or offer_index >= market_reroll_progress.size():
 		return false
 	return market_reroll_progress[offer_index] <= 0
@@ -448,6 +464,22 @@ func _init_puzzle_queues() -> void:
 	var raw_animals = shop_cfg.get("animal_market", [])
 	if typeof(raw_animals) == TYPE_ARRAY:
 		_puzzle_animal_queue = raw_animals.duplicate()
+
+
+func _max_pack_takes() -> int:
+	return GameSession.get_max_pack_takes()
+
+
+func _pack_take_limit_reached() -> bool:
+	var cap := _max_pack_takes()
+	return cap >= 0 and _pack_takes >= cap
+
+
+func _clear_all_boosters() -> void:
+	_puzzle_booster_queue.clear()
+	for i in range(booster_limit):
+		boosters[i] = _booster_from_puzzle_entry(null)
+		booster_container.set_booster_visuals(i, boosters[i])
 
 
 func _apply_puzzle_boosters() -> void:

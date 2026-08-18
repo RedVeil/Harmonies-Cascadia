@@ -241,6 +241,15 @@ func get_puzzle_ratings() -> Dictionary:
 	}
 
 
+## -1 means unlimited pack takes (open puzzles / non-puzzle modes).
+func get_max_pack_takes() -> int:
+	if not is_puzzle():
+		return -1
+	if not puzzle_config.has("max_pack_takes"):
+		return -1
+	return int(puzzle_config.get("max_pack_takes", -1))
+
+
 ## Returns "gold" / "silver" / "bronze" / "" for the highest tier reached.
 func rating_for_score(score: int) -> String:
 	var ratings := get_puzzle_ratings()
@@ -274,10 +283,15 @@ func list_puzzles() -> Array[Dictionary]:
 					"id": str(puzzle.get("id", id)),
 					"title": str(puzzle.get("title", id)),
 					"description": str(puzzle.get("description", "")),
+					"order": int(puzzle.get("order", 1000)),
 				})
 		file_name = dir.get_next()
 	dir.list_dir_end()
 	out.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		var order_a := int(a.get("order", 1000))
+		var order_b := int(b.get("order", 1000))
+		if order_a != order_b:
+			return order_a < order_b
 		return str(a.get("title", "")) < str(b.get("title", ""))
 	)
 	return out
@@ -418,6 +432,11 @@ func _parse_map_size(key: String) -> MapSize:
 
 func get_daily_seed() -> int:
 	return _daily_seed()
+
+
+func get_utc_date_iso() -> String:
+	var d := Time.get_date_dict_from_system(true)
+	return "%04d-%02d-%02d" % [d.year, d.month, d.day]
 
 
 func _daily_seed() -> int:

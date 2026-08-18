@@ -2,6 +2,7 @@
 	"id": "starter_grove",
 	"title": "Starter Grove",
 	"description": "A small forest foothold. Reach bronze, silver, or gold before ending the game.",
+	"order": 4,
 	"seed": 1001,
 	"ring_count": 3,
 	"map_growth": false,

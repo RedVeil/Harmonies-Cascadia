@@ -105,12 +105,14 @@ func _apply_pending_run_state_deferred(pending_state: Variant) -> void:
 
 
 func _apply_puzzle_setup() -> void:
+	var puzzle := GameSession.puzzle_config
 	PuzzleSetupScript.apply(
-		GameSession.puzzle_config,
+		puzzle,
 		hex_manager,
 		score_engine,
 		point_counter
 	)
+	_seed_scripted_hand(puzzle)
 
 
 func apply_tutorial_part_setup(part: Dictionary) -> void:
@@ -124,16 +126,22 @@ func apply_tutorial_part_setup(part: Dictionary) -> void:
 		for _i in consumed:
 			booster_manager.consume_booster_without_hand(0)
 	PuzzleSetupScript.apply(setup, hex_manager, score_engine, point_counter)
-	var raw_tiles = setup.get("tiles", [])
+	_seed_scripted_hand(setup)
+
+
+func _seed_scripted_hand(config: Dictionary) -> void:
+	if config.is_empty():
+		return
+	var raw_tiles = config.get("tiles", [])
 	if typeof(raw_tiles) == TYPE_ARRAY:
 		_placed_tile_count = maxi(_placed_tile_count, raw_tiles.size())
-	var raw_animals = setup.get("hand_animal_ids", [])
+	var raw_animals = config.get("hand_animal_ids", [])
 	if typeof(raw_animals) == TYPE_ARRAY:
 		for animal_id in raw_animals:
 			var card := _tutorial_animal_card(int(animal_id))
 			if card != null:
 				add_hand_card(card)
-	var raw_elements = setup.get("hand_element_ids", [])
+	var raw_elements = config.get("hand_element_ids", [])
 	var seeded_elements := 0
 	if typeof(raw_elements) == TYPE_ARRAY:
 		for element_id in raw_elements:
@@ -243,6 +251,7 @@ func _on_in_game_menu_end() -> void:
 	if tutorial_bridge.active and not tutorial_bridge.allows_action("end_game"):
 		return
 	game_over = true
+	_submit_daily_score_if_needed()
 	if RunSave.supports_mode(GameSession.game_mode):
 		RunSave.save_from_orchestrator(self)
 	leave_to_menu()
@@ -342,10 +351,23 @@ func confirm_end_game() -> void:
 	if game_over:
 		return
 	game_over = true
+	_submit_daily_score_if_needed()
 	if in_game_menu:
 		in_game_menu.open(score_engine.total_score, true)
 	elif game_over_overlay:
 		game_over_overlay.show_results(score_engine.total_score)
+
+
+func _submit_daily_score_if_needed() -> void:
+	if GameSession.game_mode != GameSession.GameMode.DAILY:
+		return
+	if score_engine == null:
+		return
+	var player_id := GameSettings.player_id.strip_edges()
+	var player_name := GameSettings.player_name.strip_edges()
+	if player_id.is_empty() or player_name.is_empty():
+		return
+	SupabaseClient.submit_daily_score(player_id, player_name, score_engine.total_score)
 
 
 func leave_to_menu() -> void:
