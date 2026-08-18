@@ -1,6 +1,9 @@
 [gd_scene format=3 uid="uid://btq3hb02wek7u"]
 
 [ext_resource type="Script" uid="uid://d3iu7t4cukitx" path="res://scripts/game/tutorial_overlay.gd" id="1_tutorial"]
+[ext_resource type="Texture2D" uid="uid://bnrcql3uy3afb" path="res://assets/icons/book.png" id="2_book"]
+[ext_resource type="Texture2D" uid="uid://pnqe7ys6paej" path="res://assets/tutorial/t11.webp" id="2_q6tp3"]
+[ext_resource type="Texture2D" uid="uid://gjrnqosd4hds" path="res://assets/icons/IconsFlat19_64px.png" id="3_help"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_popup"]
 bg_color = Color(0.95686275, 0.8745098, 0.7921569, 1)
@@ -28,37 +31,78 @@ content_margin_right = 16.0
 content_margin_bottom = 2.0
 bg_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_icon_chip"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_color = Color(0, 0, 0, 0.097)
+shadow_size = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_icon_chip_hover"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_color = Color(0, 0, 0, 0.097)
+shadow_size = 4
+
 [node name="TutorialOverlay" type="CanvasLayer" unique_id=383445874]
 layer = 10
 script = ExtResource("1_tutorial")
-panel_padding = Vector2(8, 24)
+image = ExtResource("2_q6tp3")
+book_icon = ExtResource("2_book")
+help_icon = ExtResource("3_help")
 
 [node name="PopupRoot" type="Node2D" parent="." unique_id=1448785795]
+position = Vector2(625, 340.5)
 
 [node name="PopupPanel" type="Panel" parent="PopupRoot" unique_id=531527263]
-offset_left = -472.0
-offset_top = -280.0
-offset_right = 472.0
-offset_bottom = 280.0
+offset_left = -470.0
+offset_top = -210.0
+offset_right = 430.0
+offset_bottom = 290.0
+scale = Vector2(1.0799994, 0.88000053)
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_popup")
 
 [node name="ClickBlocker" type="Panel" parent="PopupRoot" unique_id=1740210695]
-offset_left = -472.0
-offset_top = -280.0
-offset_right = 472.0
-offset_bottom = 280.0
+offset_left = -366.0
+offset_top = -202.0
+offset_right = 434.0
+offset_bottom = 278.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_blocker")
 
 [node name="ImageDisplay" type="Sprite2D" parent="PopupRoot" unique_id=594319098]
-position = Vector2(0, -40)
+position = Vector2(11, -11)
+scale = Vector2(0.45, 0.45)
+texture = ExtResource("2_q6tp3")
+
+[node name="ScoringRow" type="HBoxContainer" parent="PopupRoot" unique_id=387273099]
+offset_left = -454.0
+offset_top = -177.0
+offset_right = 486.0
+offset_bottom = 153.5
+mouse_filter = 2
+theme_override_constants/separation = 12
 
 [node name="CloseButton" type="Button" parent="PopupRoot" unique_id=2015260018]
 custom_minimum_size = Vector2(0, 24)
-offset_left = -48.0
-offset_top = 228.0
-offset_right = 48.0
-offset_bottom = 252.0
+offset_left = -51.0
+offset_top = 185.0
+offset_right = 45.0
+offset_bottom = 219.0
+focus_mode = 0
 theme_override_colors/font_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
 theme_override_colors/font_focus_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
 theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
@@ -71,6 +115,28 @@ theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
 theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
 text = "CLOSE"
 
+[node name="ToggleButton" type="Button" parent="PopupRoot" unique_id=415185524]
+custom_minimum_size = Vector2(40, 40)
+offset_left = 444.0
+offset_top = 177.0
+offset_right = 484.0
+offset_bottom = 217.0
+focus_mode = 0
+theme_override_colors/icon_normal_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_colors/icon_focus_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_colors/icon_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_icon_chip")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_icon_chip_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_icon_chip_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_icon_chip")
+theme_override_styles/focus = SubResource("StyleBoxFlat_icon_chip")
+icon = ExtResource("2_book")
+icon_alignment = 1
+expand_icon = true
+
 [connection signal="gui_input" from="PopupRoot/ClickBlocker" to="." method="_on_blocker_gui_input"]
 [connection signal="mouse_entered" from="PopupRoot/CloseButton" to="." method="_on_close_mouse_entered"]
 [connection signal="pressed" from="PopupRoot/CloseButton" to="." method="_on_close_pressed"]
+[connection signal="mouse_entered" from="PopupRoot/ToggleButton" to="." method="_on_toggle_mouse_entered"]
+[connection signal="pressed" from="PopupRoot/ToggleButton" to="." method="_on_toggle_pressed"]

@@ -2,162 +2,40 @@
 
 [ext_resource type="Script" uid="uid://dggol5cr45w7e" path="res://scripts/game/score_tooltip.gd" id="1_d6nn3"]
 [ext_resource type="Texture2D" uid="uid://gjrnqosd4hds" path="res://assets/icons/IconsFlat19_64px.png" id="2_d6nn3"]
-[ext_resource type="Texture2D" uid="uid://cjulobfnnfiaf" path="res://assets/elements/a0.png" id="3_44yi1"]
-[ext_resource type="PackedScene" uid="uid://ccy33o81w8qpr" path="res://scenes/game/tooltip_icon.tscn" id="3_e6s6x"]
-[ext_resource type="Texture2D" uid="uid://bvwixgsubb5dn" path="res://assets/elements/f1.png" id="4_d4g8o"]
-[ext_resource type="Texture2D" uid="uid://cslq3nxtay7p3" path="res://assets/elements/m2.png" id="5_ci7lu"]
-[ext_resource type="Texture2D" uid="uid://cvdocpei0br0m" path="res://assets/elements/r0.png" id="6_d6nn3"]
-[ext_resource type="Texture2D" uid="uid://fitjq8iuh7ul" path="res://assets/elements/w0.png" id="8_ci7lu"]
-[ext_resource type="Texture2D" uid="uid://bnrcql3uy3afb" path="res://assets/icons/book.png" id="9_d6nn3"]
-[ext_resource type="Texture2D" uid="uid://dngccn0vhtypv" path="res://assets/score_tooltip/a1.webp" id="10_d6nn3"]
+[ext_resource type="Texture2D" uid="uid://ca2hp56qvfswa" path="res://assets/icons/circle.png" id="3_circle"]
+[ext_resource type="Material" uid="uid://cn853ytgoxks6" path="res://assets/ui/sdf_circle_fill.tres" id="4_fill"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e867d"]
-bg_color = Color(1, 1, 1, 1)
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
-shadow_color = Color(0, 0, 0, 0.078)
-shadow_size = 4
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_672qq"]
-size = Vector2(44, 40)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_44yi1"]
-bg_color = Color(0.95686275, 0.8745098, 0.7921569, 1)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
-shadow_color = Color(0, 0, 0, 0.1254902)
-shadow_size = 4
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d4g8o"]
-bg_color = Color(0.95686275, 0.8745098, 0.7921569, 1)
-shadow_color = Color(0, 0, 0, 0.1254902)
-shadow_size = 4
+[sub_resource type="CircleShape2D" id="CircleShape2D_hit"]
+radius = 14.0
 
 [node name="ScoreTooltip" type="Node2D" unique_id=2118125176]
 z_index = 1
 script = ExtResource("1_d6nn3")
 
-[node name="Panel" type="Panel" parent="." unique_id=376977882]
-offset_right = 44.0
-offset_bottom = 360.0
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_e867d")
-
 [node name="Button" type="Area2D" parent="." unique_id=33584632]
-position = Vector2(0, 320)
+position = Vector2(22, 18)
 monitorable = false
 priority = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Button" unique_id=552286692]
-position = Vector2(22, 20)
-shape = SubResource("RectangleShape2D_672qq")
+z_index = 1
+shape = SubResource("CircleShape2D_hit")
 
-[node name="Sprite2D" type="Sprite2D" parent="Button" unique_id=2077933624]
-self_modulate = Color(0.5686275, 0.5176471, 0.47058824, 1)
-position = Vector2(22.5, 19.234375)
-scale = Vector2(0.4, 0.4)
-texture = ExtResource("2_d6nn3")
+[node name="background" type="Sprite2D" parent="Button" unique_id=376977882]
+material = ExtResource("4_fill")
+scale = Vector2(0.07, 0.07)
+texture = ExtResource("3_circle")
 
-[node name="icons" type="Node2D" parent="." unique_id=1708123780]
-
-[node name="TooltipIcon" parent="icons" unique_id=978343123 instance=ExtResource("3_e6s6x")]
-position = Vector2(22, 40)
-icon = ExtResource("4_d4g8o")
-
-[node name="TooltipIcon2" parent="icons" unique_id=1889096491 instance=ExtResource("3_e6s6x")]
-position = Vector2(22, 90)
-icon = ExtResource("3_44yi1")
-
-[node name="TooltipIcon3" parent="icons" unique_id=70363252 instance=ExtResource("3_e6s6x")]
-position = Vector2(22, 140)
-icon = ExtResource("5_ci7lu")
-
-[node name="TooltipIcon4" parent="icons" unique_id=414096696 instance=ExtResource("3_e6s6x")]
-position = Vector2(22, 190)
-icon = ExtResource("6_d6nn3")
-
-[node name="TooltipIcon5" parent="icons" unique_id=1628951938 instance=ExtResource("3_e6s6x")]
-position = Vector2(22, 240)
-icon = ExtResource("8_ci7lu")
-
-[node name="TooltipIcon6" parent="icons" unique_id=1606368459 instance=ExtResource("3_e6s6x")]
-position = Vector2(22, 290)
-icon = ExtResource("9_d6nn3")
-
-[node name="Panel2" type="Panel" parent="." unique_id=2102555946]
-visible = false
-offset_left = -197.0
-offset_top = 9.0
-offset_right = -18.0
-offset_bottom = 320.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_44yi1")
-
-[node name="Panel" type="Panel" parent="Panel2" unique_id=2014226531]
+[node name="shadow" type="Sprite2D" parent="Button/background" unique_id=730007767]
+modulate = Color(0, 0, 0, 0.097)
 show_behind_parent = true
-layout_mode = 0
-offset_left = 160.0
-offset_top = 104.0
-offset_right = 200.0
-offset_bottom = 144.0
-rotation = 0.7853982
-theme_override_styles/panel = SubResource("StyleBoxFlat_d4g8o")
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("3_circle")
 
-[node name="title" type="Node2D" parent="Panel2" unique_id=166627953]
-position = Vector2(197, -22)
-
-[node name="Label" type="Label" parent="Panel2/title" unique_id=959125867]
-offset_left = -197.0
-offset_top = 29.0
-offset_right = -18.0
-offset_bottom = 52.0
-theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-theme_override_colors/font_outline_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-theme_override_constants/outline_size = 1
-theme_override_font_sizes/font_size = 20
-text = "Mountain"
-horizontal_alignment = 1
-
-[node name="ColorRect" type="ColorRect" parent="Panel2/title" unique_id=1615313368]
-visible = false
-offset_left = -150.0
-offset_top = 51.0
-offset_right = -66.0
-offset_bottom = 53.0
-color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-
-[node name="description" type="Node2D" parent="Panel2" unique_id=1516773916]
-position = Vector2(0, -28)
-
-[node name="ColorRect" type="ColorRect" parent="Panel2/description" unique_id=846609058]
-visible = false
-offset_left = 4.0
-offset_top = 228.0
-offset_right = 175.0
-offset_bottom = 230.0
-color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-
-[node name="Label" type="Label" parent="Panel2/description" unique_id=146333483]
-offset_left = 9.0
-offset_top = 217.0
-offset_right = 170.0
-offset_bottom = 332.0
-theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-theme_override_colors/font_outline_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-theme_override_constants/line_spacing = -5
-theme_override_font_sizes/font_size = 14
-text = "Rivers score by the length of a river.
-The score calculation will always take the shortest route from end to end. "
-autowrap_mode = 2
-
-[node name="graphic" type="Node2D" parent="Panel2" unique_id=723530522]
-position = Vector2(18, -21)
-
-[node name="Sprite2D7" type="Sprite2D" parent="Panel2/graphic" unique_id=1924229882]
-position = Vector2(71.25172, 137)
-scale = Vector2(0.16366826, 0.15883668)
-texture = ExtResource("10_d6nn3")
+[node name="icon" type="Sprite2D" parent="Button" unique_id=2077933624]
+self_modulate = Color(0.5686275, 0.5176471, 0.47058824, 1)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("2_d6nn3")
 
 [connection signal="input_event" from="Button" to="." method="_on_button_input_event"]
 [connection signal="mouse_entered" from="Button" to="." method="_on_button_mouse_entered"]

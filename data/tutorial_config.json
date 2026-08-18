@@ -294,41 +294,24 @@
 			}
 		},
 		{
-			"id": "forest_scoring",
-			"title": "Forest scoring",
-			"body": "Click now on the forest icon to see this sessions's forest scoring rule.",
-			"highlight": "scoring_forest_icon",
+			"id": "scoring_rules_modal",
+			"title": "Scoring rules",
+			"body": "Here you can see the scoring rules for this session. Each landscape type has its own rule. Take time to read them. When you are done click Continue.",
+			"highlight": "tutorial_modal",
+			"bubble_side": "above_left",
 			"gates": {
-				"allow_actions": [
-					"open_scoring_rule"
-				]
+				"allow_actions": []
 			},
 			"complete": {
-				"type": "action",
-				"action": "scoring_rule_opened"
-			}
-		},
-		{
-			"id": "forest_scoring2",
-			"title": "Forest scoring",
-			"body": "Here you can see the scoring rule for the forest. Take time to read it and understand how it works. When you are done click the forest icon again to close it.",
-			"highlight": "scoring_forest",
-			"gates": {
-				"allow_actions": [
-					"open_scoring_rule"
-				]
-			},
-			"complete": {
-				"type": "action",
-				"action": "scoring_rule_closes"
+				"type": "continue_button"
 			}
 		},
 		{
 			"id": "open_tutorial_book",
 			"title": "Landscape Stacking",
-			"body": "If you want to know how landscape tiles can be stacked on what their symbols mean click on the Book-Icon.",
+			"body": "If you want to know how landscape tiles can be stacked and what their symbols mean, click the Book-Icon in the bottom right.",
 			"highlight": "scoring_book",
-			"bubble_side": "left",
+			"bubble_side": "above_left",
 			"gates": {
 				"allow_actions": [
 					"open_tutorial"

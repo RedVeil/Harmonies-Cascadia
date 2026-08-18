@@ -83,18 +83,22 @@ func _ready() -> void:
 
 	# Continue flow: restore run state after the scene loads.
 	var pending_state = RunSave.consume_pending_state_or_null()
-	if pending_state != null and RunSave.supports_mode(GameSession.game_mode):
+	var continuing := pending_state != null and RunSave.supports_mode(GameSession.game_mode)
+	if continuing:
 		# Defer by 1 frame so all managers' @onready vars (e.g. QuestContainer)
 		# are initialized before we apply state.
 		call_deferred("_apply_pending_run_state_deferred", pending_state)
 
 	if tutorial_bridge and not tutorial_bridge.action_performed.is_connected(_on_tutorial_bridge_action):
 		tutorial_bridge.action_performed.connect(_on_tutorial_bridge_action)
-	# Interactive tutorial owns first-run coaching; keep slideshow for non-tutorial runs / rules library.
-	#if not GameSession.is_tutorial() and not GameSession.is_puzzle():
-		#show_tutorial()
 	if GameSession.is_puzzle():
 		call_deferred("_apply_puzzle_setup")
+		return
+	if continuing:
+		return
+	if tutorial_overlay != null and not tutorial_overlay.is_node_ready():
+		await tutorial_overlay.ready
+	_maybe_open_score_help()
 
 func _apply_pending_run_state_deferred(pending_state: Variant) -> void:
 	if pending_state == null:
@@ -121,6 +125,8 @@ func _apply_puzzle_setup() -> void:
 	_puzzle_plays = 0
 	_refresh_play_counter()
 	_show_puzzle_intro()
+	if tutorial_coach == null:
+		_maybe_open_score_help()
 
 
 func apply_tutorial_part_setup(part: Dictionary) -> void:
@@ -439,6 +445,7 @@ func _on_puzzle_intro_start() -> void:
 			tutorial_coach.continue_pressed.disconnect(_on_puzzle_intro_start)
 		tutorial_coach.hide_coach()
 	unpause_cards()
+	_maybe_open_score_help()
 
 
 func _submit_daily_score_if_needed() -> void:
@@ -932,13 +939,26 @@ func get_active_rule(type:int) -> ScoringRule:
 
 ## ----- Score Tutorial ----- ##
 
+func _maybe_open_score_help() -> void:
+	match GameSession.game_mode:
+		GameSession.GameMode.DAILY, GameSession.GameMode.NORMAL, GameSession.GameMode.ENDLESS, GameSession.GameMode.PUZZLE:
+			if tutorial_overlay:
+				tutorial_overlay.open_scoring()
+
+func show_score_help() -> void:
+	if tutorial_overlay == null:
+		return
+	if not tutorial_overlay.is_node_ready():
+		await tutorial_overlay.ready
+	tutorial_overlay.open_scoring()
+
 func show_tutorial() -> void:
 	if tutorial_overlay == null:
 		return
 	# TutorialOverlay is a later sibling, so it may not have finished _ready yet.
 	if not tutorial_overlay.is_node_ready():
 		await tutorial_overlay.ready
-	tutorial_overlay.open()
+	tutorial_overlay.open_stacking()
 
 
 func show_settings() -> void:

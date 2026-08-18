@@ -45,7 +45,7 @@
 	},
 	{
 		"id": 2.0,
-		"name": "Sprawling Forest",
+		"name": "Large Forest",
 		"description": "Each forest group scores based on its size, plus 1 point per level 2 tile. The more tiles a forest group has the more it scores.",
 		"min_group_size": 1.0,
 		"max_group_size": 100000.0,
