@@ -50,6 +50,10 @@ func clear() -> void:
 	_armed_press_id = _press_id
 
 
+func press_id() -> int:
+	return _press_id
+
+
 func is_held() -> bool:
 	return _downs > 0
 

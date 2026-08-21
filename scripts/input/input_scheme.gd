@@ -97,6 +97,56 @@ func is_left_click(event: InputEvent) -> bool:
 	return true
 
 
+func is_emulated_touch_mouse() -> bool:
+	return _is_emulated_touch_mouse()
+
+
+func clear_stuck_gui_hover(root: Node = null) -> void:
+	if not OS.has_feature("web"):
+		return
+	if root != null and not is_instance_valid(root):
+		root = null
+	var vp := get_viewport()
+	if vp == null:
+		return
+	vp.gui_release_focus()
+	var hovered := vp.gui_get_hovered_control()
+	var seen: Dictionary = {}
+	while hovered != null and not seen.has(hovered):
+		seen[hovered] = true
+		hovered.notification(Control.NOTIFICATION_MOUSE_EXIT)
+		hovered = hovered.get_parent() as Control
+	if root != null:
+		_notify_mouse_exit_tree(root)
+	var motion := InputEventMouseMotion.new()
+	motion.position = Vector2(-64, -64)
+	motion.global_position = Vector2(-64, -64)
+	vp.push_input(motion)
+	touch.notify_mouse_up()
+
+
+func clear_stuck_gui_hover_deferred(root: Node = null) -> void:
+	if not OS.has_feature("web"):
+		return
+	call_deferred("clear_stuck_gui_hover", root)
+	# Same-tap emulated mouse can re-hover after layout change (Back vs Exit).
+	var tree := get_tree()
+	if tree != null:
+		tree.process_frame.connect(
+			clear_stuck_gui_hover.bind(root),
+			CONNECT_ONE_SHOT
+		)
+
+
+func _notify_mouse_exit_tree(root: Node) -> void:
+	if root is Control:
+		(root as Control).notification(Control.NOTIFICATION_MOUSE_EXIT)
+	for node in root.find_children("*", "Control", true, false):
+		var control := node as Control
+		if control != null:
+			control.notification(Control.NOTIFICATION_MOUSE_EXIT)
+
+
 func _detect_boot_scheme() -> Scheme:
 	var pads := Input.get_connected_joypads()
 	if not pads.is_empty():
@@ -222,7 +272,9 @@ func _apply_scheme(scheme: Scheme, force: bool = false) -> void:
 
 
 func _apply_cursor() -> void:
-	if current == Scheme.KEYBOARD_MOUSE:
+	if current == Scheme.KEYBOARD_MOUSE or OS.has_feature("web"):
+		# Web GUI is driven by emulated mouse events. Hiding/warping the cursor
+		# off-canvas makes menu taps hover-only and never click.
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	else:
 		Input.mouse_mode = Input.MOUSE_MODE_HIDDEN

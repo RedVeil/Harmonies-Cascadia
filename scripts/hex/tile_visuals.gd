@@ -9,7 +9,6 @@ const LEGACY_MARKER_CONTAINER_NAMES := ["base_markers", "base_marker"]
 @export var multimesh_slots: Array[MultiMeshInstance3D] = []
 var _scenes_root: Node3D = null
 var _active_signature: String = ""
-var _multimesh_cache: Dictionary = {}
 var _scene_layer_pool: Dictionary = {}
 var _active_scene_layer_nodes: Dictionary = {}
 var _animals_root: Node3D = null
@@ -523,48 +522,7 @@ func _coerce_multimesh_path(entry) -> String:
 
 
 func _resolve_multimesh_option(path: String) -> Dictionary:
-	if path.is_empty():
-		return {}
-
-	if _multimesh_cache.has(path):
-		return _multimesh_cache[path]
-
-	var resource := load(path)
-	var resolved := _multimesh_from_resource(resource)
-	if not resolved.is_empty():
-		_multimesh_cache[path] = resolved
-	return resolved
-
-
-func _multimesh_from_resource(resource: Resource) -> Dictionary:
-	if resource is MultiMesh:
-		return {"multimesh": resource}
-
-	if resource is PackedScene:
-		var temp = resource.instantiate()
-		var mesh_instance := _find_multimesh_instance(temp)
-		var resolved := {}
-		if mesh_instance != null and mesh_instance.multimesh != null:
-			resolved = {
-				"multimesh": mesh_instance.multimesh,
-				"material": mesh_instance.material_override,
-			}
-		temp.free()
-		return resolved
-
-	return {}
-
-
-func _find_multimesh_instance(node: Node) -> MultiMeshInstance3D:
-	if node is MultiMeshInstance3D:
-		return node
-
-	for child in node.get_children():
-		var found := _find_multimesh_instance(child)
-		if found != null:
-			return found
-
-	return null
+	return TileSetupCatalog.get_or_load_multimesh(path)
 
 
 func _get_or_create_scene_layer_instance(layer_index: int, scene: PackedScene) -> Node:

@@ -98,7 +98,7 @@
 		{
 			"id": "camera",
 			"title": "Camera Controls",
-			"body": "You can move the camera with W,A,S,D or the arrow keys on your keyboard. Zoom in and out with the mouse wheel.",
+			"body": "You can move the camera with W,A,S,D or the arrow keys on your keyboard. Zoom in and out with the mouse wheel. On mobile, drag with one finger to move the camera and pinch with two fingers to zoom.",
 			"highlight": "none",
 			"gates": {
 				"allow_actions": []
@@ -122,7 +122,7 @@
 		{
 			"id": "select_card",
 			"title": "Landscape cards",
-			"body": "Lets click on the forest (tree) card in your hand to select it.",
+			"body": "Lets click (double tap) on the forest (tree) card in your hand to select it.",
 			"highlight": "hand",
 			"gates": {
 				"allow_actions": [
@@ -165,7 +165,7 @@
 		{
 			"id": "place_card",
 			"title": "Place the first tree",
-			"body": "Now lets place our first tree. Hover the empty hex and click it to place your first tile. You will see how many points you will earn from this.",
+			"body": "Now lets place our first tree. Hover (tap) the empty hex and click (double tap) it to place your first tile. You will see how many points you will earn from this.",
 			"highlight": "hex_0_0",
 			"gates": {
 				"allow_actions": [
@@ -193,7 +193,7 @@
 		{
 			"id": "place_tree_2",
 			"title": "Stack it",
-			"body": "Some landscapes can be stacked on top of each other. Click the same hex again to place your second tree on top.",
+			"body": "Some landscapes can be stacked on top of each other. Click (double tap) the same hex again to place your second tree on top.",
 			"highlight": "hex_0_0",
 			"gates": {
 				"allow_actions": [
@@ -280,7 +280,7 @@
 		{
 			"id": "open_scoring",
 			"title": "Scoring rules",
-			"body": "To see the scoring rules for your session click on the 'Question'-icon at the top.",
+			"body": "To see the scoring rules for your session click (double tap) on the 'Question'-icon at the top.",
 			"highlight": "scoring_menu",
 			"gates": {
 				"allow_actions": [
@@ -295,7 +295,7 @@
 		{
 			"id": "scoring_rules_modal",
 			"title": "Scoring rules",
-			"body": "Here you can see the scoring rules for this session. Each landscape type has its own rule. Take time to read them. When you are done click Continue.",
+			"body": "Here you can see the scoring rules for this session. Each landscape type has its own rule. Take time to read them. When you are done click (double tap) Continue.",
 			"highlight": "tutorial_modal",
 			"bubble_side": "above_left",
 			"gates": {
@@ -308,7 +308,7 @@
 		{
 			"id": "open_tutorial_book",
 			"title": "Landscape Stacking",
-			"body": "If you want to know how landscape tiles can be stacked and what their symbols mean, click the Book-Icon in the bottom right.",
+			"body": "If you want to know how landscape tiles can be stacked and what their symbols mean, click (double tap) the Book-Icon in the bottom right.",
 			"highlight": "scoring_book",
 			"bubble_side": "above_left",
 			"gates": {
@@ -324,7 +324,7 @@
 		{
 			"id": "close_tutorial_book",
 			"title": "Landscape Stacking",
-			"body": "This slide shows you each tile with their symbol and how they stack on top of each other. When you are done click the Close-button.",
+			"body": "This slide shows you each tile with their symbol and how they stack on top of each other. When you are done click (double tap) the Close-button.",
 			"highlight": "tutorial_modal",
 			"bubble_side": "above_left",
 			"gates": {
@@ -352,7 +352,7 @@
 		{
 			"id": "take_booster",
 			"title": "Take a pack",
-			"body": "Click on any landscape pack to add those cards to your hand.",
+			"body": "Click (double tap) on any landscape pack to add those cards to your hand.",
 			"highlight": "boosters",
 			"gates": {
 				"allow_actions": [
@@ -416,7 +416,7 @@
 		{
 			"id": "reroll_booster",
 			"title": "Reroll a pack",
-			"body": "If you dont like the cards in your pack, you can reroll it by hovering on the pack and clicking the reroll icon. (The small X icon). Try it!",
+			"body": "If you dont like the cards in your pack, you can reroll it by hovering (tap) on the pack and clicking (double tap) the reroll icon. (The small X icon). Try it!",
 			"highlight": "boosters_expanded",
 			"gates": {
 				"allow_actions": [
@@ -443,7 +443,7 @@
 		{
 			"id": "expand_animal_market",
 			"title": "Animals",
-			"body": "Lets add some animals to our landscape. Open the animal market by clicking the expand arrow above the packs.",
+			"body": "Lets add some animals to our landscape. Open the animal market by clicking (double tap) the expand arrow above the packs.",
 			"highlight": "animal_button",
 			"gates": {
 				"allow_actions": [
@@ -473,7 +473,7 @@
 		{
 			"id": "animal_market2",
 			"title": "Animal selection",
-			"body": "Click now on the Hedgehog card to add it to your hand.",
+			"body": "Click (double tap) now on the Hedgehog card to add it to your hand.",
 			"highlight": "animals",
 			"gates": {
 				"allow_actions": [
@@ -494,7 +494,7 @@
 		{
 			"id": "select_animal",
 			"title": "Select an animal",
-			"body": "Click the selected Hedgehog card in your hand to examine it.",
+			"body": "Click (double tap) the selected Hedgehog card in your hand to examine it.",
 			"highlight": "card",
 			"gates": {
 				"allow_actions": [
@@ -547,7 +547,7 @@
 		{
 			"id": "animal_cards3",
 			"title": "Animal cards",
-			"body": "At all times you can have only 2 animal cards on your hand. You can discard one by clicking the 'X'-button.",
+			"body": "At all times you can have only 2 animal cards on your hand. You can discard one by clicking (double tap) the 'X'-button.",
 			"highlight": "card",
 			"gates": {
 				"allow_actions": []
@@ -646,7 +646,7 @@
 		{
 			"id": "quest_tooltip_explain",
 			"title": "Quest requirements",
-			"body": "Hover the quest to see its requirements. Place this pattern anywhere on the board to earn its points (bottom of the tooltip).",
+			"body": "Hover (tap) the quest to see its requirements. Place this pattern anywhere on the board to earn its points (bottom of the tooltip).",
 			"highlight": "quests_expanded",
 			"gates": {
 				"allow_actions": []
@@ -752,7 +752,7 @@
 		{
 			"id": "end_session",
 			"title": "End session",
-			"body": "To end your session click on END SESSION in the menu.",
+			"body": "To end your session click (double tap) on END SESSION in the menu.",
 			"highlight": "end_session",
 			"gates": {
 				"allow_actions": [

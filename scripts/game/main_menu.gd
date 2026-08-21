@@ -3,6 +3,7 @@ extends Control
 const GAME_SCENE := "res://scenes/Refactored_Main.tscn"
 const BG_PATH := "res://assets/ui/menu_bg.webp"
 const PUZZLE_SLOT_SCENE := preload("res://scenes/game/puzzle_slot.tscn")
+const WEB_TEXT_PROMPT := preload("res://scripts/input/web_text_prompt.gd")
 
 var COLOR_RIGHT := Color.html("#D2C2AD")
 
@@ -35,8 +36,10 @@ var COLOR_RIGHT := Color.html("#D2C2AD")
 @onready var _endless_button: Button = $Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessButton
 @onready var _endless_desc: Label = $Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessDesc
 @onready var _endless_inline_buttons: HBoxContainer = $Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessInlineButtons
+@onready var _exit_button: Button = $Split/LeftColumn/Margin/NavStack/RootNav/ExitButton
 
 var _puzzle_ids: Array[String] = []
+var _web_text
 
 
 func _ready() -> void:
@@ -45,9 +48,12 @@ func _ready() -> void:
 		get_tree().change_scene_to_file(GAME_SCENE)
 		return
 	_setup_background()
+	_hide_exit_on_web()
 	_setup_puzzle_ids()
-	_setup_button_hover_sounds()
 	OverlayFocus.enable_buttons(self)
+	_setup_button_hover_sounds()
+	WebInstantButton.wire_tree(self)
+	_setup_web_text_inputs()
 	_code_status.text = ""
 	if _name_input:
 		_name_input.max_length = GameSettings.PLAYER_NAME_MAX_LENGTH
@@ -60,6 +66,23 @@ func _ready() -> void:
 		_show_name_nav()
 	else:
 		_show_root_nav()
+
+
+func _hide_exit_on_web() -> void:
+	if not OS.has_feature("web") or _exit_button == null:
+		return
+	_exit_button.hide()
+	_exit_button.disabled = true
+	_exit_button.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+
+func _setup_web_text_inputs() -> void:
+	if not WEB_TEXT_PROMPT.is_needed():
+		return
+	_web_text = WEB_TEXT_PROMPT.new()
+	_web_text.setup()
+	_web_text.bind_line_edit(_name_input, "Your name")
+	_web_text.bind_line_edit(_code_input, "Paste a share code")
 
 
 func _setup_button_hover_sounds() -> void:
@@ -97,9 +120,12 @@ func _setup_button_hover_sounds() -> void:
 	for button in buttons:
 		if button != null and not button.mouse_entered.is_connected(_on_nav_button_mouse_entered):
 			button.mouse_entered.connect(_on_nav_button_mouse_entered)
+	WebInstantButton.wire_many(buttons)
 
 
 func _on_nav_button_mouse_entered() -> void:
+	if WebInstantButton.skip_hover():
+		return
 	GameFeedback.play_hover_button()
 
 
@@ -190,6 +216,7 @@ func _sync_nav_input_filters(active: Control) -> void:
 			nav.mouse_filter = Control.MOUSE_FILTER_STOP
 		else:
 			nav.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	InputScheme.clear_stuck_gui_hover_deferred(self)
 
 
 func _show_name_nav() -> void:
@@ -202,7 +229,8 @@ func _show_name_nav() -> void:
 	_settings_nav.hide()
 	_reset_mode_inline_ui()
 	_sync_nav_input_filters(_name_nav)
-	_name_input.grab_focus()
+	if not WEB_TEXT_PROMPT.is_needed():
+		_name_input.grab_focus()
 
 
 func _show_root_nav() -> void:
@@ -276,7 +304,7 @@ func _show_code_nav() -> void:
 	_code_status.text = ""
 	if InputScheme.is_gamepad():
 		OverlayFocus.grab_first_button(_code_nav)
-	else:
+	elif not WEB_TEXT_PROMPT.is_needed():
 		_code_input.grab_focus()
 
 
@@ -310,7 +338,8 @@ func _on_name_submitted(text: String) -> void:
 func _try_accept_player_name(text: String) -> void:
 	var new_name := text.strip_edges()
 	if new_name.is_empty():
-		_name_input.grab_focus()
+		if not WEB_TEXT_PROMPT.is_needed():
+			_name_input.grab_focus()
 		return
 	GameSettings.set_player_name(new_name)
 	_show_root_nav()
@@ -370,6 +399,8 @@ func _on_back_pressed() -> void:
 
 
 func _on_exit_pressed() -> void:
+	if OS.has_feature("web"):
+		return
 	GameFeedback.play_click_button()
 	get_tree().quit()
 

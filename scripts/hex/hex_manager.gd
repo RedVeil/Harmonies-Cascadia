@@ -1,6 +1,8 @@
 extends Node3D
 class_name HexManager
 
+const TileVisualWarmupScript := preload("res://scripts/hex/tile_visual_warmup.gd")
+
 @export var orchestrator : Orchestrator
 @export var map_button : PackedScene
 @export var map_ring_count : int = 3
@@ -26,6 +28,7 @@ func _ready() -> void:
 	hex_container.init(self)
 	map_ring_count = GameSession.get_map_ring_count()
 	create_map(Vector2i.ZERO)
+	await TileVisualWarmupScript.run(self)
 
 ## ----- Tile Creation Logic ----- ##
 
