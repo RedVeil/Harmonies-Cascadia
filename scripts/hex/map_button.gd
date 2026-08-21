@@ -90,12 +90,12 @@ func _on_input_event(
 	_normal: Vector3,
 	_shape_idx: int
 ) -> void:
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			if UiPointerBlock.is_blocked():
-				return
-			GameFeedback.play_click_button()
-			hex_manager.handle_map_button_click(my_coord)
+	if not InputScheme.is_left_click(event):
+		return
+	if UiPointerBlock.is_blocked():
+		return
+	GameFeedback.play_click_button()
+	hex_manager.handle_map_button_click(my_coord)
 
 
 func _on_mouse_entered() -> void:

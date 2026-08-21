@@ -29,6 +29,14 @@ func _ready() -> void:
 	_show_view(View.ROOT)
 
 
+func _unhandled_input(event: InputEvent) -> void:
+	if not visible:
+		return
+	if OverlayFocus.is_cancel(event):
+		_on_back_pressed()
+		get_viewport().set_input_as_handled()
+
+
 func _setup_hover_sounds() -> void:
 	var buttons: Array[Control] = [
 		$Root/Split/LeftColumn/Margin/NavStack/RootNav/SettingsButton,
@@ -72,6 +80,11 @@ func _show_view(view: View) -> void:
 	_footer_spacer.visible = view != View.SETTINGS
 	_settings_block.size_flags_vertical = Control.SIZE_EXPAND_FILL if view == View.SETTINGS else 0
 	_sync_view_input_filters()
+	_grab_view_focus()
+
+
+func _grab_view_focus() -> void:
+	OverlayFocus.grab_first_button($Root/Split/LeftColumn/Margin/NavStack)
 
 
 func _sync_view_input_filters() -> void:
@@ -88,6 +101,7 @@ func open(score: int, _results: bool = false) -> void:
 	_sub_label.text = "Take a break or wrap up your session."
 	_show_view(View.ROOT)
 	show()
+	OverlayFocus.grab_first_button(_root_nav)
 
 
 func show_results(final_score: int) -> void:
@@ -98,6 +112,7 @@ func show_results(final_score: int) -> void:
 	_share_status.text = ""
 	_show_view(View.END_SESSION)
 	show()
+	OverlayFocus.grab_first_button(_end_session_block)
 
 
 func close() -> void:

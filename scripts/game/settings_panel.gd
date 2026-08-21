@@ -57,6 +57,7 @@ func handle_back() -> bool:
 		return false
 	GameFeedback.play_close_popup()
 	_show_view(View.ROOT)
+	OverlayFocus.grab_first_button(_root_view)
 	return true
 
 
@@ -98,7 +99,7 @@ func apply_sidebar_style() -> void:
 		check.add_theme_color_override("font_color", white)
 		check.add_theme_color_override("font_pressed_color", white)
 		check.add_theme_color_override("font_hover_color", taupe_dark)
-		check.add_theme_color_override("font_focus_color", white)
+		check.add_theme_color_override("font_focus_color", taupe_dark)
 		check.add_theme_color_override("font_disabled_color", Color(1, 1, 1, 0.4))
 
 	_style_sidebar_slider(_music_slider, taupe, taupe_dark)
@@ -115,7 +116,7 @@ func _style_nav_button(button: Button) -> void:
 	button.add_theme_color_override("font_color", Color.WHITE)
 	button.add_theme_color_override("font_hover_color", taupe_dark)
 	button.add_theme_color_override("font_pressed_color", Color(1, 1, 1, 0.6))
-	button.add_theme_color_override("font_focus_color", Color.WHITE)
+	button.add_theme_color_override("font_focus_color", taupe_dark)
 	for state in ["normal", "hover", "pressed", "focus", "disabled"]:
 		button.add_theme_stylebox_override(state, _nav_empty)
 
@@ -178,14 +179,14 @@ func _style_chip_button(button: Button, taupe: Color, taupe_dark: Color) -> void
 	button.add_theme_color_override("font_color", taupe)
 	button.add_theme_color_override("font_hover_color", Color.WHITE)
 	button.add_theme_color_override("font_pressed_color", Color.WHITE)
-	button.add_theme_color_override("font_focus_color", taupe)
+	button.add_theme_color_override("font_focus_color", Color.WHITE)
 	button.add_theme_color_override("font_disabled_color", Color(taupe.r, taupe.g, taupe.b, 0.45))
 	button.add_theme_color_override("font_hover_pressed_color", Color.WHITE)
 	button.add_theme_stylebox_override("normal", _chip_normal)
 	button.add_theme_stylebox_override("hover", _chip_hover)
 	button.add_theme_stylebox_override("pressed", _chip_pressed)
 	button.add_theme_stylebox_override("hover_pressed", _chip_pressed)
-	button.add_theme_stylebox_override("focus", _chip_normal)
+	button.add_theme_stylebox_override("focus", _chip_hover)
 	button.add_theme_stylebox_override("disabled", _chip_disabled)
 
 
@@ -196,12 +197,12 @@ func _style_chip_option(option: OptionButton, taupe: Color, taupe_dark: Color) -
 	option.add_theme_color_override("font_color", taupe)
 	option.add_theme_color_override("font_hover_color", Color.WHITE)
 	option.add_theme_color_override("font_pressed_color", Color.WHITE)
-	option.add_theme_color_override("font_focus_color", taupe)
+	option.add_theme_color_override("font_focus_color", Color.WHITE)
 	option.add_theme_color_override("font_disabled_color", Color(taupe.r, taupe.g, taupe.b, 0.45))
 	option.add_theme_stylebox_override("normal", _chip_normal)
 	option.add_theme_stylebox_override("hover", _chip_hover)
 	option.add_theme_stylebox_override("pressed", _chip_hover)
-	option.add_theme_stylebox_override("focus", _chip_normal)
+	option.add_theme_stylebox_override("focus", _chip_hover)
 	option.add_theme_stylebox_override("disabled", _chip_disabled)
 
 	var popup := option.get_popup()
@@ -313,12 +314,14 @@ func _on_graphics_pressed() -> void:
 	GameFeedback.play_click_button()
 	GameFeedback.play_open_popup()
 	_show_view(View.GRAPHICS)
+	OverlayFocus.grab_button_row(_preset_low.get_parent() if _preset_low else null)
 
 
 func _on_audio_pressed() -> void:
 	GameFeedback.play_click_button()
 	GameFeedback.play_open_popup()
 	_show_view(View.AUDIO)
+	OverlayFocus.grab_first_button(_audio_view)
 
 
 func _on_preset_pressed(preset: GameSettings.Preset) -> void:

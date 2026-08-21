@@ -27,6 +27,8 @@ func _ready() -> void:
 	_button.pressed.connect(_on_pressed)
 	_button.mouse_entered.connect(_on_mouse_entered)
 	_button.mouse_exited.connect(_on_mouse_exited)
+	_button.focus_entered.connect(_on_focus_entered)
+	_button.focus_exited.connect(_on_focus_exited)
 
 
 func setup(id: String, number: int, unlocked: bool, rating: String) -> void:
@@ -111,4 +113,18 @@ func _on_mouse_entered() -> void:
 
 
 func _on_mouse_exited() -> void:
+	if _button.has_focus():
+		return
+	_apply_box_style(false)
+
+
+func _on_focus_entered() -> void:
+	if not _unlocked:
+		return
+	_apply_box_style(true)
+
+
+func _on_focus_exited() -> void:
+	if _button.is_hovered():
+		return
 	_apply_box_style(false)

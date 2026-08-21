@@ -240,6 +240,8 @@ func _on_mouse_entered() -> void:
 
 
 func _on_mouse_exited() -> void:
+	if InputScheme.uses_touch_confirm() and InputScheme.touch.is_sticky("hex", coord):
+		return
 	container.handle_exit(coord)
 	hide_outline()
 
@@ -253,10 +255,15 @@ func _on_input_event(
 ) -> void:
 	if UiPointerBlock.is_blocked():
 		return
-	if event is InputEventMouseButton:
-		if event.button_index != MOUSE_BUTTON_LEFT or not event.pressed:
+	if not InputScheme.is_left_click(event):
+		return
+	if InputScheme.uses_touch_confirm():
+		if not InputScheme.touch.is_sticky("hex", coord):
+			InputScheme.touch.set_target("hex", coord)
+			container.handle_hover(coord)
+			show_outline(Color.WHITE)
 			return
-		container.handle_click(coord)
+	container.handle_click(coord)
 
 
 ## ----- Points Logic ----- ##

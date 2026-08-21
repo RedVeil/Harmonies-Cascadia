@@ -6,14 +6,13 @@
 [ext_resource type="Material" uid="uid://cn853ytgoxks6" path="res://assets/ui/sdf_circle_fill.tres" id="4_fill"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_hit"]
-radius = 14.0
+radius = 28.0
 
 [node name="ScoreTooltip" type="Node2D" unique_id=2118125176]
 z_index = 1
 script = ExtResource("1_d6nn3")
 
 [node name="Button" type="Area2D" parent="." unique_id=33584632]
-position = Vector2(22, 18)
 monitorable = false
 priority = 1
 
@@ -23,10 +22,11 @@ shape = SubResource("CircleShape2D_hit")
 
 [node name="background" type="Sprite2D" parent="Button" unique_id=376977882]
 material = ExtResource("4_fill")
-scale = Vector2(0.07, 0.07)
+scale = Vector2(0.1, 0.1)
 texture = ExtResource("3_circle")
 
 [node name="shadow" type="Sprite2D" parent="Button/background" unique_id=730007767]
+visible = false
 modulate = Color(0, 0, 0, 0.097)
 show_behind_parent = true
 scale = Vector2(1.1, 1.1)
@@ -34,7 +34,7 @@ texture = ExtResource("3_circle")
 
 [node name="icon" type="Sprite2D" parent="Button" unique_id=2077933624]
 self_modulate = Color(0.5686275, 0.5176471, 0.47058824, 1)
-scale = Vector2(0.2, 0.2)
+scale = Vector2(0.3, 0.3)
 texture = ExtResource("2_d6nn3")
 
 [connection signal="input_event" from="Button" to="." method="_on_button_input_event"]

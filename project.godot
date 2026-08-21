@@ -14,7 +14,8 @@ config/name="Harmonies-Cascadia"
 config/version="0.1.0"
 run/main_scene="res://scenes/main_menu.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="uid://dvpyk6otk5nkh"
+config/windows_native_icon="res://assets/ui/symbia_favicon.ico"
 
 [autoload]
 
@@ -30,6 +31,7 @@ RuleCatalog="*uid://tqkcwruu08es"
 QuestCatalog="*uid://dwsmx6x25woub"
 GameFeedback="*res://scenes/effects/game_feedback.tscn"
 UiPointerBlock="*res://scripts/input/ui_pointer_block.gd"
+InputScheme="*res://scripts/input/input_scheme.gd"
 
 [display]
 
@@ -59,6 +61,74 @@ mouse_scroll_down={
 "events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":0,"position":Vector2(0, 0),"global_position":Vector2(0, 0),"factor":1.0,"button_index":5,"canceled":false,"pressed":false,"double_click":false,"script":null)
 ]
 }
+focus_left={
+"deadzone": 0.5,
+"events": []
+}
+focus_right={
+"deadzone": 0.5,
+"events": []
+}
+focus_up={
+"deadzone": 0.5,
+"events": []
+}
+focus_down={
+"deadzone": 0.5,
+"events": []
+}
+focus_region_next={
+"deadzone": 0.5,
+"events": []
+}
+focus_region_prev={
+"deadzone": 0.5,
+"events": []
+}
+confirm={
+"deadzone": 0.5,
+"events": []
+}
+cancel={
+"deadzone": 0.5,
+"events": []
+}
+alt_action={
+"deadzone": 0.5,
+"events": []
+}
+undo_action={
+"deadzone": 0.5,
+"events": []
+}
+open_menu={
+"deadzone": 0.5,
+"events": []
+}
+camera_left={
+"deadzone": 0.5,
+"events": []
+}
+camera_right={
+"deadzone": 0.5,
+"events": []
+}
+camera_up={
+"deadzone": 0.5,
+"events": []
+}
+camera_down={
+"deadzone": 0.5,
+"events": []
+}
+zoom_in={
+"deadzone": 0.2,
+"events": []
+}
+zoom_out={
+"deadzone": 0.2,
+"events": []
+}
 
 [physics]
 
@@ -68,8 +138,10 @@ mouse_scroll_down={
 
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true
 anti_aliasing/quality/msaa_2d=2
+environment/defaults/default_clear_color=Color(0.8186203, 0.7502329, 0.6806915, 1)
 
 [shader_globals]
 

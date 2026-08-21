@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bf1gj3v1fnm2f" path="res://scripts/game/in_game_menu.gd" id="1_menu"]
 [ext_resource type="PackedScene" uid="uid://ckwpm5wl7l4a3" path="res://scenes/game/settings_panel.tscn" id="2_settings"]
+[ext_resource type="Texture2D" uid="uid://bka6fv5qia2ew" path="res://assets/ui/Symbia_title.webp" id="3_title"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_left"]
 bg_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
@@ -62,11 +63,13 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 16
 
-[node name="TitleLabel" type="Label" parent="Root/Split/LeftColumn/Margin/NavStack" unique_id=97993096]
+[node name="TitleImage" type="TextureRect" parent="Root/Split/LeftColumn/Margin/NavStack" unique_id=97993096]
+custom_minimum_size = Vector2(0, 112)
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 72
-text = "SYMBIA"
+mouse_filter = 2
+texture = ExtResource("3_title")
+expand_mode = 1
+stretch_mode = 4
 
 [node name="RootNav" type="VBoxContainer" parent="Root/Split/LeftColumn/Margin/NavStack" unique_id=1960448338]
 layout_mode = 2

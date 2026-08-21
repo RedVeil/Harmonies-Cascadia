@@ -27,6 +27,7 @@ var _offer_roots: Array[Node2D] = []
 var _cards: Array[Card] = []
 var _buy_buttons: Array[Control] = []
 var _hover_card_id: int = -1
+var _hover_frame: int = -1
 var _reroll_enabled: bool = true
 var _buys_enabled: Array[bool] = []
 var _disabled_buy_label: String = "Wait"
@@ -56,11 +57,14 @@ func open(offers: Array[CardData], _price: int = 0, _credits: int = 0, _reroll_p
 	GameFeedback.play_open_popup()
 	_offers = offers.duplicate()
 	_hover_card_id = -1
+	_clear_market_overlay_touch()
 	_rebuild_offers()
 	_refresh_labels()
 	_refresh_reroll_button()
 	_layout()
 	show()
+	OverlayFocus.enable_control(_close_button)
+	OverlayFocus.grab_control(_close_button)
 
 func refresh_offers(offers: Array[CardData]) -> void:
 	_offers = offers.duplicate()
@@ -99,14 +103,25 @@ func update_credits(_credits: int) -> void:
 
 func close() -> void:
 	GameFeedback.play_close_popup()
+	_clear_market_overlay_touch()
 	_clear_offers()
 	hide()
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not visible:
+		return
+	if OverlayFocus.is_cancel(event):
+		_on_close_pressed()
+		get_viewport().set_input_as_handled()
 
 ## ----- Card host (duck-typed like CardContainer) ----- ##
 
 func hover_card(id: int) -> void:
 	if id < 0 or id >= _cards.size() or _cards[id] == null:
 		return
+	if _hover_card_id != id:
+		_hover_frame = Engine.get_process_frames()
 	if _hover_card_id == -1:
 		_hover_card_id = id
 		_cards[id].handle_hover()
@@ -116,6 +131,8 @@ func hover_card(id: int) -> void:
 		_hover_card_id = id
 
 func exit_card(id: int) -> void:
+	if InputScheme.touch.is_sticky("market_overlay", id):
+		return
 	if id < 0 or id >= _cards.size() or _cards[id] == null:
 		return
 	if _hover_card_id == id:
@@ -123,12 +140,36 @@ func exit_card(id: int) -> void:
 	_cards[id].handle_exit()
 
 func select_card(id: int) -> void:
-	# Card already played click feedback via its HitArea.
+	# Card already played click feedback via its CardArea.
 	if id < 0 or id >= _offers.size():
 		return
+	var same_frame_hover := _hover_card_id == id and _hover_frame == Engine.get_process_frames()
+	if InputScheme.uses_touch_confirm() or same_frame_hover or InputScheme.touch.is_sticky("market_overlay", id):
+		var preview := not InputScheme.touch.can_confirm("market_overlay", id) or same_frame_hover
+		if preview:
+			if not InputScheme.touch.is_sticky("market_overlay", id):
+				var prev := InputScheme.touch.set_target("market_overlay", id)
+				if String(prev.get("kind", "")) == "market_overlay" and prev.get("id", id) != id:
+					_unhover_other_offer(int(prev["id"]))
+			hover_card(id)
+			return
 	if not _is_buy_enabled(id):
 		return
 	buy_pressed.emit(id)
+	InputScheme.touch.clear()
+
+
+func _unhover_other_offer(other_id: int) -> void:
+	if other_id < 0 or other_id >= _cards.size() or _cards[other_id] == null:
+		return
+	if _hover_card_id == other_id:
+		_hover_card_id = -1
+	_cards[other_id].handle_exit()
+
+
+func _clear_market_overlay_touch() -> void:
+	if InputScheme.touch.kind == "market_overlay":
+		InputScheme.touch.clear()
 
 ## ----- Layout ----- ##
 
@@ -334,10 +375,9 @@ func _refresh_reroll_button() -> void:
 ## ----- Input ----- ##
 
 func _handle_gui_click(event: InputEvent, callback: Callable) -> void:
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			callback.call()
-			get_viewport().set_input_as_handled()
+	if OverlayFocus.is_activate(event) or InputScheme.is_left_click(event):
+		callback.call()
+		get_viewport().set_input_as_handled()
 
 func _on_close_gui_input(event: InputEvent) -> void:
 	_handle_gui_click(event, _on_close_pressed)
@@ -361,10 +401,18 @@ func _on_buy_gui_input(event: InputEvent, offer_index: int) -> void:
 func _on_buy_pressed(offer_index: int) -> void:
 	if offer_index < 0 or offer_index >= _offers.size():
 		return
+	if InputScheme.uses_touch_confirm() or InputScheme.touch.is_sticky("market_overlay", offer_index):
+		if not InputScheme.touch.can_confirm("market_overlay", offer_index):
+			var prev := InputScheme.touch.set_target("market_overlay", offer_index)
+			if String(prev.get("kind", "")) == "market_overlay" and prev.get("id", offer_index) != offer_index:
+				_unhover_other_offer(int(prev["id"]))
+			hover_card(offer_index)
+			return
 	if not _is_buy_enabled(offer_index):
 		return
 	GameFeedback.play_click_button()
 	buy_pressed.emit(offer_index)
+	InputScheme.touch.clear()
 
 func _on_close_mouse_entered() -> void:
 	GameFeedback.play_hover_button()

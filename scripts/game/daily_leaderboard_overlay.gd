@@ -58,6 +58,7 @@ func is_open() -> bool:
 func open() -> void:
 	show()
 	mouse_filter = Control.MOUSE_FILTER_STOP
+	OverlayFocus.grab_first_button(self)
 	_open_async()
 
 
@@ -69,6 +70,14 @@ func close() -> void:
 	_clear_rows()
 	_status.text = ""
 	_show_me.disabled = true
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not visible:
+		return
+	if OverlayFocus.is_cancel(event):
+		close()
+		get_viewport().set_input_as_handled()
 
 
 func _apply_panel_style() -> void:

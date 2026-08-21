@@ -33,9 +33,9 @@ func disable() -> void:
 ## ----- Interactions Logic ----- ##
 
 func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed and enabled:
-			orchestrator.apply_recycle_card(-1, recycling_value, false)
+	if not InputScheme.is_left_click(event) or not enabled:
+		return
+	orchestrator.apply_recycle_card(-1, recycling_value, false)
 
 func _on_mouse_entered() -> void:
 	UiPointerBlock.enter(self)
@@ -56,6 +56,14 @@ func _on_mouse_exited() -> void:
 		is_hovered = false
 		timer = 0.5
 		$Tooltip.hide()
+
+
+func set_focus_hover(on: bool) -> void:
+	if on:
+		_on_mouse_entered()
+	else:
+		_on_mouse_exited()
+
 
 ## ----- Tooltip Logic ----- ##
 

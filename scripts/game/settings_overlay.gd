@@ -24,6 +24,17 @@ func open() -> void:
 		_settings_panel.reset_to_root()
 		_settings_panel.refresh()
 	show()
+	OverlayFocus.grab_first_button(_settings_panel)
+	if _close_button:
+		OverlayFocus.enable_control(_close_button)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not visible:
+		return
+	if OverlayFocus.is_cancel(event):
+		_on_close_pressed()
+		get_viewport().set_input_as_handled()
 
 
 func close() -> void:
@@ -42,10 +53,9 @@ func _on_close_pressed() -> void:
 
 
 func _on_close_gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			_on_close_pressed()
-			get_viewport().set_input_as_handled()
+	if OverlayFocus.is_activate(event) or InputScheme.is_left_click(event):
+		_on_close_pressed()
+		get_viewport().set_input_as_handled()
 
 
 func _on_dimmer_gui_input(event: InputEvent) -> void:

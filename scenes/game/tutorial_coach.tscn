@@ -52,8 +52,19 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
+[node name="boosters_expanded" type="Panel" parent="Highlights" unique_id=1006101260]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 9.0
+offset_top = -148.0
+offset_right = 314.0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
+
 [node name="boosters" type="Panel" parent="Highlights" unique_id=1239422822]
-visible = false
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -134,29 +145,27 @@ mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
 
 [node name="animal_button" type="Panel" parent="Highlights" unique_id=2054818584]
-visible = false
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 2.0
-offset_top = -205.0
+offset_top = -258.0
 offset_right = 58.0
-offset_bottom = -137.0
+offset_bottom = -190.0
 grow_vertical = 0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
 
 [node name="animals" type="Panel" parent="Highlights" unique_id=1115332346]
-visible = false
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 10.0
-offset_top = -300.0
-offset_right = 333.0
-offset_bottom = -93.0
+offset_top = -350.0
+offset_right = 345.0
+offset_bottom = -143.0
 grow_vertical = 0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
@@ -199,10 +208,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -71.0
-offset_top = -70.0
-offset_right = -10.0
-offset_bottom = -9.0
+offset_left = -94.0
+offset_top = -71.0
+offset_right = -33.0
+offset_bottom = -10.0
 grow_horizontal = 0
 grow_vertical = 0
 mouse_filter = 2
@@ -211,27 +220,20 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
 [node name="menu" type="Panel" parent="Highlights" unique_id=1398115736]
 visible = false
 layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -119.0
-offset_top = -20.0
-offset_right = -71.0
-offset_bottom = 45.0
-grow_horizontal = 0
+offset_left = 149.0
+offset_top = 4.0
+offset_right = 210.0
+offset_bottom = 65.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
 
 [node name="scoring_menu" type="Panel" parent="Highlights" unique_id=1504129074]
 visible = false
 layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -64.0
-offset_top = 2.0
-offset_bottom = 61.0
-grow_horizontal = 0
+offset_left = 200.0
+offset_top = 4.0
+offset_right = 261.0
+offset_bottom = 65.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
 
@@ -260,9 +262,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -471.0
-offset_top = -274.0
-offset_right = 471.0
-offset_bottom = 274.0
+offset_top = -209.0
+offset_right = 501.0
+offset_bottom = 231.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -354,24 +356,22 @@ mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
 
 [node name="end_session" type="Panel" parent="Highlights" unique_id=1072985061]
-visible = false
 layout_mode = 1
 offset_left = 22.0
-offset_top = 195.0
+offset_top = 177.0
 offset_right = 196.0
-offset_bottom = 241.0
+offset_bottom = 223.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
 
 [node name="share" type="Panel" parent="Highlights" unique_id=1156647822]
-visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 0.333333
 offset_left = 21.0
-offset_top = 268.0
+offset_top = 250.0
 offset_right = -21.0
-offset_bottom = 328.0
+offset_bottom = 310.0
 grow_horizontal = 0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")

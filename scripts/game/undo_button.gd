@@ -24,12 +24,19 @@ func disable() -> void:
 	$background.self_modulate = Color.WHITE
 	$icon.self_modulate = Color.GRAY
 
+
+func set_focus_hover(on: bool) -> void:
+	if on:
+		_on_mouse_entered()
+	else:
+		_on_mouse_exited()
+
 ## ----- Interactions Logic ----- ##
 
 func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed and enabled:
-			orchestrator.undo()
+	if not InputScheme.is_left_click(event) or not enabled:
+		return
+	orchestrator.undo()
 
 func _on_mouse_entered() -> void:
 	UiPointerBlock.enter(self)

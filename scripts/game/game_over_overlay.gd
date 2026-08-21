@@ -56,6 +56,34 @@ func _ready() -> void:
 	_show_confirm_buttons()
 
 
+func _unhandled_input(event: InputEvent) -> void:
+	if not visible:
+		return
+	if OverlayFocus.is_cancel(event):
+		if _continue_button != null and _continue_button.visible:
+			_on_continue_pressed()
+		elif _leave_button != null and _leave_button.visible:
+			_on_leave_pressed()
+		get_viewport().set_input_as_handled()
+
+
+func _grab_visible_button_focus() -> void:
+	for button in [
+		_continue_button,
+		_end_button,
+		_leave_button,
+		_restart_button,
+		_next_button,
+		_share_button,
+	]:
+		if button == null:
+			continue
+		OverlayFocus.enable_control(button)
+		if button.visible and button.is_visible_in_tree():
+			OverlayFocus.grab_control(button)
+			return
+
+
 func _setup_stars() -> void:
 	if _stars_row == null:
 		return
@@ -125,6 +153,7 @@ func open_confirm(final_score: int) -> void:
 	_show_confirm_buttons()
 	_reset_button_hovers()
 	show()
+	_grab_visible_button_focus()
 
 
 func show_results(final_score: int) -> void:
@@ -135,6 +164,7 @@ func show_results(final_score: int) -> void:
 		_show_puzzle_results(final_score)
 		show()
 		GameFeedback.play_open_popup()
+		_grab_visible_button_focus()
 		return
 	GameFeedback.play_open_popup()
 	_apply_default_layout()
@@ -163,6 +193,7 @@ func show_results(final_score: int) -> void:
 	_show_results_buttons()
 	_reset_button_hovers()
 	show()
+	_grab_visible_button_focus()
 
 
 func _show_puzzle_results(final_score: int) -> void:
@@ -422,10 +453,9 @@ func _set_button_hover(button: Control, hovered: bool) -> void:
 
 
 func _handle_gui_click(event: InputEvent, callback: Callable) -> void:
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			get_viewport().set_input_as_handled()
-			callback.call()
+	if OverlayFocus.is_activate(event) or InputScheme.is_left_click(event):
+		get_viewport().set_input_as_handled()
+		callback.call()
 
 
 func _on_continue_gui_input(event: InputEvent) -> void:

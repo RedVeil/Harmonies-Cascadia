@@ -14,11 +14,11 @@ func _ready() -> void:
 
 
 func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			GameFeedback.play_click_button()
-			if settings_overlay != null:
-				settings_overlay.open()
+	if not InputScheme.is_left_click(event):
+		return
+	GameFeedback.play_click_button()
+	if settings_overlay != null:
+		settings_overlay.open()
 
 
 func _on_mouse_entered() -> void:

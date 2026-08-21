@@ -92,9 +92,6 @@ func show_step(step: Dictionary, highlight_name: String, show_continue: bool) ->
 		_sync_hex_highlight()
 	_place_bubble(_highlight_rect())
 	show()
-	# #region agent log
-	call_deferred("_debug_log_menu_highlight", highlight_name, "post-fix")
-	# #endregion
 
 
 func hide_coach() -> void:
@@ -290,10 +287,6 @@ func _on_viewport_resized() -> void:
 	if not visible:
 		return
 	_place_bubble(_highlight_rect())
-	# #region agent log
-	if _visible_highlight:
-		_debug_log_menu_highlight(_visible_highlight.name, "post-fix")
-	# #endregion
 
 
 func _on_continue() -> void:
@@ -304,82 +297,3 @@ func _on_continue() -> void:
 func _on_skip() -> void:
 	GameFeedback.play_click_button()
 	skip_pressed.emit()
-
-
-# #region agent log
-func _debug_log_menu_highlight(highlight_name: String, run_id: String) -> void:
-	if highlight_name != "share" and highlight_name != "end_session":
-		return
-	var vp := get_viewport().get_visible_rect()
-	var win := DisplayServer.window_get_size()
-	var hl_rect := Rect2()
-	var hl_off := {}
-	if _visible_highlight:
-		hl_rect = _visible_highlight.get_global_rect()
-		hl_off = {
-			"off_l": _visible_highlight.offset_left,
-			"off_t": _visible_highlight.offset_top,
-			"off_r": _visible_highlight.offset_right,
-			"off_b": _visible_highlight.offset_bottom,
-			"anchor_l": _visible_highlight.anchor_left,
-			"anchor_r": _visible_highlight.anchor_right,
-			"clip": _visible_highlight.clip_contents,
-		}
-	var menu_data := {}
-	var menu := get_tree().root.find_child("InGameMenu", true, false)
-	if menu:
-		var left_col: Control = menu.get_node_or_null("Root/Split/LeftColumn")
-		var action_row: Control = menu.get_node_or_null("Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock/ActionRow")
-		var share_btn: Control = menu.get_node_or_null("Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock/ActionRow/ShareButton")
-		var end_btn: Control = menu.get_node_or_null("Root/Split/LeftColumn/Margin/NavStack/RootNav/EndSessionButton")
-		if left_col:
-			menu_data["left_col"] = {"x": left_col.get_global_rect().position.x, "y": left_col.get_global_rect().position.y, "w": left_col.get_global_rect().size.x, "h": left_col.get_global_rect().size.y}
-		if action_row:
-			menu_data["action_row"] = {"x": action_row.get_global_rect().position.x, "y": action_row.get_global_rect().position.y, "w": action_row.get_global_rect().size.x, "h": action_row.get_global_rect().size.y}
-		if share_btn:
-			menu_data["share_btn"] = {"x": share_btn.get_global_rect().position.x, "y": share_btn.get_global_rect().position.y, "w": share_btn.get_global_rect().size.x, "h": share_btn.get_global_rect().size.y, "visible": share_btn.visible}
-		if end_btn:
-			menu_data["end_session_btn"] = {"x": end_btn.get_global_rect().position.x, "y": end_btn.get_global_rect().position.y, "w": end_btn.get_global_rect().size.x, "h": end_btn.get_global_rect().size.y, "visible": end_btn.visible}
-		if left_col and hl_rect.size.x > 0.0:
-			menu_data["overflow_right"] = hl_rect.end.x - left_col.get_global_rect().end.x
-	var data := {
-		"highlight": highlight_name,
-		"vp_w": vp.size.x,
-		"vp_h": vp.size.y,
-		"win_w": win.x,
-		"win_h": win.y,
-		"hl_x": hl_rect.position.x,
-		"hl_y": hl_rect.position.y,
-		"hl_w": hl_rect.size.x,
-		"hl_h": hl_rect.size.y,
-		"hl_end_x": hl_rect.end.x,
-		"highlights_clip": _highlights.clip_contents,
-		"highlights_w": _highlights.size.x,
-		"offsets": hl_off,
-		"menu": menu_data,
-	}
-	_agent_log("A,B,C,D,E", "tutorial_coach.gd:_debug_log_menu_highlight", "menu highlight vs sidebar", data, run_id)
-
-
-func _agent_log(hypothesis_id: String, location: String, message: String, data: Dictionary, run_id: String) -> void:
-	var payload := {
-		"sessionId": "901c2e",
-		"hypothesisId": hypothesis_id,
-		"location": location,
-		"message": message,
-		"data": data,
-		"timestamp": int(Time.get_unix_time_from_system() * 1000.0),
-		"runId": run_id,
-	}
-	var path := ProjectSettings.globalize_path("res://debug-901c2e.log")
-	var f: FileAccess
-	if FileAccess.file_exists(path):
-		f = FileAccess.open(path, FileAccess.READ_WRITE)
-		if f:
-			f.seek_end()
-	else:
-		f = FileAccess.open(path, FileAccess.WRITE)
-	if f:
-		f.store_line(JSON.stringify(payload))
-		f.close()
-# #endregion

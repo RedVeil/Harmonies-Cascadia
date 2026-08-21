@@ -11,12 +11,6 @@
 [ext_resource type="Material" path="res://assets/ui/sdf_card_shadow.tres" id="9_shadow"]
 [ext_resource type="FontFile" uid="uid://cjgc8hhsb6xtr" path="res://assets/fonts/Dangrek-Regular.ttf" id="10_font"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_pack"]
-size = Vector2(78, 140)
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_reroll"]
-radius = 14.0
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_reroll_shadow"]
 shader = ExtResource("3_4cwg5")
 shader_parameter/shadow_color = Color(0, 0, 0, 0.28)
@@ -44,18 +38,29 @@ shader_parameter/shadow_color = Color(0, 0, 0, 0.1254902)
 shader_parameter/blur_size = 20.0
 shader_parameter/radius = 0.85
 
-[node name="Booster" type="Area2D" unique_id=321030438]
-monitorable = false
-priority = 1
+[node name="Booster" type="Node2D" unique_id=321030438]
 script = ExtResource("1_r28fy")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=800364982]
-visible = false
-z_index = 1
-shape = SubResource("RectangleShape2D_pack")
 
 [node name="StackVisuals" type="Node2D" parent="." unique_id=1441552771]
 scale = Vector2(0.75, 0.75)
+
+[node name="EmptyArea" type="Control" parent="StackVisuals" unique_id=1441552772]
+z_index = 5
+layout_mode = 3
+anchors_preset = 0
+offset_left = -50.0
+offset_top = -154.0
+offset_right = 50.0
+offset_bottom = -86.0
+
+[node name="CardArea" type="Control" parent="StackVisuals" unique_id=1441552773]
+z_index = 6
+layout_mode = 3
+anchors_preset = 0
+offset_left = -50.0
+offset_top = -86.0
+offset_right = 50.0
+offset_bottom = 88.0
 
 [node name="Shadow" type="TextureRect" parent="StackVisuals" unique_id=1173635571]
 modulate = Color(0, 0, 0, 0.28)
@@ -111,35 +116,48 @@ mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="HoverButton" type="Area2D" parent="StackVisuals" unique_id=1583002112]
-z_index = 2
-position = Vector2(0, -86)
-monitorable = false
-priority = 3
+[node name="RecycleButton" type="Control" parent="StackVisuals" unique_id=1583002112]
+z_index = 40
+layout_mode = 3
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -15.833334
+offset_top = -132.0
+offset_right = 21.166666
+offset_bottom = -95.0
+grow_horizontal = 2
+mouse_filter = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StackVisuals/HoverButton" unique_id=1889437002]
-shape = SubResource("CircleShape2D_reroll")
-
-[node name="Shadow" type="Sprite2D" parent="StackVisuals/HoverButton" unique_id=799092591]
+[node name="Shadow" type="TextureRect" parent="StackVisuals/RecycleButton" unique_id=799092591]
 z_index = -1
 material = SubResource("ShaderMaterial_reroll_shadow")
-position = Vector2(1.5, 2.5)
-scale = Vector2(0.085, 0.085)
+layout_mode = 0
+offset_left = -0.66666603
+offset_top = -0.666687
+offset_right = 33.333336
+offset_bottom = 33.333313
+mouse_filter = 2
 texture = ExtResource("2_430vb")
+expand_mode = 1
 
-[node name="Circle" type="Sprite2D" parent="StackVisuals/HoverButton" unique_id=2100593392]
+[node name="Circle" type="TextureRect" parent="StackVisuals/RecycleButton" unique_id=2100593392]
 material = ExtResource("6_fill")
-scale = Vector2(0.07, 0.07)
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 32.0
+mouse_filter = 2
 texture = ExtResource("2_430vb")
+expand_mode = 1
 
-[node name="Label" type="Label" parent="StackVisuals/HoverButton" unique_id=296435737]
-offset_left = -12.666668
-offset_top = -16.333336
-offset_right = 15.333332
-offset_bottom = 16.666664
+[node name="Label" type="Label" parent="StackVisuals/RecycleButton" unique_id=296435737]
+layout_mode = 0
+offset_top = -4.0000305
+offset_right = 32.0
+offset_bottom = 35.99997
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
 theme_override_fonts/font = ExtResource("10_font")
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 22
 text = "X"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -169,10 +187,3 @@ visible = false
 self_modulate = Color(0.5686275, 0.5176471, 0.47058824, 1)
 scale = Vector2(0.28, 0.28)
 texture = ExtResource("4_430vb")
-
-[connection signal="input_event" from="." to="." method="_on_input_event"]
-[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
-[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
-[connection signal="input_event" from="StackVisuals/HoverButton" to="." method="_on_reroll_input_event"]
-[connection signal="mouse_entered" from="StackVisuals/HoverButton" to="." method="_on_reroll_mouse_entered"]
-[connection signal="mouse_exited" from="StackVisuals/HoverButton" to="." method="_on_reroll_mouse_exited"]

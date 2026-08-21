@@ -24,12 +24,15 @@ var COLOR_RIGHT := Color.html("#D2C2AD")
 @onready var _code_input: LineEdit = $Split/LeftColumn/Margin/NavStack/CodeNav/CodeInput
 @onready var _code_status: Label = $Split/LeftColumn/Margin/NavStack/CodeNav/CodeStatus
 
+@onready var _daily_button: Button = $Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyButton
 @onready var _daily_desc: Label = $Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyDesc
 @onready var _daily_inline_buttons: HBoxContainer = $Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyInlineButtons
 @onready var _leaderboard: DailyLeaderboardOverlay = $Split/RightColumn/DailyLeaderboardOverlay
 
+@onready var _quick_session_button: Button = $Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickSessionButton
 @onready var _quick_inline_buttons: HBoxContainer = $Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickInlineButtons
 
+@onready var _endless_button: Button = $Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessButton
 @onready var _endless_desc: Label = $Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessDesc
 @onready var _endless_inline_buttons: HBoxContainer = $Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessInlineButtons
 
@@ -44,12 +47,15 @@ func _ready() -> void:
 	_setup_background()
 	_setup_puzzle_ids()
 	_setup_button_hover_sounds()
+	OverlayFocus.enable_buttons(self)
 	_code_status.text = ""
 	if _name_input:
 		_name_input.max_length = GameSettings.PLAYER_NAME_MAX_LENGTH
 	if _settings_panel:
 		_settings_panel.apply_sidebar_style()
 	_reset_mode_inline_ui()
+	if not InputScheme.scheme_changed.is_connected(_on_input_scheme_changed):
+		InputScheme.scheme_changed.connect(_on_input_scheme_changed)
 	if GameSettings.tutorial_completed and GameSettings.player_name.strip_edges().is_empty():
 		_show_name_nav()
 	else:
@@ -209,6 +215,7 @@ func _show_root_nav() -> void:
 	_settings_nav.hide()
 	_reset_mode_inline_ui()
 	_sync_nav_input_filters(_root_nav)
+	OverlayFocus.grab_first_button(_root_nav)
 
 
 func _show_play_nav() -> void:
@@ -223,6 +230,7 @@ func _show_play_nav() -> void:
 	_settings_nav.hide()
 	_reset_mode_inline_ui()
 	_sync_nav_input_filters(_play_nav)
+	OverlayFocus.grab_first_button(_play_nav)
 
 
 func _show_tutorial_nav() -> void:
@@ -236,6 +244,7 @@ func _show_tutorial_nav() -> void:
 	_settings_nav.hide()
 	_reset_mode_inline_ui()
 	_sync_nav_input_filters(_tutorial_nav)
+	OverlayFocus.grab_first_button(_tutorial_nav)
 
 
 func _show_puzzle_nav() -> void:
@@ -250,6 +259,7 @@ func _show_puzzle_nav() -> void:
 	_settings_nav.hide()
 	_reset_mode_inline_ui()
 	_sync_nav_input_filters(_puzzle_nav)
+	OverlayFocus.grab_first_button(_puzzle_nav)
 
 
 func _show_code_nav() -> void:
@@ -264,7 +274,10 @@ func _show_code_nav() -> void:
 	_reset_mode_inline_ui()
 	_sync_nav_input_filters(_code_nav)
 	_code_status.text = ""
-	_code_input.grab_focus()
+	if InputScheme.is_gamepad():
+		OverlayFocus.grab_first_button(_code_nav)
+	else:
+		_code_input.grab_focus()
 
 
 func _show_settings_nav() -> void:
@@ -282,6 +295,7 @@ func _show_settings_nav() -> void:
 		_settings_panel.apply_sidebar_style()
 		_settings_panel.reset_to_root()
 		_settings_panel.refresh()
+	OverlayFocus.grab_first_button(_settings_nav)
 
 
 func _on_name_accept_pressed() -> void:
@@ -360,6 +374,62 @@ func _on_exit_pressed() -> void:
 	get_tree().quit()
 
 
+func _on_input_scheme_changed(_scheme: InputScheme.Scheme) -> void:
+	if _root_nav.visible:
+		OverlayFocus.grab_first_button(_root_nav)
+	elif _play_nav.visible:
+		OverlayFocus.grab_first_button(_play_nav)
+	elif _tutorial_nav.visible:
+		OverlayFocus.grab_first_button(_tutorial_nav)
+	elif _puzzle_nav.visible:
+		OverlayFocus.grab_first_button(_puzzle_nav)
+	elif _code_nav.visible:
+		OverlayFocus.grab_first_button(_code_nav)
+	elif _settings_nav.visible:
+		OverlayFocus.grab_first_button(_settings_nav)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if OverlayFocus.is_cancel(event) and not _root_nav.visible and not _name_nav.visible:
+		if _try_collapse_inline_row():
+			get_viewport().set_input_as_handled()
+			return
+		_on_back_pressed()
+		get_viewport().set_input_as_handled()
+
+
+func _try_collapse_inline_row() -> bool:
+	if _leaderboard != null and _leaderboard.is_open():
+		return false
+	if _map_size_row != null and _map_size_row.visible:
+		_hide_map_size_row()
+		if RunSave.has_save(GameSession.GameMode.NORMAL):
+			_quick_inline_buttons.show()
+			OverlayFocus.grab_button_row(_quick_inline_buttons, _quick_session_button)
+		else:
+			OverlayFocus.restore_parent_focus(_quick_session_button)
+		return true
+	if _quick_inline_buttons != null and _quick_inline_buttons.visible:
+		_quick_inline_buttons.hide()
+		if _quick_session_desc:
+			_quick_session_desc.show()
+		OverlayFocus.restore_parent_focus(_quick_session_button)
+		return true
+	if _daily_inline_buttons != null and _daily_inline_buttons.visible:
+		_daily_inline_buttons.hide()
+		if _daily_desc:
+			_daily_desc.show()
+		OverlayFocus.restore_parent_focus(_daily_button)
+		return true
+	if _endless_inline_buttons != null and _endless_inline_buttons.visible:
+		_endless_inline_buttons.hide()
+		if _endless_desc:
+			_endless_desc.show()
+		OverlayFocus.restore_parent_focus(_endless_button)
+		return true
+	return false
+
+
 func _close_leaderboard() -> void:
 	if _leaderboard != null and _leaderboard.is_open():
 		_leaderboard.close()
@@ -371,8 +441,11 @@ func _on_daily_pressed() -> void:
 	var showing := not _daily_inline_buttons.visible
 	_daily_inline_buttons.visible = showing
 	_daily_desc.visible = not showing
-	if not showing:
+	if showing:
+		OverlayFocus.grab_button_row(_daily_inline_buttons, _daily_button)
+	else:
 		_close_leaderboard()
+		OverlayFocus.restore_parent_focus(_daily_button)
 
 
 func _on_daily_play_pressed() -> void:
@@ -394,6 +467,7 @@ func _on_daily_leaderboards_pressed() -> void:
 		return
 	if _leaderboard.is_open():
 		_leaderboard.close()
+		OverlayFocus.grab_button_row(_daily_inline_buttons, _daily_button)
 	else:
 		_leaderboard.open()
 
@@ -405,11 +479,19 @@ func _on_quick_session_pressed() -> void:
 		_quick_inline_buttons.visible = showing
 		_map_size_row.hide()
 		_quick_session_desc.visible = not showing
+		if showing:
+			OverlayFocus.grab_button_row(_quick_inline_buttons, _quick_session_button)
+		else:
+			OverlayFocus.restore_parent_focus(_quick_session_button)
 		return
 
 	_quick_inline_buttons.hide()
 	_map_size_row.visible = not _map_size_row.visible
 	_quick_session_desc.visible = not _map_size_row.visible
+	if _map_size_row.visible:
+		OverlayFocus.grab_button_row(_map_size_row, _quick_session_button)
+	else:
+		OverlayFocus.restore_parent_focus(_quick_session_button)
 
 
 func _on_quick_continue_pressed() -> void:
@@ -431,6 +513,7 @@ func _on_quick_new_pressed() -> void:
 		_quick_inline_buttons.hide()
 	_map_size_row.show()
 	_quick_session_desc.hide()
+	OverlayFocus.grab_button_row(_map_size_row, _quick_session_button)
 
 
 func _on_map_size_small_pressed() -> void:
@@ -455,8 +538,13 @@ func _start_normal_run(size: GameSession.MapSize) -> void:
 func _on_endless_pressed() -> void:
 	GameFeedback.play_click_button()
 	if RunSave.has_save(GameSession.GameMode.ENDLESS):
-		_endless_inline_buttons.visible = not _endless_inline_buttons.visible
-		_endless_desc.visible = not _endless_inline_buttons.visible
+		var showing := not _endless_inline_buttons.visible
+		_endless_inline_buttons.visible = showing
+		_endless_desc.visible = not showing
+		if showing:
+			OverlayFocus.grab_button_row(_endless_inline_buttons, _endless_button)
+		else:
+			OverlayFocus.restore_parent_focus(_endless_button)
 		return
 
 	GameSession.begin_endless_run()
