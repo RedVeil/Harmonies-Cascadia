@@ -3,6 +3,8 @@ class_name CardPlacement
 
 const HEX_OUTLINE_THIN := preload("res://assets/icons/hex_outline_thin.png")
 const HEX_OUTLINE_BOLD := preload("res://assets/icons/hex_outline_bold.png")
+var COLOR_HEX_BORDER_MAIN := Color.WHITE
+var COLOR_HEX_BORDER_BONUS := Color(0.78, 0.78, 0.78, 1.0)
 
 func init(card_data: CardData) -> void:
 	$element.hide()
@@ -46,10 +48,10 @@ func _coords_from_name(node_name: String) -> Vector2i:
 
 func _apply_hex_style(outline: Sprite2D, placement: Placement, is_center: bool) -> void:
 	if is_center:
-		outline.self_modulate = Color.WHITE
+		outline.self_modulate = COLOR_HEX_BORDER_MAIN
 		outline.texture = HEX_OUTLINE_BOLD
 	else:
-		outline.self_modulate = Color.TRANSPARENT
+		outline.self_modulate = COLOR_HEX_BORDER_BONUS
 		outline.texture = HEX_OUTLINE_THIN
 
 	var levels: Array = ElementCatalog.elements[placement.element].levels

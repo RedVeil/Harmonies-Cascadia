@@ -173,7 +173,6 @@ z_index = 1
 scale = Vector2(0.09, 0.09)
 
 [node name="pair" type="Node2D" parent="animal" unique_id=2006039524]
-visible = false
 rotation = -0.5061455
 
 [node name="(0,0)" type="Sprite2D" parent="animal/pair" unique_id=1347635981]
