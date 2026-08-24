@@ -6,7 +6,7 @@
 [ext_resource type="Material" uid="uid://cn853ytgoxks6" path="res://assets/ui/sdf_circle_fill.tres" id="5_fill"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_hxqf6"]
-radius = 21.0
+radius = 28.0
 
 [node name="UndoButton" type="Area2D" unique_id=1759140847]
 monitorable = false

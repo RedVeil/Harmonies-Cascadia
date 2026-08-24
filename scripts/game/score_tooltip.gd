@@ -18,10 +18,15 @@ func _on_button_mouse_exited() -> void:
 	$Button/background.self_modulate = Color.WHITE
 	$Button/icon.self_modulate = COLOR_BROWN
 
+
+func set_focus_hover(on: bool) -> void:
+	if on:
+		_on_button_mouse_entered()
+	else:
+		_on_button_mouse_exited()
+
 func _on_button_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
-	if not (event is InputEventMouseButton):
-		return
-	if event.button_index != MOUSE_BUTTON_LEFT or not event.pressed:
+	if not InputScheme.is_left_click(event):
 		return
 	if orchestrator == null:
 		return

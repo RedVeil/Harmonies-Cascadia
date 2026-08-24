@@ -6,7 +6,7 @@
 [ext_resource type="Material" uid="uid://cn853ytgoxks6" path="res://assets/ui/sdf_circle_fill.tres" id="5_fill"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_hit"]
-radius = 14.0
+radius = 28.0
 
 [node name="MenuButton" type="Area2D" unique_id=1742130518]
 monitorable = false
@@ -19,10 +19,11 @@ shape = SubResource("CircleShape2D_hit")
 
 [node name="background" type="Sprite2D" parent="." unique_id=266668285]
 material = ExtResource("5_fill")
-scale = Vector2(0.07, 0.07)
+scale = Vector2(0.1, 0.1)
 texture = ExtResource("2_circle")
 
 [node name="shadow" type="Sprite2D" parent="background" unique_id=730007766]
+visible = false
 modulate = Color(0, 0, 0, 0.097)
 show_behind_parent = true
 position = Vector2(-1.5258789e-05, -1.5258789e-05)
@@ -32,5 +33,5 @@ texture = ExtResource("2_circle")
 [node name="icon" type="Sprite2D" parent="." unique_id=437751435]
 self_modulate = Color(0.5686275, 0.5176471, 0.47058824, 1)
 position = Vector2(-1.1920929e-07, -2.9802322e-07)
-scale = Vector2(0.2, 0.2)
+scale = Vector2(0.3, 0.3)
 texture = ExtResource("4_ttrjr")

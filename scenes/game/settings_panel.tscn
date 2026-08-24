@@ -2,6 +2,18 @@
 
 [ext_resource type="Script" uid="uid://bl4ndt7tp2pg5" path="res://scripts/game/settings_panel.gd" id="1_panel"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_name_input"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+
 [node name="SettingsPanel" type="Control" unique_id=1627405394]
 layout_mode = 3
 anchors_preset = 15
@@ -25,6 +37,16 @@ theme_override_constants/separation = 12
 layout_mode = 2
 theme_override_constants/separation = 8
 
+[node name="PlayerButton" type="Button" parent="Content/RootView" unique_id=3100000001]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_colors/font_pressed_color = Color(0.5686275, 0.5176471, 0.47058824, 0.6)
+theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 0.7)
+theme_override_font_sizes/font_size = 26
+text = "PLAYER"
+flat = true
+alignment = 0
+
 [node name="GraphicsButton" type="Button" parent="Content/RootView" unique_id=280447167]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
@@ -44,6 +66,30 @@ theme_override_font_sizes/font_size = 26
 text = "AUDIO"
 flat = true
 alignment = 0
+
+[node name="PlayerView" type="VBoxContainer" parent="Content" unique_id=3100000002]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="NameLabel" type="Label" parent="Content/PlayerView" unique_id=3100000003]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 16
+text = "Player name"
+
+[node name="NameInput" type="LineEdit" parent="Content/PlayerView" unique_id=3100000004]
+custom_minimum_size = Vector2(220, 40)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_colors/font_placeholder_color = Color(0.5686275, 0.5176471, 0.47058824, 0.55)
+theme_override_styles/normal = SubResource("StyleBoxFlat_name_input")
+theme_override_styles/read_only = SubResource("StyleBoxFlat_name_input")
+theme_override_styles/focus = SubResource("StyleBoxFlat_name_input")
+placeholder_text = "Your name"
+max_length = 12
+caret_blink = true
 
 [node name="GraphicsView" type="VBoxContainer" parent="Content" unique_id=413313601]
 visible = false
@@ -81,7 +127,6 @@ text = "High"
 [node name="CustomButton" type="Button" parent="Content/GraphicsView/PresetRow" unique_id=1454025661]
 layout_mode = 2
 size_flags_horizontal = 3
-disabled = true
 toggle_mode = true
 text = "Custom"
 

@@ -27,6 +27,13 @@ func disable() -> void:
 	_refresh_visuals()
 
 
+func set_focus_hover(on: bool) -> void:
+	if on:
+		_on_mouse_entered()
+	else:
+		_on_mouse_exited()
+
+
 func _refresh_visuals() -> void:
 	if enabled:
 		$background.self_modulate = Color.WHITE
@@ -37,10 +44,10 @@ func _refresh_visuals() -> void:
 
 
 func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed and enabled:
-			GameFeedback.play_click_button()
-			orchestrator.end_game()
+	if not InputScheme.is_left_click(event) or not enabled:
+		return
+	GameFeedback.play_click_button()
+	orchestrator.end_game()
 
 
 func _on_mouse_entered() -> void:

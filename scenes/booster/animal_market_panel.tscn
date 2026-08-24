@@ -4,8 +4,11 @@
 [ext_resource type="PackedScene" uid="uid://0fu8v3fe2jgj" path="res://scenes/card/card.tscn" id="2_card"]
 [ext_resource type="Texture2D" uid="uid://de8xqj04oa2hw" path="res://assets/icons/ArrowBrownOuline23.webp" id="3_obics"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_1klby"]
-size = Vector2(24, 52)
+[sub_resource type="CircleShape2D" id="CircleShape2D_s3on8"]
+radius = 22.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_obics"]
+radius = 22.0
 
 [node name="AnimalMarketPanel" type="Node2D" unique_id=1353906806]
 script = ExtResource("1_panel")
@@ -21,7 +24,8 @@ monitorable = false
 priority = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ExpandArrow" unique_id=1242310773]
-shape = SubResource("RectangleShape2D_1klby")
+position = Vector2(-3, 0)
+shape = SubResource("CircleShape2D_s3on8")
 
 [node name="Icon" type="Sprite2D" parent="ExpandArrow" unique_id=1357026683]
 position = Vector2(-1, 0)
@@ -35,14 +39,14 @@ position = Vector2(6.666664, 6.666687)
 texture = ExtResource("3_obics")
 
 [node name="CollapseArrow" type="Area2D" parent="." unique_id=1017714051]
-position = Vector2(247.5, -170.5)
+position = Vector2(260, -170.5)
 input_pickable = false
 monitorable = false
 priority = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CollapseArrow" unique_id=1156241679]
-position = Vector2(5, 0)
-shape = SubResource("RectangleShape2D_1klby")
+position = Vector2(8, 0)
+shape = SubResource("CircleShape2D_obics")
 
 [node name="Icon" type="Sprite2D" parent="CollapseArrow" unique_id=1439643392]
 position = Vector2(5, 0)

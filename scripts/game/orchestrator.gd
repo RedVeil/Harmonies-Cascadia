@@ -23,6 +23,7 @@ signal tutorial_action(action: String, payload: Dictionary)
 
 @onready var placement_logic:PlacementLogic = $PlacementLogic
 @onready var grouping_logic:GroupingLogic = $GroupingLogic
+@onready var gameplay_focus: GameplayFocus = $GameplayFocus
 
 var selected_card_id : int = -1
 var cards_paused: bool = false
@@ -64,6 +65,10 @@ func _ready() -> void:
 	vp.physics_object_picking_sort = true
 	vp.physics_object_picking_first_only = true
 	GameFeedback.start_background_music()
+	if gameplay_focus:
+		gameplay_focus.setup(self)
+	if not InputScheme.scheme_changed.is_connected(_on_input_scheme_changed):
+		InputScheme.scheme_changed.connect(_on_input_scheme_changed)
 	if not UiPointerBlock.blocked_changed.is_connected(_on_ui_pointer_blocked_changed):
 		UiPointerBlock.blocked_changed.connect(_on_ui_pointer_blocked_changed)
 	if game_over_overlay:
@@ -220,6 +225,18 @@ func tutorial_allows_booster(id: int) -> bool:
 
 func has_placed_tile() -> bool:
 	return _placed_tile_count > 0
+
+
+func is_intro_locked() -> bool:
+	return _puzzle_intro_open
+
+
+func _on_input_scheme_changed(_scheme: InputScheme.Scheme) -> void:
+	if tile_hovered:
+		hex_manager.hex_container.handle_exit(selected_coord)
+	for map_btn in hex_manager.map_buttons:
+		if map_btn != null:
+			map_btn.clear_hover_for_ui()
 
 
 func _apply_game_mode_ui() -> void:
@@ -461,7 +478,7 @@ func _submit_daily_score_if_needed() -> void:
 
 
 func leave_to_menu() -> void:
-	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+	SceneLoader.goto("res://scenes/main_menu.tscn")
 
 
 func restart_run() -> void:
@@ -481,7 +498,7 @@ func restart_run() -> void:
 		GameSession.begin_puzzle_run(GameSession.puzzle_id)
 	else:
 		GameSession.begin_normal_run(GameSession.map_size)
-	get_tree().call_deferred("reload_current_scene")
+	SceneLoader.reload()
 
 
 func start_next_puzzle() -> void:
@@ -490,7 +507,7 @@ func start_next_puzzle() -> void:
 		return
 	if not GameSession.begin_puzzle_run(next_id):
 		return
-	get_tree().call_deferred("reload_current_scene")
+	SceneLoader.reload()
 
 func preview_recycle_card(_id:int, _amount:int, _id_known:bool) -> void:
 	pass
@@ -521,13 +538,6 @@ func recycle_hand_animal(card_id: int) -> void:
 	if card == null or card.type != CardData.CARD_TYPE.ANIMAL:
 		return
 	var count := card.amount
-	# #region agent log
-	_dbg87("E", "orchestrator.gd:recycle_hand_animal", "recycling hand animal", {
-		"card_id": card_id,
-		"amount": count,
-		"catalog_id": card.id,
-	})
-	# #endregion
 	for i in count:
 		GameFeedback.play_recycle()
 		card_manager.remove_card(card_id)
@@ -541,6 +551,8 @@ func reset_recycle_card_preview() -> void:
 ## ----- Handle Tile Interactions ----- ##
 
 func _on_ui_pointer_blocked_changed(blocked: bool) -> void:
+	if not InputScheme.is_keyboard_mouse():
+		return
 	if not blocked:
 		return
 	if tile_hovered:
@@ -551,7 +563,7 @@ func _on_ui_pointer_blocked_changed(blocked: bool) -> void:
 
 
 func handle_tile_hover(coord:Vector2i) -> void:
-	if UiPointerBlock.is_blocked():
+	if InputScheme.is_keyboard_mouse() and UiPointerBlock.is_blocked():
 		return
 	var entered_new_tile := coord != _hover_slide_coord
 	_hover_slide_coord = coord
@@ -588,7 +600,7 @@ func handle_tile_exit() -> bool:
 	return true
 
 func handle_tile_click(coord: Vector2i) -> void:
-	if UiPointerBlock.is_blocked():
+	if InputScheme.is_keyboard_mouse() and UiPointerBlock.is_blocked():
 		return
 	if game_over or _puzzle_intro_open:
 		return
@@ -662,19 +674,12 @@ func handle_tile_click(coord: Vector2i) -> void:
 					
 		hex_manager.apply_placement(coord)
 		hex_manager.play_placement_reward(coord, last_points_diff, contributing_coords)
+		InputScheme.touch.clear()
 		# Commit HUD score before remove_card: emptying a stack deselects and
 		# would otherwise wipe preview before apply_preview can animate it.
 		point_counter.preview_progress(score_engine.total_score)
 		point_counter.apply_preview(true)
 		var placed_was_element = selected_card.type == CardData.CARD_TYPE.ELEMENT
-		# #region agent log
-		_dbg87("E", "orchestrator.gd:place", "removing placed card from hand", {
-			"selected_card_id": selected_card_id,
-			"card_type": selected_card.type,
-			"catalog_id": selected_card.id,
-			"amount_before": selected_card.amount,
-		})
-		# #endregion
 		card_manager.remove_card(selected_card_id)
 		if placed_was_element:
 			booster_manager.notify_element_played()
@@ -990,24 +995,3 @@ func _on_graphics_settings_changed() -> void:
 					visuals.start_animal_idle_loop()
 				GameSettings.AnimalMotion.FULL_ROAM:
 					visuals.start_animal_roam()
-
-# #region agent log
-func _dbg87(hyp: String, loc: String, msg: String, data: Dictionary) -> void:
-	var payload := {
-		"sessionId": "87ce77",
-		"hypothesisId": hyp,
-		"location": loc,
-		"message": msg,
-		"data": data,
-		"timestamp": int(Time.get_unix_time_from_system() * 1000.0),
-	}
-	var path := "c:/Users/leonn/Documents/Harmonies-Cascadia/debug-87ce77.log"
-	var f := FileAccess.open(path, FileAccess.READ_WRITE)
-	if f == null:
-		f = FileAccess.open(path, FileAccess.WRITE)
-	else:
-		f.seek_end()
-	if f != null:
-		f.store_line(JSON.stringify(payload))
-		f.close()
-# #endregion

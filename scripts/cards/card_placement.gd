@@ -3,6 +3,9 @@ class_name CardPlacement
 
 const HEX_OUTLINE_THIN := preload("res://assets/icons/hex_outline_thin.png")
 const HEX_OUTLINE_BOLD := preload("res://assets/icons/hex_outline_bold.png")
+const MAIN_OUTLINE_SCALE := 1.2
+var COLOR_HEX_BORDER_MAIN := Color.WHITE
+var COLOR_HEX_BORDER_BONUS := Color(0.78, 0.78, 0.78, 1.0)
 
 func init(card_data: CardData) -> void:
 	$element.hide()
@@ -45,12 +48,17 @@ func _coords_from_name(node_name: String) -> Vector2i:
 	return Vector2i(int(parts[0]), int(parts[1]))
 
 func _apply_hex_style(outline: Sprite2D, placement: Placement, is_center: bool) -> void:
+	var fill: Sprite2D = outline.get_node("Sprite2D")
 	if is_center:
-		outline.self_modulate = Color.WHITE
+		outline.self_modulate = COLOR_HEX_BORDER_MAIN
 		outline.texture = HEX_OUTLINE_BOLD
+		outline.scale = Vector2.ONE * MAIN_OUTLINE_SCALE
+		fill.scale = Vector2.ONE / MAIN_OUTLINE_SCALE
 	else:
-		outline.self_modulate = Color.TRANSPARENT
+		outline.self_modulate = COLOR_HEX_BORDER_BONUS
 		outline.texture = HEX_OUTLINE_THIN
+		outline.scale = Vector2.ONE
+		fill.scale = Vector2.ONE
 
 	var levels: Array = ElementCatalog.elements[placement.element].levels
 	var level_index := 0 if placement.element == 0 else clampi(placement.level - 1, 0, levels.size() - 1)
@@ -60,7 +68,6 @@ func _apply_hex_style(outline: Sprite2D, placement: Placement, is_center: bool) 
 	var texture_size := icon.get_size()
 	var scale_factor := minf(300.0 / texture_size.x, 300.0 / texture_size.y)
 
-	var fill: Sprite2D = outline.get_node("Sprite2D")
 	fill.self_modulate = Color.html(level.color)
 	var icon_sprite: Sprite2D = fill.get_node("Sprite2D")
 	icon_sprite.texture = icon

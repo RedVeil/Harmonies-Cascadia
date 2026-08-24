@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dwuyo8tml1kyc" path="res://scripts/game/main_menu.gd" id="1_menu"]
 [ext_resource type="PackedScene" uid="uid://ckwpm5wl7l4a3" path="res://scenes/game/settings_panel.tscn" id="2_settings"]
 [ext_resource type="PackedScene" path="res://scenes/game/daily_leaderboard_overlay.tscn" id="3_leaderboard"]
+[ext_resource type="Texture2D" uid="uid://bka6fv5qia2ew" path="res://assets/ui/Symbia_title.webp" id="4_title"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_left"]
 bg_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
@@ -92,12 +93,13 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 20
 
-[node name="TitleLabel" type="Label" parent="Split/LeftColumn/Margin/NavStack" unique_id=2072497958]
+[node name="TitleImage" type="TextureRect" parent="Split/LeftColumn/Margin/NavStack" unique_id=2072497958]
+custom_minimum_size = Vector2(0, 112)
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 72
-text = "SYMBIA"
-autowrap_mode = 2
+mouse_filter = 2
+texture = ExtResource("4_title")
+expand_mode = 1
+stretch_mode = 4
 
 [node name="NameNav" type="VBoxContainer" parent="Split/LeftColumn/Margin/NavStack" unique_id=-2094967296]
 visible = false
@@ -786,6 +788,22 @@ theme_override_styles/focus = SubResource("StyleBoxFlat_code_input")
 placeholder_text = "HC1-..."
 caret_blink = true
 
+[node name="PasteCodeButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/CodeNav" unique_id=1889895955]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
+theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBoxEmpty_text")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_text")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_text")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_text")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_text")
+text = "PASTE"
+flat = true
+alignment = 0
+
 [node name="StartCodeButton" type="Button" parent="Split/LeftColumn/Margin/NavStack/CodeNav" unique_id=1889895944]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -903,6 +921,8 @@ grow_vertical = 2
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/TutorialNav/TutorialBackButton" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/PuzzleNav/PuzzleBackButton" to="." method="_on_back_pressed"]
 [connection signal="text_submitted" from="Split/LeftColumn/Margin/NavStack/CodeNav/CodeInput" to="." method="_on_code_submitted"]
+[connection signal="text_changed" from="Split/LeftColumn/Margin/NavStack/CodeNav/CodeInput" to="." method="_on_code_text_changed"]
+[connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/CodeNav/PasteCodeButton" to="." method="_on_paste_code_pressed"]
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/CodeNav/StartCodeButton" to="." method="_on_start_code_pressed"]
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/CodeNav/CodeBackButton" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="Split/LeftColumn/Margin/NavStack/SettingsNav/SettingsBackButton" to="." method="_on_back_pressed"]

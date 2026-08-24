@@ -14,11 +14,11 @@ func _ready() -> void:
 
 
 func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			GameFeedback.play_click_button()
-			if orchestrator != null:
-				orchestrator.open_in_game_menu()
+	if not InputScheme.is_left_click(event):
+		return
+	GameFeedback.play_click_button()
+	if orchestrator != null:
+		orchestrator.open_in_game_menu()
 
 
 func _on_mouse_entered() -> void:
@@ -34,3 +34,10 @@ func _on_mouse_exited() -> void:
 	$background.self_modulate = Color.WHITE
 	$icon.self_modulate = Color.html("#918478")
 	is_hovered = false
+
+
+func set_focus_hover(on: bool) -> void:
+	if on:
+		_on_mouse_entered()
+	else:
+		_on_mouse_exited()

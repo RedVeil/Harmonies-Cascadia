@@ -24,10 +24,11 @@ const DESATURATE_AMOUNT := 0.45
 var COLOR_BROWN := Color.html("#918478")
 
 @onready var visuals : Node2D = $visuals
-@onready var hit_area : Control = $HitArea
-@onready var recycle_btn: Control = $HitArea/RecycleButton
-@onready var recycle_circle: Sprite2D = $HitArea/RecycleButton/Circle
-@onready var recycle_label: Label = $HitArea/RecycleButton/Label
+@onready var empty_area : Control = $EmptyArea
+@onready var card_area : Control = $CardArea
+@onready var recycle_btn: Control = $visuals/RecycleButton
+@onready var recycle_circle: TextureRect = $visuals/RecycleButton/Circle
+@onready var recycle_label: Label = $visuals/RecycleButton/Label
 @onready var card_placement : CardPlacement = $visuals/CardPlacement
 @onready var frame : TextureRect = $visuals/Frame
 @onready var frame_2 : TextureRect = $visuals/Frame2
@@ -47,10 +48,10 @@ var base_scale: Vector2 = Vector2.ONE
 var target_scale : Vector2 =  Vector2.ONE
 var base_visuals_position : Vector2 = Vector2.ZERO
 var target_visuals_position : Vector2 = Vector2.ZERO
-var _hit_area_rest_offset_left: float = 0.0
-var _hit_area_rest_offset_top: float = 0.0
-var _hit_area_rest_offset_right: float = 0.0
-var _hit_area_rest_offset_bottom: float = 0.0
+var _card_area_rest := Rect2()
+var _empty_area_rest := Rect2()
+var _recycle_rest_offset_top: float = 0.0
+var _recycle_rest_offset_bottom: float = 0.0
 var _shadow_base_offset_top: float = 0.0
 var stack_amount : int = 0
 var background_color : Color
@@ -67,37 +68,25 @@ var _spawn_layout_pending : bool = false
 var _feedback_tweens: Dictionary = {}
 var _recycle_enabled: bool = false
 var _recycle_hovered: bool = false
-var _recycle_base_position: Vector2 = Vector2.ZERO
 
 ## ----- Initialisation ----- ##
 
 func _ready() -> void:
-	_hit_area_rest_offset_left = hit_area.offset_left
-	_hit_area_rest_offset_top = hit_area.offset_top
-	_hit_area_rest_offset_right = hit_area.offset_right
-	_hit_area_rest_offset_bottom = hit_area.offset_bottom
+	_card_area_rest = _area_rest_rect(card_area)
+	_empty_area_rest = _area_rest_rect(empty_area)
+	_recycle_rest_offset_top = recycle_btn.offset_top
+	_recycle_rest_offset_bottom = recycle_btn.offset_bottom
 	_shadow_base_offset_top = shadow.offset_top
-	hit_area.scale = Vector2.ONE
-	hit_area.pivot_offset = hit_area.size * 0.5
-	hit_area.mouse_entered.connect(_on_mouse_entered)
-	hit_area.mouse_exited.connect(_on_mouse_exited)
-	hit_area.gui_input.connect(_on_gui_input)
-	_recycle_base_position = recycle_btn.position
-	# #region agent log
-	_dbg_recycle("C", "card.gd:_ready", "captured recycle/hit bases", {
-		"card_id": id,
-		"recycle_pos": {"x": recycle_btn.position.x, "y": recycle_btn.position.y},
-		"recycle_base": {"x": _recycle_base_position.x, "y": _recycle_base_position.y},
-		"hit_offset_top": hit_area.offset_top,
-		"hit_rest_offset_top": _hit_area_rest_offset_top,
-		"hit_pos": {"x": hit_area.position.x, "y": hit_area.position.y},
-	})
-	# #endregion
+	_wire_area(empty_area)
+	_wire_area(card_area)
+	card_area.gui_input.connect(_on_gui_input)
 	recycle_btn.visible = false
 	recycle_btn.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	recycle_btn.pivot_offset = Vector2(14, 14)
 	recycle_btn.gui_input.connect(_on_recycle_gui_input)
 	recycle_btn.mouse_entered.connect(_on_recycle_mouse_entered)
 	recycle_btn.mouse_exited.connect(_on_recycle_mouse_exited)
+	_sync_areas_to_visuals()
 
 func init(cardData:CardData, parent:Node, idx:int) -> void:
 	if parent is CardContainer:
@@ -141,7 +130,6 @@ func init(cardData:CardData, parent:Node, idx:int) -> void:
 			or (parent != null and parent.has_method("reroll_card"))
 		)
 
-
 ## ----- Layout Logic ----- ##
 
 func mark_spawn_layout() -> void:
@@ -154,66 +142,53 @@ func consume_spawn_layout() -> bool:
 
 ## ----- Interactions Logic ----- ##
 
+func _wire_area(area: Control) -> void:
+	area.scale = Vector2.ONE
+	area.mouse_filter = Control.MOUSE_FILTER_STOP
+	area.mouse_entered.connect(_on_mouse_entered)
+	area.mouse_exited.connect(_on_mouse_exited)
+
+
 func _on_mouse_entered() -> void:
 	is_mouse_inside = true
 	_sync_ui_pointer_block()
 	if _interaction_host and _interaction_host.has_method("hover_card"):
 		_interaction_host.hover_card(id)
-	
+
 
 func _on_mouse_exited() -> void:
+	# Moving between CardArea, EmptyArea, and the X must not drop hover.
+	if _is_pointer_over_card_ui():
+		_sync_ui_pointer_block()
+		return
 	is_mouse_inside = false
-	# #region agent log
-	_agent_dbg("A", "card.gd:_on_mouse_exited", "mouse_exited fired", {
-		"card_id": id,
-		"card_in_tree": is_inside_tree(),
-		"card_vp_null": get_viewport() == null,
-		"hit_in_tree": hit_area != null and hit_area.is_inside_tree(),
-		"hit_vp_null": hit_area != null and hit_area.get_viewport() == null,
-		"recycle_in_tree": recycle_btn != null and recycle_btn.is_inside_tree(),
-		"recycle_vp_null": recycle_btn != null and recycle_btn.get_viewport() == null,
-		"recycle_visible": recycle_btn != null and recycle_btn.visible,
-		"hit_visible": hit_area != null and hit_area.visible,
-	})
-	# #endregion
-	# Child STOP X fires parent exit first; keep hover/block until recycle owns it.
-	if _is_pointer_over_recycle():
+	if _is_touch_sticky_market():
+		# Finger-up: keep the preview. X lives in EmptyArea so it cannot
+		# steal the next CardArea tap.
+		_clear_recycle_hover()
 		_sync_ui_pointer_block()
 		return
 	_sync_ui_pointer_block()
 	if _interaction_host and _interaction_host.has_method("exit_card"):
 		_interaction_host.exit_card(id)
-	
+
 
 func _on_gui_input(event: InputEvent) -> void:
-	if _recycle_hovered:
+	if not InputScheme.is_left_click(event):
 		return
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			GameFeedback.play_click_card()
-			if _interaction_host and _interaction_host.has_method("select_card"):
-				_interaction_host.select_card(id)
-			get_viewport().set_input_as_handled()
+	GameFeedback.play_click_card()
+	if _interaction_host and _interaction_host.has_method("select_card"):
+		_interaction_host.select_card(id)
+	if _is_touch_sticky_market():
+		_clear_recycle_hover()
+	card_area.accept_event()
+	get_viewport().set_input_as_handled()
 
 ## ----- Stack Logic ----- ##
 
 func set_stack_amount(amount: int, animate: bool = true) -> void:
 	if stack_amount == amount:
 		return
-	# #region agent log
-	_dbg_recycle("A", "card.gd:set_stack_amount", "stack amount changing", {
-		"card_id": id,
-		"is_animal": is_animal,
-		"from": stack_amount,
-		"to": amount,
-		"is_active": is_active,
-		"is_mouse_inside": is_mouse_inside,
-		"visuals_pos_y": visuals.position.y,
-		"target_visuals_y": target_visuals_position.y,
-		"hit_offset_top": hit_area.offset_top,
-		"recycle_pos_y": recycle_btn.position.y,
-	})
-	# #endregion
 	stack_amount = amount
 	_apply_stack_visuals()
 	if animate:
@@ -234,33 +209,7 @@ func _apply_stack_visuals() -> void:
 
 	var extra := _stack_extra_px()
 	shadow.offset_top = _shadow_base_offset_top - extra
-	_sync_hit_area_to_visuals()
-	# #region agent log
-	_dbg_recycle("A", "card.gd:_apply_stack_visuals", "before hit/recycle sync", {
-		"card_id": id,
-		"is_animal": is_animal,
-		"stack_amount": stack_amount,
-		"depth": depth,
-		"extra": extra,
-		"is_active": is_active,
-		"visuals_pos_y": visuals.position.y,
-		"hit_offset_top_after_stack": hit_area.offset_top,
-		"hit_rest_offset_top": _hit_area_rest_offset_top,
-		"hit_pos_y": hit_area.position.y,
-		"recycle_pos_y_before": recycle_btn.position.y,
-		"recycle_base_y": _recycle_base_position.y,
-	})
-	# #endregion
-	_sync_recycle_button_stack_offset()
-	# #region agent log
-	_dbg_recycle("D", "card.gd:_apply_stack_visuals", "after hit/recycle sync", {
-		"card_id": id,
-		"hit_offset_top": hit_area.offset_top,
-		"hit_pos_y": hit_area.position.y,
-		"visuals_pos_y": visuals.position.y,
-		"recycle_pos_y": recycle_btn.position.y,
-	})
-	# #endregion
+	_sync_areas_to_visuals()
 
 ## ----- Other Logic ----- ##
 
@@ -287,14 +236,6 @@ func deselect() -> void:
 	reset_select_visuals()
 
 func remove_card() -> void:
-	# #region agent log
-	_agent_dbg("A", "card.gd:remove_card", "remove_card called", {
-		"card_id": id,
-		"card_in_tree": is_inside_tree(),
-		"is_mouse_inside": is_mouse_inside,
-		"recycle_visible": recycle_btn != null and recycle_btn.visible,
-	})
-	# #endregion
 	UiPointerBlock.exit(self)
 	UiPointerBlock.exit(recycle_btn)
 	kill_animations()
@@ -302,14 +243,6 @@ func remove_card() -> void:
 
 
 func _exit_tree() -> void:
-	# #region agent log
-	_agent_dbg("E", "card.gd:_exit_tree", "card leaving tree", {
-		"card_id": id,
-		"is_mouse_inside": is_mouse_inside,
-		"recycle_visible": recycle_btn != null and recycle_btn.visible,
-		"vp_null": get_viewport() == null,
-	})
-	# #endregion
 	UiPointerBlock.exit(self)
 	if recycle_btn != null:
 		UiPointerBlock.exit(recycle_btn)
@@ -393,7 +326,7 @@ func _process(delta: float) -> void:
 			visuals.position = visuals.position.lerp(target_visuals_position, delta * scale_speed)
 		elif visuals.position.distance_squared_to(target_visuals_position) >= 0.01 * 0.01:
 			visuals.position = visuals.position.lerp(target_visuals_position, delta * scale_speed)
-	_sync_hit_area_to_visuals()
+	_sync_areas_to_visuals()
 	_sync_ui_pointer_block()
 
 
@@ -402,40 +335,52 @@ func _stack_extra_px() -> float:
 	return float(depth - 1) * STACK_STEP_PX
 
 
+func _area_rest_rect(area: Control) -> Rect2:
+	return Rect2(
+		area.offset_left,
+		area.offset_top,
+		area.offset_right - area.offset_left,
+		area.offset_bottom - area.offset_top
+	)
+
+
 ## Rest + stack extra + current visuals transform. Always computed from stored
 ## rest offsets so a place-while-selected cannot bake hover into the hit box.
-func _sync_hit_area_to_visuals() -> void:
+## EmptyArea.bottom stays glued to CardArea.top.
+func _sync_areas_to_visuals() -> void:
 	var extra := _stack_extra_px()
 	var dx := visuals.position.x
 	var dy := visuals.position.y
-	hit_area.offset_left = _hit_area_rest_offset_left + dx
-	hit_area.offset_top = _hit_area_rest_offset_top - extra + dy
-	hit_area.offset_right = _hit_area_rest_offset_right + dx
-	hit_area.offset_bottom = _hit_area_rest_offset_bottom + dy
-	hit_area.scale = visuals.scale
-	hit_area.pivot_offset = Vector2(
-		-_hit_area_rest_offset_left,
-		-(_hit_area_rest_offset_top - extra)
-	)
+	_apply_area_transform(card_area, _card_area_rest, extra, dx, dy, false)
+	_apply_area_transform(empty_area, _empty_area_rest, extra, dx, dy, true)
+	recycle_btn.offset_top = _recycle_rest_offset_top - extra
+	recycle_btn.offset_bottom = _recycle_rest_offset_bottom - extra
+
+
+func _apply_area_transform(
+	area: Control,
+	rest: Rect2,
+	extra: float,
+	dx: float,
+	dy: float,
+	move_bottom: bool
+) -> void:
+	var top := rest.position.y - extra + dy
+	var bottom := rest.position.y + rest.size.y + dy
+	if move_bottom:
+		bottom -= extra
+	area.offset_left = rest.position.x + dx
+	area.offset_top = top
+	area.offset_right = rest.position.x + rest.size.x + dx
+	area.offset_bottom = bottom
+	area.scale = visuals.scale
+	area.pivot_offset = Vector2(-rest.position.x, -(rest.position.y - extra))
 
 
 func _control_has_mouse(control: Control) -> bool:
 	if control == null or not control.visible:
 		return false
-	var in_tree := control.is_inside_tree()
-	var vp_null := control.get_viewport() == null
-	if not in_tree or vp_null:
-		# #region agent log
-		_agent_dbg("A", "card.gd:_control_has_mouse", "unsafe mouse query", {
-			"card_id": id,
-			"control_name": str(control.name),
-			"in_tree": in_tree,
-			"vp_null": vp_null,
-			"card_in_tree": is_inside_tree(),
-			"visible": control.visible,
-			"runId": "post-fix",
-		})
-		# #endregion
+	if not control.is_inside_tree() or control.get_viewport() == null:
 		return false
 	return control.get_global_rect().has_point(control.get_global_mouse_position())
 
@@ -445,7 +390,9 @@ func _is_pointer_over_recycle() -> bool:
 
 
 func _is_pointer_over_card_ui() -> bool:
-	return _control_has_mouse(hit_area) or _is_pointer_over_recycle()
+	return _control_has_mouse(empty_area) \
+		or _control_has_mouse(card_area) \
+		or _is_pointer_over_recycle()
 
 
 func _sync_ui_pointer_block() -> void:
@@ -454,88 +401,43 @@ func _sync_ui_pointer_block() -> void:
 		UiPointerBlock.exit(recycle_btn)
 
 
-## ----- Recycle X (animals only; node in card.tscn → HitArea/RecycleButton) ----- ##
-
-## Keeps editor X/Y; only shifts Y when HitArea grows for stacked cards.
-## Hover lift/scale is inherited from HitArea, so do not add visuals.position.
-func _sync_recycle_button_stack_offset() -> void:
-	var extra := _stack_extra_px()
-	# #region agent log
-	_dbg_recycle("B", "card.gd:_sync_recycle_button_stack_offset", "reposition recycle", {
-		"card_id": id,
-		"recycle_base_y": _recycle_base_position.y,
-		"delta_y": extra,
-		"new_recycle_y": _recycle_base_position.y + extra,
-		"hit_offset_top": hit_area.offset_top,
-		"hit_rest_offset_top": _hit_area_rest_offset_top,
-		"visuals_pos_y": visuals.position.y,
-		"stack_amount": stack_amount,
-	})
-	# #endregion
-	recycle_btn.position = _recycle_base_position + Vector2(0.0, extra)
-
-
 func refresh_recycle_button(show: bool) -> void:
 	var visible := show and _recycle_enabled and is_animal
-	# #region agent log
-	if recycle_btn.visible and not visible:
-		_agent_dbg("B", "card.gd:refresh_recycle_button", "hiding recycle button", {
-			"card_id": id,
-			"card_in_tree": is_inside_tree(),
-			"vp_null": get_viewport() == null,
-			"is_mouse_inside": is_mouse_inside,
-		})
-	# #endregion
 	recycle_btn.visible = visible
-	# #region agent log
-	if visible:
-		_dbg_recycle("E", "card.gd:refresh_recycle_button", "showing recycle button", {
-			"card_id": id,
-			"recycle_pos_y": recycle_btn.position.y,
-			"recycle_base_y": _recycle_base_position.y,
-			"hit_offset_top": hit_area.offset_top,
-			"hit_pos_y": hit_area.position.y,
-			"visuals_pos_y": visuals.position.y,
-			"stack_amount": stack_amount,
-			"is_active": is_active,
-		})
-	# #endregion
-	recycle_btn.mouse_filter = (
-		Control.MOUSE_FILTER_STOP if visible else Control.MOUSE_FILTER_IGNORE
-	)
 	if not visible:
 		_recycle_hovered = false
 		_reset_recycle_button_colors()
 		UiPointerBlock.exit(recycle_btn)
+	_apply_recycle_pickable()
 	_sync_ui_pointer_block()
 
 
+func _apply_recycle_pickable() -> void:
+	recycle_btn.mouse_filter = (
+		Control.MOUSE_FILTER_STOP if recycle_btn.visible else Control.MOUSE_FILTER_IGNORE
+	)
+
+
 func _on_recycle_gui_input(event: InputEvent) -> void:
+	if not InputScheme.is_left_click(event):
+		return
 	if not _recycle_enabled:
 		return
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			GameFeedback.play_click_button()
-			# #region agent log
-			_dbg87("A", "card.gd:_on_recycle_gui_input", "recycle X clicked", {
-				"card_id": id,
-				"is_animal": is_animal,
-				"in_tree": is_inside_tree(),
-				"queued_free": is_queued_for_deletion(),
-				"recycle_visible": recycle_btn != null and recycle_btn.visible,
-			})
-			# #endregion
-			if container != null and container.has_method("recycle_card"):
-				container.recycle_card(id)
-			elif _interaction_host != null and _interaction_host.has_method("reroll_card"):
-				_interaction_host.reroll_card(id)
-			elif _interaction_host != null and _interaction_host.has_method("recycle_card"):
-				_interaction_host.recycle_card(id)
-			get_viewport().set_input_as_handled()
+	GameFeedback.play_click_button()
+	if container != null and container.has_method("recycle_card"):
+		container.recycle_card(id)
+	elif _interaction_host != null and _interaction_host.has_method("reroll_card"):
+		_interaction_host.reroll_card(id)
+	elif _interaction_host != null and _interaction_host.has_method("recycle_card"):
+		_interaction_host.recycle_card(id)
+	recycle_btn.accept_event()
+	get_viewport().set_input_as_handled()
 
 
 func _on_recycle_mouse_entered() -> void:
 	if not _recycle_enabled:
+		return
+	if recycle_btn.mouse_filter == Control.MOUSE_FILTER_IGNORE:
 		return
 	_recycle_hovered = true
 	UiPointerBlock.enter(recycle_btn)
@@ -548,96 +450,50 @@ func _on_recycle_mouse_entered() -> void:
 
 
 func _on_recycle_mouse_exited() -> void:
-	# #region agent log
-	_dbg87("A", "card.gd:_on_recycle_mouse_exited", "recycle mouse exited", {
-		"card_id": id,
-		"is_animal": is_animal,
-		"in_tree": is_inside_tree(),
-		"queued_free": is_queued_for_deletion(),
-		"recycle_visible": recycle_btn != null and recycle_btn.visible,
-		"hit_has_mouse": _control_has_mouse(hit_area),
-		"host_valid": _interaction_host != null and is_instance_valid(_interaction_host),
-	})
-	# #endregion
-	_recycle_hovered = false
-	UiPointerBlock.exit(recycle_btn)
-	_reset_recycle_button_colors()
-	if _interaction_host != null and _interaction_host.has_method("set_recycle_hover"):
-		_interaction_host.set_recycle_hover(id, false)
+	if _is_touch_sticky_market():
+		_clear_recycle_hover()
+		_sync_ui_pointer_block()
+		return
+	_clear_recycle_hover()
 	_sync_ui_pointer_block()
-	# Left X into empty space (not back onto the card body).
-	if not _control_has_mouse(hit_area):
-		is_mouse_inside = false
-		# Recycle already removed this card; skip hover-exit on a freed slot.
-		if is_queued_for_deletion():
-			return
-		if _interaction_host != null and _interaction_host.has_method("exit_card"):
-			_interaction_host.exit_card(id)
+	if _is_pointer_over_card_ui():
+		return
+	is_mouse_inside = false
+	if is_queued_for_deletion():
+		return
+	if _interaction_host != null and _interaction_host.has_method("exit_card"):
+		_interaction_host.exit_card(id)
 
 
 func _reset_recycle_button_colors() -> void:
 	recycle_circle.self_modulate = Color.WHITE
 	recycle_label.add_theme_color_override("font_color", COLOR_BROWN)
 
-# #region agent log
-func _dbg_recycle(hyp: String, loc: String, msg: String, data: Dictionary) -> void:
-	var payload := {
-		"sessionId": "3fc6cd",
-		"runId": "post-fix",
-		"hypothesisId": hyp,
-		"location": loc,
-		"message": msg,
-		"data": data,
-		"timestamp": int(Time.get_unix_time_from_system() * 1000.0),
-	}
-	var path := "c:/Users/leonn/Documents/Harmonies-Cascadia/debug-3fc6cd.log"
-	var f := FileAccess.open(path, FileAccess.READ_WRITE)
-	if f == null:
-		f = FileAccess.open(path, FileAccess.WRITE)
-	else:
-		f.seek_end()
-	if f != null:
-		f.store_line(JSON.stringify(payload))
-		f.close()
 
-func _dbg87(hyp: String, loc: String, msg: String, data: Dictionary) -> void:
-	var payload := {
-		"sessionId": "87ce77",
-		"hypothesisId": hyp,
-		"location": loc,
-		"message": msg,
-		"data": data,
-		"timestamp": int(Time.get_unix_time_from_system() * 1000.0),
-	}
-	var path := "c:/Users/leonn/Documents/Harmonies-Cascadia/debug-87ce77.log"
-	var f := FileAccess.open(path, FileAccess.READ_WRITE)
-	if f == null:
-		f = FileAccess.open(path, FileAccess.WRITE)
-	else:
-		f.seek_end()
-	if f != null:
-		f.store_line(JSON.stringify(payload))
-		f.close()
+func _clear_recycle_hover() -> void:
+	if not _recycle_hovered:
+		UiPointerBlock.exit(recycle_btn)
+		_reset_recycle_button_colors()
+		return
+	_recycle_hovered = false
+	UiPointerBlock.exit(recycle_btn)
+	_reset_recycle_button_colors()
+	if _interaction_host != null and _interaction_host.has_method("set_recycle_hover"):
+		_interaction_host.set_recycle_hover(id, false)
 
-func _agent_dbg(hyp: String, loc: String, msg: String, data: Dictionary) -> void:
-	var payload := {
-		"sessionId": "22fdc4",
-		"hypothesisId": hyp,
-		"location": loc,
-		"message": msg,
-		"data": data,
-		"timestamp": int(Time.get_unix_time_from_system() * 1000.0),
-	}
-	var path := "c:/Users/leonn/Documents/Harmonies-Cascadia/debug-22fdc4.log"
-	var f := FileAccess.open(path, FileAccess.READ_WRITE)
-	if f == null:
-		f = FileAccess.open(path, FileAccess.WRITE)
-	else:
-		f.seek_end()
-	if f != null:
-		f.store_line(JSON.stringify(payload))
-		f.close()
-# #endregion
+
+func _is_market_host() -> bool:
+	return _interaction_host is AnimalMarketPanel \
+		or _interaction_host is AnimalMarketOverlay
+
+
+func _is_touch_sticky_market() -> bool:
+	if not _is_market_host():
+		return false
+	if _interaction_host is AnimalMarketOverlay:
+		return InputScheme.touch.is_sticky("market_overlay", id)
+	return InputScheme.touch.is_sticky("market", id)
+
 
 func _animate_spawn(target_pos: Vector2, target_angle: float, z: int) -> void:
 	FeedbackAnimHelper.play_sounds(spawn_sounds, spawn_sound_volume_db)

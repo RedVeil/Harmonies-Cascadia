@@ -4,6 +4,7 @@ const CATALOG_PATH := "res://data/tile_setup_catalog.json"
 
 var _entries: Dictionary = {}
 var _game_seed: int = 0
+var _multimesh_cache: Dictionary = {}
 
 func _ready() -> void:
 	_game_seed = randi()
@@ -28,6 +29,8 @@ func load_catalog() -> void:
 
 		var key := _make_key(element, level)
 		_entries[key] = {
+			"element": element,
+			"level": level,
 			"scene_layers": _load_scene_layers_from_json(entry.get("scene_layers", [])),
 			"multi_mesh_layers": _load_multimesh_layers_from_json(entry.get("multi_mesh_layers", [])),
 		}
@@ -61,6 +64,57 @@ func resolve_layers(
 		"multi_mesh_layers": _resolve_multimesh_layers(multimesh_option_layers, pick_rng),
 		"signature": _make_signature(element, level, river_index),
 	}
+
+
+func iter_setup_keys() -> Array[Dictionary]:
+	var specs: Array[Dictionary] = []
+	for entry in _entries.values():
+		specs.append({
+			"element": int(entry.get("element", -1)),
+			"level": int(entry.get("level", -1)),
+		})
+	return specs
+
+
+func get_scene_option_count(element: int, level: int, layer_index: int = 0) -> int:
+	var key := _make_key(element, level)
+	if not _entries.has(key):
+		return 0
+	var scene_layers: Array = _entries[key].get("scene_layers", [])
+	if layer_index < 0 or layer_index >= scene_layers.size():
+		return 0
+	var options = scene_layers[layer_index]
+	if typeof(options) != TYPE_ARRAY:
+		return 0
+	return options.size()
+
+
+func get_unique_multimesh_paths() -> Array[String]:
+	var seen: Dictionary = {}
+	var paths: Array[String] = []
+	for entry in _entries.values():
+		for layer in entry.get("multi_mesh_layers", []):
+			if typeof(layer) != TYPE_ARRAY:
+				continue
+			for path in layer:
+				if typeof(path) != TYPE_STRING or path.is_empty() or seen.has(path):
+					continue
+				seen[path] = true
+				paths.append(path)
+	return paths
+
+
+func get_or_load_multimesh(path: String) -> Dictionary:
+	if path.is_empty():
+		return {}
+	if _multimesh_cache.has(path):
+		return _multimesh_cache[path]
+
+	var resource := load(path)
+	var resolved := _multimesh_from_resource(resource)
+	if not resolved.is_empty():
+		_multimesh_cache[path] = resolved
+	return resolved
 
 
 func get_layers_state(
@@ -181,3 +235,34 @@ func _make_signature(element: int, level: int, river_index:int) -> String:
 
 func _make_key(element: int, level: int) -> String:
 	return "%d_%d" % [element, level]
+
+
+func _multimesh_from_resource(resource: Resource) -> Dictionary:
+	if resource is MultiMesh:
+		return {"multimesh": resource}
+
+	if resource is PackedScene:
+		var temp = resource.instantiate()
+		var mesh_instance := _find_multimesh_instance(temp)
+		var resolved := {}
+		if mesh_instance != null and mesh_instance.multimesh != null:
+			resolved = {
+				"multimesh": mesh_instance.multimesh,
+				"material": mesh_instance.material_override,
+			}
+		temp.free()
+		return resolved
+
+	return {}
+
+
+func _find_multimesh_instance(node: Node) -> MultiMeshInstance3D:
+	if node is MultiMeshInstance3D:
+		return node
+
+	for child in node.get_children():
+		var found := _find_multimesh_instance(child)
+		if found != null:
+			return found
+
+	return null

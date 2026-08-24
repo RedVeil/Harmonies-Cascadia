@@ -817,8 +817,8 @@
 					"element": 3.0,
 					"level": 2.0,
 					"coords": [
-						0.0,
-						-1.0
+						-1.0,
+						0.0
 					]
 				}
 			],
@@ -1605,7 +1605,7 @@
 			"element": 4.0,
 			"secondary_element": 3.0,
 			"point_score": 5.0,
-			"bonus_points": 2.0,
+			"bonus_points": 3.0,
 			"visual_amount": 3.0,
 			"icon": "res://assets/animals/icons/SeaShellfish_Crab_Sand.png",
 			"models": [
@@ -1637,7 +1637,7 @@
 					]
 				}
 			],
-			"amount": 2.0,
+			"amount": 3.0,
 			"draw_chance": 20.0,
 			"element": 4.0,
 			"secondary_element": 5.0,

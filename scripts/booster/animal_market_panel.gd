@@ -9,17 +9,10 @@ var COLOR_BROWN = Color.html("#918478")
 ## Match booster pack chrome ([Booster.STACK_SCALE] / container x = 0, 100, 200).
 const MARKET_SCALE := 0.75
 const BOOSTER_SPACING := 100.0
-const CARD_WIDTH_PX := 100.0
 const CARD_HEIGHT_PX := 174.0
 const MARKET_BOOSTER_GAP_PX := 40.0
-## Sit above packs with a fixed gap (also arrow Y = card-row center).
+## Sit above packs with a fixed gap.
 const OFFERS_Y := -(CARD_HEIGHT_PX * MARKET_SCALE + MARKET_BOOSTER_GAP_PX)
-## Pack frame half-width at market/booster scale.
-const ARROW_HALF_W := CARD_WIDTH_PX * MARKET_SCALE * 0.5
-## Expand: right-arrow left of pack 1.
-const EXPAND_ARROW_X := -26.5
-## Collapse: left-arrow past pack 3 right edge.
-const COLLAPSE_ARROW_X := 2.0 * BOOSTER_SPACING + ARROW_HALF_W + 10.0
 const FADE_DURATION := 0.18
 const FADE_STAGGER := 0.09
 
@@ -30,6 +23,7 @@ var _offers: Array[CardData] = []
 var _offer_roots: Array[Node2D] = []
 var _cards: Array[Card] = []
 var _hover_card_id: int = -1
+var _hover_frame: int = -1
 var _reroll_hover_id: int = -1
 var _buys_enabled: Array[bool] = []
 var _reroll_ready_flags: Array[bool] = []
@@ -69,6 +63,7 @@ func open(offers: Array[CardData], _price: int = 0, _credits: int = 0, _reroll_p
 	_offers = offers.duplicate()
 	_hover_card_id = -1
 	_reroll_hover_id = -1
+	_clear_market_touch()
 	_rebuild_offers()
 	_set_cards_alpha(0.0)
 	_offers_root.show()
@@ -83,6 +78,7 @@ func close() -> void:
 	_expanded = false
 	_hover_card_id = -1
 	_reroll_hover_id = -1
+	_clear_market_touch()
 	_sync_arrow_buttons()
 	if not was_open:
 		_clear_offers()
@@ -166,6 +162,8 @@ func hover_card(id: int) -> void:
 		return
 	if id < 0 or id >= _cards.size() or _cards[id] == null:
 		return
+	if _hover_card_id != id:
+		_hover_frame = Engine.get_process_frames()
 	if _hover_card_id == -1:
 		_hover_card_id = id
 		_cards[id].handle_hover()
@@ -177,6 +175,8 @@ func hover_card(id: int) -> void:
 
 
 func exit_card(id: int) -> void:
+	if InputScheme.touch.is_sticky("market", id):
+		return
 	if id < 0 or id >= _cards.size() or _cards[id] == null:
 		return
 	# Keep hover while pointer moves onto this offer's X button.
@@ -191,13 +191,40 @@ func exit_card(id: int) -> void:
 func select_card(id: int) -> void:
 	if not _expanded:
 		return
-	if _reroll_hover_id == id:
-		return
 	if id < 0 or id >= _offers.size():
+		return
+	var same_frame_hover := _hover_card_id == id and _hover_frame == Engine.get_process_frames()
+	if InputScheme.uses_touch_confirm() or same_frame_hover or InputScheme.touch.is_sticky("market", id):
+		var preview := not InputScheme.touch.can_confirm("market", id) or same_frame_hover
+		if preview:
+			if not InputScheme.touch.is_sticky("market", id):
+				var prev := InputScheme.touch.set_target("market", id)
+				if String(prev.get("kind", "")) == "market" and prev.get("id", id) != id:
+					_unhover_other_offer(int(prev["id"]))
+			hover_card(id)
+			return
+	elif _reroll_hover_id == id:
 		return
 	if not _is_buy_enabled(id):
 		return
 	buy_pressed.emit(id)
+	InputScheme.touch.clear()
+
+
+func _unhover_other_offer(other_id: int) -> void:
+	if other_id < 0 or other_id >= _cards.size() or _cards[other_id] == null:
+		return
+	if _hover_card_id == other_id:
+		_hover_card_id = -1
+	if _reroll_hover_id == other_id:
+		_reroll_hover_id = -1
+	_cards[other_id].handle_exit()
+	_refresh_reroll_button_visibility()
+
+
+func _clear_market_touch() -> void:
+	if InputScheme.touch.kind == "market":
+		InputScheme.touch.clear()
 
 
 func reroll_card(id: int) -> void:
@@ -206,10 +233,14 @@ func reroll_card(id: int) -> void:
 	if not _is_reroll_ready(id):
 		return
 	reroll_pressed.emit(id)
+	if InputScheme.uses_touch_confirm():
+		InputScheme.touch.set_target("market", id)
 
 
 func set_recycle_hover(id: int, hovering: bool) -> void:
 	if hovering:
+		if _reroll_hover_id == id and _hover_card_id == id:
+			return
 		_reroll_hover_id = id
 		if _hover_card_id != id and id >= 0 and id < _cards.size() and _cards[id] != null:
 			if _hover_card_id != -1 and _hover_card_id < _cards.size() and _cards[_hover_card_id] != null:
@@ -218,6 +249,8 @@ func set_recycle_hover(id: int, hovering: bool) -> void:
 			_cards[id].handle_hover()
 	elif _reroll_hover_id == id:
 		_reroll_hover_id = -1
+	else:
+		return
 	_refresh_reroll_button_visibility()
 
 
@@ -230,8 +263,6 @@ func _sync_arrow_buttons() -> void:
 	_expand_arrow.input_pickable = not _expanded
 	_collapse_arrow.visible = _expanded
 	_collapse_arrow.input_pickable = _expanded
-	_expand_arrow.position = Vector2(EXPAND_ARROW_X, OFFERS_Y)
-	_collapse_arrow.position = Vector2(COLLAPSE_ARROW_X, OFFERS_Y)
 	_reset_arrow_colors(_expand_icon)
 	_reset_arrow_colors(_collapse_icon)
 
@@ -299,10 +330,13 @@ func _rehover_offer_under_pointer(offer_index: int) -> void:
 	if offer_index < 0 or offer_index >= _cards.size():
 		return
 	var card := _cards[offer_index]
-	if card == null or card.hit_area == null:
+	if card == null or card.card_area == null:
 		return
-	var hit := card.hit_area
-	if not hit.get_global_rect().has_point(hit.get_global_mouse_position()):
+	var mouse := card.card_area.get_global_mouse_position()
+	var over_card := card.card_area.get_global_rect().has_point(mouse)
+	var over_empty := card.empty_area != null \
+		and card.empty_area.get_global_rect().has_point(mouse)
+	if not over_card and not over_empty:
 		return
 	card.is_mouse_inside = true
 	UiPointerBlock.enter(card)
@@ -386,11 +420,11 @@ func _is_buy_enabled(offer_index: int) -> bool:
 ## ----- Arrow / reroll input ----- ##
 
 func _on_arrow_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			GameFeedback.play_click_button()
-			toggle_pressed.emit()
-			get_viewport().set_input_as_handled()
+	if not InputScheme.is_left_click(event):
+		return
+	GameFeedback.play_click_button()
+	toggle_pressed.emit()
+	get_viewport().set_input_as_handled()
 
 
 func _on_arrow_mouse_entered(arrow: Area2D) -> void:

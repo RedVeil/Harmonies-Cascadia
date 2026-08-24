@@ -3,6 +3,7 @@ extends Control
 const GAME_SCENE := "res://scenes/Refactored_Main.tscn"
 const BG_PATH := "res://assets/ui/menu_bg.webp"
 const PUZZLE_SLOT_SCENE := preload("res://scenes/game/puzzle_slot.tscn")
+const WEB_TEXT_PROMPT := preload("res://scripts/input/web_text_prompt.gd")
 
 var COLOR_RIGHT := Color.html("#D2C2AD")
 
@@ -24,36 +25,64 @@ var COLOR_RIGHT := Color.html("#D2C2AD")
 @onready var _code_input: LineEdit = $Split/LeftColumn/Margin/NavStack/CodeNav/CodeInput
 @onready var _code_status: Label = $Split/LeftColumn/Margin/NavStack/CodeNav/CodeStatus
 
+@onready var _daily_button: Button = $Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyButton
 @onready var _daily_desc: Label = $Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyDesc
 @onready var _daily_inline_buttons: HBoxContainer = $Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyInlineButtons
 @onready var _leaderboard: DailyLeaderboardOverlay = $Split/RightColumn/DailyLeaderboardOverlay
 
+@onready var _quick_session_button: Button = $Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickSessionButton
 @onready var _quick_inline_buttons: HBoxContainer = $Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickInlineButtons
 
+@onready var _endless_button: Button = $Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessButton
 @onready var _endless_desc: Label = $Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessDesc
 @onready var _endless_inline_buttons: HBoxContainer = $Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessInlineButtons
+@onready var _exit_button: Button = $Split/LeftColumn/Margin/NavStack/RootNav/ExitButton
 
 var _puzzle_ids: Array[String] = []
+var _web_text
 
 
 func _ready() -> void:
 	if not GameSettings.tutorial_played:
 		GameSession.begin_tutorial_run()
-		get_tree().change_scene_to_file(GAME_SCENE)
+		SceneLoader.goto(GAME_SCENE)
 		return
 	_setup_background()
+	_hide_exit_on_web()
 	_setup_puzzle_ids()
+	OverlayFocus.enable_buttons(self)
 	_setup_button_hover_sounds()
+	WebInstantButton.wire_tree(self)
+	_setup_web_text_inputs()
 	_code_status.text = ""
 	if _name_input:
 		_name_input.max_length = GameSettings.PLAYER_NAME_MAX_LENGTH
 	if _settings_panel:
 		_settings_panel.apply_sidebar_style()
 	_reset_mode_inline_ui()
+	if not InputScheme.scheme_changed.is_connected(_on_input_scheme_changed):
+		InputScheme.scheme_changed.connect(_on_input_scheme_changed)
 	if GameSettings.tutorial_completed and GameSettings.player_name.strip_edges().is_empty():
 		_show_name_nav()
 	else:
 		_show_root_nav()
+
+
+func _hide_exit_on_web() -> void:
+	if not OS.has_feature("web") or _exit_button == null:
+		return
+	_exit_button.hide()
+	_exit_button.disabled = true
+	_exit_button.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+
+func _setup_web_text_inputs() -> void:
+	if not WEB_TEXT_PROMPT.is_needed():
+		return
+	_web_text = WEB_TEXT_PROMPT.new()
+	_web_text.setup()
+	_web_text.bind_line_edit(_name_input, "Your name")
+	_web_text.bind_line_edit(_code_input, "Paste a share code", true)
 
 
 func _setup_button_hover_sounds() -> void:
@@ -85,15 +114,19 @@ func _setup_button_hover_sounds() -> void:
 		$Split/LeftColumn/Margin/NavStack/PlayNav/PuzzleBlock/PuzzleButton,
 		$Split/LeftColumn/Margin/NavStack/PuzzleNav/PuzzleBackButton,
 		$Split/LeftColumn/Margin/NavStack/CodeNav/CodeBackButton,
+		$Split/LeftColumn/Margin/NavStack/CodeNav/PasteCodeButton,
 		$Split/LeftColumn/Margin/NavStack/CodeNav/StartCodeButton,
 		$Split/LeftColumn/Margin/NavStack/SettingsNav/SettingsBackButton,
 	]
 	for button in buttons:
 		if button != null and not button.mouse_entered.is_connected(_on_nav_button_mouse_entered):
 			button.mouse_entered.connect(_on_nav_button_mouse_entered)
+	WebInstantButton.wire_many(buttons)
 
 
 func _on_nav_button_mouse_entered() -> void:
+	if WebInstantButton.skip_hover():
+		return
 	GameFeedback.play_hover_button()
 
 
@@ -184,6 +217,7 @@ func _sync_nav_input_filters(active: Control) -> void:
 			nav.mouse_filter = Control.MOUSE_FILTER_STOP
 		else:
 			nav.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	InputScheme.clear_stuck_gui_hover_deferred(self)
 
 
 func _show_name_nav() -> void:
@@ -196,7 +230,8 @@ func _show_name_nav() -> void:
 	_settings_nav.hide()
 	_reset_mode_inline_ui()
 	_sync_nav_input_filters(_name_nav)
-	_name_input.grab_focus()
+	if not WEB_TEXT_PROMPT.is_needed():
+		_name_input.grab_focus()
 
 
 func _show_root_nav() -> void:
@@ -209,6 +244,7 @@ func _show_root_nav() -> void:
 	_settings_nav.hide()
 	_reset_mode_inline_ui()
 	_sync_nav_input_filters(_root_nav)
+	OverlayFocus.grab_first_button(_root_nav)
 
 
 func _show_play_nav() -> void:
@@ -223,6 +259,7 @@ func _show_play_nav() -> void:
 	_settings_nav.hide()
 	_reset_mode_inline_ui()
 	_sync_nav_input_filters(_play_nav)
+	OverlayFocus.grab_first_button(_play_nav)
 
 
 func _show_tutorial_nav() -> void:
@@ -236,6 +273,7 @@ func _show_tutorial_nav() -> void:
 	_settings_nav.hide()
 	_reset_mode_inline_ui()
 	_sync_nav_input_filters(_tutorial_nav)
+	OverlayFocus.grab_first_button(_tutorial_nav)
 
 
 func _show_puzzle_nav() -> void:
@@ -250,6 +288,7 @@ func _show_puzzle_nav() -> void:
 	_settings_nav.hide()
 	_reset_mode_inline_ui()
 	_sync_nav_input_filters(_puzzle_nav)
+	OverlayFocus.grab_first_button(_puzzle_nav)
 
 
 func _show_code_nav() -> void:
@@ -264,7 +303,10 @@ func _show_code_nav() -> void:
 	_reset_mode_inline_ui()
 	_sync_nav_input_filters(_code_nav)
 	_code_status.text = ""
-	_code_input.grab_focus()
+	if InputScheme.is_gamepad():
+		OverlayFocus.grab_first_button(_code_nav)
+	elif not WEB_TEXT_PROMPT.is_needed():
+		_code_input.grab_focus()
 
 
 func _show_settings_nav() -> void:
@@ -282,6 +324,7 @@ func _show_settings_nav() -> void:
 		_settings_panel.apply_sidebar_style()
 		_settings_panel.reset_to_root()
 		_settings_panel.refresh()
+	OverlayFocus.grab_first_button(_settings_nav)
 
 
 func _on_name_accept_pressed() -> void:
@@ -296,7 +339,8 @@ func _on_name_submitted(text: String) -> void:
 func _try_accept_player_name(text: String) -> void:
 	var new_name := text.strip_edges()
 	if new_name.is_empty():
-		_name_input.grab_focus()
+		if not WEB_TEXT_PROMPT.is_needed():
+			_name_input.grab_focus()
 		return
 	GameSettings.set_player_name(new_name)
 	_show_root_nav()
@@ -331,7 +375,7 @@ func _on_tutorial_quests_pressed() -> void:
 func _start_tutorial_part(part_id: String) -> void:
 	GameFeedback.play_click_button()
 	GameSession.begin_tutorial_run(part_id)
-	get_tree().change_scene_to_file(GAME_SCENE)
+	SceneLoader.goto(GAME_SCENE)
 
 
 func _on_settings_pressed() -> void:
@@ -356,8 +400,66 @@ func _on_back_pressed() -> void:
 
 
 func _on_exit_pressed() -> void:
+	if OS.has_feature("web"):
+		return
 	GameFeedback.play_click_button()
 	get_tree().quit()
+
+
+func _on_input_scheme_changed(_scheme: InputScheme.Scheme) -> void:
+	if _root_nav.visible:
+		OverlayFocus.grab_first_button(_root_nav)
+	elif _play_nav.visible:
+		OverlayFocus.grab_first_button(_play_nav)
+	elif _tutorial_nav.visible:
+		OverlayFocus.grab_first_button(_tutorial_nav)
+	elif _puzzle_nav.visible:
+		OverlayFocus.grab_first_button(_puzzle_nav)
+	elif _code_nav.visible:
+		OverlayFocus.grab_first_button(_code_nav)
+	elif _settings_nav.visible:
+		OverlayFocus.grab_first_button(_settings_nav)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if OverlayFocus.is_cancel(event) and not _root_nav.visible and not _name_nav.visible:
+		if _try_collapse_inline_row():
+			get_viewport().set_input_as_handled()
+			return
+		_on_back_pressed()
+		get_viewport().set_input_as_handled()
+
+
+func _try_collapse_inline_row() -> bool:
+	if _leaderboard != null and _leaderboard.is_open():
+		return false
+	if _map_size_row != null and _map_size_row.visible:
+		_hide_map_size_row()
+		if RunSave.has_save(GameSession.GameMode.NORMAL):
+			_quick_inline_buttons.show()
+			OverlayFocus.grab_button_row(_quick_inline_buttons, _quick_session_button)
+		else:
+			OverlayFocus.restore_parent_focus(_quick_session_button)
+		return true
+	if _quick_inline_buttons != null and _quick_inline_buttons.visible:
+		_quick_inline_buttons.hide()
+		if _quick_session_desc:
+			_quick_session_desc.show()
+		OverlayFocus.restore_parent_focus(_quick_session_button)
+		return true
+	if _daily_inline_buttons != null and _daily_inline_buttons.visible:
+		_daily_inline_buttons.hide()
+		if _daily_desc:
+			_daily_desc.show()
+		OverlayFocus.restore_parent_focus(_daily_button)
+		return true
+	if _endless_inline_buttons != null and _endless_inline_buttons.visible:
+		_endless_inline_buttons.hide()
+		if _endless_desc:
+			_endless_desc.show()
+		OverlayFocus.restore_parent_focus(_endless_button)
+		return true
+	return false
 
 
 func _close_leaderboard() -> void:
@@ -371,8 +473,11 @@ func _on_daily_pressed() -> void:
 	var showing := not _daily_inline_buttons.visible
 	_daily_inline_buttons.visible = showing
 	_daily_desc.visible = not showing
-	if not showing:
+	if showing:
+		OverlayFocus.grab_button_row(_daily_inline_buttons, _daily_button)
+	else:
 		_close_leaderboard()
+		OverlayFocus.restore_parent_focus(_daily_button)
 
 
 func _on_daily_play_pressed() -> void:
@@ -385,7 +490,7 @@ func _on_daily_play_pressed() -> void:
 			return
 		RunSave.clear_save(GameSession.GameMode.DAILY)
 	GameSession.begin_daily_run()
-	get_tree().change_scene_to_file(GAME_SCENE)
+	SceneLoader.goto(GAME_SCENE)
 
 
 func _on_daily_leaderboards_pressed() -> void:
@@ -394,6 +499,7 @@ func _on_daily_leaderboards_pressed() -> void:
 		return
 	if _leaderboard.is_open():
 		_leaderboard.close()
+		OverlayFocus.grab_button_row(_daily_inline_buttons, _daily_button)
 	else:
 		_leaderboard.open()
 
@@ -405,11 +511,19 @@ func _on_quick_session_pressed() -> void:
 		_quick_inline_buttons.visible = showing
 		_map_size_row.hide()
 		_quick_session_desc.visible = not showing
+		if showing:
+			OverlayFocus.grab_button_row(_quick_inline_buttons, _quick_session_button)
+		else:
+			OverlayFocus.restore_parent_focus(_quick_session_button)
 		return
 
 	_quick_inline_buttons.hide()
 	_map_size_row.visible = not _map_size_row.visible
 	_quick_session_desc.visible = not _map_size_row.visible
+	if _map_size_row.visible:
+		OverlayFocus.grab_button_row(_map_size_row, _quick_session_button)
+	else:
+		OverlayFocus.restore_parent_focus(_quick_session_button)
 
 
 func _on_quick_continue_pressed() -> void:
@@ -417,7 +531,7 @@ func _on_quick_continue_pressed() -> void:
 	var state := RunSave.load_save(GameSession.GameMode.NORMAL)
 	if state.is_empty():
 		GameSession.begin_normal_run(GameSession.MapSize.MEDIUM)
-		get_tree().change_scene_to_file(GAME_SCENE)
+		SceneLoader.goto(GAME_SCENE)
 		return
 	_continue_from_state(state, GameSession.GameMode.NORMAL)
 	if _quick_inline_buttons:
@@ -431,6 +545,7 @@ func _on_quick_new_pressed() -> void:
 		_quick_inline_buttons.hide()
 	_map_size_row.show()
 	_quick_session_desc.hide()
+	OverlayFocus.grab_button_row(_map_size_row, _quick_session_button)
 
 
 func _on_map_size_small_pressed() -> void:
@@ -449,18 +564,23 @@ func _start_normal_run(size: GameSession.MapSize) -> void:
 	GameFeedback.play_click_button()
 	RunSave.clear_save(GameSession.GameMode.NORMAL)
 	GameSession.begin_normal_run(size)
-	get_tree().change_scene_to_file(GAME_SCENE)
+	SceneLoader.goto(GAME_SCENE)
 
 
 func _on_endless_pressed() -> void:
 	GameFeedback.play_click_button()
 	if RunSave.has_save(GameSession.GameMode.ENDLESS):
-		_endless_inline_buttons.visible = not _endless_inline_buttons.visible
-		_endless_desc.visible = not _endless_inline_buttons.visible
+		var showing := not _endless_inline_buttons.visible
+		_endless_inline_buttons.visible = showing
+		_endless_desc.visible = not showing
+		if showing:
+			OverlayFocus.grab_button_row(_endless_inline_buttons, _endless_button)
+		else:
+			OverlayFocus.restore_parent_focus(_endless_button)
 		return
 
 	GameSession.begin_endless_run()
-	get_tree().change_scene_to_file(GAME_SCENE)
+	SceneLoader.goto(GAME_SCENE)
 
 
 func _on_endless_continue_pressed() -> void:
@@ -468,7 +588,7 @@ func _on_endless_continue_pressed() -> void:
 	var state := RunSave.load_save(GameSession.GameMode.ENDLESS)
 	if state.is_empty():
 		GameSession.begin_endless_run()
-		get_tree().change_scene_to_file(GAME_SCENE)
+		SceneLoader.goto(GAME_SCENE)
 		return
 	_continue_from_state(state, GameSession.GameMode.ENDLESS)
 	if _endless_inline_buttons:
@@ -483,7 +603,7 @@ func _on_endless_new_pressed() -> void:
 	if _endless_desc:
 		_endless_desc.show()
 	GameSession.begin_endless_run()
-	get_tree().change_scene_to_file(GAME_SCENE)
+	SceneLoader.goto(GAME_SCENE)
 
 
 func _continue_from_state(state: Dictionary, mode: GameSession.GameMode) -> void:
@@ -502,7 +622,7 @@ func _continue_from_state(state: Dictionary, mode: GameSession.GameMode) -> void
 
 	var run_seed_value := int(state.get("run_seed", 1))
 	GameSession.begin_run(run_seed_value, true)
-	get_tree().change_scene_to_file(GAME_SCENE)
+	SceneLoader.goto(GAME_SCENE)
 
 
 func _on_puzzle_pressed() -> void:
@@ -518,12 +638,37 @@ func _on_puzzle_selected(id: String) -> void:
 		return
 	if not GameSession.begin_puzzle_run(id):
 		return
-	get_tree().change_scene_to_file(GAME_SCENE)
+	SceneLoader.goto(GAME_SCENE)
 
 
 func _on_start_code_pressed() -> void:
 	GameFeedback.play_click_button()
 	_try_start_from_code(_code_input.text)
+
+
+func _on_paste_code_pressed() -> void:
+	GameFeedback.play_click_button()
+	ShareCode.request_clipboard_text(_on_clipboard_text)
+
+
+func _on_clipboard_text(text: String) -> void:
+	if text.is_empty() or _code_input == null:
+		return
+	var extracted := ShareCode.extract_code(text)
+	_code_input.text = extracted if extracted.begins_with(ShareCode.PREFIX) else text.strip_edges()
+	_code_input.caret_column = _code_input.text.length()
+
+
+func _on_code_text_changed(new_text: String) -> void:
+	var extracted := ShareCode.extract_code(new_text)
+	if extracted.is_empty() or extracted == new_text:
+		return
+	if not extracted.begins_with(ShareCode.PREFIX):
+		return
+	_code_input.set_block_signals(true)
+	_code_input.text = extracted
+	_code_input.caret_column = extracted.length()
+	_code_input.set_block_signals(false)
 
 
 func _on_code_submitted(text: String) -> void:
@@ -540,4 +685,4 @@ func _try_start_from_code(text: String) -> void:
 		int(decoded["ring_count"]),
 		int(decoded["score"])
 	)
-	get_tree().change_scene_to_file(GAME_SCENE)
+	SceneLoader.goto(GAME_SCENE)

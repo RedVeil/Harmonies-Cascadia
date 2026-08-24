@@ -1,13 +1,17 @@
 extends Control
 class_name SettingsPanel
 
-enum View { ROOT, GRAPHICS, AUDIO }
+enum View { ROOT, PLAYER, GRAPHICS, AUDIO }
 
 @onready var _root_view: VBoxContainer = $Content/RootView
+@onready var _player_view: VBoxContainer = $Content/PlayerView
 @onready var _graphics_view: VBoxContainer = $Content/GraphicsView
 @onready var _audio_view: VBoxContainer = $Content/AudioView
+@onready var _player_button: Button = $Content/RootView/PlayerButton
 @onready var _graphics_button: Button = $Content/RootView/GraphicsButton
 @onready var _audio_button: Button = $Content/RootView/AudioButton
+@onready var _name_label: Label = $Content/PlayerView/NameLabel
+@onready var _name_input: LineEdit = $Content/PlayerView/NameInput
 @onready var _music_label: Label = $Content/AudioView/MusicHeader/MusicLabel
 @onready var _music_value: Label = $Content/AudioView/MusicHeader/MusicValue
 @onready var _effects_label: Label = $Content/AudioView/EffectsHeader/EffectsLabel
@@ -33,11 +37,15 @@ var _chip_hover: StyleBoxFlat
 var _chip_pressed: StyleBoxFlat
 var _chip_disabled: StyleBoxFlat
 var _nav_empty: StyleBoxEmpty
+var _web_text
+var _committing_name: bool = false
 
 
 func _ready() -> void:
 	_setup_options()
-	_preset_custom.disabled = true
+	if _name_input:
+		_name_input.max_length = GameSettings.PLAYER_NAME_MAX_LENGTH
+	_setup_web_text()
 	_wire_signals()
 	_show_view(View.ROOT)
 	refresh()
@@ -55,8 +63,11 @@ func reset_to_root() -> void:
 func handle_back() -> bool:
 	if _view == View.ROOT:
 		return false
+	if _view == View.PLAYER:
+		_commit_player_name()
 	GameFeedback.play_close_popup()
 	_show_view(View.ROOT)
+	OverlayFocus.grab_first_button(_root_view)
 	return true
 
 
@@ -79,12 +90,15 @@ func apply_sidebar_style() -> void:
 		_preset_label,
 		_animal_label,
 		_msaa_label,
+		_name_label,
 	]:
 		if label:
 			label.add_theme_color_override("font_color", white)
 
+	_style_nav_button(_player_button)
 	_style_nav_button(_graphics_button)
 	_style_nav_button(_audio_button)
+	_style_sidebar_line_edit(_name_input, taupe)
 
 	for button in [_preset_low, _preset_medium, _preset_high, _preset_custom]:
 		_style_chip_button(button, taupe, taupe_dark)
@@ -98,7 +112,7 @@ func apply_sidebar_style() -> void:
 		check.add_theme_color_override("font_color", white)
 		check.add_theme_color_override("font_pressed_color", white)
 		check.add_theme_color_override("font_hover_color", taupe_dark)
-		check.add_theme_color_override("font_focus_color", white)
+		check.add_theme_color_override("font_focus_color", taupe_dark)
 		check.add_theme_color_override("font_disabled_color", Color(1, 1, 1, 0.4))
 
 	_style_sidebar_slider(_music_slider, taupe, taupe_dark)
@@ -115,9 +129,28 @@ func _style_nav_button(button: Button) -> void:
 	button.add_theme_color_override("font_color", Color.WHITE)
 	button.add_theme_color_override("font_hover_color", taupe_dark)
 	button.add_theme_color_override("font_pressed_color", Color(1, 1, 1, 0.6))
-	button.add_theme_color_override("font_focus_color", Color.WHITE)
+	button.add_theme_color_override("font_focus_color", taupe_dark)
 	for state in ["normal", "hover", "pressed", "focus", "disabled"]:
 		button.add_theme_stylebox_override(state, _nav_empty)
+
+
+func _style_sidebar_line_edit(line_edit: LineEdit, taupe: Color) -> void:
+	if line_edit == null:
+		return
+	var box := StyleBoxFlat.new()
+	box.bg_color = taupe
+	box.set_border_width_all(1)
+	box.border_color = Color.WHITE
+	box.content_margin_left = 12.0
+	box.content_margin_top = 8.0
+	box.content_margin_right = 12.0
+	box.content_margin_bottom = 8.0
+	line_edit.add_theme_color_override("font_color", Color.WHITE)
+	line_edit.add_theme_color_override("font_placeholder_color", Color(1, 1, 1, 0.55))
+	line_edit.add_theme_color_override("caret_color", Color.WHITE)
+	line_edit.add_theme_stylebox_override("normal", box)
+	line_edit.add_theme_stylebox_override("read_only", box)
+	line_edit.add_theme_stylebox_override("focus", box)
 
 
 func _style_sidebar_slider(slider: HSlider, taupe: Color, taupe_dark: Color) -> void:
@@ -178,14 +211,14 @@ func _style_chip_button(button: Button, taupe: Color, taupe_dark: Color) -> void
 	button.add_theme_color_override("font_color", taupe)
 	button.add_theme_color_override("font_hover_color", Color.WHITE)
 	button.add_theme_color_override("font_pressed_color", Color.WHITE)
-	button.add_theme_color_override("font_focus_color", taupe)
+	button.add_theme_color_override("font_focus_color", Color.WHITE)
 	button.add_theme_color_override("font_disabled_color", Color(taupe.r, taupe.g, taupe.b, 0.45))
 	button.add_theme_color_override("font_hover_pressed_color", Color.WHITE)
 	button.add_theme_stylebox_override("normal", _chip_normal)
 	button.add_theme_stylebox_override("hover", _chip_hover)
 	button.add_theme_stylebox_override("pressed", _chip_pressed)
 	button.add_theme_stylebox_override("hover_pressed", _chip_pressed)
-	button.add_theme_stylebox_override("focus", _chip_normal)
+	button.add_theme_stylebox_override("focus", _chip_hover)
 	button.add_theme_stylebox_override("disabled", _chip_disabled)
 
 
@@ -196,12 +229,12 @@ func _style_chip_option(option: OptionButton, taupe: Color, taupe_dark: Color) -
 	option.add_theme_color_override("font_color", taupe)
 	option.add_theme_color_override("font_hover_color", Color.WHITE)
 	option.add_theme_color_override("font_pressed_color", Color.WHITE)
-	option.add_theme_color_override("font_focus_color", taupe)
+	option.add_theme_color_override("font_focus_color", Color.WHITE)
 	option.add_theme_color_override("font_disabled_color", Color(taupe.r, taupe.g, taupe.b, 0.45))
 	option.add_theme_stylebox_override("normal", _chip_normal)
 	option.add_theme_stylebox_override("hover", _chip_hover)
 	option.add_theme_stylebox_override("pressed", _chip_hover)
-	option.add_theme_stylebox_override("focus", _chip_normal)
+	option.add_theme_stylebox_override("focus", _chip_hover)
 	option.add_theme_stylebox_override("disabled", _chip_disabled)
 
 	var popup := option.get_popup()
@@ -231,11 +264,15 @@ func _setup_options() -> void:
 
 
 func _wire_signals() -> void:
+	_player_button.pressed.connect(_on_player_pressed)
 	_graphics_button.pressed.connect(_on_graphics_pressed)
 	_audio_button.pressed.connect(_on_audio_pressed)
+	_name_input.text_submitted.connect(_on_name_submitted)
+	_name_input.focus_exited.connect(_on_name_focus_exited)
 	_preset_low.pressed.connect(_on_preset_pressed.bind(GameSettings.Preset.LOW))
 	_preset_medium.pressed.connect(_on_preset_pressed.bind(GameSettings.Preset.MEDIUM))
 	_preset_high.pressed.connect(_on_preset_pressed.bind(GameSettings.Preset.HIGH))
+	_preset_custom.pressed.connect(_on_preset_pressed.bind(GameSettings.Preset.CUSTOM))
 	_wind_check.toggled.connect(_on_wind_toggled)
 	_clouds_check.toggled.connect(_on_clouds_toggled)
 	_animal_option.item_selected.connect(_on_animal_selected)
@@ -243,11 +280,13 @@ func _wire_signals() -> void:
 	_music_slider.value_changed.connect(_on_music_volume_changed)
 	_effects_slider.value_changed.connect(_on_sfx_volume_changed)
 	for control in [
+		_player_button,
 		_graphics_button,
 		_audio_button,
 		_preset_low,
 		_preset_medium,
 		_preset_high,
+		_preset_custom,
 		_wind_check,
 		_clouds_check,
 		_animal_option,
@@ -257,22 +296,40 @@ func _wire_signals() -> void:
 	]:
 		if control != null and not control.mouse_entered.is_connected(_on_control_mouse_entered):
 			control.mouse_entered.connect(_on_control_mouse_entered)
+	WebInstantButton.wire_many([
+		_player_button,
+		_graphics_button,
+		_audio_button,
+		_preset_low,
+		_preset_medium,
+		_preset_high,
+		_preset_custom,
+		_wind_check,
+		_clouds_check,
+		_animal_option,
+		_msaa_option,
+	])
 
 
 func _on_control_mouse_entered() -> void:
+	if WebInstantButton.skip_hover():
+		return
 	GameFeedback.play_hover_button()
 
 
 func _show_view(view: View) -> void:
 	_view = view
 	_root_view.visible = view == View.ROOT
+	_player_view.visible = view == View.PLAYER
 	_graphics_view.visible = view == View.GRAPHICS
 	_audio_view.visible = view == View.AUDIO
 	# Title label is intentionally hidden.
+	InputScheme.clear_stuck_gui_hover_deferred(self)
 
 
 func _refresh_from_settings() -> void:
 	GameSettings.begin_ui_sync()
+	_fill_name_input()
 	_music_slider.value = GameSettings.music_volume
 	_effects_slider.value = GameSettings.sfx_volume
 	_update_volume_labels()
@@ -309,16 +366,62 @@ func _update_preset_buttons() -> void:
 	_preset_custom.button_pressed = GameSettings.preset == GameSettings.Preset.CUSTOM
 
 
+func _on_player_pressed() -> void:
+	GameFeedback.play_click_button()
+	GameFeedback.play_open_popup()
+	_fill_name_input()
+	_show_view(View.PLAYER)
+	OverlayFocus.grab_control(_name_input)
+
+
+func _fill_name_input() -> void:
+	if _name_input == null:
+		return
+	_name_input.text = GameSettings.player_name
+
+
+func _commit_player_name() -> void:
+	if _name_input == null or _committing_name:
+		return
+	_committing_name = true
+	var new_name := _name_input.text.strip_edges()
+	if new_name.is_empty():
+		_name_input.text = GameSettings.player_name
+		_committing_name = false
+		return
+	GameSettings.set_player_name(new_name)
+	_name_input.text = GameSettings.player_name
+	_committing_name = false
+
+
+func _on_name_submitted(_text: String) -> void:
+	_commit_player_name()
+
+
+func _on_name_focus_exited() -> void:
+	_commit_player_name()
+
+
+func _setup_web_text() -> void:
+	if not WebTextPrompt.is_needed():
+		return
+	_web_text = WebTextPrompt.new()
+	_web_text.setup()
+	_web_text.bind_line_edit(_name_input, "Your name")
+
+
 func _on_graphics_pressed() -> void:
 	GameFeedback.play_click_button()
 	GameFeedback.play_open_popup()
 	_show_view(View.GRAPHICS)
+	OverlayFocus.grab_button_row(_preset_low.get_parent() if _preset_low else null)
 
 
 func _on_audio_pressed() -> void:
 	GameFeedback.play_click_button()
 	GameFeedback.play_open_popup()
 	_show_view(View.AUDIO)
+	OverlayFocus.grab_first_button(_audio_view)
 
 
 func _on_preset_pressed(preset: GameSettings.Preset) -> void:

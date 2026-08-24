@@ -29,8 +29,6 @@ var _columns: Array[VBoxContainer] = []
 
 func _ready() -> void:
 	hide()
-	_toggle_button.focus_mode = Control.FOCUS_NONE
-	_close_button.focus_mode = Control.FOCUS_NONE
 	_build_scoring_row()
 	_center_popup_root()
 	get_viewport().size_changed.connect(_center_popup_root)
@@ -59,6 +57,14 @@ func close() -> void:
 	if orchestrator:
 		orchestrator.tutorial_bridge.notify("tutorial_closed")
 
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not visible:
+		return
+	if OverlayFocus.is_cancel(event):
+		close()
+		get_viewport().set_input_as_handled()
+
 ## ----- View ----- ##
 
 func _open_view(view: View) -> void:
@@ -68,6 +74,9 @@ func _open_view(view: View) -> void:
 		GameFeedback.play_open_popup()
 	_apply_view()
 	show()
+	_close_button.focus_mode = Control.FOCUS_ALL
+	_toggle_button.focus_mode = Control.FOCUS_ALL
+	OverlayFocus.grab_control(_close_button)
 
 func _apply_view() -> void:
 	var scoring := _view == View.SCORING
