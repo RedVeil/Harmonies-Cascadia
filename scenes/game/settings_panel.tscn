@@ -127,7 +127,6 @@ text = "High"
 [node name="CustomButton" type="Button" parent="Content/GraphicsView/PresetRow" unique_id=1454025661]
 layout_mode = 2
 size_flags_horizontal = 3
-disabled = true
 toggle_mode = true
 text = "Custom"
 

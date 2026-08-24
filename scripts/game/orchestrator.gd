@@ -478,7 +478,7 @@ func _submit_daily_score_if_needed() -> void:
 
 
 func leave_to_menu() -> void:
-	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+	SceneLoader.goto("res://scenes/main_menu.tscn")
 
 
 func restart_run() -> void:
@@ -498,7 +498,7 @@ func restart_run() -> void:
 		GameSession.begin_puzzle_run(GameSession.puzzle_id)
 	else:
 		GameSession.begin_normal_run(GameSession.map_size)
-	get_tree().call_deferred("reload_current_scene")
+	SceneLoader.reload()
 
 
 func start_next_puzzle() -> void:
@@ -507,7 +507,7 @@ func start_next_puzzle() -> void:
 		return
 	if not GameSession.begin_puzzle_run(next_id):
 		return
-	get_tree().call_deferred("reload_current_scene")
+	SceneLoader.reload()
 
 func preview_recycle_card(_id:int, _amount:int, _id_known:bool) -> void:
 	pass

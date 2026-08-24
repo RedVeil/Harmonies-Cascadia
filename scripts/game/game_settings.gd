@@ -44,7 +44,7 @@ func load_from_disk() -> void:
 	elif FileAccess.file_exists(LEGACY_SAVE_PATH):
 		_load_from_legacy_cfg()
 	else:
-		apply_preset(Preset.HIGH, false)
+		apply_preset(_default_preset(), false)
 
 	var identity_dirty := false
 	if player_id.is_empty():
@@ -62,7 +62,7 @@ func load_from_disk() -> void:
 func _load_from_json() -> void:
 	var parsed = JSON.parse_string(FileAccess.get_file_as_string(SAVE_PATH))
 	if typeof(parsed) != TYPE_DICTIONARY:
-		apply_preset(Preset.HIGH, false)
+		apply_preset(_default_preset(), false)
 		return
 
 	var data: Dictionary = parsed
@@ -96,7 +96,7 @@ func _load_from_json() -> void:
 func _load_from_legacy_cfg() -> void:
 	var cfg := ConfigFile.new()
 	if cfg.load(LEGACY_SAVE_PATH) != OK:
-		apply_preset(Preset.HIGH, false)
+		apply_preset(_default_preset(), false)
 		return
 	preset = int(cfg.get_value(SECTION, "preset", Preset.HIGH)) as Preset
 	wind_enabled = bool(cfg.get_value(SECTION, "wind_enabled", true))
@@ -205,6 +205,17 @@ func _migrate_player_progress() -> bool:
 	return dirty
 
 
+func _is_mobile_platform() -> bool:
+	return OS.has_feature("android") \
+		or OS.has_feature("ios") \
+		or OS.has_feature("web_android") \
+		or OS.has_feature("web_ios")
+
+
+func _default_preset() -> Preset:
+	return Preset.LOW if _is_mobile_platform() else Preset.HIGH
+
+
 func _platform_tag() -> String:
 	if OS.has_feature("web"):
 		return "web"
@@ -227,16 +238,29 @@ func _generate_player_id() -> String:
 
 func apply_preset(new_preset: Preset, do_save: bool = true) -> void:
 	if new_preset == Preset.CUSTOM:
+		if preset == Preset.CUSTOM:
+			if do_save:
+				save_to_disk()
+			return
+		_apply_named_preset_values(Preset.LOW)
 		preset = Preset.CUSTOM
+		apply()
 		if do_save:
 			save_to_disk()
 		return
 
 	preset = new_preset
-	match new_preset:
+	_apply_named_preset_values(new_preset)
+	apply()
+	if do_save:
+		save_to_disk()
+
+
+func _apply_named_preset_values(named_preset: Preset) -> void:
+	match named_preset:
 		Preset.LOW:
 			wind_enabled = false
-			clouds_enabled = false
+			clouds_enabled = true
 			animal_motion = AnimalMotion.FROZEN
 			msaa_mode = MsaaMode.OFF
 		Preset.MEDIUM:
@@ -249,9 +273,6 @@ func apply_preset(new_preset: Preset, do_save: bool = true) -> void:
 			clouds_enabled = true
 			animal_motion = AnimalMotion.FULL_ROAM
 			msaa_mode = MsaaMode.X4
-	apply()
-	if do_save:
-		save_to_disk()
 
 
 func set_wind_enabled(value: bool) -> void:

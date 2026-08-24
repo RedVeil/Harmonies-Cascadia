@@ -8,6 +8,10 @@ const PREFIX := "HC1-"
 const VERSION := 1
 const ITCH_URL := "https://0xveil.itch.io/symbia"
 
+static var _paste_helper: ShareCode
+var _paste_cb = null
+var _paste_done: Callable
+
 
 static func encode(seed: int, ring_count: int, score: int) -> String:
 	var payload := {
@@ -79,9 +83,115 @@ static func _copy_to_clipboard_web(text: String) -> bool:
 	return bool(result)
 
 
+## Reads clipboard text. On web, tries the Clipboard API then falls back to a
+## DOM textarea overlay (itch iframe often blocks clipboard-read). Calls
+## on_done with the pasted string, or not at all if the user cancels.
+static func request_clipboard_text(on_done: Callable) -> void:
+	if not on_done.is_valid():
+		return
+	if not OS.has_feature("web"):
+		on_done.call(DisplayServer.clipboard_get())
+		return
+	if _paste_helper == null:
+		_paste_helper = ShareCode.new()
+	_paste_helper._request_clipboard_web(on_done)
+
+
+func _request_clipboard_web(on_done: Callable) -> void:
+	_paste_done = on_done
+	if _paste_cb == null:
+		_paste_cb = JavaScriptBridge.create_callback(_on_paste_js)
+	JavaScriptBridge.eval(
+		"""
+(function() {
+	if (window.symbiaPastePrompt) return;
+	window.symbiaPastePrompt = {
+		_cb: null,
+		setCallback: function(cb) { this._cb = cb; },
+		_finish: function(text, action) {
+			if (this._cb) this._cb(String(text || ''), action || 'submit');
+			var old = document.getElementById('symbia-paste-overlay');
+			if (old) old.remove();
+		},
+		_showOverlay: function() {
+			var self = this;
+			var old = document.getElementById('symbia-paste-overlay');
+			if (old) old.remove();
+			var wrap = document.createElement('div');
+			wrap.id = 'symbia-paste-overlay';
+			wrap.style.cssText = 'position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,0.55);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;font-family:sans-serif;';
+			var ta = document.createElement('textarea');
+			ta.value = '';
+			ta.placeholder = 'Paste a share code';
+			ta.style.cssText = 'width:min(560px,100%);height:160px;font-size:14px;padding:12px;box-sizing:border-box;resize:none;';
+			var hint = document.createElement('div');
+			hint.textContent = 'Press Ctrl+V (Cmd+V on Mac) to paste, then Continue';
+			hint.style.cssText = 'color:#fff;margin:12px 0 8px;font-size:14px;text-align:center;';
+			var row = document.createElement('div');
+			row.style.cssText = 'display:flex;gap:12px;';
+			var done = document.createElement('button');
+			done.textContent = 'Continue';
+			done.style.cssText = 'padding:8px 20px;font-size:14px;cursor:pointer;';
+			var cancel = document.createElement('button');
+			cancel.textContent = 'Cancel';
+			cancel.style.cssText = 'padding:8px 20px;font-size:14px;cursor:pointer;';
+			done.onclick = function() { self._finish(ta.value, 'submit'); };
+			cancel.onclick = function() { self._finish('', 'cancel'); };
+			ta.addEventListener('keydown', function(e) {
+				if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+					e.preventDefault();
+					self._finish(ta.value, 'submit');
+				}
+			});
+			row.appendChild(done);
+			row.appendChild(cancel);
+			wrap.appendChild(ta);
+			wrap.appendChild(hint);
+			wrap.appendChild(row);
+			document.body.appendChild(wrap);
+			ta.focus();
+		},
+		open: function() {
+			var self = this;
+			var old = document.getElementById('symbia-paste-overlay');
+			if (old) old.remove();
+			var show = function() { self._showOverlay(); };
+			if (navigator.clipboard && navigator.clipboard.readText) {
+				navigator.clipboard.readText().then(function(text) {
+					if (text) {
+						self._finish(text, 'submit');
+					} else {
+						show();
+					}
+				}).catch(function() { show(); });
+				return;
+			}
+			show();
+		}
+	};
+})();
+"""
+	)
+	var window := JavaScriptBridge.get_interface("window")
+	if window == null or window.symbiaPastePrompt == null:
+		return
+	window.symbiaPastePrompt.setCallback(_paste_cb)
+	window.symbiaPastePrompt.open()
+
+
+func _on_paste_js(args: Array) -> void:
+	var text := str(args[0]) if not args.is_empty() else ""
+	var action := str(args[1]) if args.size() > 1 else "submit"
+	var done := _paste_done
+	_paste_done = Callable()
+	if action == "cancel" or not done.is_valid():
+		return
+	done.call(text)
+
+
 ## Returns { "ok": bool, "seed": int, "ring_count": int, "score": int, "error": String }
 static func decode(code: String) -> Dictionary:
-	var raw := _extract_code(code)
+	var raw := extract_code(code)
 	if raw.is_empty():
 		return _fail("Enter a share code.")
 	if not raw.begins_with(PREFIX):
@@ -117,7 +227,7 @@ static func decode(code: String) -> Dictionary:
 	}
 
 
-static func _extract_code(text: String) -> String:
+static func extract_code(text: String) -> String:
 	var raw := text.strip_edges()
 	if raw.is_empty():
 		return ""

@@ -6,7 +6,7 @@ extends RefCounted
 
 var _js_callback = null
 var _target: LineEdit
-var _bound: Dictionary = {} # LineEdit -> placeholder label
+var _bound: Dictionary = {} # LineEdit -> {placeholder, multiline}
 
 
 static func is_needed() -> bool:
@@ -99,7 +99,7 @@ func setup() -> void:
 			setTimeout(function() { input.focus({ preventScroll: true }); }, 50);
 			setTimeout(function() { input.focus({ preventScroll: true }); }, 150);
 		},
-		open: function(initial, placeholder, labelText, maxLen) {
+		open: function(initial, placeholder, labelText, maxLen, multiline) {
 			var old = document.getElementById('symbia-text-prompt');
 			if (old) old.remove();
 			window.symbiaTextPrompt._restore = window.symbiaTextPrompt._isolateFocus();
@@ -109,17 +109,24 @@ func setup() -> void:
 			var label = document.createElement('div');
 			label.textContent = labelText || placeholder || 'Enter text';
 			label.style.cssText = 'color:#fff;font-size:16px;margin-bottom:10px;width:min(560px,100%);';
-			var input = document.createElement('input');
-			input.type = 'text';
-			input.inputMode = 'text';
-			input.enterKeyHint = 'done';
+			var input;
+			if (multiline) {
+				input = document.createElement('textarea');
+				input.rows = 5;
+				input.style.cssText = 'width:min(560px,100%);min-height:120px;font-size:16px;padding:14px 12px;box-sizing:border-box;border-radius:8px;border:1px solid #ccc;color:#111;background:#fff;resize:vertical;';
+			} else {
+				input = document.createElement('input');
+				input.type = 'text';
+				input.inputMode = 'text';
+				input.enterKeyHint = 'done';
+				input.style.cssText = 'width:min(560px,100%);font-size:16px;padding:14px 12px;box-sizing:border-box;border-radius:8px;border:1px solid #ccc;color:#111;background:#fff;';
+				if (maxLen && maxLen > 0) input.maxLength = maxLen;
+			}
 			input.value = initial || '';
 			input.placeholder = placeholder || '';
 			input.autocomplete = 'off';
 			input.autocapitalize = 'words';
 			input.spellcheck = false;
-			if (maxLen && maxLen > 0) input.maxLength = maxLen;
-			input.style.cssText = 'width:min(560px,100%);font-size:16px;padding:14px 12px;box-sizing:border-box;border-radius:8px;border:1px solid #ccc;color:#111;background:#fff;';
 			var row = document.createElement('div');
 			row.style.cssText = 'display:flex;gap:12px;margin-top:12px;';
 			var done = document.createElement('button');
@@ -139,7 +146,7 @@ func setup() -> void:
 			done.onclick = function() { finish('submit'); };
 			cancel.onclick = function() { finish('cancel'); };
 			input.addEventListener('keydown', function(e) {
-				if (e.key === 'Enter') {
+				if (e.key === 'Enter' && (!multiline || e.ctrlKey || e.metaKey)) {
 					e.preventDefault();
 					finish('submit');
 				}
@@ -173,18 +180,18 @@ func setup() -> void:
 	window.symbiaTextPrompt._suppressGodotInputs()
 
 
-func bind_line_edit(line_edit: LineEdit, placeholder: String = "") -> void:
+func bind_line_edit(line_edit: LineEdit, placeholder: String = "", multiline: bool = false) -> void:
 	if not OS.has_feature("web") or line_edit == null:
 		return
 	if _bound.has(line_edit):
 		return
-	_bound[line_edit] = placeholder
+	_bound[line_edit] = {"placeholder": placeholder, "multiline": multiline}
 	line_edit.focus_mode = Control.FOCUS_NONE
 	line_edit.virtual_keyboard_enabled = false
-	line_edit.gui_input.connect(_on_line_edit_gui_input.bind(line_edit, placeholder))
+	line_edit.gui_input.connect(_on_line_edit_gui_input.bind(line_edit))
 
 
-func open(line_edit: LineEdit, placeholder: String = "") -> void:
+func open(line_edit: LineEdit, placeholder: String = "", multiline: bool = false) -> void:
 	if not OS.has_feature("web") or line_edit == null:
 		return
 	if _js_callback == null:
@@ -198,10 +205,11 @@ func open(line_edit: LineEdit, placeholder: String = "") -> void:
 		window.symbiaTextPrompt.setCallback(_js_callback)
 	var ph := placeholder if not placeholder.is_empty() else line_edit.placeholder_text
 	var label := ph if not ph.is_empty() else "Enter text"
-	window.symbiaTextPrompt.open(line_edit.text, ph, label, line_edit.max_length)
+	var max_len := 0 if multiline else line_edit.max_length
+	window.symbiaTextPrompt.open(line_edit.text, ph, label, max_len, multiline)
 
 
-func _on_line_edit_gui_input(event: InputEvent, line_edit: LineEdit, placeholder: String) -> void:
+func _on_line_edit_gui_input(event: InputEvent, line_edit: LineEdit) -> void:
 	var pressed := false
 	if event is InputEventScreenTouch:
 		pressed = event.pressed
@@ -209,7 +217,8 @@ func _on_line_edit_gui_input(event: InputEvent, line_edit: LineEdit, placeholder
 		pressed = event.pressed and event.button_index == MOUSE_BUTTON_LEFT
 	if not pressed:
 		return
-	open(line_edit, placeholder)
+	var opts: Dictionary = _bound.get(line_edit, {})
+	open(line_edit, str(opts.get("placeholder", "")), bool(opts.get("multiline", false)))
 	line_edit.accept_event()
 
 
@@ -223,9 +232,9 @@ func _on_js(args: Array) -> void:
 		_target = null
 		return
 	_target.text = text
-	_target.caret_column = text.length()
+	_target.caret_column = _target.text.length()
 	if action == "submit":
-		_target.text_submitted.emit(text)
+		_target.text_submitted.emit(_target.text)
 		_target = null
 
 

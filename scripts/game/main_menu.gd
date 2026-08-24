@@ -45,7 +45,7 @@ var _web_text
 func _ready() -> void:
 	if not GameSettings.tutorial_played:
 		GameSession.begin_tutorial_run()
-		get_tree().change_scene_to_file(GAME_SCENE)
+		SceneLoader.goto(GAME_SCENE)
 		return
 	_setup_background()
 	_hide_exit_on_web()
@@ -82,7 +82,7 @@ func _setup_web_text_inputs() -> void:
 	_web_text = WEB_TEXT_PROMPT.new()
 	_web_text.setup()
 	_web_text.bind_line_edit(_name_input, "Your name")
-	_web_text.bind_line_edit(_code_input, "Paste a share code")
+	_web_text.bind_line_edit(_code_input, "Paste a share code", true)
 
 
 func _setup_button_hover_sounds() -> void:
@@ -114,6 +114,7 @@ func _setup_button_hover_sounds() -> void:
 		$Split/LeftColumn/Margin/NavStack/PlayNav/PuzzleBlock/PuzzleButton,
 		$Split/LeftColumn/Margin/NavStack/PuzzleNav/PuzzleBackButton,
 		$Split/LeftColumn/Margin/NavStack/CodeNav/CodeBackButton,
+		$Split/LeftColumn/Margin/NavStack/CodeNav/PasteCodeButton,
 		$Split/LeftColumn/Margin/NavStack/CodeNav/StartCodeButton,
 		$Split/LeftColumn/Margin/NavStack/SettingsNav/SettingsBackButton,
 	]
@@ -374,7 +375,7 @@ func _on_tutorial_quests_pressed() -> void:
 func _start_tutorial_part(part_id: String) -> void:
 	GameFeedback.play_click_button()
 	GameSession.begin_tutorial_run(part_id)
-	get_tree().change_scene_to_file(GAME_SCENE)
+	SceneLoader.goto(GAME_SCENE)
 
 
 func _on_settings_pressed() -> void:
@@ -489,7 +490,7 @@ func _on_daily_play_pressed() -> void:
 			return
 		RunSave.clear_save(GameSession.GameMode.DAILY)
 	GameSession.begin_daily_run()
-	get_tree().change_scene_to_file(GAME_SCENE)
+	SceneLoader.goto(GAME_SCENE)
 
 
 func _on_daily_leaderboards_pressed() -> void:
@@ -530,7 +531,7 @@ func _on_quick_continue_pressed() -> void:
 	var state := RunSave.load_save(GameSession.GameMode.NORMAL)
 	if state.is_empty():
 		GameSession.begin_normal_run(GameSession.MapSize.MEDIUM)
-		get_tree().change_scene_to_file(GAME_SCENE)
+		SceneLoader.goto(GAME_SCENE)
 		return
 	_continue_from_state(state, GameSession.GameMode.NORMAL)
 	if _quick_inline_buttons:
@@ -563,7 +564,7 @@ func _start_normal_run(size: GameSession.MapSize) -> void:
 	GameFeedback.play_click_button()
 	RunSave.clear_save(GameSession.GameMode.NORMAL)
 	GameSession.begin_normal_run(size)
-	get_tree().change_scene_to_file(GAME_SCENE)
+	SceneLoader.goto(GAME_SCENE)
 
 
 func _on_endless_pressed() -> void:
@@ -579,7 +580,7 @@ func _on_endless_pressed() -> void:
 		return
 
 	GameSession.begin_endless_run()
-	get_tree().change_scene_to_file(GAME_SCENE)
+	SceneLoader.goto(GAME_SCENE)
 
 
 func _on_endless_continue_pressed() -> void:
@@ -587,7 +588,7 @@ func _on_endless_continue_pressed() -> void:
 	var state := RunSave.load_save(GameSession.GameMode.ENDLESS)
 	if state.is_empty():
 		GameSession.begin_endless_run()
-		get_tree().change_scene_to_file(GAME_SCENE)
+		SceneLoader.goto(GAME_SCENE)
 		return
 	_continue_from_state(state, GameSession.GameMode.ENDLESS)
 	if _endless_inline_buttons:
@@ -602,7 +603,7 @@ func _on_endless_new_pressed() -> void:
 	if _endless_desc:
 		_endless_desc.show()
 	GameSession.begin_endless_run()
-	get_tree().change_scene_to_file(GAME_SCENE)
+	SceneLoader.goto(GAME_SCENE)
 
 
 func _continue_from_state(state: Dictionary, mode: GameSession.GameMode) -> void:
@@ -621,7 +622,7 @@ func _continue_from_state(state: Dictionary, mode: GameSession.GameMode) -> void
 
 	var run_seed_value := int(state.get("run_seed", 1))
 	GameSession.begin_run(run_seed_value, true)
-	get_tree().change_scene_to_file(GAME_SCENE)
+	SceneLoader.goto(GAME_SCENE)
 
 
 func _on_puzzle_pressed() -> void:
@@ -637,12 +638,37 @@ func _on_puzzle_selected(id: String) -> void:
 		return
 	if not GameSession.begin_puzzle_run(id):
 		return
-	get_tree().change_scene_to_file(GAME_SCENE)
+	SceneLoader.goto(GAME_SCENE)
 
 
 func _on_start_code_pressed() -> void:
 	GameFeedback.play_click_button()
 	_try_start_from_code(_code_input.text)
+
+
+func _on_paste_code_pressed() -> void:
+	GameFeedback.play_click_button()
+	ShareCode.request_clipboard_text(_on_clipboard_text)
+
+
+func _on_clipboard_text(text: String) -> void:
+	if text.is_empty() or _code_input == null:
+		return
+	var extracted := ShareCode.extract_code(text)
+	_code_input.text = extracted if extracted.begins_with(ShareCode.PREFIX) else text.strip_edges()
+	_code_input.caret_column = _code_input.text.length()
+
+
+func _on_code_text_changed(new_text: String) -> void:
+	var extracted := ShareCode.extract_code(new_text)
+	if extracted.is_empty() or extracted == new_text:
+		return
+	if not extracted.begins_with(ShareCode.PREFIX):
+		return
+	_code_input.set_block_signals(true)
+	_code_input.text = extracted
+	_code_input.caret_column = extracted.length()
+	_code_input.set_block_signals(false)
 
 
 func _on_code_submitted(text: String) -> void:
@@ -659,4 +685,4 @@ func _try_start_from_code(text: String) -> void:
 		int(decoded["ring_count"]),
 		int(decoded["score"])
 	)
-	get_tree().change_scene_to_file(GAME_SCENE)
+	SceneLoader.goto(GAME_SCENE)

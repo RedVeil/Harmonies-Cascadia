@@ -30,6 +30,7 @@ BoosterCatalog="*uid://crtpprdxd6gj4"
 RuleCatalog="*uid://tqkcwruu08es"
 QuestCatalog="*uid://dwsmx6x25woub"
 GameFeedback="*res://scenes/effects/game_feedback.tscn"
+SceneLoader="*res://scenes/game/scene_loader.tscn"
 UiPointerBlock="*res://scripts/input/ui_pointer_block.gd"
 InputScheme="*res://scripts/input/input_scheme.gd"
 

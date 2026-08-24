@@ -43,7 +43,6 @@ var _committing_name: bool = false
 
 func _ready() -> void:
 	_setup_options()
-	_preset_custom.disabled = true
 	if _name_input:
 		_name_input.max_length = GameSettings.PLAYER_NAME_MAX_LENGTH
 	_setup_web_text()
@@ -273,6 +272,7 @@ func _wire_signals() -> void:
 	_preset_low.pressed.connect(_on_preset_pressed.bind(GameSettings.Preset.LOW))
 	_preset_medium.pressed.connect(_on_preset_pressed.bind(GameSettings.Preset.MEDIUM))
 	_preset_high.pressed.connect(_on_preset_pressed.bind(GameSettings.Preset.HIGH))
+	_preset_custom.pressed.connect(_on_preset_pressed.bind(GameSettings.Preset.CUSTOM))
 	_wind_check.toggled.connect(_on_wind_toggled)
 	_clouds_check.toggled.connect(_on_clouds_toggled)
 	_animal_option.item_selected.connect(_on_animal_selected)
@@ -286,6 +286,7 @@ func _wire_signals() -> void:
 		_preset_low,
 		_preset_medium,
 		_preset_high,
+		_preset_custom,
 		_wind_check,
 		_clouds_check,
 		_animal_option,
@@ -302,6 +303,7 @@ func _wire_signals() -> void:
 		_preset_low,
 		_preset_medium,
 		_preset_high,
+		_preset_custom,
 		_wind_check,
 		_clouds_check,
 		_animal_option,

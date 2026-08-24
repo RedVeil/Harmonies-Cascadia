@@ -1,0 +1,38 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/game/scene_loader.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://b77eea30ut0so" path="res://assets/icons/hex_outline_bold.png" id="2_hex"]
+
+[node name="SceneLoader" type="CanvasLayer"]
+layer = 100
+visible = false
+process_mode = 3
+script = ExtResource("1_script")
+
+[node name="Dimmer" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+color = Color(0.8235294, 0.7607843, 0.6784314, 0.55)
+
+[node name="Hex" type="TextureRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -48.0
+offset_top = -48.0
+offset_right = 48.0
+offset_bottom = 48.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(48, 48)
+mouse_filter = 2
+modulate = Color(0.5686275, 0.5176471, 0.47058824, 1)
+texture = ExtResource("2_hex")
+expand_mode = 1
+stretch_mode = 5
