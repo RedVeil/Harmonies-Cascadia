@@ -387,7 +387,12 @@ func _confirm() -> void:
 		Region.BOOSTERS:
 			_confirm_booster()
 		Region.QUESTS:
-			pass
+			var quest_targets := _region_targets()
+			if _index < 0 or _index >= quest_targets.size():
+				return
+			var quest: QuestItem = quest_targets[_index].get("node", null)
+			if quest != null:
+				quest.toggle_tooltip_pin()
 		Region.HUD:
 			_confirm_hud()
 
@@ -536,6 +541,11 @@ func _hud_targets() -> Array[Dictionary]:
 			out.append({"kind": "score", "node": score})
 	if orchestrator.card_recycling != null:
 		out.append({"kind": "recycle", "node": orchestrator.card_recycling})
+	if orchestrator.play_counter != null and orchestrator.play_counter.visible:
+		out.append({"kind": "play", "node": orchestrator.play_counter})
+	if orchestrator.booster_manager != null and orchestrator.booster_manager.pack_counter != null \
+			and orchestrator.booster_manager.pack_counter.visible:
+		out.append({"kind": "pack", "node": orchestrator.booster_manager.pack_counter})
 	return out
 
 
@@ -597,7 +607,7 @@ func _hover_target(target: Dictionary, on: bool, play_hover: bool) -> void:
 					quest._on_mouse_entered()
 				else:
 					quest._on_mouse_exited()
-		"undo", "menu", "score", "recycle":
+		"undo", "menu", "score", "recycle", "play", "pack":
 			var node: Node = target.get("node", null)
 			if node != null and node.has_method("set_focus_hover"):
 				node.set_focus_hover(on)

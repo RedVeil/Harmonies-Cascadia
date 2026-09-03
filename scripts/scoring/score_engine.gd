@@ -23,7 +23,7 @@ var points_per_element_group_backup: Dictionary[int, int] = {}
 func _ready() -> void:
 	if GameSession.is_tutorial():
 		_apply_forced_or_random_rules(GameSession.get_tutorial_scoring_rules())
-	elif GameSession.is_puzzle():
+	elif GameSession.is_puzzle() or GameSession.is_puzzle_maker():
 		_apply_forced_or_random_rules(GameSession.get_puzzle_scoring_rules())
 	else:
 		_pick_random_rules()
@@ -110,6 +110,9 @@ func calculate_normal_element_group(
 	rule:ScoringRule,
 	tiles:Dictionary[Vector2i, HexTileData]
 	) -> int:
+	if coords.size() < rule.min_group_size:
+		return 0
+	
 	var levels : Array[int] = []
 	for c in coords:
 		levels.append(tiles[c].level)

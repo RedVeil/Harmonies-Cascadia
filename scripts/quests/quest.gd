@@ -11,11 +11,15 @@ var preview: int = 0
 
 var current_backup: int = 0
 
+var _pinned := false
+var _hovered := false
+
 ## ----- Initialisation ----- ##
 
 func _ready() -> void:
 	input_pickable = true
 
+	input_event.connect(_on_input_event)
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
 
@@ -41,13 +45,28 @@ func init(container: QuestContainer, quest: Quest) -> void:
 
 ## ----- Interactions Logic ----- ##
 
+func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
+	if not InputScheme.is_left_click(event):
+		return
+	toggle_tooltip_pin()
+
 func _on_mouse_entered() -> void:
+	_hovered = true
 	UiPointerBlock.enter(self)
 	placement_tooltip.show()
 
 func _on_mouse_exited() -> void:
+	_hovered = false
 	UiPointerBlock.exit(self)
-	placement_tooltip.hide()
+	if not _pinned:
+		placement_tooltip.hide()
+
+func toggle_tooltip_pin() -> void:
+	_pinned = not _pinned
+	if _pinned:
+		placement_tooltip.show()
+	elif not _hovered:
+		placement_tooltip.hide()
 
 ## ----- Down stream Logic ----- ##
 

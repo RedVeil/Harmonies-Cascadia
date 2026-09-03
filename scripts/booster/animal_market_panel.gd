@@ -85,8 +85,8 @@ func close() -> void:
 		_offers_root.hide()
 		return
 	GameFeedback.play_close_popup()
-	if _cards.is_empty():
-		_offers_root.hide()
+	if not _has_animatable_cards():
+		_finish_close()
 		return
 	_play_fade_out()
 
@@ -365,6 +365,13 @@ func _set_cards_alpha(alpha: float) -> void:
 			card.modulate.a = alpha
 
 
+func _has_animatable_cards() -> bool:
+	for card in _cards:
+		if card != null:
+			return true
+	return false
+
+
 func _kill_anim() -> void:
 	if _anim_tween != null and _anim_tween.is_valid():
 		_anim_tween.kill()
@@ -372,6 +379,8 @@ func _kill_anim() -> void:
 
 
 func _play_fade_in() -> void:
+	if not _has_animatable_cards():
+		return
 	_anim_tween = create_tween()
 	_anim_tween.set_parallel(true)
 	for i in _cards.size():
@@ -384,6 +393,9 @@ func _play_fade_in() -> void:
 
 
 func _play_fade_out() -> void:
+	if not _has_animatable_cards():
+		_finish_close()
+		return
 	_anim_tween = create_tween()
 	_anim_tween.set_parallel(true)
 	var last_i := _cards.size() - 1

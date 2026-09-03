@@ -37,16 +37,13 @@ var COLOR_RIGHT := Color.html("#D2C2AD")
 @onready var _endless_desc: Label = $Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessDesc
 @onready var _endless_inline_buttons: HBoxContainer = $Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessInlineButtons
 @onready var _exit_button: Button = $Split/LeftColumn/Margin/NavStack/RootNav/ExitButton
+@onready var _tutorial_coach: TutorialCoach = $TutorialCoach
 
 var _puzzle_ids: Array[String] = []
 var _web_text
 
 
 func _ready() -> void:
-	if not GameSettings.tutorial_played:
-		GameSession.begin_tutorial_run()
-		SceneLoader.goto(GAME_SCENE)
-		return
 	_setup_background()
 	_hide_exit_on_web()
 	_setup_puzzle_ids()
@@ -66,6 +63,8 @@ func _ready() -> void:
 		_show_name_nav()
 	else:
 		_show_root_nav()
+	if not GameSettings.tutorial_played:
+		_show_first_play_prompt()
 
 
 func _hide_exit_on_web() -> void:
@@ -244,6 +243,44 @@ func _show_root_nav() -> void:
 	_settings_nav.hide()
 	_reset_mode_inline_ui()
 	_sync_nav_input_filters(_root_nav)
+	OverlayFocus.grab_first_button(_root_nav)
+
+
+func _show_first_play_prompt() -> void:
+	if _tutorial_coach == null:
+		return
+	if not _tutorial_coach.continue_pressed.is_connected(_on_first_play_tutorial):
+		_tutorial_coach.continue_pressed.connect(_on_first_play_tutorial)
+	if not _tutorial_coach.skip_pressed.is_connected(_on_first_play_skip):
+		_tutorial_coach.skip_pressed.connect(_on_first_play_skip)
+	_tutorial_coach.show_centered_modal(
+		"Play the tutorial?",
+		"Learn the rules first, or skip and jump into the game. You can always open Tutorial from the menu later.",
+		"Play Tutorial",
+		{},
+		"Skip"
+	)
+
+
+func _clear_first_play_prompt() -> void:
+	if _tutorial_coach == null:
+		return
+	if _tutorial_coach.continue_pressed.is_connected(_on_first_play_tutorial):
+		_tutorial_coach.continue_pressed.disconnect(_on_first_play_tutorial)
+	if _tutorial_coach.skip_pressed.is_connected(_on_first_play_skip):
+		_tutorial_coach.skip_pressed.disconnect(_on_first_play_skip)
+	_tutorial_coach.hide_coach()
+
+
+func _on_first_play_tutorial() -> void:
+	_clear_first_play_prompt()
+	GameSession.begin_tutorial_run()
+	SceneLoader.goto(GAME_SCENE)
+
+
+func _on_first_play_skip() -> void:
+	GameSettings.mark_tutorial_played()
+	_clear_first_play_prompt()
 	OverlayFocus.grab_first_button(_root_nav)
 
 

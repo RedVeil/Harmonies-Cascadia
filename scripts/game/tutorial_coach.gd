@@ -8,13 +8,21 @@ signal skip_pressed
 const COACH_LAYER_DEFAULT := 12
 const COACH_LAYER_MENU := 20
 const MENU_HIGHLIGHTS := ["end_session", "share"]
+const HUD_HIGHLIGHTS := {
+	"play_counter": "PlayCounter",
+	"pack_counter": "PackCounter",
+}
 
 @export_group("Hex Highlight")
 ## Pixels to shift every hex spotlight up (positive = up). Tune on TutorialCoach.
 @export var hex_highlight_up: float = 48.0
 ## Extra pixels around the projected tile.
 @export var hex_highlight_pad: float = 10.0
+@export_group("HUD Highlight")
+## Half-size of the spotlight around Node2D HUD counters (collision radius ~28).
+@export var hud_highlight_radius: float = 36.0
 
+@onready var _dimmer: ColorRect = $Dimmer
 @onready var _highlights: Control = $Highlights
 @onready var _bubble: Panel = $Bubble
 @onready var _title: Label = $Bubble/Margin/VBox/Title
@@ -22,6 +30,7 @@ const MENU_HIGHLIGHTS := ["end_session", "share"]
 @onready var _continue_button: Button = $Bubble/Margin/VBox/ButtonRow/ContinueButton
 @onready var _skip_button: Button = $Bubble/Margin/VBox/ButtonRow/SkipButton
 @onready var _stars_row: HBoxContainer = $Bubble/Margin/VBox/StarsRow
+@onready var _button_row: HBoxContainer = $Bubble/Margin/VBox/ButtonRow
 
 var COLOR_STAR_BRONZE := Color.html("#C4783B")
 var COLOR_STAR_SILVER := Color.html("#C8C8CC")
@@ -31,6 +40,7 @@ var _visible_highlight: Control = null
 var _bubble_side: String = ""
 var _track_hex: bool = false
 var _tracked_hex_coord := Vector2i.ZERO
+var _track_node2d: Node2D = null
 var _hex_container: HexTileContainer = null
 var _modal_bubble_size := Vector2.ZERO
 
@@ -49,27 +59,40 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	if not visible or not _track_hex:
+	if not visible:
 		return
-	_sync_hex_highlight()
+	if _track_hex:
+		_sync_hex_highlight()
+		_place_bubble(_highlight_rect())
+	elif _track_node2d != null:
+		_sync_node2d_highlight()
+		_place_bubble(_highlight_rect())
 
 
 func _on_button_mouse_entered() -> void:
 	GameFeedback.play_hover_button()
 
 
-func show_centered_modal(title: String, body: String, button_label: String, ratings: Dictionary = {}) -> void:
-	_modal_bubble_size = Vector2(380, 280)
+func show_centered_modal(title: String, body: String, button_label: String, ratings: Dictionary = {}, skip_label: String = "") -> void:
 	GameFeedback.play_open_popup()
+	var complete := {"label": button_label}
+	if not skip_label.is_empty():
+		complete["skip_label"] = skip_label
 	show_step({
 		"title": title,
 		"body": body,
-		"complete": {"label": button_label},
+		"complete": complete,
 	}, "none", true)
+	_modal_bubble_size = Vector2(380, 280)
+	_place_bubble(_highlight_rect())
 	_apply_rating_stars(ratings)
+	_set_dimmer_visible(true)
+	_focus_modal_buttons()
 
 
 func show_step(step: Dictionary, highlight_name: String, show_continue: bool) -> void:
+	_modal_bubble_size = Vector2.ZERO
+	_set_dimmer_visible(false)
 	_apply_rating_stars({})
 	_title.text = str(step.get("title", ""))
 	_body.text = str(step.get("body", ""))
@@ -90,16 +113,37 @@ func show_step(step: Dictionary, highlight_name: String, show_continue: bool) ->
 	_show_highlight(highlight_name)
 	if _track_hex:
 		_sync_hex_highlight()
+	elif _track_node2d != null:
+		_sync_node2d_highlight()
 	_place_bubble(_highlight_rect())
 	show()
+	if show_continue:
+		_focus_modal_buttons()
 
 
 func hide_coach() -> void:
 	layer = COACH_LAYER_DEFAULT
 	_modal_bubble_size = Vector2.ZERO
+	_set_dimmer_visible(false)
 	_apply_rating_stars({})
 	_hide_all_highlights()
 	hide()
+
+
+func _set_dimmer_visible(should_show: bool) -> void:
+	if _dimmer == null:
+		return
+	_dimmer.visible = should_show
+
+
+func _focus_modal_buttons() -> void:
+	OverlayFocus.enable_buttons(_bubble)
+	if _button_row:
+		OverlayFocus.wire_horizontal_row(_button_row)
+	if _continue_button.visible:
+		OverlayFocus.grab_control(_continue_button)
+	elif _skip_button.visible:
+		OverlayFocus.grab_control(_skip_button)
 
 
 func _apply_rating_stars(ratings: Dictionary) -> void:
@@ -138,6 +182,7 @@ func _show_highlight(highlight_name: String) -> void:
 		_visible_highlight.hide()
 		_visible_highlight = null
 	_track_hex = false
+	_track_node2d = null
 	if highlight_name.is_empty() or highlight_name == "none":
 		return
 	var node := _highlights.get_node_or_null(NodePath(highlight_name)) as Control
@@ -147,11 +192,14 @@ func _show_highlight(highlight_name: String) -> void:
 	node.show()
 	_visible_highlight = node
 	_track_hex = _parse_hex_highlight(highlight_name)
+	if not _track_hex and HUD_HIGHLIGHTS.has(highlight_name):
+		_track_node2d = _resolve_hud_node(str(HUD_HIGHLIGHTS[highlight_name]))
 
 
 func _hide_all_highlights() -> void:
 	_visible_highlight = null
 	_track_hex = false
+	_track_node2d = null
 	if _highlights == null:
 		return
 	for child in _highlights.get_children():
@@ -170,9 +218,22 @@ func _parse_hex_highlight(highlight_name: String) -> bool:
 
 
 func _sync_hex_highlight() -> void:
+	_apply_highlight_rect(_hex_screen_rect(_tracked_hex_coord))
+
+
+func _sync_node2d_highlight() -> void:
+	if _track_node2d == null or not is_instance_valid(_track_node2d):
+		return
+	if not _track_node2d.visible:
+		return
+	var center := _track_node2d.get_global_transform_with_canvas().origin
+	var r := hud_highlight_radius
+	_apply_highlight_rect(Rect2(center - Vector2(r, r), Vector2(r * 2.0, r * 2.0)))
+
+
+func _apply_highlight_rect(rect: Rect2) -> void:
 	if _visible_highlight == null or not is_instance_valid(_visible_highlight):
 		return
-	var rect := _hex_screen_rect(_tracked_hex_coord)
 	if rect.size.x < 1.0 or rect.size.y < 1.0:
 		return
 	_visible_highlight.anchor_left = 0.0
@@ -183,6 +244,11 @@ func _sync_hex_highlight() -> void:
 	_visible_highlight.offset_top = rect.position.y
 	_visible_highlight.offset_right = rect.end.x
 	_visible_highlight.offset_bottom = rect.end.y
+
+
+func _resolve_hud_node(node_name: String) -> Node2D:
+	var node := get_tree().root.find_child(node_name, true, false)
+	return node as Node2D
 
 
 func _hex_screen_rect(coord: Vector2i) -> Rect2:
@@ -286,6 +352,10 @@ func _place_bubble(highlight_rect: Rect2) -> void:
 func _on_viewport_resized() -> void:
 	if not visible:
 		return
+	if _track_hex:
+		_sync_hex_highlight()
+	elif _track_node2d != null:
+		_sync_node2d_highlight()
 	_place_bubble(_highlight_rect())
 
 

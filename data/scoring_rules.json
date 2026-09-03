@@ -2,13 +2,13 @@
 	{
 		"id": 0.0,
 		"name": "Forest",
-		"description": "Each forest tile scores by level. 3 Points for level 1 and 4 Points for level 2.",
+		"description": "Place forests anywhere. Each forest tile scores by level. 2 Points for level 1 and another 2 Points for level 2.",
 		"min_group_size": 1.0,
 		"max_group_size": 100000.0,
 		"points_per_tile_level": [
 			[
 				1.0,
-				3.0
+				2.0
 			],
 			[
 				2.0,
@@ -17,14 +17,12 @@
 		],
 		"flat_points": 0.0,
 		"special_rule": 0.0,
-		"special_rule_specs": {
-
-		}
+		"special_rule_specs": {}
 	},
 	{
 		"id": 1.0,
 		"name": "Tall Forest",
-		"description": "Each forest tile scores by level. 1 Points for level 1 and 5 Points for level 2.",
+		"description": "Place forests anywhere. Each forest tile scores by level. 1 Points for level 1 and 4 more Points for level 2.",
 		"min_group_size": 1.0,
 		"max_group_size": 100000.0,
 		"points_per_tile_level": [
@@ -39,14 +37,12 @@
 		],
 		"flat_points": 0.0,
 		"special_rule": 0.0,
-		"special_rule_specs": {
-
-		}
+		"special_rule_specs": {}
 	},
 	{
 		"id": 2.0,
 		"name": "Large Forest",
-		"description": "Each forest group scores based on its size, plus 1 point per level 2 tile. The more tiles a forest group has the more it scores.",
+		"description": "Place forests connected to each other. The more forests are connected the more points you earn. Level 2 forets earn an additional 2 points.",
 		"min_group_size": 1.0,
 		"max_group_size": 100000.0,
 		"points_per_tile_level": [
@@ -56,7 +52,7 @@
 			],
 			[
 				2.0,
-				1.0
+				2.0
 			]
 		],
 		"flat_points": 0.0,
@@ -64,14 +60,10 @@
 		"special_rule_specs": {
 			"points": [
 				2.0,
-				4.0,
-				9.0,
-				16.0,
-				22.0,
-				29.0,
-				35.0,
-				39.0,
-				46.0
+				5.0,
+				8.0,
+				12.0,
+				16.0
 			],
 			"extra_points": 5.0
 		}
@@ -79,71 +71,110 @@
 	{
 		"id": 3.0,
 		"name": "Field",
-		"description": "A field that is connected to one or more other fields scores a flat 10 points.",
-		"min_group_size": 2.0,
-		"max_group_size": 2.0,
+		"description": "Place fields in pairs. A pair of fields earns 10 points. Adding more fields to a pair doesnt earn more points.",
+		"min_group_size": 1.0,
+		"max_group_size": 100000.0,
 		"points_per_tile_level": [
 			[
 				1.0,
-				1.0
+				0.0
 			]
 		],
-		"flat_points": 10.0,
-		"special_rule": 0.0,
+		"flat_points": 0.0,
+		"special_rule": 3.0,
 		"special_rule_specs": {
-
+			"points": [
+				1.0,
+				10.0
+			],
+			"extra_points": 0.0
 		}
 	},
 	{
 		"id": 4.0,
 		"name": "Small Fields",
-		"description": "Each group of fields scores a flat 5 points. More fields in the group dont earn more points.",
+		"description": "Place fields alone. Each field earns 5 points. A field connected to another field doesnt earn any points.",
 		"min_group_size": 1.0,
 		"max_group_size": 1.0,
 		"points_per_tile_level": [
 			[
 				1.0,
-				6.0
+				5.0
 			]
 		],
 		"flat_points": 0.0,
 		"special_rule": 0.0,
-		"special_rule_specs": {
-
-		}
+		"special_rule_specs": {}
 	},
 	{
 		"id": 5.0,
 		"name": "Large Fields",
-		"description": "A field that is connected to two or more other fields scores a flat 20 points.",
-		"min_group_size": 3.0,
+		"description": "Place fields in groups of 3. A group of fields earns 20 points. Adding more fields to the group doesnt earn more points.",
+		"min_group_size": 1.0,
 		"max_group_size": 100000.0,
 		"points_per_tile_level": [
 			[
 				1.0,
-				2.0
+				0.0
 			]
 		],
-		"flat_points": 20.0,
-		"special_rule": 0.0,
+		"flat_points": 0.0,
+		"special_rule": 3.0,
 		"special_rule_specs": {
-
+			"points": [
+				1.0,
+				2.0,
+				20.0
+			],
+			"extra_points": 0.0
 		}
 	},
 	{
 		"id": 6.0,
 		"name": "Mountains",
-		"description": "Mountains score if they are connected to another mountain. They score more when leveled up to higher levels.",
+		"description": "Place mountains connected to another mountain. Mountains that are not connected to another mountain dont earn points. Each level of a mountain earns 3 additional points.",
 		"min_group_size": 2.0,
 		"max_group_size": 100000.0,
 		"points_per_tile_level": [
 			[
 				1.0,
-				3.0
+				0.0
 			],
 			[
 				2.0,
+				3.0
+			],
+			[
+				3.0,
 				6.0
+			]
+		],
+		"flat_points": 0.0,
+		"special_rule": 3.0,
+		"special_rule_specs": {
+			"points": [
+				0.0,
+				6.0,
+				9.0,
+				12.0
+			],
+			"extra_points": 3.0
+		}
+	},
+	{
+		"id": 7.0,
+		"name": "Tall Mountains",
+		"description": "Place mountains connected to another mountain. Mountains that are not connected to another mountain dont earn points. The higher the mountain the more points you earn.",
+		"min_group_size": 2.0,
+		"max_group_size": 100000.0,
+		"points_per_tile_level": [
+			[
+				1.0,
+				1.0
+			],
+			[
+				2.0,
+				3.0
 			],
 			[
 				3.0,
@@ -151,35 +182,15 @@
 			]
 		],
 		"flat_points": 0.0,
-		"special_rule": 0.0,
+		"special_rule": 3.0,
 		"special_rule_specs": {
-
-		}
-	},
-	{
-		"id": 7.0,
-		"name": "Tall Mountains",
-		"description": "Mountains score if they are connected to another mountain. They score exponentially more when leveled up to higher levels.",
-		"min_group_size": 2.0,
-		"max_group_size": 100000.0,
-		"points_per_tile_level": [
-			[
+			"points": [
 				1.0,
-				2.0
-			],
-			[
 				2.0,
+				3.0,
 				4.0
 			],
-			[
-				3.0,
-				10.0
-			]
-		],
-		"flat_points": 0.0,
-		"special_rule": 0.0,
-		"special_rule_specs": {
-
+			"extra_points": 1.0
 		}
 	},
 	{
@@ -204,14 +215,12 @@
 		],
 		"flat_points": 0.0,
 		"special_rule": 0.0,
-		"special_rule_specs": {
-
-		}
+		"special_rule_specs": {}
 	},
 	{
 		"id": 9.0,
 		"name": "Long River",
-		"description": "Score by the length of the river. It only scores the shorted route from end to end. The longer the river the more points you score.",
+		"description": "Make long rivers. Dont create clusters of rivers but stretch them out. The longer the river the more points you earn.",
 		"min_group_size": 1.0,
 		"max_group_size": 100000.0,
 		"points_per_tile_level": [
@@ -224,23 +233,23 @@
 		"special_rule": 1.0,
 		"special_rule_specs": {
 			"points": [
-				2.0,
-				4.0,
-				9.0,
-				16.0,
-				22.0,
-				29.0,
-				35.0,
-				39.0,
-				46.0
+				1.0,
+				3.0,
+				7.0,
+				12.0,
+				18.0,
+				25.0,
+				33.0,
+				42.0,
+				50.0
 			],
-			"extra_points": 6.0
+			"extra_points": 8.0
 		}
 	},
 	{
 		"id": 10.0,
 		"name": "Short River",
-		"description": "Score by the length of the river. It only scores the shorted route from end to end. You earn more and more points until your river is 5 tiles long.",
+		"description": "Make short rivers. Dont create clusters of rivers but stretch them out. The longer the river the more points you earn up to a maximum of 5 river tiles.",
 		"min_group_size": 1.0,
 		"max_group_size": 100000.0,
 		"points_per_tile_level": [
@@ -253,11 +262,11 @@
 		"special_rule": 1.0,
 		"special_rule_specs": {
 			"points": [
-				2.0,
-				5.0,
-				11.0,
+				1.0,
+				4.0,
+				10.0,
 				18.0,
-				24.0
+				28.0
 			],
 			"extra_points": 0.0
 		}
@@ -265,7 +274,7 @@
 	{
 		"id": 11.0,
 		"name": "River",
-		"description": "Each river tile scores 4 points. The shape or length of the river does not matter.",
+		"description": "Place rivers anywhere. Each river earns 4 points.",
 		"min_group_size": 1.0,
 		"max_group_size": 100000.0,
 		"points_per_tile_level": [
@@ -276,14 +285,12 @@
 		],
 		"flat_points": 0.0,
 		"special_rule": 0.0,
-		"special_rule_specs": {
-
-		}
+		"special_rule_specs": {}
 	},
 	{
 		"id": 12.0,
 		"name": "Wetland",
-		"description": "A wetland scores 12 points if it has at least 3 different neighboring elements. Different tile levels dont affect the scoring.",
+		"description": "Place wetlands in between other types of tiles. A wetland earns 12 points if its connected to a minimum of 3 different neighboring types. Different tile levels dont affect the scoring.",
 		"min_group_size": 1.0,
 		"max_group_size": 1.0,
 		"points_per_tile_level": [
@@ -303,7 +310,7 @@
 	{
 		"id": 13.0,
 		"name": "Wetland Neighbors",
-		"description": "A wetland scores 4 points per different neighboring element. The more different elements the more points you score.",
+		"description": "Place wetlands in between other types of tiles. A wetland earns 4 points per adjacent tile type. Different tile levels dont affect the scoring.",
 		"min_group_size": 1.0,
 		"max_group_size": 1.0,
 		"points_per_tile_level": [
@@ -323,19 +330,23 @@
 	{
 		"id": 14.0,
 		"name": "Wetland Group",
-		"description": "A wetland that is connected to one or more other wetlands scores a flat 20 points.",
-		"min_group_size": 2.0,
-		"max_group_size": 2.0,
+		"description": "Place wetlands in pairs. A pair of wetlands earns 15 points. Adding more wetlands to a pair doesnt earn more points.",
+		"min_group_size": 1.0,
+		"max_group_size": 100000.0,
 		"points_per_tile_level": [
 			[
 				1.0,
-				2.0
+				0.0
 			]
 		],
-		"flat_points": 20.0,
-		"special_rule": 0.0,
+		"flat_points": 0.0,
+		"special_rule": 3.0,
 		"special_rule_specs": {
-
+			"points": [
+				2.0,
+				15.0
+			],
+			"extra_points": 0.0
 		}
 	}
 ]

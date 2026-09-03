@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dhpl5abg2f64d" path="res://scripts/booster/booster_manager.gd" id="1_aj74b"]
 [ext_resource type="PackedScene" uid="uid://bigecmmvbwaep" path="res://scenes/booster/booster_container.tscn" id="2_yeb88"]
 [ext_resource type="PackedScene" uid="uid://bc7k250db7n42" path="res://scenes/booster/animal_market_panel.tscn" id="3_market"]
+[ext_resource type="PackedScene" uid="uid://bp334gpx77q2i" path="res://scenes/game/play_counter.tscn" id="4_pack_counter"]
 
 [node name="BoosterManager" type="Node2D" unique_id=231766619]
 script = ExtResource("1_aj74b")
@@ -11,3 +12,8 @@ script = ExtResource("1_aj74b")
 
 [node name="AnimalMarketPanel" parent="." unique_id=2102771734 instance=ExtResource("3_market")]
 position = Vector2(0, -53)
+
+[node name="PackCounter" parent="." unique_id=1847392011 instance=ExtResource("4_pack_counter")]
+visible = false
+position = Vector2(276, -39)
+tooltip_text = "How many packs you can still take."

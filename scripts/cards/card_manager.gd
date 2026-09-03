@@ -8,6 +8,8 @@ class_name CardManager
 @export var card_limit_buffer : int = 5
 @export var animal_limit : int = 2
 @export var recycling_value : int = 2
+## When true (or GameSession puzzle maker), ignore hand limits and stacking recycle.
+@export var maker_mode: bool = false
 
 var cards: Array[CardData] = []
 var card_amount: int = 0
@@ -16,6 +18,11 @@ var animal_amount: int = 0
 ## ----- Initialisation ----- ##
 
 func _ready() -> void:
+	if maker_mode or GameSession.is_puzzle_maker():
+		maker_mode = true
+		card_limit = 40
+		card_limit_buffer = 20
+		animal_limit = 40
 	cards.resize(card_limit + card_limit_buffer)
 	card_container.init(self, card_limit + card_limit_buffer)
 
@@ -37,16 +44,19 @@ func add_card(card_data:CardData) -> void:
 	var matching_card_id := cards.find_custom(func(card):return card != null && card.type == hand_card.type && card.id == hand_card.id)
 	if matching_card_id == -1:
 		var new_id := cards.find_custom(func(card_):return card_ == null)
+		if new_id == -1:
+			push_warning("CardManager: no free hand slot for card id %s" % hand_card.id)
+			return
 		cards[new_id] = hand_card
 		card_container.add_card(hand_card, new_id)
 		card_amount += 1
 		if hand_card.type == CardData.CARD_TYPE.ANIMAL:
 			animal_amount += 1
-		if card_amount > card_limit or animal_amount > animal_limit:
+		if not maker_mode and (card_amount > card_limit or animal_amount > animal_limit):
 			orchestrator.pause_cards()
 			_refresh_limit_panel()
 	else:
-		if cards[matching_card_id].amount == 10:
+		if not maker_mode and cards[matching_card_id].amount == 10:
 			orchestrator.preview_recycle_card(matching_card_id, recycling_value, true)
 			orchestrator.apply_recycle_card(matching_card_id, recycling_value, true)
 		else:
@@ -77,6 +87,8 @@ func cards_over_any_limit() -> bool:
 func can_accept_animal(card: CardData) -> bool:
 	if card == null or card.type != CardData.CARD_TYPE.ANIMAL:
 		return false
+	if maker_mode:
+		return true
 	var matching_card_id := cards.find_custom(
 		func(existing): return existing != null and existing.type == card.type and existing.id == card.id
 	)

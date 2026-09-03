@@ -141,6 +141,52 @@ func remove_map_buttons() -> void:
 	map_buttons = []
 
 
+## Rebuild the map to a new ring radius, keeping tiles that still fit.
+func rebuild_with_ring_count(new_ring_count: int) -> void:
+	new_ring_count = maxi(new_ring_count, 1)
+	var kept_tiles: Array = []
+	for coord in tiles.keys():
+		var data: HexTileData = tiles[coord]
+		if data.element == GameEnums.ELEMENT.NONE and data.animal_id < 0:
+			continue
+		if HexCoord.distance(Vector2i.ZERO, coord) > new_ring_count:
+			continue
+		var entry := {
+			"q": coord.x,
+			"r": coord.y,
+			"element": int(data.element),
+			"level": int(data.level),
+		}
+		if data.animal_id >= 0:
+			entry["animal_id"] = data.animal_id
+			entry["animal_amount"] = data.animal_amount
+		kept_tiles.append(entry)
+
+	remove_map_buttons()
+	hex_map_active.clear()
+	groups.clear()
+	next_group_id = 0
+	for tile in hex_container.tiles_by_coord.values():
+		if is_instance_valid(tile):
+			tile.queue_free()
+	hex_container.tiles_by_coord.clear()
+	tiles.clear()
+
+	map_ring_count = new_ring_count
+	create_map(Vector2i.ZERO)
+
+	for entry in kept_tiles:
+		var coord := Vector2i(int(entry.get("q", 0)), int(entry.get("r", 0)))
+		if not tiles.has(coord):
+			continue
+		var data: HexTileData = tiles[coord]
+		data.element = int(entry.get("element", GameEnums.ELEMENT.NONE)) as GameEnums.ELEMENT
+		data.level = int(entry.get("level", GameEnums.LEVEL.ANY)) as GameEnums.LEVEL
+		data.animal_id = int(entry.get("animal_id", -1))
+		data.animal_amount = int(entry.get("animal_amount", 0))
+		data.orientation_steps = HexCoord.pick_orientation_steps(coord)
+
+
 ## ----- Endless Continue Apply Helpers ----- ##
 ##
 ## Rebuild board + tile visuals from serialized state.

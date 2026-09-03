@@ -38,6 +38,7 @@ var tutorial_bridge: TutorialBridge = TutorialBridge.new()
 var _placed_tile_count: int = 0
 var _puzzle_plays: int = 0
 var _puzzle_intro_open: bool = false
+var _puzzle_intro_step: int = -1
 
 ## HexTile Preview State
 var placement_valid : bool = false
@@ -99,11 +100,47 @@ func _ready() -> void:
 	if GameSession.is_puzzle():
 		call_deferred("_apply_puzzle_setup")
 		return
+	if GameSession.is_puzzle_maker():
+		call_deferred("_apply_puzzle_maker_setup")
+		return
 	if continuing:
 		return
 	if tutorial_overlay != null and not tutorial_overlay.is_node_ready():
 		await tutorial_overlay.ready
 	_maybe_open_score_help()
+
+
+func _apply_puzzle_maker_setup() -> void:
+	if undo_button:
+		undo_button.hide()
+	if booster_manager:
+		booster_manager.hide()
+	if card_manager:
+		card_manager.maker_mode = true
+		card_manager.show()
+	# Hand palette is seeded by PuzzleMakerController after HUD layout settles.
+	var puzzle := GameSession.puzzle_config
+	if not puzzle.is_empty():
+		PuzzleSetupScript.apply(puzzle, hex_manager, score_engine, point_counter)
+		_seed_scripted_quests(puzzle)
+
+
+func _seed_maker_element_palette() -> void:
+	if card_manager == null:
+		return
+	# Avoid duplicating stamps if already seeded.
+	for existing in card_manager.cards:
+		if existing != null and existing.type == CardData.CARD_TYPE.ELEMENT and existing.id > 0:
+			return
+	for element in CardCatalog.elements:
+		if element == null:
+			continue
+		# Skip DeadEarth (id 0); stamp with landscape elements only.
+		if element.id <= 0:
+			continue
+		var card := element.duplicate(true) as CardData
+		card.amount = 99
+		add_hand_card(card)
 
 func _apply_pending_run_state_deferred(pending_state: Variant) -> void:
 	if pending_state == null:
@@ -127,6 +164,7 @@ func _apply_puzzle_setup() -> void:
 		point_counter
 	)
 	_seed_scripted_hand(puzzle)
+	_seed_scripted_quests(puzzle)
 	_puzzle_plays = 0
 	_refresh_play_counter()
 	_show_puzzle_intro()
@@ -170,6 +208,22 @@ func _seed_scripted_hand(config: Dictionary) -> void:
 				seeded_elements += 1
 	if booster_manager and seeded_elements > 0:
 		booster_manager.seed_pending_elements(seeded_elements)
+
+
+func _seed_scripted_quests(config: Dictionary) -> void:
+	if config.is_empty() or quest_manager == null:
+		return
+	var raw_quests = config.get("quest_ids", [])
+	if typeof(raw_quests) != TYPE_ARRAY:
+		return
+	var catalog_size := QuestCatalog.quest_options.size()
+	for quest_id in raw_quests:
+		var qid := int(quest_id)
+		if qid < 0 or qid >= catalog_size:
+			continue
+		if QuestCatalog.quest_options[qid] == null:
+			continue
+		add_quest(qid)
 
 
 func apply_tutorial_part_tiles(part: Dictionary) -> void:
@@ -303,7 +357,8 @@ func _on_in_game_menu_end() -> void:
 
 func add_hand_card(card:CardData) -> void:
 	card_manager.add_card(card)
-	undo_button.disable()
+	if undo_button and not GameSession.is_puzzle_maker():
+		undo_button.disable()
 
 ## ----- Handle Hand Interactions ----- ##
 
@@ -356,7 +411,8 @@ func _update_card_recycling_state() -> void:
 
 func pause_cards() -> void:
 	cards_paused = true
-	booster_manager.paused = true
+	if booster_manager:
+		booster_manager.paused = true
 	
 func unpause_cards() -> void:
 	if game_over:
@@ -368,8 +424,76 @@ func unpause_cards() -> void:
 	if card_manager.animal_amount > card_manager.animal_limit:
 		return
 	cards_paused = false
-	booster_manager.paused = false
+	if booster_manager:
+		booster_manager.paused = false
 	card_manager.unpause()
+
+
+## Clears a tile in puzzle-maker mode (erase tool).
+func maker_erase_tile(coord: Vector2i) -> void:
+	if not GameSession.is_puzzle_maker():
+		return
+	if hex_manager == null or not hex_manager.tiles.has(coord):
+		return
+	var data: HexTileData = hex_manager.tiles[coord]
+	if data.element == GameEnums.ELEMENT.NONE and data.animal_id < 0:
+		return
+	var tiles := _serialize_filled_tiles()
+	var filtered: Array = []
+	for entry in tiles:
+		if int(entry.get("q", 0)) == coord.x and int(entry.get("r", 0)) == coord.y:
+			continue
+		filtered.append(entry)
+	_maker_rebuild_from_tiles(filtered)
+	if tile_hovered:
+		handle_tile_hover(selected_coord)
+
+
+func serialize_filled_tiles() -> Array:
+	return _serialize_filled_tiles()
+
+
+func _serialize_filled_tiles() -> Array:
+	var tiles: Array = []
+	if hex_manager == null:
+		return tiles
+	var coords: Array = hex_manager.tiles.keys()
+	coords.sort_custom(func(a: Vector2i, b: Vector2i) -> bool:
+		if a.x != b.x:
+			return a.x < b.x
+		return a.y < b.y
+	)
+	for coord in coords:
+		var data: HexTileData = hex_manager.tiles[coord]
+		if data.element == GameEnums.ELEMENT.NONE and data.animal_id < 0:
+			continue
+		var entry := {
+			"q": coord.x,
+			"r": coord.y,
+			"element": int(data.element),
+			"level": int(data.level),
+		}
+		if data.animal_id >= 0:
+			entry["animal_id"] = data.animal_id
+		tiles.append(entry)
+	return tiles
+
+
+func _maker_rebuild_from_tiles(tiles: Array) -> void:
+	if hex_manager == null:
+		return
+	for coord in hex_manager.tiles.keys():
+		var data: HexTileData = hex_manager.tiles[coord]
+		data.element = GameEnums.ELEMENT.NONE
+		data.level = GameEnums.LEVEL.ANY
+		data.animal_id = -1
+		data.animal_amount = 0
+		data.group_id = -1
+		var container := hex_manager.hex_container
+		if container.tiles_by_coord.has(coord):
+			var tile: HexTile = container.tiles_by_coord[coord]
+			tile.commit_preview_from_tile_data(data, [])
+	PuzzleSetupScript.apply({"tiles": tiles}, hex_manager, score_engine, point_counter)
 
 ## ----- Game Over ----- ##
 
@@ -446,20 +570,84 @@ func _show_puzzle_intro() -> void:
 		return
 	pause_cards()
 	_puzzle_intro_open = true
-	if not tutorial_coach.continue_pressed.is_connected(_on_puzzle_intro_start):
-		tutorial_coach.continue_pressed.connect(_on_puzzle_intro_start)
+	if not tutorial_coach.continue_pressed.is_connected(_on_puzzle_intro_continue):
+		tutorial_coach.continue_pressed.connect(_on_puzzle_intro_continue)
+	if _should_show_first_puzzle_coach():
+		_puzzle_intro_step = 0
+		_show_first_puzzle_intro_step()
+		return
+	_puzzle_intro_step = -1
+	_show_puzzle_intro_modal()
+
+
+func _should_show_first_puzzle_coach() -> bool:
+	if not GameSession.is_puzzle():
+		return false
+	if GameSettings.first_puzzle_intro_shown:
+		return false
+	var first_id := GameSession.get_first_puzzle_id()
+	return not first_id.is_empty() and GameSession.puzzle_id == first_id
+
+
+func _show_first_puzzle_intro_step() -> void:
+	if tutorial_coach == null:
+		return
+	match _puzzle_intro_step:
+		0:
+			tutorial_coach.show_centered_modal(
+				"Welcome to puzzles",
+				"Puzzles give you a goal, a limited number of placements, and a limited number of packs. Let's look at those limits before you start.",
+				"Continue"
+			)
+		1:
+			tutorial_coach.show_step({
+				"title": "Actions",
+				"body": "This number is how many tiles you can still place. Each landscape or animal you put on the board uses one action.",
+				"bubble_side": "above",
+				"complete": {"label": "Continue"},
+			}, "play_counter", true)
+		2:
+			tutorial_coach.show_step({
+				"title": "Packs",
+				"body": "This number is how many landscape packs you can still take. When it reaches zero, you cannot draw more packs.",
+				"bubble_side": "above",
+				"complete": {"label": "Continue"},
+			}, "pack_counter", true)
+		_:
+			_show_puzzle_intro_modal()
+
+
+func _show_puzzle_intro_modal() -> void:
+	if tutorial_coach == null:
+		return
 	var title := str(GameSession.puzzle_config.get("title", "Puzzle"))
-	var desc := str(GameSession.puzzle_config.get("description", "")).strip_edges()
+	var desc := GameSession.format_puzzle_description(GameSession.puzzle_config)
 	tutorial_coach.show_centered_modal(title, desc, "Start", GameSession.get_puzzle_ratings())
+
+
+func _on_puzzle_intro_continue() -> void:
+	if not _puzzle_intro_open:
+		return
+	if _puzzle_intro_step >= 0 and _puzzle_intro_step < 2:
+		_puzzle_intro_step += 1
+		_show_first_puzzle_intro_step()
+		return
+	if _puzzle_intro_step == 2:
+		GameSettings.mark_first_puzzle_intro_shown()
+		_puzzle_intro_step = -1
+		_show_puzzle_intro_modal()
+		return
+	_on_puzzle_intro_start()
 
 
 func _on_puzzle_intro_start() -> void:
 	if not _puzzle_intro_open:
 		return
 	_puzzle_intro_open = false
+	_puzzle_intro_step = -1
 	if tutorial_coach:
-		if tutorial_coach.continue_pressed.is_connected(_on_puzzle_intro_start):
-			tutorial_coach.continue_pressed.disconnect(_on_puzzle_intro_start)
+		if tutorial_coach.continue_pressed.is_connected(_on_puzzle_intro_continue):
+			tutorial_coach.continue_pressed.disconnect(_on_puzzle_intro_continue)
 		tutorial_coach.hide_coach()
 	unpause_cards()
 	_maybe_open_score_help()
@@ -478,6 +666,9 @@ func _submit_daily_score_if_needed() -> void:
 
 
 func leave_to_menu() -> void:
+	if GameSession.is_puzzle_maker():
+		GameSession.clear_puzzle()
+		GameSession.game_mode = GameSession.GameMode.NORMAL
 	SceneLoader.goto("res://scenes/main_menu.tscn")
 
 
@@ -496,6 +687,8 @@ func restart_run() -> void:
 		GameSession.begin_tutorial_run(GameSession.tutorial_start_part)
 	elif GameSession.game_mode == GameSession.GameMode.PUZZLE:
 		GameSession.begin_puzzle_run(GameSession.puzzle_id)
+	elif GameSession.game_mode == GameSession.GameMode.PUZZLE_MAKER:
+		GameSession.begin_puzzle_maker(GameSession.puzzle_id)
 	else:
 		GameSession.begin_normal_run(GameSession.map_size)
 	SceneLoader.reload()
@@ -660,7 +853,7 @@ func handle_tile_click(coord: Vector2i) -> void:
 		hex_manager.tiles[coord] = tile_data_preview
 
 		var quest_points := 0
-		if selected_card.type == 0:
+		if selected_card.type == 0 and not GameSession.is_puzzle_maker():
 			quest_points = quest_manager.evaluate_pattern_quests(
 				coord,
 				hex_manager.tiles,
@@ -680,13 +873,17 @@ func handle_tile_click(coord: Vector2i) -> void:
 		point_counter.preview_progress(score_engine.total_score)
 		point_counter.apply_preview(true)
 		var placed_was_element = selected_card.type == CardData.CARD_TYPE.ELEMENT
-		card_manager.remove_card(selected_card_id)
-		if placed_was_element:
-			booster_manager.notify_element_played()
+		# Puzzle maker stamps without consuming hand cards.
+		if not GameSession.is_puzzle_maker():
+			card_manager.remove_card(selected_card_id)
+			if placed_was_element and booster_manager:
+				booster_manager.notify_element_played()
 		
 		reset_preview()
-		if not card_manager.cards[selected_card_id]:
+		if not GameSession.is_puzzle_maker() and not card_manager.cards[selected_card_id]:
 			selected_card_id = -1
+		elif GameSession.is_puzzle_maker() and tile_hovered:
+			handle_tile_hover(selected_coord)
 
 		_placed_tile_count += 1
 		if GameSession.is_puzzle() and GameSession.get_max_plays() >= 0:
@@ -879,7 +1076,7 @@ func get_neighbor_contributing_coords(group_coords:Array[Vector2i]) -> Array[Vec
 	for coord in group_coords:
 		var neighbors = HexCoord.neighbors(coord)
 		for n in neighbors:
-			if hex_manager.tiles.has(n) and !coords.has(n):
+			if hex_manager.tiles.has(n) and !coords.has(n) and hex_manager.tiles[n].element > 0:
 				coords.append(n)
 	return coords
 

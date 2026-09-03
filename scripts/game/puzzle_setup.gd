@@ -178,7 +178,7 @@ static func _neighbor_contributing_coords(
 		coords = group_coords.duplicate()
 	for coord in group_coords:
 		for n in HexCoord.neighbors(coord):
-			if hex_manager.tiles.has(n) and not coords.has(n):
+			if hex_manager.tiles.has(n) and not coords.has(n) and hex_manager.tiles[n].element > 0:
 				coords.append(n)
 	return coords
 

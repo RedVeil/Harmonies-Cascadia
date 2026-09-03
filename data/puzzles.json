@@ -1,109 +1,3141 @@
 {
 	"puzzles": [
 		{
-			"id": "first",
-			"title": "First Puzzle",
-			"description": "Puzzles are small challenges that test your knowledge of the game. Each puzzle has a limited number of actions. For each placed tile or animal the counter in the bottom right corner reduces. Once it reaches 0 the puzzle is over. Reach atleast bronze to unlock the next puzzle.",
-			"order": 1,
-			"seed": 2001,
-			"ring_count": 3,
+			"animal_market": [
+				-1.0,
+				-1.0,
+				-1.0
+			],
+			"boosters": [
+				{
+					"elements": [
+						1.0,
+						1.0,
+						1.0
+					]
+				},
+				null,
+				null
+			],
+			"description": "This puzzle is about forests. Forests can be placed basically anywhere and earn similar amount of points from placing and stacking them. Try it out with your three actions.",
+			"hand_animal_ids": [],
+			"hand_element_ids": [],
+			"id": "forest1_puzzle",
 			"map_growth": false,
-			"max_pack_takes": 0,
-			"max_plays": 3,
+			"max_pack_takes": 1.0,
+			"max_plays": 3.0,
+			"order": 0.0,
+			"quest_ids": [],
+			"ratings": {
+				"bronze": 89.0,
+				"gold": 93.0,
+				"silver": 91.0
+			},
+			"ring_count": 2.0,
+			"scoring_rules": {
+				"1": 0.0,
+				"2": 4.0,
+				"3": 7.0,
+				"4": 9.0,
+				"5": 14.0
+			},
+			"seed": 3968453778.0,
+			"tiles": [
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 1.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 2.0
+				},
+				{
+					"element": 3.0,
+					"level": 3.0,
+					"q": -1.0,
+					"r": -1.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 0.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 1.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": -2.0
+				},
+				{
+					"element": 3.0,
+					"level": 3.0,
+					"q": 0.0,
+					"r": -1.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 0.0
+				},
+				{
+					"element": 5.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 1.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": -2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": -1.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": 1.0,
+					"r": 0.0
+				},
+				{
+					"element": 1.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": 1.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": -2.0
+				},
+				{
+					"element": 5.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": -1.0
+				}
+			],
+			"title": "Forest Puzzle 1"
+		},
+		{
+			"animal_market": [
+				-1.0,
+				-1.0,
+				-1.0
+			],
+			"boosters": [
+				{
+					"elements": [
+						1.0,
+						1.0,
+						1.0
+					]
+				},
+				null,
+				null
+			],
+			"description": "The \"Tall Forest\"-rule grants more points to stacked forests than new ones. Focus on stacking forests with your three actions",
+			"hand_animal_ids": [],
+			"hand_element_ids": [],
+			"id": "forest2_puzzle",
+			"map_growth": false,
+			"max_pack_takes": 1.0,
+			"max_plays": 3.0,
+			"order": 0.0,
+			"quest_ids": [],
+			"ratings": {
+				"bronze": 92.0,
+				"gold": 97.0,
+				"silver": 93.0
+			},
+			"ring_count": 2.0,
+			"scoring_rules": {
+				"1": 1.0,
+				"2": 4.0,
+				"3": 7.0,
+				"4": 9.0,
+				"5": 14.0
+			},
+			"seed": 3968453778.0,
+			"tiles": [
+				{
+					"element": 1.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 0.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 1.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 2.0
+				},
+				{
+					"element": 3.0,
+					"level": 3.0,
+					"q": -1.0,
+					"r": -1.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 0.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 1.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": -2.0
+				},
+				{
+					"element": 3.0,
+					"level": 3.0,
+					"q": 0.0,
+					"r": -1.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 0.0
+				},
+				{
+					"element": 5.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 1.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": -2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": -1.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": 1.0,
+					"r": 0.0
+				},
+				{
+					"element": 1.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": 1.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": -2.0
+				},
+				{
+					"element": 5.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": -1.0
+				}
+			],
+			"title": "Forest Puzzle 2"
+		},
+		{
+			"animal_market": [
+				-1.0,
+				-1.0,
+				-1.0
+			],
+			"boosters": [
+				{
+					"elements": [
+						1.0,
+						1.0,
+						1.0
+					]
+				},
+				null,
+				null
+			],
+			"description": "Now the forest rule wants you to create big forests. You earn exponentially more points for forests with more tiles. You have three actions to build sprawling forests.",
+			"hand_animal_ids": [],
+			"hand_element_ids": [],
+			"id": "forest3_puzzle",
+			"map_growth": false,
+			"max_pack_takes": 1.0,
+			"max_plays": 3.0,
+			"order": 0.0,
+			"quest_ids": [],
+			"ratings": {
+				"bronze": 74.0,
+				"gold": 84.0,
+				"silver": 78.0
+			},
+			"ring_count": 2.0,
+			"scoring_rules": {
+				"1": 2.0,
+				"2": 4.0,
+				"3": 7.0,
+				"4": 9.0,
+				"5": 14.0
+			},
+			"seed": 3968453778.0,
+			"tiles": [
+				{
+					"element": 1.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 0.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 1.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 0.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 1.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": -2.0
+				},
+				{
+					"element": 3.0,
+					"level": 3.0,
+					"q": 0.0,
+					"r": -1.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 0.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": 0.0,
+					"r": 1.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": -2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": -1.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": 1.0,
+					"r": 0.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": 1.0,
+					"r": 1.0
+				},
+				{
+					"element": 1.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": 0.0
+				}
+			],
+			"title": "Forest Puzzle 3"
+		},
+		{
+			"animal_market": [
+				-1.0,
+				-1.0,
+				-1.0
+			],
+			"boosters": [
+				{
+					"elements": [
+						2.0,
+						2.0,
+						3.0
+					]
+				},
+				null,
+				null
+			],
+			"description": "This puzzle is about fields. Fields usually want to be in groups of two or three fields. Create two new groups of fields in two actions.",
+			"hand_animal_ids": [],
+			"hand_element_ids": [],
+			"id": "field1_puzzle",
+			"map_growth": false,
+			"max_pack_takes": 1.0,
+			"max_plays": 2.0,
+			"order": 0.0,
+			"quest_ids": [],
+			"ratings": {
+				"bronze": 40.0,
+				"gold": 49.0,
+				"silver": 45.0
+			},
+			"ring_count": 2.0,
+			"scoring_rules": {
+				"1": 1.0,
+				"2": 3.0,
+				"3": 8.0,
+				"4": 11.0,
+				"5": 12.0
+			},
+			"seed": 833284018.0,
+			"tiles": [
+				{
+					"element": 3.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 0.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": -1.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 1.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": -1.0
+				},
+				{
+					"element": 3.0,
+					"level": 3.0,
+					"q": 0.0,
+					"r": 2.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": 0.0
+				},
+				{
+					"element": 3.0,
+					"level": 2.0,
+					"q": 2.0,
+					"r": -2.0
+				}
+			],
+			"title": "Field Puzzle 1"
+		},
+		{
+			"animal_market": [
+				-1.0,
+				-1.0,
+				-1.0
+			],
+			"boosters": [
+				{
+					"elements": [
+						2.0,
+						2.0,
+						2.0
+					]
+				},
+				null,
+				null
+			],
+			"description": "In this puzzle you need to create groups of three or more fields. Create the right groups with your two actions.",
+			"hand_animal_ids": [],
+			"hand_element_ids": [],
+			"id": "field2_puzzle",
+			"map_growth": false,
+			"max_pack_takes": 1.0,
+			"max_plays": 2.0,
+			"order": 0.0,
+			"quest_ids": [],
+			"ratings": {
+				"bronze": 40.0,
+				"gold": 60.0,
+				"silver": 50.0
+			},
+			"ring_count": 2.0,
+			"scoring_rules": {
+				"1": 1.0,
+				"2": 5.0,
+				"3": 7.0,
+				"4": 9.0,
+				"5": 12.0
+			},
+			"seed": 833284018.0,
+			"tiles": [
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 1.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 2.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 2.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": -2.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": -1.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 1.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 2.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": -2.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": 0.0
+				}
+			],
+			"title": "Field Puzzle 2"
+		},
+		{
+			"animal_market": [
+				-1.0,
+				-1.0,
+				-1.0
+			],
+			"boosters": [
+				{
+					"elements": [
+						2.0,
+						2.0,
+						2.0
+					]
+				},
+				null,
+				null
+			],
+			"description": "Find a way to create two large field groups in three actions.",
+			"hand_animal_ids": [],
+			"hand_element_ids": [],
+			"id": "field3_puzzle",
+			"map_growth": false,
+			"max_pack_takes": 1.0,
+			"max_plays": 3.0,
+			"order": 0.0,
+			"quest_ids": [],
+			"ratings": {
+				"bronze": 40.0,
+				"gold": 60.0,
+				"silver": 51.0
+			},
+			"ring_count": 2.0,
+			"scoring_rules": {
+				"1": 1.0,
+				"2": 5.0,
+				"3": 7.0,
+				"4": 9.0,
+				"5": 12.0
+			},
+			"seed": 833284018.0,
+			"tiles": [
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 0.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": -1.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 0.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 2.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": -1.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": 0.0
+				}
+			],
+			"title": "Field Puzzle 3"
+		},
+		{
+			"animal_market": [
+				-1.0,
+				-1.0,
+				-1.0
+			],
+			"boosters": [
+				{
+					"elements": [
+						2.0,
+						2.0,
+						2.0
+					]
+				},
+				null,
+				null
+			],
+			"description": "This time fields need to be isolated. Find the right spots to place all the fields in three actions.",
+			"hand_animal_ids": [],
+			"hand_element_ids": [],
+			"id": "field4_puzzle",
+			"map_growth": false,
+			"max_pack_takes": 1.0,
+			"max_plays": 3.0,
+			"order": 0.0,
+			"quest_ids": [],
+			"ratings": {
+				"bronze": 42.0,
+				"gold": 52.0,
+				"silver": 47.0
+			},
+			"ring_count": 2.0,
+			"scoring_rules": {
+				"1": 1.0,
+				"2": 4.0,
+				"3": 7.0,
+				"4": 9.0,
+				"5": 12.0
+			},
+			"seed": 833284018.0,
+			"tiles": [
+				{
+					"element": 3.0,
+					"level": 3.0,
+					"q": -2.0,
+					"r": 0.0
+				},
+				{
+					"element": 3.0,
+					"level": 2.0,
+					"q": -2.0,
+					"r": 1.0
+				},
+				{
+					"element": 3.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": -1.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": -2.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 2.0
+				},
+				{
+					"element": 1.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": 1.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": -2.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": 2.0,
+					"r": 0.0
+				}
+			],
+			"title": "Field Puzzle 4"
+		},
+		{
+			"animal_market": [
+				-1.0,
+				-1.0,
+				-1.0
+			],
+			"boosters": [
+				{
+					"elements": [
+						3.0,
+						3.0,
+						3.0
+					]
+				},
+				null,
+				null
+			],
+			"description": "This puzzle is about mountains. Mountains need to be connected with other mountains to score. They also earn more points when stacked. Place your tiles next to the right mountains to make them score.",
+			"hand_animal_ids": [],
+			"hand_element_ids": [],
+			"id": "mountain1_puzzle",
+			"map_growth": false,
+			"max_pack_takes": 1.0,
+			"max_plays": 3.0,
+			"order": 0.0,
+			"quest_ids": [],
+			"ratings": {
+				"bronze": 18.0,
+				"gold": 33.0,
+				"silver": 25.0
+			},
+			"ring_count": 2.0,
+			"scoring_rules": {
+				"1": 0.0,
+				"2": 3.0,
+				"3": 6.0,
+				"4": 9.0,
+				"5": 12.0
+			},
+			"seed": 833284018.0,
+			"tiles": [
+				{
+					"element": 3.0,
+					"level": 3.0,
+					"q": -2.0,
+					"r": 1.0
+				},
+				{
+					"element": 3.0,
+					"level": 2.0,
+					"q": 0.0,
+					"r": -2.0
+				},
+				{
+					"element": 3.0,
+					"level": 3.0,
+					"q": 0.0,
+					"r": 2.0
+				},
+				{
+					"element": 3.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": -1.0
+				}
+			],
+			"title": "Mountain Puzzle 1"
+		},
+		{
+			"animal_market": [
+				-1.0,
+				-1.0,
+				-1.0
+			],
+			"boosters": [
+				{
+					"elements": [
+						3.0,
+						3.0,
+						3.0
+					]
+				},
+				null,
+				null
+			],
+			"description": "This time mountains score extra when getting to the third stack. Find the right mountains to stack in three actions.",
+			"hand_animal_ids": [],
+			"hand_element_ids": [],
+			"id": "mountain2_puzzle",
+			"map_growth": false,
+			"max_pack_takes": 1.0,
+			"max_plays": 3.0,
+			"order": 0.0,
+			"quest_ids": [],
+			"ratings": {
+				"bronze": 70.0,
+				"gold": 74.0,
+				"silver": 72.0
+			},
+			"ring_count": 2.0,
+			"scoring_rules": {
+				"1": 0.0,
+				"2": 3.0,
+				"3": 7.0,
+				"4": 9.0,
+				"5": 12.0
+			},
+			"seed": 833284018.0,
+			"tiles": [
+				{
+					"element": 1.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 0.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": -2.0,
+					"r": 1.0
+				},
+				{
+					"element": 5.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 2.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": -1.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": -1.0,
+					"r": 0.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 1.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 2.0
+				},
+				{
+					"element": 5.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": -2.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": -1.0
+				},
+				{
+					"element": 3.0,
+					"level": 2.0,
+					"q": 0.0,
+					"r": 0.0
+				},
+				{
+					"element": 1.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 1.0
+				},
+				{
+					"element": 3.0,
+					"level": 2.0,
+					"q": 0.0,
+					"r": 2.0
+				},
+				{
+					"element": 3.0,
+					"level": 2.0,
+					"q": 1.0,
+					"r": -2.0
+				},
+				{
+					"element": 1.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": -1.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": 1.0,
+					"r": 0.0
+				},
+				{
+					"element": 3.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": 1.0
+				},
+				{
+					"element": 3.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": -2.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": -1.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": 0.0
+				}
+			],
+			"title": "Mountain Puzzle 2"
+		},
+		{
+			"animal_market": [
+				-1.0,
+				-1.0,
+				-1.0
+			],
+			"boosters": [
+				{
+					"elements": [
+						3.0,
+						3.0,
+						3.0
+					]
+				},
+				null,
+				null
+			],
+			"description": "This mountain rule is different to the others. It scores only isolated mountains. Find the right mountains to place and stack in three actions.",
+			"hand_animal_ids": [],
+			"hand_element_ids": [],
+			"id": "mountain3_puzzle",
+			"map_growth": false,
+			"max_pack_takes": 1.0,
+			"max_plays": 3.0,
+			"order": 0.0,
+			"quest_ids": [],
+			"ratings": {
+				"bronze": 39.0,
+				"gold": 45.0,
+				"silver": 42.0
+			},
+			"ring_count": 2.0,
+			"scoring_rules": {
+				"1": 0.0,
+				"2": 5.0,
+				"3": 8.0,
+				"4": 9.0,
+				"5": 12.0
+			},
+			"seed": 833284018.0,
+			"tiles": [
+				{
+					"element": 1.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 0.0
+				},
+				{
+					"element": 3.0,
+					"level": 3.0,
+					"q": -2.0,
+					"r": 1.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": -1.0,
+					"r": -1.0
+				},
+				{
+					"element": 3.0,
+					"level": 2.0,
+					"q": -1.0,
+					"r": 2.0
+				},
+				{
+					"element": 1.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": -1.0
+				},
+				{
+					"element": 3.0,
+					"level": 2.0,
+					"q": 1.0,
+					"r": 0.0
+				},
+				{
+					"element": 3.0,
+					"level": 3.0,
+					"q": 1.0,
+					"r": 1.0
+				},
+				{
+					"element": 3.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": -2.0
+				},
+				{
+					"element": 1.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": -1.0
+				},
+				{
+					"element": 3.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": 0.0
+				}
+			],
+			"title": "Mountain Puzzle 3"
+		},
+		{
+			"animal_market": [
+				-1.0,
+				-1.0,
+				-1.0
+			],
+			"boosters": [
+				{
+					"elements": [
+						4.0,
+						3.0,
+						2.0
+					]
+				},
+				null,
+				null
+			],
+			"description": "This puzzle is about rivers. Rivers need to be in long lines to score the most points. Find the right way to connect these two rivers.",
+			"hand_animal_ids": [],
+			"hand_element_ids": [],
+			"id": "river1_puzzle",
+			"map_growth": false,
+			"max_pack_takes": 1.0,
+			"max_plays": 1.0,
+			"order": 0.0,
+			"quest_ids": [],
+			"ratings": {
+				"bronze": 42.0,
+				"gold": 58.0,
+				"silver": 50.0
+			},
+			"ring_count": 2.0,
+			"scoring_rules": {
+				"1": 0.0,
+				"2": 3.0,
+				"3": 7.0,
+				"4": 9.0,
+				"5": 12.0
+			},
+			"seed": 833284018.0,
+			"tiles": [
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": -1.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 0.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": -2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 0.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": -2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": 1.0
+				}
+			],
+			"title": "River Puzzle 1"
+		},
+		{
+			"animal_market": [
+				-1.0,
+				-1.0,
+				-1.0
+			],
+			"boosters": [
+				{
+					"elements": [
+						4.0,
+						4.0,
+						4.0
+					]
+				},
+				null,
+				null
+			],
+			"description": "Extend the river as far as you can in three actions.",
+			"hand_animal_ids": [],
+			"hand_element_ids": [],
+			"id": "river2_puzzle",
+			"map_growth": false,
+			"max_pack_takes": 1.0,
+			"max_plays": 3.0,
+			"order": 0.0,
+			"quest_ids": [],
+			"ratings": {
+				"bronze": 60.0,
+				"gold": 74.0,
+				"silver": 66.0
+			},
+			"ring_count": 2.0,
+			"scoring_rules": {
+				"1": 0.0,
+				"2": 3.0,
+				"3": 7.0,
+				"4": 9.0,
+				"5": 12.0
+			},
+			"seed": 833284018.0,
+			"tiles": [
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": -1.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 0.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": -2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 0.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": -2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": 1.0
+				}
+			],
+			"title": "River Puzzle 2"
+		},
+		{
+			"animal_market": [
+				-1.0,
+				-1.0,
+				-1.0
+			],
+			"boosters": [
+				{
+					"elements": [
+						4.0,
+						4.0,
+						4.0
+					]
+				},
+				null,
+				null
+			],
+			"description": "This time rivers stop scoring when they become longer than five tiles. Extend the rivers in two actions.",
+			"hand_animal_ids": [],
+			"hand_element_ids": [],
+			"id": "river3_puzzle",
+			"map_growth": false,
+			"max_pack_takes": 1.0,
+			"max_plays": 2.0,
+			"order": 0.0,
+			"quest_ids": [],
+			"ratings": {
+				"bronze": 46.0,
+				"gold": 56.0,
+				"silver": 46.0
+			},
+			"ring_count": 2.0,
+			"scoring_rules": {
+				"1": 0.0,
+				"2": 3.0,
+				"3": 7.0,
+				"4": 10.0,
+				"5": 12.0
+			},
+			"seed": 833284018.0,
+			"tiles": [
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": -2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": -2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": 1.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": -2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": -1.0
+				}
+			],
+			"title": "River Puzzle 3"
+		},
+		{
+			"animal_market": [
+				-1.0,
+				-1.0,
+				-1.0
+			],
+			"boosters": [
+				{
+					"elements": [
+						4.0,
+						4.0,
+						4.0
+					]
+				},
+				null,
+				null
+			],
+			"description": "This time rivers just score a flat amount of points no matter where you place them. Just fill in the gaps.",
+			"hand_animal_ids": [],
+			"hand_element_ids": [],
+			"id": "river4_puzzle",
+			"map_growth": false,
+			"max_pack_takes": 1.0,
+			"max_plays": 3.0,
+			"order": 0.0,
+			"quest_ids": [],
+			"ratings": {
+				"bronze": 75.0,
+				"gold": 75.0,
+				"silver": 75.0
+			},
+			"ring_count": 2.0,
+			"scoring_rules": {
+				"1": 2.0,
+				"2": 3.0,
+				"3": 7.0,
+				"4": 11.0,
+				"5": 14.0
+			},
+			"seed": 1702345738.0,
+			"tiles": [
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 1.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 2.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": -1.0,
+					"r": -1.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": -1.0,
+					"r": 0.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 1.0
+				},
+				{
+					"element": 3.0,
+					"level": 2.0,
+					"q": 0.0,
+					"r": -2.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": 0.0,
+					"r": -1.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 0.0
+				},
+				{
+					"element": 1.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 1.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 2.0
+				},
+				{
+					"element": 3.0,
+					"level": 2.0,
+					"q": 1.0,
+					"r": -2.0
+				},
+				{
+					"element": 5.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": -1.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": 1.0,
+					"r": 0.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": 1.0
+				},
+				{
+					"element": 3.0,
+					"level": 3.0,
+					"q": 2.0,
+					"r": -2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": 0.0
+				}
+			],
+			"title": "River Puzzle 4"
+		},
+		{
+			"animal_market": [
+				-1.0,
+				-1.0,
+				-1.0
+			],
+			"boosters": [
+				{
+					"elements": [
+						5.0,
+						5.0,
+						5.0
+					]
+				},
+				null,
+				null
+			],
+			"description": "This time we look at wetlands. Wetlands want many different neighbor types. In this case you earn a flat 12 points per wetland that has atleast three different neighbors. Find those spots in three actions.",
+			"hand_animal_ids": [],
+			"hand_element_ids": [],
+			"id": "wetland1_puzzle",
+			"map_growth": false,
+			"max_pack_takes": 1.0,
+			"max_plays": 3.0,
+			"order": 0.0,
+			"quest_ids": [],
+			"ratings": {
+				"bronze": 64.0,
+				"gold": 88.0,
+				"silver": 76.0
+			},
+			"ring_count": 2.0,
+			"scoring_rules": {
+				"1": 0.0,
+				"2": 3.0,
+				"3": 7.0,
+				"4": 10.0,
+				"5": 12.0
+			},
+			"seed": 833284018.0,
+			"tiles": [
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 0.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 1.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 2.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": -1.0,
+					"r": 0.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 2.0
+				},
+				{
+					"element": 3.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": -2.0
+				},
+				{
+					"element": 3.0,
+					"level": 3.0,
+					"q": 0.0,
+					"r": -1.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": 0.0,
+					"r": 1.0
+				},
+				{
+					"element": 3.0,
+					"level": 2.0,
+					"q": 1.0,
+					"r": -2.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": 0.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": -1.0
+				},
+				{
+					"element": 5.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": 0.0
+				}
+			],
+			"title": "Wetland Puzzle 1"
+		},
+		{
+			"animal_market": [
+				-1.0,
+				-1.0,
+				-1.0
+			],
+			"boosters": [
+				{
+					"elements": [
+						5.0,
+						5.0,
+						1.0
+					]
+				},
+				null,
+				null
+			],
+			"description": "Here we have the same rule but one wetland wont have enough neighbors unless you place it. You have three actions to solve it.",
+			"hand_animal_ids": [],
+			"hand_element_ids": [],
+			"id": "wetland2_puzzle",
+			"map_growth": false,
+			"max_pack_takes": 1.0,
+			"max_plays": 3.0,
+			"order": 0.0,
+			"quest_ids": [],
+			"ratings": {
+				"bronze": 82.0,
+				"gold": 82.0,
+				"silver": 82.0
+			},
+			"ring_count": 2.0,
+			"scoring_rules": {
+				"1": 0.0,
+				"2": 3.0,
+				"3": 7.0,
+				"4": 10.0,
+				"5": 12.0
+			},
+			"seed": 833284018.0,
+			"tiles": [
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": -2.0,
+					"r": 1.0
+				},
+				{
+					"element": 3.0,
+					"level": 3.0,
+					"q": -1.0,
+					"r": -1.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 0.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 1.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 2.0
+				},
+				{
+					"element": 3.0,
+					"level": 2.0,
+					"q": 0.0,
+					"r": -2.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 0.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": 1.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": -2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": -1.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": 0.0
+				}
+			],
+			"title": "Wetland Puzzle 2"
+		},
+		{
+			"animal_market": [
+				-1.0,
+				-1.0,
+				-1.0
+			],
+			"boosters": [
+				{
+					"elements": [
+						5.0,
+						2.0,
+						3.0
+					]
+				},
+				null,
+				null
+			],
+			"description": "And once again you have a wetland but not enough different neighbors. But im sure you can solve it three actions.",
+			"hand_animal_ids": [],
+			"hand_element_ids": [],
+			"id": "wetland3_puzzle",
+			"map_growth": false,
+			"max_pack_takes": 1.0,
+			"max_plays": 3.0,
+			"order": 0.0,
+			"quest_ids": [],
+			"ratings": {
+				"bronze": 30.0,
+				"gold": 30.0,
+				"silver": 30.0
+			},
+			"ring_count": 2.0,
+			"scoring_rules": {
+				"1": 0.0,
+				"2": 3.0,
+				"3": 8.0,
+				"4": 10.0,
+				"5": 12.0
+			},
+			"seed": 833284018.0,
+			"tiles": [
+				{
+					"element": 1.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 0.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": -2.0,
+					"r": 1.0
+				},
+				{
+					"element": 1.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 0.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": 0.0,
+					"r": 0.0
+				}
+			],
+			"title": "Wetland Puzzle 3"
+		},
+		{
+			"animal_market": [
+				-1.0,
+				-1.0,
+				-1.0
+			],
+			"boosters": [
+				{
+					"elements": [
+						5.0,
+						5.0,
+						5.0
+					]
+				},
+				null,
+				null
+			],
+			"description": "Here the wetlands score four points per different neighbor (not counting other wetlands). Find the best three locations.",
+			"hand_animal_ids": [],
+			"hand_element_ids": [],
+			"id": "wetland4_puzzle",
+			"map_growth": false,
+			"max_pack_takes": 1.0,
+			"max_plays": 3.0,
+			"order": 0.0,
+			"quest_ids": [],
+			"ratings": {
+				"bronze": 56.0,
+				"gold": 67.0,
+				"silver": 62.0
+			},
+			"ring_count": 2.0,
+			"scoring_rules": {
+				"1": 0.0,
+				"2": 3.0,
+				"3": 8.0,
+				"4": 10.0,
+				"5": 13.0
+			},
+			"seed": 833284018.0,
+			"tiles": [
+				{
+					"element": 1.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 0.0
+				},
+				{
+					"element": 3.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 0.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": -2.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": -1.0
+				},
+				{
+					"element": 3.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 0.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": -2.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": 1.0,
+					"r": 0.0
+				},
+				{
+					"element": 5.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": -2.0
+				},
+				{
+					"element": 1.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": 0.0
+				}
+			],
+			"title": "Wetland Puzzle 4"
+		},
+		{
+			"animal_market": [
+				-1.0,
+				-1.0,
+				-1.0
+			],
+			"boosters": [
+				{
+					"elements": [
+						5.0,
+						5.0,
+						5.0
+					]
+				},
+				null,
+				null
+			],
+			"description": "This wetland rule wants you to place pairs of wetlands. Create two pairs with three actions.",
+			"hand_animal_ids": [],
+			"hand_element_ids": [],
+			"id": "wetland5_puzzle",
+			"map_growth": false,
+			"max_pack_takes": 1.0,
+			"max_plays": 3.0,
+			"order": 0.0,
+			"quest_ids": [],
+			"ratings": {
+				"bronze": 66.0,
+				"gold": 80.0,
+				"silver": 68.0
+			},
+			"ring_count": 2.0,
+			"scoring_rules": {
+				"1": 0.0,
+				"2": 3.0,
+				"3": 8.0,
+				"4": 10.0,
+				"5": 14.0
+			},
+			"seed": 833284018.0,
+			"tiles": [
+				{
+					"element": 1.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 0.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": -2.0,
+					"r": 1.0
+				},
+				{
+					"element": 1.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 2.0
+				},
+				{
+					"element": 3.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 0.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": -2.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": -1.0
+				},
+				{
+					"element": 3.0,
+					"level": 3.0,
+					"q": 0.0,
+					"r": 0.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": -2.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": -1.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": 1.0,
+					"r": 0.0
+				},
+				{
+					"element": 1.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": 1.0
+				},
+				{
+					"element": 5.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": -2.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": 2.0,
+					"r": 0.0
+				}
+			],
+			"title": "Wetland Puzzle 5"
+		},
+		{
+			"animal_market": [
+				4.0,
+				-1.0,
+				-1.0
+			],
+			"boosters": [
+				{
+					"elements": [
+						1.0,
+						1.0,
+						3.0
+					]
+				},
+				{
+					"elements": [
+						3.0,
+						3.0,
+						2.0
+					]
+				},
+				{
+					"elements": [
+						4.0,
+						3.0,
+						1.0
+					]
+				}
+			],
+			"description": "Now lets look at animals. Animals have specific patterns that can be mirrored and rotated. Pick the giraffe from the market and figure out how to place all the giraffes with one pack and five actions.",
+			"hand_animal_ids": [],
+			"hand_element_ids": [],
+			"id": "animal1_puzzle",
+			"map_growth": false,
+			"max_pack_takes": 1.0,
+			"max_plays": 5.0,
+			"order": 0.0,
+			"quest_ids": [],
+			"ratings": {
+				"bronze": 95.0,
+				"gold": 105.0,
+				"silver": 100.0
+			},
+			"ring_count": 2.0,
+			"scoring_rules": {
+				"1": 1.0,
+				"2": 4.0,
+				"3": 7.0,
+				"4": 10.0,
+				"5": 13.0
+			},
+			"seed": 4204742705.0,
+			"tiles": [
+				{
+					"element": 3.0,
+					"level": 2.0,
+					"q": -2.0,
+					"r": 0.0
+				},
+				{
+					"element": 3.0,
+					"level": 2.0,
+					"q": -2.0,
+					"r": 1.0
+				},
+				{
+					"element": 5.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": -1.0
+				},
+				{
+					"element": 3.0,
+					"level": 2.0,
+					"q": -1.0,
+					"r": 0.0
+				},
+				{
+					"element": 5.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 1.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": -2.0
+				},
+				{
+					"element": 1.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": -1.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 0.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": 0.0,
+					"r": 1.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": -2.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": -1.0
+				},
+				{
+					"element": 1.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": 0.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": 1.0,
+					"r": 1.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": -2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": -1.0
+				},
+				{
+					"element": 1.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": 0.0
+				}
+			],
+			"title": "Animal Puzzle 1"
+		},
+		{
+			"animal_market": [
+				4.0,
+				-1.0,
+				-1.0
+			],
+			"boosters": [
+				{
+					"elements": [
+						2.0,
+						2.0,
+						1.0
+					]
+				},
+				{
+					"elements": [
+						2.0,
+						3.0,
+						1.0
+					]
+				},
+				{
+					"elements": [
+						3.0,
+						3.0,
+						2.0
+					]
+				}
+			],
+			"description": "Its giraffes again but this time try to find the most efficient shape with one pack of tiles to place all three giraffes.",
+			"hand_animal_ids": [],
+			"hand_element_ids": [],
+			"id": "animal2_puzzle",
+			"map_growth": false,
+			"max_pack_takes": 1.0,
+			"max_plays": 6.0,
+			"order": 0.0,
+			"quest_ids": [],
+			"ratings": {
+				"bronze": 35.0,
+				"gold": 53.0,
+				"silver": 45.0
+			},
+			"ring_count": 2.0,
+			"scoring_rules": {
+				"1": 1.0,
+				"2": 5.0,
+				"3": 6.0,
+				"4": 9.0,
+				"5": 13.0
+			},
+			"seed": 3873512722.0,
+			"tiles": [
+				{
+					"element": 1.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 0.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 1.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": -1.0,
+					"r": 2.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": 1.0,
+					"r": 0.0
+				}
+			],
+			"title": "Animal Puzzle 2"
+		},
+		{
+			"animal_market": [
+				30,
+				-1,
+				-1
+			],
+			"boosters": [
+				{
+					"elements": [
+						1.0,
+						4.0,
+						3.0
+					]
+				},
+				{
+					"elements": [
+						4.0,
+						5.0,
+						1.0
+					]
+				},
+				{
+					"elements": [
+						4.0,
+						1.0,
+						2.0
+					]
+				}
+			],
+			"description": "Here we have a different kind of pattern with the turtles. Find a way to place all of turtles. You have one pack and five actions to do so. Also keep the river scoring rule in mind for the highest points.",
+			"hand_animal_ids": [],
+			"hand_element_ids": [],
+			"id": "animal3_puzzle",
+			"map_growth": false,
+			"max_pack_takes": 1,
+			"max_plays": 5,
+			"order": 0.0,
+			"quest_ids": [],
 			"ratings": {
 				"bronze": 14,
-				"silver": 21,
-				"gold": 24
+				"gold": 28,
+				"silver": 22
 			},
+			"ring_count": 2,
 			"scoring_rules": {
 				"1": 1,
-				"2": 3,
+				"2": 5,
 				"3": 6,
-				"4": 11,
-				"5": 12
+				"4": 9,
+				"5": 13
 			},
+			"seed": 3873512722.0,
 			"tiles": [
-				{ "q": 0, "r": 0, "element": 1, "level": 1 },
-				{ "q": 2, "r": -1, "element": 2, "level": 1 },
-				{ "q": -1, "r": 1, "element": 3, "level": 1 },
-				{ "q": 0, "r": 1, "element": 3, "level": 1 }
+				{
+					"element": 1,
+					"level": 1,
+					"q": -1,
+					"r": -1
+				},
+				{
+					"element": 4,
+					"level": 1,
+					"q": 0,
+					"r": -2
+				},
+				{
+					"element": 1,
+					"level": 1,
+					"q": 1,
+					"r": -2
+				},
+				{
+					"element": 4,
+					"level": 1,
+					"q": 1,
+					"r": -1
+				}
 			],
-			"hand_element_ids": [1, 1, 2],
-			"boosters": [null, null, null],
-			"animal_market": [-1, -1, -1]
+			"title": "Animal Puzzle 3"
 		},
 		{
-			"id": "one_pack",
-			"title": "One Pack",
-			"description": "Only one of these packs is worth taking. Place it well.",
-			"order": 2,
-			"seed": 2002,
-			"ring_count": 3,
-			"map_growth": false,
-			"max_pack_takes": 1,
-			"max_plays": 3,
-			"ratings": {
-				"bronze": 31,
-				"silver": 34,
-				"gold": 40
-			},
-			"scoring_rules": {
-				"1": 0,
-				"2": 3,
-				"3": 8,
-				"4": 9,
-				"5": 12
-			},
-			"tiles": [
-				{ "q": 0, "r": -3, "element": 4, "level": 1 },
-				{ "q": 1, "r": -3, "element": 4, "level": 1 },
-				{ "q": 2, "r": -3, "element": 4, "level": 1 },
-				{ "q": 2, "r": 1, "element": 2, "level": 1 },
-				{ "q": -2, "r": 2, "element": 3, "level": 2 }
+			"animal_market": [
+				32.0,
+				-1.0,
+				-1.0
 			],
 			"boosters": [
-				{ "elements": [4, 4, 2] },
-				{ "elements": [3, 3, 3] },
-				{ "elements": [5, 1, 1] }
+				{
+					"elements": [
+						4.0,
+						3.0,
+						4.0
+					]
+				},
+				{
+					"elements": [
+						4.0,
+						3.0,
+						3.0
+					]
+				},
+				{
+					"elements": [
+						3.0,
+						3.0,
+						4.0
+					]
+				}
 			],
-			"animal_market": [-1, -1, -1]
+			"description": "These crabs want a pair of tiles. Can you figure out the right placement to place all of them using only two packs?",
+			"hand_animal_ids": [],
+			"hand_element_ids": [],
+			"id": "animal4_puzzle",
+			"map_growth": false,
+			"max_pack_takes": 2.0,
+			"max_plays": 9.0,
+			"order": 0.0,
+			"quest_ids": [],
+			"ratings": {
+				"bronze": 17.0,
+				"gold": 44.0,
+				"silver": 29.0
+			},
+			"ring_count": 2.0,
+			"scoring_rules": {
+				"1": 1.0,
+				"2": 5.0,
+				"3": 8.0,
+				"4": 11.0,
+				"5": 13.0
+			},
+			"seed": 3873512722.0,
+			"tiles": [],
+			"title": "Animal Puzzle 4"
 		},
 		{
-			"id": "watering_hole",
-			"title": "The Watering Hole",
-			"description": "The right pack, the right tiles, and the right animal.",
-			"order": 3,
-			"seed": 2003,
-			"ring_count": 3,
-			"map_growth": false,
-			"max_pack_takes": 1,
-			"max_plays": 4,
-			"ratings": {
-				"bronze": 39,
-				"silver": 44,
-				"gold": 50
-			},
-			"scoring_rules": {
-				"1": 0,
-				"2": 3,
-				"3": 8,
-				"4": 9,
-				"5": 12
-			},
-			"tiles": [
-				{ "q": 0, "r": 0, "element": 1, "level": 2 },
-				{ "q": 2, "r": 0, "element": 2, "level": 1 },
-				{ "q": 3, "r": -3, "element": 4, "level": 1 },
-				{ "q": 2, "r": -2, "element": 4, "level": 1 },
-				{ "q": 1, "r": -1, "element": 4, "level": 1 },
-				{ "q": -2, "r": 2, "element": 3, "level": 1 }
+			"animal_market": [
+				7.0,
+				-1.0,
+				-1.0
 			],
 			"boosters": [
-				{ "elements": [5, 4, 4] },
-				{ "elements": [1, 2, 2] },
-				{ "elements": [3, 3, 3] }
+				{
+					"elements": [
+						5.0,
+						1.0,
+						5.0
+					]
+				},
+				{
+					"elements": [
+						1.0,
+						1.0,
+						1.0
+					]
+				},
+				{
+					"elements": [
+						2.0,
+						1.0,
+						3.0
+					]
+				}
 			],
-			"animal_market": [15, 11, 1]
+			"description": "The elephants are placed in a straight line. You can place both of them with only two packs. But the key to gold is to pick the right pack at the right time...",
+			"hand_animal_ids": [],
+			"hand_element_ids": [],
+			"id": "animal5_puzzle",
+			"map_growth": false,
+			"max_pack_takes": 2.0,
+			"max_plays": 8.0,
+			"order": 0.0,
+			"quest_ids": [],
+			"ratings": {
+				"bronze": 18.0,
+				"gold": 35.0,
+				"silver": 29.0
+			},
+			"ring_count": 2.0,
+			"scoring_rules": {
+				"1": 1.0,
+				"2": 5.0,
+				"3": 8.0,
+				"4": 11.0,
+				"5": 13.0
+			},
+			"seed": 3873512722.0,
+			"tiles": [],
+			"title": "Animal Puzzle 5"
+		},
+		{
+			"animal_market": [
+				-1.0,
+				-1.0,
+				-1.0
+			],
+			"boosters": [
+				{
+					"elements": [
+						2.0,
+						4.0,
+						1.0
+					]
+				},
+				null,
+				null
+			],
+			"description": "Now lets look at quests. Pick the right pack and finish the quest.",
+			"hand_animal_ids": [],
+			"hand_element_ids": [],
+			"id": "quest1_puzzle",
+			"map_growth": false,
+			"max_pack_takes": 1.0,
+			"max_plays": 2.0,
+			"order": 0.0,
+			"quest_ids": [
+				1.0
+			],
+			"ratings": {
+				"bronze": 38.0,
+				"gold": 57.0,
+				"silver": 45.0
+			},
+			"ring_count": 2.0,
+			"scoring_rules": {
+				"1": 1.0,
+				"2": 5.0,
+				"3": 7.0,
+				"4": 11.0,
+				"5": 12.0
+			},
+			"seed": 3810548977.0,
+			"tiles": [
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 0.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 1.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 2.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": -2.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": -1.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": 1.0
+				}
+			],
+			"title": "Quest Puzzle 1"
+		},
+		{
+			"animal_market": [
+				-1.0,
+				-1.0,
+				-1.0
+			],
+			"boosters": [
+				{
+					"elements": [
+						5.0,
+						2.0,
+						4.0
+					]
+				},
+				{
+					"elements": [
+						1.0,
+						2.0,
+						3.0
+					]
+				},
+				{
+					"elements": [
+						5.0,
+						2.0,
+						3.0
+					]
+				}
+			],
+			"description": "Finish this quest by picking the correct two booster packs and tile placement. You earn additional points for figuring out the right order of tiles to play.",
+			"hand_animal_ids": [],
+			"hand_element_ids": [],
+			"id": "quest2_puzzle",
+			"map_growth": false,
+			"max_pack_takes": 2.0,
+			"max_plays": 4.0,
+			"order": 0.0,
+			"quest_ids": [
+				132.0
+			],
+			"ratings": {
+				"bronze": 102.0,
+				"gold": 122.0,
+				"silver": 112.0
+			},
+			"ring_count": 2.0,
+			"scoring_rules": {
+				"1": 0.0,
+				"2": 5.0,
+				"3": 7.0,
+				"4": 11.0,
+				"5": 12.0
+			},
+			"seed": 3148089011.0,
+			"tiles": [
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": -2.0,
+					"r": 0.0
+				},
+				{
+					"element": 3.0,
+					"level": 2.0,
+					"q": -2.0,
+					"r": 2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": -1.0
+				},
+				{
+					"element": 3.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 1.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": -1.0,
+					"r": 2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": -2.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": 0.0,
+					"r": -1.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": 0.0,
+					"r": 2.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": -2.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": 0.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": 1.0,
+					"r": 1.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": -2.0
+				},
+				{
+					"element": 5.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": -1.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": 2.0,
+					"r": 0.0
+				}
+			],
+			"title": "Quest Puzzle 2"
+		},
+		{
+			"animal_market": [
+				-1.0,
+				-1.0,
+				-1.0
+			],
+			"boosters": [
+				{
+					"elements": [
+						1.0,
+						5.0,
+						3.0
+					]
+				},
+				{
+					"elements": [
+						4.0,
+						4.0,
+						2.0
+					]
+				},
+				{
+					"elements": [
+						3.0,
+						3.0,
+						2.0
+					]
+				}
+			],
+			"description": "Complete both of the quests with just two packs. Earn additional points for placing tiles in the right order...",
+			"hand_animal_ids": [],
+			"hand_element_ids": [],
+			"id": "quest3_puzzle",
+			"map_growth": false,
+			"max_pack_takes": 2.0,
+			"max_plays": 6.0,
+			"order": 0.0,
+			"quest_ids": [
+				106.0,
+				63.0
+			],
+			"ratings": {
+				"bronze": 36.0,
+				"gold": 76.0,
+				"silver": 48.0
+			},
+			"ring_count": 2.0,
+			"scoring_rules": {
+				"1": 0.0,
+				"2": 4.0,
+				"3": 8.0,
+				"4": 11.0,
+				"5": 13.0
+			},
+			"seed": 2816859028.0,
+			"tiles": [],
+			"title": "Quest Puzzle 3"
+		},
+		{
+			"animal_market": [
+				-1.0,
+				-1.0,
+				-1.0
+			],
+			"boosters": [
+				{
+					"elements": [
+						1.0,
+						1.0,
+						5.0
+					]
+				},
+				{
+					"elements": [
+						5.0,
+						3.0,
+						4.0
+					]
+				},
+				{
+					"elements": [
+						3.0,
+						3.0,
+						1.0
+					]
+				}
+			],
+			"description": "Complete both quests with just one pack and two actions.",
+			"hand_animal_ids": [],
+			"hand_element_ids": [],
+			"id": "quest4_puzzle",
+			"map_growth": false,
+			"max_pack_takes": 1.0,
+			"max_plays": 2.0,
+			"order": 0.0,
+			"quest_ids": [
+				32.0,
+				27.0
+			],
+			"ratings": {
+				"bronze": 80.0,
+				"gold": 100.0,
+				"silver": 90.0
+			},
+			"ring_count": 2.0,
+			"scoring_rules": {
+				"1": 1.0,
+				"2": 3.0,
+				"3": 7.0,
+				"4": 10.0,
+				"5": 12.0
+			},
+			"seed": 833284018.0,
+			"tiles": [
+				{
+					"element": 5.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 0.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 1.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 2.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": -1.0,
+					"r": -1.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": -1.0,
+					"r": 0.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 1.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 2.0
+				},
+				{
+					"element": 1.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": -2.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": 0.0,
+					"r": -1.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 0.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 1.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 2.0
+				},
+				{
+					"element": 3.0,
+					"level": 2.0,
+					"q": 1.0,
+					"r": -2.0
+				},
+				{
+					"element": 3.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": -1.0
+				},
+				{
+					"element": 3.0,
+					"level": 3.0,
+					"q": 2.0,
+					"r": -2.0
+				},
+				{
+					"element": 1.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": -1.0
+				},
+				{
+					"element": 1.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": 0.0
+				}
+			],
+			"title": "Quest Puzzle 4"
+		},
+		{
+			"animal_market": [
+				-1.0,
+				-1.0,
+				-1.0
+			],
+			"boosters": [
+				{
+					"elements": [
+						5.0,
+						2.0,
+						4.0
+					]
+				},
+				{
+					"elements": [
+						3.0,
+						3.0,
+						4.0
+					]
+				},
+				{
+					"elements": [
+						3.0,
+						1.0,
+						5.0
+					]
+				}
+			],
+			"description": "Choose the right pack and the right placement to maximise your points.",
+			"hand_animal_ids": [],
+			"hand_element_ids": [],
+			"id": "mixed1_puzzle",
+			"map_growth": false,
+			"max_pack_takes": 1.0,
+			"max_plays": 3.0,
+			"order": 0.0,
+			"quest_ids": [],
+			"ratings": {
+				"bronze": 73.0,
+				"gold": 82.0,
+				"silver": 73.0
+			},
+			"ring_count": 2.0,
+			"scoring_rules": {
+				"1": 1.0,
+				"2": 3.0,
+				"3": 7.0,
+				"4": 10.0,
+				"5": 12.0
+			},
+			"seed": 833284018.0,
+			"tiles": [
+				{
+					"element": 1.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 0.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": -2.0,
+					"r": 1.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": -1.0,
+					"r": -1.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": -1.0,
+					"r": 0.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 1.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": -1.0,
+					"r": 2.0
+				},
+				{
+					"element": 1.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": -2.0
+				},
+				{
+					"element": 1.0,
+					"level": 2.0,
+					"q": 0.0,
+					"r": -1.0
+				},
+				{
+					"element": 3.0,
+					"level": 2.0,
+					"q": 0.0,
+					"r": 0.0
+				},
+				{
+					"element": 2.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 1.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 0.0,
+					"r": 2.0
+				},
+				{
+					"element": 3.0,
+					"level": 2.0,
+					"q": 1.0,
+					"r": -2.0
+				},
+				{
+					"element": 3.0,
+					"level": 2.0,
+					"q": 1.0,
+					"r": -1.0
+				},
+				{
+					"element": 4.0,
+					"level": 1.0,
+					"q": 1.0,
+					"r": 1.0
+				},
+				{
+					"element": 1.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": -2.0
+				},
+				{
+					"element": 1.0,
+					"level": 1.0,
+					"q": 2.0,
+					"r": -1.0
+				}
+			],
+			"title": "Mixed Puzzle 1"
 		}
 	]
 }

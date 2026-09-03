@@ -69,39 +69,40 @@ position = Vector2(625, 340.5)
 
 [node name="PopupPanel" type="Panel" parent="PopupRoot" unique_id=531527263]
 offset_left = -470.0
-offset_top = -210.0
+offset_top = -238.5
 offset_right = 430.0
-offset_bottom = 290.0
+offset_bottom = 330.8178
 scale = Vector2(1.0799994, 0.88000053)
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_popup")
 
 [node name="ClickBlocker" type="Panel" parent="PopupRoot" unique_id=1740210695]
-offset_left = -366.0
-offset_top = -202.0
-offset_right = 434.0
-offset_bottom = 278.0
+offset_left = -472.0
+offset_top = -237.5
+offset_right = 503.0
+offset_bottom = 263.5
 theme_override_styles/panel = SubResource("StyleBoxFlat_blocker")
 
 [node name="ImageDisplay" type="Sprite2D" parent="PopupRoot" unique_id=594319098]
+visible = false
 position = Vector2(11, -11)
 scale = Vector2(0.45, 0.45)
 texture = ExtResource("2_q6tp3")
 
 [node name="ScoringRow" type="HBoxContainer" parent="PopupRoot" unique_id=387273099]
 offset_left = -454.0
-offset_top = -177.0
+offset_top = -193.0
 offset_right = 486.0
-offset_bottom = 153.5
+offset_bottom = 182.5
 mouse_filter = 2
 theme_override_constants/separation = 12
 
 [node name="CloseButton" type="Button" parent="PopupRoot" unique_id=2015260018]
 custom_minimum_size = Vector2(0, 24)
 offset_left = -51.0
-offset_top = 185.0
+offset_top = 209.0
 offset_right = 45.0
-offset_bottom = 219.0
+offset_bottom = 243.0
 focus_mode = 0
 theme_override_colors/font_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
 theme_override_colors/font_focus_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
@@ -118,9 +119,9 @@ text = "CLOSE"
 [node name="ToggleButton" type="Button" parent="PopupRoot" unique_id=415185524]
 custom_minimum_size = Vector2(40, 40)
 offset_left = 444.0
-offset_top = 177.0
+offset_top = 201.0
 offset_right = 484.0
-offset_bottom = 217.0
+offset_bottom = 241.0
 focus_mode = 0
 theme_override_colors/icon_normal_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
 theme_override_colors/icon_focus_color = Color(0.5686275, 0.5176471, 0.47058824, 1)

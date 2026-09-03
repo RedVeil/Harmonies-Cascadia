@@ -6,7 +6,7 @@ const CONFIG_PATH := "res://data/session_config.json"
 const TUTORIAL_CONFIG_PATH := "res://data/tutorial_config.json"
 const PUZZLES_PATH := "res://data/puzzles.json"
 
-enum GameMode { DAILY, NORMAL, ENDLESS, CHALLENGE, TUTORIAL, PUZZLE }
+enum GameMode { DAILY, NORMAL, ENDLESS, CHALLENGE, TUTORIAL, PUZZLE, PUZZLE_MAKER }
 enum MapSize { SMALL, MEDIUM, LARGE }
 
 var run_seed: int = 0
@@ -14,7 +14,7 @@ var game_mode: GameMode = GameMode.NORMAL
 var map_size: MapSize = MapSize.MEDIUM
 
 ## Resolved from session_config.json when a run begins.
-var ring_count: int = 4
+var ring_count: int = 3
 var checkpoint: int = 10000
 var checkpoint_multiplier: float = 2.0
 var checkpoint_flat_increase: int = 0
@@ -60,7 +60,7 @@ func begin_daily_run() -> void:
 	clear_challenge()
 	clear_puzzle()
 	game_mode = GameMode.DAILY
-	map_size = MapSize.MEDIUM
+	map_size = MapSize.SMALL
 	_apply_mode_config(game_mode, map_size)
 	begin_run(_daily_seed())
 
@@ -145,12 +145,41 @@ func begin_puzzle_run(id: String) -> bool:
 	return true
 
 
+func begin_puzzle_maker(edit_id: String = "") -> void:
+	clear_challenge()
+	clear_puzzle()
+	game_mode = GameMode.PUZZLE_MAKER
+	map_size = MapSize.MEDIUM
+	_apply_mode_config(GameMode.NORMAL, MapSize.MEDIUM)
+	ring_count = 3
+	map_growth_enabled = false
+	checkpoint = 100
+	checkpoint_flat_increase = 0
+	checkpoint_multiplier = 2.0
+	checkpoint_targets.clear()
+	if not edit_id.is_empty():
+		var loaded := load_puzzle(edit_id)
+		if not loaded.is_empty():
+			puzzle_id = edit_id
+			puzzle_config = loaded
+			ring_count = int(loaded.get("ring_count", ring_count))
+	begin_run(hash("puzzle_maker"), true)
+
+
 func is_tutorial() -> bool:
 	return game_mode == GameMode.TUTORIAL
 
 
 func is_puzzle() -> bool:
 	return game_mode == GameMode.PUZZLE
+
+
+func is_puzzle_maker() -> bool:
+	return game_mode == GameMode.PUZZLE_MAKER
+
+
+func reload_puzzles() -> void:
+	_load_puzzles()
 
 
 ## Puzzle mode always; tutorial when boosters/animal_market queues are authored.
@@ -256,6 +285,10 @@ func get_max_pack_takes() -> int:
 	return int(puzzle_config.get("max_pack_takes", -1))
 
 
+func format_puzzle_description(puzzle: Dictionary) -> String:
+	return str(puzzle.get("description", "")).strip_edges()
+
+
 ## -1 means unlimited placements (open puzzles / non-puzzle modes).
 func get_max_plays() -> int:
 	if not is_puzzle():
@@ -301,6 +334,14 @@ func record_puzzle_result(score: int) -> void:
 	GameSettings.record_puzzle_score(puzzle_id, score)
 
 
+## First catalog puzzle id, or empty if the catalog has none.
+func get_first_puzzle_id() -> String:
+	var puzzles := list_puzzles()
+	if puzzles.is_empty():
+		return ""
+	return str(puzzles[0].get("id", ""))
+
+
 ## Catalog entry after the current puzzle, or empty if this is the last.
 func get_next_puzzle_id() -> String:
 	if puzzle_id.is_empty():
@@ -328,7 +369,7 @@ func list_puzzles() -> Array[Dictionary]:
 		out.append({
 			"id": id,
 			"title": str(puzzle.get("title", id)),
-			"description": str(puzzle.get("description", "")),
+			"description": format_puzzle_description(puzzle),
 			"order": int(puzzle.get("order", 1000)),
 			"ratings": _ratings_from_puzzle(puzzle),
 		})

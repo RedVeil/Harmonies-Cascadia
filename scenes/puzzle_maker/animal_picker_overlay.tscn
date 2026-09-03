@@ -1,0 +1,83 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/puzzle_maker/animal_picker_overlay.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_popup"]
+bg_color = Color(0.95686275, 0.8745098, 0.7921569, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.1254902)
+shadow_size = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dim"]
+bg_color = Color(0, 0, 0, 0.35)
+
+[node name="AnimalPickerOverlay" type="CanvasLayer"]
+layer = 16
+script = ExtResource("1_script")
+
+[node name="Dimmer" type="Panel" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_dim")
+
+[node name="PopupRoot" type="Node2D" parent="."]
+
+[node name="PopupPanel" type="Panel" parent="PopupRoot"]
+offset_left = -360.0
+offset_top = -260.0
+offset_right = 360.0
+offset_bottom = 260.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_popup")
+
+[node name="TitleLabel" type="Label" parent="PopupRoot"]
+offset_left = -320.0
+offset_top = -240.0
+offset_right = 280.0
+offset_bottom = -204.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 22
+text = "Spawn Animal"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CloseButton" type="Control" parent="PopupRoot"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 300.0
+offset_top = -240.0
+offset_right = 332.0
+offset_bottom = -204.0
+
+[node name="Label" type="Label" parent="PopupRoot/CloseButton"]
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 36.0
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 24
+text = "×"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="PopupRoot"]
+offset_left = -340.0
+offset_top = -190.0
+offset_right = 340.0
+offset_bottom = 240.0
+
+[node name="Content" type="Control" parent="PopupRoot/Scroll"]
+custom_minimum_size = Vector2(600, 800)
+layout_mode = 2
+
+[node name="GridRoot" type="Node2D" parent="PopupRoot/Scroll/Content"]
+
+[connection signal="gui_input" from="Dimmer" to="." method="_on_dimmer_gui_input"]
+[connection signal="gui_input" from="PopupRoot/CloseButton" to="." method="_on_close_gui_input"]

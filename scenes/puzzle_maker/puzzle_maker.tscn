@@ -1,0 +1,242 @@
+[gd_scene format=3 uid="uid://tn788wyiby4s"]
+
+[ext_resource type="Script" uid="uid://bnb8amv0s2k4k" path="res://scripts/camera/IsometricCameraController.gd" id="1_cam"]
+[ext_resource type="PackedScene" uid="uid://df4lpksbnpvvl" path="res://scenes/card/card_manager.tscn" id="2_cards"]
+[ext_resource type="PackedScene" uid="uid://dkeifl0skpmfk" path="res://scenes/hex/hex_manager.tscn" id="3_hex"]
+[ext_resource type="PackedScene" uid="uid://1m8f7nk3gk26" path="res://scenes/hex/map_button.tscn" id="4_mapbtn"]
+[ext_resource type="PackedScene" uid="uid://cm1vk1v7ec785" path="res://scenes/game/score_engine.tscn" id="5_score"]
+[ext_resource type="PackedScene" uid="uid://e4s0qxa8vcde" path="res://scenes/game/orchestrator.tscn" id="6_orch"]
+[ext_resource type="PackedScene" uid="uid://slux8ml7jqbn" path="res://scenes/quest/quest_manager.tscn" id="7_quest"]
+[ext_resource type="PackedScene" uid="uid://b8oeyth2j2arg" path="res://scenes/game/point_counter.tscn" id="8_points"]
+[ext_resource type="PackedScene" uid="uid://3lps20yejg6k" path="res://scenes/booster/booster_manager.tscn" id="9_boost"]
+[ext_resource type="PackedScene" uid="uid://bde4y0iag4uud" path="res://scenes/game/undo_button.tscn" id="10_undo"]
+[ext_resource type="PackedScene" uid="uid://bp334gpx77q2i" path="res://scenes/game/play_counter.tscn" id="11_play"]
+[ext_resource type="PackedScene" uid="uid://dfujx1wir7he5" path="res://scenes/game/menu_button.tscn" id="12_menu"]
+[ext_resource type="PackedScene" uid="uid://yohtubn30g0x" path="res://scenes/game/in_game_menu.tscn" id="13_igm"]
+[ext_resource type="Script" uid="uid://bhhe83k1kifpx" path="res://scripts/game/hud_layout.gd" id="14_hud"]
+[ext_resource type="Script" uid="uid://wchj613gvrnq" path="res://scripts/puzzle_maker/puzzle_maker.gd" id="15_maker"]
+[ext_resource type="PackedScene" path="res://scenes/puzzle_maker/animal_picker_overlay.tscn" id="16_animal"]
+[ext_resource type="PackedScene" path="res://scenes/puzzle_maker/quest_picker_overlay.tscn" id="17_questov"]
+[ext_resource type="PackedScene" path="res://scenes/puzzle_maker/pack_builder_overlay.tscn" id="18_pack"]
+[ext_resource type="PackedScene" path="res://scenes/puzzle_maker/puzzle_save_overlay.tscn" id="19_save"]
+[ext_resource type="PackedScene" path="res://scenes/puzzle_maker/maker_toolbar.tscn" id="20_toolbar"]
+[ext_resource type="PackedScene" uid="uid://bv5ofl0j1ktqc" path="res://scenes/game/score_tooltips.tscn" id="21_tip"]
+[ext_resource type="PackedScene" path="res://scenes/puzzle_maker/scoring_rules_overlay.tscn" id="22_scoring"]
+[ext_resource type="PackedScene" path="res://scenes/puzzle_maker/puzzle_load_overlay.tscn" id="23_load"]
+
+[sub_resource type="Environment" id="Environment_bg"]
+background_mode = 1
+background_color = Color(0.8186203, 0.7502329, 0.6806915, 1)
+adjustment_enabled = true
+
+[node name="PuzzleMaker" type="Node3D" unique_id=454855802]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1140313662]
+environment = SubResource("Environment_bg")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment" unique_id=268936089]
+transform = Transform3D(-0.8660253, -0.43301287, 0.24999996, 0, 0.50000006, 0.86602527, -0.5, 0.7500002, -0.43301257, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=544859187]
+transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 0, 80, 80)
+projection = 1
+current = true
+fov = 60.0
+size = 100.0
+near = 0.1
+far = 1000.0
+script = ExtResource("1_cam")
+move_speed = 24.0
+zoom_min = 50.0
+zoom_max = 150.0
+
+[node name="HexManager" parent="." unique_id=579609554 node_paths=PackedStringArray("orchestrator") instance=ExtResource("3_hex")]
+orchestrator = NodePath("../Orchestrator")
+map_button = ExtResource("4_mapbtn")
+
+[node name="ScoreEngine" parent="." unique_id=139786141 instance=ExtResource("5_score")]
+
+[node name="Orchestrator" parent="." unique_id=1733660485 node_paths=PackedStringArray("booster_manager", "card_manager", "hex_manager", "score_engine", "quest_manager", "point_counter", "undo_button", "play_counter", "in_game_menu", "menu_button") instance=ExtResource("6_orch")]
+booster_manager = NodePath("../HUD/BoosterManager")
+card_manager = NodePath("../HUD/CardManager")
+hex_manager = NodePath("../HexManager")
+score_engine = NodePath("../ScoreEngine")
+quest_manager = NodePath("../HUD/QuestManager")
+point_counter = NodePath("../HUD/PointCounter")
+undo_button = NodePath("../HUD/UndoButton")
+play_counter = NodePath("../HUD/PlayCounter")
+in_game_menu = NodePath("../InGameMenu")
+menu_button = NodePath("../HUD/MenuButton")
+
+[node name="Maker" type="Node" parent="." unique_id=443549054 node_paths=PackedStringArray("orchestrator", "animal_picker", "quest_picker", "pack_builder", "save_overlay", "scoring_overlay", "load_overlay")]
+script = ExtResource("15_maker")
+orchestrator = NodePath("../Orchestrator")
+animal_picker = NodePath("../AnimalPickerOverlay")
+quest_picker = NodePath("../QuestPickerOverlay")
+pack_builder = NodePath("../PackBuilderOverlay")
+save_overlay = NodePath("../PuzzleSaveOverlay")
+scoring_overlay = NodePath("../ScoringRulesOverlay")
+load_overlay = NodePath("../PuzzleLoadOverlay")
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=1715516406]
+script = ExtResource("14_hud")
+
+[node name="Root" type="Control" parent="HUD" unique_id=1615394152]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="PointCounterSlot" type="Control" parent="HUD/Root" unique_id=1692632813]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 80.0
+offset_top = 80.0
+offset_right = 80.0
+offset_bottom = 80.0
+mouse_filter = 2
+
+[node name="QuestManagerSlot" type="Control" parent="HUD/Root" unique_id=319656386]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 60.0
+offset_top = 133.0
+offset_right = 60.0
+offset_bottom = 133.0
+mouse_filter = 2
+
+[node name="BoosterManagerSlot" type="Control" parent="HUD/Root" unique_id=295058500]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 60.0
+offset_right = 60.0
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="CardManagerSlot" type="Control" parent="HUD/Root" unique_id=577426748]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -320.0
+offset_top = -160.0
+offset_right = -320.0
+offset_bottom = -160.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="ScoreTooltipSlot" type="Control" parent="HUD/Root" unique_id=1940218031]
+visible = false
+layout_mode = 1
+anchors_preset = 0
+offset_left = 230.0
+offset_top = 35.0
+offset_right = 230.0
+offset_bottom = 35.0
+mouse_filter = 2
+
+[node name="MenuButtonSlot" type="Control" parent="HUD/Root" unique_id=1819065274]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 180.0
+offset_top = 35.0
+offset_right = 180.0
+offset_bottom = 35.0
+mouse_filter = 2
+
+[node name="PlayCounterSlot" type="Control" parent="HUD/Root" unique_id=21539277]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -116.0
+offset_top = -39.0
+offset_right = -116.0
+offset_bottom = -39.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="UndoButtonSlot" type="Control" parent="HUD/Root" unique_id=1596984889]
+visible = false
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -64.0
+offset_top = -40.0
+offset_right = -64.0
+offset_bottom = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="PointCounter" parent="HUD" unique_id=479737219 node_paths=PackedStringArray("orchestrator") instance=ExtResource("8_points")]
+orchestrator = NodePath("../../Orchestrator")
+
+[node name="QuestManager" parent="HUD" unique_id=2042361305 instance=ExtResource("7_quest")]
+quest_limit = 6
+
+[node name="BoosterManager" parent="HUD" unique_id=110795517 node_paths=PackedStringArray("orchestrator", "animal_market") instance=ExtResource("9_boost")]
+visible = false
+orchestrator = NodePath("../../Orchestrator")
+animal_market = NodePath("AnimalMarketPanel")
+
+[node name="CardManager" parent="HUD" unique_id=219740899 node_paths=PackedStringArray("orchestrator") instance=ExtResource("2_cards")]
+orchestrator = NodePath("../../Orchestrator")
+card_limit = 40
+card_limit_buffer = 20
+animal_limit = 40
+recycling_value = 0
+maker_mode = true
+
+[node name="ScoreTooltip" parent="HUD" unique_id=1436100163 node_paths=PackedStringArray("orchestrator") instance=ExtResource("21_tip")]
+visible = false
+orchestrator = NodePath("../../Orchestrator")
+
+[node name="MenuButton" parent="HUD" unique_id=5915817 node_paths=PackedStringArray("orchestrator") instance=ExtResource("12_menu")]
+orchestrator = NodePath("../../Orchestrator")
+
+[node name="PlayCounter" parent="HUD" unique_id=966191325 instance=ExtResource("11_play")]
+
+[node name="UndoButton" parent="HUD" unique_id=256262569 node_paths=PackedStringArray("orchestrator") instance=ExtResource("10_undo")]
+visible = false
+orchestrator = NodePath("../../Orchestrator")
+
+[node name="InGameMenu" parent="." unique_id=2075077425 node_paths=PackedStringArray("orchestrator") instance=ExtResource("13_igm")]
+visible = false
+orchestrator = NodePath("../Orchestrator")
+
+[node name="MakerToolbar" parent="." unique_id=1536305904 node_paths=PackedStringArray("maker") instance=ExtResource("20_toolbar")]
+maker = NodePath("../Maker")
+
+[node name="AnimalPickerOverlay" parent="." unique_id=1442880761 instance=ExtResource("16_animal")]
+visible = false
+
+[node name="QuestPickerOverlay" parent="." unique_id=696220875 instance=ExtResource("17_questov")]
+visible = false
+
+[node name="PackBuilderOverlay" parent="." unique_id=640139751 instance=ExtResource("18_pack")]
+visible = false
+
+[node name="PuzzleSaveOverlay" parent="." unique_id=949744122 instance=ExtResource("19_save")]
+visible = false
+
+[node name="ScoringRulesOverlay" parent="." unique_id=173474298 instance=ExtResource("22_scoring")]
+visible = false
+
+[node name="PuzzleLoadOverlay" parent="." unique_id=173474299 instance=ExtResource("23_load")]
+visible = false

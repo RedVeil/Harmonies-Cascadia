@@ -13,6 +13,7 @@ var _waiting_action: String = ""
 var _active: bool = false
 var _advance_timer: Timer
 var _break_shown_for_index: int = -1
+var _post_tutorial_choice: bool = false
 
 
 func _ready() -> void:
@@ -57,6 +58,7 @@ func stop(mark_completed: bool = true) -> void:
 	_waiting_action = ""
 	_current = {}
 	_break_shown_for_index = -1
+	_post_tutorial_choice = false
 	if _advance_timer:
 		_advance_timer.stop()
 	if orchestrator:
@@ -245,6 +247,9 @@ func _schedule_advance() -> void:
 
 
 func _on_continue() -> void:
+	if _post_tutorial_choice:
+		_start_first_puzzle()
+		return
 	if not _active:
 		return
 	var complete: Dictionary = _current.get("complete", {})
@@ -254,12 +259,54 @@ func _on_continue() -> void:
 
 
 func _on_skip() -> void:
+	if _post_tutorial_choice:
+		_leave_after_tutorial()
+		return
 	stop(true)
 	if orchestrator:
 		orchestrator.leave_to_menu()
 
 
 func _finish() -> void:
-	stop(true)
+	if coach == null:
+		stop(true)
+		if orchestrator:
+			orchestrator.leave_to_menu()
+		return
+	GameSettings.mark_tutorial_completed()
+	_active = false
+	_waiting_action = ""
+	_current = {}
+	if _advance_timer:
+		_advance_timer.stop()
+	if orchestrator:
+		orchestrator.set_tutorial_gates({"allow_actions": []})
+		orchestrator.close_in_game_menu()
+		orchestrator.pause_cards()
+	_post_tutorial_choice = true
+	coach.show_centered_modal(
+		"Tutorial complete",
+		"Continue with puzzles, or end the tutorial and return to the menu.",
+		"Puzzles",
+		{},
+		"End"
+	)
+
+
+func _start_first_puzzle() -> void:
+	_post_tutorial_choice = false
+	if coach:
+		coach.hide_coach()
+	var first_id := GameSession.get_first_puzzle_id()
+	if first_id.is_empty() or not GameSession.begin_puzzle_run(first_id):
+		_leave_after_tutorial()
+		return
+	SceneLoader.reload()
+
+
+func _leave_after_tutorial() -> void:
+	_post_tutorial_choice = false
+	if coach:
+		coach.hide_coach()
 	if orchestrator:
 		orchestrator.leave_to_menu()

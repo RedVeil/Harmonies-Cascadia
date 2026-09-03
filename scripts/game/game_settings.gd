@@ -17,6 +17,7 @@ var player_id: String = ""
 var player_name: String = ""
 var tutorial_played: bool = false
 var tutorial_completed: bool = false
+var first_puzzle_intro_shown: bool = false
 
 var preset: Preset = Preset.HIGH
 var wind_enabled: bool = true
@@ -70,6 +71,7 @@ func _load_from_json() -> void:
 	player_name = str(data.get("player_name", ""))
 	tutorial_played = bool(data.get("tutorial_played", false))
 	tutorial_completed = bool(data.get("tutorial_completed", false))
+	first_puzzle_intro_shown = bool(data.get("first_puzzle_intro_shown", false))
 
 	var graphics: Dictionary = data.get("graphics", {})
 	if typeof(graphics) != TYPE_DICTIONARY:
@@ -113,6 +115,7 @@ func save_to_disk() -> void:
 		"player_name": player_name,
 		"tutorial_played": tutorial_played,
 		"tutorial_completed": tutorial_completed,
+		"first_puzzle_intro_shown": first_puzzle_intro_shown,
 		"graphics": {
 			"preset": int(preset),
 			"wind_enabled": wind_enabled,
@@ -163,6 +166,13 @@ func mark_tutorial_completed() -> void:
 		return
 	tutorial_completed = true
 	tutorial_played = true
+	save_to_disk()
+
+
+func mark_first_puzzle_intro_shown() -> void:
+	if first_puzzle_intro_shown:
+		return
+	first_puzzle_intro_shown = true
 	save_to_disk()
 
 

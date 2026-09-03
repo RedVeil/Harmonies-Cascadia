@@ -5,13 +5,13 @@
 		"checkpoint_flat_increase": 100,
 		"map_growth": false,
 		"map_sizes": {
-			"small": { "ring_count": 3 },
-			"medium": { "ring_count": 4 },
-			"large": { "ring_count": 5 }
+			"small": { "ring_count": 2 },
+			"medium": { "ring_count": 3 },
+			"large": { "ring_count": 4 }
 		}
 	},
 	"daily": {
-		"ring_count": 3,
+		"ring_count": 2,
 		"checkpoint": 100,
 		"checkpoint_multiplier": 1.0,
 		"checkpoint_flat_increase": 100,

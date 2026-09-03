@@ -83,10 +83,8 @@ func _setup_gain_label() -> void:
 ## ----- Score Logic ----- ##
 
 func preview_progress(val:int) -> void:
-	if val > target:
-		preview = target
-	else:
-		preview = val
+	# Do not clamp to `target`: overflow must count, then apply_preview advances.
+	preview = val
 
 	# Keep logical preview updated, but don't fight an in-flight score reward.
 	if _is_score_reward_playing():
@@ -96,12 +94,13 @@ func preview_progress(val:int) -> void:
 		$ProgressBar.material.set_shader_parameter("third_value",  0.0)
 		$ProgressBar.material.set_shader_parameter("current_value",  0.0)
 	else:
+		var fill := _progress_fill(preview)
 		if val > current:
 			$ProgressBar.material.set_shader_parameter("current_value",  0.0)
-			$ProgressBar.material.set_shader_parameter("third_value",  float(preview) / float(target))
+			$ProgressBar.material.set_shader_parameter("third_value",  fill)
 		else:
 			$ProgressBar.material.set_shader_parameter("third_value",  0.0)
-			$ProgressBar.material.set_shader_parameter("current_value",  float(preview) / float(target))
+			$ProgressBar.material.set_shader_parameter("current_value",  fill)
 		
 		$Label.text = "%d" % current
 
@@ -239,13 +238,18 @@ func _setup_gain_popup_text(gained: int) -> void:
 		_gain_label.text = "%d" % gained
 		_gain_label.add_theme_color_override("font_color", Color(0.9, 0.35, 0.35, 1.0))
 
+func _progress_fill(score: int) -> float:
+	if target <= 0:
+		return 0.0
+	return clampf(float(score) / float(target), 0.0, 1.0)
+
+
 func _set_animated_score_display(value: float) -> void:
 	var shown := int(round(value))
 	$Label.text = "%d" % shown
-	var progress := clampf(float(shown) / float(target), 0.0, 1.0)
 	$ProgressBar.material.set_shader_parameter("third_value", 0.0)
 	$ProgressBar.material.set_shader_parameter("current_value", 0.0)
-	$ProgressBar.material.set_shader_parameter("lerp_value", progress)
+	$ProgressBar.material.set_shader_parameter("lerp_value", _progress_fill(shown))
 
 func _finish_gain_popup() -> void:
 	gain_label.visible = false
@@ -269,7 +273,7 @@ func apply_current_style() -> void:
 	$Sprite2D.scale = hex_base_scale
 	$ProgressBar.material.set_shader_parameter("third_value",  0.0)
 	$ProgressBar.material.set_shader_parameter("current_value",  0.0)
-	$ProgressBar.material.set_shader_parameter("lerp_value",  float(current) / float(target))
+	$ProgressBar.material.set_shader_parameter("lerp_value",  _progress_fill(current))
 	$Label.text = "%d" % current
 
 

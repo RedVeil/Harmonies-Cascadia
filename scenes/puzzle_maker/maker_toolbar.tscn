@@ -1,0 +1,118 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/puzzle_maker/maker_toolbar.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.95686275, 0.8745098, 0.7921569, 0.92)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0, 0, 0.12)
+shadow_size = 3
+
+[node name="MakerToolbar" type="CanvasLayer"]
+layer = 5
+script = ExtResource("1_script")
+
+[node name="Panel" type="Panel" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -230.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = 504.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBox" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = -12.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 16
+text = "Puzzle Maker"
+horizontal_alignment = 1
+
+[node name="MapRow" type="HBoxContainer" parent="Panel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="MapLabel" type="Label" parent="Panel/VBox/MapRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 13
+text = "Map rings"
+
+[node name="RingsSpin" type="SpinBox" parent="Panel/VBox/MapRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(80, 0)
+min_value = 1.0
+max_value = 8.0
+value = 3.0
+
+[node name="ActionsRow" type="HBoxContainer" parent="Panel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ActionsLabel" type="Label" parent="Panel/VBox/ActionsRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 13
+text = "Actions"
+
+[node name="PlaysSpin" type="SpinBox" parent="Panel/VBox/ActionsRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(80, 0)
+min_value = -1.0
+max_value = 99.0
+value = 3.0
+
+[node name="AnimalsButton" type="Button" parent="Panel/VBox"]
+layout_mode = 2
+text = "Animals"
+
+[node name="QuestsButton" type="Button" parent="Panel/VBox"]
+layout_mode = 2
+text = "Quests"
+
+[node name="PacksButton" type="Button" parent="Panel/VBox"]
+layout_mode = 2
+text = "Packs / Market"
+
+[node name="ScoringButton" type="Button" parent="Panel/VBox"]
+layout_mode = 2
+text = "Scoring Rules"
+
+[node name="SaveButton" type="Button" parent="Panel/VBox"]
+layout_mode = 2
+text = "Save Puzzle"
+
+[node name="LoadButton" type="Button" parent="Panel/VBox"]
+layout_mode = 2
+text = "Load Puzzle"
+
+[node name="LeaveButton" type="Button" parent="Panel/VBox"]
+layout_mode = 2
+text = "Leave"
+
+[node name="HintLabel" type="Label" parent="Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 11
+text = "Right-click to erase. -1 actions = unlimited."
+autowrap_mode = 3

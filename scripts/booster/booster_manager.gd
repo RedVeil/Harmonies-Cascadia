@@ -2,6 +2,7 @@ extends Node2D
 class_name BoosterManager
 
 @onready var booster_container : BoosterContainer = $booster_container
+@onready var pack_counter: PlayCounter = $PackCounter
 
 @export var orchestrator : Orchestrator
 @export var animal_market : AnimalMarketPanel
@@ -75,6 +76,7 @@ func _ready() -> void:
 	
 	_refresh_option_ui()
 	_refresh_reroll_ui()
+	_refresh_pack_counter()
 
 func _init_reroll_progress() -> void:
 	booster_reroll_progress.clear()
@@ -131,6 +133,7 @@ func select_booster(id: int) -> void:
 	_refresh_option_ui()
 	_refresh_reroll_ui()
 	_refresh_market_buy_ui()
+	_refresh_pack_counter()
 	if orchestrator:
 		orchestrator.tutorial_bridge.notify("booster_taken", {"booster_id": id})
 
@@ -473,6 +476,19 @@ func _max_pack_takes() -> int:
 func _pack_take_limit_reached() -> bool:
 	var cap := _max_pack_takes()
 	return cap >= 0 and _pack_takes >= cap
+
+
+func get_packs_remaining() -> int:
+	var cap := _max_pack_takes()
+	if cap < 0:
+		return -1
+	return maxi(cap - _pack_takes, 0)
+
+
+func _refresh_pack_counter() -> void:
+	if pack_counter == null:
+		return
+	pack_counter.set_remaining(get_packs_remaining())
 
 
 func _clear_all_boosters() -> void:
