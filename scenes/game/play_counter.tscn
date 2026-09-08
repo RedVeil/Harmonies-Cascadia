@@ -35,13 +35,6 @@ material = ExtResource("3_fill")
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("2_circle")
 
-[node name="shadow" type="Sprite2D" parent="background" unique_id=895270339]
-modulate = Color(0, 0, 0, 0.097)
-show_behind_parent = true
-position = Vector2(0.68392086, 1.1477747)
-scale = Vector2(1.1, 1.1)
-texture = ExtResource("2_circle")
-
 [node name="Label" type="Label" parent="." unique_id=1075079067]
 offset_left = -21.0
 offset_top = -22.0
