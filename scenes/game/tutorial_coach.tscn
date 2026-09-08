@@ -17,12 +17,11 @@ corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bubble"]
 bg_color = Color(0.95686275, 0.8745098, 0.7921569, 0.97)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
-shadow_color = Color(0, 0, 0, 0.2)
-shadow_size = 6
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(1, 1, 1, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_chip"]
 content_margin_left = 16.0
@@ -45,13 +44,11 @@ hex_highlight_up = 40.0
 
 [node name="Dimmer" type="ColorRect" parent="." unique_id=1049361089]
 visible = false
-layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 0
 color = Color(0, 0, 0, 0.35)
 
 [node name="Highlights" type="Control" parent="." unique_id=1830237816]
@@ -76,6 +73,7 @@ mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
 
 [node name="boosters" type="Panel" parent="Highlights" unique_id=1239422822]
+visible = false
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -147,7 +145,7 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -145.0
-offset_top = -161.0
+offset_top = -228.0
 offset_right = 147.0
 offset_bottom = -1.0
 grow_horizontal = 2
@@ -302,9 +300,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -101.0
-offset_top = -43.0
+offset_top = -53.0
 offset_right = 99.0
-offset_bottom = 137.0
+offset_bottom = 147.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -321,7 +319,7 @@ anchor_bottom = 0.5
 offset_left = -101.0
 offset_top = -47.0
 offset_right = 99.0
-offset_bottom = 133.0
+offset_bottom = 153.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -338,7 +336,7 @@ anchor_bottom = 0.5
 offset_left = 18.0
 offset_top = -190.0
 offset_right = 218.0
-offset_bottom = -10.0
+offset_bottom = 10.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -355,7 +353,7 @@ anchor_bottom = 0.5
 offset_left = 18.0
 offset_top = -47.0
 offset_right = 218.0
-offset_bottom = 133.0
+offset_bottom = 153.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -372,7 +370,7 @@ anchor_bottom = 0.5
 offset_left = -221.0
 offset_top = -190.0
 offset_right = -21.0
-offset_bottom = -10.0
+offset_bottom = 10.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -449,11 +447,39 @@ layout_mode = 2
 theme_override_constants/separation = 2
 alignment = 1
 
-[node name="Icon" type="TextureRect" parent="Bubble/Margin/VBox/StarsRow/StarCol1" unique_id=866363022]
-modulate = Color(0.7686275, 0.47058824, 0.23137255, 1)
-custom_minimum_size = Vector2(32, 32)
+[node name="StarIcon" type="Control" parent="Bubble/Margin/VBox/StarsRow/StarCol1" unique_id=479279378]
+custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="Outline" type="TextureRect" parent="Bubble/Margin/VBox/StarsRow/StarCol1/StarIcon" unique_id=1896500376]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_star")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Icon" type="TextureRect" parent="Bubble/Margin/VBox/StarsRow/StarCol1/StarIcon" unique_id=1616745830]
+modulate = Color(0.7686275, 0.47058824, 0.23137255, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -18.0
+offset_top = -18.0
+offset_right = 18.0
+offset_bottom = 18.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("2_star")
 expand_mode = 1
@@ -471,11 +497,39 @@ layout_mode = 2
 theme_override_constants/separation = 2
 alignment = 1
 
-[node name="Icon" type="TextureRect" parent="Bubble/Margin/VBox/StarsRow/StarCol2" unique_id=1143811738]
-modulate = Color(0.78431374, 0.78431374, 0.8, 1)
-custom_minimum_size = Vector2(32, 32)
+[node name="StarIcon" type="Control" parent="Bubble/Margin/VBox/StarsRow/StarCol2" unique_id=1423410388]
+custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="Outline" type="TextureRect" parent="Bubble/Margin/VBox/StarsRow/StarCol2/StarIcon" unique_id=535883087]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_star")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Icon" type="TextureRect" parent="Bubble/Margin/VBox/StarsRow/StarCol2/StarIcon" unique_id=2134613778]
+modulate = Color(0.78431374, 0.78431374, 0.8, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -18.0
+offset_top = -18.0
+offset_right = 18.0
+offset_bottom = 18.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("2_star")
 expand_mode = 1
@@ -493,11 +547,39 @@ layout_mode = 2
 theme_override_constants/separation = 2
 alignment = 1
 
-[node name="Icon" type="TextureRect" parent="Bubble/Margin/VBox/StarsRow/StarCol3" unique_id=328656603]
-modulate = Color(0.9490196, 0.6901961, 0.36078432, 1)
-custom_minimum_size = Vector2(32, 32)
+[node name="StarIcon" type="Control" parent="Bubble/Margin/VBox/StarsRow/StarCol3" unique_id=1281004845]
+custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="Outline" type="TextureRect" parent="Bubble/Margin/VBox/StarsRow/StarCol3/StarIcon" unique_id=175482801]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_star")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Icon" type="TextureRect" parent="Bubble/Margin/VBox/StarsRow/StarCol3/StarIcon" unique_id=78024586]
+modulate = Color(0.9490196, 0.6901961, 0.36078432, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -18.0
+offset_top = -18.0
+offset_right = 18.0
+offset_bottom = 18.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("2_star")
 expand_mode = 1

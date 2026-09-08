@@ -3,11 +3,6 @@ class_name DailyLeaderboardOverlay
 
 @export var page_size: int = 25
 
-var COLOR_PANEL := Color.html("#F4DFCA")
-var COLOR_HEADER := Color.html("#918478")
-var COLOR_ROW := Color(1, 1, 1, 0.35)
-var COLOR_ROW_ME := Color.html("#E8C9A8")
-
 @onready var _scroll: ScrollContainer = $Panel/Margin/Layout/Scroll
 @onready var _row_list: VBoxContainer = $Panel/Margin/Layout/Scroll/RowList
 @onready var _status: Label = $Panel/Margin/Layout/StatusLabel
@@ -16,6 +11,7 @@ var COLOR_ROW_ME := Color.html("#E8C9A8")
 @onready var _show_top: Button = $Panel/Margin/Layout/ButtonRow/ShowTopButton
 @onready var _close: Button = $Panel/Margin/Layout/ButtonRow/CloseButton
 @onready var _panel: PanelContainer = $Panel
+@onready var _title: Label = $Panel/Margin/Layout/TitleLabel
 
 var _load_gen: int = 0
 var _loading: bool = false
@@ -26,6 +22,7 @@ var _loaded_end: int = 0
 var _player_rank: int = 0
 var _player_id: String = ""
 var _date: String = ""
+var _kind: String = "daily"
 var _row_normal: StyleBoxFlat
 var _row_me: StyleBoxFlat
 
@@ -33,10 +30,8 @@ var _row_me: StyleBoxFlat
 func _ready() -> void:
 	hide()
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
-	COLOR_PANEL.a = 0.94
-	_apply_panel_style()
-	_row_normal = _make_row_style(COLOR_ROW)
-	_row_me = _make_row_style(COLOR_ROW_ME)
+	_apply_theme()
+	UiTheme.bind_node(self, _apply_theme)
 	_update.pressed.connect(_on_update_pressed)
 	_show_me.pressed.connect(_on_show_me_pressed)
 	_show_top.pressed.connect(_on_show_top_pressed)
@@ -55,7 +50,22 @@ func is_open() -> bool:
 	return visible
 
 
+func is_weekly() -> bool:
+	return _kind == "weekly"
+
+
 func open() -> void:
+	_prepare_board("daily")
+
+
+func open_weekly() -> void:
+	_prepare_board("weekly")
+
+
+func _prepare_board(kind: String) -> void:
+	_kind = kind
+	if _title != null:
+		_title.text = "WEEKLY LEADERBOARD" if _kind == "weekly" else "DAILY LEADERBOARD"
 	show()
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	OverlayFocus.grab_first_button(self)
@@ -80,14 +90,28 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 
-func _apply_panel_style() -> void:
-	var box := StyleBoxFlat.new()
-	box.bg_color = COLOR_PANEL
-	box.corner_radius_top_left = 12
-	box.corner_radius_top_right = 12
-	box.corner_radius_bottom_right = 12
-	box.corner_radius_bottom_left = 12
-	_panel.add_theme_stylebox_override("panel", box)
+func _apply_theme() -> void:
+	UiTheme.style_panel(_panel, 12, 0.94)
+	UiTheme.style_label(_title)
+	UiTheme.style_label(_status, true)
+	for button in [_update, _show_me, _show_top, _close]:
+		UiTheme.style_chip_button(button)
+	_row_normal = _make_row_style(UiTheme.with_alpha(UiTheme.text, 0.18))
+	_row_me = _make_row_style(UiTheme.with_alpha(UiTheme.text, 0.35))
+	if _row_list:
+		for row in _row_list.get_children():
+			if row is PanelContainer:
+				var is_me := str(row.get_meta("player_id", "")) == _player_id and _player_id != ""
+				row.add_theme_stylebox_override("panel", _row_me if is_me else _row_normal)
+				_recolor_row_labels(row)
+
+
+func _recolor_row_labels(row: Node) -> void:
+	for child in row.get_children():
+		if child is Label:
+			UiTheme.style_label(child as Label)
+		else:
+			_recolor_row_labels(child)
 
 
 func _make_row_style(color: Color) -> StyleBoxFlat:
@@ -110,6 +134,24 @@ func _set_busy(busy: bool) -> void:
 		_update.disabled = busy
 
 
+func _empty_status() -> String:
+	if _kind == "weekly":
+		return "No scores yet this week."
+	return "No scores yet today."
+
+
+func _fetch_page(offset: int, limit: int) -> Array:
+	if _kind == "weekly":
+		return await SupabaseClient.fetch_weekly_page(_date, offset, limit)
+	return await SupabaseClient.fetch_page(_date, offset, limit)
+
+
+func _fetch_player_entry() -> Dictionary:
+	if _kind == "weekly":
+		return await SupabaseClient.fetch_weekly_player_entry(_date, _player_id)
+	return await SupabaseClient.fetch_player_entry(_date, _player_id)
+
+
 func _open_async() -> void:
 	_load_gen += 1
 	var gen := _load_gen
@@ -120,7 +162,7 @@ func _open_async() -> void:
 	_has_more_below = false
 	_player_rank = 0
 	_player_id = GameSettings.player_id
-	_date = GameSession.get_utc_date_iso()
+	_date = GameSession.get_utc_week_start_iso() if _kind == "weekly" else GameSession.get_utc_date_iso()
 	_show_me.disabled = true
 	_status.text = "Loading..."
 
@@ -129,7 +171,7 @@ func _open_async() -> void:
 		_set_busy(false)
 		return
 
-	var entry: Dictionary = await SupabaseClient.fetch_player_entry(_date, _player_id)
+	var entry: Dictionary = await _fetch_player_entry()
 	if gen != _load_gen:
 		return
 	if not entry.is_empty():
@@ -154,7 +196,7 @@ func _centered_offset(rank: int) -> int:
 
 func _replace_with_page(offset: int, gen: int = _load_gen) -> bool:
 	_set_busy(true)
-	var rows: Array = await SupabaseClient.fetch_page(_date, offset, page_size)
+	var rows: Array = await _fetch_page(offset, page_size)
 	if gen != _load_gen:
 		return false
 	_set_busy(false)
@@ -168,7 +210,7 @@ func _replace_with_page(offset: int, gen: int = _load_gen) -> bool:
 		if not SupabaseClient.last_error.is_empty():
 			_status.text = SupabaseClient.last_error
 		else:
-			_status.text = "No scores yet today."
+			_status.text = _empty_status()
 	else:
 		_status.text = ""
 	return true
@@ -221,7 +263,7 @@ func _make_cell(text: String, min_width: float) -> Label:
 	var label := Label.new()
 	label.text = text
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	label.add_theme_color_override("font_color", COLOR_HEADER)
+	label.add_theme_color_override("font_color", UiTheme.text)
 	label.add_theme_font_size_override("font_size", 16)
 	if min_width > 0.0:
 		label.custom_minimum_size = Vector2(min_width, 0)
@@ -297,7 +339,7 @@ func _load_next() -> void:
 		return
 	var gen := _load_gen
 	_set_busy(true)
-	var rows: Array = await SupabaseClient.fetch_page(_date, _loaded_end, page_size)
+	var rows: Array = await _fetch_page(_loaded_end, page_size)
 	if gen != _load_gen:
 		return
 	_set_busy(false)
@@ -317,7 +359,7 @@ func _load_previous() -> void:
 	_suspend_scroll_load = true
 	var old_scroll := _scroll.scroll_vertical
 	var old_height := _row_list.size.y
-	var rows: Array = await SupabaseClient.fetch_page(_date, offset, count)
+	var rows: Array = await _fetch_page(offset, count)
 	if gen != _load_gen:
 		_suspend_scroll_load = false
 		return
@@ -351,7 +393,7 @@ func _update_merge_async() -> void:
 	_set_busy(true)
 	_status.text = "Updating..."
 
-	var entry: Dictionary = await SupabaseClient.fetch_player_entry(_date, _player_id)
+	var entry: Dictionary = await _fetch_player_entry()
 	if gen != _load_gen:
 		return
 	if not entry.is_empty():
@@ -368,7 +410,7 @@ func _update_merge_async() -> void:
 	var page_offset := offset
 	while remaining > 0:
 		var take := mini(remaining, page_size)
-		var page: Array = await SupabaseClient.fetch_page(_date, page_offset, take)
+		var page: Array = await _fetch_page(page_offset, take)
 		if gen != _load_gen:
 			return
 		if page.is_empty():
@@ -388,7 +430,7 @@ func _update_merge_async() -> void:
 		if not SupabaseClient.last_error.is_empty():
 			_status.text = SupabaseClient.last_error
 		else:
-			_status.text = "No scores yet today."
+			_status.text = _empty_status()
 		return
 	if fetched.is_empty() and not SupabaseClient.last_error.is_empty():
 		_status.text = SupabaseClient.last_error

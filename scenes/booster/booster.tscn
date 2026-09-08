@@ -11,12 +11,6 @@
 [ext_resource type="Material" path="res://assets/ui/sdf_card_shadow.tres" id="9_shadow"]
 [ext_resource type="FontFile" uid="uid://cjgc8hhsb6xtr" path="res://assets/fonts/Dangrek-Regular.ttf" id="10_font"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_reroll_shadow"]
-shader = ExtResource("3_4cwg5")
-shader_parameter/shadow_color = Color(0, 0, 0, 0.28)
-shader_parameter/blur_size = 16.0
-shader_parameter/radius = 0.85
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_progress"]
 shader = ExtResource("5_prog")
 shader_parameter/primary_color = Color(0, 0.81278217, 0.8193065, 1)
@@ -128,18 +122,6 @@ offset_right = 21.166666
 offset_bottom = -95.0
 grow_horizontal = 2
 mouse_filter = 2
-
-[node name="Shadow" type="TextureRect" parent="StackVisuals/RecycleButton" unique_id=799092591]
-z_index = -1
-material = SubResource("ShaderMaterial_reroll_shadow")
-layout_mode = 0
-offset_left = -0.66666603
-offset_top = -0.666687
-offset_right = 33.333336
-offset_bottom = 33.333313
-mouse_filter = 2
-texture = ExtResource("2_430vb")
-expand_mode = 1
 
 [node name="Circle" type="TextureRect" parent="StackVisuals/RecycleButton" unique_id=2100593392]
 material = ExtResource("6_fill")

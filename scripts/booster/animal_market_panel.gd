@@ -5,7 +5,6 @@ signal buy_pressed(offer_index: int)
 signal toggle_pressed
 signal reroll_pressed(offer_index: int)
 
-var COLOR_BROWN = Color.html("#918478")
 ## Match booster pack chrome ([Booster.STACK_SCALE] / container x = 0, 100, 200).
 const MARKET_SCALE := 0.75
 const BOOSTER_SPACING := 100.0
@@ -445,7 +444,7 @@ func _on_arrow_mouse_entered(arrow: Area2D) -> void:
 	UiPointerBlock.enter(arrow)
 	GameFeedback.play_hover_button()
 	var icon: Sprite2D = arrow.get_node("Icon")
-	icon.modulate = COLOR_BROWN
+	icon.modulate = UiTheme.secondary
 
 
 func _on_arrow_mouse_exited(arrow: Area2D) -> void:

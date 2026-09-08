@@ -10,6 +10,7 @@ class_name RunSave
 
 const PATH_ENDLESS := "user://endless_run_save.json"
 const PATH_DAILY := "user://daily_run_save.json"
+const PATH_WEEKLY := "user://weekly_run_save.json"
 const PATH_NORMAL := "user://normal_run_save.json"
 
 # In-memory payload used between scene loads (main menu -> game scene).
@@ -21,6 +22,8 @@ static func path_for_mode(mode: int) -> String:
 	match mode:
 		GameSession.GameMode.DAILY:
 			return PATH_DAILY
+		GameSession.GameMode.WEEKLY:
+			return PATH_WEEKLY
 		GameSession.GameMode.NORMAL:
 			return PATH_NORMAL
 		GameSession.GameMode.ENDLESS:
@@ -32,6 +35,7 @@ static func path_for_mode(mode: int) -> String:
 static func supports_mode(mode: int) -> bool:
 	return (
 		mode == GameSession.GameMode.DAILY
+		or mode == GameSession.GameMode.WEEKLY
 		or mode == GameSession.GameMode.NORMAL
 		or mode == GameSession.GameMode.ENDLESS
 	)
@@ -45,6 +49,8 @@ static func has_save(mode: int) -> bool:
 		return false
 	if mode == GameSession.GameMode.DAILY:
 		return is_daily_save_valid(load_save(mode))
+	if mode == GameSession.GameMode.WEEKLY:
+		return is_weekly_save_valid(load_save(mode))
 	return true
 
 
@@ -55,12 +61,27 @@ static func is_daily_save_valid(state: Dictionary) -> bool:
 	return saved_seed != 0 and saved_seed == GameSession.get_daily_seed()
 
 
+static func is_weekly_save_valid(state: Dictionary) -> bool:
+	if state.is_empty():
+		return false
+	var saved_seed := int(state.get("run_seed", 0))
+	return saved_seed != 0 and saved_seed == GameSession.get_weekly_seed()
+
+
 static func clear_expired_daily_save() -> void:
 	if not FileAccess.file_exists(PATH_DAILY):
 		return
 	var state := load_save(GameSession.GameMode.DAILY)
 	if not is_daily_save_valid(state):
 		clear_save(GameSession.GameMode.DAILY)
+
+
+static func clear_expired_weekly_save() -> void:
+	if not FileAccess.file_exists(PATH_WEEKLY):
+		return
+	var state := load_save(GameSession.GameMode.WEEKLY)
+	if not is_weekly_save_valid(state):
+		clear_save(GameSession.GameMode.WEEKLY)
 
 
 static func clear_save(mode: int) -> void:

@@ -8,6 +8,8 @@ signal skip_pressed
 const COACH_LAYER_DEFAULT := 12
 const COACH_LAYER_MENU := 20
 const MENU_HIGHLIGHTS := ["end_session", "share"]
+const STAR_ICON_SIZE := 40.0
+const STAR_FILL_SIZE := 36.0
 const HUD_HIGHLIGHTS := {
 	"play_counter": "PlayCounter",
 	"pack_counter": "PackCounter",
@@ -56,6 +58,8 @@ func _ready() -> void:
 	get_viewport().size_changed.connect(_on_viewport_resized)
 	if _stars_row:
 		_stars_row.hide()
+	_apply_theme()
+	UiTheme.bind_node(self, _apply_theme)
 
 
 func _process(_delta: float) -> void:
@@ -71,6 +75,27 @@ func _process(_delta: float) -> void:
 
 func _on_button_mouse_entered() -> void:
 	GameFeedback.play_hover_button()
+
+
+func _apply_theme() -> void:
+	if _bubble:
+		UiTheme.style_panel(_bubble)
+	UiTheme.style_label(_title)
+	UiTheme.style_label(_body)
+	UiTheme.style_chip_button(_continue_button)
+	UiTheme.style_chip_button(_skip_button)
+	_theme_rating_stars()
+	if _highlights == null:
+		return
+	for child in _highlights.get_children():
+		var panel := child as Panel
+		if panel == null:
+			continue
+		var existing := panel.get_theme_stylebox("panel")
+		if existing is StyleBoxFlat:
+			var box := existing as StyleBoxFlat
+			box.border_color = UiTheme.highlight
+			box.bg_color = UiTheme.with_alpha(UiTheme.highlight, 0.0)
 
 
 func show_centered_modal(title: String, body: String, button_label: String, ratings: Dictionary = {}, skip_label: String = "") -> void:
@@ -167,14 +192,54 @@ func _apply_rating_stars(ratings: Dictionary) -> void:
 		var col := cols[i] as Control
 		if col == null:
 			continue
-		var icon := col.get_node_or_null("Icon") as TextureRect
+		var icon := col.get_node_or_null("StarIcon/Icon") as TextureRect
 		var points := col.get_node_or_null("Points") as Label
 		if icon:
-			icon.custom_minimum_size = Vector2(32, 32)
-			icon.modulate = colors[i]
+			_apply_star_icon(icon, colors[i])
 		if points:
 			points.text = str(values[i])
+			UiTheme.style_label(points)
 	_stars_row.show()
+
+
+func _theme_rating_stars() -> void:
+	if _stars_row == null:
+		return
+	var colors: Array[Color] = [
+		COLOR_STAR_BRONZE,
+		COLOR_STAR_SILVER,
+		COLOR_STAR_GOLD,
+	]
+	var cols := _stars_row.get_children()
+	for i in cols.size():
+		var col := cols[i] as Control
+		if col == null:
+			continue
+		var icon := col.get_node_or_null("StarIcon/Icon") as TextureRect
+		var points := col.get_node_or_null("Points") as Label
+		if icon:
+			var fill := colors[i] if i < colors.size() else Color.WHITE
+			_apply_star_icon(icon, fill)
+		if points:
+			UiTheme.style_label(points)
+
+
+func _apply_star_icon(icon: TextureRect, fill: Color) -> void:
+	icon.material = null
+	icon.modulate = fill
+	var wrap := icon.get_parent() as Control
+	if wrap:
+		wrap.clip_contents = false
+		wrap.custom_minimum_size = Vector2(STAR_ICON_SIZE, STAR_ICON_SIZE)
+	var outline := wrap.get_node_or_null("Outline") as TextureRect if wrap else null
+	if outline:
+		outline.material = null
+		outline.modulate = Color.WHITE
+	var half := STAR_FILL_SIZE * 0.5
+	icon.offset_left = -half
+	icon.offset_top = -half
+	icon.offset_right = half
+	icon.offset_bottom = half
 
 
 func _show_highlight(highlight_name: String) -> void:

@@ -94,7 +94,7 @@ visible = false
 [node name="ElementBubble" type="Sprite3D" parent="HoverInfo" unique_id=301385433]
 transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, -4, 19, 0)
 visible = false
-modulate = Color(0.956863, 0.87451, 0.792157, 1)
+modulate = Color(1, 1, 1, 1)
 billboard = 1
 alpha_cut = 1
 cast_shadow = 0
@@ -110,7 +110,7 @@ render_priority = 3
 [node name="AnimalBubble" type="Sprite3D" parent="HoverInfo" unique_id=349752291]
 transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 4, 19, 0)
 visible = false
-modulate = Color(0.956863, 0.87451, 0.792157, 1)
+modulate = Color(1, 1, 1, 1)
 billboard = 1
 alpha_cut = 1
 cast_shadow = 0

@@ -21,6 +21,7 @@ config/windows_native_icon="res://assets/ui/symbia_favicon.ico"
 
 GameSession="*res://scripts/game/game_session.gd"
 GameSettings="*res://scripts/game/game_settings.gd"
+UiTheme="*res://scripts/ui/ui_theme.gd"
 SupabaseClient="*res://scripts/net/supabase_client.gd"
 CardCatalog="*uid://b8oog78vthmvf"
 Enums="*uid://dx4s0agjfg2qs"

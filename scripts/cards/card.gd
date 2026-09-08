@@ -21,7 +21,6 @@ class_name Card
 const STACK_STEP_PX := 10.0
 const STACK_VISUAL_CAP := 4
 const DESATURATE_AMOUNT := 0.45
-var COLOR_BROWN := Color.html("#918478")
 
 @onready var visuals : Node2D = $visuals
 @onready var empty_area : Control = $EmptyArea
@@ -87,6 +86,14 @@ func _ready() -> void:
 	recycle_btn.mouse_entered.connect(_on_recycle_mouse_entered)
 	recycle_btn.mouse_exited.connect(_on_recycle_mouse_exited)
 	_sync_areas_to_visuals()
+	UiTheme.bind_node(self, _apply_theme)
+	_apply_theme()
+
+
+func _apply_theme() -> void:
+	if not _recycle_hovered:
+		_reset_recycle_button_colors()
+
 
 func init(cardData:CardData, parent:Node, idx:int) -> void:
 	if parent is CardContainer:
@@ -443,7 +450,7 @@ func _on_recycle_mouse_entered() -> void:
 	UiPointerBlock.enter(recycle_btn)
 	_sync_ui_pointer_block()
 	GameFeedback.play_hover_button()
-	recycle_circle.self_modulate = COLOR_BROWN
+	recycle_circle.self_modulate = UiTheme.secondary
 	recycle_label.add_theme_color_override("font_color", Color.WHITE)
 	if _interaction_host != null and _interaction_host.has_method("set_recycle_hover"):
 		_interaction_host.set_recycle_hover(id, true)
@@ -467,7 +474,7 @@ func _on_recycle_mouse_exited() -> void:
 
 func _reset_recycle_button_colors() -> void:
 	recycle_circle.self_modulate = Color.WHITE
-	recycle_label.add_theme_color_override("font_color", COLOR_BROWN)
+	recycle_label.add_theme_color_override("font_color", UiTheme.secondary)
 
 
 func _clear_recycle_hover() -> void:

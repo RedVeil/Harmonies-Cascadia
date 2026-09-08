@@ -32,12 +32,6 @@ position = Vector2(-1, 0)
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("3_obics")
 
-[node name="Icon" type="Sprite2D" parent="ExpandArrow/Icon" unique_id=713817234]
-modulate = Color(0, 0, 0, 0.097)
-show_behind_parent = true
-position = Vector2(6.666664, 6.666687)
-texture = ExtResource("3_obics")
-
 [node name="CollapseArrow" type="Area2D" parent="." unique_id=1017714051]
 position = Vector2(260, -170.5)
 input_pickable = false
@@ -52,10 +46,4 @@ shape = SubResource("CircleShape2D_obics")
 position = Vector2(5, 0)
 rotation = 3.1415927
 scale = Vector2(0.3, 0.3)
-texture = ExtResource("3_obics")
-
-[node name="Icon" type="Sprite2D" parent="CollapseArrow/Icon" unique_id=1579914909]
-modulate = Color(0, 0, 0, 0.097)
-show_behind_parent = true
-position = Vector2(-6.666588, -6.666687)
 texture = ExtResource("3_obics")

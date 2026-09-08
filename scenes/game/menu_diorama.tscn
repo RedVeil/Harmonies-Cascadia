@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/game/menu_diorama.gd" id="1_diorama"]
+
+[sub_resource type="Environment" id="Environment_menu"]
+background_mode = 1
+background_color = Color(0.43529412, 0.7019608, 0.7490196, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.81960785, 0.7490196, 0.6784314, 1)
+adjustment_enabled = true
+
+[node name="MenuDiorama" type="Node3D"]
+script = ExtResource("1_diorama")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_menu")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(-0.8660253, -0.43301287, 0.24999996, 0, 0.50000006, 0.86602527, -0.5, 0.7500002, -0.43301257, 0, 0, 0)
+shadow_enabled = true
+sky_mode = 1
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 0, 80, 80)
+projection = 1
+current = true
+fov = 60.0
+size = 100.0
+near = 0.1
+far = 1000.0
+
+[node name="Board" type="Node3D" parent="."]

@@ -7,24 +7,30 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n22po"]
 bg_color = Color(0.9137255, 0.8352941, 0.7607843, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-shadow_color = Color(0, 0, 0, 0.078)
-shadow_size = 4
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d75bn"]
 bg_color = Color(0.9137255, 0.8352941, 0.7607843, 1)
-shadow_color = Color(0, 0, 0, 0.078)
-shadow_size = 4
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_132bv"]
+bg_color = Color(0.9137255, 0.8352941, 0.7607843, 1)
+border_width_left = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
 
 [node name="PlacementTooltip" type="Node2D" unique_id=1404822029]
 script = ExtResource("1_kjs7j")
 
 [node name="element" type="Node2D" parent="." unique_id=250293903]
 z_index = 1
-position = Vector2(26, 29.999998)
+position = Vector2(30, 29.999998)
 scale = Vector2(0.1, 0.1)
 
 [node name="1" type="Node2D" parent="element" unique_id=1079115816]
@@ -125,7 +131,7 @@ texture = ExtResource("3_d75bn")
 
 [node name="animal" type="Node2D" parent="." unique_id=1633695476]
 z_index = 1
-position = Vector2(50, 58)
+position = Vector2(53.999992, 58)
 scale = Vector2(0.09, 0.09)
 
 [node name="(0,0)" type="Sprite2D" parent="animal" unique_id=1735063232]
@@ -213,14 +219,14 @@ texture = ExtResource("3_d75bn")
 [node name="Sprite2D" type="Sprite2D" parent="animal/(1,0)/Sprite2D" unique_id=615137148]
 
 [node name="Panel" type="Panel" parent="." unique_id=558093077]
-offset_right = 100.0
-offset_bottom = 130.0
+offset_right = 107.0
+offset_bottom = 137.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_n22po")
 
 [node name="PointsLabel" type="Label" parent="Panel" unique_id=1925528481]
 layout_mode = 0
 offset_top = 97.0
-offset_right = 100.0
+offset_right = 107.0
 offset_bottom = 130.0
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.4745098, 1)
 theme_override_colors/font_outline_color = Color(0.5686275, 0.5176471, 0.4745098, 1)
@@ -231,22 +237,19 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="ArrowDown" type="Panel" parent="Panel" unique_id=1752528228]
-show_behind_parent = true
 layout_mode = 0
-offset_left = 49.00001
-offset_top = 118.0
-offset_right = 65.000015
-offset_bottom = 134.0
+offset_left = 55.000008
+offset_top = 125.000015
+offset_right = 71.000015
+offset_bottom = 141.00002
 rotation = 0.7853982
 theme_override_styles/panel = SubResource("StyleBoxFlat_d75bn")
 
 [node name="ArrowRight" type="Panel" parent="Panel" unique_id=748754709]
-visible = false
-show_behind_parent = true
 layout_mode = 0
-offset_left = -0.42640305
-offset_top = 49.722923
-offset_right = 15.573597
-offset_bottom = 65.72292
+offset_left = 0.9999981
+offset_top = 55.00001
+offset_right = 16.999998
+offset_bottom = 71.000015
 rotation = 0.7853982
-theme_override_styles/panel = SubResource("StyleBoxFlat_d75bn")
+theme_override_styles/panel = SubResource("StyleBoxFlat_132bv")

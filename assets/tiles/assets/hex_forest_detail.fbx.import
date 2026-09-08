@@ -41,7 +41,7 @@ _subresources={
 "materials": {
 "BrownDark": {
 "use_external/enabled": true,
-"use_external/fallback_path": "res://assets/tiles/materials/ground/BrownDark.tres",
+"use_external/fallback_path": "res://assets/tiles/materials/ground/TileShadow.tres",
 "use_external/path": "uid://vbn4wsie61cd"
 },
 "Green": {

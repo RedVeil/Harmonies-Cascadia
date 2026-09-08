@@ -13,8 +13,6 @@ const PACK_SLOTS := 3
 const MARKET_SLOTS := 3
 const MAX_PACK_ELEMENTS := 4
 
-var COLOR_BROWN := Color.html("#918478")
-
 var boosters: Array = [null, null, null]
 var animal_market: Array = [-1, -1, -1]
 
@@ -34,6 +32,30 @@ func _ready() -> void:
 	hide()
 	_center_popup_root()
 	get_viewport().size_changed.connect(_center_popup_root)
+	_apply_theme()
+	UiTheme.bind_node(self, _apply_theme)
+
+
+func _apply_theme() -> void:
+	if _popup_panel:
+		UiTheme.style_panel(_popup_panel)
+	UiTheme.style_label(_title)
+	UiTheme.style_label(_status, true)
+	if _close_button:
+		var close_label := _close_button.get_node_or_null("Label") as Label
+		if close_label:
+			UiTheme.style_label(close_label)
+	if _content:
+		_recolor_labels(_content)
+
+
+func _recolor_labels(node: Node) -> void:
+	if node is Label:
+		UiTheme.style_label(node as Label)
+	elif node is Button:
+		UiTheme.style_chip_button(node as Button)
+	for child in node.get_children():
+		_recolor_labels(child)
 
 
 func open(initial_boosters: Array = [], initial_market: Array = []) -> void:
@@ -127,7 +149,7 @@ func _rebuild_ui() -> void:
 
 	var packs_label := Label.new()
 	packs_label.text = "Packs"
-	packs_label.add_theme_color_override("font_color", COLOR_BROWN)
+	packs_label.add_theme_color_override("font_color", UiTheme.text)
 	packs_label.add_theme_font_size_override("font_size", 18)
 	_content.add_child(packs_label)
 
@@ -136,12 +158,13 @@ func _rebuild_ui() -> void:
 
 	var market_label := Label.new()
 	market_label.text = "Animal Market"
-	market_label.add_theme_color_override("font_color", COLOR_BROWN)
+	market_label.add_theme_color_override("font_color", UiTheme.text)
 	market_label.add_theme_font_size_override("font_size", 18)
 	_content.add_child(market_label)
 
 	for i in MARKET_SLOTS:
 		_content.add_child(_make_market_row(i))
+	_apply_theme()
 
 
 func _make_pack_row(index: int) -> HBoxContainer:
@@ -150,7 +173,7 @@ func _make_pack_row(index: int) -> HBoxContainer:
 	var pack = boosters[index]
 	var summary := Label.new()
 	summary.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	summary.add_theme_color_override("font_color", COLOR_BROWN)
+	summary.add_theme_color_override("font_color", UiTheme.text)
 	summary.add_theme_font_size_override("font_size", 13)
 	if pack == null:
 		summary.text = "Pack %d: (empty)" % (index + 1)
@@ -171,7 +194,7 @@ func _make_market_row(index: int) -> HBoxContainer:
 	row.add_theme_constant_override("separation", 8)
 	var summary := Label.new()
 	summary.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	summary.add_theme_color_override("font_color", COLOR_BROWN)
+	summary.add_theme_color_override("font_color", UiTheme.text)
 	summary.add_theme_font_size_override("font_size", 13)
 	var animal_id := int(animal_market[index])
 	if animal_id < 0:
@@ -193,6 +216,7 @@ func _btn(text: String, cb: Callable) -> Button:
 	var b := Button.new()
 	b.text = text
 	b.custom_minimum_size = Vector2(72, 28)
+	UiTheme.style_chip_button(b)
 	b.pressed.connect(cb)
 	return b
 
@@ -216,7 +240,7 @@ func _show_element_chooser(pack_index: int) -> void:
 	row.add_theme_constant_override("separation", 6)
 	var label := Label.new()
 	label.text = "Add element to pack %d:" % (pack_index + 1)
-	label.add_theme_color_override("font_color", COLOR_BROWN)
+	label.add_theme_color_override("font_color", UiTheme.text)
 	row.add_child(label)
 	for element in CardCatalog.elements:
 		if element == null or element.id <= 0:

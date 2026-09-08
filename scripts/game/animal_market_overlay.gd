@@ -4,8 +4,6 @@ class_name AnimalMarketOverlay
 signal buy_pressed(offer_index: int)
 signal close_pressed
 signal reroll_pressed
-
-var COLOR_BROWN := Color.html("#918478")
 const CLOSE_BUTTON_SIZE := Vector2(32.0, 36.0)
 const CARD_SIZE := Vector2(94.0, 168.0)
 const OFFER_WIDTH := 120.0
@@ -50,6 +48,8 @@ func _ready() -> void:
 	hide()
 	_center_popup_root()
 	get_viewport().size_changed.connect(_center_popup_root)
+	_apply_theme()
+	UiTheme.bind_node(self, _apply_theme)
 
 ## ----- Public API ----- ##
 
@@ -300,7 +300,7 @@ func _rebuild_single_offer(offer_index: int) -> void:
 
 	var buy_bg := ColorRect.new()
 	buy_bg.name = "Background"
-	buy_bg.color = Color.WHITE
+	buy_bg.color = UiTheme.text
 	buy_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	buy_bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	buy_button.add_child(buy_bg)
@@ -309,7 +309,7 @@ func _rebuild_single_offer(offer_index: int) -> void:
 	buy_label.name = "Label"
 	buy_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	buy_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	buy_label.add_theme_color_override("font_color", COLOR_BROWN)
+	buy_label.add_theme_color_override("font_color", UiTheme.menu)
 	buy_label.add_theme_font_size_override("font_size", 12)
 	buy_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	buy_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -321,6 +321,25 @@ func _refresh_labels() -> void:
 	_title_label.text = "Animal Market"
 	if _credits_label.text.is_empty():
 		_credits_label.text = "Take 1 animal per booster"
+	_style_market_chrome()
+
+
+func _apply_theme() -> void:
+	_style_market_chrome()
+	_refresh_reroll_button()
+	for i in _buy_buttons.size():
+		_refresh_offer_button(i)
+
+
+func _style_market_chrome() -> void:
+	if _popup_panel:
+		UiTheme.style_panel(_popup_panel)
+	UiTheme.style_label(_title_label)
+	UiTheme.style_label(_credits_label)
+	if _close_button:
+		var close_label := _close_button.get_node_or_null("Label") as Label
+		if close_label:
+			UiTheme.style_label(close_label)
 
 func _is_buy_enabled(offer_index: int) -> bool:
 	if offer_index < 0 or offer_index >= _offers.size():
@@ -347,8 +366,8 @@ func _refresh_offer_button(offer_index: int) -> void:
 
 	if _is_buy_enabled(offer_index):
 		buy_label.text = "Take"
-		buy_bg.color = Color.WHITE
-		buy_label.add_theme_color_override("font_color", COLOR_BROWN)
+		buy_bg.color = UiTheme.text
+		buy_label.add_theme_color_override("font_color", UiTheme.menu)
 		buy_button.mouse_filter = Control.MOUSE_FILTER_STOP
 	else:
 		buy_label.text = "—" if not has_offer else _disabled_buy_label
@@ -363,8 +382,8 @@ func _refresh_reroll_button() -> void:
 	var bg: ColorRect = _reroll_button.get_node("Background")
 	if _reroll_enabled:
 		label.text = "Refresh"
-		bg.color = Color.WHITE
-		label.add_theme_color_override("font_color", COLOR_BROWN)
+		bg.color = UiTheme.text
+		label.add_theme_color_override("font_color", UiTheme.menu)
 		_reroll_button.mouse_filter = Control.MOUSE_FILTER_STOP
 	else:
 		label.text = "Refresh (cooling down)"
@@ -416,17 +435,17 @@ func _on_buy_pressed(offer_index: int) -> void:
 
 func _on_close_mouse_entered() -> void:
 	GameFeedback.play_hover_button()
-	_close_button.get_node("Label").add_theme_color_override("font_color", Color.WHITE)
+	_close_button.get_node("Label").add_theme_color_override("font_color", UiTheme.hint_color())
 
 func _on_close_mouse_exited() -> void:
-	_close_button.get_node("Label").add_theme_color_override("font_color", COLOR_BROWN)
+	_close_button.get_node("Label").add_theme_color_override("font_color", UiTheme.text)
 
 func _on_reroll_mouse_entered() -> void:
 	if not _reroll_enabled:
 		return
 	GameFeedback.play_hover_button()
-	_reroll_button.get_node("Background").color = COLOR_BROWN
-	_reroll_button.get_node("Label").add_theme_color_override("font_color", Color.WHITE)
+	_reroll_button.get_node("Background").color = UiTheme.menu
+	_reroll_button.get_node("Label").add_theme_color_override("font_color", UiTheme.text)
 
 func _on_reroll_mouse_exited() -> void:
 	_refresh_reroll_button()
@@ -440,8 +459,8 @@ func _on_buy_mouse_entered(offer_index: int) -> void:
 	if buy_button == null:
 		return
 	GameFeedback.play_hover_button()
-	buy_button.get_node("Background").color = COLOR_BROWN
-	buy_button.get_node("Label").add_theme_color_override("font_color", Color.WHITE)
+	buy_button.get_node("Background").color = UiTheme.menu
+	buy_button.get_node("Label").add_theme_color_override("font_color", UiTheme.text)
 
 func _on_buy_mouse_exited(offer_index: int) -> void:
 	_refresh_offer_button(offer_index)

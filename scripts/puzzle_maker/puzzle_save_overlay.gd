@@ -6,8 +6,6 @@ class_name PuzzleSaveOverlay
 signal save_requested(payload: Dictionary)
 signal closed
 
-var COLOR_BROWN := Color.html("#918478")
-
 @onready var _popup_root: Node2D = $PopupRoot
 @onready var _popup_panel: Panel = $PopupRoot/PopupPanel
 @onready var _title: Label = $PopupRoot/TitleLabel
@@ -32,6 +30,29 @@ func _ready() -> void:
 	_center_popup_root()
 	get_viewport().size_changed.connect(_center_popup_root)
 	_save_button.pressed.connect(_on_save_pressed)
+	_apply_theme()
+	UiTheme.bind_node(self, _apply_theme)
+
+
+func _apply_theme() -> void:
+	if _popup_panel:
+		UiTheme.style_panel(_popup_panel)
+	UiTheme.style_label(_title)
+	UiTheme.style_label(_board_score)
+	UiTheme.style_label(_status, true)
+	UiTheme.style_line_edit(_id_edit)
+	UiTheme.style_line_edit(_title_edit)
+	UiTheme.style_text_edit(_desc_edit)
+	UiTheme.style_chip_button(_save_button)
+	if _close_button:
+		var close_label := _close_button.get_node_or_null("Label") as Label
+		if close_label:
+			UiTheme.style_label(close_label)
+	if _form:
+		for child in _form.find_children("*", "Label", true, false):
+			if child is Label:
+				var hint := (child as Label).name.to_lower().contains("status")
+				UiTheme.style_label(child as Label, hint)
 
 
 func open(draft: Dictionary, board_score: int = 0) -> void:

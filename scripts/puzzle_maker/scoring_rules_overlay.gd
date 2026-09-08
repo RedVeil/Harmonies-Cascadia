@@ -6,8 +6,6 @@ class_name ScoringRulesOverlay
 signal rules_changed(scoring_rules: Dictionary)
 signal closed
 
-var COLOR_BROWN := Color.html("#918478")
-
 const ELEMENT_TYPES := [1, 2, 3, 4, 5]
 
 var _option_buttons: Dictionary = {} # element_type -> OptionButton
@@ -26,6 +24,31 @@ func _ready() -> void:
 	hide()
 	_center_popup_root()
 	get_viewport().size_changed.connect(_center_popup_root)
+	_apply_theme()
+	UiTheme.bind_node(self, _apply_theme)
+
+
+func _apply_theme() -> void:
+	if _popup_panel:
+		UiTheme.style_panel(_popup_panel)
+	UiTheme.style_label(_title)
+	UiTheme.style_label(_hint, true)
+	if _close_button:
+		var close_label := _close_button.get_node_or_null("Label") as Label
+		if close_label:
+			UiTheme.style_label(close_label)
+	for element_type in _desc_labels:
+		var desc: Label = _desc_labels[element_type]
+		if desc:
+			UiTheme.style_label(desc, true)
+	for element_type in _option_buttons:
+		var option: OptionButton = _option_buttons[element_type]
+		if option:
+			UiTheme.style_option_button(option)
+	if _content:
+		for child in _content.find_children("*", "Label", true, false):
+			if child is Label:
+				UiTheme.style_label(child as Label)
 
 
 func open(current_rules: Dictionary = {}) -> void:
@@ -72,7 +95,7 @@ func _rebuild_ui(current_rules: Dictionary) -> void:
 		var name_label := Label.new()
 		name_label.text = str(element.name)
 		name_label.custom_minimum_size = Vector2(90, 0)
-		name_label.add_theme_color_override("font_color", COLOR_BROWN)
+		name_label.add_theme_color_override("font_color", UiTheme.text)
 		name_label.add_theme_font_size_override("font_size", 15)
 		header.add_child(name_label)
 
@@ -99,7 +122,7 @@ func _rebuild_ui(current_rules: Dictionary) -> void:
 
 		var desc := Label.new()
 		desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		desc.add_theme_color_override("font_color", COLOR_BROWN)
+		desc.add_theme_color_override("font_color", UiTheme.text)
 		desc.add_theme_font_size_override("font_size", 11)
 		desc.text = _description_for(ids[selected_idx] if selected_idx < ids.size() else -1)
 		row.add_child(desc)
@@ -108,6 +131,7 @@ func _rebuild_ui(current_rules: Dictionary) -> void:
 		_option_buttons[element_type] = option
 		_desc_labels[element_type] = desc
 		_rule_ids_by_element[element_type] = ids
+	_apply_theme()
 
 
 func _rule_id_for_element(rules: Dictionary, element_type: int) -> int:

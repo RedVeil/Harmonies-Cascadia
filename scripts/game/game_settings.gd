@@ -1,5 +1,5 @@
 extends Node
-## Persistent configuration: player identity, tutorial flags, graphics/audio. Apply at boot and from SettingsPanel.
+## Persistent configuration: player identity, tutorial flags, graphics/audio/theme. Apply at boot and from SettingsPanel.
 
 signal settings_changed
 
@@ -27,6 +27,7 @@ var msaa_mode: MsaaMode = MsaaMode.X4
 
 var music_volume: float = 0.5
 var sfx_volume: float = 0.5
+var theme_id: String = "cascadia"
 ## puzzle_id -> { "best_score": int }
 var puzzle_progress: Dictionary = {}
 
@@ -87,6 +88,9 @@ func _load_from_json() -> void:
 		audio = {}
 	music_volume = clampf(float(audio.get("music_volume", 0.5)), 0.0, 1.0)
 	sfx_volume = clampf(float(audio.get("sfx_volume", 0.5)), 0.0, 1.0)
+	theme_id = str(data.get("theme_id", "cascadia"))
+	if theme_id.is_empty():
+		theme_id = "cascadia"
 
 	var progress = data.get("puzzle_progress", {})
 	if typeof(progress) == TYPE_DICTIONARY:
@@ -127,6 +131,7 @@ func save_to_disk() -> void:
 			"music_volume": music_volume,
 			"sfx_volume": sfx_volume,
 		},
+		"theme_id": theme_id,
 		"puzzle_progress": puzzle_progress,
 	}
 	var json := JSON.stringify(data)

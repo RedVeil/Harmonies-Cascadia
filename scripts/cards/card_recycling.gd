@@ -11,24 +11,25 @@ var timer : float = 0.5
 ## ----- Initialisation ----- ##
 
 func _ready() -> void:
-	$icon.self_modulate = Color.GRAY
+	UiTheme.bind_node(self, _apply_theme)
+	_apply_theme()
 
 ## ----- State Logic ----- ##
 
 func enable() -> void:
 	enabled = true
-	
-	$background.self_modulate = Color.WHITE
-	$icon.self_modulate = Color.html("#918478")
+	_apply_theme()
 
 func disable() -> void:
 	enabled = false
-	
-	$background.self_modulate = Color.WHITE
-	$icon.self_modulate = Color.GRAY
 	is_hovered = false
 	timer = 0.5
 	$Tooltip.hide()
+	_apply_theme()
+
+
+func _apply_theme() -> void:
+	UiTheme.apply_hud_circle($background, $icon, is_hovered, enabled)
 
 ## ----- Interactions Logic ----- ##
 
@@ -41,21 +42,19 @@ func _on_mouse_entered() -> void:
 	UiPointerBlock.enter(self)
 	if enabled:
 		GameFeedback.play_hover_button()
-		$background.self_modulate = Color.html("#918478")
-		$icon.self_modulate = Color.WHITE
-		orchestrator.preview_recycle_card(-1, recycling_value, false)
 		is_hovered = true
 		timer = 0.5
+		_apply_theme()
+		orchestrator.preview_recycle_card(-1, recycling_value, false)
 
 func _on_mouse_exited() -> void:
 	UiPointerBlock.exit(self)
+	is_hovered = false
+	timer = 0.5
+	$Tooltip.hide()
 	if enabled:
-		$background.self_modulate = Color.WHITE
-		$icon.self_modulate = Color.html("#918478")
+		_apply_theme()
 		orchestrator.reset_recycle_card_preview()
-		is_hovered = false
-		timer = 0.5
-		$Tooltip.hide()
 
 
 func set_focus_hover(on: bool) -> void:

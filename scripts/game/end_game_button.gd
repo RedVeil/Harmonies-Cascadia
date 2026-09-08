@@ -7,10 +7,8 @@ var enabled: bool = true
 var is_hovered: bool = false
 var timer: float = 0.5
 
-var COLOR_BROWN := Color.html("#918478")
-
-
 func _ready() -> void:
+	UiTheme.bind_node(self, _refresh_visuals)
 	_refresh_visuals()
 
 
@@ -35,12 +33,7 @@ func set_focus_hover(on: bool) -> void:
 
 
 func _refresh_visuals() -> void:
-	if enabled:
-		$background.self_modulate = Color.WHITE
-		$icon.self_modulate = COLOR_BROWN
-	else:
-		$background.self_modulate = Color.WHITE
-		$icon.self_modulate = Color.GRAY
+	UiTheme.apply_hud_circle($background, $icon, is_hovered, enabled)
 
 
 func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
@@ -54,20 +47,18 @@ func _on_mouse_entered() -> void:
 	UiPointerBlock.enter(self)
 	if enabled:
 		GameFeedback.play_hover_button()
-		$background.self_modulate = COLOR_BROWN
-		$icon.self_modulate = Color.WHITE
 		is_hovered = true
 		timer = 0.5
+		_refresh_visuals()
 
 
 func _on_mouse_exited() -> void:
 	UiPointerBlock.exit(self)
+	is_hovered = false
+	timer = 0.5
+	$Tooltip.hide()
 	if enabled:
-		$background.self_modulate = Color.WHITE
-		$icon.self_modulate = COLOR_BROWN
-		is_hovered = false
-		timer = 0.5
-		$Tooltip.hide()
+		_refresh_visuals()
 
 
 func _process(delta: float) -> void:

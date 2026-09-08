@@ -3,20 +3,30 @@ class_name ScoringTooltip
 
 @export var orchestrator: Orchestrator
 
-var COLOR_BROWN := Color.html("#918478")
+var _hovered: bool = false
+
+## ----- Initialisation ----- ##
+
+func _ready() -> void:
+	UiTheme.bind_node(self, _apply_theme)
+	_apply_theme()
+
+
+func _apply_theme() -> void:
+	UiTheme.apply_hud_circle($Button/background, $Button/icon, _hovered)
 
 ## ----- Interactions Logic ----- ##
 
 func _on_button_mouse_entered() -> void:
 	UiPointerBlock.enter(self)
 	GameFeedback.play_hover_button()
-	$Button/background.self_modulate = COLOR_BROWN
-	$Button/icon.self_modulate = Color.WHITE
+	_hovered = true
+	_apply_theme()
 
 func _on_button_mouse_exited() -> void:
 	UiPointerBlock.exit(self)
-	$Button/background.self_modulate = Color.WHITE
-	$Button/icon.self_modulate = COLOR_BROWN
+	_hovered = false
+	_apply_theme()
 
 
 func set_focus_hover(on: bool) -> void:

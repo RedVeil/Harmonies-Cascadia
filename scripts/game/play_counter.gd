@@ -3,8 +3,6 @@ class_name PlayCounter
 
 @export var tooltip_text: String = "How many tiles you can still place."
 
-var COLOR_BROWN := Color.html("#918478")
-
 @onready var _label: Label = $Label
 @onready var _tooltip: Panel = $Tooltip
 @onready var _tooltip_label: Label = $Tooltip/Label
@@ -17,12 +15,18 @@ var _timer := 0.5
 func _ready() -> void:
 	input_pickable = true
 	if _label:
-		_label.add_theme_color_override("font_color", COLOR_BROWN)
 		_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	if _tooltip_label:
 		_tooltip_label.text = tooltip_text
 	if _tooltip:
 		_tooltip.hide()
+	UiTheme.bind_node(self, _apply_theme)
+	_apply_theme()
+
+
+func _apply_theme() -> void:
+	if _label:
+		_label.add_theme_color_override("font_color", UiTheme.secondary)
 
 
 func set_remaining(remaining: int) -> void:

@@ -12,10 +12,26 @@ func _ready() -> void:
 	get_viewport().size_changed.connect(_center_popup_root)
 	if _close_button != null:
 		_close_button.mouse_entered.connect(_on_close_mouse_entered)
+	_apply_theme()
+	UiTheme.bind_node(self, _apply_theme)
+	if _settings_panel:
+		_settings_panel.apply_sidebar_style()
 
 
 func _on_close_mouse_entered() -> void:
 	GameFeedback.play_hover_button()
+
+
+func _apply_theme() -> void:
+	var panel := $PopupRoot/PopupPanel as Control
+	if panel:
+		UiTheme.style_panel(panel)
+	if _close_button:
+		var label := _close_button.get_node_or_null("Label") as Label
+		if label:
+			UiTheme.style_label(label)
+	if _settings_panel:
+		_settings_panel.apply_sidebar_style()
 
 
 func open() -> void:

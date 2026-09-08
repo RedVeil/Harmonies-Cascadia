@@ -582,7 +582,7 @@ func _hover_target(target: Dictionary, on: bool, play_hover: bool) -> void:
 						GameFeedback.play_hover_button()
 					var icon := arrow.get_node_or_null("Icon") as Sprite2D
 					if icon:
-						icon.modulate = Color.html("#918478")
+						icon.modulate = UiTheme.secondary
 					UiPointerBlock.enter(arrow)
 				else:
 					UiPointerBlock.exit(arrow)

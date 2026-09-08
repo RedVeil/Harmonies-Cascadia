@@ -4,25 +4,28 @@ class_name UndoButton
 @export var orchestrator : Orchestrator
 
 var enabled : bool = false
+var is_hovered: bool = false
 
 ## ----- Initialisation ----- ##
 
 func _ready() -> void:
-	$icon.self_modulate = Color.GRAY
+	UiTheme.bind_node(self, _apply_theme)
+	_apply_theme()
 
 ## ----- State Logic ----- ##
 
 func enable() -> void:
 	enabled = true
-	
-	$background.self_modulate = Color.WHITE
-	$icon.self_modulate = Color.html("#918478")
+	_apply_theme()
 
 func disable() -> void:
 	enabled = false
-	
-	$background.self_modulate = Color.WHITE
-	$icon.self_modulate = Color.GRAY
+	is_hovered = false
+	_apply_theme()
+
+
+func _apply_theme() -> void:
+	UiTheme.apply_hud_circle($background, $icon, is_hovered, enabled)
 
 
 func set_focus_hover(on: bool) -> void:
@@ -42,11 +45,11 @@ func _on_mouse_entered() -> void:
 	UiPointerBlock.enter(self)
 	if enabled:
 		GameFeedback.play_hover_button()
-		$background.self_modulate = Color.html("#918478")
-		$icon.self_modulate = Color.WHITE
+		is_hovered = true
+		_apply_theme()
 
 func _on_mouse_exited() -> void:
 	UiPointerBlock.exit(self)
+	is_hovered = false
 	if enabled:
-		$background.self_modulate = Color.WHITE
-		$icon.self_modulate = Color.html("#918478")
+		_apply_theme()

@@ -55,6 +55,23 @@ func _ready() -> void:
 	mouse_exited.connect(_on_mouse_exited)
 	input_event.connect(_on_input_event)
 	_cache_visual_nodes()
+	UiTheme.bind_node(self, _apply_theme)
+	_apply_theme()
+
+
+func _apply_theme() -> void:
+	var element_bubble := get_node_or_null("HoverInfo/ElementBubble") as Sprite3D
+	var animal_bubble := get_node_or_null("HoverInfo/AnimalBubble") as Sprite3D
+	if element_bubble:
+		element_bubble.modulate = UiTheme.hud_background
+		var element_icon := element_bubble.get_node_or_null("Icon") as Sprite3D
+		if element_icon:
+			element_icon.modulate = UiTheme.secondary
+	if animal_bubble:
+		animal_bubble.modulate = UiTheme.hud_background
+		var animal_icon := animal_bubble.get_node_or_null("Icon") as Sprite3D
+		if animal_icon:
+			animal_icon.modulate = UiTheme.secondary
 
 
 func _cache_visual_nodes() -> void:
@@ -274,13 +291,13 @@ func show_points(points: int) -> void:
 	hide_hover_info()
 	if points > 0:
 		$Sprite3D/Label3D.text = "+%d" % points
-		$Sprite3D.modulate = Color.GOLD
+		$Sprite3D.modulate = UiTheme.points_positive
 	elif points < 0:
 		$Sprite3D/Label3D.text = "%d" % points
-		$Sprite3D.modulate = Color.CRIMSON
+		$Sprite3D.modulate = UiTheme.points_negative
 	else:
 		$Sprite3D/Label3D.text = "%d" % points
-		$Sprite3D.modulate = Color.WHITE
+		$Sprite3D.modulate = UiTheme.hud_background
 	$Sprite3D.scale = POINTS_BUBBLE_SCALE
 	$Sprite3D.show()
 
@@ -331,12 +348,14 @@ func _apply_hover_info(
 	var show_animal := animal_tex != null
 
 	if show_element:
+		element_bubble.modulate = UiTheme.hud_background
 		_apply_hover_icon(element_bubble.get_node("Icon") as Sprite3D, element_tex, icon_color)
 		element_bubble.show()
 	else:
 		element_bubble.hide()
 
 	if show_animal:
+		animal_bubble.modulate = UiTheme.hud_background
 		_apply_hover_icon(animal_bubble.get_node("Icon") as Sprite3D, animal_tex, icon_color)
 		animal_bubble.show()
 	else:
@@ -461,10 +480,10 @@ func _animate_score_pop(points: int) -> void:
 	var label: Label3D = $Sprite3D/Label3D
 	if points > 0:
 		label.text = "+%d" % points
-		sprite.modulate = Color(1.0, 0.88, 0.35, 1.0)
+		sprite.modulate = UiTheme.points_positive
 	else:
 		label.text = "%d" % points
-		sprite.modulate = Color(0.95, 0.35, 0.35, 1.0)
+		sprite.modulate = UiTheme.points_negative
 
 	sprite.visible = true
 	sprite.position.y = SCORE_POP_BASE_Y

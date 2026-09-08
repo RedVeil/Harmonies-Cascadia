@@ -10,14 +10,7 @@
 [ext_resource type="Material" path="res://assets/ui/sdf_card_shadow.tres" id="9_shadow"]
 [ext_resource type="Texture2D" uid="uid://ca2hp56qvfswa" path="res://assets/icons/circle.png" id="10_circle"]
 [ext_resource type="Material" uid="uid://cn853ytgoxks6" path="res://assets/ui/sdf_circle_fill.tres" id="11_fill"]
-[ext_resource type="Shader" uid="uid://y4g8ky747mqh" path="res://assets/shader/ui/shadow.gdshader" id="12_shadow_shader"]
 [ext_resource type="FontFile" uid="uid://cjgc8hhsb6xtr" path="res://assets/fonts/Dangrek-Regular.ttf" id="13_font"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_recycle_shadow"]
-shader = ExtResource("12_shadow_shader")
-shader_parameter/shadow_color = Color(0, 0, 0, 0.28)
-shader_parameter/blur_size = 16.0
-shader_parameter/radius = 0.85
 
 [node name="card" type="Node2D" unique_id=1490211396]
 script = ExtResource("1_73nwn")
@@ -48,6 +41,7 @@ offset_bottom = 94.0
 [node name="visuals" type="Node2D" parent="." unique_id=1650819141]
 
 [node name="Shadow" type="TextureRect" parent="visuals" unique_id=56098690]
+visible = false
 modulate = Color(0, 0, 0, 0.28)
 z_index = -1
 material = ExtResource("9_shadow")
@@ -108,18 +102,6 @@ offset_top = -132.0
 offset_right = 14.0
 offset_bottom = -104.0
 mouse_filter = 2
-
-[node name="Shadow" type="TextureRect" parent="visuals/RecycleButton" unique_id=1401233581]
-z_index = -1
-material = SubResource("ShaderMaterial_recycle_shadow")
-layout_mode = 0
-offset_left = -2.0
-offset_top = -1.0
-offset_right = 30.0
-offset_bottom = 31.0
-mouse_filter = 2
-texture = ExtResource("10_circle")
-expand_mode = 1
 
 [node name="Circle" type="TextureRect" parent="visuals/RecycleButton" unique_id=1644193754]
 material = ExtResource("11_fill")

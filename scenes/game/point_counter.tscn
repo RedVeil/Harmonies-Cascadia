@@ -8,9 +8,9 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_iqdn0"]
 shader = ExtResource("3_qn64k")
-shader_parameter/primary_color = Color(0.7176471, 0.8509804, 0.8745098, 1)
-shader_parameter/secondary_color = Color(0.43529412, 0.7019608, 0.7490196, 1)
-shader_parameter/third_color = Color(0.7176471, 0.8509804, 0.8745098, 1)
+shader_parameter/primary_color = Color(0.9882353, 0.8980392, 0.5411765, 1)
+shader_parameter/secondary_color = Color(0.98039216, 0.8, 0.08235294, 1)
+shader_parameter/third_color = Color(0.9882353, 0.8980392, 0.5411765, 1)
 shader_parameter/unfilled_color = Color(1, 1, 1, 1)
 shader_parameter/current_value = 0.0
 shader_parameter/lerp_value = 0.0
@@ -25,7 +25,7 @@ script = ExtResource("1_iwanl")
 score_reward_sounds = Array[AudioStream]([ExtResource("5_score")])
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=834061608]
-self_modulate = Color(0.9137255, 0.8352941, 0.7607843, 1)
+modulate = Color(0.43529412, 0.7019608, 0.7490196, 1)
 rotation = -1.7453293
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("3_3qcl6")
@@ -41,21 +41,21 @@ offset_left = -59.0
 offset_top = -34.0
 offset_right = 59.0
 offset_bottom = 33.0
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/outline_size = 6
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 40
 text = "100"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Area2D" type="Area2D" parent="." unique_id=821042248]
+visible = false
 monitorable = false
 priority = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1334500712]
 shape = SubResource("CircleShape2D_ci8s0")
 
-[node name="MapAlert" type="Panel" parent="."]
+[node name="MapAlert" type="Panel" parent="." unique_id=1736079387]
 visible = false
 offset_left = 80.0
 offset_top = -10.0
@@ -63,12 +63,11 @@ offset_right = 520.0
 offset_bottom = 10.0
 mouse_filter = 2
 
-[node name="Label" type="Label" parent="MapAlert"]
+[node name="Label" type="Label" parent="MapAlert" unique_id=1676999758]
 layout_mode = 0
 offset_top = -3.0
 offset_right = 440.0
 offset_bottom = 23.0
-mouse_filter = 2
 text = "Map expansion available. Choose a highlighted area to grow the map."
 horizontal_alignment = 1
 

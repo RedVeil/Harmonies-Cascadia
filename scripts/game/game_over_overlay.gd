@@ -7,7 +7,6 @@ signal leave_pressed
 signal restart_pressed
 signal next_pressed
 
-var COLOR_BROWN := Color.html("#918478")
 var COLOR_STAR_EARNED := Color.html("#F2B05C")
 var COLOR_STAR_EMPTY := Color.WHITE
 
@@ -54,6 +53,8 @@ func _ready() -> void:
 		_stars_row.hide()
 	_share_status.text = ""
 	_show_confirm_buttons()
+	_apply_theme()
+	UiTheme.bind_node(self, _apply_theme)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -439,17 +440,24 @@ func _reset_button_hovers() -> void:
 	_set_button_hover(_share_button, false)
 
 
+func _apply_theme() -> void:
+	var panel := $PopupRoot/PopupPanel as Control
+	if panel:
+		UiTheme.style_panel(panel)
+	UiTheme.style_label(_title_label)
+	UiTheme.style_label(_score_label)
+	UiTheme.style_label(_compare_label)
+	UiTheme.style_label(_rating_label)
+	UiTheme.style_label(_share_status, true)
+	_reset_button_hovers()
+
+
 func _set_button_hover(button: Control, hovered: bool) -> void:
 	if button == null:
 		return
 	var background: ColorRect = button.get_node("Background")
 	var label: Label = button.get_node("Label")
-	if hovered:
-		background.color = COLOR_BROWN
-		label.add_theme_color_override("font_color", Color.WHITE)
-	else:
-		background.color = Color.WHITE
-		label.add_theme_color_override("font_color", COLOR_BROWN)
+	UiTheme.apply_rect_button(background, label, hovered)
 
 
 func _handle_gui_click(event: InputEvent, callback: Callable) -> void:

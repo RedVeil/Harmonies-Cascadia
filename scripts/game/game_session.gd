@@ -6,7 +6,7 @@ const CONFIG_PATH := "res://data/session_config.json"
 const TUTORIAL_CONFIG_PATH := "res://data/tutorial_config.json"
 const PUZZLES_PATH := "res://data/puzzles.json"
 
-enum GameMode { DAILY, NORMAL, ENDLESS, CHALLENGE, TUTORIAL, PUZZLE, PUZZLE_MAKER }
+enum GameMode { DAILY, NORMAL, ENDLESS, CHALLENGE, TUTORIAL, PUZZLE, PUZZLE_MAKER, WEEKLY }
 enum MapSize { SMALL, MEDIUM, LARGE }
 
 var run_seed: int = 0
@@ -63,6 +63,15 @@ func begin_daily_run() -> void:
 	map_size = MapSize.SMALL
 	_apply_mode_config(game_mode, map_size)
 	begin_run(_daily_seed())
+
+
+func begin_weekly_run() -> void:
+	clear_challenge()
+	clear_puzzle()
+	game_mode = GameMode.WEEKLY
+	map_size = MapSize.SMALL
+	_apply_mode_config(game_mode, map_size)
+	begin_run(_weekly_seed())
 
 
 func begin_normal_run(size: MapSize) -> void:
@@ -500,6 +509,8 @@ func _mode_key(mode: GameMode) -> String:
 	match mode:
 		GameMode.DAILY:
 			return "daily"
+		GameMode.WEEKLY:
+			return "weekly"
 		GameMode.ENDLESS:
 			return "endless"
 		_:
@@ -530,9 +541,18 @@ func get_daily_seed() -> int:
 	return _daily_seed()
 
 
+func get_weekly_seed() -> int:
+	return _weekly_seed()
+
+
 func get_utc_date_iso() -> String:
 	var d := Time.get_date_dict_from_system(true)
 	return "%04d-%02d-%02d" % [d.year, d.month, d.day]
+
+
+func get_utc_week_start_iso() -> String:
+	var start := _utc_week_start_dict()
+	return "%04d-%02d-%02d" % [start.year, start.month, start.day]
 
 
 func _daily_seed() -> int:
@@ -540,3 +560,25 @@ func _daily_seed() -> int:
 	var key := "%04d%02d%02d" % [d.year, d.month, d.day]
 	var h := hash(key)
 	return h if h != 0 else 1
+
+
+func _weekly_seed() -> int:
+	var start := _utc_week_start_dict()
+	var key := "%04d%02d%02d" % [start.year, start.month, start.day]
+	var h := hash(key)
+	return h if h != 0 else 1
+
+
+func _utc_week_start_dict() -> Dictionary:
+	var d := Time.get_date_dict_from_system(true)
+	var days_from_monday := (int(d.get("weekday", 1)) + 6) % 7
+	var unix := Time.get_unix_time_from_datetime_dict({
+		"year": int(d.year),
+		"month": int(d.month),
+		"day": int(d.day),
+		"hour": 0,
+		"minute": 0,
+		"second": 0,
+	})
+	unix -= days_from_monday * 86400
+	return Time.get_datetime_dict_from_unix_time(int(unix))

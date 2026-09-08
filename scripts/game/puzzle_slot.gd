@@ -4,7 +4,6 @@ class_name PuzzleSlot
 signal selected(id: String)
 
 var COLOR_WHITE := Color.WHITE
-var COLOR_NUMBER_HOVER := Color.html("#918478")
 var COLOR_STAR_EARNED := Color.html("#F2B05C")
 var COLOR_LOCKED := Color(1.0, 1.0, 1.0, 0.4)
 
@@ -30,6 +29,11 @@ func _ready() -> void:
 	WebInstantButton.wire(_button)
 	_button.focus_entered.connect(_on_focus_entered)
 	_button.focus_exited.connect(_on_focus_exited)
+	UiTheme.bind_node(self, _on_theme_changed)
+
+
+func _on_theme_changed() -> void:
+	_apply_box_style(_button.has_focus() or _button.is_hovered())
 
 
 func setup(id: String, number: int, unlocked: bool, rating: String) -> void:
@@ -75,7 +79,7 @@ func _apply_box_style(hovered: bool) -> void:
 	_button.add_theme_stylebox_override("pressed", box)
 	_button.add_theme_stylebox_override("disabled", _box_normal)
 	_button.add_theme_stylebox_override("focus", box)
-	var number_color := COLOR_NUMBER_HOVER if hovered and _unlocked else COLOR_WHITE
+	var number_color := UiTheme.secondary if hovered and _unlocked else COLOR_WHITE
 	_button.add_theme_color_override("font_color", number_color)
 	_button.add_theme_color_override("font_hover_color", number_color)
 	_button.add_theme_color_override("font_pressed_color", number_color)

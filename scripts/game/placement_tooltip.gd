@@ -16,6 +16,20 @@ var _pattern_bases_captured := false
 
 ## ----- Initialisation ----- ##
 
+func _ready() -> void:
+	UiTheme.bind_node(self, _apply_theme)
+	_apply_theme()
+
+
+func _apply_theme() -> void:
+	UiTheme.style_panel($Panel)
+	UiTheme.style_panel($Panel/ArrowDown)
+	UiTheme.style_panel($Panel/ArrowRight)
+	var label: Label = $Panel/PointsLabel
+	UiTheme.style_label(label)
+	label.add_theme_color_override("font_outline_color", UiTheme.text)
+
+
 func init(
 	type: int,
 	center: Array[Placement],

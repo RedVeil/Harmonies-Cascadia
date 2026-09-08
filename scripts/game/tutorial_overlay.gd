@@ -7,9 +7,7 @@ enum View { SCORING, STACKING }
 
 const COLUMN_COUNT := 5
 const DIVIDER_WIDTH := 1.0
-
-var TEXT_BROWN := Color.html("#918478")
-var DIVIDER_COLOR := Color.html("#918478")
+const TITLE_LINE_COUNT := 2
 
 @export var orchestrator: Orchestrator
 @export var image: Texture2D
@@ -33,6 +31,8 @@ func _ready() -> void:
 	_center_popup_root()
 	get_viewport().size_changed.connect(_center_popup_root)
 	_apply_view()
+	_apply_theme()
+	UiTheme.bind_node(self, _apply_theme)
 
 ## ----- Public API ----- ##
 
@@ -103,6 +103,7 @@ func _populate_scoring() -> void:
 		title.text = rule.name
 		description.text = rule.description
 		graphic.texture = get_desc_image(rule.id)
+		_fit_title(title)
 		_fit_graphic(graphic)
 
 func get_desc_image(id: int) -> Texture2D:
@@ -153,6 +154,13 @@ func _column_width() -> float:
 	var usable := row_width - DIVIDER_WIDTH * 4.0 - float(sep) * 8.0
 	return maxf(usable / float(COLUMN_COUNT), 80.0)
 
+func _fit_title(title: Label) -> void:
+	if title == null:
+		return
+	var line_height := float(title.get_line_height())
+	var line_spacing := float(title.get_theme_constant("line_spacing"))
+	title.custom_minimum_size.y = line_height * TITLE_LINE_COUNT + line_spacing * (TITLE_LINE_COUNT - 1)
+
 func _fit_graphic(graphic: TextureRect) -> void:
 	var tex := graphic.texture
 	if tex == null:
@@ -173,7 +181,7 @@ func _build_scoring_row() -> void:
 			var divider := ColorRect.new()
 			divider.custom_minimum_size = Vector2(DIVIDER_WIDTH, 0.0)
 			divider.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-			divider.color = DIVIDER_COLOR
+			divider.color = UiTheme.text
 			divider.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			divider.size_flags_vertical = Control.SIZE_EXPAND_FILL
 			_scoring_row.add_child(divider)
@@ -190,16 +198,18 @@ func _make_column() -> VBoxContainer:
 
 	var title := Label.new()
 	title.name = "Title"
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	title.autowrap_mode = TextServer.AUTOWRAP_WORD
-	title.add_theme_color_override("font_color", TEXT_BROWN)
-	title.add_theme_color_override("font_outline_color", TEXT_BROWN)
+	title.add_theme_color_override("font_color", UiTheme.text)
+	title.add_theme_color_override("font_outline_color", UiTheme.text)
 	title.add_theme_constant_override("outline_size", 1)
 	title.add_theme_font_size_override("font_size", 20)
+	UiTheme.apply_title_font(title)
 	title.text = "Rule"
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	column.add_child(title)
+	_fit_title(title)
 
 	var graphic := TextureRect.new()
 	graphic.name = "Graphic"
@@ -214,13 +224,39 @@ func _make_column() -> VBoxContainer:
 	description.autowrap_mode = TextServer.AUTOWRAP_WORD
 	description.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	description.vertical_alignment = VERTICAL_ALIGNMENT_TOP
-	description.add_theme_color_override("font_color", TEXT_BROWN)
+	description.add_theme_color_override("font_color", UiTheme.text)
 	description.add_theme_constant_override("line_spacing", -5)
 	description.add_theme_font_size_override("font_size", 14)
 	description.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	column.add_child(description)
 
 	return column
+
+
+func _apply_theme() -> void:
+	var panel := $PopupRoot/PopupPanel as Panel
+	if panel:
+		var box := panel.get_theme_stylebox("panel") as StyleBoxFlat
+		if box:
+			box.bg_color = UiTheme.menu
+			box.border_color = UiTheme.text
+	if _close_button:
+		UiTheme.style_chip_button(_close_button)
+	if _toggle_button:
+		UiTheme.style_chip_button(_toggle_button, 8.0, 8.0, 20)
+	for child in _scoring_row.get_children():
+		if child is ColorRect:
+			(child as ColorRect).color = UiTheme.text
+		elif child is VBoxContainer:
+			var title := child.get_node_or_null("Title") as Label
+			var description := child.get_node_or_null("Description") as Label
+			if title:
+				UiTheme.apply_title_font(title)
+				title.add_theme_color_override("font_color", UiTheme.text)
+				title.add_theme_color_override("font_outline_color", UiTheme.text)
+				_fit_title(title)
+			if description:
+				description.add_theme_color_override("font_color", UiTheme.text)
 
 ## ----- Interactions ----- ##
 

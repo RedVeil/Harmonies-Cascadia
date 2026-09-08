@@ -11,8 +11,6 @@ const COLUMNS := 6
 const CELL := Vector2(100, 180)
 const PANEL_PAD := Vector2(28, 24)
 
-var COLOR_BROWN := Color.html("#918478")
-
 var _cards: Array[Card] = []
 var _hover_id: int = -1
 
@@ -29,6 +27,18 @@ func _ready() -> void:
 	hide()
 	_center_popup_root()
 	get_viewport().size_changed.connect(_center_popup_root)
+	_apply_theme()
+	UiTheme.bind_node(self, _apply_theme)
+
+
+func _apply_theme() -> void:
+	if _popup_panel:
+		UiTheme.style_panel(_popup_panel)
+	UiTheme.style_label(_title)
+	if _close_button:
+		var close_label := _close_button.get_node_or_null("Label") as Label
+		if close_label:
+			UiTheme.style_label(close_label)
 
 
 func open() -> void:

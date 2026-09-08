@@ -12,6 +12,8 @@ enum View { ROOT, PLAYER, GRAPHICS, AUDIO }
 @onready var _audio_button: Button = $Content/RootView/AudioButton
 @onready var _name_label: Label = $Content/PlayerView/NameLabel
 @onready var _name_input: LineEdit = $Content/PlayerView/NameInput
+@onready var _theme_label: Label = $Content/PlayerView/ThemeLabel
+@onready var _theme_option: OptionButton = $Content/PlayerView/ThemeOption
 @onready var _music_label: Label = $Content/AudioView/MusicHeader/MusicLabel
 @onready var _music_value: Label = $Content/AudioView/MusicHeader/MusicValue
 @onready var _effects_label: Label = $Content/AudioView/EffectsHeader/EffectsLabel
@@ -31,12 +33,6 @@ enum View { ROOT, PLAYER, GRAPHICS, AUDIO }
 @onready var _msaa_option: OptionButton = $Content/GraphicsView/MsaaOption
 
 var _view: View = View.ROOT
-var _sidebar_styled: bool = false
-var _chip_normal: StyleBoxFlat
-var _chip_hover: StyleBoxFlat
-var _chip_pressed: StyleBoxFlat
-var _chip_disabled: StyleBoxFlat
-var _nav_empty: StyleBoxEmpty
 var _web_text
 var _committing_name: bool = false
 
@@ -46,8 +42,11 @@ func _ready() -> void:
 	if _name_input:
 		_name_input.max_length = GameSettings.PLAYER_NAME_MAX_LENGTH
 	_setup_web_text()
+	_build_theme_picker()
 	_wire_signals()
 	_show_view(View.ROOT)
+	apply_sidebar_style()
+	UiTheme.bind_node(self, apply_sidebar_style)
 	refresh()
 
 
@@ -72,16 +71,6 @@ func handle_back() -> bool:
 
 
 func apply_sidebar_style() -> void:
-	if _sidebar_styled:
-		return
-	_sidebar_styled = true
-	_build_chip_styles()
-	_nav_empty = StyleBoxEmpty.new()
-
-	var white := Color.WHITE
-	var taupe := Color.html("#B4A594")
-	var taupe_dark := Color.html("#918478")
-
 	for label in [
 		_music_label,
 		_music_value,
@@ -91,164 +80,79 @@ func apply_sidebar_style() -> void:
 		_animal_label,
 		_msaa_label,
 		_name_label,
+		_theme_label,
 	]:
-		if label:
-			label.add_theme_color_override("font_color", white)
+		UiTheme.style_subtitle_label(label)
 
-	_style_nav_button(_player_button)
-	_style_nav_button(_graphics_button)
-	_style_nav_button(_audio_button)
-	_style_sidebar_line_edit(_name_input, taupe)
+	UiTheme.style_nav_button(_player_button, 26)
+	UiTheme.style_nav_button(_graphics_button, 26)
+	UiTheme.style_nav_button(_audio_button, 26)
+	if _player_button:
+		_player_button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	if _graphics_button:
+		_graphics_button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	if _audio_button:
+		_audio_button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	UiTheme.style_line_edit(_name_input)
 
 	for button in [_preset_low, _preset_medium, _preset_high, _preset_custom]:
-		_style_chip_button(button, taupe, taupe_dark)
+		if button:
+			button.custom_minimum_size = Vector2(0, 28)
+		UiTheme.style_chip_button(button, 12.0, 6.0)
 
 	for option in [_animal_option, _msaa_option]:
-		_style_chip_option(option, taupe, taupe_dark)
+		if option:
+			option.custom_minimum_size = Vector2(0, 28)
+		UiTheme.style_option_button(option, 12.0, 6.0)
 
-	for check in [_wind_check, _clouds_check]:
-		if check == null:
-			continue
-		check.add_theme_color_override("font_color", white)
-		check.add_theme_color_override("font_pressed_color", white)
-		check.add_theme_color_override("font_hover_color", taupe_dark)
-		check.add_theme_color_override("font_focus_color", taupe_dark)
-		check.add_theme_color_override("font_disabled_color", Color(1, 1, 1, 0.4))
-
-	_style_sidebar_slider(_music_slider, taupe, taupe_dark)
-	_style_sidebar_slider(_effects_slider, taupe, taupe_dark)
+	UiTheme.style_check_button(_wind_check, UiTheme.SUBTITLE_FONT_SIZE)
+	UiTheme.style_check_button(_clouds_check, UiTheme.SUBTITLE_FONT_SIZE)
+	UiTheme.style_slider(_music_slider)
+	UiTheme.style_slider(_effects_slider)
+	_style_theme_option()
 
 
-func _style_nav_button(button: Button) -> void:
-	if button == null:
+func _build_theme_picker() -> void:
+	if _theme_option == null:
 		return
-	var taupe_dark := Color.html("#918478")
-	button.flat = true
-	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-	button.add_theme_font_size_override("font_size", 26)
-	button.add_theme_color_override("font_color", Color.WHITE)
-	button.add_theme_color_override("font_hover_color", taupe_dark)
-	button.add_theme_color_override("font_pressed_color", Color(1, 1, 1, 0.6))
-	button.add_theme_color_override("font_focus_color", taupe_dark)
-	for state in ["normal", "hover", "pressed", "focus", "disabled"]:
-		button.add_theme_stylebox_override(state, _nav_empty)
+	_theme_option.clear()
+	_theme_option.fit_to_longest_item = true
+	_theme_option.expand_icon = false
+	_theme_option.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	for id in UiTheme.THEMES:
+		var theme_id := str(id)
+		_theme_option.add_icon_item(UiTheme.theme_strip_icon(theme_id), UiTheme.theme_display_name(theme_id))
+		_theme_option.set_item_metadata(_theme_option.item_count - 1, theme_id)
+	_select_theme_option(UiTheme.theme_id)
 
 
-func _style_sidebar_line_edit(line_edit: LineEdit, taupe: Color) -> void:
-	if line_edit == null:
+func _style_theme_option() -> void:
+	if _theme_option == null:
 		return
-	var box := StyleBoxFlat.new()
-	box.bg_color = taupe
-	box.set_border_width_all(1)
-	box.border_color = Color.WHITE
-	box.content_margin_left = 12.0
-	box.content_margin_top = 8.0
-	box.content_margin_right = 12.0
-	box.content_margin_bottom = 8.0
-	line_edit.add_theme_color_override("font_color", Color.WHITE)
-	line_edit.add_theme_color_override("font_placeholder_color", Color(1, 1, 1, 0.55))
-	line_edit.add_theme_color_override("caret_color", Color.WHITE)
-	line_edit.add_theme_stylebox_override("normal", box)
-	line_edit.add_theme_stylebox_override("read_only", box)
-	line_edit.add_theme_stylebox_override("focus", box)
+	_theme_option.custom_minimum_size = Vector2(0, 28)
+	UiTheme.style_option_button(_theme_option, 12.0, 6.0, UiTheme.THEME_STRIP_WIDTH)
+	_select_theme_option(UiTheme.theme_id)
 
 
-func _style_sidebar_slider(slider: HSlider, taupe: Color, taupe_dark: Color) -> void:
-	if slider == null:
+func _select_theme_option(id: String) -> void:
+	if _theme_option == null:
 		return
-	var grabber := StyleBoxFlat.new()
-	grabber.bg_color = Color.WHITE
-	grabber.set_corner_radius_all(4)
-	grabber.content_margin_left = 6.0
-	grabber.content_margin_top = 6.0
-	grabber.content_margin_right = 6.0
-	grabber.content_margin_bottom = 6.0
-
-	var grabber_hl := grabber.duplicate() as StyleBoxFlat
-	grabber_hl.bg_color = taupe_dark
-
-	var slider_style := StyleBoxFlat.new()
-	slider_style.bg_color = Color(1, 1, 1, 0.35)
-	slider_style.set_corner_radius_all(2)
-	slider_style.content_margin_top = 4.0
-	slider_style.content_margin_bottom = 4.0
-
-	var fill := StyleBoxFlat.new()
-	fill.bg_color = Color.WHITE
-	fill.set_corner_radius_all(2)
-	fill.content_margin_top = 4.0
-	fill.content_margin_bottom = 4.0
-
-	slider.add_theme_stylebox_override("slider", slider_style)
-	slider.add_theme_stylebox_override("grabber_area", fill)
-	slider.add_theme_stylebox_override("grabber_area_highlight", fill)
-	slider.add_theme_stylebox_override("grabber", grabber)
-	slider.add_theme_stylebox_override("grabber_highlight", grabber_hl)
-	slider.add_theme_color_override("grabber_font_color", taupe)
+	for i in _theme_option.item_count:
+		if str(_theme_option.get_item_metadata(i)) == id:
+			_theme_option.select(i)
+			return
+	if _theme_option.item_count > 0:
+		_theme_option.select(0)
 
 
-func _build_chip_styles() -> void:
-	_chip_normal = _make_chip_style(Color.WHITE)
-	_chip_hover = _make_chip_style(Color.html("#918478"))
-	_chip_pressed = _make_chip_style(Color.html("#918478"))
-	_chip_disabled = _make_chip_style(Color(1, 1, 1, 0.45))
-
-
-func _make_chip_style(bg: Color) -> StyleBoxFlat:
-	var style := StyleBoxFlat.new()
-	style.bg_color = bg
-	style.content_margin_left = 12.0
-	style.content_margin_top = 6.0
-	style.content_margin_right = 12.0
-	style.content_margin_bottom = 6.0
-	return style
-
-
-func _style_chip_button(button: Button, taupe: Color, taupe_dark: Color) -> void:
-	if button == null:
+func _on_theme_option_selected(index: int) -> void:
+	if _theme_option == null:
 		return
-	button.custom_minimum_size = Vector2(0, 28)
-	button.add_theme_color_override("font_color", taupe)
-	button.add_theme_color_override("font_hover_color", Color.WHITE)
-	button.add_theme_color_override("font_pressed_color", Color.WHITE)
-	button.add_theme_color_override("font_focus_color", Color.WHITE)
-	button.add_theme_color_override("font_disabled_color", Color(taupe.r, taupe.g, taupe.b, 0.45))
-	button.add_theme_color_override("font_hover_pressed_color", Color.WHITE)
-	button.add_theme_stylebox_override("normal", _chip_normal)
-	button.add_theme_stylebox_override("hover", _chip_hover)
-	button.add_theme_stylebox_override("pressed", _chip_pressed)
-	button.add_theme_stylebox_override("hover_pressed", _chip_pressed)
-	button.add_theme_stylebox_override("focus", _chip_hover)
-	button.add_theme_stylebox_override("disabled", _chip_disabled)
-
-
-func _style_chip_option(option: OptionButton, taupe: Color, taupe_dark: Color) -> void:
-	if option == null:
+	var id := str(_theme_option.get_item_metadata(index))
+	if id.is_empty() or id == UiTheme.theme_id:
 		return
-	option.custom_minimum_size = Vector2(0, 28)
-	option.add_theme_color_override("font_color", taupe)
-	option.add_theme_color_override("font_hover_color", Color.WHITE)
-	option.add_theme_color_override("font_pressed_color", Color.WHITE)
-	option.add_theme_color_override("font_focus_color", Color.WHITE)
-	option.add_theme_color_override("font_disabled_color", Color(taupe.r, taupe.g, taupe.b, 0.45))
-	option.add_theme_stylebox_override("normal", _chip_normal)
-	option.add_theme_stylebox_override("hover", _chip_hover)
-	option.add_theme_stylebox_override("pressed", _chip_hover)
-	option.add_theme_stylebox_override("focus", _chip_hover)
-	option.add_theme_stylebox_override("disabled", _chip_disabled)
-
-	var popup := option.get_popup()
-	var popup_panel := _make_chip_style(Color.WHITE)
-	popup_panel.content_margin_left = 8.0
-	popup_panel.content_margin_top = 6.0
-	popup_panel.content_margin_right = 8.0
-	popup_panel.content_margin_bottom = 6.0
-	popup.add_theme_stylebox_override("panel", popup_panel)
-	popup.add_theme_stylebox_override("hover", _make_chip_style(Color.html("#918478")))
-	popup.add_theme_color_override("font_color", taupe)
-	popup.add_theme_color_override("font_hover_color", Color.WHITE)
-	popup.add_theme_color_override("font_separator_color", Color(taupe.r, taupe.g, taupe.b, 0.35))
-	popup.add_theme_color_override("font_accelerator_color", taupe_dark)
+	GameFeedback.play_click_button()
+	UiTheme.set_theme_id(id)
 
 
 func _setup_options() -> void:
@@ -277,6 +181,7 @@ func _wire_signals() -> void:
 	_clouds_check.toggled.connect(_on_clouds_toggled)
 	_animal_option.item_selected.connect(_on_animal_selected)
 	_msaa_option.item_selected.connect(_on_msaa_selected)
+	_theme_option.item_selected.connect(_on_theme_option_selected)
 	_music_slider.value_changed.connect(_on_music_volume_changed)
 	_effects_slider.value_changed.connect(_on_sfx_volume_changed)
 	for control in [
@@ -291,6 +196,7 @@ func _wire_signals() -> void:
 		_clouds_check,
 		_animal_option,
 		_msaa_option,
+		_theme_option,
 		_music_slider,
 		_effects_slider,
 	]:
@@ -308,6 +214,7 @@ func _wire_signals() -> void:
 		_clouds_check,
 		_animal_option,
 		_msaa_option,
+		_theme_option,
 	])
 
 
@@ -337,6 +244,7 @@ func _refresh_from_settings() -> void:
 	_clouds_check.button_pressed = GameSettings.clouds_enabled
 	_select_option_by_id(_animal_option, int(GameSettings.animal_motion))
 	_select_option_by_id(_msaa_option, int(GameSettings.msaa_mode))
+	_select_theme_option(UiTheme.theme_id)
 	GameSettings.end_ui_sync()
 	_update_preset_buttons()
 

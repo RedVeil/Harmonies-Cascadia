@@ -8,7 +8,6 @@ const HOVER_TWEEN_SEC := 0.12
 const STACK_STEP_PX := 12.0
 const DESATURATE_AMOUNT := 0.45
 var FALLBACK_COLOR := Color(0.5686275, 0.5176471, 0.47058824, 1.0)
-var COLOR_BROWN := Color.html("#918478")
 
 @export var id: int = 0
 
@@ -69,6 +68,8 @@ func _ready() -> void:
 	_sync_areas_to_visuals()
 	if id == 4:
 		icon.texture = load("res://assets/icons/animal.png")
+	UiTheme.bind_node(self, _apply_theme)
+	_apply_theme()
 
 func init(parent: BoosterContainer) -> void:
 	container = parent
@@ -180,20 +181,19 @@ func _on_gui_input(event: InputEvent) -> void:
 	get_viewport().set_input_as_handled()
 
 
+func _apply_theme() -> void:
+	if is_stack_mode():
+		if not _reroll_hovered:
+			_reset_recycle_button_colors()
+		return
+	_apply_hover_visuals()
+
+
 func _apply_hover_visuals() -> void:
 	if is_stack_mode():
 		_apply_stack_hover_visuals()
 		return
-	if not enabled:
-		background.self_modulate = Color.WHITE
-		icon.self_modulate = Color.GRAY
-		return
-	if is_hovered:
-		background.self_modulate = Color.html("#918478")
-		icon.self_modulate = Color.WHITE
-	else:
-		background.self_modulate = Color.WHITE
-		icon.self_modulate = Color.html("#918478")
+	UiTheme.apply_hud_circle(background, icon, is_hovered, enabled)
 
 func _apply_stack_hover_visuals() -> void:
 	var show_x := enabled and _reroll_ready and (is_hovered or _reroll_hovered)
@@ -255,7 +255,7 @@ func _on_recycle_mouse_entered() -> void:
 	_sync_ui_pointer_block()
 	if _reroll_ready:
 		GameFeedback.play_hover_button()
-		recycle_circle.self_modulate = COLOR_BROWN
+		recycle_circle.self_modulate = UiTheme.secondary
 		recycle_label.add_theme_color_override("font_color", Color.WHITE)
 
 
@@ -283,7 +283,7 @@ func _clear_reroll_hover() -> void:
 
 func _reset_recycle_button_colors() -> void:
 	recycle_circle.self_modulate = Color.WHITE
-	recycle_label.add_theme_color_override("font_color", COLOR_BROWN)
+	recycle_label.add_theme_color_override("font_color", UiTheme.secondary)
 
 
 func _apply_recycle_pickable() -> void:

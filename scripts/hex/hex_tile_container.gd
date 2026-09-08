@@ -230,7 +230,7 @@ func show_tile_info(coord: Vector2i) -> void:
 	var level_index := 0 if data.element == GameEnums.ELEMENT.NONE else clampi(data.level - 1, 0, element.levels.size() - 1)
 	var level := element.levels[level_index]
 	element_tex = load(level.icon) as Texture2D
-	var icon_color := Color.html("#918478")
+	var icon_color := UiTheme.secondary
 
 	if data.animal_id != -1:
 		for card in CardCatalog.animals:

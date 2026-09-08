@@ -60,6 +60,8 @@ func _ready() -> void:
 	gain_popup = _gain_popup
 	gain_label = _gain_label
 	call_deferred("ensure_score_label_pivot")
+	UiTheme.bind_node(self, _apply_theme)
+	_apply_theme()
 
 func _setup_gain_label() -> void:
 	_gain_popup = Node2D.new()
@@ -79,6 +81,15 @@ func _setup_gain_label() -> void:
 	_gain_label.add_theme_constant_override("outline_size", 5)
 	_gain_label.add_theme_font_size_override("font_size", 28)
 	_gain_popup.add_child(_gain_label)
+
+
+func _apply_theme() -> void:
+	if background_sprite:
+		background_sprite.self_modulate = Color.WHITE
+		background_sprite.modulate = UiTheme.primary
+	if score_label:
+		score_label.add_theme_color_override("font_color", UiTheme.hud_background)
+		score_label.add_theme_constant_override("outline_size", 0)
 
 ## ----- Score Logic ----- ##
 
@@ -233,10 +244,10 @@ func _animate_score_reward(gained: int, from_score: int, to_score: int) -> void:
 func _setup_gain_popup_text(gained: int) -> void:
 	if gained > 0:
 		_gain_label.text = "+%d" % gained
-		_gain_label.add_theme_color_override("font_color", Color(0.95, 0.72, 0.2, 1.0))
+		_gain_label.add_theme_color_override("font_color", UiTheme.points_positive)
 	else:
 		_gain_label.text = "%d" % gained
-		_gain_label.add_theme_color_override("font_color", Color(0.9, 0.35, 0.35, 1.0))
+		_gain_label.add_theme_color_override("font_color", UiTheme.points_negative)
 
 func _progress_fill(score: int) -> float:
 	if target <= 0:

@@ -56,6 +56,26 @@ func _ready() -> void:
 	call_deferred("_sync_spinners_from_maker")
 	_rings_spin.value_changed.connect(_on_rings_changed)
 	_plays_spin.value_changed.connect(_on_plays_changed)
+	_apply_theme()
+	UiTheme.bind_node(self, _apply_theme)
+
+
+func _apply_theme() -> void:
+	var panel := $Panel as Control
+	if panel:
+		UiTheme.style_panel(panel, 10, 0.92)
+	UiTheme.style_label(_title)
+	UiTheme.style_label(_hint, true)
+	for button in [
+		_animals_btn,
+		_quests_btn,
+		_packs_btn,
+		_scoring_btn,
+		_save_btn,
+		_load_btn,
+		_leave_btn,
+	]:
+		UiTheme.style_chip_button(button)
 
 
 func _sync_spinners_from_maker() -> void:

@@ -4,9 +4,6 @@ extends CanvasLayer
 
 const SPIN_RAD_PER_SEC := 1.6
 
-var COLOR_DIM := Color(0.8235294, 0.7607843, 0.6784314, 0.55)
-var COLOR_HEX := Color.html("#918478")
-
 @onready var _dimmer: ColorRect = $Dimmer
 @onready var _hex: TextureRect = $Hex
 
@@ -17,12 +14,17 @@ var _pending_path: String = ""
 func _ready() -> void:
 	layer = 100
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	_dimmer.color = COLOR_DIM
 	_dimmer.mouse_filter = Control.MOUSE_FILTER_STOP
-	_hex.modulate = COLOR_HEX
 	_hex.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hide()
 	set_process(false)
+	_apply_theme()
+	UiTheme.bind_node(self, _apply_theme)
+
+
+func _apply_theme() -> void:
+	_dimmer.color = UiTheme.with_alpha(UiTheme.primary, 0.55)
+	_hex.modulate = UiTheme.secondary
 
 
 func _process(delta: float) -> void:

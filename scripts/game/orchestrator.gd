@@ -149,6 +149,9 @@ func _apply_pending_run_state_deferred(pending_state: Variant) -> void:
 		return
 	var state := pending_state as Dictionary
 	RunSave.apply_state_to_orchestrator(self, state)
+	# Placement undo snapshots are in-memory only and are not part of the save.
+	# Keep undo off until the player places again after Continue.
+	_clear_undo()
 	# The saved state may have been captured while the in-game menu was open,
 	# leaving `cards_paused` and `booster_manager.paused` enabled.
 	# We want Continue to resume play, so run normal "close menu" unpause logic.
@@ -330,7 +333,7 @@ func close_in_game_menu() -> void:
 	if _puzzle_intro_open:
 		pause_cards()
 		return
-	if map_points == 0:
+	if map_points == 0 and selected_card_backup != null:
 		undo_button.enable()
 	unpause_cards()
 
@@ -357,8 +360,8 @@ func _on_in_game_menu_end() -> void:
 
 func add_hand_card(card:CardData) -> void:
 	card_manager.add_card(card)
-	if undo_button and not GameSession.is_puzzle_maker():
-		undo_button.disable()
+	if not GameSession.is_puzzle_maker():
+		_clear_undo()
 
 ## ----- Handle Hand Interactions ----- ##
 
@@ -654,15 +657,16 @@ func _on_puzzle_intro_start() -> void:
 
 
 func _submit_daily_score_if_needed() -> void:
-	if GameSession.game_mode != GameSession.GameMode.DAILY:
-		return
 	if score_engine == null:
 		return
 	var player_id := GameSettings.player_id.strip_edges()
 	var player_name := GameSettings.player_name.strip_edges()
 	if player_id.is_empty() or player_name.is_empty():
 		return
-	SupabaseClient.submit_daily_score(player_id, player_name, score_engine.total_score)
+	if GameSession.game_mode == GameSession.GameMode.DAILY:
+		SupabaseClient.submit_daily_score(player_id, player_name, score_engine.total_score)
+	elif GameSession.game_mode == GameSession.GameMode.WEEKLY:
+		SupabaseClient.submit_weekly_score(player_id, player_name, score_engine.total_score)
 
 
 func leave_to_menu() -> void:
@@ -675,6 +679,8 @@ func leave_to_menu() -> void:
 func restart_run() -> void:
 	if GameSession.game_mode == GameSession.GameMode.DAILY:
 		GameSession.begin_daily_run()
+	elif GameSession.game_mode == GameSession.GameMode.WEEKLY:
+		GameSession.begin_weekly_run()
 	elif GameSession.game_mode == GameSession.GameMode.ENDLESS:
 		GameSession.begin_endless_run()
 	elif GameSession.game_mode == GameSession.GameMode.CHALLENGE:
@@ -715,7 +721,7 @@ func apply_recycle_card(id:int, _amount:int, id_known:bool) -> void:
 	if id_known:
 		GameFeedback.play_recycle()
 		card_manager.remove_card(card_id)
-		undo_button.disable()
+		_clear_undo()
 		tutorial_bridge.notify("recycled", {"card_id": card_id})
 		return
 
@@ -734,7 +740,7 @@ func recycle_hand_animal(card_id: int) -> void:
 	for i in count:
 		GameFeedback.play_recycle()
 		card_manager.remove_card(card_id)
-	undo_button.disable()
+	_clear_undo()
 	_update_card_recycling_state()
 	tutorial_bridge.notify("recycled", {"card_id": card_id})
 
@@ -997,10 +1003,20 @@ func _animal_bonus_multiplier_score(card: CardData) -> int:
 
 ## ----- Undo Logic ----- ##
 
+func _clear_undo() -> void:
+	selected_card_backup = null
+	tile_backup = null
+	if undo_button:
+		undo_button.disable()
+
+
 func undo() -> void:
 	if game_over or _puzzle_intro_open:
 		return
 	if tutorial_bridge.active and not tutorial_bridge.allows_action("undo"):
+		return
+	if selected_card_backup == null or tile_backup == null:
+		_clear_undo()
 		return
 	quest_manager.undo() # to be tested
 	point_counter.undo() # works
@@ -1033,7 +1049,7 @@ func undo() -> void:
 
 	hex_manager.tiles[coord_backup] = tile_backup.duplicate(true)
 	hex_manager.undo(coord_backup) # works
-	undo_button.disable() # works
+	_clear_undo()
 	_placed_tile_count = maxi(_placed_tile_count - 1, 0)
 	if GameSession.is_puzzle() and GameSession.get_max_plays() >= 0:
 		_puzzle_plays = maxi(_puzzle_plays - 1, 0)
@@ -1105,7 +1121,7 @@ func add_map_points(val:int) -> void:
 	map_points += val
 	hex_manager.discard_undo_visuals()
 	hex_manager.show_map_buttons()
-	undo_button.disable()
+	_clear_undo()
 	pause_cards()
 	point_counter.show_map_alert()
 
@@ -1143,7 +1159,7 @@ func get_active_rule(type:int) -> ScoringRule:
 
 func _maybe_open_score_help() -> void:
 	match GameSession.game_mode:
-		GameSession.GameMode.DAILY, GameSession.GameMode.NORMAL, GameSession.GameMode.ENDLESS, GameSession.GameMode.PUZZLE:
+		GameSession.GameMode.DAILY, GameSession.GameMode.WEEKLY, GameSession.GameMode.NORMAL, GameSession.GameMode.ENDLESS, GameSession.GameMode.PUZZLE:
 			if tutorial_overlay:
 				tutorial_overlay.open_scoring()
 

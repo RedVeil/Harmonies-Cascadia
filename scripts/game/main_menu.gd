@@ -1,14 +1,9 @@
 extends Control
 
 const GAME_SCENE := "res://scenes/Refactored_Main.tscn"
-const BG_PATH := "res://assets/ui/menu_bg.webp"
 const PUZZLE_SLOT_SCENE := preload("res://scenes/game/puzzle_slot.tscn")
 const WEB_TEXT_PROMPT := preload("res://scripts/input/web_text_prompt.gd")
 
-var COLOR_RIGHT := Color.html("#D2C2AD")
-
-@onready var _bg_fallback: ColorRect = $BackgroundFallback
-@onready var _bg_image: TextureRect = $BackgroundImage
 @onready var _name_nav: VBoxContainer = $Split/LeftColumn/Margin/NavStack/NameNav
 @onready var _name_input: LineEdit = $Split/LeftColumn/Margin/NavStack/NameNav/NameInput
 @onready var _root_nav: VBoxContainer = $Split/LeftColumn/Margin/NavStack/RootNav
@@ -28,6 +23,9 @@ var COLOR_RIGHT := Color.html("#D2C2AD")
 @onready var _daily_button: Button = $Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyButton
 @onready var _daily_desc: Label = $Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyDesc
 @onready var _daily_inline_buttons: HBoxContainer = $Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyInlineButtons
+@onready var _weekly_button: Button = $Split/LeftColumn/Margin/NavStack/PlayNav/WeeklyBlock/WeeklyButton
+@onready var _weekly_desc: Label = $Split/LeftColumn/Margin/NavStack/PlayNav/WeeklyBlock/WeeklyDesc
+@onready var _weekly_inline_buttons: HBoxContainer = $Split/LeftColumn/Margin/NavStack/PlayNav/WeeklyBlock/WeeklyInlineButtons
 @onready var _leaderboard: DailyLeaderboardOverlay = $Split/RightColumn/DailyLeaderboardOverlay
 
 @onready var _quick_session_button: Button = $Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickSessionButton
@@ -44,7 +42,7 @@ var _web_text
 
 
 func _ready() -> void:
-	_setup_background()
+	_hide_daily_challenge()
 	_hide_exit_on_web()
 	_setup_puzzle_ids()
 	OverlayFocus.enable_buttons(self)
@@ -56,6 +54,8 @@ func _ready() -> void:
 		_name_input.max_length = GameSettings.PLAYER_NAME_MAX_LENGTH
 	if _settings_panel:
 		_settings_panel.apply_sidebar_style()
+	_apply_theme()
+	UiTheme.bind_node(self, _apply_theme)
 	_reset_mode_inline_ui()
 	if not InputScheme.scheme_changed.is_connected(_on_input_scheme_changed):
 		InputScheme.scheme_changed.connect(_on_input_scheme_changed)
@@ -65,6 +65,13 @@ func _ready() -> void:
 		_show_root_nav()
 	if not GameSettings.tutorial_played:
 		_show_first_play_prompt()
+
+
+func _hide_daily_challenge() -> void:
+	var daily_block := $Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock as Control
+	if daily_block == null:
+		return
+	daily_block.hide()
 
 
 func _hide_exit_on_web() -> void:
@@ -129,15 +136,12 @@ func _on_nav_button_mouse_entered() -> void:
 	GameFeedback.play_hover_button()
 
 
-func _setup_background() -> void:
-	_bg_fallback.color = COLOR_RIGHT
-	if ResourceLoader.exists(BG_PATH):
-		var tex := load(BG_PATH) as Texture2D
-		if tex != null:
-			_bg_image.texture = tex
-			_bg_image.show()
-			return
-	_bg_image.hide()
+func _apply_theme() -> void:
+	var left := $Split/LeftColumn as Control
+	if left:
+		UiTheme.apply_menu_tree(left)
+	if _settings_panel:
+		_settings_panel.apply_sidebar_style()
 
 
 func _setup_puzzle_ids() -> void:
@@ -194,6 +198,10 @@ func _reset_mode_inline_ui() -> void:
 		_daily_inline_buttons.hide()
 	if _daily_desc:
 		_daily_desc.show()
+	if _weekly_inline_buttons:
+		_weekly_inline_buttons.hide()
+	if _weekly_desc:
+		_weekly_desc.show()
 	if _quick_inline_buttons:
 		_quick_inline_buttons.hide()
 	if _endless_inline_buttons:
@@ -287,6 +295,7 @@ func _on_first_play_skip() -> void:
 func _show_play_nav() -> void:
 	GameFeedback.play_open_popup()
 	RunSave.clear_expired_daily_save()
+	RunSave.clear_expired_weekly_save()
 	_name_nav.hide()
 	_root_nav.hide()
 	_play_nav.show()
@@ -490,6 +499,12 @@ func _try_collapse_inline_row() -> bool:
 			_daily_desc.show()
 		OverlayFocus.restore_parent_focus(_daily_button)
 		return true
+	if _weekly_inline_buttons != null and _weekly_inline_buttons.visible:
+		_weekly_inline_buttons.hide()
+		if _weekly_desc:
+			_weekly_desc.show()
+		OverlayFocus.restore_parent_focus(_weekly_button)
+		return true
 	if _endless_inline_buttons != null and _endless_inline_buttons.visible:
 		_endless_inline_buttons.hide()
 		if _endless_desc:
@@ -513,7 +528,8 @@ func _on_daily_pressed() -> void:
 	if showing:
 		OverlayFocus.grab_button_row(_daily_inline_buttons, _daily_button)
 	else:
-		_close_leaderboard()
+		if _leaderboard != null and _leaderboard.is_open() and not _leaderboard.is_weekly():
+			_leaderboard.close()
 		OverlayFocus.restore_parent_focus(_daily_button)
 
 
@@ -534,11 +550,49 @@ func _on_daily_leaderboards_pressed() -> void:
 	GameFeedback.play_click_button()
 	if _leaderboard == null:
 		return
-	if _leaderboard.is_open():
+	if _leaderboard.is_open() and not _leaderboard.is_weekly():
 		_leaderboard.close()
 		OverlayFocus.grab_button_row(_daily_inline_buttons, _daily_button)
 	else:
 		_leaderboard.open()
+
+
+func _on_weekly_pressed() -> void:
+	GameFeedback.play_click_button()
+	RunSave.clear_expired_weekly_save()
+	var showing := not _weekly_inline_buttons.visible
+	_weekly_inline_buttons.visible = showing
+	_weekly_desc.visible = not showing
+	if showing:
+		OverlayFocus.grab_button_row(_weekly_inline_buttons, _weekly_button)
+	else:
+		if _leaderboard != null and _leaderboard.is_open() and _leaderboard.is_weekly():
+			_leaderboard.close()
+		OverlayFocus.restore_parent_focus(_weekly_button)
+
+
+func _on_weekly_play_pressed() -> void:
+	GameFeedback.play_click_button()
+	RunSave.clear_expired_weekly_save()
+	if RunSave.has_save(GameSession.GameMode.WEEKLY):
+		var state := RunSave.load_save(GameSession.GameMode.WEEKLY)
+		if not state.is_empty() and RunSave.is_weekly_save_valid(state):
+			_continue_from_state(state, GameSession.GameMode.WEEKLY)
+			return
+		RunSave.clear_save(GameSession.GameMode.WEEKLY)
+	GameSession.begin_weekly_run()
+	SceneLoader.goto(GAME_SCENE)
+
+
+func _on_weekly_leaderboards_pressed() -> void:
+	GameFeedback.play_click_button()
+	if _leaderboard == null:
+		return
+	if _leaderboard.is_open() and _leaderboard.is_weekly():
+		_leaderboard.close()
+		OverlayFocus.grab_button_row(_weekly_inline_buttons, _weekly_button)
+	else:
+		_leaderboard.open_weekly()
 
 
 func _on_quick_session_pressed() -> void:

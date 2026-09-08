@@ -6,8 +6,6 @@ class_name PuzzleLoadOverlay
 signal puzzle_selected(id: String)
 signal closed
 
-var COLOR_BROWN := Color.html("#918478")
-
 @onready var _popup_root: Node2D = $PopupRoot
 @onready var _close_button: Control = $PopupRoot/CloseButton
 @onready var _list: VBoxContainer = $PopupRoot/Scroll/List
@@ -18,6 +16,27 @@ func _ready() -> void:
 	hide()
 	_center_popup_root()
 	get_viewport().size_changed.connect(_center_popup_root)
+	_apply_theme()
+	UiTheme.bind_node(self, _apply_theme)
+
+
+func _apply_theme() -> void:
+	var panel := $PopupRoot/PopupPanel as Control
+	if panel:
+		UiTheme.style_panel(panel)
+	var title := $PopupRoot/TitleLabel as Label
+	if title:
+		UiTheme.style_label(title)
+	UiTheme.style_label(_status, true)
+	if _close_button:
+		var close_label := _close_button.get_node_or_null("Label") as Label
+		if close_label:
+			UiTheme.style_label(close_label)
+	if _list:
+		for child in _list.get_children():
+			if child is Button:
+				UiTheme.style_chip_button(child as Button)
+				(child as Button).alignment = HORIZONTAL_ALIGNMENT_LEFT
 
 
 func open(current_id: String = "") -> void:
@@ -67,10 +86,8 @@ func _rebuild_list(current_id: String) -> void:
 		var label := title if title == id else "%s  ·  %s" % [title, id]
 		button.text = "%d  ·  %s" % [i + 1, label]
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		button.add_theme_color_override("font_color", COLOR_BROWN)
-		button.add_theme_color_override("font_hover_color", Color.WHITE)
-		button.add_theme_color_override("font_pressed_color", Color.WHITE)
-		button.add_theme_color_override("font_focus_color", COLOR_BROWN)
+		UiTheme.style_chip_button(button)
+		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		if id == current_id:
 			button.text = "▸  " + button.text
 		button.pressed.connect(_on_puzzle_pressed.bind(id))

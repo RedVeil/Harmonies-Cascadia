@@ -23,13 +23,6 @@ material = ExtResource("5_fill")
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("2_hjekv")
 
-[node name="shadow" type="Sprite2D" parent="background" unique_id=1816452682]
-modulate = Color(0, 0, 0, 0.097)
-show_behind_parent = true
-position = Vector2(0.68392086, 1.1477747)
-scale = Vector2(1.1, 1.1)
-texture = ExtResource("2_hjekv")
-
 [node name="icon" type="Sprite2D" parent="." unique_id=1411433287]
 self_modulate = Color(0.8782205, 0.8782205, 0.8782205, 1)
 scale = Vector2(0.3, 0.3)

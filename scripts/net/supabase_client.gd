@@ -1,5 +1,5 @@
 extends Node
-## Thin Supabase REST client for daily leaderboard RPCs.
+## Thin Supabase REST client for daily and weekly leaderboard RPCs.
 
 const CONFIG_PATH := "res://data/supabase_config.json"
 const RPC_TIMEOUT_MS := 15000
@@ -76,8 +76,51 @@ func fetch_player_entry(date: String, player_id: String) -> Dictionary:
 	return {}
 
 
+func submit_weekly_score(player_id: String, player_name: String, points: int) -> void:
+	if not is_configured():
+		return
+	_submit_weekly_score_async(player_id, player_name, points)
+
+
+func fetch_weekly_page(week_start: String, offset: int, limit: int) -> Array:
+	var result: Variant = await _rpc("weekly_leaderboard_page", {
+		"p_week_start": week_start,
+		"p_offset": offset,
+		"p_limit": limit,
+	})
+	if typeof(result) != TYPE_ARRAY:
+		if last_error.is_empty():
+			last_error = "Could not load leaderboard."
+		return []
+	var out: Array = []
+	for item in result:
+		if typeof(item) == TYPE_DICTIONARY:
+			out.append(_normalize_entry(item))
+	return out
+
+
+func fetch_weekly_player_entry(week_start: String, player_id: String) -> Dictionary:
+	var result: Variant = await _rpc("weekly_player_entry", {
+		"p_week_start": week_start,
+		"p_player_id": player_id,
+	})
+	if typeof(result) == TYPE_DICTIONARY:
+		return _normalize_entry(result)
+	if typeof(result) == TYPE_ARRAY and result.size() > 0 and typeof(result[0]) == TYPE_DICTIONARY:
+		return _normalize_entry(result[0])
+	return {}
+
+
 func _submit_daily_score_async(player_id: String, player_name: String, points: int) -> void:
 	await _rpc("submit_daily_score", {
+		"p_player_id": player_id,
+		"p_name": player_name,
+		"p_points": points,
+	})
+
+
+func _submit_weekly_score_async(player_id: String, player_name: String, points: int) -> void:
+	await _rpc("submit_weekly_score", {
 		"p_player_id": player_id,
 		"p_name": player_name,
 		"p_points": points,

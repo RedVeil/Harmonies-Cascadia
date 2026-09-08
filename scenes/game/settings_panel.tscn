@@ -35,7 +35,7 @@ theme_override_constants/separation = 12
 
 [node name="RootView" type="VBoxContainer" parent="Content" unique_id=72768527]
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 24
 
 [node name="PlayerButton" type="Button" parent="Content/RootView" unique_id=3100000001]
 layout_mode = 2
@@ -75,7 +75,7 @@ theme_override_constants/separation = 12
 [node name="NameLabel" type="Label" parent="Content/PlayerView" unique_id=3100000003]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "Player name"
 
 [node name="NameInput" type="LineEdit" parent="Content/PlayerView" unique_id=3100000004]
@@ -91,6 +91,15 @@ placeholder_text = "Your name"
 max_length = 12
 caret_blink = true
 
+[node name="ThemeLabel" type="Label" parent="Content/PlayerView"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 20
+text = "Theme"
+
+[node name="ThemeOption" type="OptionButton" parent="Content/PlayerView"]
+layout_mode = 2
+
 [node name="GraphicsView" type="VBoxContainer" parent="Content" unique_id=413313601]
 visible = false
 layout_mode = 2
@@ -99,7 +108,7 @@ theme_override_constants/separation = 12
 [node name="PresetLabel" type="Label" parent="Content/GraphicsView" unique_id=589506292]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "Quality"
 
 [node name="PresetRow" type="HBoxContainer" parent="Content/GraphicsView" unique_id=2099003882]
@@ -133,17 +142,19 @@ text = "Custom"
 [node name="WindCheck" type="CheckButton" parent="Content/GraphicsView" unique_id=1395253361]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 20
 text = "Plant sway"
 
 [node name="CloudsCheck" type="CheckButton" parent="Content/GraphicsView" unique_id=437615923]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 20
 text = "Cloud shadows"
 
 [node name="AnimalLabel" type="Label" parent="Content/GraphicsView" unique_id=1900806232]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "Animal motion"
 
 [node name="AnimalOption" type="OptionButton" parent="Content/GraphicsView" unique_id=1983895235]
@@ -152,7 +163,7 @@ layout_mode = 2
 [node name="MsaaLabel" type="Label" parent="Content/GraphicsView" unique_id=1247359068]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "MSAA"
 
 [node name="MsaaOption" type="OptionButton" parent="Content/GraphicsView" unique_id=2079348319]
@@ -170,13 +181,13 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "Music"
 
 [node name="MusicValue" type="Label" parent="Content/AudioView/MusicHeader" unique_id=1099852660]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "50"
 horizontal_alignment = 2
 
@@ -193,13 +204,13 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "Effects"
 
 [node name="EffectsValue" type="Label" parent="Content/AudioView/EffectsHeader" unique_id=1674209578]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "50"
 horizontal_alignment = 2
 

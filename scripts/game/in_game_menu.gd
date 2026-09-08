@@ -27,6 +27,8 @@ func _ready() -> void:
 	_share_status.text = ""
 	_setup_hover_sounds()
 	_show_view(View.ROOT)
+	_apply_theme()
+	UiTheme.bind_node(self, _apply_theme)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -56,6 +58,18 @@ func _on_button_mouse_entered() -> void:
 	if WebInstantButton.skip_hover():
 		return
 	GameFeedback.play_hover_button()
+
+
+func _apply_theme() -> void:
+	var left := $Root/Split/LeftColumn as Control
+	if left:
+		UiTheme.apply_menu_tree(left)
+	if _settings_panel:
+		_settings_panel.apply_sidebar_style()
+	if _sub_label:
+		UiTheme.style_label(_sub_label, true)
+	if _share_status:
+		UiTheme.style_label(_share_status, true)
 
 
 func _tutorial_active() -> bool:
