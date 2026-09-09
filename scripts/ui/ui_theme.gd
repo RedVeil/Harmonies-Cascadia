@@ -5,6 +5,7 @@ signal theme_changed
 
 const TILE_SHADOW_PATH := "res://assets/tiles/materials/ground/TileShadow.tres"
 const TITLE_FONT := preload("res://assets/fonts/LuckiestGuy-Regular.ttf")
+const BODY_FONT := preload("res://assets/fonts/Dangrek-Regular.ttf")
 const HINT_ALPHA := 0.7
 const BUTTON_HOVER_ALPHA := 0.5
 const CHIP_BORDER_WIDTH := 2
@@ -94,6 +95,8 @@ var _toggle_icons: Dictionary = {}
 
 
 func _ready() -> void:
+	_add_latin_fallback(TITLE_FONT)
+	_add_latin_fallback(BODY_FONT)
 	_tile_shadow = load(TILE_SHADOW_PATH) as StandardMaterial3D
 	var stored := DEFAULT_ID
 	if GameSettings != null:
@@ -133,10 +136,11 @@ func _unbind_callback(callback: Callable) -> void:
 
 
 func theme_display_name(id: String) -> String:
+	var fallback := id
 	var data = THEMES.get(id, {})
 	if typeof(data) == TYPE_DICTIONARY:
-		return str(data.get("name", id))
-	return id
+		fallback = str(data.get("name", id))
+	return Loc.ui("theme.%s" % id, fallback)
 
 
 func theme_colors(id: String) -> Dictionary:
@@ -269,6 +273,20 @@ func apply_title_font(control: Control) -> void:
 	if control == null:
 		return
 	control.add_theme_font_override("font", TITLE_FONT)
+
+
+func _add_latin_fallback(font: Font) -> void:
+	if font == null:
+		return
+	for existing in font.fallbacks:
+		if existing is SystemFont:
+			return
+	var fallback := SystemFont.new()
+	fallback.font_names = PackedStringArray(["Segoe UI", "Noto Sans", "DejaVu Sans", "Arial"])
+	var next: Array[Font] = []
+	next.assign(font.fallbacks)
+	next.append(fallback)
+	font.fallbacks = next
 
 
 func style_title_label(label: Label) -> void:

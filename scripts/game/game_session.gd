@@ -295,7 +295,15 @@ func get_max_pack_takes() -> int:
 
 
 func format_puzzle_description(puzzle: Dictionary) -> String:
-	return str(puzzle.get("description", "")).strip_edges()
+	return Loc.text(puzzle.get("description", "")).strip_edges()
+
+
+func format_puzzle_title(puzzle: Dictionary, fallback: String = "") -> String:
+	var id := str(puzzle.get("id", fallback))
+	var title: String = Loc.text(puzzle.get("title", ""), id).strip_edges()
+	if title.is_empty():
+		return id
+	return title
 
 
 ## -1 means unlimited placements (open puzzles / non-puzzle modes).
@@ -377,7 +385,7 @@ func list_puzzles() -> Array[Dictionary]:
 			continue
 		out.append({
 			"id": id,
-			"title": str(puzzle.get("title", id)),
+			"title": format_puzzle_title(puzzle, id),
 			"description": format_puzzle_description(puzzle),
 			"order": int(puzzle.get("order", 1000)),
 			"ratings": _ratings_from_puzzle(puzzle),

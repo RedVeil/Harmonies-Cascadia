@@ -45,6 +45,11 @@ var _tracked_hex_coord := Vector2i.ZERO
 var _track_node2d: Node2D = null
 var _hex_container: HexTileContainer = null
 var _modal_bubble_size := Vector2.ZERO
+var _last_step: Dictionary = {}
+var _last_highlight: String = ""
+var _last_show_continue: bool = false
+var _last_ratings: Dictionary = {}
+var _last_modal: bool = false
 
 
 func _ready() -> void:
@@ -60,6 +65,8 @@ func _ready() -> void:
 		_stars_row.hide()
 	_apply_theme()
 	UiTheme.bind_node(self, _apply_theme)
+	if GameSettings != null and not GameSettings.settings_changed.is_connected(_on_content_locale_changed):
+		GameSettings.settings_changed.connect(_on_content_locale_changed)
 
 
 func _process(_delta: float) -> void:
@@ -98,16 +105,20 @@ func _apply_theme() -> void:
 			box.bg_color = UiTheme.with_alpha(UiTheme.highlight, 0.0)
 
 
-func show_centered_modal(title: String, body: String, button_label: String, ratings: Dictionary = {}, skip_label: String = "") -> void:
+func show_centered_modal(title, body, button_label, ratings: Dictionary = {}, skip_label = "") -> void:
 	GameFeedback.play_open_popup()
 	var complete := {"label": button_label}
-	if not skip_label.is_empty():
+	if typeof(skip_label) == TYPE_DICTIONARY:
+		complete["skip_label"] = skip_label
+	elif not str(skip_label).strip_edges().is_empty():
 		complete["skip_label"] = skip_label
 	show_step({
 		"title": title,
 		"body": body,
 		"complete": complete,
 	}, "none", true)
+	_last_modal = true
+	_last_ratings = ratings.duplicate(true)
 	_modal_bubble_size = Vector2(380, 280)
 	_place_bubble(_highlight_rect())
 	_apply_rating_stars(ratings)
@@ -116,20 +127,15 @@ func show_centered_modal(title: String, body: String, button_label: String, rati
 
 
 func show_step(step: Dictionary, highlight_name: String, show_continue: bool) -> void:
+	_last_step = step.duplicate(true)
+	_last_highlight = highlight_name
+	_last_show_continue = show_continue
+	_last_modal = false
+	_last_ratings = {}
 	_modal_bubble_size = Vector2.ZERO
 	_set_dimmer_visible(false)
 	_apply_rating_stars({})
-	_title.text = str(step.get("title", ""))
-	_body.text = str(step.get("body", ""))
-	_continue_button.visible = show_continue
-	var complete: Dictionary = step.get("complete", {})
-	if typeof(complete) != TYPE_DICTIONARY:
-		complete = {}
-	_continue_button.text = str(complete.get("label", "Continue"))
-	var skip_label := str(complete.get("skip_label", ""))
-	_skip_button.visible = not skip_label.is_empty()
-	if _skip_button.visible:
-		_skip_button.text = skip_label
+	_apply_step_copy(step, show_continue)
 	_bubble_side = str(step.get("bubble_side", "")).to_lower()
 	if highlight_name in MENU_HIGHLIGHTS:
 		layer = COACH_LAYER_MENU
@@ -146,9 +152,37 @@ func show_step(step: Dictionary, highlight_name: String, show_continue: bool) ->
 		_focus_modal_buttons()
 
 
+func _apply_step_copy(step: Dictionary, show_continue: bool) -> void:
+	_title.text = Loc.text(step.get("title", ""))
+	_body.text = Loc.text(step.get("body", ""))
+	_continue_button.visible = show_continue
+	var complete: Dictionary = step.get("complete", {})
+	if typeof(complete) != TYPE_DICTIONARY:
+		complete = {}
+	_continue_button.text = Loc.text(complete.get("label", Loc.CONTINUE))
+	var skip_raw = complete.get("skip_label", "")
+	var skip_label: String = Loc.text(skip_raw)
+	_skip_button.visible = not skip_label.is_empty()
+	if _skip_button.visible:
+		_skip_button.text = skip_label
+
+
+func _on_content_locale_changed() -> void:
+	if not visible or _last_step.is_empty():
+		return
+	_apply_step_copy(_last_step, _last_show_continue)
+	if _last_modal:
+		_modal_bubble_size = Vector2(380, 280)
+		_place_bubble(_highlight_rect())
+		_apply_rating_stars(_last_ratings)
+
+
 func hide_coach() -> void:
 	layer = COACH_LAYER_DEFAULT
 	_modal_bubble_size = Vector2.ZERO
+	_last_step = {}
+	_last_modal = false
+	_last_ratings = {}
 	_set_dimmer_visible(false)
 	_apply_rating_stars({})
 	_hide_all_highlights()

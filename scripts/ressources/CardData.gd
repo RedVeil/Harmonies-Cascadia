@@ -8,7 +8,12 @@ enum CARD_TYPE {
 
 @export var type: CARD_TYPE = CARD_TYPE.ELEMENT
 @export var id: int = 0
-@export var name: String = ""
+## String or `{eng, ger}` dict from card_catalog.json.
+@export var name_i18n: Variant = ""
+
+
+func display_name() -> String:
+	return Loc.text(name_i18n)
 # where the card can be placed
 @export var placement: Array[Placement] = []
 # what has to be surrounding it to score point_score

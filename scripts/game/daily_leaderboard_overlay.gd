@@ -28,6 +28,8 @@ var _date: String = ""
 var _kind: String = "daily"
 var _row_normal: StyleBoxFlat
 var _row_me: StyleBoxFlat
+var _status_kind: String = ""
+var _status_error: String = ""
 
 
 func _ready() -> void:
@@ -35,6 +37,9 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_apply_theme()
 	UiTheme.bind_node(self, _apply_theme)
+	_apply_locale()
+	if GameSettings != null and not GameSettings.settings_changed.is_connected(_apply_locale):
+		GameSettings.settings_changed.connect(_apply_locale)
 	_update.pressed.connect(_on_update_pressed)
 	_show_me.pressed.connect(_on_show_me_pressed)
 	_show_top.pressed.connect(_on_show_top_pressed)
@@ -67,8 +72,7 @@ func open_weekly() -> void:
 
 func _prepare_board(kind: String) -> void:
 	_kind = kind
-	if _title != null:
-		_title.text = "WEEKLY LEADERBOARD" if _kind == "weekly" else "DAILY LEADERBOARD"
+	_apply_locale()
 	show()
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	OverlayFocus.grab_first_button(self)
@@ -81,7 +85,7 @@ func close() -> void:
 	hide()
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_clear_rows()
-	_status.text = ""
+	_set_status("")
 	_show_me.disabled = true
 
 
@@ -110,6 +114,50 @@ func _apply_theme() -> void:
 				var is_me := str(row.get_meta("player_id", "")) == _player_id and _player_id != ""
 				row.add_theme_stylebox_override("panel", _row_me if is_me else _row_normal)
 				_recolor_row_labels(row)
+
+
+func _apply_locale() -> void:
+	if _title:
+		_title.text = Loc.ui("leaderboard.weekly") if _kind == "weekly" else Loc.ui("leaderboard.daily")
+	if _rank_header:
+		_rank_header.text = Loc.ui("leaderboard.rank")
+	if _name_header:
+		_name_header.text = Loc.ui("leaderboard.name")
+	if _points_header:
+		_points_header.text = Loc.ui("leaderboard.points")
+	if _update:
+		_update.text = Loc.ui("leaderboard.update")
+	if _show_me:
+		_show_me.text = Loc.ui("leaderboard.show_me")
+	if _show_top:
+		_show_top.text = Loc.ui("leaderboard.show_top")
+	if _close:
+		_close.text = Loc.ui("leaderboard.close")
+	_refresh_status_text()
+
+
+func _set_status(kind: String, error_text: String = "") -> void:
+	_status_kind = kind
+	_status_error = error_text
+	_refresh_status_text()
+
+
+func _refresh_status_text() -> void:
+	if _status == null:
+		return
+	match _status_kind:
+		"loading":
+			_status.text = Loc.ui("leaderboard.loading")
+		"updating":
+			_status.text = Loc.ui("leaderboard.updating")
+		"not_configured":
+			_status.text = Loc.ui("leaderboard.not_configured")
+		"empty":
+			_status.text = _empty_status()
+		"error":
+			_status.text = _status_error
+		_:
+			_status.text = ""
 
 
 func _recolor_row_labels(row: Node) -> void:
@@ -142,8 +190,8 @@ func _set_busy(busy: bool) -> void:
 
 func _empty_status() -> String:
 	if _kind == "weekly":
-		return "No scores yet this week."
-	return "No scores yet today."
+		return Loc.ui("leaderboard.empty_weekly")
+	return Loc.ui("leaderboard.empty_daily")
 
 
 func _fetch_page(offset: int, limit: int) -> Array:
@@ -170,10 +218,10 @@ func _open_async() -> void:
 	_player_id = GameSettings.player_id
 	_date = GameSession.get_utc_week_start_iso() if _kind == "weekly" else GameSession.get_utc_date_iso()
 	_show_me.disabled = true
-	_status.text = "Loading..."
+	_set_status("loading")
 
 	if not SupabaseClient.is_configured():
-		_status.text = "Leaderboard is not configured."
+		_set_status("not_configured")
 		_set_busy(false)
 		return
 
@@ -214,11 +262,11 @@ func _replace_with_page(offset: int, gen: int = _load_gen) -> bool:
 	_sync_row_list_width()
 	if rows.is_empty() and offset == 0:
 		if not SupabaseClient.last_error.is_empty():
-			_status.text = SupabaseClient.last_error
+			_set_status("error", SupabaseClient.last_error)
 		else:
-			_status.text = _empty_status()
+			_set_status("empty")
 	else:
-		_status.text = ""
+		_set_status("")
 	return true
 
 
@@ -397,7 +445,7 @@ func _update_merge_async() -> void:
 	_load_gen += 1
 	var gen := _load_gen
 	_set_busy(true)
-	_status.text = "Updating..."
+	_set_status("updating")
 
 	var entry: Dictionary = await _fetch_player_entry()
 	if gen != _load_gen:
@@ -434,17 +482,17 @@ func _update_merge_async() -> void:
 	if fetched.is_empty() and offset == 0:
 		_merge_rows(fetched)
 		if not SupabaseClient.last_error.is_empty():
-			_status.text = SupabaseClient.last_error
+			_set_status("error", SupabaseClient.last_error)
 		else:
-			_status.text = _empty_status()
+			_set_status("empty")
 		return
 	if fetched.is_empty() and not SupabaseClient.last_error.is_empty():
-		_status.text = SupabaseClient.last_error
+		_set_status("error", SupabaseClient.last_error)
 		return
 
 	_has_more_below = fetched.size() >= count
 	_merge_rows(fetched)
-	_status.text = ""
+	_set_status("")
 
 
 func _merge_rows(fetched: Array) -> void:

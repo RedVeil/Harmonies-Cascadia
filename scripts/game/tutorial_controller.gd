@@ -110,14 +110,14 @@ func _show_part_break() -> void:
 	var part := _part_for_step_index(_index)
 	var step := {
 		"id": "part_break",
-		"title": str(part.get("break_title", "Part complete")),
-		"body": str(part.get("break_body", "Continue to the next lesson, or end the tutorial.")),
+		"title": part.get("break_title", Loc.PART_COMPLETE),
+		"body": part.get("break_body", Loc.PART_BREAK_BODY),
 		"highlight": "none",
 		"gates": {"allow_actions": []},
 		"complete": {
 			"type": "continue_button",
-			"label": "Continue",
-			"skip_label": "End",
+			"label": Loc.CONTINUE,
+			"skip_label": Loc.END,
 		},
 	}
 	_enter_step(step)

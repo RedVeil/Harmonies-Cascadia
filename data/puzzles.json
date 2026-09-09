@@ -17,7 +17,10 @@
 				null,
 				null
 			],
-			"description": "This puzzle is about forests. Forests can be placed basically anywhere and earn similar amount of points from placing and stacking them. Try it out with your three actions.",
+			"description": {
+				"eng": "This puzzle is about forests. Forests can be placed basically anywhere and earn similar amount of points from placing and stacking them. Try it out with your three actions.",
+				"ger": "Dieses Rätsel dreht sich um Wälder. Wälder kannst du fast überall legen; Platzieren und Stapeln bringen ähnlich viele Punkte. Löse das Puzzle in drei Aktionen."
+			},
 			"hand_animal_ids": [],
 			"hand_element_ids": [],
 			"id": "forest1_puzzle",
@@ -144,7 +147,10 @@
 					"r": -1.0
 				}
 			],
-			"title": "Forest Puzzle 1"
+			"title": {
+				"eng": "Forest Puzzle 1",
+				"ger": "Wald-Rätsel 1"
+			}
 		},
 		{
 			"animal_market": [
@@ -163,7 +169,10 @@
 				null,
 				null
 			],
-			"description": "The \"Tall Forest\"-rule grants more points to stacked forests than new ones. Focus on stacking forests with your three actions",
+			"description": {
+				"eng": "The \"Tall Forest\"-rule grants more points to stacked forests than new ones. Focus on stacking forests with your three actions",
+				"ger": "Die Regel „Hoher Wald“ gibt gestapelten Wäldern mehr Punkte als neuen. Konzentriere dich mit deinen drei Aktionen aufs Stapeln."
+			},
 			"hand_animal_ids": [],
 			"hand_element_ids": [],
 			"id": "forest2_puzzle",
@@ -296,7 +305,10 @@
 					"r": -1.0
 				}
 			],
-			"title": "Forest Puzzle 2"
+			"title": {
+				"eng": "Forest Puzzle 2",
+				"ger": "Wald-Rätsel 2"
+			}
 		},
 		{
 			"animal_market": [
@@ -315,7 +327,10 @@
 				null,
 				null
 			],
-			"description": "Now the forest rule wants you to create big forests. You earn exponentially more points for forests with more tiles. You have three actions to build sprawling forests.",
+			"description": {
+				"eng": "Now the forest rule wants you to create big forests. You earn exponentially more points for forests with more tiles. You have three actions to build sprawling forests.",
+				"ger": "Jetzt will die Wald-Regel große Wälder. Je mehr Waldkacheln zusammenhängen, desto mehr Punkte. Du hast drei Aktionen für ausgedehnte Wälder."
+			},
 			"hand_animal_ids": [],
 			"hand_element_ids": [],
 			"id": "forest3_puzzle",
@@ -436,7 +451,10 @@
 					"r": 0.0
 				}
 			],
-			"title": "Forest Puzzle 3"
+			"title": {
+				"eng": "Forest Puzzle 3",
+				"ger": "Wald-Rätsel 3"
+			}
 		},
 		{
 			"animal_market": [
@@ -455,7 +473,10 @@
 				null,
 				null
 			],
-			"description": "This puzzle is about fields. Fields usually want to be in groups of two or three fields. Create two new groups of fields in two actions.",
+			"description": {
+				"eng": "This puzzle is about fields. Fields usually want to be in groups of two or three fields. Create two new groups of fields in two actions.",
+				"ger": "Dieses Rätsel dreht sich um Felder. Felder wollen meist Gruppen aus zwei oder drei. Bilde in zwei Aktionen zwei neue Feldgruppen."
+			},
 			"hand_animal_ids": [],
 			"hand_element_ids": [],
 			"id": "field1_puzzle",
@@ -522,7 +543,10 @@
 					"r": -2.0
 				}
 			],
-			"title": "Field Puzzle 1"
+			"title": {
+				"eng": "Field Puzzle 1",
+				"ger": "Feld-Rätsel 1"
+			}
 		},
 		{
 			"animal_market": [
@@ -541,7 +565,10 @@
 				null,
 				null
 			],
-			"description": "In this puzzle you need to create groups of three or more fields. Create the right groups with your two actions.",
+			"description": {
+				"eng": "In this puzzle you need to create groups of three or more fields. Create the right groups with your two actions.",
+				"ger": "In diesem Rätsel musst du Gruppen aus drei oder mehr Feldern bilden. Schaffe die richtigen Gruppen mit deinen zwei Aktionen."
+			},
 			"hand_animal_ids": [],
 			"hand_element_ids": [],
 			"id": "field2_puzzle",
@@ -620,7 +647,10 @@
 					"r": 0.0
 				}
 			],
-			"title": "Field Puzzle 2"
+			"title": {
+				"eng": "Field Puzzle 2",
+				"ger": "Feld-Rätsel 2"
+			}
 		},
 		{
 			"animal_market": [
@@ -639,7 +669,10 @@
 				null,
 				null
 			],
-			"description": "Find a way to create two large field groups in three actions.",
+			"description": {
+				"eng": "Find a way to create two large field groups in three actions.",
+				"ger": "Finde einen Weg, in drei Aktionen zwei große Feldgruppen zu bilden."
+			},
 			"hand_animal_ids": [],
 			"hand_element_ids": [],
 			"id": "field3_puzzle",
@@ -700,7 +733,10 @@
 					"r": 0.0
 				}
 			],
-			"title": "Field Puzzle 3"
+			"title": {
+				"eng": "Field Puzzle 3",
+				"ger": "Feld-Rätsel 3"
+			}
 		},
 		{
 			"animal_market": [
@@ -719,7 +755,10 @@
 				null,
 				null
 			],
-			"description": "This time fields need to be isolated. Find the right spots to place all the fields in three actions.",
+			"description": {
+				"eng": "This time fields need to be isolated. Find the right spots to place all the fields in three actions.",
+				"ger": "Diesmal müssen Felder isoliert sein. Finde in drei Aktionen die richtigen Stellen für alle Felder."
+			},
 			"hand_animal_ids": [],
 			"hand_element_ids": [],
 			"id": "field4_puzzle",
@@ -792,7 +831,10 @@
 					"r": 0.0
 				}
 			],
-			"title": "Field Puzzle 4"
+			"title": {
+				"eng": "Field Puzzle 4",
+				"ger": "Feld-Rätsel 4"
+			}
 		},
 		{
 			"animal_market": [
@@ -811,7 +853,10 @@
 				null,
 				null
 			],
-			"description": "This puzzle is about mountains. Mountains need to be connected with other mountains to score. They also earn more points when stacked. Place your tiles next to the right mountains to make them score.",
+			"description": {
+				"eng": "This puzzle is about mountains. Mountains need to be connected with other mountains to score. They also earn more points when stacked. Place your tiles next to the right mountains to make them score.",
+				"ger": "Dieses Rätsel dreht sich um Berge. Berge müssen mit anderen Bergen verbunden sein, um zu werten. Gestapelt bringen sie mehr. Lege deine Kacheln an die richtigen Berge."
+			},
 			"hand_animal_ids": [],
 			"hand_element_ids": [],
 			"id": "mountain1_puzzle",
@@ -860,7 +905,10 @@
 					"r": -1.0
 				}
 			],
-			"title": "Mountain Puzzle 1"
+			"title": {
+				"eng": "Mountain Puzzle 1",
+				"ger": "Berg-Rätsel 1"
+			}
 		},
 		{
 			"animal_market": [
@@ -879,7 +927,10 @@
 				null,
 				null
 			],
-			"description": "This time mountains score extra when getting to the third stack. Find the right mountains to stack in three actions.",
+			"description": {
+				"eng": "This time mountains score extra when getting to the third stack. Find the right mountains to stack in three actions.",
+				"ger": "Diesmal werten Berge extra auf der dritten Stufe. Finde in drei Aktionen die richtigen Berge zum Stapeln."
+			},
 			"hand_animal_ids": [],
 			"hand_element_ids": [],
 			"id": "mountain2_puzzle",
@@ -1018,7 +1069,10 @@
 					"r": 0.0
 				}
 			],
-			"title": "Mountain Puzzle 2"
+			"title": {
+				"eng": "Mountain Puzzle 2",
+				"ger": "Berg-Rätsel 2"
+			}
 		},
 		{
 			"animal_market": [
@@ -1037,7 +1091,10 @@
 				null,
 				null
 			],
-			"description": "This mountain rule is different to the others. It scores only isolated mountains. Find the right mountains to place and stack in three actions.",
+			"description": {
+				"eng": "This mountain rule is different to the others. It scores only isolated mountains. Find the right mountains to place and stack in three actions.",
+				"ger": "Diese Berg-Regel ist anders: Nur isolierte Berge werten. Finde in drei Aktionen die richtigen Berge zum Platzieren und Stapeln."
+			},
 			"hand_animal_ids": [],
 			"hand_element_ids": [],
 			"id": "mountain3_puzzle",
@@ -1122,7 +1179,10 @@
 					"r": 0.0
 				}
 			],
-			"title": "Mountain Puzzle 3"
+			"title": {
+				"eng": "Mountain Puzzle 3",
+				"ger": "Berg-Rätsel 3"
+			}
 		},
 		{
 			"animal_market": [
@@ -1141,7 +1201,10 @@
 				null,
 				null
 			],
-			"description": "This puzzle is about rivers. Rivers need to be in long lines to score the most points. Find the right way to connect these two rivers.",
+			"description": {
+				"eng": "This puzzle is about rivers. Rivers need to be in long lines to score the most points. Find the right way to connect these two rivers.",
+				"ger": "Dieses Rätsel dreht sich um Flüsse. Lange Linien bringen die meisten Punkte. Verbinde diese zwei Flüsse richtig."
+			},
 			"hand_animal_ids": [],
 			"hand_element_ids": [],
 			"id": "river1_puzzle",
@@ -1220,7 +1283,10 @@
 					"r": 1.0
 				}
 			],
-			"title": "River Puzzle 1"
+			"title": {
+				"eng": "River Puzzle 1",
+				"ger": "Fluss-Rätsel 1"
+			}
 		},
 		{
 			"animal_market": [
@@ -1239,7 +1305,10 @@
 				null,
 				null
 			],
-			"description": "Extend the river as far as you can in three actions.",
+			"description": {
+				"eng": "Extend the river as far as you can in three actions.",
+				"ger": "Verlängere den Fluss so weit wie möglich in drei Aktionen."
+			},
 			"hand_animal_ids": [],
 			"hand_element_ids": [],
 			"id": "river2_puzzle",
@@ -1318,7 +1387,10 @@
 					"r": 1.0
 				}
 			],
-			"title": "River Puzzle 2"
+			"title": {
+				"eng": "River Puzzle 2",
+				"ger": "Fluss-Rätsel 2"
+			}
 		},
 		{
 			"animal_market": [
@@ -1337,7 +1409,10 @@
 				null,
 				null
 			],
-			"description": "This time rivers stop scoring when they become longer than five tiles. Extend the rivers in two actions.",
+			"description": {
+				"eng": "This time rivers stop scoring when they become longer than five tiles. Extend the rivers in two actions.",
+				"ger": "Diesmal werten Flüsse nicht mehr, wenn sie länger als fünf Kacheln sind. Verlängere die Flüsse in zwei Aktionen."
+			},
 			"hand_animal_ids": [],
 			"hand_element_ids": [],
 			"id": "river3_puzzle",
@@ -1410,7 +1485,10 @@
 					"r": -1.0
 				}
 			],
-			"title": "River Puzzle 3"
+			"title": {
+				"eng": "River Puzzle 3",
+				"ger": "Fluss-Rätsel 3"
+			}
 		},
 		{
 			"animal_market": [
@@ -1429,7 +1507,10 @@
 				null,
 				null
 			],
-			"description": "This time rivers just score a flat amount of points no matter where you place them. Just fill in the gaps.",
+			"description": {
+				"eng": "This time rivers just score a flat amount of points no matter where you place them. Just fill in the gaps.",
+				"ger": "Diesmal bringen Flüsse eine feste Punktzahl, egal wo du sie legst. Fülle einfach die Lücken."
+			},
 			"hand_animal_ids": [],
 			"hand_element_ids": [],
 			"id": "river4_puzzle",
@@ -1550,7 +1631,10 @@
 					"r": 0.0
 				}
 			],
-			"title": "River Puzzle 4"
+			"title": {
+				"eng": "River Puzzle 4",
+				"ger": "Fluss-Rätsel 4"
+			}
 		},
 		{
 			"animal_market": [
@@ -1569,7 +1653,10 @@
 				null,
 				null
 			],
-			"description": "This time we look at wetlands. Wetlands want many different neighbor types. In this case you earn a flat 12 points per wetland that has atleast three different neighbors. Find those spots in three actions.",
+			"description": {
+				"eng": "This time we look at wetlands. Wetlands want many different neighbor types. In this case you earn a flat 12 points per wetland that has atleast three different neighbors. Find those spots in three actions.",
+				"ger": "Diesmal Feuchtgebiete. Sie wollen viele verschiedene Nachbartypen. Hier gibt es pauschal 12 Punkte pro Feuchtgebiet mit mindestens drei verschiedenen Nachbarn. Finde diese Stellen in drei Aktionen."
+			},
 			"hand_animal_ids": [],
 			"hand_element_ids": [],
 			"id": "wetland1_puzzle",
@@ -1666,7 +1753,10 @@
 					"r": 0.0
 				}
 			],
-			"title": "Wetland Puzzle 1"
+			"title": {
+				"eng": "Wetland Puzzle 1",
+				"ger": "Feuchtgebiet-Rätsel 1"
+			}
 		},
 		{
 			"animal_market": [
@@ -1685,7 +1775,10 @@
 				null,
 				null
 			],
-			"description": "Here we have the same rule but one wetland wont have enough neighbors unless you place it. You have three actions to solve it.",
+			"description": {
+				"eng": "Here we have the same rule but one wetland wont have enough neighbors unless you place it. You have three actions to solve it.",
+				"ger": "Dieselbe Regel, aber ein Feuchtgebiet hat erst genug Nachbarn, wenn du es platzierst. Du hast drei Aktionen."
+			},
 			"hand_animal_ids": [],
 			"hand_element_ids": [],
 			"id": "wetland2_puzzle",
@@ -1782,7 +1875,10 @@
 					"r": 0.0
 				}
 			],
-			"title": "Wetland Puzzle 2"
+			"title": {
+				"eng": "Wetland Puzzle 2",
+				"ger": "Feuchtgebiet-Rätsel 2"
+			}
 		},
 		{
 			"animal_market": [
@@ -1801,7 +1897,10 @@
 				null,
 				null
 			],
-			"description": "And once again you have a wetland but not enough different neighbors. But im sure you can solve it three actions.",
+			"description": {
+				"eng": "And once again you have a wetland but not enough different neighbors. But im sure you can solve it three actions.",
+				"ger": "Wieder einmal hat ein Feuchtgebiet nicht genug verschiedene Nachbarn, außer du platzierst es. Löse es in drei Aktionen."
+			},
 			"hand_animal_ids": [],
 			"hand_element_ids": [],
 			"id": "wetland3_puzzle",
@@ -1850,7 +1949,10 @@
 					"r": 0.0
 				}
 			],
-			"title": "Wetland Puzzle 3"
+			"title": {
+				"eng": "Wetland Puzzle 3",
+				"ger": "Feuchtgebiet-Rätsel 3"
+			}
 		},
 		{
 			"animal_market": [
@@ -1869,7 +1971,10 @@
 				null,
 				null
 			],
-			"description": "Here the wetlands score four points per different neighbor (not counting other wetlands). Find the best three locations.",
+			"description": {
+				"eng": "Here the wetlands score four points per different neighbor (not counting other wetlands). Find the best three locations.",
+				"ger": "Hier bringen Feuchtgebiete vier Punkte pro verschiedenem Nachbartyp (andere Feuchtgebiete zählen nicht). Finde die drei besten Stellen."
+			},
 			"hand_animal_ids": [],
 			"hand_element_ids": [],
 			"id": "wetland4_puzzle",
@@ -1954,7 +2059,10 @@
 					"r": 0.0
 				}
 			],
-			"title": "Wetland Puzzle 4"
+			"title": {
+				"eng": "Wetland Puzzle 4",
+				"ger": "Feuchtgebiet-Rätsel 4"
+			}
 		},
 		{
 			"animal_market": [
@@ -1973,7 +2081,10 @@
 				null,
 				null
 			],
-			"description": "This wetland rule wants you to place pairs of wetlands. Create two pairs with three actions.",
+			"description": {
+				"eng": "This wetland rule wants you to place pairs of wetlands. Create two pairs with three actions.",
+				"ger": "Diese Feuchtgebiet-Regel will Paare. Bilde mit drei Aktionen zwei Paare."
+			},
 			"hand_animal_ids": [],
 			"hand_element_ids": [],
 			"id": "wetland5_puzzle",
@@ -2088,7 +2199,10 @@
 					"r": 0.0
 				}
 			],
-			"title": "Wetland Puzzle 5"
+			"title": {
+				"eng": "Wetland Puzzle 5",
+				"ger": "Feuchtgebiet-Rätsel 5"
+			}
 		},
 		{
 			"animal_market": [
@@ -2119,7 +2233,10 @@
 					]
 				}
 			],
-			"description": "Now lets look at animals. Animals have specific patterns that can be mirrored and rotated. Pick the giraffe from the market and figure out how to place all the giraffes with one pack and five actions.",
+			"description": {
+				"eng": "Now lets look at animals. Animals have specific patterns that can be mirrored and rotated. Pick the giraffe from the market and figure out how to place all the giraffes with one pack and five actions.",
+				"ger": "Schauen wir uns Tiere an. Tiere haben bestimmte Muster, die du spiegeln und drehen kannst. Nimm die Giraffe vom Markt und platziere alle Giraffen mit einem Paket und fünf Aktionen."
+			},
 			"hand_animal_ids": [],
 			"hand_element_ids": [],
 			"id": "animal1_puzzle",
@@ -2258,7 +2375,10 @@
 					"r": 0.0
 				}
 			],
-			"title": "Animal Puzzle 1"
+			"title": {
+				"eng": "Animal Puzzle 1",
+				"ger": "Tier-Rätsel 1"
+			}
 		},
 		{
 			"animal_market": [
@@ -2289,7 +2409,10 @@
 					]
 				}
 			],
-			"description": "Its giraffes again but this time try to find the most efficient shape with one pack of tiles to place all three giraffes.",
+			"description": {
+				"eng": "Its giraffes again but this time try to find the most efficient shape with one pack of tiles to place all three giraffes.",
+				"ger": "Wieder Giraffen, aber diesmal suche die effizienteste Form mit einem Paket, um alle drei Giraffen zu platzieren."
+			},
 			"hand_animal_ids": [],
 			"hand_element_ids": [],
 			"id": "animal2_puzzle",
@@ -2338,7 +2461,10 @@
 					"r": 0.0
 				}
 			],
-			"title": "Animal Puzzle 2"
+			"title": {
+				"eng": "Animal Puzzle 2",
+				"ger": "Tier-Rätsel 2"
+			}
 		},
 		{
 			"animal_market": [
@@ -2369,7 +2495,10 @@
 					]
 				}
 			],
-			"description": "Here we have a different kind of pattern with the turtles. Find a way to place all of turtles. You have one pack and five actions to do so. Also keep the river scoring rule in mind for the highest points.",
+			"description": {
+				"eng": "Here we have a different kind of pattern with the turtles. Find a way to place all of turtles. You have one pack and five actions to do so. Also keep the river scoring rule in mind for the highest points.",
+				"ger": "Hier gibt es ein anderes Muster mit den Schildkröten. Platziere alle Schildkröten. Du hast ein Paket und fünf Aktionen. Achte auch auf die Fluss-Wertung für die höchste Punktzahl."
+			},
 			"hand_animal_ids": [],
 			"hand_element_ids": [],
 			"id": "animal3_puzzle",
@@ -2418,7 +2547,10 @@
 					"r": -1
 				}
 			],
-			"title": "Animal Puzzle 3"
+			"title": {
+				"eng": "Animal Puzzle 3",
+				"ger": "Tier-Rätsel 3"
+			}
 		},
 		{
 			"animal_market": [
@@ -2449,7 +2581,10 @@
 					]
 				}
 			],
-			"description": "These crabs want a pair of tiles. Can you figure out the right placement to place all of them using only two packs?",
+			"description": {
+				"eng": "These crabs want a pair of tiles. Can you figure out the right placement to place all of them using only two packs?",
+				"ger": "Diese Krabben wollen ein Kachelpaar. Findest du die Platzierung, um alle mit nur zwei Paketen zu legen?"
+			},
 			"hand_animal_ids": [],
 			"hand_element_ids": [],
 			"id": "animal4_puzzle",
@@ -2473,7 +2608,10 @@
 			},
 			"seed": 3873512722.0,
 			"tiles": [],
-			"title": "Animal Puzzle 4"
+			"title": {
+				"eng": "Animal Puzzle 4",
+				"ger": "Tier-Rätsel 4"
+			}
 		},
 		{
 			"animal_market": [
@@ -2504,7 +2642,10 @@
 					]
 				}
 			],
-			"description": "The elephants are placed in a straight line. You can place both of them with only two packs. But the key to gold is to pick the right pack at the right time...",
+			"description": {
+				"eng": "The elephants are placed in a straight line. You can place both of them with only two packs. But the key to gold is to pick the right pack at the right time...",
+				"ger": "Die Elefanten stehen in einer geraden Linie. Beide kannst du mit nur zwei Paketen platzieren. Der Schlüssel zu Gold ist, das richtige Paket zur richtigen Zeit zu nehmen..."
+			},
 			"hand_animal_ids": [],
 			"hand_element_ids": [],
 			"id": "animal5_puzzle",
@@ -2528,7 +2669,10 @@
 			},
 			"seed": 3873512722.0,
 			"tiles": [],
-			"title": "Animal Puzzle 5"
+			"title": {
+				"eng": "Animal Puzzle 5",
+				"ger": "Tier-Rätsel 5"
+			}
 		},
 		{
 			"animal_market": [
@@ -2547,7 +2691,10 @@
 				null,
 				null
 			],
-			"description": "Now lets look at quests. Pick the right pack and finish the quest.",
+			"description": {
+				"eng": "Now lets look at quests. Pick the right pack and finish the quest.",
+				"ger": "Schauen wir uns Aufträge an. Nimm das richtige Paket und erfülle den Auftrag."
+			},
 			"hand_animal_ids": [],
 			"hand_element_ids": [],
 			"id": "quest1_puzzle",
@@ -2622,7 +2769,10 @@
 					"r": 1.0
 				}
 			],
-			"title": "Quest Puzzle 1"
+			"title": {
+				"eng": "Quest Puzzle 1",
+				"ger": "Auftrags-Rätsel 1"
+			}
 		},
 		{
 			"animal_market": [
@@ -2653,7 +2803,10 @@
 					]
 				}
 			],
-			"description": "Finish this quest by picking the correct two booster packs and tile placement. You earn additional points for figuring out the right order of tiles to play.",
+			"description": {
+				"eng": "Finish this quest by picking the correct two booster packs and tile placement. You earn additional points for figuring out the right order of tiles to play.",
+				"ger": "Erfülle diesen Auftrag, indem du die richtigen zwei Pakete und die richtige Platzierung wählst. Extra-Punkte gibt es für die richtige Reihenfolge der Kacheln."
+			},
 			"hand_animal_ids": [],
 			"hand_element_ids": [],
 			"id": "quest2_puzzle",
@@ -2764,7 +2917,10 @@
 					"r": 0.0
 				}
 			],
-			"title": "Quest Puzzle 2"
+			"title": {
+				"eng": "Quest Puzzle 2",
+				"ger": "Auftrags-Rätsel 2"
+			}
 		},
 		{
 			"animal_market": [
@@ -2795,7 +2951,10 @@
 					]
 				}
 			],
-			"description": "Complete both of the quests with just two packs. Earn additional points for placing tiles in the right order...",
+			"description": {
+				"eng": "Complete both of the quests with just two packs. Earn additional points for placing tiles in the right order...",
+				"ger": "Erfülle beide Aufträge mit nur zwei Paketen. Extra-Punkte gibt es für die richtige Reihenfolge der Kacheln..."
+			},
 			"hand_animal_ids": [],
 			"hand_element_ids": [],
 			"id": "quest3_puzzle",
@@ -2822,7 +2981,10 @@
 			},
 			"seed": 2816859028.0,
 			"tiles": [],
-			"title": "Quest Puzzle 3"
+			"title": {
+				"eng": "Quest Puzzle 3",
+				"ger": "Auftrags-Rätsel 3"
+			}
 		},
 		{
 			"animal_market": [
@@ -2853,7 +3015,10 @@
 					]
 				}
 			],
-			"description": "Complete both quests with just one pack and two actions.",
+			"description": {
+				"eng": "Complete both quests with just one pack and two actions.",
+				"ger": "Erfülle beide Aufträge mit nur einem Paket und zwei Aktionen."
+			},
 			"hand_animal_ids": [],
 			"hand_element_ids": [],
 			"id": "quest4_puzzle",
@@ -2983,7 +3148,10 @@
 					"r": 0.0
 				}
 			],
-			"title": "Quest Puzzle 4"
+			"title": {
+				"eng": "Quest Puzzle 4",
+				"ger": "Auftrags-Rätsel 4"
+			}
 		},
 		{
 			"animal_market": [
@@ -3014,7 +3182,10 @@
 					]
 				}
 			],
-			"description": "Choose the right pack and the right placement to maximise your points.",
+			"description": {
+				"eng": "Choose the right pack and the right placement to maximise your points.",
+				"ger": "Wähle das richtige Paket und die richtige Platzierung, um deine Punkte zu maximieren."
+			},
 			"hand_animal_ids": [],
 			"hand_element_ids": [],
 			"id": "mixed1_puzzle",
@@ -3135,7 +3306,10 @@
 					"r": -1.0
 				}
 			],
-			"title": "Mixed Puzzle 1"
+			"title": {
+				"eng": "Mixed Puzzle 1",
+				"ger": "Gemischtes Rätsel 1"
+			}
 		}
 	]
 }

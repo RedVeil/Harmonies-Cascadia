@@ -9,8 +9,17 @@ enum SpecialRule {
 }
 
 @export var id:int = 0
-@export var name:String = ""
-@export var description:String = ""
+## String or `{eng, ger}` dict from scoring_rules.json.
+@export var name_i18n: Variant = ""
+@export var description_i18n: Variant = ""
+
+
+func display_name() -> String:
+	return Loc.text(name_i18n)
+
+
+func display_description() -> String:
+	return Loc.text(description_i18n)
 # minimum group size required to earn flat_points
 @export var min_group_size: int = 0
 # max tiles that count toward points_per_tile_level (highest levels first)

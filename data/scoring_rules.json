@@ -1,8 +1,14 @@
 [
 	{
 		"id": 0.0,
-		"name": "Forest",
-		"description": "Place forests anywhere. Each forest tile scores by level. 2 Points for level 1 and another 2 Points for level 2.",
+		"name": {
+			"eng": "Forest",
+			"ger": "Wald"
+		},
+		"description": {
+			"eng": "Place forests anywhere. Forests can be stacked. You earn 2 points for a level-1-forest and another 2 points for a level-2-forest.",
+			"ger": "Du kannst Wälder überall platzieren. Wälder können gestapelt werden. Du erhältst 2 Punkte für einen Stufe-1-Wald und 2 weitere Punkte für einen Stufe-2-Wald."
+		},
 		"min_group_size": 1.0,
 		"max_group_size": 100000.0,
 		"points_per_tile_level": [
@@ -21,8 +27,14 @@
 	},
 	{
 		"id": 1.0,
-		"name": "Tall Forest",
-		"description": "Place forests anywhere. Each forest tile scores by level. 1 Points for level 1 and 4 more Points for level 2.",
+		"name": {
+			"eng": "Tall Forest",
+			"ger": "Hoher Wald"
+		},
+		"description": {
+			"eng": "Place forests anywhere. Each forest tile scores by stack level. You earn 1 point for a level-1-forest and another 4 points for a level-2-forest.",
+			"ger": "Du kannst Wälder überall platzieren. Wälder können gestapelt werden. Du erhältst 1 Punkt für einen Stufe-1-Wald und 4 weitere Punkte für einen Stufe-2-Wald."
+		},
 		"min_group_size": 1.0,
 		"max_group_size": 100000.0,
 		"points_per_tile_level": [
@@ -41,8 +53,14 @@
 	},
 	{
 		"id": 2.0,
-		"name": "Large Forest",
-		"description": "Place forests connected to each other. The more forests are connected the more points you earn. Level 2 forets earn an additional 2 points.",
+		"name": {
+			"eng": "Large Forest",
+			"ger": "Großer Wald"
+		},
+		"description": {
+			"eng": "Place forests connected to each other. The more forests are connected the more points you earn. Level-2-forests earn an additional 2 points.",
+			"ger": "Platziere Wälder zusammenhängend. Je mehr Wälder verbunden sind, desto mehr Punkte erhältst du. Stufe-2-Wälder bringen zusätzlich je 2 Punkte."
+		},
 		"min_group_size": 1.0,
 		"max_group_size": 100000.0,
 		"points_per_tile_level": [
@@ -70,8 +88,14 @@
 	},
 	{
 		"id": 3.0,
-		"name": "Field",
-		"description": "Place fields in pairs. A pair of fields earns 10 points. Adding more fields to a pair doesnt earn more points.",
+		"name": {
+			"eng": "Field",
+			"ger": "Feld"
+		},
+		"description": {
+			"eng": "Place fields in pairs. A pair of fields earns 10 points. Adding more fields to a pair doesn't earn more points.",
+			"ger": "Platziere Felder in Paaren. Ein Paar bringt 10 Punkte. Jedes extra Feld an einem Paar bringt keine weiteren Punkte."
+		},
 		"min_group_size": 1.0,
 		"max_group_size": 100000.0,
 		"points_per_tile_level": [
@@ -92,8 +116,14 @@
 	},
 	{
 		"id": 4.0,
-		"name": "Small Fields",
-		"description": "Place fields alone. Each field earns 5 points. A field connected to another field doesnt earn any points.",
+		"name": {
+			"eng": "Small Fields",
+			"ger": "Kleine Felder"
+		},
+		"description": {
+			"eng": "Place fields alone. Each field earns 5 points. A field connected to another field doesn't earn any points.",
+			"ger": "Platziere Felder einzeln. Jedes Feld bringt 5 Punkte. Ein Feld, neben einem anderen Feld, bringt keine weiteren Punkte."
+		},
 		"min_group_size": 1.0,
 		"max_group_size": 1.0,
 		"points_per_tile_level": [
@@ -108,8 +138,14 @@
 	},
 	{
 		"id": 5.0,
-		"name": "Large Fields",
-		"description": "Place fields in groups of 3. A group of fields earns 20 points. Adding more fields to the group doesnt earn more points.",
+		"name": {
+			"eng": "Large Fields",
+			"ger": "Große Felder"
+		},
+		"description": {
+			"eng": "Place fields in groups of three. A group of fields earns 20 points. Adding more fields to the group doesnt earn more points.",
+			"ger": "Platziere Felder in Gruppen von drei Feldern. Eine Gruppe bringt 20 Punkte. Jedes extra Feld in der Gruppe bringt keine weiteren Punkte."
+		},
 		"min_group_size": 1.0,
 		"max_group_size": 100000.0,
 		"points_per_tile_level": [
@@ -131,8 +167,14 @@
 	},
 	{
 		"id": 6.0,
-		"name": "Mountains",
-		"description": "Place mountains connected to another mountain. Mountains that are not connected to another mountain dont earn points. Each level of a mountain earns 3 additional points.",
+		"name": {
+			"eng": "Mountains",
+			"ger": "Berge"
+		},
+		"description": {
+			"eng": "Place mountains connected to another mountain. Mountains that are not connected to another mountain dont earn points. Each level of a mountain earns 3 additional points.",
+			"ger": "Platziere Berge verbunden mit mindestens einem anderen Berg. Isolierte Berge bringen keine Punkte. Jede Stufe eines Bergs bringt 3 zusätzliche Punkte."
+		},
 		"min_group_size": 2.0,
 		"max_group_size": 100000.0,
 		"points_per_tile_level": [
@@ -163,8 +205,14 @@
 	},
 	{
 		"id": 7.0,
-		"name": "Tall Mountains",
-		"description": "Place mountains connected to another mountain. Mountains that are not connected to another mountain dont earn points. The higher the mountain the more points you earn.",
+		"name": {
+			"eng": "Tall Mountains",
+			"ger": "Hohe Berge"
+		},
+		"description": {
+			"eng": "Place mountains connected to another mountain. Mountains that are not connected to another mountain dont earn points. The higher the mountain the more points you earn.",
+			"ger": "Platziere Berge verbunden mit mindestens einem anderen Berg. Isolierte Berge bringen keine Punkte. Je höher der Berg, desto mehr Punkte."
+		},
 		"min_group_size": 2.0,
 		"max_group_size": 100000.0,
 		"points_per_tile_level": [
@@ -195,8 +243,14 @@
 	},
 	{
 		"id": 8.0,
-		"name": "Isolated Mountains",
-		"description": "Mountains score if they are NOT connected to another mountain. They score more when leveled up to higher levels.",
+		"name": {
+			"eng": "Isolated Mountains",
+			"ger": "Isolierte Berge"
+		},
+		"description": {
+			"eng": "Mountains score if they are NOT connected to another mountain. They score more when leveled up to higher levels.",
+			"ger": "Berge werten, wenn sie NICHT mit einem anderen Berg verbunden sind. Höhere Stufen bringen mehr Punkte."
+		},
 		"min_group_size": 1.0,
 		"max_group_size": 1.0,
 		"points_per_tile_level": [
@@ -219,8 +273,14 @@
 	},
 	{
 		"id": 9.0,
-		"name": "Long River",
-		"description": "Make long rivers. Dont create clusters of rivers but stretch them out. The longer the river the more points you earn.",
+		"name": {
+			"eng": "Long River",
+			"ger": "Langer Fluss"
+		},
+		"description": {
+			"eng": "Make long rivers. Dont create clusters of rivers but stretch them out. The longer the river the more points you earn.",
+			"ger": "Platziere lange Flüsse. Baue keine engen Gruppen sondern lange schlängelnde Flüsse. Je länger der Fluss, desto mehr Punkte."
+		},
 		"min_group_size": 1.0,
 		"max_group_size": 100000.0,
 		"points_per_tile_level": [
@@ -248,8 +308,14 @@
 	},
 	{
 		"id": 10.0,
-		"name": "Short River",
-		"description": "Make short rivers. Dont create clusters of rivers but stretch them out. The longer the river the more points you earn up to a maximum of 5 river tiles.",
+		"name": {
+			"eng": "Short River",
+			"ger": "Kurzer Fluss"
+		},
+		"description": {
+			"eng": "Make short rivers. Dont create clusters of rivers but stretch them out. The longer the river the more points you earn up to a maximum of 5 river tiles.",
+			"ger": "Baue kurze Flüsse. Baue keine engen Gruppen sondern lange schlängelnde Flüsse. Je länger der Fluss, desto mehr Punkte, bis höchstens 5 Flusskacheln."
+		},
 		"min_group_size": 1.0,
 		"max_group_size": 100000.0,
 		"points_per_tile_level": [
@@ -273,8 +339,14 @@
 	},
 	{
 		"id": 11.0,
-		"name": "River",
-		"description": "Place rivers anywhere. Each river earns 4 points.",
+		"name": {
+			"eng": "River",
+			"ger": "Fluss"
+		},
+		"description": {
+			"eng": "Place rivers anywhere. Each river earns 4 points.",
+			"ger": "Du kannst Flüsse überall platzieren. Jeder Fluss bringt 4 Punkte."
+		},
 		"min_group_size": 1.0,
 		"max_group_size": 100000.0,
 		"points_per_tile_level": [
@@ -289,8 +361,14 @@
 	},
 	{
 		"id": 12.0,
-		"name": "Wetland",
-		"description": "Place wetlands in between other types of tiles. A wetland earns 12 points if its connected to a minimum of 3 different neighboring types. Different tile levels dont affect the scoring.",
+		"name": {
+			"eng": "Wetland",
+			"ger": "Sumpf"
+		},
+		"description": {
+			"eng": "Place wetlands in between other types of tiles. A wetland earns 12 points if its connected to a minimum of 3 different neighboring types. Different tile levels dont affect the scoring.",
+			"ger": "Platziere Sümpfe zwischen anderen Kacheltypen. Ein Sumpf bringt 12 Punkte, wenn es an mindestens 3 verschiedene Nachbartypen grenzt. Die Stufe der Kacheln spielt keine Rolle."
+		},
 		"min_group_size": 1.0,
 		"max_group_size": 1.0,
 		"points_per_tile_level": [
@@ -309,8 +387,14 @@
 	},
 	{
 		"id": 13.0,
-		"name": "Wetland Neighbors",
-		"description": "Place wetlands in between other types of tiles. A wetland earns 4 points per adjacent tile type. Different tile levels dont affect the scoring.",
+		"name": {
+			"eng": "Wetland Neighbors",
+			"ger": "Sumpf-Nachbarn"
+		},
+		"description": {
+			"eng": "Place wetlands in between other types of tiles. A wetland earns 4 points per adjacent tile type. Different tile levels dont affect the scoring.",
+			"ger": "Platziere Sümpfe zwischen anderen Kacheltypen. Ein Sumpf bringt 4 Punkte pro angrenzendem Kacheltyp. Die Stufe der Kacheln spielt keine Rolle."
+		},
 		"min_group_size": 1.0,
 		"max_group_size": 1.0,
 		"points_per_tile_level": [
@@ -329,8 +413,14 @@
 	},
 	{
 		"id": 14.0,
-		"name": "Wetland Group",
-		"description": "Place wetlands in pairs. A pair of wetlands earns 15 points. Adding more wetlands to a pair doesnt earn more points.",
+		"name": {
+			"eng": "Wetland Group",
+			"ger": "Sumpf-Gruppe"
+		},
+		"description": {
+			"eng": "Place wetlands in pairs. A pair of wetlands earns 15 points. Adding more wetlands to a pair doesnt earn more points.",
+			"ger": "Platziere Sümpfe in Paaren. Ein Paar bringt 15 Punkte. Weitere Sümpfe am Paar bringen keine weiteren Punkte."
+		},
 		"min_group_size": 1.0,
 		"max_group_size": 100000.0,
 		"points_per_tile_level": [

@@ -33,6 +33,13 @@ func _ready() -> void:
 	_apply_view()
 	_apply_theme()
 	UiTheme.bind_node(self, _apply_theme)
+	if GameSettings != null and not GameSettings.settings_changed.is_connected(_on_content_locale_changed):
+		GameSettings.settings_changed.connect(_on_content_locale_changed)
+
+
+func _on_content_locale_changed() -> void:
+	if visible and _view == View.SCORING:
+		_populate_scoring()
 
 ## ----- Public API ----- ##
 
@@ -100,8 +107,8 @@ func _populate_scoring() -> void:
 		var title := _columns[i].get_node("Title") as Label
 		var graphic := _columns[i].get_node("Graphic") as TextureRect
 		var description := _columns[i].get_node("Description") as Label
-		title.text = rule.name
-		description.text = rule.description
+		title.text = rule.display_name()
+		description.text = rule.display_description()
 		graphic.texture = get_desc_image(rule.id)
 		_fit_title(title)
 		_fit_graphic(graphic)

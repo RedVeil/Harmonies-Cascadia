@@ -28,6 +28,8 @@ var msaa_mode: MsaaMode = MsaaMode.OFF
 var music_volume: float = 0.5
 var sfx_volume: float = 0.5
 var theme_id: String = "cascadia"
+## "eng" or "ger". JSON catalog copy is resolved from this.
+var content_locale: String = "eng"
 ## puzzle_id -> { "best_score": int }
 var puzzle_progress: Dictionary = {}
 
@@ -47,6 +49,7 @@ func load_from_disk() -> void:
 		_load_from_legacy_cfg()
 	else:
 		apply_preset(_default_preset(), false)
+		content_locale = Loc.ENG
 
 	var identity_dirty := false
 	if player_id.is_empty():
@@ -57,7 +60,16 @@ func load_from_disk() -> void:
 		player_name = sanitized_name
 		identity_dirty = true
 	var tutorial_dirty := _migrate_player_progress()
-	if identity_dirty or tutorial_dirty or not FileAccess.file_exists(SAVE_PATH):
+	var locale_dirty := false
+	if content_locale.is_empty():
+		content_locale = Loc.ENG
+		locale_dirty = true
+	else:
+		var normalized: String = Loc.normalize_locale(content_locale)
+		if normalized != content_locale:
+			content_locale = normalized
+			locale_dirty = true
+	if identity_dirty or tutorial_dirty or locale_dirty or not FileAccess.file_exists(SAVE_PATH):
 		save_to_disk()
 
 
@@ -91,6 +103,10 @@ func _load_from_json() -> void:
 	theme_id = str(data.get("theme_id", "cascadia"))
 	if theme_id.is_empty():
 		theme_id = "cascadia"
+	if data.has("content_locale"):
+		content_locale = Loc.normalize_locale(str(data.get("content_locale", Loc.ENG)))
+	else:
+		content_locale = Loc.ENG
 
 	var progress = data.get("puzzle_progress", {})
 	if typeof(progress) == TYPE_DICTIONARY:
@@ -111,6 +127,7 @@ func _load_from_legacy_cfg() -> void:
 	msaa_mode = int(cfg.get_value(SECTION, "msaa_mode", MsaaMode.OFF)) as MsaaMode
 	music_volume = clampf(float(cfg.get_value(AUDIO_SECTION, "music_volume", 0.5)), 0.0, 1.0)
 	sfx_volume = clampf(float(cfg.get_value(AUDIO_SECTION, "sfx_volume", 0.5)), 0.0, 1.0)
+	content_locale = Loc.ENG
 
 
 func save_to_disk() -> void:
@@ -132,6 +149,7 @@ func save_to_disk() -> void:
 			"sfx_volume": sfx_volume,
 		},
 		"theme_id": theme_id,
+		"content_locale": content_locale,
 		"puzzle_progress": puzzle_progress,
 	}
 	var json := JSON.stringify(data)
@@ -150,6 +168,15 @@ func set_player_name(new_name: String) -> void:
 		return
 	player_name = sanitized
 	save_to_disk()
+
+
+func set_content_locale(locale: String) -> void:
+	var normalized: String = Loc.normalize_locale(locale)
+	if content_locale == normalized:
+		return
+	content_locale = normalized
+	save_to_disk()
+	settings_changed.emit()
 
 
 func _sanitize_player_name(value: String) -> String:

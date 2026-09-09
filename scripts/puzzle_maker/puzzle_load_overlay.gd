@@ -11,6 +11,8 @@ signal closed
 @onready var _list: VBoxContainer = $PopupRoot/Scroll/List
 @onready var _status: Label = $PopupRoot/StatusLabel
 
+var _current_id: String = ""
+
 
 func _ready() -> void:
 	hide()
@@ -18,6 +20,13 @@ func _ready() -> void:
 	get_viewport().size_changed.connect(_center_popup_root)
 	_apply_theme()
 	UiTheme.bind_node(self, _apply_theme)
+	if GameSettings != null and not GameSettings.settings_changed.is_connected(_on_content_locale_changed):
+		GameSettings.settings_changed.connect(_on_content_locale_changed)
+
+
+func _on_content_locale_changed() -> void:
+	if visible:
+		_rebuild_list(_current_id)
 
 
 func _apply_theme() -> void:
@@ -41,6 +50,7 @@ func _apply_theme() -> void:
 
 func open(current_id: String = "") -> void:
 	GameFeedback.play_open_popup()
+	_current_id = current_id
 	_rebuild_list(current_id)
 	show()
 	OverlayFocus.enable_control(_close_button)

@@ -218,7 +218,7 @@ func _on_line_edit_gui_input(event: InputEvent, line_edit: LineEdit) -> void:
 	if not pressed:
 		return
 	var opts: Dictionary = _bound.get(line_edit, {})
-	open(line_edit, str(opts.get("placeholder", "")), bool(opts.get("multiline", false)))
+	open(line_edit, line_edit.placeholder_text, bool(opts.get("multiline", false)))
 	line_edit.accept_event()
 
 

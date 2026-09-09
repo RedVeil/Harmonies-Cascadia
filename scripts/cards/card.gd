@@ -67,6 +67,7 @@ var _spawn_layout_pending : bool = false
 var _feedback_tweens: Dictionary = {}
 var _recycle_enabled: bool = false
 var _recycle_hovered: bool = false
+var _data: CardData
 
 ## ----- Initialisation ----- ##
 
@@ -88,6 +89,8 @@ func _ready() -> void:
 	_sync_areas_to_visuals()
 	UiTheme.bind_node(self, _apply_theme)
 	_apply_theme()
+	if GameSettings != null and not GameSettings.settings_changed.is_connected(_refresh_localized_name):
+		GameSettings.settings_changed.connect(_refresh_localized_name)
 
 
 func _apply_theme() -> void:
@@ -95,11 +98,18 @@ func _apply_theme() -> void:
 		_reset_recycle_button_colors()
 
 
+func _refresh_localized_name() -> void:
+	if _data == null:
+		return
+	$visuals/CardLabel.text = _data.display_name()
+
+
 func init(cardData:CardData, parent:Node, idx:int) -> void:
 	if parent is CardContainer:
 		container = parent
 	_interaction_host = parent
 	id = idx
+	_data = cardData
 	
 	stack_amount = cardData.amount
 	
@@ -118,7 +128,7 @@ func init(cardData:CardData, parent:Node, idx:int) -> void:
 	_desaturated = false
 	
 	$visuals/points/Label.text = "%d" % cardData.point_score
-	$visuals/CardLabel.text = cardData.name
+	_refresh_localized_name()
 	_apply_stack_visuals()
 	
 	$visuals/icon.texture = load(cardData.icon)

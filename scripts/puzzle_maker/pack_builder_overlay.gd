@@ -34,6 +34,13 @@ func _ready() -> void:
 	get_viewport().size_changed.connect(_center_popup_root)
 	_apply_theme()
 	UiTheme.bind_node(self, _apply_theme)
+	if GameSettings != null and not GameSettings.settings_changed.is_connected(_on_content_locale_changed):
+		GameSettings.settings_changed.connect(_on_content_locale_changed)
+
+
+func _on_content_locale_changed() -> void:
+	if visible:
+		_rebuild_ui()
 
 
 func _apply_theme() -> void:
@@ -203,7 +210,7 @@ func _make_market_row(index: int) -> HBoxContainer:
 		var name := str(animal_id)
 		for animal in CardCatalog.animals:
 			if animal != null and animal.id == animal_id:
-				name = animal.name
+				name = animal.display_name()
 				break
 		summary.text = "Slot %d: %s (#%d)" % [index + 1, name, animal_id]
 	row.add_child(summary)

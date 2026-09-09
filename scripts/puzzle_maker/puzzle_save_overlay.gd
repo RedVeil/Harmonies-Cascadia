@@ -24,6 +24,9 @@ signal closed
 @onready var _save_button: Button = $PopupRoot/Form/SaveButton
 @onready var _status: Label = $PopupRoot/Form/StatusLabel
 
+var _previous_title
+var _previous_description
+
 
 func _ready() -> void:
 	hide()
@@ -58,8 +61,10 @@ func _apply_theme() -> void:
 func open(draft: Dictionary, board_score: int = 0) -> void:
 	GameFeedback.play_open_popup()
 	_id_edit.text = str(draft.get("id", ""))
-	_title_edit.text = str(draft.get("title", ""))
-	_desc_edit.text = str(draft.get("description", ""))
+	_previous_title = draft.get("title", "")
+	_previous_description = draft.get("description", "")
+	_title_edit.text = Loc.source_eng(_previous_title)
+	_desc_edit.text = Loc.source_eng(_previous_description)
 	_max_plays.value = int(draft.get("max_plays", 3))
 	_max_packs.value = int(draft.get("max_pack_takes", 0))
 	_rings.value = int(draft.get("ring_count", 3))
@@ -101,8 +106,8 @@ func _on_save_pressed() -> void:
 		return
 	var payload := {
 		"id": id,
-		"title": _title_edit.text.strip_edges(),
-		"description": _desc_edit.text.strip_edges(),
+		"title": Loc.merge_eng(_previous_title, _title_edit.text.strip_edges()),
+		"description": Loc.merge_eng(_previous_description, _desc_edit.text.strip_edges()),
 		"max_plays": int(_max_plays.value),
 		"max_pack_takes": int(_max_packs.value),
 		"ring_count": int(_rings.value),

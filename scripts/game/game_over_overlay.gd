@@ -28,7 +28,6 @@ var COLOR_STAR_EMPTY := Color.WHITE
 @onready var _share_button: Control = $PopupRoot/ShareButton
 @onready var _share_status: Label = $PopupRoot/ShareStatus
 @onready var _popup_root: Node2D = $PopupRoot
-@onready var _leave_label: Label = $PopupRoot/LeaveButton/Label
 
 var _final_score: int = 0
 var _displayed_score: int = 0
@@ -38,6 +37,10 @@ var _star_nodes: Array[Node2D] = []
 var _star_base_scale: Array[Vector2] = []
 var _star_thresholds: Array[int] = [0, 0, 0]
 var _feedback_tweens: Dictionary = {}
+var _mode: String = ""
+var _has_compare: bool = false
+var _compare_ref: int = 0
+var _share_kind: String = ""
 
 
 func _ready() -> void:
@@ -55,6 +58,9 @@ func _ready() -> void:
 	_show_confirm_buttons()
 	_apply_theme()
 	UiTheme.bind_node(self, _apply_theme)
+	_apply_locale()
+	if GameSettings != null and not GameSettings.settings_changed.is_connected(_apply_locale):
+		GameSettings.settings_changed.connect(_apply_locale)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -140,19 +146,18 @@ func open_confirm(final_score: int) -> void:
 	_stop_puzzle_reveal()
 	GameFeedback.play_open_popup()
 	_final_score = final_score
+	_mode = "confirm"
+	_has_compare = false
+	_share_kind = ""
 	_apply_default_layout()
-	_title_label.text = "End Game?"
-	_score_label.text = "Score: %d" % final_score
-	_share_status.text = ""
 	_compare_label.hide()
 	if _rating_label:
 		_rating_label.hide()
 	if _stars_row:
 		_stars_row.hide()
-	if _leave_label:
-		_leave_label.text = "Leave"
 	_show_confirm_buttons()
 	_reset_button_hovers()
+	_apply_locale()
 	show()
 	_grab_visible_button_focus()
 
@@ -160,7 +165,7 @@ func open_confirm(final_score: int) -> void:
 func show_results(final_score: int) -> void:
 	_stop_puzzle_reveal()
 	_final_score = final_score
-	_share_status.text = ""
+	_share_kind = ""
 	if GameSession.is_puzzle():
 		_show_puzzle_results(final_score)
 		show()
@@ -168,43 +173,35 @@ func show_results(final_score: int) -> void:
 		_grab_visible_button_focus()
 		return
 	GameFeedback.play_open_popup()
+	_mode = "results"
 	_apply_default_layout()
-	_title_label.text = "End Game?"
-	_score_label.text = "Score: %d" % final_score
 	if _stars_row:
 		_stars_row.hide()
-	if _leave_label:
-		_leave_label.text = "Leave"
 	if GameSession.has_reference_score():
 		if _rating_label:
 			_rating_label.hide()
-		var ref := GameSession.reference_score
-		var delta := final_score - ref
-		var result := "Tied"
-		if delta > 0:
-			result = "You win (+%d)" % delta
-		elif delta < 0:
-			result = "They win (%d)" % delta
-		_compare_label.text = "Their score: %d\n%s" % [ref, result]
+		_has_compare = true
+		_compare_ref = GameSession.reference_score
 		_compare_label.show()
 	else:
 		if _rating_label:
 			_rating_label.hide()
+		_has_compare = false
 		_compare_label.hide()
 	_show_results_buttons()
 	_reset_button_hovers()
+	_apply_locale()
 	show()
 	_grab_visible_button_focus()
 
 
 func _show_puzzle_results(final_score: int) -> void:
+	_mode = "puzzle"
+	_has_compare = false
 	_apply_puzzle_layout()
-	_title_label.text = "Puzzle Complete"
 	_compare_label.hide()
 	if _rating_label:
 		_rating_label.hide()
-	if _leave_label:
-		_leave_label.text = "End"
 	_hide_all_action_buttons()
 	_reset_stars()
 	if _stars_row:
@@ -219,6 +216,7 @@ func _show_puzzle_results(final_score: int) -> void:
 	_set_score_display(0)
 	_puzzle_counting = true
 	_reset_button_hovers()
+	_apply_locale()
 	var duration := clampf(1.5 + float(final_score) / 180.0, 1.5, 2.1)
 	var tween := FeedbackAnimHelper.create_tween(self, _feedback_tweens, &"count")
 	tween.tween_method(_on_count_tick, 0.0, float(final_score), duration)\
@@ -426,9 +424,10 @@ func _on_share_pressed() -> void:
 	GameFeedback.play_click_button()
 	var msg := ShareCode.clipboard_message(GameSession.run_seed, GameSession.ring_count, _final_score)
 	if ShareCode.copy_to_clipboard(msg):
-		_share_status.text = "Code copied"
+		_share_kind = "copied"
 	else:
-		_share_status.text = "Press Ctrl+C to copy"
+		_share_kind = "press_copy"
+	_refresh_share_status()
 
 
 func _reset_button_hovers() -> void:
@@ -450,6 +449,57 @@ func _apply_theme() -> void:
 	UiTheme.style_label(_rating_label)
 	UiTheme.style_label(_share_status, true)
 	_reset_button_hovers()
+
+
+func _apply_locale() -> void:
+	_set_action_label(_continue_button, Loc.ui("game_over.continue"))
+	_set_action_label(_end_button, Loc.ui("game_over.end"))
+	_set_action_label(_restart_button, Loc.ui("game_over.restart"))
+	_set_action_label(_next_button, Loc.ui("game_over.next"))
+	_set_action_label(_share_button, Loc.ui("game_over.share"))
+	if _mode == "puzzle":
+		_set_action_label(_leave_button, Loc.ui("game_over.end"))
+		if _title_label:
+			_title_label.text = Loc.ui("game_over.puzzle_complete")
+		if not _puzzle_counting:
+			_set_score_display(_displayed_score if _displayed_score > 0 else _final_score)
+	else:
+		_set_action_label(_leave_button, Loc.ui("game_over.leave"))
+		if _mode == "confirm" or _mode == "results":
+			if _title_label:
+				_title_label.text = Loc.ui("game_over.end_game")
+			if _score_label:
+				_score_label.text = Loc.ui("game_over.score") % _final_score
+		if _mode == "results" and _has_compare and _compare_label:
+			_compare_label.text = Loc.ui("game_over.their_score") % [_compare_ref, _compare_outcome_text(_final_score - _compare_ref)]
+	_refresh_share_status()
+
+
+func _compare_outcome_text(delta: int) -> String:
+	if delta > 0:
+		return Loc.ui("game_over.you_win") % delta
+	if delta < 0:
+		return Loc.ui("game_over.they_win") % delta
+	return Loc.ui("game_over.tied")
+
+
+func _set_action_label(button: Control, text: String) -> void:
+	if button == null:
+		return
+	var label := button.get_node_or_null("Label") as Label
+	if label:
+		label.text = text
+
+
+func _refresh_share_status() -> void:
+	if _share_status == null:
+		return
+	if _share_kind == "copied":
+		_share_status.text = Loc.ui("game_over.code_copied")
+	elif _share_kind == "press_copy":
+		_share_status.text = Loc.ui("game_over.press_copy")
+	else:
+		_share_status.text = ""
 
 
 func _set_button_hover(button: Control, hovered: bool) -> void:

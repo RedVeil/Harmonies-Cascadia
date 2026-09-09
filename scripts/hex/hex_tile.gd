@@ -71,7 +71,7 @@ func _apply_theme() -> void:
 		animal_bubble.modulate = UiTheme.hud_background
 		var animal_icon := animal_bubble.get_node_or_null("Icon") as Sprite3D
 		if animal_icon:
-			animal_icon.modulate = UiTheme.secondary
+			animal_icon.modulate = Color.WHITE
 
 
 func _cache_visual_nodes() -> void:
@@ -356,7 +356,7 @@ func _apply_hover_info(
 
 	if show_animal:
 		animal_bubble.modulate = UiTheme.hud_background
-		_apply_hover_icon(animal_bubble.get_node("Icon") as Sprite3D, animal_tex, icon_color)
+		_apply_hover_icon(animal_bubble.get_node("Icon") as Sprite3D, animal_tex, Color.WHITE)
 		animal_bubble.show()
 	else:
 		animal_bubble.hide()

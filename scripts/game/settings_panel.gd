@@ -14,6 +14,8 @@ enum View { ROOT, PLAYER, GRAPHICS, AUDIO }
 @onready var _name_input: LineEdit = $Content/PlayerView/NameInput
 @onready var _theme_label: Label = $Content/PlayerView/ThemeLabel
 @onready var _theme_option: OptionButton = $Content/PlayerView/ThemeOption
+@onready var _language_label: Label = $Content/PlayerView/LanguageLabel
+@onready var _language_option: OptionButton = $Content/PlayerView/LanguageOption
 @onready var _music_label: Label = $Content/AudioView/MusicHeader/MusicLabel
 @onready var _music_value: Label = $Content/AudioView/MusicHeader/MusicValue
 @onready var _effects_label: Label = $Content/AudioView/EffectsHeader/EffectsLabel
@@ -43,15 +45,63 @@ func _ready() -> void:
 		_name_input.max_length = GameSettings.PLAYER_NAME_MAX_LENGTH
 	_setup_web_text()
 	_build_theme_picker()
+	_build_language_picker()
 	_wire_signals()
 	_show_view(View.ROOT)
 	apply_sidebar_style()
 	UiTheme.bind_node(self, apply_sidebar_style)
 	refresh()
+	apply_locale()
+	if GameSettings != null and not GameSettings.settings_changed.is_connected(apply_locale):
+		GameSettings.settings_changed.connect(apply_locale)
 
 
 func refresh() -> void:
 	_refresh_from_settings()
+
+
+func apply_locale() -> void:
+	if _player_button:
+		_player_button.text = Loc.ui("settings.player")
+	if _graphics_button:
+		_graphics_button.text = Loc.ui("settings.graphics")
+	if _audio_button:
+		_audio_button.text = Loc.ui("settings.audio")
+	if _name_label:
+		_name_label.text = Loc.ui("settings.player_name")
+	if _name_input:
+		_name_input.placeholder_text = Loc.ui("settings.your_name")
+	if _theme_label:
+		_theme_label.text = Loc.ui("settings.theme")
+	if _language_label:
+		_language_label.text = Loc.ui("settings.language")
+	if _preset_label:
+		_preset_label.text = Loc.ui("settings.quality")
+	if _preset_low:
+		_preset_low.text = Loc.ui("settings.low")
+	if _preset_medium:
+		_preset_medium.text = Loc.ui("settings.medium")
+	if _preset_high:
+		_preset_high.text = Loc.ui("settings.high")
+	if _preset_custom:
+		_preset_custom.text = Loc.ui("settings.custom")
+	if _wind_check:
+		_wind_check.text = Loc.ui("settings.plant_sway")
+	if _clouds_check:
+		_clouds_check.text = Loc.ui("settings.cloud_shadows")
+	if _animal_label:
+		_animal_label.text = Loc.ui("settings.animal_motion")
+	if _msaa_label:
+		_msaa_label.text = Loc.ui("settings.msaa")
+	if _music_label:
+		_music_label.text = Loc.ui("settings.music")
+	if _effects_label:
+		_effects_label.text = Loc.ui("settings.effects")
+	GameSettings.begin_ui_sync()
+	_setup_options()
+	_build_theme_picker()
+	GameSettings.end_ui_sync()
+	_update_preset_buttons()
 
 
 func reset_to_root() -> void:
@@ -81,6 +131,7 @@ func apply_sidebar_style() -> void:
 		_msaa_label,
 		_name_label,
 		_theme_label,
+		_language_label,
 	]:
 		UiTheme.style_subtitle_label(label)
 
@@ -100,7 +151,7 @@ func apply_sidebar_style() -> void:
 			button.custom_minimum_size = Vector2(0, 28)
 		UiTheme.style_chip_button(button, 12.0, 6.0)
 
-	for option in [_animal_option, _msaa_option]:
+	for option in [_animal_option, _msaa_option, _language_option]:
 		if option:
 			option.custom_minimum_size = Vector2(0, 28)
 		UiTheme.style_option_button(option, 12.0, 6.0)
@@ -126,6 +177,41 @@ func _build_theme_picker() -> void:
 	_select_theme_option(UiTheme.theme_id)
 
 
+func _build_language_picker() -> void:
+	if _language_option == null:
+		return
+	_language_option.clear()
+	_language_option.fit_to_longest_item = true
+	_language_option.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	_language_option.add_item("English", 0)
+	_language_option.set_item_metadata(0, Loc.ENG)
+	_language_option.add_item("Deutsch", 1)
+	_language_option.set_item_metadata(1, Loc.GER)
+	_select_language_option(GameSettings.content_locale)
+
+
+func _select_language_option(locale: String) -> void:
+	if _language_option == null:
+		return
+	var wanted: String = Loc.normalize_locale(locale)
+	for i in _language_option.item_count:
+		if str(_language_option.get_item_metadata(i)) == wanted:
+			_language_option.select(i)
+			return
+	if _language_option.item_count > 0:
+		_language_option.select(0)
+
+
+func _on_language_option_selected(index: int) -> void:
+	if GameSettings.is_ui_syncing() or _language_option == null:
+		return
+	var locale := str(_language_option.get_item_metadata(index))
+	if locale.is_empty() or locale == GameSettings.content_locale:
+		return
+	GameFeedback.play_click_button()
+	GameSettings.set_content_locale(locale)
+
+
 func _style_theme_option() -> void:
 	if _theme_option == null:
 		return
@@ -146,7 +232,7 @@ func _select_theme_option(id: String) -> void:
 
 
 func _on_theme_option_selected(index: int) -> void:
-	if _theme_option == null:
+	if GameSettings.is_ui_syncing() or _theme_option == null:
 		return
 	var id := str(_theme_option.get_item_metadata(index))
 	if id.is_empty() or id == UiTheme.theme_id:
@@ -156,15 +242,19 @@ func _on_theme_option_selected(index: int) -> void:
 
 
 func _setup_options() -> void:
+	var animal_id := _animal_option.get_selected_id() if _animal_option.item_count > 0 else int(GameSettings.animal_motion)
+	var msaa_id := _msaa_option.get_selected_id() if _msaa_option.item_count > 0 else int(GameSettings.msaa_mode)
 	_animal_option.clear()
-	_animal_option.add_item("Frozen", GameSettings.AnimalMotion.FROZEN)
-	_animal_option.add_item("Idle / Special", GameSettings.AnimalMotion.IDLE_SPECIAL)
-	_animal_option.add_item("Full Roam", GameSettings.AnimalMotion.FULL_ROAM)
+	_animal_option.add_item(Loc.ui("settings.frozen"), GameSettings.AnimalMotion.FROZEN)
+	_animal_option.add_item(Loc.ui("settings.idle_special"), GameSettings.AnimalMotion.IDLE_SPECIAL)
+	_animal_option.add_item(Loc.ui("settings.full_roam"), GameSettings.AnimalMotion.FULL_ROAM)
+	_select_option_by_id(_animal_option, animal_id)
 
 	_msaa_option.clear()
-	_msaa_option.add_item("Off", GameSettings.MsaaMode.OFF)
+	_msaa_option.add_item(Loc.ui("settings.off"), GameSettings.MsaaMode.OFF)
 	_msaa_option.add_item("2×", GameSettings.MsaaMode.X2)
 	_msaa_option.add_item("4×", GameSettings.MsaaMode.X4)
+	_select_option_by_id(_msaa_option, msaa_id)
 
 
 func _wire_signals() -> void:
@@ -182,6 +272,7 @@ func _wire_signals() -> void:
 	_animal_option.item_selected.connect(_on_animal_selected)
 	_msaa_option.item_selected.connect(_on_msaa_selected)
 	_theme_option.item_selected.connect(_on_theme_option_selected)
+	_language_option.item_selected.connect(_on_language_option_selected)
 	_music_slider.value_changed.connect(_on_music_volume_changed)
 	_effects_slider.value_changed.connect(_on_sfx_volume_changed)
 	for control in [
@@ -197,6 +288,7 @@ func _wire_signals() -> void:
 		_animal_option,
 		_msaa_option,
 		_theme_option,
+		_language_option,
 		_music_slider,
 		_effects_slider,
 	]:
@@ -215,6 +307,7 @@ func _wire_signals() -> void:
 		_animal_option,
 		_msaa_option,
 		_theme_option,
+		_language_option,
 	])
 
 
@@ -245,6 +338,7 @@ func _refresh_from_settings() -> void:
 	_select_option_by_id(_animal_option, int(GameSettings.animal_motion))
 	_select_option_by_id(_msaa_option, int(GameSettings.msaa_mode))
 	_select_theme_option(UiTheme.theme_id)
+	_select_language_option(GameSettings.content_locale)
 	GameSettings.end_ui_sync()
 	_update_preset_buttons()
 
@@ -315,7 +409,7 @@ func _setup_web_text() -> void:
 		return
 	_web_text = WebTextPrompt.new()
 	_web_text.setup()
-	_web_text.bind_line_edit(_name_input, "Your name")
+	_web_text.bind_line_edit(_name_input, Loc.ui("settings.your_name"))
 
 
 func _on_graphics_pressed() -> void:

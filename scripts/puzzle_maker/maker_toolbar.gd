@@ -58,6 +58,8 @@ func _ready() -> void:
 	_plays_spin.value_changed.connect(_on_plays_changed)
 	_apply_theme()
 	UiTheme.bind_node(self, _apply_theme)
+	if GameSettings != null and not GameSettings.settings_changed.is_connected(_sync_spinners_from_maker):
+		GameSettings.settings_changed.connect(_sync_spinners_from_maker)
 
 
 func _apply_theme() -> void:
@@ -83,7 +85,7 @@ func _sync_spinners_from_maker() -> void:
 		return
 	_rings_spin.set_value_no_signal(float(maker.get_ring_count()))
 	_plays_spin.set_value_no_signal(float(maker.get_max_plays()))
-	var title := str(maker.draft.get("title", "")).strip_edges()
+	var title: String = Loc.text(maker.draft.get("title", "")).strip_edges()
 	if title.is_empty():
 		title = str(maker.draft.get("id", "")).strip_edges()
 	_title.text = title if not title.is_empty() else "Puzzle Maker"

@@ -11,6 +11,7 @@ const ELEMENT_TYPES := [1, 2, 3, 4, 5]
 var _option_buttons: Dictionary = {} # element_type -> OptionButton
 var _desc_labels: Dictionary = {} # element_type -> Label
 var _rule_ids_by_element: Dictionary = {} # element_type -> Array[int]
+var _current_rules: Dictionary = {}
 
 @onready var _popup_root: Node2D = $PopupRoot
 @onready var _popup_panel: Panel = $PopupRoot/PopupPanel
@@ -26,6 +27,13 @@ func _ready() -> void:
 	get_viewport().size_changed.connect(_center_popup_root)
 	_apply_theme()
 	UiTheme.bind_node(self, _apply_theme)
+	if GameSettings != null and not GameSettings.settings_changed.is_connected(_on_content_locale_changed):
+		GameSettings.settings_changed.connect(_on_content_locale_changed)
+
+
+func _on_content_locale_changed() -> void:
+	if visible:
+		_rebuild_ui(_current_rules)
 
 
 func _apply_theme() -> void:
@@ -53,7 +61,8 @@ func _apply_theme() -> void:
 
 func open(current_rules: Dictionary = {}) -> void:
 	GameFeedback.play_open_popup()
-	_rebuild_ui(current_rules)
+	_current_rules = current_rules.duplicate(true)
+	_rebuild_ui(_current_rules)
 	show()
 	OverlayFocus.enable_control(_close_button)
 	OverlayFocus.grab_control(_close_button)
@@ -110,7 +119,7 @@ func _rebuild_ui(current_rules: Dictionary) -> void:
 			ids.append(rule_id)
 			var rule_name := "Rule %d" % rule_id
 			if rule_id >= 0 and rule_id < RuleCatalog.rules.size() and RuleCatalog.rules[rule_id] != null:
-				rule_name = RuleCatalog.rules[rule_id].name
+				rule_name = RuleCatalog.rules[rule_id].display_name()
 			option.add_item(rule_name, rule_id)
 			if rule_id == wanted:
 				selected_idx = i
@@ -149,7 +158,7 @@ func _description_for(rule_id: int) -> String:
 	var rule: ScoringRule = RuleCatalog.rules[rule_id]
 	if rule == null:
 		return ""
-	return str(rule.description)
+	return rule.display_description()
 
 
 func _on_rule_selected(item_index: int, element_type: int) -> void:
@@ -174,6 +183,7 @@ func _collect_rules() -> Dictionary:
 		if idx < 0 or idx >= ids.size():
 			continue
 		out[str(element_type)] = int(ids[idx])
+	_current_rules = out
 	return out
 
 

@@ -26,8 +26,8 @@ func load_rules():
 func parse_rule(data:Dictionary) -> ScoringRule:
 	var rule = ScoringRule.new()
 	rule.id = data.id
-	rule.name = data.name
-	rule.description = data.description
+	rule.name_i18n = data.get("name", "")
+	rule.description_i18n = data.get("description", "")
 	rule.min_group_size = data.min_group_size
 	rule.max_group_size = data.max_group_size
 	rule.flat_points = data.flat_points

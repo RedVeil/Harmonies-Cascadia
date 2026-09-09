@@ -193,31 +193,31 @@ func _on_paste_js(args: Array) -> void:
 static func decode(code: String) -> Dictionary:
 	var raw := extract_code(code)
 	if raw.is_empty():
-		return _fail("Enter a share code.")
+		return _fail("share.enter")
 	if not raw.begins_with(PREFIX):
-		return _fail("Unrecognized code.")
+		return _fail("share.unrecognized")
 	var b64 := raw.substr(PREFIX.length())
 	b64 = b64.replace("-", "+").replace("_", "/")
 	while b64.length() % 4 != 0:
 		b64 += "="
 	var bytes := Marshalls.base64_to_raw(b64)
 	if bytes.is_empty():
-		return _fail("Invalid code.")
+		return _fail("share.invalid")
 	var parsed = JSON.parse_string(bytes.get_string_from_utf8())
 	if typeof(parsed) != TYPE_DICTIONARY:
-		return _fail("Invalid code.")
+		return _fail("share.invalid")
 	var data: Dictionary = parsed
 	if int(data.get("v", 0)) != VERSION:
-		return _fail("Unsupported code version.")
+		return _fail("share.unsupported")
 	if not data.has("s") or not data.has("r") or not data.has("c"):
-		return _fail("Incomplete code.")
+		return _fail("share.incomplete")
 	var seed := int(data["s"])
 	var ring_count := int(data["r"])
 	var score := int(data["c"])
 	if ring_count < 0 or ring_count > 32:
-		return _fail("Invalid map size in code.")
+		return _fail("share.map_size")
 	if score < 0:
-		return _fail("Invalid score in code.")
+		return _fail("share.score")
 	return {
 		"ok": true,
 		"seed": seed,

@@ -623,8 +623,8 @@ func _show_first_puzzle_intro_step() -> void:
 func _show_puzzle_intro_modal() -> void:
 	if tutorial_coach == null:
 		return
-	var title := str(GameSession.puzzle_config.get("title", "Puzzle"))
-	var desc := GameSession.format_puzzle_description(GameSession.puzzle_config)
+	var title = GameSession.puzzle_config.get("title", Loc.PUZZLE_FALLBACK)
+	var desc = GameSession.puzzle_config.get("description", "")
 	tutorial_coach.show_centered_modal(title, desc, "Start", GameSession.get_puzzle_ratings())
 
 

@@ -20,6 +20,8 @@ signal back_pressed
 
 var _score: int = 0
 var _view: View = View.ROOT
+var _showing_results: bool = false
+var _share_kind: String = ""
 
 
 func _ready() -> void:
@@ -29,6 +31,9 @@ func _ready() -> void:
 	_show_view(View.ROOT)
 	_apply_theme()
 	UiTheme.bind_node(self, _apply_theme)
+	_apply_locale()
+	if GameSettings != null and not GameSettings.settings_changed.is_connected(_apply_locale):
+		GameSettings.settings_changed.connect(_apply_locale)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -70,6 +75,51 @@ func _apply_theme() -> void:
 		UiTheme.style_label(_sub_label, true)
 	if _share_status:
 		UiTheme.style_label(_share_status, true)
+
+
+func _apply_locale() -> void:
+	var end_session := $Root/Split/LeftColumn/Margin/NavStack/RootNav/EndSessionButton as Button
+	if end_session:
+		end_session.text = Loc.ui("pause.end_session")
+	var settings_btn := $Root/Split/LeftColumn/Margin/NavStack/RootNav/SettingsButton as Button
+	if settings_btn:
+		settings_btn.text = Loc.ui("pause.settings")
+	var restart := $Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock/ActionRow/RestartButton as Button
+	if restart:
+		restart.text = Loc.ui("pause.restart")
+	var end_btn := $Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock/ActionRow/EndButton as Button
+	if end_btn:
+		end_btn.text = Loc.ui("pause.end")
+	var share := $Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock/ActionRow/ShareButton as Button
+	if share:
+		share.text = Loc.ui("pause.share")
+	var back := $Root/Split/LeftColumn/Margin/NavStack/BackButton as Button
+	if back:
+		back.text = Loc.ui("pause.back")
+	_refresh_end_session_copy()
+	_refresh_share_status()
+
+
+func _refresh_end_session_copy() -> void:
+	if _score_label == null or _sub_label == null:
+		return
+	if _showing_results:
+		_score_label.text = Loc.ui("pause.you_earned_points") % _score
+		_sub_label.text = Loc.ui("pause.well_done")
+	else:
+		_score_label.text = Loc.ui("pause.you_have_points") % _score
+		_sub_label.text = Loc.ui("pause.take_a_break")
+
+
+func _refresh_share_status() -> void:
+	if _share_status == null:
+		return
+	if _share_kind == "copied":
+		_share_status.text = Loc.ui("pause.code_copied")
+	elif _share_kind == "press_copy":
+		_share_status.text = Loc.ui("pause.press_copy")
+	else:
+		_share_status.text = ""
 
 
 func _tutorial_active() -> bool:
@@ -114,9 +164,10 @@ func _sync_view_input_filters() -> void:
 func open(score: int, _results: bool = false) -> void:
 	GameFeedback.play_open_popup()
 	_score = score
+	_showing_results = false
+	_share_kind = ""
 	_share_status.text = ""
-	_score_label.text = "You have %d Points!" % score
-	_sub_label.text = "Take a break or wrap up your session."
+	_refresh_end_session_copy()
 	_show_view(View.ROOT)
 	show()
 	OverlayFocus.grab_first_button(_root_nav)
@@ -125,8 +176,9 @@ func open(score: int, _results: bool = false) -> void:
 func show_results(final_score: int) -> void:
 	GameFeedback.play_open_popup()
 	_score = final_score
-	_score_label.text = "You earned %d Points!" % final_score
-	_sub_label.text = "Well done!"
+	_showing_results = true
+	_share_kind = ""
+	_refresh_end_session_copy()
 	_share_status.text = ""
 	_show_view(View.END_SESSION)
 	show()
@@ -164,9 +216,10 @@ func _on_end_session_pressed() -> void:
 		return
 	GameFeedback.play_click_button()
 	GameFeedback.play_open_popup()
+	_showing_results = false
+	_share_kind = ""
 	_share_status.text = ""
-	_score_label.text = "You have %d Points!" % _score
-	_sub_label.text = "Take a break or wrap up your session."
+	_refresh_end_session_copy()
 	_show_view(View.END_SESSION)
 	_notify("end_session_opened")
 
@@ -191,9 +244,10 @@ func _on_share_pressed() -> void:
 	GameFeedback.play_click_button()
 	var msg := ShareCode.clipboard_message(GameSession.run_seed, GameSession.ring_count, _score)
 	if ShareCode.copy_to_clipboard(msg):
-		_share_status.text = "Code copied"
+		_share_kind = "copied"
 	else:
-		_share_status.text = "Press Ctrl+C to copy"
+		_share_kind = "press_copy"
+	_refresh_share_status()
 	_notify("code_shared")
 
 

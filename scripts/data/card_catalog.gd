@@ -34,7 +34,7 @@ func parse_card(card:Dictionary) -> CardData:
 	var card_data := CardData.new()
 	card_data.id = card.id
 	card_data.type = card.type
-	card_data.name = card.name
+	card_data.name_i18n = card.get("name", "")
 	card_data.amount = card.amount
 	card_data.visual_amount = int(card.get("visual_amount", 1))
 	card_data.draw_chance = card.draw_chance

@@ -56,6 +56,9 @@ func _ready() -> void:
 		_settings_panel.apply_sidebar_style()
 	_apply_theme()
 	UiTheme.bind_node(self, _apply_theme)
+	_apply_locale()
+	if GameSettings != null and not GameSettings.settings_changed.is_connected(_apply_locale):
+		GameSettings.settings_changed.connect(_apply_locale)
 	_reset_mode_inline_ui()
 	if not InputScheme.scheme_changed.is_connected(_on_input_scheme_changed):
 		InputScheme.scheme_changed.connect(_on_input_scheme_changed)
@@ -87,8 +90,8 @@ func _setup_web_text_inputs() -> void:
 		return
 	_web_text = WEB_TEXT_PROMPT.new()
 	_web_text.setup()
-	_web_text.bind_line_edit(_name_input, "Your name")
-	_web_text.bind_line_edit(_code_input, "Paste a share code", true)
+	_web_text.bind_line_edit(_name_input, Loc.ui("main.your_name"))
+	_web_text.bind_line_edit(_code_input, Loc.ui("main.code_hint"), true)
 
 
 func _setup_button_hover_sounds() -> void:
@@ -142,6 +145,76 @@ func _apply_theme() -> void:
 		UiTheme.apply_menu_tree(left)
 	if _settings_panel:
 		_settings_panel.apply_sidebar_style()
+
+
+func _set_text(path: String, key: String) -> void:
+	var node := get_node_or_null(path)
+	if node == null:
+		return
+	if node is BaseButton:
+		(node as BaseButton).text = Loc.ui(key)
+	elif node is LineEdit:
+		(node as LineEdit).placeholder_text = Loc.ui(key)
+	elif node is Label:
+		(node as Label).text = Loc.ui(key)
+
+
+func _apply_locale() -> void:
+	_set_text("Split/LeftColumn/Margin/NavStack/NameNav/NameHint", "main.choose_name")
+	_set_text("Split/LeftColumn/Margin/NavStack/NameNav/NameInput", "main.your_name")
+	_set_text("Split/LeftColumn/Margin/NavStack/NameNav/NameAcceptButton", "main.accept")
+	_set_text("Split/LeftColumn/Margin/NavStack/RootNav/PlayBlock/PlayButton", "main.play")
+	_set_text("Split/LeftColumn/Margin/NavStack/RootNav/PlayBlock/PlayDesc", "main.play_desc")
+	_set_text("Split/LeftColumn/Margin/NavStack/RootNav/TutorialBlock/TutorialButton", "main.tutorial")
+	_set_text("Split/LeftColumn/Margin/NavStack/RootNav/TutorialBlock/TutorialDesc", "main.tutorial_desc")
+	_set_text("Split/LeftColumn/Margin/NavStack/RootNav/SettingsBlock/SettingsButton", "main.settings")
+	_set_text("Split/LeftColumn/Margin/NavStack/RootNav/SettingsBlock/SettingsDesc", "main.settings_desc")
+	_set_text("Split/LeftColumn/Margin/NavStack/RootNav/EnterCodeBlock/EnterCodeButton", "main.enter_code")
+	_set_text("Split/LeftColumn/Margin/NavStack/RootNav/EnterCodeBlock/EnterCodeDesc", "main.enter_code_desc")
+	_set_text("Split/LeftColumn/Margin/NavStack/RootNav/ExitButton", "main.exit")
+	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyButton", "main.daily")
+	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyDesc", "main.daily_desc")
+	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyInlineButtons/PlayButton", "main.play")
+	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyInlineButtons/LeaderboardsButton", "main.leaderboards")
+	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/WeeklyBlock/WeeklyButton", "main.weekly")
+	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/WeeklyBlock/WeeklyDesc", "main.weekly_desc")
+	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/WeeklyBlock/WeeklyInlineButtons/PlayButton", "main.play")
+	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/WeeklyBlock/WeeklyInlineButtons/LeaderboardsButton", "main.leaderboards")
+	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickSessionButton", "main.quick")
+	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickSessionDesc", "main.quick_desc")
+	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickInlineButtons/ContinueButton", "main.continue")
+	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickInlineButtons/NewButton", "main.new")
+	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow/SmallButton", "main.small")
+	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow/MediumButton", "main.medium")
+	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow/LargeButton", "main.large")
+	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessButton", "main.endless")
+	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessDesc", "main.endless_desc")
+	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessInlineButtons/ContinueButton", "main.continue")
+	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessInlineButtons/NewButton", "main.new")
+	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/PuzzleBlock/PuzzleButton", "main.puzzles")
+	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/PuzzleBlock/PuzzleDesc", "main.puzzles_desc")
+	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/BackButton", "main.back")
+	_set_text("Split/LeftColumn/Margin/NavStack/TutorialNav/LandscapesBlock/LandscapesButton", "main.landscapes")
+	_set_text("Split/LeftColumn/Margin/NavStack/TutorialNav/LandscapesBlock/LandscapesDesc", "main.landscapes_desc")
+	_set_text("Split/LeftColumn/Margin/NavStack/TutorialNav/ScoringBlock/ScoringButton", "main.packs")
+	_set_text("Split/LeftColumn/Margin/NavStack/TutorialNav/ScoringBlock/ScoringDesc", "main.packs_desc")
+	_set_text("Split/LeftColumn/Margin/NavStack/TutorialNav/AnimalsBlock/AnimalsButton", "main.animals")
+	_set_text("Split/LeftColumn/Margin/NavStack/TutorialNav/AnimalsBlock/AnimalsDesc", "main.animals_desc")
+	_set_text("Split/LeftColumn/Margin/NavStack/TutorialNav/QuestsBlock/QuestsButton", "main.quests")
+	_set_text("Split/LeftColumn/Margin/NavStack/TutorialNav/QuestsBlock/QuestsDesc", "main.quests_desc")
+	_set_text("Split/LeftColumn/Margin/NavStack/TutorialNav/TutorialBackButton", "main.back")
+	_set_text("Split/LeftColumn/Margin/NavStack/PuzzleNav/PuzzleBackButton", "main.back")
+	_set_text("Split/LeftColumn/Margin/NavStack/CodeNav/CodeHint", "main.code_hint")
+	_set_text("Split/LeftColumn/Margin/NavStack/CodeNav/PasteCodeButton", "main.paste")
+	_set_text("Split/LeftColumn/Margin/NavStack/CodeNav/StartCodeButton", "main.start")
+	_set_text("Split/LeftColumn/Margin/NavStack/CodeNav/CodeBackButton", "main.back")
+	_set_text("Split/LeftColumn/Margin/NavStack/SettingsNav/SettingsBackButton", "main.back")
+	if _name_input:
+		_name_input.placeholder_text = Loc.ui("main.your_name")
+	if _code_input:
+		_code_input.placeholder_text = Loc.ui("main.code_hint")
+	if _settings_panel != null and _settings_panel.has_method("apply_locale"):
+		_settings_panel.apply_locale()
 
 
 func _setup_puzzle_ids() -> void:
@@ -266,11 +339,11 @@ func _show_first_play_prompt() -> void:
 	if not _tutorial_coach.skip_pressed.is_connected(_on_first_play_skip):
 		_tutorial_coach.skip_pressed.connect(_on_first_play_skip)
 	_tutorial_coach.show_centered_modal(
-		"Play the tutorial?",
-		"Learn the rules first, or skip and jump into the game. You can always open Tutorial from the menu later.",
-		"Play Tutorial",
+		Loc.ui_entry("main.play_tutorial_title"),
+		Loc.ui_entry("main.play_tutorial_body"),
+		Loc.ui_entry("main.play_tutorial"),
 		{},
-		"Skip"
+		Loc.ui_entry("main.skip")
 	)
 
 
@@ -776,7 +849,7 @@ func _on_code_submitted(text: String) -> void:
 func _try_start_from_code(text: String) -> void:
 	var decoded := ShareCode.decode(text)
 	if not decoded.get("ok", false):
-		_code_status.text = str(decoded.get("error", "Invalid code."))
+		_code_status.text = Loc.ui(str(decoded.get("error", "share.invalid")), Loc.ui("share.invalid"))
 		return
 	GameSession.begin_challenge_run(
 		int(decoded["seed"]),
