@@ -205,7 +205,7 @@ func reroll_market_slot(offer_index: int) -> void:
 	if GameSession.uses_scripted_shop():
 		replacement = _dequeue_puzzle_animal()
 	else:
-		replacement = _generate_market_offer_at(offer_index, _market_used_ids(offer_index))
+		replacement = _generate_market_offer_at(offer_index, _market_used_ids())
 	_market_offers[offer_index] = replacement
 	animal_market.replace_offer(offer_index, replacement)
 	if offer_index < market_reroll_progress.size():
@@ -338,7 +338,7 @@ func buy_market_animal(offer_index: int) -> void:
 	if GameSession.uses_scripted_shop():
 		replacement = _dequeue_puzzle_animal()
 	else:
-		replacement = _generate_market_offer_at(offer_index, _market_used_ids(offer_index))
+		replacement = _generate_market_offer_at(offer_index, _market_used_ids())
 	_market_offers[offer_index] = replacement
 	if animal_market:
 		animal_market.replace_offer(offer_index, replacement)
@@ -394,18 +394,15 @@ func _ensure_market_offers() -> void:
 func _is_valid_market_offer(offer: CardData) -> bool:
 	return offer != null and offer.amount > 0
 
-func _market_blocked_ids(exclude_index: int = -1) -> Dictionary:
+func _market_blocked_ids() -> Dictionary:
 	var blocked: Dictionary = _bought_animal_ids.duplicate()
-	for i in _market_offers.size():
-		if i == exclude_index:
-			continue
-		var offer := _market_offers[i]
+	for offer in _market_offers:
 		if _is_valid_market_offer(offer):
 			blocked[offer.id] = true
 	return blocked
 
-func _market_used_ids(exclude_index: int = -1) -> Dictionary:
-	return _market_blocked_ids(exclude_index)
+func _market_used_ids() -> Dictionary:
+	return _market_blocked_ids()
 
 func _generate_market_offer_at(slot_index: int, used_ids: Dictionary) -> CardData:
 	var blocked: Dictionary = used_ids.duplicate()
@@ -438,12 +435,26 @@ func _generate_market_offers() -> Array[CardData]:
 ## ----- Create Booster Logic ----- ##
 
 func createBooster(idx: int) -> void:
-	var booster = BoosterData.new()
 	if GameSession.uses_scripted_shop():
 		boosters[idx] = _dequeue_puzzle_booster()
 		booster_container.set_booster_visuals(idx, boosters[idx])
 		return
 
+	var previous: BoosterData = boosters[idx] if idx < boosters.size() else null
+	var booster := BoosterData.new()
+	var attempts := 0
+	var max_attempts := 64
+	while attempts < max_attempts:
+		attempts += 1
+		booster = _draw_mixed_shop_pack()
+		if not _packs_have_same_elements(previous, booster):
+			break
+	boosters[idx] = booster
+	booster_container.set_booster_visuals(idx, booster)
+
+
+func _draw_mixed_shop_pack() -> BoosterData:
+	var booster := BoosterData.new()
 	# Shop slots: always exactly N independently weighted element tiles.
 	booster.type = 6
 	booster.cards = _create_mixed_element_pack()
@@ -453,8 +464,27 @@ func createBooster(idx: int) -> void:
 		var quest_id := orchestrator.pick_quest(0, _pick_pack_quest_element(booster.cards))
 		if quest_id != -1:
 			booster.quest_ids.append(quest_id)
-	boosters[idx] = booster
-	booster_container.set_booster_visuals(idx, booster)
+	return booster
+
+
+func _pack_element_signature(booster: BoosterData) -> Array[int]:
+	var ids: Array[int] = []
+	if booster == null:
+		return ids
+	for card in booster.cards:
+		if card == null or card.type != CardData.CARD_TYPE.ELEMENT:
+			continue
+		ids.append(card.id)
+	ids.sort()
+	return ids
+
+
+func _packs_have_same_elements(a: BoosterData, b: BoosterData) -> bool:
+	if a == null or b == null:
+		return false
+	if a.cards.is_empty() or b.cards.is_empty():
+		return false
+	return _pack_element_signature(a) == _pack_element_signature(b)
 
 
 func _init_puzzle_queues() -> void:
