@@ -16,6 +16,7 @@ const PLAYER_NAME_MAX_LENGTH := 12
 const WINDOWED_SIZE := Vector2i(1280, 720)
 const UI_SCALE_MIN := 0.75
 const UI_SCALE_MAX := 1.5
+const UI_SCALE_DEFAULT := 1.0
 const FPS_CAP_DEFAULT := 60
 const FPS_CAP_OPTIONS: Array[int] = [30, 60, 120, 0]
 
@@ -36,7 +37,7 @@ var fps_cap: int = FPS_CAP_DEFAULT
 var music_volume: float = 0.5
 var sfx_volume: float = 0.5
 var master_volume: float = 1.0
-var ui_scale: float = 1.0
+var ui_scale: float = UI_SCALE_DEFAULT
 var theme_id: String = "cascadia"
 ## "eng" or "ger". JSON catalog copy is resolved from this.
 var content_locale: String = "eng"
@@ -113,7 +114,7 @@ func _load_from_json() -> void:
 	music_volume = clampf(float(audio.get("music_volume", 0.5)), 0.0, 1.0)
 	sfx_volume = clampf(float(audio.get("sfx_volume", 0.5)), 0.0, 1.0)
 	master_volume = clampf(float(audio.get("master_volume", 1.0)), 0.0, 1.0)
-	ui_scale = clampf(float(data.get("ui_scale", 1.0)), UI_SCALE_MIN, UI_SCALE_MAX)
+	ui_scale = clampf(float(data.get("ui_scale", UI_SCALE_DEFAULT)), UI_SCALE_MIN, UI_SCALE_MAX)
 	theme_id = str(data.get("theme_id", "cascadia"))
 	if theme_id.is_empty():
 		theme_id = "cascadia"
