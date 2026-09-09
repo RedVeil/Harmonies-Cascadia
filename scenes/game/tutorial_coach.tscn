@@ -73,13 +73,12 @@ mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
 
 [node name="boosters" type="Panel" parent="Highlights" unique_id=1239422822]
-visible = false
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 9.0
-offset_top = -101.0
+offset_top = -107.0
 offset_right = 314.0
 grow_vertical = 0
 mouse_filter = 2
@@ -180,12 +179,11 @@ mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
 
 [node name="quests_expanded" type="Panel" parent="Highlights" unique_id=647956649]
-visible = false
 layout_mode = 0
 offset_left = 53.0
-offset_top = 89.0
-offset_right = 230.0
-offset_bottom = 245.0
+offset_top = 93.0
+offset_right = 231.0
+offset_bottom = 249.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
 
@@ -266,16 +264,15 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = 436.0
-offset_top = 169.0
+offset_top = 193.0
 offset_right = 492.0
-offset_bottom = 225.0
+offset_bottom = 249.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
 
 [node name="tutorial_modal" type="Panel" parent="Highlights" unique_id=1847263902]
-visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -283,9 +280,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -471.0
-offset_top = -209.0
+offset_top = -218.0
 offset_right = 501.0
-offset_bottom = 231.0
+offset_bottom = 202.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -379,9 +376,9 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
 [node name="end_session" type="Panel" parent="Highlights" unique_id=1072985061]
 layout_mode = 1
 offset_left = 22.0
-offset_top = 177.0
+offset_top = 148.0
 offset_right = 196.0
-offset_bottom = 223.0
+offset_bottom = 194.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")
 
@@ -390,9 +387,9 @@ layout_mode = 1
 anchors_preset = -1
 anchor_right = 0.333333
 offset_left = 21.0
-offset_top = 250.0
+offset_top = 235.0
 offset_right = -21.0
-offset_bottom = 310.0
+offset_bottom = 295.0
 grow_horizontal = 0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight")

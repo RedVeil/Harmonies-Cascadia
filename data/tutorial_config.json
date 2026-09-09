@@ -167,6 +167,7 @@
 			"title": "Place the first tree",
 			"body": "Now lets place our first tree. Hover (tap) the empty hex and click (double tap) it to place your first tile. You will see how many points you will earn from this.",
 			"highlight": "hex_0_0",
+			"bubble_side": "left",
 			"gates": {
 				"allow_actions": [
 					"select_card",
@@ -195,6 +196,7 @@
 			"title": "Stack it",
 			"body": "Some landscapes can be stacked on top of each other. Click (double tap) the same hex again to place your second tree on top.",
 			"highlight": "hex_0_0",
+			"bubble_side": "left",
 			"gates": {
 				"allow_actions": [
 					"select_card",
@@ -242,6 +244,7 @@
 			"title": "Place a field",
 			"body": "Place the field tile next to the stacked trees. We will need it later.",
 			"highlight": "hex_0_1",
+			"bubble_side": "left",
 			"gates": {
 				"allow_actions": [
 					"select_card",
@@ -342,6 +345,7 @@
 			"title": "Landscape Packs",
 			"body": "These are your landscape packs. They provide you with landscape cards to place on the board.",
 			"highlight": "boosters",
+			"bubble_side": "right",
 			"gates": {
 				"allow_actions": []
 			},
@@ -354,6 +358,7 @@
 			"title": "Take a pack",
 			"body": "Click (double tap) on any landscape pack to add those cards to your hand.",
 			"highlight": "boosters",
+			"bubble_side": "right",
 			"gates": {
 				"allow_actions": [
 					"take_booster"
@@ -374,6 +379,7 @@
 			"title": "Pack cooldown",
 			"body": "Notice how the packs are now grayed out? That's because they're on cooldown. You can only take a new pack after placing all your current landscape cards.",
 			"highlight": "boosters",
+			"bubble_side": "right",
 			"gates": {
 				"allow_actions": []
 			},
@@ -386,6 +392,7 @@
 			"title": "Place your cards",
 			"body": "Place all three landscape cards anywhere on the board. Packs stay on cooldown until your hand is empty.",
 			"highlight": "hand",
+			"bubble_side": "left",
 			"gates": {
 				"allow_actions": [
 					"select_card",
@@ -406,6 +413,7 @@
 			"title": "Pack cooldown",
 			"body": "You have placed all your tiles, so the packs are no longer grayed out and available to take again.",
 			"highlight": "boosters",
+			"bubble_side": "right",
 			"gates": {
 				"allow_actions": []
 			},
@@ -418,6 +426,7 @@
 			"title": "Reroll a pack",
 			"body": "If you dont like the cards in your pack, you can reroll it by hovering (tap) on the pack and clicking (double tap) the reroll icon. (The small X icon). Try it!",
 			"highlight": "boosters_expanded",
+			"bubble_side": "right",
 			"gates": {
 				"allow_actions": [
 					"reroll"
@@ -433,6 +442,7 @@
 			"title": "Reroll cooldown",
 			"body": "Now the reroll is on cooldown and its icon is gone. After taking 3 new packs, the reroll icon will appear again.",
 			"highlight": "boosters",
+			"bubble_side": "right",
 			"gates": {
 				"allow_actions": []
 			},
@@ -496,6 +506,7 @@
 			"title": "Select an animal",
 			"body": "Click (double tap) the selected Hedgehog card in your hand to examine it.",
 			"highlight": "card",
+			"bubble_side": "left",
 			"gates": {
 				"allow_actions": [
 					"select_card"
@@ -512,6 +523,7 @@
 			"title": "Animal cards",
 			"body": "The background color shows you on what type of landscape the animal can be placed.",
 			"highlight": "card",
+			"bubble_side": "left",
 			"gates": {
 				"allow_actions": []
 			},
@@ -524,6 +536,7 @@
 			"title": "Animal cards",
 			"body": "In the top left you see how many points you earn for this animal. The number below are its bonus points. You earn more bonus points for each animal of the same type you place.",
 			"highlight": "card",
+			"bubble_side": "left",
 			"gates": {
 				"allow_actions": []
 			},
@@ -549,6 +562,7 @@
 			"title": "Animal cards",
 			"body": "At all times you can have only 2 animal cards on your hand. You can discard one by clicking (double tap) the 'X'-button.",
 			"highlight": "card",
+			"bubble_side": "left",
 			"gates": {
 				"allow_actions": []
 			},
@@ -561,6 +575,7 @@
 			"title": "Place the animal",
 			"body": "Place the animal on the field tile next to the stacked trees.",
 			"highlight": "hex_0_1",
+			"bubble_side": "left",
 			"gates": {
 				"allow_actions": [
 					"select_card",
@@ -586,6 +601,7 @@
 			"title": "Hedgehog bonus",
 			"body": "Place another Hedgehog on the highlighted hex. You will notice that this one now earned bonus points.",
 			"highlight": "hex_1_-1",
+			"bubble_side": "left",
 			"gates": {
 				"allow_actions": [
 					"select_card",
@@ -611,6 +627,7 @@
 			"title": "More bonus points",
 			"body": "Place a third Hedgehog on this Field to earn even more bonus points!",
 			"highlight": "hex_1_0",
+			"bubble_side": "left",
 			"gates": {
 				"allow_actions": [
 					"select_card",
@@ -680,6 +697,7 @@
 			"title": "Place a Field",
 			"body": "Now lets complete the quest and earn some bonus points. Select the field.",
 			"highlight": "hand_expanded",
+			"bubble_side": "left",
 			"gates": {
 				"allow_actions": [
 					"select_card"
@@ -699,6 +717,7 @@
 			"title": "Complete the quest",
 			"body": "Place the field on the highlighted hex to finish the triangle and complete the quest.",
 			"highlight": "hex_-1_0",
+			"bubble_side": "left",
 			"gates": {
 				"allow_actions": [
 					"select_card",
@@ -727,6 +746,7 @@
 			"title": "Undo",
 			"body": "Made a mistake? Use Undo (bottom-right) to take back your last placement.",
 			"highlight": "undo",
+			"bubble_side": "left",
 			"gates": {
 				"allow_actions": []
 			},

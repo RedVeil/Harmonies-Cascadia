@@ -12,6 +12,9 @@ class_name DailyLeaderboardOverlay
 @onready var _close: Button = $Panel/Margin/Layout/ButtonRow/CloseButton
 @onready var _panel: PanelContainer = $Panel
 @onready var _title: Label = $Panel/Margin/Layout/TitleLabel
+@onready var _rank_header: Label = $Panel/Margin/Layout/HeaderRow/RankHeader
+@onready var _name_header: Label = $Panel/Margin/Layout/HeaderRow/NameHeader
+@onready var _points_header: Label = $Panel/Margin/Layout/HeaderRow/PointsHeader
 
 var _load_gen: int = 0
 var _loading: bool = false
@@ -92,7 +95,10 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _apply_theme() -> void:
 	UiTheme.style_panel(_panel, 12, 0.94)
-	UiTheme.style_label(_title)
+	UiTheme.style_title_label(_title)
+	UiTheme.style_subtitle_label(_rank_header)
+	UiTheme.style_subtitle_label(_name_header)
+	UiTheme.style_subtitle_label(_points_header)
 	UiTheme.style_label(_status, true)
 	for button in [_update, _show_me, _show_top, _close]:
 		UiTheme.style_chip_button(button)

@@ -1,6 +1,14 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://dxff4b3d71nuv"]
 
-[ext_resource type="Script" path="res://scripts/game/daily_leaderboard_overlay.gd" id="1_overlay"]
+[ext_resource type="Script" uid="uid://b3evdvbipp5h2" path="res://scripts/game/daily_leaderboard_overlay.gd" id="1_overlay"]
+[ext_resource type="FontFile" uid="uid://c8v5t5lrl06at" path="res://assets/fonts/LuckiestGuy-Regular.ttf" id="2_title"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.95686275, 0.8745098, 0.7921569, 0.94)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_chip"]
 content_margin_left = 16.0
@@ -16,15 +24,7 @@ content_margin_right = 16.0
 content_margin_bottom = 2.0
 bg_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
-bg_color = Color(0.95686275, 0.8745098, 0.7921569, 0.94)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
-
-[node name="DailyLeaderboardOverlay" type="Control"]
-visible = false
+[node name="DailyLeaderboardOverlay" type="Control" unique_id=2055835589]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -34,7 +34,7 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_overlay")
 
-[node name="Panel" type="PanelContainer" parent="."]
+[node name="Panel" type="PanelContainer" parent="." unique_id=1041761623]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -47,70 +47,71 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 
-[node name="Margin" type="MarginContainer" parent="Panel"]
+[node name="Margin" type="MarginContainer" parent="Panel" unique_id=1356134169]
 layout_mode = 2
 theme_override_constants/margin_left = 24
 theme_override_constants/margin_top = 24
 theme_override_constants/margin_right = 24
 theme_override_constants/margin_bottom = 24
 
-[node name="Layout" type="VBoxContainer" parent="Panel/Margin"]
+[node name="Layout" type="VBoxContainer" parent="Panel/Margin" unique_id=2345279]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="TitleLabel" type="Label" parent="Panel/Margin/Layout"]
+[node name="TitleLabel" type="Label" parent="Panel/Margin/Layout" unique_id=623348471]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_fonts/font = ExtResource("2_title")
 theme_override_font_sizes/font_size = 28
 text = "DAILY LEADERBOARD"
 
-[node name="HeaderRow" type="HBoxContainer" parent="Panel/Margin/Layout"]
+[node name="HeaderRow" type="HBoxContainer" parent="Panel/Margin/Layout" unique_id=290339042]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="RankHeader" type="Label" parent="Panel/Margin/Layout/HeaderRow"]
+[node name="RankHeader" type="Label" parent="Panel/Margin/Layout/HeaderRow" unique_id=580625960]
 custom_minimum_size = Vector2(56, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 0.75)
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 20
 text = "RANK"
 
-[node name="NameHeader" type="Label" parent="Panel/Margin/Layout/HeaderRow"]
+[node name="NameHeader" type="Label" parent="Panel/Margin/Layout/HeaderRow" unique_id=724947118]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 0.75)
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 20
 text = "NAME"
 
-[node name="PointsHeader" type="Label" parent="Panel/Margin/Layout/HeaderRow"]
+[node name="PointsHeader" type="Label" parent="Panel/Margin/Layout/HeaderRow" unique_id=2052757606]
 custom_minimum_size = Vector2(72, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 0.75)
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 20
 text = "POINTS"
 horizontal_alignment = 2
 
-[node name="Scroll" type="ScrollContainer" parent="Panel/Margin/Layout"]
+[node name="Scroll" type="ScrollContainer" parent="Panel/Margin/Layout" unique_id=262876943]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="RowList" type="VBoxContainer" parent="Panel/Margin/Layout/Scroll"]
+[node name="RowList" type="VBoxContainer" parent="Panel/Margin/Layout/Scroll" unique_id=1776888744]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 4
 
-[node name="StatusLabel" type="Label" parent="Panel/Margin/Layout"]
+[node name="StatusLabel" type="Label" parent="Panel/Margin/Layout" unique_id=1763543356]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 0.75)
 theme_override_font_sizes/font_size = 14
 autowrap_mode = 2
 
-[node name="ButtonRow" type="HBoxContainer" parent="Panel/Margin/Layout"]
+[node name="ButtonRow" type="HBoxContainer" parent="Panel/Margin/Layout" unique_id=1504797707]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="UpdateButton" type="Button" parent="Panel/Margin/Layout/ButtonRow"]
+[node name="UpdateButton" type="Button" parent="Panel/Margin/Layout/ButtonRow" unique_id=1387253089]
 custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -127,7 +128,7 @@ theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
 theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
 text = "UPDATE"
 
-[node name="ShowMeButton" type="Button" parent="Panel/Margin/Layout/ButtonRow"]
+[node name="ShowMeButton" type="Button" parent="Panel/Margin/Layout/ButtonRow" unique_id=1881536870]
 custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -144,7 +145,7 @@ theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
 theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
 text = "SHOW ME"
 
-[node name="ShowTopButton" type="Button" parent="Panel/Margin/Layout/ButtonRow"]
+[node name="ShowTopButton" type="Button" parent="Panel/Margin/Layout/ButtonRow" unique_id=1796418902]
 custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -160,7 +161,7 @@ theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
 theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
 text = "SHOW TOP"
 
-[node name="CloseButton" type="Button" parent="Panel/Margin/Layout/ButtonRow"]
+[node name="CloseButton" type="Button" parent="Panel/Margin/Layout/ButtonRow" unique_id=1834058768]
 custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
 size_flags_horizontal = 3

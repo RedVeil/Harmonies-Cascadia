@@ -59,7 +59,7 @@ func _ready() -> void:
 	_reset_mode_inline_ui()
 	if not InputScheme.scheme_changed.is_connected(_on_input_scheme_changed):
 		InputScheme.scheme_changed.connect(_on_input_scheme_changed)
-	if GameSettings.tutorial_completed and GameSettings.player_name.strip_edges().is_empty():
+	if _needs_player_name():
 		_show_name_nav()
 	else:
 		_show_root_nav()
@@ -227,6 +227,10 @@ func _sync_nav_input_filters(active: Control) -> void:
 	InputScheme.clear_stuck_gui_hover_deferred(self)
 
 
+func _needs_player_name() -> bool:
+	return GameSettings.tutorial_completed and GameSettings.player_name.strip_edges().is_empty()
+
+
 func _show_name_nav() -> void:
 	_name_nav.show()
 	_root_nav.hide()
@@ -287,9 +291,12 @@ func _on_first_play_tutorial() -> void:
 
 
 func _on_first_play_skip() -> void:
-	GameSettings.mark_tutorial_played()
+	GameSettings.mark_tutorial_completed()
 	_clear_first_play_prompt()
-	OverlayFocus.grab_first_button(_root_nav)
+	if _needs_player_name():
+		_show_name_nav()
+	else:
+		OverlayFocus.grab_first_button(_root_nav)
 
 
 func _show_play_nav() -> void:
