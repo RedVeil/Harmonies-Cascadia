@@ -19,11 +19,11 @@ var tutorial_played: bool = false
 var tutorial_completed: bool = false
 var first_puzzle_intro_shown: bool = false
 
-var preset: Preset = Preset.HIGH
-var wind_enabled: bool = true
+var preset: Preset = Preset.LOW
+var wind_enabled: bool = false
 var clouds_enabled: bool = true
-var animal_motion: AnimalMotion = AnimalMotion.FULL_ROAM
-var msaa_mode: MsaaMode = MsaaMode.X4
+var animal_motion: AnimalMotion = AnimalMotion.FROZEN
+var msaa_mode: MsaaMode = MsaaMode.OFF
 
 var music_volume: float = 0.5
 var sfx_volume: float = 0.5
@@ -77,11 +77,11 @@ func _load_from_json() -> void:
 	var graphics: Dictionary = data.get("graphics", {})
 	if typeof(graphics) != TYPE_DICTIONARY:
 		graphics = {}
-	preset = int(graphics.get("preset", Preset.HIGH)) as Preset
-	wind_enabled = bool(graphics.get("wind_enabled", true))
+	preset = int(graphics.get("preset", Preset.LOW)) as Preset
+	wind_enabled = bool(graphics.get("wind_enabled", false))
 	clouds_enabled = bool(graphics.get("clouds_enabled", true))
-	animal_motion = int(graphics.get("animal_motion", AnimalMotion.FULL_ROAM)) as AnimalMotion
-	msaa_mode = int(graphics.get("msaa_mode", MsaaMode.X4)) as MsaaMode
+	animal_motion = int(graphics.get("animal_motion", AnimalMotion.FROZEN)) as AnimalMotion
+	msaa_mode = int(graphics.get("msaa_mode", MsaaMode.OFF)) as MsaaMode
 
 	var audio: Dictionary = data.get("audio", {})
 	if typeof(audio) != TYPE_DICTIONARY:
@@ -104,11 +104,11 @@ func _load_from_legacy_cfg() -> void:
 	if cfg.load(LEGACY_SAVE_PATH) != OK:
 		apply_preset(_default_preset(), false)
 		return
-	preset = int(cfg.get_value(SECTION, "preset", Preset.HIGH)) as Preset
-	wind_enabled = bool(cfg.get_value(SECTION, "wind_enabled", true))
+	preset = int(cfg.get_value(SECTION, "preset", Preset.LOW)) as Preset
+	wind_enabled = bool(cfg.get_value(SECTION, "wind_enabled", false))
 	clouds_enabled = bool(cfg.get_value(SECTION, "clouds_enabled", true))
-	animal_motion = int(cfg.get_value(SECTION, "animal_motion", AnimalMotion.FULL_ROAM)) as AnimalMotion
-	msaa_mode = int(cfg.get_value(SECTION, "msaa_mode", MsaaMode.X4)) as MsaaMode
+	animal_motion = int(cfg.get_value(SECTION, "animal_motion", AnimalMotion.FROZEN)) as AnimalMotion
+	msaa_mode = int(cfg.get_value(SECTION, "msaa_mode", MsaaMode.OFF)) as MsaaMode
 	music_volume = clampf(float(cfg.get_value(AUDIO_SECTION, "music_volume", 0.5)), 0.0, 1.0)
 	sfx_volume = clampf(float(cfg.get_value(AUDIO_SECTION, "sfx_volume", 0.5)), 0.0, 1.0)
 
@@ -228,7 +228,7 @@ func _is_mobile_platform() -> bool:
 
 
 func _default_preset() -> Preset:
-	return Preset.LOW if _is_mobile_platform() else Preset.HIGH
+	return Preset.LOW if _is_mobile_platform() or OS.has_feature("web") else Preset.HIGH
 
 
 func _platform_tag() -> String:

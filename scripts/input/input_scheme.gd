@@ -22,6 +22,7 @@ var _mouse_pos_inited: bool = false
 var _suppress_click: bool = false
 var _ignore_mouse_motion_frames: int = 0
 var _last_touch_msec: int = 0
+var _stuck_hover_root: Node = null
 
 
 func _ready() -> void:
@@ -131,11 +132,19 @@ func clear_stuck_gui_hover_deferred(root: Node = null) -> void:
 	call_deferred("clear_stuck_gui_hover", root)
 	# Same-tap emulated mouse can re-hover after layout change (Back vs Exit).
 	var tree := get_tree()
-	if tree != null:
-		tree.process_frame.connect(
-			clear_stuck_gui_hover.bind(root),
-			CONNECT_ONE_SHOT
-		)
+	if tree == null:
+		return
+	if root != null:
+		_stuck_hover_root = root
+	if tree.process_frame.is_connected(_clear_stuck_gui_hover_on_process_frame):
+		return
+	tree.process_frame.connect(_clear_stuck_gui_hover_on_process_frame, CONNECT_ONE_SHOT)
+
+
+func _clear_stuck_gui_hover_on_process_frame() -> void:
+	var root := _stuck_hover_root
+	_stuck_hover_root = null
+	clear_stuck_gui_hover(root)
 
 
 func _notify_mouse_exit_tree(root: Node) -> void:
