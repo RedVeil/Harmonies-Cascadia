@@ -21,6 +21,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_vertical = 3
 script = ExtResource("1_panel")
 
 [node name="Content" type="VBoxContainer" parent="." unique_id=371653836]
@@ -35,9 +36,14 @@ theme_override_constants/separation = 12
 
 [node name="RootView" type="VBoxContainer" parent="Content" unique_id=72768527]
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_constants/separation = 24
 
-[node name="PlayerButton" type="Button" parent="Content/RootView" unique_id=3100000001]
+[node name="PlayerBlock" type="VBoxContainer" parent="Content/RootView"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="PlayerButton" type="Button" parent="Content/RootView/PlayerBlock" unique_id=3100000001]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
 theme_override_colors/font_pressed_color = Color(0.5686275, 0.5176471, 0.47058824, 0.6)
@@ -47,7 +53,19 @@ text = "PLAYER"
 flat = true
 alignment = 0
 
-[node name="GraphicsButton" type="Button" parent="Content/RootView" unique_id=280447167]
+[node name="PlayerDesc" type="Label" parent="Content/RootView/PlayerBlock"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 0.7)
+theme_override_constants/line_spacing = -5
+theme_override_font_sizes/font_size = 16
+text = "Change your name, color theme, and language"
+autowrap_mode = 2
+
+[node name="GraphicsBlock" type="VBoxContainer" parent="Content/RootView"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="GraphicsButton" type="Button" parent="Content/RootView/GraphicsBlock" unique_id=280447167]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
 theme_override_colors/font_pressed_color = Color(0.5686275, 0.5176471, 0.47058824, 0.6)
@@ -57,7 +75,19 @@ text = "GRAPHICS"
 flat = true
 alignment = 0
 
-[node name="AudioButton" type="Button" parent="Content/RootView" unique_id=919675704]
+[node name="GraphicsDesc" type="Label" parent="Content/RootView/GraphicsBlock"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 0.7)
+theme_override_constants/line_spacing = -5
+theme_override_font_sizes/font_size = 16
+text = "Tune quality, display mode, and visual effects"
+autowrap_mode = 2
+
+[node name="AudioBlock" type="VBoxContainer" parent="Content/RootView"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="AudioButton" type="Button" parent="Content/RootView/AudioBlock" unique_id=919675704]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
 theme_override_colors/font_pressed_color = Color(0.5686275, 0.5176471, 0.47058824, 0.6)
@@ -66,6 +96,14 @@ theme_override_font_sizes/font_size = 26
 text = "AUDIO"
 flat = true
 alignment = 0
+
+[node name="AudioDesc" type="Label" parent="Content/RootView/AudioBlock"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 0.7)
+theme_override_constants/line_spacing = -5
+theme_override_font_sizes/font_size = 16
+text = "Adjust master, music, and effects volume"
+autowrap_mode = 2
 
 [node name="PlayerView" type="VBoxContainer" parent="Content" unique_id=3100000002]
 visible = false
@@ -109,79 +147,162 @@ text = "Language"
 [node name="LanguageOption" type="OptionButton" parent="Content/PlayerView"]
 layout_mode = 2
 
-[node name="GraphicsView" type="VBoxContainer" parent="Content" unique_id=413313601]
+[node name="GraphicsScroll" type="ScrollContainer" parent="Content"]
 visible = false
 layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="GraphicsView" type="VBoxContainer" parent="Content/GraphicsScroll" unique_id=413313601]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
 theme_override_constants/separation = 12
 
-[node name="PresetLabel" type="Label" parent="Content/GraphicsView" unique_id=589506292]
+[node name="PresetLabel" type="Label" parent="Content/GraphicsScroll/GraphicsView" unique_id=589506292]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
 theme_override_font_sizes/font_size = 20
 text = "Quality"
 
-[node name="PresetRow" type="HBoxContainer" parent="Content/GraphicsView" unique_id=2099003882]
+[node name="PresetRow" type="HBoxContainer" parent="Content/GraphicsScroll/GraphicsView" unique_id=2099003882]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="LowButton" type="Button" parent="Content/GraphicsView/PresetRow" unique_id=78838831]
+[node name="LowButton" type="Button" parent="Content/GraphicsScroll/GraphicsView/PresetRow" unique_id=78838831]
 layout_mode = 2
 size_flags_horizontal = 3
 toggle_mode = true
 text = "Low"
 
-[node name="MediumButton" type="Button" parent="Content/GraphicsView/PresetRow" unique_id=1657606107]
+[node name="MediumButton" type="Button" parent="Content/GraphicsScroll/GraphicsView/PresetRow" unique_id=1657606107]
 layout_mode = 2
 size_flags_horizontal = 3
 toggle_mode = true
 text = "Medium"
 
-[node name="HighButton" type="Button" parent="Content/GraphicsView/PresetRow" unique_id=1287479196]
+[node name="HighButton" type="Button" parent="Content/GraphicsScroll/GraphicsView/PresetRow" unique_id=1287479196]
 layout_mode = 2
 size_flags_horizontal = 3
 toggle_mode = true
 text = "High"
 
-[node name="CustomButton" type="Button" parent="Content/GraphicsView/PresetRow" unique_id=1454025661]
+[node name="CustomButton" type="Button" parent="Content/GraphicsScroll/GraphicsView/PresetRow" unique_id=1454025661]
 layout_mode = 2
 size_flags_horizontal = 3
 toggle_mode = true
 text = "Custom"
 
-[node name="WindCheck" type="CheckButton" parent="Content/GraphicsView" unique_id=1395253361]
+[node name="WindCheck" type="CheckButton" parent="Content/GraphicsScroll/GraphicsView" unique_id=1395253361]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
 theme_override_font_sizes/font_size = 20
 text = "Plant sway"
 
-[node name="CloudsCheck" type="CheckButton" parent="Content/GraphicsView" unique_id=437615923]
+[node name="CloudsCheck" type="CheckButton" parent="Content/GraphicsScroll/GraphicsView" unique_id=437615923]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
 theme_override_font_sizes/font_size = 20
 text = "Cloud shadows"
 
-[node name="AnimalLabel" type="Label" parent="Content/GraphicsView" unique_id=1900806232]
+[node name="AnimalLabel" type="Label" parent="Content/GraphicsScroll/GraphicsView" unique_id=1900806232]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
 theme_override_font_sizes/font_size = 20
 text = "Animal motion"
 
-[node name="AnimalOption" type="OptionButton" parent="Content/GraphicsView" unique_id=1983895235]
+[node name="AnimalOption" type="OptionButton" parent="Content/GraphicsScroll/GraphicsView" unique_id=1983895235]
 layout_mode = 2
 
-[node name="MsaaLabel" type="Label" parent="Content/GraphicsView" unique_id=1247359068]
+[node name="MsaaLabel" type="Label" parent="Content/GraphicsScroll/GraphicsView" unique_id=1247359068]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
 theme_override_font_sizes/font_size = 20
 text = "MSAA"
 
-[node name="MsaaOption" type="OptionButton" parent="Content/GraphicsView" unique_id=2079348319]
+[node name="MsaaOption" type="OptionButton" parent="Content/GraphicsScroll/GraphicsView" unique_id=2079348319]
 layout_mode = 2
+
+[node name="QualityDivider" type="ColorRect" parent="Content/GraphicsScroll/GraphicsView"]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+
+[node name="DesktopBlock" type="VBoxContainer" parent="Content/GraphicsScroll/GraphicsView"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="DisplayLabel" type="Label" parent="Content/GraphicsScroll/GraphicsView/DesktopBlock"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 20
+text = "Display"
+
+[node name="DisplayOption" type="OptionButton" parent="Content/GraphicsScroll/GraphicsView/DesktopBlock"]
+layout_mode = 2
+
+[node name="FpsLabel" type="Label" parent="Content/GraphicsScroll/GraphicsView/DesktopBlock"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 20
+text = "FPS cap"
+
+[node name="FpsOption" type="OptionButton" parent="Content/GraphicsScroll/GraphicsView/DesktopBlock"]
+layout_mode = 2
+
+[node name="UiScaleHeader" type="HBoxContainer" parent="Content/GraphicsScroll/GraphicsView"]
+layout_mode = 2
+
+[node name="UiScaleLabel" type="Label" parent="Content/GraphicsScroll/GraphicsView/UiScaleHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 20
+text = "UI scale"
+
+[node name="UiScaleValue" type="Label" parent="Content/GraphicsScroll/GraphicsView/UiScaleHeader"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 20
+text = "100"
+horizontal_alignment = 2
+
+[node name="UiScaleSlider" type="HSlider" parent="Content/GraphicsScroll/GraphicsView"]
+layout_mode = 2
+min_value = 0.75
+max_value = 1.5
+step = 0.05
+value = 1.0
 
 [node name="AudioView" type="VBoxContainer" parent="Content" unique_id=1756797146]
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 12
+
+[node name="MasterHeader" type="HBoxContainer" parent="Content/AudioView"]
+layout_mode = 2
+
+[node name="MasterLabel" type="Label" parent="Content/AudioView/MasterHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 20
+text = "Master"
+
+[node name="MasterValue" type="Label" parent="Content/AudioView/MasterHeader"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 20
+text = "100"
+horizontal_alignment = 2
+
+[node name="MasterSlider" type="HSlider" parent="Content/AudioView"]
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+value = 1.0
 
 [node name="MusicHeader" type="HBoxContainer" parent="Content/AudioView" unique_id=78992098]
 layout_mode = 2

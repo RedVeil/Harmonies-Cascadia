@@ -59,6 +59,7 @@ var _next_player_index: int = 0
 var _music_player: AudioStreamPlayer
 var _user_music_linear: float = 0.5
 var _user_sfx_linear: float = 0.5
+var _user_master_linear: float = 1.0
 
 ## ----- Initialisation ----- ##
 
@@ -98,6 +99,7 @@ func _acquire_sfx_player() -> AudioStreamPlayer:
 func apply_user_volumes() -> void:
 	_user_music_linear = clampf(GameSettings.music_volume, 0.0, 1.0)
 	_user_sfx_linear = clampf(GameSettings.sfx_volume, 0.0, 1.0)
+	_user_master_linear = clampf(GameSettings.master_volume, 0.0, 1.0)
 	_refresh_music_volume()
 
 func _linear_gain_db(linear: float) -> float:
@@ -108,7 +110,7 @@ func _linear_gain_db(linear: float) -> float:
 func _refresh_music_volume() -> void:
 	if _music_player == null:
 		return
-	_music_player.volume_db = music_volume_db + _linear_gain_db(_user_music_linear)
+	_music_player.volume_db = music_volume_db + _linear_gain_db(_user_master_linear * _user_music_linear)
 
 ## ----- Internal Playback ----- ##
 
@@ -120,12 +122,13 @@ func _play_on_player(
 ) -> void:
 	if stream == null or player == null:
 		return
-	if _user_sfx_linear <= 0.0001:
+	var sfx_gain := _user_master_linear * _user_sfx_linear
+	if sfx_gain <= 0.0001:
 		return
 	player.stop()
 	player.stream = stream
 	player.pitch_scale = pitch_scale
-	player.volume_db = volume_db + master_volume_offset_db + _linear_gain_db(_user_sfx_linear)
+	player.volume_db = volume_db + master_volume_offset_db + _linear_gain_db(sfx_gain)
 	player.play()
 
 func play_stream(

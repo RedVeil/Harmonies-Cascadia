@@ -6,12 +6,18 @@ signal settings_changed
 enum Preset { LOW, MEDIUM, HIGH, CUSTOM }
 enum AnimalMotion { FROZEN, IDLE_SPECIAL, FULL_ROAM }
 enum MsaaMode { OFF, X2, X4 }
+enum WindowMode { FULLSCREEN, WINDOWED, FULLSCREEN_WINDOWED }
 
 const SAVE_PATH := "user://configuration.json"
 const LEGACY_SAVE_PATH := "user://graphics_settings.cfg"
 const SECTION := "graphics"
 const AUDIO_SECTION := "audio"
 const PLAYER_NAME_MAX_LENGTH := 12
+const WINDOWED_SIZE := Vector2i(1280, 720)
+const UI_SCALE_MIN := 0.75
+const UI_SCALE_MAX := 1.5
+const FPS_CAP_DEFAULT := 60
+const FPS_CAP_OPTIONS: Array[int] = [30, 60, 120, 0]
 
 var player_id: String = ""
 var player_name: String = ""
@@ -24,9 +30,13 @@ var wind_enabled: bool = false
 var clouds_enabled: bool = true
 var animal_motion: AnimalMotion = AnimalMotion.FROZEN
 var msaa_mode: MsaaMode = MsaaMode.OFF
+var window_mode: WindowMode = WindowMode.FULLSCREEN
+var fps_cap: int = FPS_CAP_DEFAULT
 
 var music_volume: float = 0.5
 var sfx_volume: float = 0.5
+var master_volume: float = 1.0
+var ui_scale: float = 1.0
 var theme_id: String = "cascadia"
 ## "eng" or "ger". JSON catalog copy is resolved from this.
 var content_locale: String = "eng"
@@ -94,12 +104,16 @@ func _load_from_json() -> void:
 	clouds_enabled = bool(graphics.get("clouds_enabled", true))
 	animal_motion = int(graphics.get("animal_motion", AnimalMotion.FROZEN)) as AnimalMotion
 	msaa_mode = int(graphics.get("msaa_mode", MsaaMode.OFF)) as MsaaMode
+	window_mode = _normalize_window_mode(int(graphics.get("window_mode", WindowMode.FULLSCREEN)))
+	fps_cap = _normalize_fps_cap(int(graphics.get("fps_cap", FPS_CAP_DEFAULT)))
 
 	var audio: Dictionary = data.get("audio", {})
 	if typeof(audio) != TYPE_DICTIONARY:
 		audio = {}
 	music_volume = clampf(float(audio.get("music_volume", 0.5)), 0.0, 1.0)
 	sfx_volume = clampf(float(audio.get("sfx_volume", 0.5)), 0.0, 1.0)
+	master_volume = clampf(float(audio.get("master_volume", 1.0)), 0.0, 1.0)
+	ui_scale = clampf(float(data.get("ui_scale", 1.0)), UI_SCALE_MIN, UI_SCALE_MAX)
 	theme_id = str(data.get("theme_id", "cascadia"))
 	if theme_id.is_empty():
 		theme_id = "cascadia"
@@ -143,11 +157,15 @@ func save_to_disk() -> void:
 			"clouds_enabled": clouds_enabled,
 			"animal_motion": int(animal_motion),
 			"msaa_mode": int(msaa_mode),
+			"window_mode": int(window_mode),
+			"fps_cap": fps_cap,
 		},
 		"audio": {
 			"music_volume": music_volume,
 			"sfx_volume": sfx_volume,
+			"master_volume": master_volume,
 		},
+		"ui_scale": ui_scale,
 		"theme_id": theme_id,
 		"content_locale": content_locale,
 		"puzzle_progress": puzzle_progress,
@@ -247,11 +265,27 @@ func _migrate_player_progress() -> bool:
 	return dirty
 
 
+func is_native_desktop() -> bool:
+	return OS.has_feature("windows") or OS.has_feature("macos") or OS.has_feature("linux")
+
+
 func _is_mobile_platform() -> bool:
 	return OS.has_feature("android") \
 		or OS.has_feature("ios") \
 		or OS.has_feature("web_android") \
 		or OS.has_feature("web_ios")
+
+
+func _normalize_window_mode(value: int) -> WindowMode:
+	if value == int(WindowMode.WINDOWED) or value == int(WindowMode.FULLSCREEN_WINDOWED):
+		return value as WindowMode
+	return WindowMode.FULLSCREEN
+
+
+func _normalize_fps_cap(value: int) -> int:
+	if value == 0 or value == 30 or value == 60 or value == 120:
+		return value
+	return FPS_CAP_DEFAULT
 
 
 func _default_preset() -> Preset:
@@ -381,6 +415,54 @@ func set_sfx_volume(value: float) -> void:
 	save_to_disk()
 
 
+func set_master_volume(value: float) -> void:
+	var clamped := clampf(value, 0.0, 1.0)
+	if _applying_ui_sync:
+		master_volume = clamped
+		return
+	if is_equal_approx(master_volume, clamped):
+		return
+	master_volume = clamped
+	apply_audio()
+	save_to_disk()
+
+
+func set_ui_scale(value: float) -> void:
+	var clamped := clampf(value, UI_SCALE_MIN, UI_SCALE_MAX)
+	if _applying_ui_sync:
+		ui_scale = clamped
+		return
+	if is_equal_approx(ui_scale, clamped):
+		return
+	ui_scale = clamped
+	_apply_ui_scale()
+	save_to_disk()
+
+
+func set_window_mode(value: WindowMode) -> void:
+	var normalized := _normalize_window_mode(int(value))
+	if _applying_ui_sync:
+		window_mode = normalized
+		return
+	if window_mode == normalized:
+		return
+	window_mode = normalized
+	_apply_window_mode()
+	save_to_disk()
+
+
+func set_fps_cap(value: int) -> void:
+	var normalized := _normalize_fps_cap(value)
+	if _applying_ui_sync:
+		fps_cap = normalized
+		return
+	if fps_cap == normalized:
+		return
+	fps_cap = normalized
+	_apply_fps_cap()
+	save_to_disk()
+
+
 ## Used by SettingsOverlay when refreshing controls from stored state.
 func begin_ui_sync() -> void:
 	_applying_ui_sync = true
@@ -403,6 +485,9 @@ func _mark_custom_and_apply() -> void:
 func apply() -> void:
 	WindControl.set_wind_enabled(wind_enabled)
 	WindControl.set_cloud_enabled(clouds_enabled)
+	_apply_window_mode()
+	_apply_fps_cap()
+	_apply_ui_scale()
 	_apply_msaa()
 	apply_audio()
 	settings_changed.emit()
@@ -427,3 +512,33 @@ func _apply_msaa() -> void:
 			vp.msaa_3d = Viewport.MSAA_2X
 		MsaaMode.X4:
 			vp.msaa_3d = Viewport.MSAA_4X
+
+
+func _apply_window_mode() -> void:
+	if not is_native_desktop() or OS.has_feature("editor"):
+		return
+	var win := get_window()
+	if win == null:
+		return
+	match window_mode:
+		WindowMode.WINDOWED:
+			win.borderless = false
+			win.mode = Window.MODE_WINDOWED
+			win.size = WINDOWED_SIZE
+		WindowMode.FULLSCREEN_WINDOWED:
+			win.mode = Window.MODE_FULLSCREEN
+		_:
+			win.mode = Window.MODE_EXCLUSIVE_FULLSCREEN
+
+
+func _apply_fps_cap() -> void:
+	if not is_native_desktop():
+		return
+	Engine.max_fps = fps_cap
+
+
+func _apply_ui_scale() -> void:
+	var win := get_window()
+	if win == null:
+		return
+	win.content_scale_factor = clampf(ui_scale, UI_SCALE_MIN, UI_SCALE_MAX)

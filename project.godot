@@ -142,7 +142,7 @@ rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true
-anti_aliasing/quality/msaa_2d=2
+anti_aliasing/quality/msaa_2d=3
 environment/defaults/default_clear_color=Color(0.8186203, 0.7502329, 0.6806915, 1)
 
 [shader_globals]

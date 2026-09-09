@@ -71,35 +71,65 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_left")
 [node name="Margin" type="MarginContainer" parent="UI/MenuRoot/Split/LeftColumn" unique_id=1760950830]
 layout_mode = 2
 theme_override_constants/margin_left = 36
-theme_override_constants/margin_top = 48
+theme_override_constants/margin_top = 24
 theme_override_constants/margin_right = 36
-theme_override_constants/margin_bottom = 48
+theme_override_constants/margin_bottom = 24
 
-[node name="NavStack" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin" unique_id=1329204290]
+[node name="Sidebar" type="Control" parent="UI/MenuRoot/Split/LeftColumn/Margin" unique_id=1329204290]
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/separation = 32
 
-[node name="TitleLabel" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack" unique_id=2072497958]
-layout_mode = 2
+[node name="TitleBand" type="Control" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar"]
+layout_mode = 1
+anchor_right = 1.0
+anchor_bottom = 0.15
+mouse_filter = 2
+
+[node name="MenuBand" type="Control" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar"]
+layout_mode = 1
+anchor_top = 0.15
+anchor_right = 1.0
+anchor_bottom = 0.85
+mouse_filter = 2
+
+[node name="FooterBand" type="Control" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar"]
+layout_mode = 1
+anchor_top = 0.85
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="TitleLabel" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/TitleBand" unique_id=2072497958]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_fonts/font = ExtResource("4_title")
 theme_override_font_sizes/font_size = 80
 text = "SYMBIA"
+vertical_alignment = 1
 
-[node name="NameNav" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack" unique_id=-2094967296]
+[node name="NameNav" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand" unique_id=-2094967296]
 visible = false
-layout_mode = 2
-size_flags_vertical = 3
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_constants/separation = 12
 
-[node name="NameHint" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/NameNav" unique_id=-2094967295]
+[node name="NameHint" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/NameNav" unique_id=-2094967295]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.7)
 theme_override_font_sizes/font_size = 16
 text = "Choose a player name"
 autowrap_mode = 2
 
-[node name="NameInput" type="LineEdit" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/NameNav" unique_id=-2094967294]
+[node name="NameInput" type="LineEdit" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/NameNav" unique_id=-2094967294]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -111,7 +141,7 @@ placeholder_text = "Your name"
 max_length = 12
 caret_blink = true
 
-[node name="NameAcceptButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/NameNav" unique_id=-2094967293]
+[node name="NameAcceptButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/NameNav" unique_id=-2094967293]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
@@ -127,17 +157,21 @@ text = "ACCEPT"
 flat = true
 alignment = 0
 
-[node name="RootNav" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack" unique_id=1337161300]
+[node name="RootNav" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand" unique_id=1337161300]
 visible = false
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 36
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 24
 
-[node name="PlayBlock" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/RootNav" unique_id=166241096]
+[node name="PlayBlock" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav" unique_id=166241096]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="PlayButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/RootNav/PlayBlock" unique_id=2017643394]
+[node name="PlayButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav/PlayBlock" unique_id=2017643394]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
@@ -153,7 +187,7 @@ text = "PLAY"
 flat = true
 alignment = 0
 
-[node name="PlayDesc" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/RootNav/PlayBlock" unique_id=576457856]
+[node name="PlayDesc" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav/PlayBlock" unique_id=576457856]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.7)
 theme_override_constants/line_spacing = -5
@@ -161,11 +195,11 @@ theme_override_font_sizes/font_size = 16
 text = "Choose a game mode and start a new session"
 autowrap_mode = 2
 
-[node name="TutorialBlock" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/RootNav" unique_id=319705785]
+[node name="TutorialBlock" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav" unique_id=319705785]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="TutorialButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/RootNav/TutorialBlock" unique_id=247655967]
+[node name="TutorialButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav/TutorialBlock" unique_id=247655967]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
@@ -181,7 +215,7 @@ text = "TUTORIAL"
 flat = true
 alignment = 0
 
-[node name="TutorialDesc" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/RootNav/TutorialBlock" unique_id=1819895731]
+[node name="TutorialDesc" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav/TutorialBlock" unique_id=1819895731]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.7)
 theme_override_constants/line_spacing = -5
@@ -189,11 +223,11 @@ theme_override_font_sizes/font_size = 16
 text = "Learn the rules and how to play Harmonies."
 autowrap_mode = 2
 
-[node name="SettingsBlock" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/RootNav" unique_id=350496018]
+[node name="SettingsBlock" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav" unique_id=350496018]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="SettingsButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/RootNav/SettingsBlock" unique_id=477077838]
+[node name="SettingsButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav/SettingsBlock" unique_id=477077838]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
@@ -209,7 +243,7 @@ text = "SETTINGS"
 flat = true
 alignment = 0
 
-[node name="SettingsDesc" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/RootNav/SettingsBlock" unique_id=570623378]
+[node name="SettingsDesc" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav/SettingsBlock" unique_id=570623378]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.7)
 theme_override_constants/line_spacing = -5
@@ -217,11 +251,11 @@ theme_override_font_sizes/font_size = 16
 text = "Adjust audio, graphics, and other preferences to suit your play style"
 autowrap_mode = 2
 
-[node name="EnterCodeBlock" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/RootNav" unique_id=1190215281]
+[node name="EnterCodeBlock" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav" unique_id=1190215281]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="EnterCodeButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/RootNav/EnterCodeBlock" unique_id=2118968345]
+[node name="EnterCodeButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav/EnterCodeBlock" unique_id=2118968345]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
@@ -237,7 +271,7 @@ text = "ENTER CODE"
 flat = true
 alignment = 0
 
-[node name="EnterCodeDesc" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/RootNav/EnterCodeBlock" unique_id=168594846]
+[node name="EnterCodeDesc" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav/EnterCodeBlock" unique_id=168594846]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.7)
 theme_override_constants/line_spacing = -5
@@ -245,38 +279,22 @@ theme_override_font_sizes/font_size = 16
 text = "Paste a share code to replay that session."
 autowrap_mode = 2
 
-[node name="FooterSpacer" type="Control" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/RootNav" unique_id=198559532]
-layout_mode = 2
-size_flags_vertical = 3
-mouse_filter = 2
+[node name="PlayNav" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand" unique_id=254245351]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 24
 
-[node name="ExitButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/RootNav" unique_id=1369697865]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
-theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
-theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-theme_override_font_sizes/font_size = 26
-theme_override_styles/normal = SubResource("StyleBoxEmpty_text")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_text")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_text")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_text")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_text")
-text = "EXIT"
-flat = true
-alignment = 0
-
-[node name="PlayNav" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack" unique_id=254245351]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 36
-
-[node name="DailyBlock" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav" unique_id=515550165]
+[node name="DailyBlock" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav" unique_id=515550165]
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="DailyButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock" unique_id=67050899]
+[node name="DailyButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/DailyBlock" unique_id=67050899]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
@@ -292,7 +310,7 @@ text = "DAILY CHALLENGE"
 flat = true
 alignment = 0
 
-[node name="DailyDesc" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock" unique_id=1941923993]
+[node name="DailyDesc" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/DailyBlock" unique_id=1941923993]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.7)
 theme_override_constants/line_spacing = -5
@@ -300,13 +318,13 @@ theme_override_font_sizes/font_size = 16
 text = "Complete the daily session and compete for the high score"
 autowrap_mode = 2
 
-[node name="DailyInlineButtons" type="HBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock" unique_id=2100000010]
+[node name="DailyInlineButtons" type="HBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/DailyBlock" unique_id=2100000010]
 visible = false
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 12
 
-[node name="PlayButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyInlineButtons" unique_id=2100000011]
+[node name="PlayButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/DailyBlock/DailyInlineButtons" unique_id=2100000011]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -322,7 +340,7 @@ theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
 theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
 text = "PLAY"
 
-[node name="LeaderboardsButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyInlineButtons" unique_id=2100000012]
+[node name="LeaderboardsButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/DailyBlock/DailyInlineButtons" unique_id=2100000012]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -338,11 +356,11 @@ theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
 theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
 text = "LEADERBOARDS"
 
-[node name="WeeklyBlock" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav" unique_id=2100000030]
+[node name="WeeklyBlock" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav" unique_id=2100000030]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="WeeklyButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/WeeklyBlock" unique_id=2100000031]
+[node name="WeeklyButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/WeeklyBlock" unique_id=2100000031]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
@@ -358,7 +376,7 @@ text = "WEEKLY CHALLENGE"
 flat = true
 alignment = 0
 
-[node name="WeeklyDesc" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/WeeklyBlock" unique_id=2100000032]
+[node name="WeeklyDesc" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/WeeklyBlock" unique_id=2100000032]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.7)
 theme_override_constants/line_spacing = -5
@@ -366,13 +384,13 @@ theme_override_font_sizes/font_size = 16
 text = "Complete the weekly session and compete for the high score"
 autowrap_mode = 2
 
-[node name="WeeklyInlineButtons" type="HBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/WeeklyBlock" unique_id=2100000033]
+[node name="WeeklyInlineButtons" type="HBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/WeeklyBlock" unique_id=2100000033]
 visible = false
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 12
 
-[node name="PlayButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/WeeklyBlock/WeeklyInlineButtons" unique_id=2100000034]
+[node name="PlayButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/WeeklyBlock/WeeklyInlineButtons" unique_id=2100000034]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -388,7 +406,7 @@ theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
 theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
 text = "PLAY"
 
-[node name="LeaderboardsButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/WeeklyBlock/WeeklyInlineButtons" unique_id=2100000035]
+[node name="LeaderboardsButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/WeeklyBlock/WeeklyInlineButtons" unique_id=2100000035]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -404,15 +422,15 @@ theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
 theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
 text = "LEADERBOARDS"
 
-[node name="QuickSessionBlock" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav" unique_id=70167912]
+[node name="QuickSessionBlock" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav" unique_id=70167912]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="TitleDesc" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock" unique_id=778500284]
+[node name="TitleDesc" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/QuickSessionBlock" unique_id=778500284]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="QuickSessionButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc" unique_id=73445984]
+[node name="QuickSessionButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/QuickSessionBlock/TitleDesc" unique_id=73445984]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
@@ -428,7 +446,7 @@ text = "QUICK SESSION"
 flat = true
 alignment = 0
 
-[node name="QuickSessionDesc" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc" unique_id=957763590]
+[node name="QuickSessionDesc" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/QuickSessionBlock/TitleDesc" unique_id=957763590]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.7)
 theme_override_constants/line_spacing = -5
@@ -436,13 +454,13 @@ theme_override_font_sizes/font_size = 16
 text = "Play a quick round of harmonies with limited tile space."
 autowrap_mode = 2
 
-[node name="QuickInlineButtons" type="HBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc" unique_id=2100000020]
+[node name="QuickInlineButtons" type="HBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/QuickSessionBlock/TitleDesc" unique_id=2100000020]
 visible = false
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 12
 
-[node name="ContinueButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickInlineButtons" unique_id=2100000021]
+[node name="ContinueButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/QuickSessionBlock/TitleDesc/QuickInlineButtons" unique_id=2100000021]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -458,7 +476,7 @@ theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
 theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
 text = "CONTINUE"
 
-[node name="NewButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickInlineButtons" unique_id=2100000022]
+[node name="NewButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/QuickSessionBlock/TitleDesc/QuickInlineButtons" unique_id=2100000022]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -474,12 +492,12 @@ theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
 theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
 text = "NEW"
 
-[node name="MapSizeRow" type="HBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc" unique_id=2071344124]
+[node name="MapSizeRow" type="HBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/QuickSessionBlock/TitleDesc" unique_id=2071344124]
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="SmallButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow" unique_id=379431080]
+[node name="SmallButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow" unique_id=379431080]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -495,7 +513,7 @@ theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
 theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
 text = "SMALL"
 
-[node name="MediumButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow" unique_id=428368077]
+[node name="MediumButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow" unique_id=428368077]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -511,7 +529,7 @@ theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
 theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
 text = "MEDIUM"
 
-[node name="LargeButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow" unique_id=233759086]
+[node name="LargeButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow" unique_id=233759086]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -527,11 +545,11 @@ theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
 theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
 text = "LARGE"
 
-[node name="EndlessBlock" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav" unique_id=78474879]
+[node name="EndlessBlock" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav" unique_id=78474879]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="EndlessButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock" unique_id=1167473653]
+[node name="EndlessButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/EndlessBlock" unique_id=1167473653]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
@@ -547,7 +565,7 @@ text = "ENDLESS MODE"
 flat = true
 alignment = 0
 
-[node name="EndlessDesc" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock" unique_id=1954200089]
+[node name="EndlessDesc" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/EndlessBlock" unique_id=1954200089]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.7)
 theme_override_constants/line_spacing = -5
@@ -555,13 +573,13 @@ theme_override_font_sizes/font_size = 16
 text = "Play in endless mode where you unlock more space the better you play and see how far you can go"
 autowrap_mode = 2
 
-[node name="EndlessInlineButtons" type="HBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock" unique_id=2100000000]
+[node name="EndlessInlineButtons" type="HBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/EndlessBlock" unique_id=2100000000]
 visible = false
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 12
 
-[node name="ContinueButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessInlineButtons" unique_id=2100000001]
+[node name="ContinueButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/EndlessBlock/EndlessInlineButtons" unique_id=2100000001]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -577,7 +595,7 @@ theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
 theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
 text = "CONTINUE"
 
-[node name="NewButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessInlineButtons" unique_id=2100000002]
+[node name="NewButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/EndlessBlock/EndlessInlineButtons" unique_id=2100000002]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -593,11 +611,11 @@ theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
 theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
 text = "NEW"
 
-[node name="PuzzleBlock" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav" unique_id=1875619359]
+[node name="PuzzleBlock" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav" unique_id=1875619359]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="PuzzleButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/PuzzleBlock" unique_id=1932326354]
+[node name="PuzzleButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/PuzzleBlock" unique_id=1932326354]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
@@ -613,7 +631,7 @@ text = "PUZZLES"
 flat = true
 alignment = 0
 
-[node name="PuzzleDesc" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/PuzzleBlock" unique_id=44257558]
+[node name="PuzzleDesc" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/PuzzleBlock" unique_id=44257558]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.7)
 theme_override_constants/line_spacing = -5
@@ -621,38 +639,21 @@ theme_override_font_sizes/font_size = 16
 text = "Play through various puzzle challenges to test your skills."
 autowrap_mode = 2
 
-[node name="FooterSpacer" type="Control" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav" unique_id=1043412114]
-layout_mode = 2
-size_flags_vertical = 3
-mouse_filter = 2
-
-[node name="BackButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav" unique_id=205466954]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
-theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
-theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-theme_override_font_sizes/font_size = 26
-theme_override_styles/normal = SubResource("StyleBoxEmpty_text")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_text")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_text")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_text")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_text")
-text = "BACK"
-flat = true
-alignment = 0
-
-[node name="TutorialNav" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack" unique_id=1718501483]
+[node name="TutorialNav" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand" unique_id=1718501483]
 visible = false
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 36
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 24
 
-[node name="LandscapesBlock" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/TutorialNav" unique_id=1718501484]
+[node name="LandscapesBlock" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/TutorialNav" unique_id=1718501484]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="LandscapesButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/TutorialNav/LandscapesBlock" unique_id=1718501485]
+[node name="LandscapesButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/TutorialNav/LandscapesBlock" unique_id=1718501485]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
@@ -668,7 +669,7 @@ text = "LANDSCAPES"
 flat = true
 alignment = 0
 
-[node name="LandscapesDesc" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/TutorialNav/LandscapesBlock" unique_id=1718501486]
+[node name="LandscapesDesc" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/TutorialNav/LandscapesBlock" unique_id=1718501486]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.7)
 theme_override_constants/line_spacing = -5
@@ -676,11 +677,11 @@ theme_override_font_sizes/font_size = 16
 text = "Placing tiles, stacking, and scoring rules."
 autowrap_mode = 2
 
-[node name="ScoringBlock" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/TutorialNav" unique_id=1718501487]
+[node name="ScoringBlock" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/TutorialNav" unique_id=1718501487]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="ScoringButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/TutorialNav/ScoringBlock" unique_id=1718501488]
+[node name="ScoringButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/TutorialNav/ScoringBlock" unique_id=1718501488]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
@@ -696,7 +697,7 @@ text = "PACKS"
 flat = true
 alignment = 0
 
-[node name="ScoringDesc" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/TutorialNav/ScoringBlock" unique_id=1718501489]
+[node name="ScoringDesc" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/TutorialNav/ScoringBlock" unique_id=1718501489]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.7)
 theme_override_constants/line_spacing = -5
@@ -704,11 +705,11 @@ theme_override_font_sizes/font_size = 16
 text = "Taking landscape packs, cooldown, and reroll."
 autowrap_mode = 2
 
-[node name="AnimalsBlock" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/TutorialNav" unique_id=1718501490]
+[node name="AnimalsBlock" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/TutorialNav" unique_id=1718501490]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="AnimalsButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/TutorialNav/AnimalsBlock" unique_id=1718501491]
+[node name="AnimalsButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/TutorialNav/AnimalsBlock" unique_id=1718501491]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
@@ -724,7 +725,7 @@ text = "ANIMALS"
 flat = true
 alignment = 0
 
-[node name="AnimalsDesc" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/TutorialNav/AnimalsBlock" unique_id=1718501492]
+[node name="AnimalsDesc" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/TutorialNav/AnimalsBlock" unique_id=1718501492]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.7)
 theme_override_constants/line_spacing = -5
@@ -732,11 +733,11 @@ theme_override_font_sizes/font_size = 16
 text = "The animal market and placing animals."
 autowrap_mode = 2
 
-[node name="QuestsBlock" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/TutorialNav" unique_id=1718501493]
+[node name="QuestsBlock" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/TutorialNav" unique_id=1718501493]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="QuestsButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/TutorialNav/QuestsBlock" unique_id=1718501494]
+[node name="QuestsButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/TutorialNav/QuestsBlock" unique_id=1718501494]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
@@ -752,7 +753,7 @@ text = "QUESTS"
 flat = true
 alignment = 0
 
-[node name="QuestsDesc" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/TutorialNav/QuestsBlock" unique_id=1718501495]
+[node name="QuestsDesc" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/TutorialNav/QuestsBlock" unique_id=1718501495]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.7)
 theme_override_constants/line_spacing = -5
@@ -760,76 +761,47 @@ theme_override_font_sizes/font_size = 16
 text = "Completing quests and bonus points."
 autowrap_mode = 2
 
-[node name="FooterSpacer" type="Control" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/TutorialNav" unique_id=1718501496]
-layout_mode = 2
-size_flags_vertical = 3
-mouse_filter = 2
-
-[node name="TutorialBackButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/TutorialNav" unique_id=1718501497]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
-theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
-theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-theme_override_font_sizes/font_size = 26
-theme_override_styles/normal = SubResource("StyleBoxEmpty_text")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_text")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_text")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_text")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_text")
-text = "BACK"
-flat = true
-alignment = 0
-
-[node name="PuzzleNav" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack" unique_id=-2094967196]
+[node name="PuzzleNav" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand" unique_id=-2094967196]
 visible = false
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 24
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
 
-[node name="PuzzleScroll" type="ScrollContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PuzzleNav" unique_id=-2094967195]
+[node name="PuzzleScroll" type="ScrollContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PuzzleNav" unique_id=-2094967195]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="PuzzleGrid" type="GridContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PuzzleNav/PuzzleScroll" unique_id=-2094967192]
+[node name="PuzzleGrid" type="GridContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PuzzleNav/PuzzleScroll" unique_id=-2094967192]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/h_separation = 16
 theme_override_constants/v_separation = 20
 columns = 3
 
-[node name="PuzzleBackButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PuzzleNav" unique_id=-2094967193]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
-theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
-theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-theme_override_font_sizes/font_size = 26
-theme_override_styles/normal = SubResource("StyleBoxEmpty_text")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_text")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_text")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_text")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_text")
-text = "BACK"
-flat = true
-alignment = 0
-
-[node name="CodeNav" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack" unique_id=1718501482]
+[node name="CodeNav" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand" unique_id=1718501482]
 visible = false
-layout_mode = 2
-size_flags_vertical = 3
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_constants/separation = 12
 
-[node name="CodeHint" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/CodeNav" unique_id=292693924]
+[node name="CodeHint" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/CodeNav" unique_id=292693924]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.7)
 theme_override_font_sizes/font_size = 16
 text = "Paste a share code to replay that session."
 autowrap_mode = 2
 
-[node name="CodeInput" type="LineEdit" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/CodeNav" unique_id=761528994]
+[node name="CodeInput" type="LineEdit" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/CodeNav" unique_id=761528994]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -840,7 +812,7 @@ theme_override_styles/focus = SubResource("StyleBoxFlat_code_input")
 placeholder_text = "HC1-..."
 caret_blink = true
 
-[node name="PasteCodeButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/CodeNav" unique_id=1889895955]
+[node name="PasteCodeButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/CodeNav" unique_id=1889895955]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
@@ -856,7 +828,7 @@ text = "PASTE"
 flat = true
 alignment = 0
 
-[node name="StartCodeButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/CodeNav" unique_id=1889895944]
+[node name="StartCodeButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/CodeNav" unique_id=1889895944]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
@@ -872,56 +844,72 @@ text = "START"
 flat = true
 alignment = 0
 
-[node name="CodeStatus" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/CodeNav" unique_id=1372856251]
+[node name="CodeStatus" type="Label" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/CodeNav" unique_id=1372856251]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.7)
 theme_override_font_sizes/font_size = 16
 autowrap_mode = 2
 
-[node name="FooterSpacer" type="Control" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/CodeNav" unique_id=1141330671]
+[node name="SettingsNav" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand" unique_id=1512249364]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="SettingsScroll" type="ScrollContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/SettingsNav" unique_id=1992944264]
 layout_mode = 2
 size_flags_vertical = 3
-mouse_filter = 2
+horizontal_scroll_mode = 0
 
-[node name="CodeBackButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/CodeNav" unique_id=1938425973]
+[node name="SettingsPanel" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/SettingsNav/SettingsScroll" unique_id=546359623 instance=ExtResource("2_settings")]
+custom_minimum_size = Vector2(0, 320)
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+
+[node name="ExitButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/FooterBand"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 26
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
 theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
 theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-theme_override_font_sizes/font_size = 26
 theme_override_styles/normal = SubResource("StyleBoxEmpty_text")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_text")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_text")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_text")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_text")
-text = "BACK"
+text = "EXIT"
 flat = true
 alignment = 0
 
-[node name="SettingsNav" type="VBoxContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack" unique_id=1512249364]
+[node name="BackButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/FooterBand"]
 visible = false
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 24
-
-[node name="SettingsScroll" type="ScrollContainer" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/SettingsNav" unique_id=1992944264]
-layout_mode = 2
-size_flags_vertical = 3
-horizontal_scroll_mode = 0
-
-[node name="SettingsPanel" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/SettingsNav/SettingsScroll" unique_id=546359623 instance=ExtResource("2_settings")]
-custom_minimum_size = Vector2(0, 320)
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="SettingsBackButton" type="Button" parent="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/SettingsNav" unique_id=883496814]
-layout_mode = 2
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 26
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
 theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
 theme_override_colors/font_hover_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
-theme_override_font_sizes/font_size = 26
 theme_override_styles/normal = SubResource("StyleBoxEmpty_text")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_text")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_text")
@@ -942,39 +930,35 @@ layout_mode = 1
 
 [node name="TutorialCoach" parent="UI/MenuRoot" unique_id=826040446 instance=ExtResource("5_coach")]
 
-[connection signal="text_submitted" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/NameNav/NameInput" to="UI/MenuRoot" method="_on_name_submitted"]
-[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/NameNav/NameAcceptButton" to="UI/MenuRoot" method="_on_name_accept_pressed"]
-[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/RootNav/PlayBlock/PlayButton" to="UI/MenuRoot" method="_on_play_pressed"]
-[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/RootNav/TutorialBlock/TutorialButton" to="UI/MenuRoot" method="_on_tutorial_pressed"]
-[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/RootNav/SettingsBlock/SettingsButton" to="UI/MenuRoot" method="_on_settings_pressed"]
-[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/RootNav/EnterCodeBlock/EnterCodeButton" to="UI/MenuRoot" method="_on_enter_code_pressed"]
-[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/RootNav/ExitButton" to="UI/MenuRoot" method="_on_exit_pressed"]
-[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyButton" to="UI/MenuRoot" method="_on_daily_pressed"]
-[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyInlineButtons/PlayButton" to="UI/MenuRoot" method="_on_daily_play_pressed"]
-[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyInlineButtons/LeaderboardsButton" to="UI/MenuRoot" method="_on_daily_leaderboards_pressed"]
-[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/WeeklyBlock/WeeklyButton" to="UI/MenuRoot" method="_on_weekly_pressed"]
-[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/WeeklyBlock/WeeklyInlineButtons/PlayButton" to="UI/MenuRoot" method="_on_weekly_play_pressed"]
-[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/WeeklyBlock/WeeklyInlineButtons/LeaderboardsButton" to="UI/MenuRoot" method="_on_weekly_leaderboards_pressed"]
-[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickSessionButton" to="UI/MenuRoot" method="_on_quick_session_pressed"]
-[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickInlineButtons/ContinueButton" to="UI/MenuRoot" method="_on_quick_continue_pressed"]
-[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickInlineButtons/NewButton" to="UI/MenuRoot" method="_on_quick_new_pressed"]
-[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow/SmallButton" to="UI/MenuRoot" method="_on_map_size_small_pressed"]
-[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow/MediumButton" to="UI/MenuRoot" method="_on_map_size_medium_pressed"]
-[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow/LargeButton" to="UI/MenuRoot" method="_on_map_size_large_pressed"]
-[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessButton" to="UI/MenuRoot" method="_on_endless_pressed"]
-[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessInlineButtons/ContinueButton" to="UI/MenuRoot" method="_on_endless_continue_pressed"]
-[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessInlineButtons/NewButton" to="UI/MenuRoot" method="_on_endless_new_pressed"]
-[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/PuzzleBlock/PuzzleButton" to="UI/MenuRoot" method="_on_puzzle_pressed"]
-[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PlayNav/BackButton" to="UI/MenuRoot" method="_on_back_pressed"]
-[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/TutorialNav/LandscapesBlock/LandscapesButton" to="UI/MenuRoot" method="_on_tutorial_landscapes_pressed"]
-[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/TutorialNav/ScoringBlock/ScoringButton" to="UI/MenuRoot" method="_on_tutorial_scoring_pressed"]
-[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/TutorialNav/AnimalsBlock/AnimalsButton" to="UI/MenuRoot" method="_on_tutorial_animals_pressed"]
-[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/TutorialNav/QuestsBlock/QuestsButton" to="UI/MenuRoot" method="_on_tutorial_quests_pressed"]
-[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/TutorialNav/TutorialBackButton" to="UI/MenuRoot" method="_on_back_pressed"]
-[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/PuzzleNav/PuzzleBackButton" to="UI/MenuRoot" method="_on_back_pressed"]
-[connection signal="text_changed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/CodeNav/CodeInput" to="UI/MenuRoot" method="_on_code_text_changed"]
-[connection signal="text_submitted" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/CodeNav/CodeInput" to="UI/MenuRoot" method="_on_code_submitted"]
-[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/CodeNav/PasteCodeButton" to="UI/MenuRoot" method="_on_paste_code_pressed"]
-[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/CodeNav/StartCodeButton" to="UI/MenuRoot" method="_on_start_code_pressed"]
-[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/CodeNav/CodeBackButton" to="UI/MenuRoot" method="_on_back_pressed"]
-[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/NavStack/SettingsNav/SettingsBackButton" to="UI/MenuRoot" method="_on_back_pressed"]
+[connection signal="text_submitted" from="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/NameNav/NameInput" to="UI/MenuRoot" method="_on_name_submitted"]
+[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/NameNav/NameAcceptButton" to="UI/MenuRoot" method="_on_name_accept_pressed"]
+[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav/PlayBlock/PlayButton" to="UI/MenuRoot" method="_on_play_pressed"]
+[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav/TutorialBlock/TutorialButton" to="UI/MenuRoot" method="_on_tutorial_pressed"]
+[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav/SettingsBlock/SettingsButton" to="UI/MenuRoot" method="_on_settings_pressed"]
+[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav/EnterCodeBlock/EnterCodeButton" to="UI/MenuRoot" method="_on_enter_code_pressed"]
+[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/DailyBlock/DailyButton" to="UI/MenuRoot" method="_on_daily_pressed"]
+[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/DailyBlock/DailyInlineButtons/PlayButton" to="UI/MenuRoot" method="_on_daily_play_pressed"]
+[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/DailyBlock/DailyInlineButtons/LeaderboardsButton" to="UI/MenuRoot" method="_on_daily_leaderboards_pressed"]
+[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/WeeklyBlock/WeeklyButton" to="UI/MenuRoot" method="_on_weekly_pressed"]
+[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/WeeklyBlock/WeeklyInlineButtons/PlayButton" to="UI/MenuRoot" method="_on_weekly_play_pressed"]
+[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/WeeklyBlock/WeeklyInlineButtons/LeaderboardsButton" to="UI/MenuRoot" method="_on_weekly_leaderboards_pressed"]
+[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/QuickSessionBlock/TitleDesc/QuickSessionButton" to="UI/MenuRoot" method="_on_quick_session_pressed"]
+[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/QuickSessionBlock/TitleDesc/QuickInlineButtons/ContinueButton" to="UI/MenuRoot" method="_on_quick_continue_pressed"]
+[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/QuickSessionBlock/TitleDesc/QuickInlineButtons/NewButton" to="UI/MenuRoot" method="_on_quick_new_pressed"]
+[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow/SmallButton" to="UI/MenuRoot" method="_on_map_size_small_pressed"]
+[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow/MediumButton" to="UI/MenuRoot" method="_on_map_size_medium_pressed"]
+[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow/LargeButton" to="UI/MenuRoot" method="_on_map_size_large_pressed"]
+[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/EndlessBlock/EndlessButton" to="UI/MenuRoot" method="_on_endless_pressed"]
+[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/EndlessBlock/EndlessInlineButtons/ContinueButton" to="UI/MenuRoot" method="_on_endless_continue_pressed"]
+[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/EndlessBlock/EndlessInlineButtons/NewButton" to="UI/MenuRoot" method="_on_endless_new_pressed"]
+[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/PuzzleBlock/PuzzleButton" to="UI/MenuRoot" method="_on_puzzle_pressed"]
+[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/TutorialNav/LandscapesBlock/LandscapesButton" to="UI/MenuRoot" method="_on_tutorial_landscapes_pressed"]
+[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/TutorialNav/ScoringBlock/ScoringButton" to="UI/MenuRoot" method="_on_tutorial_scoring_pressed"]
+[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/TutorialNav/AnimalsBlock/AnimalsButton" to="UI/MenuRoot" method="_on_tutorial_animals_pressed"]
+[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/TutorialNav/QuestsBlock/QuestsButton" to="UI/MenuRoot" method="_on_tutorial_quests_pressed"]
+[connection signal="text_changed" from="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/CodeNav/CodeInput" to="UI/MenuRoot" method="_on_code_text_changed"]
+[connection signal="text_submitted" from="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/CodeNav/CodeInput" to="UI/MenuRoot" method="_on_code_submitted"]
+[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/CodeNav/PasteCodeButton" to="UI/MenuRoot" method="_on_paste_code_pressed"]
+[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/MenuBand/CodeNav/StartCodeButton" to="UI/MenuRoot" method="_on_start_code_pressed"]
+[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/FooterBand/ExitButton" to="UI/MenuRoot" method="_on_exit_pressed"]
+[connection signal="pressed" from="UI/MenuRoot/Split/LeftColumn/Margin/Sidebar/FooterBand/BackButton" to="UI/MenuRoot" method="_on_back_pressed"]

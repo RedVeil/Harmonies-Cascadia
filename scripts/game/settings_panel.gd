@@ -5,34 +5,50 @@ enum View { ROOT, PLAYER, GRAPHICS, AUDIO }
 
 @onready var _root_view: VBoxContainer = $Content/RootView
 @onready var _player_view: VBoxContainer = $Content/PlayerView
-@onready var _graphics_view: VBoxContainer = $Content/GraphicsView
+@onready var _graphics_scroll: ScrollContainer = $Content/GraphicsScroll
+@onready var _graphics_view: VBoxContainer = $Content/GraphicsScroll/GraphicsView
 @onready var _audio_view: VBoxContainer = $Content/AudioView
-@onready var _player_button: Button = $Content/RootView/PlayerButton
-@onready var _graphics_button: Button = $Content/RootView/GraphicsButton
-@onready var _audio_button: Button = $Content/RootView/AudioButton
+@onready var _player_button: Button = $Content/RootView/PlayerBlock/PlayerButton
+@onready var _graphics_button: Button = $Content/RootView/GraphicsBlock/GraphicsButton
+@onready var _audio_button: Button = $Content/RootView/AudioBlock/AudioButton
+@onready var _player_desc: Label = $Content/RootView/PlayerBlock/PlayerDesc
+@onready var _graphics_desc: Label = $Content/RootView/GraphicsBlock/GraphicsDesc
+@onready var _audio_desc: Label = $Content/RootView/AudioBlock/AudioDesc
 @onready var _name_label: Label = $Content/PlayerView/NameLabel
 @onready var _name_input: LineEdit = $Content/PlayerView/NameInput
 @onready var _theme_label: Label = $Content/PlayerView/ThemeLabel
 @onready var _theme_option: OptionButton = $Content/PlayerView/ThemeOption
 @onready var _language_label: Label = $Content/PlayerView/LanguageLabel
 @onready var _language_option: OptionButton = $Content/PlayerView/LanguageOption
+@onready var _master_label: Label = $Content/AudioView/MasterHeader/MasterLabel
+@onready var _master_value: Label = $Content/AudioView/MasterHeader/MasterValue
 @onready var _music_label: Label = $Content/AudioView/MusicHeader/MusicLabel
 @onready var _music_value: Label = $Content/AudioView/MusicHeader/MusicValue
 @onready var _effects_label: Label = $Content/AudioView/EffectsHeader/EffectsLabel
 @onready var _effects_value: Label = $Content/AudioView/EffectsHeader/EffectsValue
+@onready var _master_slider: HSlider = $Content/AudioView/MasterSlider
 @onready var _music_slider: HSlider = $Content/AudioView/MusicSlider
 @onready var _effects_slider: HSlider = $Content/AudioView/EffectsSlider
-@onready var _preset_label: Label = $Content/GraphicsView/PresetLabel
-@onready var _animal_label: Label = $Content/GraphicsView/AnimalLabel
-@onready var _msaa_label: Label = $Content/GraphicsView/MsaaLabel
-@onready var _preset_low: Button = $Content/GraphicsView/PresetRow/LowButton
-@onready var _preset_medium: Button = $Content/GraphicsView/PresetRow/MediumButton
-@onready var _preset_high: Button = $Content/GraphicsView/PresetRow/HighButton
-@onready var _preset_custom: Button = $Content/GraphicsView/PresetRow/CustomButton
-@onready var _wind_check: CheckButton = $Content/GraphicsView/WindCheck
-@onready var _clouds_check: CheckButton = $Content/GraphicsView/CloudsCheck
-@onready var _animal_option: OptionButton = $Content/GraphicsView/AnimalOption
-@onready var _msaa_option: OptionButton = $Content/GraphicsView/MsaaOption
+@onready var _desktop_block: VBoxContainer = $Content/GraphicsScroll/GraphicsView/DesktopBlock
+@onready var _display_label: Label = $Content/GraphicsScroll/GraphicsView/DesktopBlock/DisplayLabel
+@onready var _display_option: OptionButton = $Content/GraphicsScroll/GraphicsView/DesktopBlock/DisplayOption
+@onready var _fps_label: Label = $Content/GraphicsScroll/GraphicsView/DesktopBlock/FpsLabel
+@onready var _fps_option: OptionButton = $Content/GraphicsScroll/GraphicsView/DesktopBlock/FpsOption
+@onready var _ui_scale_label: Label = $Content/GraphicsScroll/GraphicsView/UiScaleHeader/UiScaleLabel
+@onready var _ui_scale_value: Label = $Content/GraphicsScroll/GraphicsView/UiScaleHeader/UiScaleValue
+@onready var _ui_scale_slider: HSlider = $Content/GraphicsScroll/GraphicsView/UiScaleSlider
+@onready var _preset_label: Label = $Content/GraphicsScroll/GraphicsView/PresetLabel
+@onready var _animal_label: Label = $Content/GraphicsScroll/GraphicsView/AnimalLabel
+@onready var _msaa_label: Label = $Content/GraphicsScroll/GraphicsView/MsaaLabel
+@onready var _preset_low: Button = $Content/GraphicsScroll/GraphicsView/PresetRow/LowButton
+@onready var _preset_medium: Button = $Content/GraphicsScroll/GraphicsView/PresetRow/MediumButton
+@onready var _preset_high: Button = $Content/GraphicsScroll/GraphicsView/PresetRow/HighButton
+@onready var _preset_custom: Button = $Content/GraphicsScroll/GraphicsView/PresetRow/CustomButton
+@onready var _wind_check: CheckButton = $Content/GraphicsScroll/GraphicsView/WindCheck
+@onready var _clouds_check: CheckButton = $Content/GraphicsScroll/GraphicsView/CloudsCheck
+@onready var _animal_option: OptionButton = $Content/GraphicsScroll/GraphicsView/AnimalOption
+@onready var _msaa_option: OptionButton = $Content/GraphicsScroll/GraphicsView/MsaaOption
+@onready var _quality_divider: ColorRect = $Content/GraphicsScroll/GraphicsView/QualityDivider
 
 var _view: View = View.ROOT
 var _web_text
@@ -47,13 +63,33 @@ func _ready() -> void:
 	_build_theme_picker()
 	_build_language_picker()
 	_wire_signals()
+	_apply_desktop_visibility()
 	_show_view(View.ROOT)
 	apply_sidebar_style()
 	UiTheme.bind_node(self, apply_sidebar_style)
 	refresh()
 	apply_locale()
+	_bind_scroll_fit()
 	if GameSettings != null and not GameSettings.settings_changed.is_connected(apply_locale):
 		GameSettings.settings_changed.connect(apply_locale)
+
+
+func _bind_scroll_fit() -> void:
+	var scroll := get_parent() as ScrollContainer
+	if scroll == null:
+		return
+	if not scroll.resized.is_connected(_fit_to_scroll_parent):
+		scroll.resized.connect(_fit_to_scroll_parent)
+	call_deferred("_fit_to_scroll_parent")
+
+
+func _fit_to_scroll_parent() -> void:
+	var scroll := get_parent() as ScrollContainer
+	if scroll == null:
+		return
+	var target := maxf(scroll.size.y, 1.0)
+	if not is_equal_approx(custom_minimum_size.y, target):
+		custom_minimum_size.y = target
 
 
 func refresh() -> void:
@@ -63,10 +99,16 @@ func refresh() -> void:
 func apply_locale() -> void:
 	if _player_button:
 		_player_button.text = Loc.ui("settings.player")
+	if _player_desc:
+		_player_desc.text = Loc.ui("settings.player_desc")
 	if _graphics_button:
 		_graphics_button.text = Loc.ui("settings.graphics")
+	if _graphics_desc:
+		_graphics_desc.text = Loc.ui("settings.graphics_desc")
 	if _audio_button:
 		_audio_button.text = Loc.ui("settings.audio")
+	if _audio_desc:
+		_audio_desc.text = Loc.ui("settings.audio_desc")
 	if _name_label:
 		_name_label.text = Loc.ui("settings.player_name")
 	if _name_input:
@@ -77,6 +119,12 @@ func apply_locale() -> void:
 		_language_label.text = Loc.ui("settings.language")
 	if _preset_label:
 		_preset_label.text = Loc.ui("settings.quality")
+	if _display_label:
+		_display_label.text = Loc.ui("settings.display")
+	if _fps_label:
+		_fps_label.text = Loc.ui("settings.fps_cap")
+	if _ui_scale_label:
+		_ui_scale_label.text = Loc.ui("settings.ui_scale")
 	if _preset_low:
 		_preset_low.text = Loc.ui("settings.low")
 	if _preset_medium:
@@ -93,6 +141,8 @@ func apply_locale() -> void:
 		_animal_label.text = Loc.ui("settings.animal_motion")
 	if _msaa_label:
 		_msaa_label.text = Loc.ui("settings.msaa")
+	if _master_label:
+		_master_label.text = Loc.ui("settings.master")
 	if _music_label:
 		_music_label.text = Loc.ui("settings.music")
 	if _effects_label:
@@ -122,10 +172,16 @@ func handle_back() -> bool:
 
 func apply_sidebar_style() -> void:
 	for label in [
+		_master_label,
+		_master_value,
 		_music_label,
 		_music_value,
 		_effects_label,
 		_effects_value,
+		_display_label,
+		_fps_label,
+		_ui_scale_label,
+		_ui_scale_value,
 		_preset_label,
 		_animal_label,
 		_msaa_label,
@@ -144,6 +200,8 @@ func apply_sidebar_style() -> void:
 		_graphics_button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	if _audio_button:
 		_audio_button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	for desc in [_player_desc, _graphics_desc, _audio_desc]:
+		UiTheme.style_label(desc, true)
 	UiTheme.style_line_edit(_name_input)
 
 	for button in [_preset_low, _preset_medium, _preset_high, _preset_custom]:
@@ -151,15 +209,19 @@ func apply_sidebar_style() -> void:
 			button.custom_minimum_size = Vector2(0, 28)
 		UiTheme.style_chip_button(button, 12.0, 6.0)
 
-	for option in [_animal_option, _msaa_option, _language_option]:
+	for option in [_animal_option, _msaa_option, _language_option, _display_option, _fps_option]:
 		if option:
 			option.custom_minimum_size = Vector2(0, 28)
 		UiTheme.style_option_button(option, 12.0, 6.0)
 
 	UiTheme.style_check_button(_wind_check, UiTheme.SUBTITLE_FONT_SIZE)
 	UiTheme.style_check_button(_clouds_check, UiTheme.SUBTITLE_FONT_SIZE)
+	UiTheme.style_slider(_master_slider)
 	UiTheme.style_slider(_music_slider)
 	UiTheme.style_slider(_effects_slider)
+	UiTheme.style_slider(_ui_scale_slider)
+	if _quality_divider:
+		_quality_divider.color = UiTheme.text
 	_style_theme_option()
 
 
@@ -244,6 +306,8 @@ func _on_theme_option_selected(index: int) -> void:
 func _setup_options() -> void:
 	var animal_id := _animal_option.get_selected_id() if _animal_option.item_count > 0 else int(GameSettings.animal_motion)
 	var msaa_id := _msaa_option.get_selected_id() if _msaa_option.item_count > 0 else int(GameSettings.msaa_mode)
+	var display_id := _display_option.get_selected_id() if _display_option.item_count > 0 else int(GameSettings.window_mode)
+	var fps_id := _fps_option.get_selected_id() if _fps_option.item_count > 0 else GameSettings.fps_cap
 	_animal_option.clear()
 	_animal_option.add_item(Loc.ui("settings.frozen"), GameSettings.AnimalMotion.FROZEN)
 	_animal_option.add_item(Loc.ui("settings.idle_special"), GameSettings.AnimalMotion.IDLE_SPECIAL)
@@ -255,6 +319,18 @@ func _setup_options() -> void:
 	_msaa_option.add_item("2×", GameSettings.MsaaMode.X2)
 	_msaa_option.add_item("4×", GameSettings.MsaaMode.X4)
 	_select_option_by_id(_msaa_option, msaa_id)
+
+	_display_option.clear()
+	_display_option.add_item(Loc.ui("settings.fullscreen"), GameSettings.WindowMode.FULLSCREEN)
+	_display_option.add_item(Loc.ui("settings.windowed"), GameSettings.WindowMode.WINDOWED)
+	_display_option.add_item(Loc.ui("settings.fullscreen_windowed"), GameSettings.WindowMode.FULLSCREEN_WINDOWED)
+	_select_option_by_id(_display_option, display_id)
+
+	_fps_option.clear()
+	for cap in GameSettings.FPS_CAP_OPTIONS:
+		var label := Loc.ui("settings.uncapped") if cap == 0 else str(cap)
+		_fps_option.add_item(label, cap)
+	_select_option_by_id(_fps_option, fps_id)
 
 
 func _wire_signals() -> void:
@@ -271,10 +347,14 @@ func _wire_signals() -> void:
 	_clouds_check.toggled.connect(_on_clouds_toggled)
 	_animal_option.item_selected.connect(_on_animal_selected)
 	_msaa_option.item_selected.connect(_on_msaa_selected)
+	_display_option.item_selected.connect(_on_display_selected)
+	_fps_option.item_selected.connect(_on_fps_selected)
 	_theme_option.item_selected.connect(_on_theme_option_selected)
 	_language_option.item_selected.connect(_on_language_option_selected)
+	_master_slider.value_changed.connect(_on_master_volume_changed)
 	_music_slider.value_changed.connect(_on_music_volume_changed)
 	_effects_slider.value_changed.connect(_on_sfx_volume_changed)
+	_ui_scale_slider.value_changed.connect(_on_ui_scale_changed)
 	for control in [
 		_player_button,
 		_graphics_button,
@@ -287,10 +367,14 @@ func _wire_signals() -> void:
 		_clouds_check,
 		_animal_option,
 		_msaa_option,
+		_display_option,
+		_fps_option,
 		_theme_option,
 		_language_option,
+		_master_slider,
 		_music_slider,
 		_effects_slider,
+		_ui_scale_slider,
 	]:
 		if control != null and not control.mouse_entered.is_connected(_on_control_mouse_entered):
 			control.mouse_entered.connect(_on_control_mouse_entered)
@@ -306,6 +390,8 @@ func _wire_signals() -> void:
 		_clouds_check,
 		_animal_option,
 		_msaa_option,
+		_display_option,
+		_fps_option,
 		_theme_option,
 		_language_option,
 	])
@@ -321,26 +407,38 @@ func _show_view(view: View) -> void:
 	_view = view
 	_root_view.visible = view == View.ROOT
 	_player_view.visible = view == View.PLAYER
-	_graphics_view.visible = view == View.GRAPHICS
+	_graphics_scroll.visible = view == View.GRAPHICS
 	_audio_view.visible = view == View.AUDIO
 	# Title label is intentionally hidden.
 	InputScheme.clear_stuck_gui_hover_deferred(self)
 
 
+func _apply_desktop_visibility() -> void:
+	if _desktop_block == null:
+		return
+	_desktop_block.visible = GameSettings.is_native_desktop()
+
+
 func _refresh_from_settings() -> void:
 	GameSettings.begin_ui_sync()
 	_fill_name_input()
+	_master_slider.value = GameSettings.master_volume
 	_music_slider.value = GameSettings.music_volume
 	_effects_slider.value = GameSettings.sfx_volume
+	_ui_scale_slider.value = GameSettings.ui_scale
 	_update_volume_labels()
+	_update_scale_label()
 	_wind_check.button_pressed = GameSettings.wind_enabled
 	_clouds_check.button_pressed = GameSettings.clouds_enabled
 	_select_option_by_id(_animal_option, int(GameSettings.animal_motion))
 	_select_option_by_id(_msaa_option, int(GameSettings.msaa_mode))
+	_select_option_by_id(_display_option, int(GameSettings.window_mode))
+	_select_option_by_id(_fps_option, GameSettings.fps_cap)
 	_select_theme_option(UiTheme.theme_id)
 	_select_language_option(GameSettings.content_locale)
 	GameSettings.end_ui_sync()
 	_update_preset_buttons()
+	_apply_desktop_visibility()
 
 
 func _volume_display(linear: float) -> String:
@@ -348,11 +446,19 @@ func _volume_display(linear: float) -> String:
 
 
 func _update_volume_labels() -> void:
+	_master_value.text = _volume_display(_master_slider.value)
 	_music_value.text = _volume_display(_music_slider.value)
 	_effects_value.text = _volume_display(_effects_slider.value)
 
 
+func _update_scale_label() -> void:
+	if _ui_scale_value:
+		_ui_scale_value.text = str(roundi(clampf(_ui_scale_slider.value, GameSettings.UI_SCALE_MIN, GameSettings.UI_SCALE_MAX) * 100.0))
+
+
 func _select_option_by_id(option: OptionButton, id: int) -> void:
+	if option == null:
+		return
 	for i in option.item_count:
 		if option.get_item_id(i) == id:
 			option.select(i)
@@ -466,6 +572,28 @@ func _on_msaa_selected(index: int) -> void:
 	_update_preset_buttons()
 
 
+func _on_display_selected(index: int) -> void:
+	if GameSettings.is_ui_syncing():
+		return
+	GameFeedback.play_click_button()
+	var id := _display_option.get_item_id(index)
+	GameSettings.set_window_mode(id as GameSettings.WindowMode)
+
+
+func _on_fps_selected(index: int) -> void:
+	if GameSettings.is_ui_syncing():
+		return
+	GameFeedback.play_click_button()
+	GameSettings.set_fps_cap(_fps_option.get_item_id(index))
+
+
+func _on_master_volume_changed(value: float) -> void:
+	_master_value.text = _volume_display(value)
+	if GameSettings.is_ui_syncing():
+		return
+	GameSettings.set_master_volume(value)
+
+
 func _on_music_volume_changed(value: float) -> void:
 	_music_value.text = _volume_display(value)
 	if GameSettings.is_ui_syncing():
@@ -478,3 +606,10 @@ func _on_sfx_volume_changed(value: float) -> void:
 	if GameSettings.is_ui_syncing():
 		return
 	GameSettings.set_sfx_volume(value)
+
+
+func _on_ui_scale_changed(value: float) -> void:
+	_update_scale_label()
+	if GameSettings.is_ui_syncing():
+		return
+	GameSettings.set_ui_scale(value)

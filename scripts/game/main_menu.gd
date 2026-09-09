@@ -4,37 +4,38 @@ const GAME_SCENE := "res://scenes/Refactored_Main.tscn"
 const PUZZLE_SLOT_SCENE := preload("res://scenes/game/puzzle_slot.tscn")
 const WEB_TEXT_PROMPT := preload("res://scripts/input/web_text_prompt.gd")
 
-@onready var _name_nav: VBoxContainer = $Split/LeftColumn/Margin/NavStack/NameNav
-@onready var _name_input: LineEdit = $Split/LeftColumn/Margin/NavStack/NameNav/NameInput
-@onready var _root_nav: VBoxContainer = $Split/LeftColumn/Margin/NavStack/RootNav
-@onready var _play_nav: VBoxContainer = $Split/LeftColumn/Margin/NavStack/PlayNav
-@onready var _tutorial_nav: VBoxContainer = $Split/LeftColumn/Margin/NavStack/TutorialNav
-@onready var _code_nav: VBoxContainer = $Split/LeftColumn/Margin/NavStack/CodeNav
-@onready var _settings_nav: VBoxContainer = $Split/LeftColumn/Margin/NavStack/SettingsNav
-@onready var _settings_panel: SettingsPanel = $Split/LeftColumn/Margin/NavStack/SettingsNav/SettingsScroll/SettingsPanel
-@onready var _map_size_row: HBoxContainer = $Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow
-@onready var _quick_session_desc: Label = $Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickSessionDesc
-@onready var _puzzle_button: Button = $Split/LeftColumn/Margin/NavStack/PlayNav/PuzzleBlock/PuzzleButton
-@onready var _puzzle_nav: VBoxContainer = $Split/LeftColumn/Margin/NavStack/PuzzleNav
-@onready var _puzzle_grid: GridContainer = $Split/LeftColumn/Margin/NavStack/PuzzleNav/PuzzleScroll/PuzzleGrid
-@onready var _code_input: LineEdit = $Split/LeftColumn/Margin/NavStack/CodeNav/CodeInput
-@onready var _code_status: Label = $Split/LeftColumn/Margin/NavStack/CodeNav/CodeStatus
+@onready var _name_nav: VBoxContainer = $Split/LeftColumn/Margin/Sidebar/MenuBand/NameNav
+@onready var _name_input: LineEdit = $Split/LeftColumn/Margin/Sidebar/MenuBand/NameNav/NameInput
+@onready var _root_nav: VBoxContainer = $Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav
+@onready var _play_nav: VBoxContainer = $Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav
+@onready var _tutorial_nav: VBoxContainer = $Split/LeftColumn/Margin/Sidebar/MenuBand/TutorialNav
+@onready var _code_nav: VBoxContainer = $Split/LeftColumn/Margin/Sidebar/MenuBand/CodeNav
+@onready var _settings_nav: VBoxContainer = $Split/LeftColumn/Margin/Sidebar/MenuBand/SettingsNav
+@onready var _settings_panel: SettingsPanel = $Split/LeftColumn/Margin/Sidebar/MenuBand/SettingsNav/SettingsScroll/SettingsPanel
+@onready var _map_size_row: HBoxContainer = $Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow
+@onready var _quick_session_desc: Label = $Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/QuickSessionBlock/TitleDesc/QuickSessionDesc
+@onready var _puzzle_button: Button = $Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/PuzzleBlock/PuzzleButton
+@onready var _puzzle_nav: VBoxContainer = $Split/LeftColumn/Margin/Sidebar/MenuBand/PuzzleNav
+@onready var _puzzle_grid: GridContainer = $Split/LeftColumn/Margin/Sidebar/MenuBand/PuzzleNav/PuzzleScroll/PuzzleGrid
+@onready var _code_input: LineEdit = $Split/LeftColumn/Margin/Sidebar/MenuBand/CodeNav/CodeInput
+@onready var _code_status: Label = $Split/LeftColumn/Margin/Sidebar/MenuBand/CodeNav/CodeStatus
 
-@onready var _daily_button: Button = $Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyButton
-@onready var _daily_desc: Label = $Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyDesc
-@onready var _daily_inline_buttons: HBoxContainer = $Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyInlineButtons
-@onready var _weekly_button: Button = $Split/LeftColumn/Margin/NavStack/PlayNav/WeeklyBlock/WeeklyButton
-@onready var _weekly_desc: Label = $Split/LeftColumn/Margin/NavStack/PlayNav/WeeklyBlock/WeeklyDesc
-@onready var _weekly_inline_buttons: HBoxContainer = $Split/LeftColumn/Margin/NavStack/PlayNav/WeeklyBlock/WeeklyInlineButtons
+@onready var _daily_button: Button = $Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/DailyBlock/DailyButton
+@onready var _daily_desc: Label = $Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/DailyBlock/DailyDesc
+@onready var _daily_inline_buttons: HBoxContainer = $Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/DailyBlock/DailyInlineButtons
+@onready var _weekly_button: Button = $Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/WeeklyBlock/WeeklyButton
+@onready var _weekly_desc: Label = $Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/WeeklyBlock/WeeklyDesc
+@onready var _weekly_inline_buttons: HBoxContainer = $Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/WeeklyBlock/WeeklyInlineButtons
 @onready var _leaderboard: DailyLeaderboardOverlay = $Split/RightColumn/DailyLeaderboardOverlay
 
-@onready var _quick_session_button: Button = $Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickSessionButton
-@onready var _quick_inline_buttons: HBoxContainer = $Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickInlineButtons
+@onready var _quick_session_button: Button = $Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/QuickSessionBlock/TitleDesc/QuickSessionButton
+@onready var _quick_inline_buttons: HBoxContainer = $Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/QuickSessionBlock/TitleDesc/QuickInlineButtons
 
-@onready var _endless_button: Button = $Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessButton
-@onready var _endless_desc: Label = $Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessDesc
-@onready var _endless_inline_buttons: HBoxContainer = $Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessInlineButtons
-@onready var _exit_button: Button = $Split/LeftColumn/Margin/NavStack/RootNav/ExitButton
+@onready var _endless_button: Button = $Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/EndlessBlock/EndlessButton
+@onready var _endless_desc: Label = $Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/EndlessBlock/EndlessDesc
+@onready var _endless_inline_buttons: HBoxContainer = $Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/EndlessBlock/EndlessInlineButtons
+@onready var _exit_button: Button = $Split/LeftColumn/Margin/Sidebar/FooterBand/ExitButton
+@onready var _back_button: Button = $Split/LeftColumn/Margin/Sidebar/FooterBand/BackButton
 @onready var _tutorial_coach: TutorialCoach = $TutorialCoach
 
 var _puzzle_ids: Array[String] = []
@@ -60,6 +61,7 @@ func _ready() -> void:
 	if GameSettings != null and not GameSettings.settings_changed.is_connected(_apply_locale):
 		GameSettings.settings_changed.connect(_apply_locale)
 	_reset_mode_inline_ui()
+	_bind_adaptive_nav_gaps()
 	if not InputScheme.scheme_changed.is_connected(_on_input_scheme_changed):
 		InputScheme.scheme_changed.connect(_on_input_scheme_changed)
 	if _needs_player_name():
@@ -70,11 +72,36 @@ func _ready() -> void:
 		_show_first_play_prompt()
 
 
+func _bind_adaptive_nav_gaps() -> void:
+	AdaptiveNavGaps.bind_sidebar($Split/LeftColumn/Margin/Sidebar as Control)
+
+
+func _refresh_adaptive_nav_gaps() -> void:
+	AdaptiveNavGaps.apply_bands($Split/LeftColumn/Margin/Sidebar as Control)
+	_sync_footer()
+
+
+func _sync_footer() -> void:
+	var name_open := _name_nav != null and _name_nav.visible
+	var root_open := _root_nav != null and _root_nav.visible
+	_set_footer_button(_exit_button, root_open and not name_open and not OS.has_feature("web"))
+	_set_footer_button(_back_button, not name_open and not root_open)
+
+
+func _set_footer_button(button: Button, show: bool) -> void:
+	if button == null:
+		return
+	button.visible = show
+	button.disabled = not show
+	button.mouse_filter = Control.MOUSE_FILTER_STOP if show else Control.MOUSE_FILTER_IGNORE
+
+
 func _hide_daily_challenge() -> void:
-	var daily_block := $Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock as Control
+	var daily_block := $Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/DailyBlock as Control
 	if daily_block == null:
 		return
 	daily_block.hide()
+	_refresh_adaptive_nav_gaps()
 
 
 func _hide_exit_on_web() -> void:
@@ -96,36 +123,32 @@ func _setup_web_text_inputs() -> void:
 
 func _setup_button_hover_sounds() -> void:
 	var buttons: Array[Control] = [
-		$Split/LeftColumn/Margin/NavStack/NameNav/NameAcceptButton,
-		$Split/LeftColumn/Margin/NavStack/RootNav/PlayBlock/PlayButton,
-		$Split/LeftColumn/Margin/NavStack/RootNav/TutorialBlock/TutorialButton,
-		$Split/LeftColumn/Margin/NavStack/RootNav/SettingsBlock/SettingsButton,
-		$Split/LeftColumn/Margin/NavStack/RootNav/EnterCodeBlock/EnterCodeButton,
-		$Split/LeftColumn/Margin/NavStack/RootNav/ExitButton,
-		$Split/LeftColumn/Margin/NavStack/PlayNav/BackButton,
-		$Split/LeftColumn/Margin/NavStack/TutorialNav/LandscapesBlock/LandscapesButton,
-		$Split/LeftColumn/Margin/NavStack/TutorialNav/ScoringBlock/ScoringButton,
-		$Split/LeftColumn/Margin/NavStack/TutorialNav/AnimalsBlock/AnimalsButton,
-		$Split/LeftColumn/Margin/NavStack/TutorialNav/QuestsBlock/QuestsButton,
-		$Split/LeftColumn/Margin/NavStack/TutorialNav/TutorialBackButton,
-		$Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyButton,
-		$Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyInlineButtons/PlayButton,
-		$Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyInlineButtons/LeaderboardsButton,
-		$Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickSessionButton,
-		$Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickInlineButtons/ContinueButton,
-		$Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickInlineButtons/NewButton,
-		$Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow/SmallButton,
-		$Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow/MediumButton,
-		$Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow/LargeButton,
-		$Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessButton,
-		$Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessInlineButtons/ContinueButton,
-		$Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessInlineButtons/NewButton,
-		$Split/LeftColumn/Margin/NavStack/PlayNav/PuzzleBlock/PuzzleButton,
-		$Split/LeftColumn/Margin/NavStack/PuzzleNav/PuzzleBackButton,
-		$Split/LeftColumn/Margin/NavStack/CodeNav/CodeBackButton,
-		$Split/LeftColumn/Margin/NavStack/CodeNav/PasteCodeButton,
-		$Split/LeftColumn/Margin/NavStack/CodeNav/StartCodeButton,
-		$Split/LeftColumn/Margin/NavStack/SettingsNav/SettingsBackButton,
+		$Split/LeftColumn/Margin/Sidebar/MenuBand/NameNav/NameAcceptButton,
+		$Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav/PlayBlock/PlayButton,
+		$Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav/TutorialBlock/TutorialButton,
+		$Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav/SettingsBlock/SettingsButton,
+		$Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav/EnterCodeBlock/EnterCodeButton,
+		$Split/LeftColumn/Margin/Sidebar/FooterBand/ExitButton,
+		$Split/LeftColumn/Margin/Sidebar/FooterBand/BackButton,
+		$Split/LeftColumn/Margin/Sidebar/MenuBand/TutorialNav/LandscapesBlock/LandscapesButton,
+		$Split/LeftColumn/Margin/Sidebar/MenuBand/TutorialNav/ScoringBlock/ScoringButton,
+		$Split/LeftColumn/Margin/Sidebar/MenuBand/TutorialNav/AnimalsBlock/AnimalsButton,
+		$Split/LeftColumn/Margin/Sidebar/MenuBand/TutorialNav/QuestsBlock/QuestsButton,
+		$Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/DailyBlock/DailyButton,
+		$Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/DailyBlock/DailyInlineButtons/PlayButton,
+		$Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/DailyBlock/DailyInlineButtons/LeaderboardsButton,
+		$Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/QuickSessionBlock/TitleDesc/QuickSessionButton,
+		$Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/QuickSessionBlock/TitleDesc/QuickInlineButtons/ContinueButton,
+		$Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/QuickSessionBlock/TitleDesc/QuickInlineButtons/NewButton,
+		$Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow/SmallButton,
+		$Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow/MediumButton,
+		$Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow/LargeButton,
+		$Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/EndlessBlock/EndlessButton,
+		$Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/EndlessBlock/EndlessInlineButtons/ContinueButton,
+		$Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/EndlessBlock/EndlessInlineButtons/NewButton,
+		$Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/PuzzleBlock/PuzzleButton,
+		$Split/LeftColumn/Margin/Sidebar/MenuBand/CodeNav/PasteCodeButton,
+		$Split/LeftColumn/Margin/Sidebar/MenuBand/CodeNav/StartCodeButton,
 	]
 	for button in buttons:
 		if button != null and not button.mouse_entered.is_connected(_on_nav_button_mouse_entered):
@@ -160,61 +183,58 @@ func _set_text(path: String, key: String) -> void:
 
 
 func _apply_locale() -> void:
-	_set_text("Split/LeftColumn/Margin/NavStack/NameNav/NameHint", "main.choose_name")
-	_set_text("Split/LeftColumn/Margin/NavStack/NameNav/NameInput", "main.your_name")
-	_set_text("Split/LeftColumn/Margin/NavStack/NameNav/NameAcceptButton", "main.accept")
-	_set_text("Split/LeftColumn/Margin/NavStack/RootNav/PlayBlock/PlayButton", "main.play")
-	_set_text("Split/LeftColumn/Margin/NavStack/RootNav/PlayBlock/PlayDesc", "main.play_desc")
-	_set_text("Split/LeftColumn/Margin/NavStack/RootNav/TutorialBlock/TutorialButton", "main.tutorial")
-	_set_text("Split/LeftColumn/Margin/NavStack/RootNav/TutorialBlock/TutorialDesc", "main.tutorial_desc")
-	_set_text("Split/LeftColumn/Margin/NavStack/RootNav/SettingsBlock/SettingsButton", "main.settings")
-	_set_text("Split/LeftColumn/Margin/NavStack/RootNav/SettingsBlock/SettingsDesc", "main.settings_desc")
-	_set_text("Split/LeftColumn/Margin/NavStack/RootNav/EnterCodeBlock/EnterCodeButton", "main.enter_code")
-	_set_text("Split/LeftColumn/Margin/NavStack/RootNav/EnterCodeBlock/EnterCodeDesc", "main.enter_code_desc")
-	_set_text("Split/LeftColumn/Margin/NavStack/RootNav/ExitButton", "main.exit")
-	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyButton", "main.daily")
-	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyDesc", "main.daily_desc")
-	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyInlineButtons/PlayButton", "main.play")
-	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/DailyBlock/DailyInlineButtons/LeaderboardsButton", "main.leaderboards")
-	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/WeeklyBlock/WeeklyButton", "main.weekly")
-	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/WeeklyBlock/WeeklyDesc", "main.weekly_desc")
-	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/WeeklyBlock/WeeklyInlineButtons/PlayButton", "main.play")
-	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/WeeklyBlock/WeeklyInlineButtons/LeaderboardsButton", "main.leaderboards")
-	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickSessionButton", "main.quick")
-	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickSessionDesc", "main.quick_desc")
-	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickInlineButtons/ContinueButton", "main.continue")
-	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/QuickInlineButtons/NewButton", "main.new")
-	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow/SmallButton", "main.small")
-	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow/MediumButton", "main.medium")
-	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow/LargeButton", "main.large")
-	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessButton", "main.endless")
-	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessDesc", "main.endless_desc")
-	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessInlineButtons/ContinueButton", "main.continue")
-	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/EndlessBlock/EndlessInlineButtons/NewButton", "main.new")
-	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/PuzzleBlock/PuzzleButton", "main.puzzles")
-	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/PuzzleBlock/PuzzleDesc", "main.puzzles_desc")
-	_set_text("Split/LeftColumn/Margin/NavStack/PlayNav/BackButton", "main.back")
-	_set_text("Split/LeftColumn/Margin/NavStack/TutorialNav/LandscapesBlock/LandscapesButton", "main.landscapes")
-	_set_text("Split/LeftColumn/Margin/NavStack/TutorialNav/LandscapesBlock/LandscapesDesc", "main.landscapes_desc")
-	_set_text("Split/LeftColumn/Margin/NavStack/TutorialNav/ScoringBlock/ScoringButton", "main.packs")
-	_set_text("Split/LeftColumn/Margin/NavStack/TutorialNav/ScoringBlock/ScoringDesc", "main.packs_desc")
-	_set_text("Split/LeftColumn/Margin/NavStack/TutorialNav/AnimalsBlock/AnimalsButton", "main.animals")
-	_set_text("Split/LeftColumn/Margin/NavStack/TutorialNav/AnimalsBlock/AnimalsDesc", "main.animals_desc")
-	_set_text("Split/LeftColumn/Margin/NavStack/TutorialNav/QuestsBlock/QuestsButton", "main.quests")
-	_set_text("Split/LeftColumn/Margin/NavStack/TutorialNav/QuestsBlock/QuestsDesc", "main.quests_desc")
-	_set_text("Split/LeftColumn/Margin/NavStack/TutorialNav/TutorialBackButton", "main.back")
-	_set_text("Split/LeftColumn/Margin/NavStack/PuzzleNav/PuzzleBackButton", "main.back")
-	_set_text("Split/LeftColumn/Margin/NavStack/CodeNav/CodeHint", "main.code_hint")
-	_set_text("Split/LeftColumn/Margin/NavStack/CodeNav/PasteCodeButton", "main.paste")
-	_set_text("Split/LeftColumn/Margin/NavStack/CodeNav/StartCodeButton", "main.start")
-	_set_text("Split/LeftColumn/Margin/NavStack/CodeNav/CodeBackButton", "main.back")
-	_set_text("Split/LeftColumn/Margin/NavStack/SettingsNav/SettingsBackButton", "main.back")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/NameNav/NameHint", "main.choose_name")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/NameNav/NameInput", "main.your_name")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/NameNav/NameAcceptButton", "main.accept")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav/PlayBlock/PlayButton", "main.play")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav/PlayBlock/PlayDesc", "main.play_desc")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav/TutorialBlock/TutorialButton", "main.tutorial")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav/TutorialBlock/TutorialDesc", "main.tutorial_desc")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav/SettingsBlock/SettingsButton", "main.settings")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav/SettingsBlock/SettingsDesc", "main.settings_desc")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav/EnterCodeBlock/EnterCodeButton", "main.enter_code")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav/EnterCodeBlock/EnterCodeDesc", "main.enter_code_desc")
+	_set_text("Split/LeftColumn/Margin/Sidebar/FooterBand/ExitButton", "main.exit")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/DailyBlock/DailyButton", "main.daily")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/DailyBlock/DailyDesc", "main.daily_desc")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/DailyBlock/DailyInlineButtons/PlayButton", "main.play")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/DailyBlock/DailyInlineButtons/LeaderboardsButton", "main.leaderboards")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/WeeklyBlock/WeeklyButton", "main.weekly")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/WeeklyBlock/WeeklyDesc", "main.weekly_desc")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/WeeklyBlock/WeeklyInlineButtons/PlayButton", "main.play")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/WeeklyBlock/WeeklyInlineButtons/LeaderboardsButton", "main.leaderboards")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/QuickSessionBlock/TitleDesc/QuickSessionButton", "main.quick")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/QuickSessionBlock/TitleDesc/QuickSessionDesc", "main.quick_desc")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/QuickSessionBlock/TitleDesc/QuickInlineButtons/ContinueButton", "main.continue")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/QuickSessionBlock/TitleDesc/QuickInlineButtons/NewButton", "main.new")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow/SmallButton", "main.small")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow/MediumButton", "main.medium")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/QuickSessionBlock/TitleDesc/MapSizeRow/LargeButton", "main.large")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/EndlessBlock/EndlessButton", "main.endless")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/EndlessBlock/EndlessDesc", "main.endless_desc")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/EndlessBlock/EndlessInlineButtons/ContinueButton", "main.continue")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/EndlessBlock/EndlessInlineButtons/NewButton", "main.new")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/PuzzleBlock/PuzzleButton", "main.puzzles")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/PlayNav/PuzzleBlock/PuzzleDesc", "main.puzzles_desc")
+	_set_text("Split/LeftColumn/Margin/Sidebar/FooterBand/BackButton", "main.back")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/TutorialNav/LandscapesBlock/LandscapesButton", "main.landscapes")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/TutorialNav/LandscapesBlock/LandscapesDesc", "main.landscapes_desc")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/TutorialNav/ScoringBlock/ScoringButton", "main.packs")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/TutorialNav/ScoringBlock/ScoringDesc", "main.packs_desc")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/TutorialNav/AnimalsBlock/AnimalsButton", "main.animals")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/TutorialNav/AnimalsBlock/AnimalsDesc", "main.animals_desc")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/TutorialNav/QuestsBlock/QuestsButton", "main.quests")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/TutorialNav/QuestsBlock/QuestsDesc", "main.quests_desc")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/CodeNav/CodeHint", "main.code_hint")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/CodeNav/PasteCodeButton", "main.paste")
+	_set_text("Split/LeftColumn/Margin/Sidebar/MenuBand/CodeNav/StartCodeButton", "main.start")
 	if _name_input:
 		_name_input.placeholder_text = Loc.ui("main.your_name")
 	if _code_input:
 		_code_input.placeholder_text = Loc.ui("main.code_hint")
 	if _settings_panel != null and _settings_panel.has_method("apply_locale"):
 		_settings_panel.apply_locale()
+	_refresh_adaptive_nav_gaps()
 
 
 func _setup_puzzle_ids() -> void:
@@ -287,6 +307,7 @@ func _reset_mode_inline_ui() -> void:
 func _hide_map_size_row() -> void:
 	_map_size_row.hide()
 	_quick_session_desc.show()
+	_refresh_adaptive_nav_gaps()
 
 
 func _sync_nav_input_filters(active: Control) -> void:
@@ -314,6 +335,7 @@ func _show_name_nav() -> void:
 	_settings_nav.hide()
 	_reset_mode_inline_ui()
 	_sync_nav_input_filters(_name_nav)
+	_refresh_adaptive_nav_gaps()
 	if not WEB_TEXT_PROMPT.is_needed():
 		_name_input.grab_focus()
 
@@ -328,6 +350,7 @@ func _show_root_nav() -> void:
 	_settings_nav.hide()
 	_reset_mode_inline_ui()
 	_sync_nav_input_filters(_root_nav)
+	_refresh_adaptive_nav_gaps()
 	OverlayFocus.grab_first_button(_root_nav)
 
 
@@ -385,6 +408,7 @@ func _show_play_nav() -> void:
 	_settings_nav.hide()
 	_reset_mode_inline_ui()
 	_sync_nav_input_filters(_play_nav)
+	_refresh_adaptive_nav_gaps()
 	OverlayFocus.grab_first_button(_play_nav)
 
 
@@ -399,6 +423,7 @@ func _show_tutorial_nav() -> void:
 	_settings_nav.hide()
 	_reset_mode_inline_ui()
 	_sync_nav_input_filters(_tutorial_nav)
+	_refresh_adaptive_nav_gaps()
 	OverlayFocus.grab_first_button(_tutorial_nav)
 
 
@@ -414,6 +439,7 @@ func _show_puzzle_nav() -> void:
 	_settings_nav.hide()
 	_reset_mode_inline_ui()
 	_sync_nav_input_filters(_puzzle_nav)
+	_refresh_adaptive_nav_gaps()
 	OverlayFocus.grab_first_button(_puzzle_nav)
 
 
@@ -428,6 +454,7 @@ func _show_code_nav() -> void:
 	_settings_nav.hide()
 	_reset_mode_inline_ui()
 	_sync_nav_input_filters(_code_nav)
+	_refresh_adaptive_nav_gaps()
 	_code_status.text = ""
 	if InputScheme.is_gamepad():
 		OverlayFocus.grab_first_button(_code_nav)
@@ -446,6 +473,7 @@ func _show_settings_nav() -> void:
 	_settings_nav.show()
 	_reset_mode_inline_ui()
 	_sync_nav_input_filters(_settings_nav)
+	_refresh_adaptive_nav_gaps()
 	if _settings_panel:
 		_settings_panel.apply_sidebar_style()
 		_settings_panel.reset_to_root()

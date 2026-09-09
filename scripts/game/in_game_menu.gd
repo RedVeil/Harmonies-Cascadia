@@ -9,14 +9,13 @@ signal back_pressed
 
 @export var orchestrator: Orchestrator
 
-@onready var _root_nav: VBoxContainer = $Root/Split/LeftColumn/Margin/NavStack/RootNav
-@onready var _end_session_block: VBoxContainer = $Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock
-@onready var _settings_block: ScrollContainer = $Root/Split/LeftColumn/Margin/NavStack/SettingsBlock
-@onready var _footer_spacer: Control = $Root/Split/LeftColumn/Margin/NavStack/FooterSpacer
-@onready var _score_label: Label = $Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock/ScoreLabel
-@onready var _sub_label: Label = $Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock/SubLabel
-@onready var _share_status: Label = $Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock/ShareStatus
-@onready var _settings_panel: SettingsPanel = $Root/Split/LeftColumn/Margin/NavStack/SettingsBlock/SettingsPanel
+@onready var _root_nav: VBoxContainer = $Root/Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav
+@onready var _end_session_block: VBoxContainer = $Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock
+@onready var _settings_block: ScrollContainer = $Root/Split/LeftColumn/Margin/Sidebar/MenuBand/SettingsBlock
+@onready var _score_label: Label = $Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock/ScoreLabel
+@onready var _sub_label: Label = $Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock/SubLabel
+@onready var _share_status: Label = $Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock/ShareStatus
+@onready var _settings_panel: SettingsPanel = $Root/Split/LeftColumn/Margin/Sidebar/MenuBand/SettingsBlock/SettingsPanel
 
 var _score: int = 0
 var _view: View = View.ROOT
@@ -32,8 +31,13 @@ func _ready() -> void:
 	_apply_theme()
 	UiTheme.bind_node(self, _apply_theme)
 	_apply_locale()
+	_bind_adaptive_nav_gaps()
 	if GameSettings != null and not GameSettings.settings_changed.is_connected(_apply_locale):
 		GameSettings.settings_changed.connect(_apply_locale)
+
+
+func _bind_adaptive_nav_gaps() -> void:
+	AdaptiveNavGaps.bind_sidebar($Root/Split/LeftColumn/Margin/Sidebar as Control)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -46,12 +50,12 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _setup_hover_sounds() -> void:
 	var buttons: Array[Control] = [
-		$Root/Split/LeftColumn/Margin/NavStack/RootNav/SettingsButton,
-		$Root/Split/LeftColumn/Margin/NavStack/RootNav/EndSessionButton,
-		$Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock/ActionRow/RestartButton,
-		$Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock/ActionRow/EndButton,
-		$Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock/ActionRow/ShareButton,
-		$Root/Split/LeftColumn/Margin/NavStack/BackButton,
+		$Root/Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav/SettingsButton,
+		$Root/Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav/EndSessionButton,
+		$Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock/ActionRow/RestartButton,
+		$Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock/ActionRow/EndButton,
+		$Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock/ActionRow/ShareButton,
+		$Root/Split/LeftColumn/Margin/Sidebar/FooterBand/BackButton,
 	]
 	for button in buttons:
 		if button != null and not button.mouse_entered.is_connected(_on_button_mouse_entered):
@@ -78,22 +82,22 @@ func _apply_theme() -> void:
 
 
 func _apply_locale() -> void:
-	var end_session := $Root/Split/LeftColumn/Margin/NavStack/RootNav/EndSessionButton as Button
+	var end_session := $Root/Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav/EndSessionButton as Button
 	if end_session:
 		end_session.text = Loc.ui("pause.end_session")
-	var settings_btn := $Root/Split/LeftColumn/Margin/NavStack/RootNav/SettingsButton as Button
+	var settings_btn := $Root/Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav/SettingsButton as Button
 	if settings_btn:
 		settings_btn.text = Loc.ui("pause.settings")
-	var restart := $Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock/ActionRow/RestartButton as Button
+	var restart := $Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock/ActionRow/RestartButton as Button
 	if restart:
 		restart.text = Loc.ui("pause.restart")
-	var end_btn := $Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock/ActionRow/EndButton as Button
+	var end_btn := $Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock/ActionRow/EndButton as Button
 	if end_btn:
 		end_btn.text = Loc.ui("pause.end")
-	var share := $Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock/ActionRow/ShareButton as Button
+	var share := $Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock/ActionRow/ShareButton as Button
 	if share:
 		share.text = Loc.ui("pause.share")
-	var back := $Root/Split/LeftColumn/Margin/NavStack/BackButton as Button
+	var back := $Root/Split/LeftColumn/Margin/Sidebar/FooterBand/BackButton as Button
 	if back:
 		back.text = Loc.ui("pause.back")
 	_refresh_end_session_copy()
@@ -143,15 +147,18 @@ func _show_view(view: View) -> void:
 	_root_nav.visible = view == View.ROOT
 	_end_session_block.visible = view == View.END_SESSION
 	_settings_block.visible = view == View.SETTINGS
-	# Settings scroll takes the expand space; otherwise footer spacer pushes BACK down.
-	_footer_spacer.visible = view != View.SETTINGS
-	_settings_block.size_flags_vertical = Control.SIZE_EXPAND_FILL if view == View.SETTINGS else 0
 	_sync_view_input_filters()
 	_grab_view_focus()
+	AdaptiveNavGaps.apply_bands($Root/Split/LeftColumn/Margin/Sidebar as Control)
 
 
 func _grab_view_focus() -> void:
-	OverlayFocus.grab_first_button($Root/Split/LeftColumn/Margin/NavStack)
+	if _view == View.END_SESSION:
+		OverlayFocus.grab_first_button(_end_session_block)
+	elif _view == View.SETTINGS:
+		OverlayFocus.grab_first_button(_settings_block)
+	else:
+		OverlayFocus.grab_first_button(_root_nav)
 
 
 func _sync_view_input_filters() -> void:

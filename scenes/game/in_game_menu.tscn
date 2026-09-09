@@ -54,27 +54,58 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_left")
 [node name="Margin" type="MarginContainer" parent="Root/Split/LeftColumn" unique_id=492964586]
 layout_mode = 2
 theme_override_constants/margin_left = 36
-theme_override_constants/margin_top = 48
+theme_override_constants/margin_top = 24
 theme_override_constants/margin_right = 36
-theme_override_constants/margin_bottom = 48
+theme_override_constants/margin_bottom = 24
 
-[node name="NavStack" type="VBoxContainer" parent="Root/Split/LeftColumn/Margin" unique_id=704589143]
+[node name="Sidebar" type="Control" parent="Root/Split/LeftColumn/Margin" unique_id=704589143]
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/separation = 32
 
-[node name="TitleLabel" type="Label" parent="Root/Split/LeftColumn/Margin/NavStack" unique_id=97993096]
-layout_mode = 2
+[node name="TitleBand" type="Control" parent="Root/Split/LeftColumn/Margin/Sidebar"]
+layout_mode = 1
+anchor_right = 1.0
+anchor_bottom = 0.15
+mouse_filter = 2
+
+[node name="MenuBand" type="Control" parent="Root/Split/LeftColumn/Margin/Sidebar"]
+layout_mode = 1
+anchor_top = 0.15
+anchor_right = 1.0
+anchor_bottom = 0.85
+mouse_filter = 2
+
+[node name="FooterBand" type="Control" parent="Root/Split/LeftColumn/Margin/Sidebar"]
+layout_mode = 1
+anchor_top = 0.85
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="TitleLabel" type="Label" parent="Root/Split/LeftColumn/Margin/Sidebar/TitleBand" unique_id=97993096]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 theme_override_fonts/font = ExtResource("3_title")
 theme_override_font_sizes/font_size = 80
 text = "SYMBIA"
+vertical_alignment = 1
 
-[node name="RootNav" type="VBoxContainer" parent="Root/Split/LeftColumn/Margin/NavStack" unique_id=1960448338]
-layout_mode = 2
+[node name="RootNav" type="VBoxContainer" parent="Root/Split/LeftColumn/Margin/Sidebar/MenuBand" unique_id=1960448338]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_constants/separation = 24
 
-[node name="EndSessionButton" type="Button" parent="Root/Split/LeftColumn/Margin/NavStack/RootNav" unique_id=982309331]
+[node name="EndSessionButton" type="Button" parent="Root/Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav" unique_id=982309331]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
@@ -90,7 +121,7 @@ text = "END SESSION"
 flat = true
 alignment = 0
 
-[node name="SettingsButton" type="Button" parent="Root/Split/LeftColumn/Margin/NavStack/RootNav" unique_id=1956696140]
+[node name="SettingsButton" type="Button" parent="Root/Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav" unique_id=1956696140]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
@@ -106,12 +137,17 @@ text = "SETTINGS"
 flat = true
 alignment = 0
 
-[node name="EndSessionBlock" type="VBoxContainer" parent="Root/Split/LeftColumn/Margin/NavStack" unique_id=1407410737]
+[node name="EndSessionBlock" type="VBoxContainer" parent="Root/Split/LeftColumn/Margin/Sidebar/MenuBand" unique_id=1407410737]
 visible = false
-layout_mode = 2
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_constants/separation = 12
 
-[node name="ScoreLabel" type="Label" parent="Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock" unique_id=451325161]
+[node name="ScoreLabel" type="Label" parent="Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock" unique_id=451325161]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_constants/line_spacing = -5
@@ -119,7 +155,7 @@ theme_override_font_sizes/font_size = 18
 text = "You have 0 Points!"
 autowrap_mode = 2
 
-[node name="SubLabel" type="Label" parent="Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock" unique_id=1516326300]
+[node name="SubLabel" type="Label" parent="Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock" unique_id=1516326300]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.7)
 theme_override_constants/line_spacing = -5
@@ -127,11 +163,11 @@ theme_override_font_sizes/font_size = 16
 text = "Take a break or wrap up your session."
 autowrap_mode = 2
 
-[node name="ActionRow" type="HBoxContainer" parent="Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock" unique_id=2075283546]
+[node name="ActionRow" type="HBoxContainer" parent="Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock" unique_id=2075283546]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="RestartButton" type="Button" parent="Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock/ActionRow" unique_id=1933804111]
+[node name="RestartButton" type="Button" parent="Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock/ActionRow" unique_id=1933804111]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -147,7 +183,7 @@ theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
 theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
 text = "RESTART"
 
-[node name="EndButton" type="Button" parent="Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock/ActionRow" unique_id=1249332192]
+[node name="EndButton" type="Button" parent="Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock/ActionRow" unique_id=1249332192]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -163,7 +199,7 @@ theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
 theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
 text = "END"
 
-[node name="ShareButton" type="Button" parent="Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock/ActionRow" unique_id=1242654730]
+[node name="ShareButton" type="Button" parent="Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock/ActionRow" unique_id=1242654730]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -179,29 +215,36 @@ theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
 theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
 text = "SHARE"
 
-[node name="ShareStatus" type="Label" parent="Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock" unique_id=1094553937]
+[node name="ShareStatus" type="Label" parent="Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock" unique_id=1094553937]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.7)
 theme_override_font_sizes/font_size = 13
 
-[node name="SettingsBlock" type="ScrollContainer" parent="Root/Split/LeftColumn/Margin/NavStack" unique_id=302998996]
+[node name="SettingsBlock" type="ScrollContainer" parent="Root/Split/LeftColumn/Margin/Sidebar/MenuBand" unique_id=302998996]
 visible = false
-layout_mode = 2
-size_flags_vertical = 3
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 horizontal_scroll_mode = 0
 
-[node name="SettingsPanel" parent="Root/Split/LeftColumn/Margin/NavStack/SettingsBlock" unique_id=134602438 instance=ExtResource("2_settings")]
+[node name="SettingsPanel" parent="Root/Split/LeftColumn/Margin/Sidebar/MenuBand/SettingsBlock" unique_id=134602438 instance=ExtResource("2_settings")]
 custom_minimum_size = Vector2(0, 320)
 layout_mode = 2
 size_flags_horizontal = 3
-
-[node name="FooterSpacer" type="Control" parent="Root/Split/LeftColumn/Margin/NavStack" unique_id=1342546753]
-layout_mode = 2
 size_flags_vertical = 3
-mouse_filter = 2
 
-[node name="BackButton" type="Button" parent="Root/Split/LeftColumn/Margin/NavStack" unique_id=1274001881]
-layout_mode = 2
+[node name="BackButton" type="Button" parent="Root/Split/LeftColumn/Margin/Sidebar/FooterBand" unique_id=1274001881]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+grow_horizontal = 2
+grow_vertical = 0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
 theme_override_colors/font_pressed_color = Color(1, 1, 1, 0.6)
@@ -222,9 +265,9 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
 mouse_filter = 2
 
-[connection signal="pressed" from="Root/Split/LeftColumn/Margin/NavStack/RootNav/EndSessionButton" to="." method="_on_end_session_pressed"]
-[connection signal="pressed" from="Root/Split/LeftColumn/Margin/NavStack/RootNav/SettingsButton" to="." method="_on_settings_pressed"]
-[connection signal="pressed" from="Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock/ActionRow/RestartButton" to="." method="_on_restart_pressed"]
-[connection signal="pressed" from="Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock/ActionRow/EndButton" to="." method="_on_end_pressed"]
-[connection signal="pressed" from="Root/Split/LeftColumn/Margin/NavStack/EndSessionBlock/ActionRow/ShareButton" to="." method="_on_share_pressed"]
-[connection signal="pressed" from="Root/Split/LeftColumn/Margin/NavStack/BackButton" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="Root/Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav/EndSessionButton" to="." method="_on_end_session_pressed"]
+[connection signal="pressed" from="Root/Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav/SettingsButton" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock/ActionRow/RestartButton" to="." method="_on_restart_pressed"]
+[connection signal="pressed" from="Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock/ActionRow/EndButton" to="." method="_on_end_pressed"]
+[connection signal="pressed" from="Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock/ActionRow/ShareButton" to="." method="_on_share_pressed"]
+[connection signal="pressed" from="Root/Split/LeftColumn/Margin/Sidebar/FooterBand/BackButton" to="." method="_on_back_pressed"]
