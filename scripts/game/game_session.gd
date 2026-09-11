@@ -69,7 +69,7 @@ func begin_weekly_run() -> void:
 	clear_challenge()
 	clear_puzzle()
 	game_mode = GameMode.WEEKLY
-	map_size = MapSize.SMALL
+	map_size = MapSize.LARGE
 	_apply_mode_config(game_mode, map_size)
 	begin_run(_weekly_seed())
 

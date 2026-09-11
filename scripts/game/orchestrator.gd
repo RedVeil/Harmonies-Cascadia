@@ -365,6 +365,58 @@ func add_hand_card(card:CardData) -> void:
 
 ## ----- Handle Hand Interactions ----- ##
 
+func _unhandled_input(event: InputEvent) -> void:
+	if not (event is InputEventKey and event.pressed and not event.echo):
+		return
+	var slot := _hand_hotkey_index(event as InputEventKey)
+	if slot < 0:
+		return
+	if not _can_handle_hand_hotkeys():
+		return
+	if card_manager == null or card_manager.card_container == null:
+		return
+	var ordered: Array = card_manager.card_container.get_layout_ordered_cards()
+	if slot >= ordered.size():
+		return
+	var card := ordered[slot] as Card
+	if card == null:
+		return
+	GameFeedback.play_click_card()
+	card_manager.card_container.select_card(card.id)
+	get_viewport().set_input_as_handled()
+
+
+func _hand_hotkey_index(event: InputEventKey) -> int:
+	if event.keycode >= KEY_1 and event.keycode <= KEY_9:
+		return event.keycode - KEY_1
+	if event.keycode >= KEY_KP_1 and event.keycode <= KEY_KP_9:
+		return event.keycode - KEY_KP_1
+	return -1
+
+
+func _can_handle_hand_hotkeys() -> bool:
+	if game_over or _puzzle_intro_open:
+		return false
+	if in_game_menu != null and in_game_menu.visible:
+		return false
+	if settings_overlay != null and settings_overlay.visible:
+		return false
+	if game_over_overlay != null and game_over_overlay.visible:
+		return false
+	if tutorial_overlay != null and tutorial_overlay.visible:
+		return false
+	if booster_manager != null and booster_manager.animal_market != null \
+		and booster_manager.animal_market.is_open():
+		return false
+	var maker := get_parent().get_node_or_null("Maker")
+	if maker != null and maker.has_method("is_overlay_open") and maker.is_overlay_open():
+		return false
+	var focus := get_viewport().gui_get_focus_owner()
+	if focus is LineEdit or focus is TextEdit:
+		return false
+	return true
+
+
 func select_hand_card(id:int) -> void:
 	if game_over or _puzzle_intro_open:
 		return

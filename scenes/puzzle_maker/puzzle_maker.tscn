@@ -24,15 +24,17 @@
 [ext_resource type="PackedScene" path="res://scenes/puzzle_maker/scoring_rules_overlay.tscn" id="22_scoring"]
 [ext_resource type="PackedScene" path="res://scenes/puzzle_maker/puzzle_load_overlay.tscn" id="23_load"]
 
-[sub_resource type="Environment" id="Environment_bg"]
+[sub_resource type="Environment" id="Environment_x5wit"]
 background_mode = 1
-background_color = Color(0.8186203, 0.7502329, 0.6806915, 1)
+background_color = Color(0.43529412, 0.7019608, 0.7490196, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.81960785, 0.7490196, 0.6784314, 1)
 adjustment_enabled = true
 
 [node name="PuzzleMaker" type="Node3D" unique_id=454855802]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1140313662]
-environment = SubResource("Environment_bg")
+environment = SubResource("Environment_x5wit")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment" unique_id=268936089]
 transform = Transform3D(-0.8660253, -0.43301287, 0.24999996, 0, 0.50000006, 0.86602527, -0.5, 0.7500002, -0.43301257, 0, 0, 0)

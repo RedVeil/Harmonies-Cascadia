@@ -124,20 +124,26 @@ func _on_quest_picker_closed() -> void:
 		_quest_pick_for_pack = false
 
 
+func is_overlay_open() -> bool:
+	if animal_picker and animal_picker.visible:
+		return true
+	if quest_picker and quest_picker.visible:
+		return true
+	if pack_builder and pack_builder.visible:
+		return true
+	if save_overlay and save_overlay.visible:
+		return true
+	if scoring_overlay and scoring_overlay.visible:
+		return true
+	if load_overlay and load_overlay.visible:
+		return true
+	return false
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	if not GameSession.is_puzzle_maker():
 		return
-	if animal_picker and animal_picker.visible:
-		return
-	if quest_picker and quest_picker.visible:
-		return
-	if pack_builder and pack_builder.visible:
-		return
-	if save_overlay and save_overlay.visible:
-		return
-	if scoring_overlay and scoring_overlay.visible:
-		return
-	if load_overlay and load_overlay.visible:
+	if is_overlay_open():
 		return
 	if event is InputEventMouseButton \
 		and event.button_index == MOUSE_BUTTON_RIGHT \

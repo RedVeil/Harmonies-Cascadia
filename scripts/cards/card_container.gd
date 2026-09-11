@@ -131,21 +131,23 @@ func _flush_layout() -> void:
 	_relayout_queued = false
 	_layout_cards()
 
-func _layout_cards() -> void:
+func get_layout_ordered_cards() -> Array:
 	var visible_cards: Array = []
-
 	for card in cards:
 		if card != null:
 			visible_cards.append(card)
+	if visible_cards.is_empty():
+		return visible_cards
+	visible_cards.sort_custom(func (a, b): return a.element_id < b.element_id)
+	var element_cards = visible_cards.filter(func (card): return !card.is_animal)
+	var animal_cards = visible_cards.filter(func (card): return card.is_animal)
+	return element_cards + animal_cards
 
+func _layout_cards() -> void:
+	var visible_cards: Array = get_layout_ordered_cards()
 	var count := visible_cards.size()
 	if count == 0:
 		return
-	
-	visible_cards.sort_custom(func (a,b): return a.element_id < b.element_id)
-	var element_cards = visible_cards.filter(func (card): return !card.is_animal)
-	var animal_cards = visible_cards.filter(func (card): return card.is_animal)
-	visible_cards = element_cards + animal_cards
 	
 	var center_x := layout_rect.position.x + layout_rect.size.x / 2.0
 	var center_y := layout_rect.position.y + layout_rect.size.y / 2.0

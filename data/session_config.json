@@ -18,7 +18,7 @@
 		"map_growth": false
 	},
 	"weekly": {
-		"ring_count": 2,
+		"ring_count": 4,
 		"checkpoint": 100,
 		"checkpoint_multiplier": 1.0,
 		"checkpoint_flat_increase": 100,
