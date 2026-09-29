@@ -28,7 +28,7 @@ func _input(event: InputEvent) -> void:
 	if not (event is InputEventKey and event.pressed and not event.echo):
 		return
 	var key := (event as InputEventKey).keycode
-	if not (key >= KEY_F1 and key <= KEY_F6) and key != KEY_F10:
+	if not (key >= KEY_F1 and key <= KEY_F7) and key != KEY_F10:
 		return
 	var focus := get_viewport().gui_get_focus_owner()
 	if focus is LineEdit or focus is TextEdit:
@@ -46,6 +46,8 @@ func _input(event: InputEvent) -> void:
 			_toggle_booster_part(_pack_nodes(), _market_nodes())
 		KEY_F6:
 			_toggle_node($CardManager)
+		KEY_F7:
+			InputScheme.toggle_cursor_visual()
 		KEY_F10:
 			visible = not visible
 			var toolbar := get_parent().get_node_or_null("MakerToolbar")

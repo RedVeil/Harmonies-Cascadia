@@ -32,9 +32,11 @@ func add_quest(id: int) -> void:
 		quest_container.add_quest(quest_index, QuestCatalog.quest_options[id])
 
 func remove_quest(index: int) -> void:
-	completed_quests.append(active_quests[index])
+	var quest_id := int(active_quests[index])
+	completed_quests.append(quest_id)
 	active_quests[index] = -1
 	quest_container.remove_quest(index)
+	Analytics.note_quest_completed(quest_id)
 
 func reset_preview() -> void:
 	pass
@@ -95,6 +97,7 @@ func undo() -> void:
 		var quest_id := active_quests_backup[index]
 		if quest_id == -1:
 			continue
+		Analytics.note_quest_uncompleted(quest_id)
 		quest_container.add_quest(index, QuestCatalog.quest_options[quest_id])
 
 	active_quests = active_quests_backup.duplicate(true)

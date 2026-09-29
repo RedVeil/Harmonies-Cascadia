@@ -20,6 +20,7 @@ enum View { ROOT, PLAYER, GRAPHICS, AUDIO }
 @onready var _theme_option: OptionButton = $Content/PlayerView/ThemeOption
 @onready var _language_label: Label = $Content/PlayerView/LanguageLabel
 @onready var _language_option: OptionButton = $Content/PlayerView/LanguageOption
+@onready var _analytics_check: CheckButton = $Content/PlayerView/AnalyticsCheck
 @onready var _master_label: Label = $Content/AudioView/MasterHeader/MasterLabel
 @onready var _master_value: Label = $Content/AudioView/MasterHeader/MasterValue
 @onready var _music_label: Label = $Content/AudioView/MusicHeader/MusicLabel
@@ -117,6 +118,8 @@ func apply_locale() -> void:
 		_theme_label.text = Loc.ui("settings.theme")
 	if _language_label:
 		_language_label.text = Loc.ui("settings.language")
+	if _analytics_check:
+		_analytics_check.text = Loc.ui("settings.analytics")
 	if _preset_label:
 		_preset_label.text = Loc.ui("settings.quality")
 	if _display_label:
@@ -214,6 +217,7 @@ func apply_sidebar_style() -> void:
 			option.custom_minimum_size = Vector2(0, 28)
 		UiTheme.style_option_button(option, 12.0, 6.0)
 
+	UiTheme.style_check_button(_analytics_check, UiTheme.SUBTITLE_FONT_SIZE)
 	UiTheme.style_check_button(_wind_check, UiTheme.SUBTITLE_FONT_SIZE)
 	UiTheme.style_check_button(_clouds_check, UiTheme.SUBTITLE_FONT_SIZE)
 	UiTheme.style_slider(_master_slider)
@@ -351,6 +355,7 @@ func _wire_signals() -> void:
 	_fps_option.item_selected.connect(_on_fps_selected)
 	_theme_option.item_selected.connect(_on_theme_option_selected)
 	_language_option.item_selected.connect(_on_language_option_selected)
+	_analytics_check.toggled.connect(_on_analytics_toggled)
 	_master_slider.value_changed.connect(_on_master_volume_changed)
 	_music_slider.value_changed.connect(_on_music_volume_changed)
 	_effects_slider.value_changed.connect(_on_sfx_volume_changed)
@@ -371,6 +376,7 @@ func _wire_signals() -> void:
 		_fps_option,
 		_theme_option,
 		_language_option,
+		_analytics_check,
 		_master_slider,
 		_music_slider,
 		_effects_slider,
@@ -394,6 +400,7 @@ func _wire_signals() -> void:
 		_fps_option,
 		_theme_option,
 		_language_option,
+		_analytics_check,
 	])
 
 
@@ -436,6 +443,8 @@ func _refresh_from_settings() -> void:
 	_select_option_by_id(_fps_option, GameSettings.fps_cap)
 	_select_theme_option(UiTheme.theme_id)
 	_select_language_option(GameSettings.content_locale)
+	if _analytics_check:
+		_analytics_check.button_pressed = GameSettings.analytics_enabled
 	GameSettings.end_ui_sync()
 	_update_preset_buttons()
 	_apply_desktop_visibility()
@@ -536,6 +545,13 @@ func _on_preset_pressed(preset: GameSettings.Preset) -> void:
 	GameFeedback.play_click_button()
 	GameSettings.apply_preset(preset)
 	_refresh_from_settings()
+
+
+func _on_analytics_toggled(pressed: bool) -> void:
+	if GameSettings.is_ui_syncing():
+		return
+	GameFeedback.play_click_button()
+	GameSettings.set_analytics_enabled(pressed)
 
 
 func _on_wind_toggled(pressed: bool) -> void:

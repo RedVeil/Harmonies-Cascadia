@@ -69,10 +69,14 @@ func _ready() -> void:
 			market_buys_remaining = 0
 		if _pack_take_limit_reached():
 			_clear_all_boosters()
+		if not RunSave.has_pending_state():
+			Analytics.note_opening_shop(self)
 	else:
 		_ensure_market_offers()
 		for i in range(booster_limit):
 			createBooster(i)
+		if not RunSave.has_pending_state():
+			Analytics.note_market_offers(_market_offers)
 	
 	_refresh_option_ui()
 	_refresh_reroll_ui()
@@ -117,6 +121,10 @@ func select_booster(id: int) -> void:
 	if booster.quest_ids.size() > 0:
 		for quest_id in booster.quest_ids:
 			orchestrator.add_quest(quest_id)
+			if orchestrator.quest_manager.active_quests.has(int(quest_id)):
+				Analytics.note_quest_taken(int(quest_id))
+	Analytics.note_pack()
+	Analytics.breadcrumb("booster", {"id": id})
 
 	pending_elements = _count_element_cards(booster)
 	elements_played = 0
@@ -148,6 +156,8 @@ func consume_booster_without_hand(id: int) -> void:
 	if booster.quest_ids.size() > 0 and orchestrator:
 		for quest_id in booster.quest_ids:
 			orchestrator.add_quest(quest_id)
+			if orchestrator.quest_manager.active_quests.has(int(quest_id)):
+				Analytics.note_quest_taken(int(quest_id))
 	pending_elements = 0
 	elements_played = 0
 	options_ready = true
@@ -183,6 +193,7 @@ func reroll_booster_slot(id: int) -> void:
 	if id < 0 or id >= booster_limit:
 		return
 	createBooster(id)
+	Analytics.note_reroll()
 	booster_reroll_progress[id] = maxi(boosters_per_reroll, 1)
 	_refresh_option_ui()
 	_refresh_reroll_ui()
@@ -208,6 +219,8 @@ func reroll_market_slot(offer_index: int) -> void:
 		replacement = _generate_market_offer_at(offer_index, _market_used_ids())
 	_market_offers[offer_index] = replacement
 	animal_market.replace_offer(offer_index, replacement)
+	Analytics.note_reroll()
+	Analytics.note_animal_offer(replacement)
 	if offer_index < market_reroll_progress.size():
 		market_reroll_progress[offer_index] = maxi(boosters_per_reroll, 1)
 	_refresh_reroll_ui()
@@ -333,6 +346,9 @@ func buy_market_animal(offer_index: int) -> void:
 		return
 	orchestrator.add_hand_card(bought)
 	_bought_animal_ids[bought.id] = true
+	Analytics.note_animal_bought(int(bought.id))
+	Analytics.note_market_buy()
+	Analytics.breadcrumb("market", {"animal_id": int(bought.id)})
 	market_buys_remaining = maxi(market_buys_remaining - 1, 0)
 	var replacement: CardData
 	if GameSession.uses_scripted_shop():
@@ -342,6 +358,7 @@ func buy_market_animal(offer_index: int) -> void:
 	_market_offers[offer_index] = replacement
 	if animal_market:
 		animal_market.replace_offer(offer_index, replacement)
+	Analytics.note_animal_offer(replacement)
 	_tick_reroll_cooldowns()
 	_refresh_reroll_ui()
 	_refresh_market_buy_ui()
@@ -438,6 +455,8 @@ func createBooster(idx: int) -> void:
 	if GameSession.uses_scripted_shop():
 		boosters[idx] = _dequeue_puzzle_booster()
 		booster_container.set_booster_visuals(idx, boosters[idx])
+		if not RunSave.has_pending_state():
+			Analytics.note_shown_booster(boosters[idx])
 		return
 
 	var previous: BoosterData = boosters[idx] if idx < boosters.size() else null
@@ -451,6 +470,8 @@ func createBooster(idx: int) -> void:
 			break
 	boosters[idx] = booster
 	booster_container.set_booster_visuals(idx, booster)
+	if not RunSave.has_pending_state():
+		Analytics.note_shown_booster(booster)
 
 
 func _draw_mixed_shop_pack() -> BoosterData:

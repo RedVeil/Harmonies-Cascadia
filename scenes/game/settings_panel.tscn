@@ -147,6 +147,12 @@ text = "Language"
 [node name="LanguageOption" type="OptionButton" parent="Content/PlayerView"]
 layout_mode = 2
 
+[node name="AnalyticsCheck" type="CheckButton" parent="Content/PlayerView"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 20
+text = "Share anonymous play data"
+
 [node name="GraphicsScroll" type="ScrollContainer" parent="Content"]
 visible = false
 layout_mode = 2

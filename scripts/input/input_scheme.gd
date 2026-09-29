@@ -23,6 +23,9 @@ var _suppress_click: bool = false
 var _ignore_mouse_motion_frames: int = 0
 var _last_touch_msec: int = 0
 var _stuck_hover_root: Node = null
+## F7: hide the cursor sprite only. Mouse events keep working, and scheme
+## changes must not warp the pointer off-screen while this is set.
+var _cursor_visual_hidden: bool = false
 
 
 func _ready() -> void:
@@ -280,7 +283,15 @@ func _apply_scheme(scheme: Scheme, force: bool = false) -> void:
 	scheme_changed.emit(scheme)
 
 
+func toggle_cursor_visual() -> void:
+	_cursor_visual_hidden = not _cursor_visual_hidden
+	_apply_cursor()
+
+
 func _apply_cursor() -> void:
+	if _cursor_visual_hidden:
+		Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
+		return
 	if current == Scheme.KEYBOARD_MOUSE or OS.has_feature("web"):
 		# Web GUI is driven by emulated mouse events. Hiding/warping the cursor
 		# off-canvas makes menu taps hover-only and never click.

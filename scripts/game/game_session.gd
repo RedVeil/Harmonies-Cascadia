@@ -54,6 +54,9 @@ func begin_run(desired_seed: int, force_seed: bool = false) -> void:
 		run_seed = desired_seed
 	else:
 		run_seed = randi()
+	var analytics := get_node_or_null("/root/Analytics")
+	if analytics != null and analytics.has_method("start_run"):
+		analytics.start_run()
 
 
 func begin_daily_run() -> void:

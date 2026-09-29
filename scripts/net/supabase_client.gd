@@ -33,6 +33,14 @@ func utc_date_string() -> String:
 	return GameSession.get_utc_date_iso()
 
 
+func configured_url() -> String:
+	return _url
+
+
+func configured_key() -> String:
+	return _anon_key
+
+
 func is_configured() -> bool:
 	if _url.is_empty() or _anon_key.is_empty():
 		return false
@@ -164,7 +172,16 @@ func _rpc(fn_name: String, payload: Dictionary) -> Variant:
 	else:
 		result = await _rpc_http(fn_name, payload)
 	_rpc_gate += 1
+	if not last_error.is_empty():
+		_report_analytics_failure(fn_name)
 	return result
+
+
+func _report_analytics_failure(fn_name: String) -> void:
+	var analytics := get_node_or_null("/root/Analytics")
+	if analytics == null or not analytics.has_method("note_leaderboard_failure"):
+		return
+	analytics.note_leaderboard_failure(fn_name, last_error)
 
 
 func _rpc_http(fn_name: String, payload: Dictionary) -> Variant:

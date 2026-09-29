@@ -41,6 +41,8 @@ var ui_scale: float = UI_SCALE_DEFAULT
 var theme_id: String = "cascadia"
 ## "eng" or "ger". JSON catalog copy is resolved from this.
 var content_locale: String = "eng"
+## When false, run summaries and error reports stay on disk and are not uploaded.
+var analytics_enabled: bool = true
 ## puzzle_id -> { "best_score": int }
 var puzzle_progress: Dictionary = {}
 
@@ -122,6 +124,7 @@ func _load_from_json() -> void:
 		content_locale = Loc.normalize_locale(str(data.get("content_locale", Loc.ENG)))
 	else:
 		content_locale = Loc.ENG
+	analytics_enabled = bool(data.get("analytics_enabled", true))
 
 	var progress = data.get("puzzle_progress", {})
 	if typeof(progress) == TYPE_DICTIONARY:
@@ -169,6 +172,7 @@ func save_to_disk() -> void:
 		"ui_scale": ui_scale,
 		"theme_id": theme_id,
 		"content_locale": content_locale,
+		"analytics_enabled": analytics_enabled,
 		"puzzle_progress": puzzle_progress,
 	}
 	var json := JSON.stringify(data)
@@ -187,6 +191,19 @@ func set_player_name(new_name: String) -> void:
 		return
 	player_name = sanitized
 	save_to_disk()
+
+
+func set_analytics_enabled(value: bool) -> void:
+	if _applying_ui_sync:
+		analytics_enabled = value
+		return
+	if analytics_enabled == value:
+		return
+	analytics_enabled = value
+	save_to_disk()
+	var analytics := get_node_or_null("/root/Analytics")
+	if analytics != null and analytics.has_method("on_setting_changed"):
+		analytics.on_setting_changed()
 
 
 func set_content_locale(locale: String) -> void:

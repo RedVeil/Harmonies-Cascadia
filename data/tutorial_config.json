@@ -795,6 +795,24 @@
 			}
 		},
 		{
+			"id": "animal_tile_full",
+			"title": {
+				"eng": "Occupied tiles",
+				"ger": "Belegte Kacheln"
+			},
+			"body": {
+				"eng": "A tile can hold only one animal. You cannot place another animal on it, and you cannot stack landscape elements on top of a tile that already has an animal.",
+				"ger": "Eine Kachel kann nur ein Tier tragen. Du kannst dort kein weiteres Tier platzieren und auch keine Landschaftselemente auf eine Kachel stapeln, auf der schon ein Tier steht."
+			},
+			"highlight": "none",
+			"gates": {
+				"allow_actions": []
+			},
+			"complete": {
+				"type": "continue_button"
+			}
+		},
+		{
 			"id": "place_hedgehog_bonus_1",
 			"title": {
 				"eng": "Hedgehog bonus",

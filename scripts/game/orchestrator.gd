@@ -148,7 +148,13 @@ func _apply_pending_run_state_deferred(pending_state: Variant) -> void:
 	if not RunSave.supports_mode(GameSession.game_mode):
 		return
 	var state := pending_state as Dictionary
+	var saved_analytics = state.get("analytics", {})
+	if typeof(saved_analytics) != TYPE_DICTIONARY:
+		saved_analytics = {}
+	var seed_shop := Analytics.resume_run(str(state.get("analytics_run_id", "")), saved_analytics)
 	RunSave.apply_state_to_orchestrator(self, state)
+	if seed_shop:
+		Analytics.seed_shop_from(booster_manager)
 	# Placement undo snapshots are in-memory only and are not part of the save.
 	# Keep undo off until the player places again after Continue.
 	_clear_undo()
@@ -351,6 +357,7 @@ func _on_in_game_menu_end() -> void:
 	_submit_daily_score_if_needed()
 	if score_engine:
 		GameSession.record_puzzle_result(score_engine.total_score)
+	Analytics.snapshot_run("menu_end", score_engine, hex_manager)
 	if RunSave.supports_mode(GameSession.game_mode):
 		RunSave.save_from_orchestrator(self)
 	leave_to_menu()
@@ -575,6 +582,7 @@ func confirm_end_game() -> void:
 	_submit_daily_score_if_needed()
 	if score_engine:
 		GameSession.record_puzzle_result(score_engine.total_score)
+	Analytics.snapshot_run("confirm_end", score_engine, hex_manager)
 	if in_game_menu:
 		in_game_menu.open(score_engine.total_score, true)
 	elif game_over_overlay:
@@ -598,6 +606,7 @@ func _complete_puzzle() -> void:
 	undo_button.disable()
 	if score_engine:
 		GameSession.record_puzzle_result(score_engine.total_score)
+	Analytics.snapshot_run("puzzle_complete", score_engine, hex_manager)
 	if game_over_overlay:
 		game_over_overlay.show_results(score_engine.total_score)
 
@@ -792,6 +801,8 @@ func recycle_hand_animal(card_id: int) -> void:
 	for i in count:
 		GameFeedback.play_recycle()
 		card_manager.remove_card(card_id)
+	Analytics.note_animal_recycled(card.id, count)
+	Analytics.breadcrumb("recycle", {"card_id": int(card.id), "count": count})
 	_clear_undo()
 	_update_card_recycling_state()
 	tutorial_bridge.notify("recycled", {"card_id": card_id})
@@ -954,6 +965,17 @@ func handle_tile_click(coord: Vector2i) -> void:
 		elif map_points == 0:
 			undo_button.enable()
 
+		if selected_card.type == CardData.CARD_TYPE.ELEMENT:
+			Analytics.note_tile_placed(selected_card.id)
+		else:
+			Analytics.note_animal_placed(selected_card.id)
+		Analytics.note_placement()
+		Analytics.breadcrumb("place", {
+			"coord": [coord.x, coord.y],
+			"card_type": int(selected_card.type),
+			"card_id": int(selected_card.id),
+		})
+
 		tutorial_bridge.notify("tile_placed", {
 			"coord": coord,
 			"card_type": selected_card_backup.type,
@@ -1101,6 +1123,15 @@ func undo() -> void:
 
 	hex_manager.tiles[coord_backup] = tile_backup.duplicate(true)
 	hex_manager.undo(coord_backup) # works
+	if selected_card_backup.type == CardData.CARD_TYPE.ELEMENT:
+		Analytics.note_tile_unplaced(selected_card_backup.id)
+	else:
+		Analytics.note_animal_unplaced(selected_card_backup.id)
+	Analytics.note_undo()
+	Analytics.breadcrumb("undo", {
+		"coord": [coord_backup.x, coord_backup.y],
+		"card_id": int(selected_card_backup.id),
+	})
 	_clear_undo()
 	_placed_tile_count = maxi(_placed_tile_count - 1, 0)
 	if GameSession.is_puzzle() and GameSession.get_max_plays() >= 0:

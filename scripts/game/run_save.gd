@@ -94,6 +94,10 @@ static func clear_save(mode: int) -> void:
 	dir.remove(path.get_file())
 
 
+static func has_pending_state() -> bool:
+	return _has_pending_state
+
+
 static func set_pending_state(state: Dictionary) -> void:
 	_pending_state = state
 	_has_pending_state = true
@@ -309,6 +313,8 @@ static func save_from_orchestrator(orchestrator: Object) -> void:
 		"map_points": int(orchestrator.map_points),
 		"placed_tile_count": int(orchestrator._placed_tile_count),
 		"cards_paused": bool(orchestrator.cards_paused),
+		"analytics_run_id": Analytics.run_id(),
+		"analytics": Analytics.export_state(),
 		"board": _serialize_board(orchestrator.hex_manager),
 		"scoring": _serialize_scoring(orchestrator.score_engine),
 		"progress": _serialize_progress(orchestrator.point_counter),
@@ -321,7 +327,9 @@ static func save_from_orchestrator(orchestrator: Object) -> void:
 	var f := FileAccess.open(path, FileAccess.WRITE)
 	if f == null:
 		push_error("RunSave: failed to open save file: %s" % path)
+		Analytics.note_save_failure("write", path)
 		return
+	Analytics.breadcrumb("save", {"mode": int(GameSession.game_mode)})
 	f.store_string(json)
 	f.flush()
 	f.close()
@@ -333,13 +341,18 @@ static func load_save(mode: int) -> Dictionary:
 		return {}
 	var parsed = JSON.parse_string(FileAccess.get_file_as_string(path))
 	if typeof(parsed) != TYPE_DICTIONARY:
+		Analytics.note_save_failure("parse", path)
 		return {}
 	return parsed
 
 
 static func apply_state_to_orchestrator(orchestrator: Object, state: Dictionary) -> void:
 	if orchestrator == null or state.is_empty():
+		if state.is_empty():
+			Analytics.note_save_failure("apply", "empty state")
 		return
+	if orchestrator.hex_manager == null:
+		Analytics.note_save_failure("apply", "board missing")
 
 	if state.has("map_size"):
 		GameSession.map_size = int(state["map_size"]) as GameSession.MapSize
