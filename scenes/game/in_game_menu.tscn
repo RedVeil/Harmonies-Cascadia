@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bf1gj3v1fnm2f" path="res://scripts/game/in_game_menu.gd" id="1_menu"]
 [ext_resource type="PackedScene" uid="uid://ckwpm5wl7l4a3" path="res://scenes/game/settings_panel.tscn" id="2_settings"]
 [ext_resource type="FontFile" uid="uid://c8v5t5lrl06at" path="res://assets/fonts/LuckiestGuy-Regular.ttf" id="3_title"]
+[ext_resource type="Script" path="res://scripts/game/session_replay.gd" id="4_replay"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_left"]
 bg_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
@@ -215,6 +216,22 @@ theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
 theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
 text = "SHARE"
 
+[node name="ReplayButton" type="Button" parent="Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock/ActionRow" unique_id=881122334]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_focus_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_chip")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_chip_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_chip")
+theme_override_styles/focus = SubResource("StyleBoxFlat_chip")
+text = "REPLAY"
+
 [node name="ShareStatus" type="Label" parent="Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock" unique_id=1094553937]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.7)
@@ -265,9 +282,21 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
 mouse_filter = 2
 
+[node name="SessionReplay" type="Control" parent="Root/Split/RightColumn" unique_id=881122335]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_replay")
+
 [connection signal="pressed" from="Root/Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav/EndSessionButton" to="." method="_on_end_session_pressed"]
 [connection signal="pressed" from="Root/Split/LeftColumn/Margin/Sidebar/MenuBand/RootNav/SettingsButton" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock/ActionRow/RestartButton" to="." method="_on_restart_pressed"]
 [connection signal="pressed" from="Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock/ActionRow/EndButton" to="." method="_on_end_pressed"]
 [connection signal="pressed" from="Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock/ActionRow/ShareButton" to="." method="_on_share_pressed"]
+[connection signal="pressed" from="Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock/ActionRow/ReplayButton" to="." method="_on_replay_pressed"]
 [connection signal="pressed" from="Root/Split/LeftColumn/Margin/Sidebar/FooterBand/BackButton" to="." method="_on_back_pressed"]

@@ -15,6 +15,8 @@ signal back_pressed
 @onready var _score_label: Label = $Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock/ScoreLabel
 @onready var _sub_label: Label = $Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock/SubLabel
 @onready var _share_status: Label = $Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock/ShareStatus
+@onready var _replay_button: Button = $Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock/ActionRow/ReplayButton
+@onready var _replay: SessionReplay = $Root/Split/RightColumn/SessionReplay
 @onready var _settings_panel: SettingsPanel = $Root/Split/LeftColumn/Margin/Sidebar/MenuBand/SettingsBlock/SettingsPanel
 
 var _score: int = 0
@@ -44,6 +46,14 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not visible:
 		return
 	if OverlayFocus.is_cancel(event):
+		if _replay != null and _replay.is_open():
+			GameFeedback.play_click_button()
+			if _replay.is_fullscreen():
+				_replay.set_fullscreen(false)
+			else:
+				_replay.close_replay()
+			get_viewport().set_input_as_handled()
+			return
 		_on_back_pressed()
 		get_viewport().set_input_as_handled()
 
@@ -55,6 +65,7 @@ func _setup_hover_sounds() -> void:
 		$Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock/ActionRow/RestartButton,
 		$Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock/ActionRow/EndButton,
 		$Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock/ActionRow/ShareButton,
+		$Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock/ActionRow/ReplayButton,
 		$Root/Split/LeftColumn/Margin/Sidebar/FooterBand/BackButton,
 	]
 	for button in buttons:
@@ -97,6 +108,8 @@ func _apply_locale() -> void:
 	var share := $Root/Split/LeftColumn/Margin/Sidebar/MenuBand/EndSessionBlock/ActionRow/ShareButton as Button
 	if share:
 		share.text = Loc.ui("pause.share")
+	if _replay_button:
+		_replay_button.text = Loc.ui("pause.replay")
 	var back := $Root/Split/LeftColumn/Margin/Sidebar/FooterBand/BackButton as Button
 	if back:
 		back.text = Loc.ui("pause.back")
@@ -143,6 +156,8 @@ func _notify(action: String, payload: Dictionary = {}) -> void:
 
 
 func _show_view(view: View) -> void:
+	if view != View.END_SESSION and _replay != null and _replay.is_open():
+		_replay.close_replay()
 	_view = view
 	_root_nav.visible = view == View.ROOT
 	_end_session_block.visible = view == View.END_SESSION
@@ -150,6 +165,14 @@ func _show_view(view: View) -> void:
 	_sync_view_input_filters()
 	_grab_view_focus()
 	AdaptiveNavGaps.apply_bands($Root/Split/LeftColumn/Margin/Sidebar as Control)
+	_refresh_replay_button()
+
+
+func _refresh_replay_button() -> void:
+	if _replay_button == null:
+		return
+	var has_steps := orchestrator != null and not orchestrator.replay_steps.is_empty()
+	_replay_button.visible = has_steps
 
 
 func _grab_view_focus() -> void:
@@ -243,6 +266,16 @@ func _on_end_pressed() -> void:
 		return
 	GameFeedback.play_click_button()
 	end_pressed.emit()
+
+
+func _on_replay_pressed() -> void:
+	if _replay == null or orchestrator == null:
+		return
+	GameFeedback.play_click_button()
+	if _replay.is_open():
+		_replay.close_replay()
+		return
+	_replay.open_replay(orchestrator)
 
 
 func _on_share_pressed() -> void:

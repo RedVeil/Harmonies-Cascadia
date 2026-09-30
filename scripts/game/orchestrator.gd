@@ -36,6 +36,8 @@ var map_points: int = 0
 ## Interactive tutorial gates (null / inactive = normal play).
 var tutorial_bridge: TutorialBridge = TutorialBridge.new()
 var _placed_tile_count: int = 0
+## Board clicks for the end-session replay. In memory for this scene load only.
+var replay_steps: Array[Dictionary] = []
 var _puzzle_plays: int = 0
 var _puzzle_intro_open: bool = false
 var _puzzle_intro_step: int = -1
@@ -933,7 +935,8 @@ func handle_tile_click(coord: Vector2i) -> void:
 			score_engine.element_score + score_engine.animal_score + score_engine.quest_score
 		)
 		last_points_diff += quest_points
-					
+		_record_replay_place(coord, last_points_diff)
+
 		hex_manager.apply_placement(coord)
 		hex_manager.play_placement_reward(coord, last_points_diff, contributing_coords)
 		InputScheme.touch.clear()
@@ -1127,6 +1130,7 @@ func undo() -> void:
 		Analytics.note_tile_unplaced(selected_card_backup.id)
 	else:
 		Analytics.note_animal_unplaced(selected_card_backup.id)
+	_pop_replay_place()
 	Analytics.note_undo()
 	Analytics.breadcrumb("undo", {
 		"coord": [coord_backup.x, coord_backup.y],
@@ -1214,7 +1218,10 @@ func handle_map_button_click(coord:Vector2i) -> void:
 	if tutorial_bridge.active and not tutorial_bridge.allows_action("map_expand"):
 		return
 	map_points -= 1
+	var map_already_active := hex_manager.hex_map_active.has(coord)
 	hex_manager.create_map(coord)
+	if not map_already_active:
+		_record_replay_map(coord)
 	hex_manager.remove_map_buttons()
 
 	if map_points == 0:
@@ -1223,6 +1230,42 @@ func handle_map_button_click(coord:Vector2i) -> void:
 	else:
 		hex_manager.show_map_buttons()
 	tutorial_bridge.notify("map_expanded", {"coord": coord})
+
+
+func _record_replay_place(coord: Vector2i, points: int) -> void:
+	if GameSession.is_puzzle_maker():
+		return
+	if hex_manager == null or not hex_manager.tiles.has(coord):
+		return
+	var tile: HexTileData = hex_manager.tiles[coord]
+	replay_steps.append({
+		"kind": "place",
+		"q": coord.x,
+		"r": coord.y,
+		"element": int(tile.element),
+		"level": int(tile.level),
+		"animal_id": int(tile.animal_id),
+		"animal_amount": int(tile.animal_amount),
+		"points": points,
+	})
+
+
+func _pop_replay_place() -> void:
+	if GameSession.is_puzzle_maker() or replay_steps.is_empty():
+		return
+	if str(replay_steps[replay_steps.size() - 1].get("kind", "")) != "place":
+		return
+	replay_steps.pop_back()
+
+
+func _record_replay_map(origin: Vector2i) -> void:
+	if GameSession.is_puzzle_maker():
+		return
+	replay_steps.append({
+		"kind": "map",
+		"q": origin.x,
+		"r": origin.y,
+	})
 
 ## ----- Quest Logic ----- ##
 
