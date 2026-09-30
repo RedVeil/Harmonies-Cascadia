@@ -353,9 +353,9 @@ func _refresh_reroll_button_visibility() -> void:
 		var card := _cards[i]
 		if card == null:
 			continue
-		var show := _expanded and _is_buy_enabled(i) and _is_reroll_ready(i) \
+		var should_show := _expanded and _is_buy_enabled(i) and _is_reroll_ready(i) \
 			and (_hover_card_id == i or _reroll_hover_id == i)
-		card.refresh_recycle_button(show)
+		card.refresh_recycle_button(should_show)
 
 
 func _set_cards_alpha(alpha: float) -> void:

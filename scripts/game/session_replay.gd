@@ -799,16 +799,16 @@ func _commit(coord: Vector2i, animate: bool) -> void:
 		return
 	var state: Dictionary = _state[coord]
 	var element := int(state["element"])
-	var rotation := 0
+	var orientation_steps := 0
 	var river_index := -1
 	if element == GameEnums.ELEMENT.RIVER:
 		var river_data := RiverPreviewLogic.get_river_index_and_rotation(coord, _river_neighbors(coord))
-		rotation = river_data.x
+		orientation_steps = river_data.x
 		river_index = river_data.y
 	elif element != GameEnums.ELEMENT.NONE:
-		rotation = HexCoord.pick_orientation_steps(coord)
+		orientation_steps = HexCoord.pick_orientation_steps(coord)
 	var pivot := _pivots[coord] as Node3D
-	pivot.rotation_degrees.y = HexCoord.direction_to_yaw_degrees(rotation)
+	pivot.rotation_degrees.y = HexCoord.direction_to_yaw_degrees(orientation_steps)
 	var visuals := _visuals[coord] as TileVisuals
 	var rotations: Array[float] = []
 	visuals.apply(
@@ -858,7 +858,7 @@ func _stop_lift() -> void:
 func _play_step_feedback(coord: Vector2i, points: int) -> void:
 	var element := GameEnums.ELEMENT.NONE
 	if _state.has(coord):
-		element = int(_state[coord]["element"])
+		element = int(_state[coord]["element"]) as GameEnums.ELEMENT
 	if _place_sound and element != GameEnums.ELEMENT.NONE:
 		_play_place_sound()
 	if _show_outline:

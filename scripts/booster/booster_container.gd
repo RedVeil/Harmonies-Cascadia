@@ -42,7 +42,7 @@ func set_options_progress(value: float) -> void:
 	for b in boosters:
 		b.set_progress(value)
 
-func set_booster_reroll_ready(id: int, ready: bool) -> void:
+func set_booster_reroll_ready(id: int, is_ready: bool) -> void:
 	if id < 0 or id >= boosters.size():
 		return
-	boosters[id].set_reroll_ready(ready)
+	boosters[id].set_reroll_ready(is_ready)

@@ -16,23 +16,23 @@ func _process(_delta: float) -> void:
 	blocked_changed.emit(blocked)
 
 
-func enter(owner: Object) -> void:
-	if owner == null:
+func enter(node: Object) -> void:
+	if node == null:
 		return
-	_hover_ids[owner.get_instance_id()] = true
+	_hover_ids[node.get_instance_id()] = true
 
 
-func exit(owner: Object) -> void:
-	if owner == null:
+func exit(node: Object) -> void:
+	if node == null:
 		return
-	_hover_ids.erase(owner.get_instance_id())
+	_hover_ids.erase(node.get_instance_id())
 
 
-func set_hovering(owner: Object, hovering: bool) -> void:
+func set_hovering(node: Object, hovering: bool) -> void:
 	if hovering:
-		enter(owner)
+		enter(node)
 	else:
-		exit(owner)
+		exit(node)
 
 
 func is_blocked() -> bool:

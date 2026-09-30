@@ -65,8 +65,8 @@ func _toggle_node(node: Node) -> void:
 
 
 func _toggle_group(nodes: Array) -> void:
-	var show := not _any_visible(nodes)
-	_set_visible(nodes, show)
+	var should_show := not _any_visible(nodes)
+	_set_visible(nodes, should_show)
 
 
 func _toggle_booster_part(targets: Array, siblings: Array) -> void:
@@ -103,10 +103,10 @@ func _any_visible(nodes: Array) -> bool:
 	return false
 
 
-func _set_visible(nodes: Array, show: bool) -> void:
+func _set_visible(nodes: Array, should_show: bool) -> void:
 	for node in nodes:
 		if node is CanvasItem:
-			(node as CanvasItem).visible = show
+			(node as CanvasItem).visible = should_show
 
 
 func _relayout() -> void:

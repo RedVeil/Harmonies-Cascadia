@@ -13,10 +13,10 @@ var _paste_cb = null
 var _paste_done: Callable
 
 
-static func encode(seed: int, ring_count: int, score: int) -> String:
+static func encode(run_seed: int, ring_count: int, score: int) -> String:
 	var payload := {
 		"v": VERSION,
-		"s": seed,
+		"s": run_seed,
 		"r": ring_count,
 		"c": score,
 	}
@@ -26,8 +26,8 @@ static func encode(seed: int, ring_count: int, score: int) -> String:
 	return PREFIX + b64
 
 
-static func clipboard_message(seed: int, ring_count: int, score: int) -> String:
-	var code := encode(seed, ring_count, score)
+static func clipboard_message(run_seed: int, ring_count: int, score: int) -> String:
+	var code := encode(run_seed, ring_count, score)
 	return "I got %d in Symbia — can you beat it?\nPlay it here: %s and just enter my code: %s." % [score, ITCH_URL, code]
 
 
@@ -211,7 +211,7 @@ static func decode(code: String) -> Dictionary:
 		return _fail("share.unsupported")
 	if not data.has("s") or not data.has("r") or not data.has("c"):
 		return _fail("share.incomplete")
-	var seed := int(data["s"])
+	var run_seed := int(data["s"])
 	var ring_count := int(data["r"])
 	var score := int(data["c"])
 	if ring_count < 0 or ring_count > 32:
@@ -220,7 +220,7 @@ static func decode(code: String) -> Dictionary:
 		return _fail("share.score")
 	return {
 		"ok": true,
-		"seed": seed,
+		"seed": run_seed,
 		"ring_count": ring_count,
 		"score": score,
 		"error": "",

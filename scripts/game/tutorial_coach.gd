@@ -261,11 +261,11 @@ func _theme_rating_stars() -> void:
 func _apply_star_icon(icon: TextureRect, fill: Color) -> void:
 	icon.material = null
 	icon.modulate = fill
-	var wrap := icon.get_parent() as Control
-	if wrap:
-		wrap.clip_contents = false
-		wrap.custom_minimum_size = Vector2(STAR_ICON_SIZE, STAR_ICON_SIZE)
-	var outline := wrap.get_node_or_null("Outline") as TextureRect if wrap else null
+	var icon_parent := icon.get_parent() as Control
+	if icon_parent:
+		icon_parent.clip_contents = false
+		icon_parent.custom_minimum_size = Vector2(STAR_ICON_SIZE, STAR_ICON_SIZE)
+	var outline := icon_parent.get_node_or_null("Outline") as TextureRect if icon_parent else null
 	if outline:
 		outline.material = null
 		outline.modulate = Color.WHITE

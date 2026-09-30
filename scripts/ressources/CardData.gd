@@ -24,8 +24,8 @@ func display_name() -> String:
 @export var visual_amount: int = 1
 @export var draw_chance: float = 0.0
 # used to get the background color of the card
-@export var element: GameEnums.ELEMENT = 0
-@export var secondary_element: GameEnums.ELEMENT = 0
+@export var element: GameEnums.ELEMENT = GameEnums.ELEMENT.NONE
+@export var secondary_element: GameEnums.ELEMENT = GameEnums.ELEMENT.NONE
 @export var point_score: int = 0
 @export var bonus_points: float = 0
 @export var icon: String = ""

@@ -477,7 +477,7 @@ func createBooster(idx: int) -> void:
 func _draw_mixed_shop_pack() -> BoosterData:
 	var booster := BoosterData.new()
 	# Shop slots: always exactly N independently weighted element tiles.
-	booster.type = 6
+	booster.type = Enums.BOOSTER_TYPE.MIX
 	booster.cards = _create_mixed_element_pack()
 	booster.booster_points = 0
 	booster.map_points = 0
@@ -564,7 +564,7 @@ func _dequeue_puzzle_booster() -> BoosterData:
 
 func _booster_from_puzzle_entry(entry) -> BoosterData:
 	var booster := BoosterData.new()
-	booster.type = 6
+	booster.type = Enums.BOOSTER_TYPE.MIX
 	booster.booster_points = 0
 	booster.map_points = 0
 	if entry == null or typeof(entry) != TYPE_DICTIONARY:
@@ -735,7 +735,7 @@ func apply_saved_state(booster_state: Dictionary) -> void:
 		if entry == null:
 			# Booster visuals: fall back to a safe empty BoosterData.
 			var empty := BoosterData.new()
-			empty.type = 0
+			empty.type = Enums.BOOSTER_TYPE.NONE
 			empty.booster_points = 0
 			empty.map_points = 0
 			empty.quest_ids = []
@@ -745,7 +745,7 @@ func apply_saved_state(booster_state: Dictionary) -> void:
 			continue
 
 		var b := BoosterData.new()
-		b.type = int(entry.get("type", 0))
+		b.type = int(entry.get("type", 0)) as Enums.BOOSTER_TYPE
 		b.booster_points = int(entry.get("booster_points", 0))
 		b.map_points = int(entry.get("map_points", 0))
 		b.quest_ids = []

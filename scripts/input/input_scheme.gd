@@ -359,14 +359,14 @@ func _ensure_action(action: String, events: Array) -> void:
 			InputMap.action_add_event(action, event)
 
 
-func _joy_button(button_index: int) -> InputEventJoypadButton:
+func _joy_button(button_index: JoyButton) -> InputEventJoypadButton:
 	var event := InputEventJoypadButton.new()
 	event.device = -1
 	event.button_index = button_index
 	return event
 
 
-func _joy_axis(axis: int, axis_value: float) -> InputEventJoypadMotion:
+func _joy_axis(axis: JoyAxis, axis_value: float) -> InputEventJoypadMotion:
 	var event := InputEventJoypadMotion.new()
 	event.device = -1
 	event.axis = axis

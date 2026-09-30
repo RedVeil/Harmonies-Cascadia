@@ -312,8 +312,8 @@ func play_redraw_animation() -> void:
 		return
 	play_animation(&"redraw", {})
 
-func play_animation(name: StringName, params: Dictionary) -> void:
-	match name:
+func play_animation(anim_name: StringName, params: Dictionary) -> void:
+	match anim_name:
 		&"spawn":
 			_animate_spawn(
 				params.get("target_pos", position),
@@ -418,10 +418,10 @@ func _sync_ui_pointer_block() -> void:
 		UiPointerBlock.exit(recycle_btn)
 
 
-func refresh_recycle_button(show: bool) -> void:
-	var visible := show and _recycle_enabled and is_animal
-	recycle_btn.visible = visible
-	if not visible:
+func refresh_recycle_button(should_show: bool) -> void:
+	var recycle_visible := should_show and _recycle_enabled and is_animal
+	recycle_btn.visible = recycle_visible
+	if not recycle_visible:
 		_recycle_hovered = false
 		_reset_recycle_button_colors()
 		UiPointerBlock.exit(recycle_btn)

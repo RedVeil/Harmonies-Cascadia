@@ -166,8 +166,8 @@ func _on_mouse_exited() -> void:
 
 ## ----- Animations ----- ##
 
-func play_animation(name: StringName, params: Dictionary) -> void:
-	match name:
+func play_animation(anim_name: StringName, params: Dictionary) -> void:
+	match anim_name:
 		&"score_reward":
 			_animate_score_reward(
 				params.get("gained", 0),

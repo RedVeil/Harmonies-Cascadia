@@ -12,7 +12,7 @@ static func get_river_index_and_rotation(
 
 	var directions: Array[int] = []
 	for neighbor in river_neighbor_coords:
-		var direction = HexCoord.DIRECTIONS.find_custom(func(direction: Vector2i) -> bool: return direction == (neighbor - coord))
+		var direction = HexCoord.DIRECTIONS.find_custom(func(step: Vector2i) -> bool: return step == (neighbor - coord))
 		if direction == 0:
 			direction = 6
 		directions.append(direction)

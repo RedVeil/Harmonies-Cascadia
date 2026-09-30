@@ -15,20 +15,20 @@ var _signature: String = ""
 static func create(
 	resolved_scene_layers: Array,
 	resolved_multimesh_layers: Array,
-	scene_layer_rotations: Array[float] = [],
-	signature: String = "",
-	animal_model: String = "",
-	element: int = GameEnums.ELEMENT.NONE,
-	orientation_steps: int = 0
+	resolved_rotations: Array[float] = [],
+	layer_signature: String = "",
+	resolved_animal_model: String = "",
+	resolved_element: int = GameEnums.ELEMENT.NONE,
+	resolved_orientation_steps: int = 0
 ) -> TileLayersState:
 	var state := TileLayersState.new()
 	state.scene_layers = resolved_scene_layers
 	state.multi_mesh_layers = resolved_multimesh_layers
-	state.scene_layer_rotations = scene_layer_rotations
-	state.animal_model = animal_model
-	state.element = element
-	state.orientation_steps = orientation_steps
-	state._signature = signature
+	state.scene_layer_rotations = resolved_rotations
+	state.animal_model = resolved_animal_model
+	state.element = resolved_element
+	state.orientation_steps = resolved_orientation_steps
+	state._signature = layer_signature
 	return state
 
 

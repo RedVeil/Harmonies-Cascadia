@@ -6,7 +6,6 @@ enum View { ROOT, PLAYER, GRAPHICS, AUDIO }
 @onready var _root_view: VBoxContainer = $Content/RootView
 @onready var _player_view: VBoxContainer = $Content/PlayerView
 @onready var _graphics_scroll: ScrollContainer = $Content/GraphicsScroll
-@onready var _graphics_view: VBoxContainer = $Content/GraphicsScroll/GraphicsView
 @onready var _audio_view: VBoxContainer = $Content/AudioView
 @onready var _player_button: Button = $Content/RootView/PlayerBlock/PlayerButton
 @onready var _graphics_button: Button = $Content/RootView/GraphicsBlock/GraphicsButton

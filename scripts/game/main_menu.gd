@@ -88,12 +88,12 @@ func _sync_footer() -> void:
 	_set_footer_button(_back_button, not name_open and not root_open)
 
 
-func _set_footer_button(button: Button, show: bool) -> void:
+func _set_footer_button(button: Button, should_show: bool) -> void:
 	if button == null:
 		return
-	button.visible = show
-	button.disabled = not show
-	button.mouse_filter = Control.MOUSE_FILTER_STOP if show else Control.MOUSE_FILTER_IGNORE
+	button.visible = should_show
+	button.disabled = not should_show
+	button.mouse_filter = Control.MOUSE_FILTER_STOP if should_show else Control.MOUSE_FILTER_IGNORE
 
 
 func _hide_daily_challenge() -> void:
@@ -759,10 +759,10 @@ func _on_map_size_large_pressed() -> void:
 	_start_normal_run(GameSession.MapSize.LARGE)
 
 
-func _start_normal_run(size: GameSession.MapSize) -> void:
+func _start_normal_run(map_size: GameSession.MapSize) -> void:
 	GameFeedback.play_click_button()
 	RunSave.clear_save(GameSession.GameMode.NORMAL)
-	GameSession.begin_normal_run(size)
+	GameSession.begin_normal_run(map_size)
 	SceneLoader.goto(GAME_SCENE)
 
 

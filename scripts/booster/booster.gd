@@ -77,8 +77,8 @@ func init(parent: BoosterContainer) -> void:
 func is_stack_mode() -> bool:
 	return id < 3
 
-func set_reroll_ready(ready: bool) -> void:
-	_reroll_ready = ready
+func set_reroll_ready(is_ready: bool) -> void:
+	_reroll_ready = is_ready
 	_apply_hover_visuals()
 
 func _configure_mode_chrome() -> void:

@@ -49,10 +49,10 @@ static func directions_world_to_local(
 	local_directions.sort()
 	return local_directions
 
-static func map_neighbors(c: Vector2i, distance:int) -> Array[Vector2i]:
+static func map_neighbors(c: Vector2i, radius:int) -> Array[Vector2i]:
 	var out: Array[Vector2i] = []
 	for dir in MAP_DIRECTIONS:
-		out.append(c + (dir*distance))
+		out.append(c + (dir*radius))
 	return out
 
 ## ----- Distance Logic ----- ##

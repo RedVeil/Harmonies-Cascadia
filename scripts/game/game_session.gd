@@ -95,7 +95,7 @@ func begin_endless_run() -> void:
 	begin_run(0)
 
 
-func begin_challenge_run(seed: int, rings: int, ref_score: int) -> void:
+func begin_challenge_run(desired_seed: int, rings: int, ref_score: int) -> void:
 	clear_puzzle()
 	game_mode = GameMode.CHALLENGE
 	map_size = MapSize.MEDIUM
@@ -110,7 +110,7 @@ func begin_challenge_run(seed: int, rings: int, ref_score: int) -> void:
 	checkpoint_flat_increase = 0
 	checkpoint_multiplier = 2.0
 	checkpoint_targets.clear()
-	begin_run(seed, true)
+	begin_run(desired_seed, true)
 
 
 func begin_tutorial_run(part_id: String = "") -> void:

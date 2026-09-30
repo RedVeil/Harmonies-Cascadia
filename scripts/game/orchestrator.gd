@@ -1015,7 +1015,7 @@ func handle_element_preview(coord:Vector2i, card:CardData) -> TileStatePreview:
 		
 		## reset tile_data after points calculation
 		hex_manager.tiles[coord].element = prev_element
-		hex_manager.tiles[coord].level -= 1
+		hex_manager.tiles[coord].level = (hex_manager.tiles[coord].level - 1) as GameEnums.LEVEL
 		hex_manager.tiles[coord].group_id = var_prev_group
 				
 		return TileStatePreview.new({
@@ -1146,9 +1146,8 @@ func undo() -> void:
 ## ----- Utility Logic ----- ##
 
 func create_tile_data_preview(coord:Vector2i, element:int, group_id:int) -> HexTileData:
-	var prev_element = hex_manager.tiles[coord].element
-	hex_manager.tiles[coord].element = element
-	hex_manager.tiles[coord].level += 1
+	hex_manager.tiles[coord].element = element as GameEnums.ELEMENT
+	hex_manager.tiles[coord].level = (hex_manager.tiles[coord].level + 1) as GameEnums.LEVEL
 	hex_manager.tiles[coord].group_id = group_id
 	return hex_manager.tiles[coord].duplicate(true)
 

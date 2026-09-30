@@ -424,8 +424,8 @@ func play_contributor_reward(element: int, delay: float = 0.0) -> void:
 	play_animation(&"contributor", {"element": element, "delay": delay})
 
 
-func play_animation(name: StringName, params: Dictionary) -> void:
-	match name:
+func play_animation(anim_name: StringName, params: Dictionary) -> void:
+	match anim_name:
 		&"place":
 			_animate_place(params.get("points", 0), params.get("element", GameEnums.ELEMENT.NONE))
 		&"contributor":

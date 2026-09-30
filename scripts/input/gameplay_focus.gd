@@ -172,7 +172,7 @@ func _cycle_region(step: int) -> void:
 	var region_count := 5
 	var next := wrapi(int(_region) + step, 0, region_count)
 	for _i in region_count:
-		_region = next
+		_region = next as Region
 		if not _region_targets().is_empty() or _region == Region.BOARD:
 			break
 		next = wrapi(next + step, 0, region_count)

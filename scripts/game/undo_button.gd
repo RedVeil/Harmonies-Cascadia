@@ -36,7 +36,7 @@ func set_focus_hover(on: bool) -> void:
 
 ## ----- Interactions Logic ----- ##
 
-func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
+func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if not InputScheme.is_left_click(event) or not enabled:
 		return
 	orchestrator.undo()
