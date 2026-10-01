@@ -9,7 +9,15 @@ const GEAR_ICON := preload("res://assets/icons/settings.png")
 const OUTLINE_TEXTURE := preload("res://assets/icons/hex_outline_thin2.png")
 const BAR_HEIGHT := 64.0
 const SPEEDS: Array[float] = [1.0, 2.0, 4.0]
-const LIFT_HEIGHT := 0.42
+const PLACED_LIFT := 0.42
+const PLACED_SCALE := 1.085
+const PLACED_RISE := 0.24
+const PLACED_SETTLE := 0.3
+const CONTRIBUTOR_LIFT := 0.16
+const CONTRIBUTOR_SCALE := 1.045
+const CONTRIBUTOR_RISE := 0.2
+const CONTRIBUTOR_SETTLE := 0.26
+const CONTRIBUTOR_STAGGER := 0.06
 const SCORE_POP_BASE_Y := 19.0
 const SCORE_POP_RISE := 1.35
 const SCORE_POP_PEAK_SCALE := 1.5
@@ -65,8 +73,7 @@ var _reparenting: bool = false
 var _pivots: Dictionary = {}
 var _visuals: Dictionary = {}
 var _state: Dictionary = {}
-var _lift_tween: Tween
-var _lift_pivot: Node3D
+var _celebrate_tweens: Dictionary = {}
 var _bar_fade: Tween
 var _bar_hover_token: int = 0
 var _place_sound: bool = true
@@ -161,7 +168,7 @@ func close_replay() -> void:
 		set_fullscreen(false)
 	_playing = false
 	_open = false
-	_stop_lift()
+	_stop_celebrate()
 	_clear_hexes()
 	_free_tiles_root()
 	_show_live_board()
@@ -707,7 +714,7 @@ func _seek(target: int) -> void:
 
 
 func _rebuild_to(target: int) -> void:
-	_stop_lift()
+	_stop_celebrate()
 	_clear_hexes()
 	_create_patch(Vector2i.ZERO)
 	_cursor = 0
@@ -751,9 +758,7 @@ func _apply_step(step: Dictionary, animate: bool, feedback: bool = false) -> voi
 		"animal_id": int(step.get("animal_id", -1)),
 		"animal_amount": int(step.get("animal_amount", 0)),
 	}
-	_commit(coord, animate)
-	if feedback:
-		_play_step_feedback(coord, int(step.get("points", 0)))
+	_commit(coord)
 	var placed_element := int(_state[coord]["element"])
 	if previous_element == GameEnums.ELEMENT.RIVER or placed_element == GameEnums.ELEMENT.RIVER:
 		for neighbor in HexCoord.neighbors(coord):
@@ -761,7 +766,12 @@ func _apply_step(step: Dictionary, animate: bool, feedback: bool = false) -> voi
 				continue
 			if int(_state[neighbor]["element"]) != GameEnums.ELEMENT.RIVER:
 				continue
-			_commit(neighbor, false)
+			_commit(neighbor)
+	var points := int(step.get("points", 0))
+	if animate:
+		_play_group_celebrate(coord, points)
+	if feedback:
+		_play_step_feedback(coord, points)
 
 
 func _create_patch(origin: Vector2i) -> void:
@@ -791,10 +801,10 @@ func _create_hex(coord: Vector2i) -> void:
 		"animal_id": -1,
 		"animal_amount": 0,
 	}
-	_commit(coord, false)
+	_commit(coord)
 
 
-func _commit(coord: Vector2i, animate: bool) -> void:
+func _commit(coord: Vector2i) -> void:
 	if not _pivots.has(coord) or not _state.has(coord):
 		return
 	var state: Dictionary = _state[coord]
@@ -822,8 +832,6 @@ func _commit(coord: Vector2i, animate: bool) -> void:
 		true,
 		_animate_animals
 	)
-	if animate:
-		_play_lift(pivot)
 
 
 func _river_neighbors(coord: Vector2i) -> Array[Vector2i]:
@@ -837,22 +845,73 @@ func _river_neighbors(coord: Vector2i) -> Array[Vector2i]:
 	return out
 
 
-func _play_lift(pivot: Node3D) -> void:
-	_stop_lift()
-	pivot.position.y = 0.0
-	_lift_pivot = pivot
-	_lift_tween = create_tween()
-	_lift_tween.tween_property(pivot, "position:y", LIFT_HEIGHT, 0.16)
-	_lift_tween.tween_property(pivot, "position:y", 0.0, 0.22)
+func _play_group_celebrate(origin: Vector2i, points: int) -> void:
+	if not _state.has(origin):
+		return
+	var element := int(_state[origin]["element"])
+	if element != GameEnums.ELEMENT.NONE:
+		_play_celebrate(origin, true, 0.0)
+	if points == 0:
+		return
+	var delay := 0.0
+	for coord in _group_targets(origin):
+		if coord == origin:
+			continue
+		if not _state.has(coord) or int(_state[coord]["element"]) == GameEnums.ELEMENT.NONE:
+			continue
+		_play_celebrate(coord, false, delay)
+		delay += CONTRIBUTOR_STAGGER
 
 
-func _stop_lift() -> void:
-	if _lift_tween != null and _lift_tween.is_valid():
-		_lift_tween.kill()
-	_lift_tween = null
-	if _lift_pivot != null and is_instance_valid(_lift_pivot):
-		_lift_pivot.position.y = 0.0
-	_lift_pivot = null
+func _play_celebrate(coord: Vector2i, strong: bool, delay: float) -> void:
+	if not _visuals.has(coord):
+		return
+	_reset_celebrate_visual(coord)
+	var visuals := _visuals[coord] as Node3D
+	if visuals == null:
+		return
+	var lift := PLACED_LIFT if strong else CONTRIBUTOR_LIFT
+	var peak := Vector3.ONE * (PLACED_SCALE if strong else CONTRIBUTOR_SCALE)
+	var rise := PLACED_RISE if strong else CONTRIBUTOR_RISE
+	var settle := PLACED_SETTLE if strong else CONTRIBUTOR_SETTLE
+	var tween := create_tween()
+	_celebrate_tweens[coord] = tween
+	if delay > 0.0:
+		tween.tween_interval(delay)
+	tween.set_parallel(true)
+	tween.tween_property(visuals, "position:y", lift, rise)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(visuals, "scale", peak, rise)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.chain().tween_property(visuals, "position:y", 0.0, settle)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	tween.parallel().tween_property(visuals, "scale", Vector3.ONE, settle)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	tween.finished.connect(_on_celebrate_finished.bind(coord))
+
+
+func _on_celebrate_finished(coord: Vector2i) -> void:
+	_reset_celebrate_visual(coord)
+
+
+func _reset_celebrate_visual(coord: Vector2i) -> void:
+	if _celebrate_tweens.has(coord):
+		var tween: Tween = _celebrate_tweens[coord]
+		_celebrate_tweens.erase(coord)
+		if tween != null and tween.is_valid():
+			tween.kill()
+	if not _visuals.has(coord):
+		return
+	var visuals := _visuals[coord] as Node3D
+	if visuals == null or not is_instance_valid(visuals):
+		return
+	visuals.position.y = 0.0
+	visuals.scale = Vector3.ONE
+
+
+func _stop_celebrate() -> void:
+	for coord in _celebrate_tweens.keys():
+		_reset_celebrate_visual(coord)
 
 
 func _play_step_feedback(coord: Vector2i, points: int) -> void:
@@ -862,7 +921,7 @@ func _play_step_feedback(coord: Vector2i, points: int) -> void:
 	if _place_sound and element != GameEnums.ELEMENT.NONE:
 		_play_place_sound()
 	if _show_outline:
-		_flash_outline(coord)
+		_flash_group_outline(coord)
 	if points == 0:
 		return
 	if _point_sound:
@@ -947,7 +1006,69 @@ func _clear_score_bubbles() -> void:
 		_clear_score_bubble(coord)
 
 
-func _flash_outline(coord: Vector2i) -> void:
+func _flash_group_outline(origin: Vector2i) -> void:
+	if not _state.has(origin):
+		return
+	var delay := 0.0
+	for coord in _group_targets(origin):
+		if coord == origin:
+			_flash_outline(coord, 0.0)
+			continue
+		_flash_outline(coord, delay)
+		delay += CONTRIBUTOR_STAGGER
+
+
+func _group_targets(origin: Vector2i) -> Array[Vector2i]:
+	var targets: Array[Vector2i] = []
+	if not _state.has(origin):
+		return targets
+	var element := int(_state[origin]["element"])
+	var group := _connected_group(origin, element)
+	targets.assign(group)
+	if not _outlines_neighbors(element):
+		return targets
+	for member in group:
+		for neighbor in HexCoord.neighbors(member):
+			if targets.has(neighbor) or not _state.has(neighbor):
+				continue
+			if int(_state[neighbor]["element"]) == GameEnums.ELEMENT.NONE:
+				continue
+			targets.append(neighbor)
+	return targets
+
+
+func _connected_group(origin: Vector2i, element: int) -> Array[Vector2i]:
+	var group: Array[Vector2i] = []
+	if element == GameEnums.ELEMENT.NONE or not _state.has(origin):
+		if _state.has(origin):
+			group.append(origin)
+		return group
+	var seen := {}
+	var stack: Array[Vector2i] = [origin]
+	seen[origin] = true
+	while not stack.is_empty():
+		var current: Vector2i = stack.pop_back()
+		group.append(current)
+		for neighbor in HexCoord.neighbors(current):
+			if seen.has(neighbor) or not _state.has(neighbor):
+				continue
+			if int(_state[neighbor]["element"]) != element:
+				continue
+			seen[neighbor] = true
+			stack.append(neighbor)
+	return group
+
+
+func _outlines_neighbors(element: int) -> bool:
+	if _orchestrator == null or _orchestrator.score_engine == null:
+		return element == GameEnums.ELEMENT.WETLAND
+	if not _orchestrator.score_engine.active_rules.has(element):
+		return false
+	var rule: ScoringRule = _orchestrator.score_engine.active_rules[element]
+	return rule != null and rule.special_rule == ScoringRule.SpecialRule.NEIGHBORS
+
+
+func _flash_outline(coord: Vector2i, delay: float) -> void:
 	if not _pivots.has(coord):
 		return
 	_clear_outline(coord)
@@ -965,6 +1086,8 @@ func _flash_outline(coord: Vector2i) -> void:
 	_outlines[coord] = outline
 	var tween := create_tween()
 	_outline_tweens[coord] = tween
+	if delay > 0.0:
+		tween.tween_interval(delay)
 	tween.tween_property(outline, "modulate:a", 0.0, OUTLINE_FLASH_FADE)\
 		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	tween.finished.connect(_on_outline_finished.bind(coord))
@@ -994,7 +1117,7 @@ func _clear_outlines() -> void:
 
 
 func _clear_hexes() -> void:
-	_stop_lift()
+	_stop_celebrate()
 	_clear_score_bubbles()
 	_clear_outlines()
 	for pivot in _pivots.values():
