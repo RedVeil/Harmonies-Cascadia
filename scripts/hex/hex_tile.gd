@@ -18,18 +18,28 @@ const POINTS_BUBBLE_SCALE := Vector3(1.2, 1.2, 1.2)
 
 @export_group("Place Celebrate Animation")
 @export var place_celebrate_sounds: Array[AudioStream] = []
-@export var placed_lift: float = 0.42
-@export var placed_scale_peak: float = 1.085
+@export var placed_lift: float = 0.7
+@export var placed_stretch: Vector3 = Vector3(1.12, 1.1, 1.12)
+@export var placed_squash: Vector3 = Vector3(1.14, 0.88, 1.14)
 @export var placed_glow: float = 0.24
-@export var placed_rise_duration: float = 0.24
-@export var placed_settle_duration: float = 0.3
+@export var placed_rise_duration: float = 0.16
+@export var placed_land_duration: float = 0.14
+@export var placed_spring_duration: float = 0.28
+@export var placed_rumble_distance: float = 0.5
+@export var placed_rumble_degrees: float = 1.15
+@export var placed_rumble_cycles: float = 1.5
 
 @export_group("Contributor Celebrate Animation")
-@export var contributor_lift: float = 0.16
-@export var contributor_scale_peak: float = 1.045
+@export var contributor_lift: float = 0.26
+@export var contributor_stretch: Vector3 = Vector3(1.05, 1.04, 1.05)
+@export var contributor_squash: Vector3 = Vector3(1.08, 0.94, 1.08)
 @export var contributor_glow: float = 0.14
-@export var contributor_rise_duration: float = 0.2
-@export var contributor_settle_duration: float = 0.26
+@export var contributor_rise_duration: float = 0.14
+@export var contributor_land_duration: float = 0.12
+@export var contributor_spring_duration: float = 0.22
+@export var contributor_rumble_distance: float = 0.28
+@export var contributor_rumble_degrees: float = 0.65
+@export var contributor_rumble_cycles: float = 1.25
 
 var container: HexTileContainer
 var coord: Vector2i
@@ -528,23 +538,81 @@ func _animate_celebrate(strong: bool, delay: float) -> void:
 	_cache_visual_nodes()
 
 	var lift := placed_lift if strong else contributor_lift
-	var peak_scale := Vector3.ONE * (placed_scale_peak if strong else contributor_scale_peak)
+	var stretch := placed_stretch if strong else contributor_stretch
+	var squash := placed_squash if strong else contributor_squash
 	var rise_duration := placed_rise_duration if strong else contributor_rise_duration
-	var settle_duration := placed_settle_duration if strong else contributor_settle_duration
+	var land_duration := placed_land_duration if strong else contributor_land_duration
+	var spring_duration := placed_spring_duration if strong else contributor_spring_duration
+	var rumble_distance := placed_rumble_distance if strong else contributor_rumble_distance
+	var rumble_degrees := placed_rumble_degrees if strong else contributor_rumble_degrees
+	var rumble_cycles := placed_rumble_cycles if strong else contributor_rumble_cycles
+	var total := rise_duration + land_duration + spring_duration
 
 	var tween := FeedbackAnimHelper.create_tween(self, _feedback_tweens, &"celebrate")
 	if delay > 0.0:
 		tween.tween_interval(delay)
-	tween.set_parallel(true)
-	tween.tween_property(_visuals_root, "position:y", lift, rise_duration)\
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	tween.tween_property(_visuals_root, "scale", peak_scale, rise_duration)\
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	tween.chain().tween_property(_visuals_root, "position:y", 0.0, settle_duration)\
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-	tween.parallel().tween_property(_visuals_root, "scale", Vector3.ONE, settle_duration)\
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	tween.tween_method(
+		_apply_celebrate_sample.bind(
+			lift,
+			stretch,
+			squash,
+			rise_duration,
+			land_duration,
+			spring_duration,
+			rumble_distance,
+			rumble_degrees,
+			rumble_cycles
+		),
+		0.0,
+		1.0,
+		total
+	)
 	tween.finished.connect(_on_celebrate_finished)
+
+
+func _apply_celebrate_sample(
+	t: float,
+	lift: float,
+	stretch: Vector3,
+	squash: Vector3,
+	rise_duration: float,
+	land_duration: float,
+	spring_duration: float,
+	rumble_distance: float,
+	rumble_degrees: float,
+	rumble_cycles: float
+) -> void:
+	var total := rise_duration + land_duration + spring_duration
+	if total <= 0.0:
+		return
+	var elapsed := t * total
+	var y := 0.0
+	var scale := Vector3.ONE
+	if elapsed <= rise_duration:
+		y = Tween.interpolate_value(0.0, lift, elapsed, rise_duration, Tween.TRANS_QUAD, Tween.EASE_OUT)
+		scale = Tween.interpolate_value(Vector3.ONE, stretch - Vector3.ONE, elapsed, rise_duration, Tween.TRANS_BACK, Tween.EASE_OUT)
+	elif elapsed <= rise_duration + land_duration:
+		var land_elapsed := elapsed - rise_duration
+		y = Tween.interpolate_value(lift, -lift, land_elapsed, land_duration, Tween.TRANS_QUAD, Tween.EASE_IN)
+		scale = Tween.interpolate_value(stretch, squash - stretch, land_elapsed, land_duration, Tween.TRANS_QUAD, Tween.EASE_IN)
+	else:
+		var spring_elapsed := elapsed - rise_duration - land_duration
+		scale = Tween.interpolate_value(squash, Vector3.ONE - squash, spring_elapsed, spring_duration, Tween.TRANS_BACK, Tween.EASE_OUT)
+
+	var rumble_start := rise_duration
+	var shove := Vector2.ZERO
+	var rock := Vector2.ZERO
+	if elapsed > rumble_start and total > rumble_start:
+		var rumble_u := clampf((elapsed - rumble_start) / (total - rumble_start), 0.0, 1.0)
+		var decay := pow(1.0 - rumble_u, 1.35)
+		var wave := sin(rumble_u * TAU * rumble_cycles)
+		shove = Vector2(wave, wave * 0.35) * rumble_distance * decay
+		rock = Vector2(wave * 0.85, wave * 0.25) * rumble_degrees * decay
+
+	var yaw := _visuals_root.rotation_degrees.y
+	_visuals_root.position = Vector3(shove.x, y, shove.y)
+	_visuals_root.scale = scale
+	_visuals_root.rotation_degrees = Vector3(rock.x, yaw, rock.y)
 
 
 func _on_outline_flash_finished() -> void:
@@ -595,5 +663,7 @@ func _reset_outline_visuals() -> void:
 
 func _reset_celebrate_visuals() -> void:
 	_cache_visual_nodes()
+	var yaw := _visuals_root.rotation_degrees.y
 	_visuals_root.position = Vector3.ZERO
 	_visuals_root.scale = Vector3.ONE
+	_visuals_root.rotation_degrees = Vector3(0.0, yaw, 0.0)
