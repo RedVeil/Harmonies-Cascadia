@@ -934,7 +934,6 @@ func handle_tile_click(coord: Vector2i) -> void:
 		score_engine.total_score = (
 			score_engine.element_score + score_engine.animal_score + score_engine.quest_score
 		)
-		last_points_diff += quest_points
 		_record_replay_place(coord, last_points_diff)
 
 		hex_manager.apply_placement(coord)
@@ -1012,6 +1011,14 @@ func handle_element_preview(coord:Vector2i, card:CardData) -> TileStatePreview:
 		
 		new_group_score = score_engine.calc_group_score(coord, contributing_coords, card.id, hex_manager.tiles)
 		score_engine.new_element_score = score_engine.calc_total_group_score(old_groups) + new_group_score
+
+		var quest_points := 0
+		if not GameSession.is_puzzle_maker():
+			quest_points = quest_manager.preview_pattern_quest_points(
+				coord,
+				hex_manager.tiles,
+				placement_logic
+			)
 		
 		## reset tile_data after points calculation
 		hex_manager.tiles[coord].element = prev_element
@@ -1022,7 +1029,7 @@ func handle_element_preview(coord:Vector2i, card:CardData) -> TileStatePreview:
 			"is_valid":true,
 			"coord":coord, 
 			"tile_data": tile_data_preview,
-			"points_diff": score_engine.new_element_score - score_engine.element_score, 
+			"points_diff": score_engine.new_element_score - score_engine.element_score + quest_points, 
 			"contributing_coords":contributing_coords
 			})
 	else:

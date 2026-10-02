@@ -194,9 +194,17 @@ func apply_points_preview(preview: TileStatePreview) -> void:
 		show_neutral_preview(preview)
 
 
+func _show_hover_points(points: int) -> void:
+	var tile := tiles_by_coord[hover_target]
+	if GameSettings != null and GameSettings.show_tile_point_preview:
+		tile.show_points(points)
+	else:
+		tile.hide_points()
+
+
 func show_positive_preview(preview: TileStatePreview) -> void:
 	tiles_by_coord[hover_target].show_outline(Color.WHITE)
-	tiles_by_coord[hover_target].show_points(preview.points_diff)
+	_show_hover_points(preview.points_diff)
 
 	for coord in preview.contributing_coords:
 		if coord != hover_target:
@@ -205,7 +213,7 @@ func show_positive_preview(preview: TileStatePreview) -> void:
 
 func show_negative_preview(preview: TileStatePreview) -> void:
 	tiles_by_coord[hover_target].show_outline(Color.WHITE)
-	tiles_by_coord[hover_target].show_points(preview.points_diff)
+	_show_hover_points(preview.points_diff)
 
 	for coord in preview.contributing_coords:
 		if coord != hover_target:
@@ -214,7 +222,7 @@ func show_negative_preview(preview: TileStatePreview) -> void:
 
 func show_neutral_preview(preview: TileStatePreview) -> void:
 	tiles_by_coord[hover_target].show_outline(Color.WHITE)
-	tiles_by_coord[hover_target].show_points(preview.points_diff)
+	_show_hover_points(preview.points_diff)
 
 
 ## ----- Reset Logic ----- ##

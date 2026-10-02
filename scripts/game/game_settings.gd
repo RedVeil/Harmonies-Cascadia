@@ -43,6 +43,8 @@ var theme_id: String = "cascadia"
 var content_locale: String = "eng"
 ## When false, run summaries and error reports stay on disk and are not uploaded.
 var analytics_enabled: bool = true
+## When false, hovering a placement does not show the floating point bubble.
+var show_tile_point_preview: bool = true
 ## puzzle_id -> { "best_score": int }
 var puzzle_progress: Dictionary = {}
 
@@ -125,6 +127,7 @@ func _load_from_json() -> void:
 	else:
 		content_locale = Loc.ENG
 	analytics_enabled = bool(data.get("analytics_enabled", true))
+	show_tile_point_preview = bool(data.get("show_tile_point_preview", true))
 
 	var progress = data.get("puzzle_progress", {})
 	if typeof(progress) == TYPE_DICTIONARY:
@@ -173,6 +176,7 @@ func save_to_disk() -> void:
 		"theme_id": theme_id,
 		"content_locale": content_locale,
 		"analytics_enabled": analytics_enabled,
+		"show_tile_point_preview": show_tile_point_preview,
 		"puzzle_progress": puzzle_progress,
 	}
 	var json := JSON.stringify(data)
@@ -204,6 +208,16 @@ func set_analytics_enabled(value: bool) -> void:
 	var analytics := get_node_or_null("/root/Analytics")
 	if analytics != null and analytics.has_method("on_setting_changed"):
 		analytics.on_setting_changed()
+
+
+func set_show_tile_point_preview(value: bool) -> void:
+	if _applying_ui_sync:
+		show_tile_point_preview = value
+		return
+	if show_tile_point_preview == value:
+		return
+	show_tile_point_preview = value
+	save_to_disk()
 
 
 func set_content_locale(locale: String) -> void:

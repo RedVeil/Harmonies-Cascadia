@@ -147,6 +147,13 @@ text = "Language"
 [node name="LanguageOption" type="OptionButton" parent="Content/PlayerView"]
 layout_mode = 2
 
+[node name="PointPreviewCheck" type="CheckButton" parent="Content/PlayerView"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)
+theme_override_font_sizes/font_size = 20
+button_pressed = true
+text = "Point preview"
+
 [node name="AnalyticsCheck" type="CheckButton" parent="Content/PlayerView"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5686275, 0.5176471, 0.47058824, 1)

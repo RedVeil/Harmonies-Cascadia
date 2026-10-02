@@ -57,6 +57,7 @@
 		"theme": { "eng": "Theme", "ger": "Thema" },
 		"language": { "eng": "Language", "ger": "Sprache" },
 		"analytics": { "eng": "Share anonymous play data", "ger": "Anonyme Spieldaten teilen" },
+		"point_preview": { "eng": "Point preview", "ger": "Punktevorschau" },
 		"display": { "eng": "Display", "ger": "Anzeige" },
 		"fullscreen": { "eng": "Fullscreen", "ger": "Vollbild" },
 		"windowed": { "eng": "Windowed", "ger": "Fenster" },

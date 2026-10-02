@@ -56,12 +56,33 @@ func evaluate_pattern_quests(
 	tiles: Dictionary[Vector2i, HexTileData],
 	placement_logic: PlacementLogic
 ) -> int:
+	var points := 0
+	for i in _matching_pattern_quest_slots(coord, tiles, placement_logic):
+		points += QuestCatalog.quest_options[active_quests[i]].points
+		completed_slot_indices.append(i)
+		remove_quest(i)
+	return points
+
+func preview_pattern_quest_points(
+	coord: Vector2i,
+	tiles: Dictionary[Vector2i, HexTileData],
+	placement_logic: PlacementLogic
+) -> int:
+	var points := 0
+	for i in _matching_pattern_quest_slots(coord, tiles, placement_logic):
+		points += QuestCatalog.quest_options[active_quests[i]].points
+	return points
+
+func _matching_pattern_quest_slots(
+	coord: Vector2i,
+	tiles: Dictionary[Vector2i, HexTileData],
+	placement_logic: PlacementLogic
+) -> Array[int]:
+	var slots: Array[int] = []
 	if not tiles.has(coord):
-		return 0
+		return slots
 
 	var placed := tiles[coord]
-	var points := 0
-
 	for i in active_quests.size():
 		var quest_id := active_quests[i]
 		if quest_id == -1:
@@ -82,12 +103,10 @@ func evaluate_pattern_quests(
 				continue
 			var result := placement_logic.check_bonus_pattern(c, quest.bonus, tiles)
 			if result.is_valid:
-				points += quest.points
-				completed_slot_indices.append(i)
-				remove_quest(i)
+				slots.append(i)
 				break
 
-	return points
+	return slots
 
 func undo() -> void:
 	if completed_slot_indices.is_empty():
