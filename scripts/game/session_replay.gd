@@ -4,7 +4,6 @@ class_name SessionReplay
 ## Plays the placement log on the live map, in the menu's right pane.
 
 const TILE_VISUALS_SCENE := preload("res://scenes/hex/tile_visuals.tscn")
-const BUBBLE_TEXTURE := preload("res://assets/icons/circle.png")
 const GEAR_ICON := preload("res://assets/icons/settings.png")
 const OUTLINE_TEXTURE := preload("res://assets/icons/hex_outline_thin2.png")
 const BAR_HEIGHT := 64.0
@@ -30,7 +29,6 @@ const STEP_INTERVAL := (
 )
 const OUTLINE_FLASH_FADE := 0.45
 var OUTLINE_FLASH_COLOR := Color(1.0, 0.9, 0.45, 1.0)
-var POINTS_BUBBLE_SCALE := Vector3(1.2, 1.2, 1.2)
 
 var _tiles_root: Node3D
 var _bar: PanelContainer
@@ -985,36 +983,44 @@ func _show_score_bubble(coord: Vector2i, points: int) -> void:
 		return
 	_clear_score_bubble(coord)
 	var pivot := _pivots[coord] as Node3D
-	var sprite := Sprite3D.new()
-	sprite.name = "ScoreBubble"
-	sprite.texture = BUBBLE_TEXTURE
-	sprite.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-	sprite.alpha_cut = SpriteBase3D.ALPHA_CUT_DISABLED
-	sprite.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	sprite.render_priority = 2
-	sprite.position = Vector3(0.0, SCORE_POP_BASE_Y, 0.0)
-	sprite.scale = POINTS_BUBBLE_SCALE
-	sprite.modulate = UiTheme.points_positive if points > 0 else UiTheme.points_negative
+	var text := "+%d" % points if points > 0 else "%d" % points
+	var root := Node3D.new()
+	root.name = "ScoreLabel"
+	root.position = Vector3(0.0, SCORE_POP_BASE_Y, 0.0)
+	var fill := _make_score_label(text, Color.WHITE, 5)
+	fill.outline_modulate = Color(0, 0, 0, 1)
+	fill.outline_size = 5
+	fill.outline_render_priority = 4
+	fill.no_depth_test = true
+	root.add_child(fill)
+	pivot.add_child(root)
+	_bubbles[coord] = root
+	var tween := create_tween()
+	_bubble_tweens[coord] = tween
+	tween.tween_property(root, "scale", Vector3.ONE * SCORE_POP_PEAK_SCALE, SCORE_POP_UP_DURATION)\
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(root, "position:y", SCORE_POP_BASE_Y + SCORE_POP_RISE, SCORE_POP_FLOAT_DURATION)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.chain().set_parallel(true)
+	tween.tween_property(fill, "modulate:a", 0.0, SCORE_POP_FADE_DURATION)\
+		.set_delay(SCORE_POP_FADE_DELAY).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tween.tween_property(fill, "outline_modulate:a", 0.0, SCORE_POP_FADE_DURATION)\
+		.set_delay(SCORE_POP_FADE_DELAY).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tween.finished.connect(_on_score_bubble_finished.bind(coord))
+
+
+func _make_score_label(text: String, color: Color, priority: int) -> Label3D:
 	var label := Label3D.new()
 	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	label.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	label.render_priority = 3
-	label.modulate = Color(0, 0, 0, 1)
-	label.font_size = 200
-	label.scale = Vector3(1.8, 1.8, 1.8)
-	label.text = "+%d" % points if points > 0 else "%d" % points
-	sprite.add_child(label)
-	pivot.add_child(sprite)
-	_bubbles[coord] = sprite
-	var tween := create_tween()
-	_bubble_tweens[coord] = tween
-	tween.tween_property(sprite, "scale", Vector3.ONE * SCORE_POP_PEAK_SCALE, SCORE_POP_UP_DURATION)\
-		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	tween.tween_property(sprite, "position:y", SCORE_POP_BASE_Y + SCORE_POP_RISE, SCORE_POP_FLOAT_DURATION)\
-		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	tween.tween_property(sprite, "modulate:a", 0.0, SCORE_POP_FADE_DURATION)\
-		.set_delay(SCORE_POP_FADE_DELAY).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	tween.finished.connect(_on_score_bubble_finished.bind(coord))
+	label.render_priority = priority
+	label.modulate = color
+	label.outline_size = 0
+	label.font = UiTheme.TITLE_FONT
+	label.font_size = 520
+	label.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR
+	label.text = text
+	return label
 
 
 func _on_score_bubble_finished(coord: Vector2i) -> void:

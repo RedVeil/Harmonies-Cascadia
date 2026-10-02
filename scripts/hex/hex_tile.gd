@@ -2,7 +2,6 @@ extends StaticBody3D
 class_name HexTile
 
 const SCORE_POP_BASE_Y := 19.0
-const POINTS_BUBBLE_SCALE := Vector3(1.2, 1.2, 1.2)
 
 @export_group("Place Score Pop Animation")
 @export var score_pop_rise: float = 1.35
@@ -70,6 +69,9 @@ func _ready() -> void:
 
 
 func _apply_theme() -> void:
+	var points_label := get_node_or_null("PointsLabel/Fill") as Label3D
+	if points_label:
+		points_label.font = UiTheme.TITLE_FONT
 	var element_bubble := get_node_or_null("HoverInfo/ElementBubble") as Sprite3D
 	var animal_bubble := get_node_or_null("HoverInfo/AnimalBubble") as Sprite3D
 	if element_bubble:
@@ -299,23 +301,24 @@ func show_points(points: int) -> void:
 	if _score_pop_playing:
 		return
 	hide_hover_info()
-	if points > 0:
-		$Sprite3D/Label3D.text = "+%d" % points
-		$Sprite3D.modulate = UiTheme.points_positive
-	elif points < 0:
-		$Sprite3D/Label3D.text = "%d" % points
-		$Sprite3D.modulate = UiTheme.points_negative
-	else:
-		$Sprite3D/Label3D.text = "%d" % points
-		$Sprite3D.modulate = UiTheme.hud_background
-	$Sprite3D.scale = POINTS_BUBBLE_SCALE
-	$Sprite3D.show()
+	_prepare_points_label(points).show()
 
 
 func hide_points() -> void:
 	if _score_pop_playing:
 		return
-	$Sprite3D.hide()
+	$PointsLabel.hide()
+
+
+func _prepare_points_label(points: int) -> Node3D:
+	var root := $PointsLabel as Node3D
+	var fill := root.get_node("Fill") as Label3D
+	fill.text = "+%d" % points if points > 0 else "%d" % points
+	fill.modulate = Color.WHITE
+	fill.outline_modulate = Color(0, 0, 0, 1)
+	root.position = Vector3(0.0, SCORE_POP_BASE_Y, 0.0)
+	root.scale = Vector3.ONE
+	return root
 
 
 ## ----- Hover Info Logic ----- ##
@@ -486,27 +489,19 @@ func _animate_score_pop(points: int) -> void:
 	$HoverInfo/ElementBubble.hide()
 	$HoverInfo/AnimalBubble.hide()
 	$HoverInfo.hide()
-	var sprite: Sprite3D = $Sprite3D
-	var label: Label3D = $Sprite3D/Label3D
-	if points > 0:
-		label.text = "+%d" % points
-		sprite.modulate = UiTheme.points_positive
-	else:
-		label.text = "%d" % points
-		sprite.modulate = UiTheme.points_negative
-
-	sprite.visible = true
-	sprite.position.y = SCORE_POP_BASE_Y
-	sprite.scale = POINTS_BUBBLE_SCALE
-	# Alpha-cut discards the bubble mid-fade while Label3D keeps drawing; disable for the pop.
-	sprite.alpha_cut = SpriteBase3D.ALPHA_CUT_DISABLED
+	var root := _prepare_points_label(points)
+	var fill := root.get_node("Fill") as Label3D
+	root.show()
 
 	var tween := FeedbackAnimHelper.create_tween(self, _feedback_tweens, &"score_pop", true)
-	tween.tween_property(sprite, "scale", Vector3.ONE * score_pop_peak_scale, score_pop_up_duration)\
+	tween.tween_property(root, "scale", Vector3.ONE * score_pop_peak_scale, score_pop_up_duration)\
 		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	tween.tween_property(sprite, "position:y", SCORE_POP_BASE_Y + score_pop_rise, score_pop_float_duration)\
+	tween.tween_property(root, "position:y", SCORE_POP_BASE_Y + score_pop_rise, score_pop_float_duration)\
 		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	tween.tween_property(sprite, "modulate:a", 0.0, score_pop_fade_duration)\
+	tween.chain().set_parallel(true)
+	tween.tween_property(fill, "modulate:a", 0.0, score_pop_fade_duration)\
+		.set_delay(score_pop_fade_delay).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tween.tween_property(fill, "outline_modulate:a", 0.0, score_pop_fade_duration)\
 		.set_delay(score_pop_fade_delay).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	tween.finished.connect(_on_score_pop_finished)
 
@@ -647,12 +642,13 @@ func _try_emit_place_feedback_finished() -> void:
 
 
 func _reset_score_pop_visuals() -> void:
-	var sprite: Sprite3D = $Sprite3D
-	sprite.hide()
-	sprite.modulate = Color.WHITE
-	sprite.position.y = SCORE_POP_BASE_Y
-	sprite.scale = POINTS_BUBBLE_SCALE
-	sprite.alpha_cut = SpriteBase3D.ALPHA_CUT_DISCARD
+	var root := $PointsLabel as Node3D
+	root.hide()
+	root.position = Vector3(0.0, SCORE_POP_BASE_Y, 0.0)
+	root.scale = Vector3.ONE
+	var fill := root.get_node("Fill") as Label3D
+	fill.modulate = Color.WHITE
+	fill.outline_modulate = Color(0, 0, 0, 1)
 
 
 func _reset_outline_visuals() -> void:

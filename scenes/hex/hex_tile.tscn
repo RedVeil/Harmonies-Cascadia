@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://cofumvkpk8rxk" path="res://scenes/hex/tile_visuals.tscn" id="3_nn350"]
 [ext_resource type="Texture2D" uid="uid://dn3plvv5w6ncp" path="res://assets/icons/hex_outline_thin2.png" id="4_nn350"]
 [ext_resource type="AudioStream" uid="uid://cntyxxeo1ekgi" path="res://assets/audio/card-slide-2.ogg" id="5_place"]
+[ext_resource type="FontFile" uid="uid://c8v5t5lrl06at" path="res://assets/fonts/LuckiestGuy-Regular.ttf" id="6_font"]
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_vyrwg"]
 points = PackedVector3Array(0, 9.5, 0, 11, 9.5, 0, 5.5, 9.5, 9.526, -5.5, 9.5, 9.526, -11, 9.5, 0, -5.5, 9.5, -9.526, 5.5, 9.5, -9.526, 0, 0, 0, 11, 0, 0, 5.5, 0, 9.526, -5.5, 0, 9.526, -11, 0, 0, -5.5, 0, -9.526, 5.5, 0, -9.526)
@@ -47,24 +48,6 @@ point_count = 4
 [node name="HexTile" type="StaticBody3D" unique_id=1124611875]
 script = ExtResource("1_pcuo8")
 place_celebrate_sounds = Array[AudioStream]([ExtResource("5_place")])
-placed_lift = 0.7
-placed_stretch = Vector3(1.12, 1.1, 1.12)
-placed_squash = Vector3(1.14, 0.88, 1.14)
-placed_rise_duration = 0.16
-placed_land_duration = 0.14
-placed_spring_duration = 0.28
-placed_rumble_distance = 0.5
-placed_rumble_degrees = 1.15
-placed_rumble_cycles = 1.5
-contributor_lift = 0.26
-contributor_stretch = Vector3(1.05, 1.04, 1.05)
-contributor_squash = Vector3(1.08, 0.94, 1.08)
-contributor_rise_duration = 0.14
-contributor_land_duration = 0.12
-contributor_spring_duration = 0.22
-contributor_rumble_distance = 0.28
-contributor_rumble_degrees = 0.65
-contributor_rumble_cycles = 1.25
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1831272945]
 shape = SubResource("ConvexPolygonShape3D_vyrwg")
@@ -84,23 +67,20 @@ axis = 1
 alpha_cut = 1
 texture = ExtResource("4_nn350")
 
-[node name="Sprite3D" type="Sprite3D" parent="." unique_id=453342763]
+[node name="PointsLabel" type="Node3D" parent="." unique_id=1816411517]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19, 0)
 visible = false
-billboard = 1
-alpha_cut = 1
-cast_shadow = 0
-render_priority = 2
-texture = ExtResource("2_nn350")
 
-[node name="Label3D" type="Label3D" parent="Sprite3D" unique_id=1816411517]
-transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, 0, 0, 0)
+[node name="Fill" type="Label3D" parent="PointsLabel" unique_id=1352045191]
 billboard = 1
-cast_shadow = 0
-render_priority = 3
-modulate = Color(0, 0, 0, 1)
-text = "+10 "
-font_size = 200
+no_depth_test = true
+texture_filter = 2
+render_priority = 5
+outline_render_priority = 4
+text = "+10"
+font = ExtResource("6_font")
+font_size = 520
+outline_size = 5
 
 [node name="HoverInfo" type="Node3D" parent="." unique_id=217283457]
 visible = false
@@ -108,39 +88,36 @@ visible = false
 [node name="ElementBubble" type="Sprite3D" parent="HoverInfo" unique_id=301385433]
 transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, -4, 19, 0)
 visible = false
-modulate = Color(1, 1, 1, 1)
+cast_shadow = 0
 billboard = 1
 alpha_cut = 1
-cast_shadow = 0
 render_priority = 2
 texture = ExtResource("2_nn350")
 
 [node name="Icon" type="Sprite3D" parent="HoverInfo/ElementBubble" unique_id=1904800637]
+cast_shadow = 0
 modulate = Color(0.568627, 0.517647, 0.470588, 1)
 billboard = 1
-cast_shadow = 0
 render_priority = 3
 
 [node name="AnimalBubble" type="Sprite3D" parent="HoverInfo" unique_id=349752291]
 transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 4, 19, 0)
 visible = false
-modulate = Color(1, 1, 1, 1)
+cast_shadow = 0
 billboard = 1
 alpha_cut = 1
-cast_shadow = 0
 render_priority = 2
 texture = ExtResource("2_nn350")
 
 [node name="Icon" type="Sprite3D" parent="HoverInfo/AnimalBubble" unique_id=1618460968]
+cast_shadow = 0
 modulate = Color(0.568627, 0.517647, 0.470588, 1)
 billboard = 1
-cast_shadow = 0
 render_priority = 3
-
 
 [node name="walk_markers" type="Node3D" parent="." unique_id=866209579]
 
-[node name="default" type="Node3D" parent="walk_markers"]
+[node name="default" type="Node3D" parent="walk_markers" unique_id=1437072682]
 
 [node name="Marker3D" type="Marker3D" parent="walk_markers/default" unique_id=345897453]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.594955, -7.880002)
@@ -160,7 +137,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.009527, 9.594955, 3.6779132
 [node name="Marker3D6" type="Marker3D" parent="walk_markers/default" unique_id=507658065]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.009527, 9.594955, -3.0005155)
 
-
 [node name="walk_paths" type="Node3D" parent="walk_markers" unique_id=1065010964]
 
 [node name="Path1" type="Path3D" parent="walk_markers/walk_paths" unique_id=1039424661]
@@ -177,4 +153,3 @@ curve = SubResource("Curve3D_walk4")
 
 [node name="Path5" type="Path3D" parent="walk_markers/walk_paths" unique_id=1360261802]
 curve = SubResource("Curve3D_walk5")
-

@@ -88,6 +88,7 @@ func _apply_theme() -> void:
 		background_sprite.self_modulate = Color.WHITE
 		background_sprite.modulate = UiTheme.primary
 	if score_label:
+		UiTheme.apply_title_font(score_label)
 		score_label.add_theme_color_override("font_color", UiTheme.hud_background)
 		score_label.add_theme_constant_override("outline_size", 0)
 
