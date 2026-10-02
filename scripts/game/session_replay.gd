@@ -102,10 +102,44 @@ func _ready() -> void:
 func _exit_tree() -> void:
 	if _reparenting:
 		return
-	_clear_hexes()
-	_free_tiles_root()
-	_show_live_board()
-	_show_scene_chrome()
+	# The scene root is already walking its children. ReplayTiles is a later
+	# sibling, so freeing it here mutates that list and crashes.
+	_playing = false
+	_open = false
+	_camera_frame_token += 1
+	_bar_hover_token += 1
+	_kill_owned_tweens()
+	_pivots.clear()
+	_visuals.clear()
+	_state.clear()
+	_bubbles.clear()
+	_outlines.clear()
+	_tiles_root = null
+	_live_hidden = false
+	_camera_node = null
+	_camera_posed = false
+	_hud = null
+	_menu_hidden = false
+
+
+func _kill_owned_tweens() -> void:
+	var tweens: Array = []
+	tweens.append_array(_celebrate_tweens.values())
+	tweens.append_array(_bubble_tweens.values())
+	tweens.append_array(_outline_tweens.values())
+	if _bar_fade != null:
+		tweens.append(_bar_fade)
+	_celebrate_tweens.clear()
+	_bubble_tweens.clear()
+	_outline_tweens.clear()
+	_bar_fade = null
+	for tween in tweens:
+		var anim := tween as Tween
+		if anim == null or not anim.is_valid():
+			continue
+		for conn in anim.finished.get_connections():
+			anim.finished.disconnect(conn["callable"])
+		anim.kill()
 
 
 func _process(delta: float) -> void:

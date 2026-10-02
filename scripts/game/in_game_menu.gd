@@ -257,6 +257,7 @@ func _on_end_session_pressed() -> void:
 func _on_restart_pressed() -> void:
 	if _tutorial_active():
 		return
+	_close_open_replay()
 	GameFeedback.play_click_button()
 	restart_pressed.emit()
 
@@ -264,8 +265,14 @@ func _on_restart_pressed() -> void:
 func _on_end_pressed() -> void:
 	if _tutorial_active() and not _allows("end_game"):
 		return
+	_close_open_replay()
 	GameFeedback.play_click_button()
 	end_pressed.emit()
+
+
+func _close_open_replay() -> void:
+	if _replay != null and _replay.is_open():
+		_replay.close_replay()
 
 
 func _on_replay_pressed() -> void:
