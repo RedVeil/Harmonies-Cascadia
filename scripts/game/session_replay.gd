@@ -18,9 +18,12 @@ const CONTRIBUTOR_RISE := 0.2
 const CONTRIBUTOR_SETTLE := 0.26
 const CONTRIBUTOR_STAGGER := 0.06
 const SCORE_POP_BASE_Y := 19.0
-const SCORE_POP_RISE := 1.35
-const SCORE_POP_PEAK_SCALE := 1.5
-const SCORE_POP_UP_DURATION := 0.18
+const SCORE_POP_RISE := 2.05
+const SCORE_POP_START_SCALE := 0.5
+const SCORE_POP_PEAK_SCALE := 1.85
+const SCORE_POP_REST_SCALE := 1.5
+const SCORE_POP_UP_DURATION := 0.1
+const SCORE_POP_SETTLE_DURATION := 0.13
 const SCORE_POP_FLOAT_DURATION := 0.85
 const SCORE_POP_FADE_DURATION := 0.55
 const SCORE_POP_FADE_DELAY := 0.35
@@ -994,11 +997,17 @@ func _show_score_bubble(coord: Vector2i, points: int) -> void:
 	fill.no_depth_test = true
 	root.add_child(fill)
 	pivot.add_child(root)
+	root.scale = Vector3.ONE * SCORE_POP_START_SCALE
 	_bubbles[coord] = root
 	var tween := create_tween()
+	tween.set_parallel(true)
 	_bubble_tweens[coord] = tween
-	tween.tween_property(root, "scale", Vector3.ONE * SCORE_POP_PEAK_SCALE, SCORE_POP_UP_DURATION)\
-		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_method(
+		_sample_score_pop_scale.bind(root),
+		0.0,
+		1.0,
+		SCORE_POP_UP_DURATION + SCORE_POP_SETTLE_DURATION
+	)
 	tween.tween_property(root, "position:y", SCORE_POP_BASE_Y + SCORE_POP_RISE, SCORE_POP_FLOAT_DURATION)\
 		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	tween.chain().set_parallel(true)
@@ -1007,6 +1016,17 @@ func _show_score_bubble(coord: Vector2i, points: int) -> void:
 	tween.tween_property(fill, "outline_modulate:a", 0.0, SCORE_POP_FADE_DURATION)\
 		.set_delay(SCORE_POP_FADE_DELAY).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	tween.finished.connect(_on_score_bubble_finished.bind(coord))
+
+
+func _sample_score_pop_scale(t: float, root: Node3D) -> void:
+	root.scale = Vector3.ONE * FeedbackAnimHelper.pop_scale(
+		t,
+		SCORE_POP_START_SCALE,
+		SCORE_POP_PEAK_SCALE,
+		SCORE_POP_REST_SCALE,
+		SCORE_POP_UP_DURATION,
+		SCORE_POP_SETTLE_DURATION
+	)
 
 
 func _make_score_label(text: String, color: Color, priority: int) -> Label3D:

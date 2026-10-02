@@ -87,9 +87,14 @@ func apply_placement(coord:Vector2i) -> void:
 func play_placement_reward(
 	coord: Vector2i,
 	points: int,
-	contributing_coords: Array[Vector2i]
+	contributing_coords: Array[Vector2i],
+	quest_count: int = 0
 ) -> void:
-	hex_container.play_placement_reward(coord, points, contributing_coords)
+	hex_container.play_placement_reward(coord, points, contributing_coords, quest_count)
+
+
+func place_celebrate_duration(coord: Vector2i) -> float:
+	return hex_container.tiles_by_coord[coord].place_celebrate_duration()
 
 func reset_preview(coord:Vector2i) -> void:
 	hex_container.reset_preview(coord)

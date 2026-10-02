@@ -2,11 +2,22 @@ extends StaticBody3D
 class_name HexTile
 
 const SCORE_POP_BASE_Y := 19.0
+const QUEST_MOTE_TEXTURE := preload("res://assets/icons/circle.png")
+
+@export_group("Point Preview Animation")
+@export var preview_pop_start_scale: float = 0.42
+@export var preview_pop_peak_scale: float = 1.38
+@export var preview_pop_rest_scale: float = 1.0
+@export var preview_pop_up_duration: float = 0.09
+@export var preview_pop_settle_duration: float = 0.12
 
 @export_group("Place Score Pop Animation")
-@export var score_pop_rise: float = 1.35
-@export var score_pop_peak_scale: float = 1.5
-@export var score_pop_up_duration: float = 0.18
+@export var score_pop_start_scale: float = 0.5
+@export var score_pop_rise: float = 2.05
+@export var score_pop_peak_scale: float = 1.85
+@export var score_pop_rest_scale: float = 1.5
+@export var score_pop_up_duration: float = 0.1
+@export var score_pop_settle_duration: float = 0.13
 @export var score_pop_float_duration: float = 0.85
 @export var score_pop_fade_duration: float = 0.55
 @export var score_pop_fade_delay: float = 0.35
@@ -40,6 +51,17 @@ const SCORE_POP_BASE_Y := 19.0
 @export var contributor_rumble_degrees: float = 0.65
 @export var contributor_rumble_cycles: float = 1.25
 
+@export_group("Quest Burst")
+@export var quest_burst_color: Color = Color(1.0, 0.9, 0.45, 1.0)
+@export var quest_burst_mote_count: int = 8
+@export var quest_burst_extra_mote_count: int = 10
+@export var quest_burst_start_radius: float = 1.4
+@export var quest_burst_radius: float = 7.2
+@export var quest_burst_rise: float = 2.4
+@export var quest_burst_mote_size: float = 0.7
+@export var quest_ring_scale: float = 1.6
+@export var quest_ring_extra_delay: float = 0.12
+
 var container: HexTileContainer
 var coord: Vector2i
 
@@ -54,6 +76,7 @@ var _hover_info_pending: bool = false
 var _pending_hover_element_tex: Texture2D = null
 var _pending_hover_animal_tex: Texture2D = null
 var _pending_hover_icon_color: Color = Color.WHITE
+var _quest_burst_root: Node3D = null
 
 signal place_feedback_finished
 
@@ -301,7 +324,24 @@ func show_points(points: int) -> void:
 	if _score_pop_playing:
 		return
 	hide_hover_info()
-	_prepare_points_label(points).show()
+	var root := _prepare_points_label(points)
+	root.scale = Vector3.ONE * preview_pop_start_scale
+	root.show()
+	var pop_time := preview_pop_up_duration + preview_pop_settle_duration
+	var tween := FeedbackAnimHelper.create_tween(self, _feedback_tweens, &"points_preview")
+	tween.tween_method(
+		_sample_points_pop_scale.bind(
+			root,
+			preview_pop_start_scale,
+			preview_pop_peak_scale,
+			preview_pop_rest_scale,
+			preview_pop_up_duration,
+			preview_pop_settle_duration
+		),
+		0.0,
+		1.0,
+		pop_time
+	)
 
 
 func hide_points() -> void:
@@ -427,9 +467,17 @@ func hide_outline() -> void:
 
 ## ----- Animations ----- ##
 
-func play_place_reward(points: int, element: int) -> void:
+func place_celebrate_duration() -> float:
+	return placed_rise_duration + placed_land_duration + placed_spring_duration
+
+
+func play_place_reward(points: int, element: int, quest_count: int = 0) -> void:
 	_awaiting_place_feedback = true
-	play_animation(&"place", {"points": points, "element": element})
+	play_animation(&"place", {
+		"points": points,
+		"element": element,
+		"quest_count": quest_count,
+	})
 	_try_emit_place_feedback_finished()
 
 
@@ -440,7 +488,11 @@ func play_contributor_reward(element: int, delay: float = 0.0) -> void:
 func play_animation(anim_name: StringName, params: Dictionary) -> void:
 	match anim_name:
 		&"place":
-			_animate_place(params.get("points", 0), params.get("element", GameEnums.ELEMENT.NONE))
+			_animate_place(
+				params.get("points", 0),
+				params.get("element", GameEnums.ELEMENT.NONE),
+				params.get("quest_count", 0)
+			)
 		&"contributor":
 			_animate_contributor(
 				params.get("element", GameEnums.ELEMENT.NONE),
@@ -456,7 +508,11 @@ func kill_animations() -> void:
 	for key in keys:
 		if key == &"score_pop":
 			continue
-		if spare_place_feedback and (key == &"celebrate" or key == &"outline"):
+		if spare_place_feedback and (
+			key == &"celebrate"
+			or key == &"outline"
+			or key == &"quest_burst_motion"
+		):
 			continue
 		var tween: Tween = _feedback_tweens[key]
 		if tween.is_valid():
@@ -466,15 +522,19 @@ func kill_animations() -> void:
 		_reset_celebrate_visuals()
 	if not spare_place_feedback or not _feedback_tweens.has(&"outline"):
 		_reset_outline_visuals()
+	if not spare_place_feedback or not _feedback_tweens.has(&"quest_burst_motion"):
+		_clear_quest_burst()
 	_try_emit_place_feedback_finished()
 
 
-func _animate_place(points: int, element: int) -> void:
+func _animate_place(points: int, element: int, quest_count: int) -> void:
 	if points != 0:
 		_animate_score_pop(points)
 	_animate_outline_flash(0.0)
 	if element != GameEnums.ELEMENT.NONE:
 		_animate_celebrate(true, 0.0)
+	if quest_count > 0:
+		_animate_quest_burst(quest_count)
 
 
 func _animate_contributor(element: int, delay: float) -> void:
@@ -491,11 +551,24 @@ func _animate_score_pop(points: int) -> void:
 	$HoverInfo.hide()
 	var root := _prepare_points_label(points)
 	var fill := root.get_node("Fill") as Label3D
+	root.scale = Vector3.ONE * score_pop_start_scale
 	root.show()
 
+	var pop_time := score_pop_up_duration + score_pop_settle_duration
 	var tween := FeedbackAnimHelper.create_tween(self, _feedback_tweens, &"score_pop", true)
-	tween.tween_property(root, "scale", Vector3.ONE * score_pop_peak_scale, score_pop_up_duration)\
-		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_method(
+		_sample_points_pop_scale.bind(
+			root,
+			score_pop_start_scale,
+			score_pop_peak_scale,
+			score_pop_rest_scale,
+			score_pop_up_duration,
+			score_pop_settle_duration
+		),
+		0.0,
+		1.0,
+		pop_time
+	)
 	tween.tween_property(root, "position:y", SCORE_POP_BASE_Y + score_pop_rise, score_pop_float_duration)\
 		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	tween.chain().set_parallel(true)
@@ -504,6 +577,25 @@ func _animate_score_pop(points: int) -> void:
 	tween.tween_property(fill, "outline_modulate:a", 0.0, score_pop_fade_duration)\
 		.set_delay(score_pop_fade_delay).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	tween.finished.connect(_on_score_pop_finished)
+
+
+func _sample_points_pop_scale(
+	t: float,
+	root: Node3D,
+	start_scale: float,
+	peak_scale: float,
+	rest_scale: float,
+	up_duration: float,
+	settle_duration: float
+) -> void:
+	root.scale = Vector3.ONE * FeedbackAnimHelper.pop_scale(
+		t,
+		start_scale,
+		peak_scale,
+		rest_scale,
+		up_duration,
+		settle_duration
+	)
 
 
 func _on_score_pop_finished() -> void:
@@ -610,6 +702,126 @@ func _apply_celebrate_sample(
 	_visuals_root.rotation_degrees = Vector3(rock.x, yaw, rock.y)
 
 
+func _animate_quest_burst(quest_count: int) -> void:
+	if _feedback_tweens.has(&"quest_burst_motion"):
+		var existing: Tween = _feedback_tweens[&"quest_burst_motion"]
+		if existing != null and existing.is_valid():
+			existing.kill()
+		_feedback_tweens.erase(&"quest_burst_motion")
+	_clear_quest_burst()
+	_start_quest_burst_motion(quest_count)
+
+
+func _start_quest_burst_motion(quest_count: int) -> void:
+	var outline := $outline as Sprite3D
+	var root := Node3D.new()
+	root.name = "QuestBurst"
+	add_child(root)
+	_quest_burst_root = root
+
+	var mote_count := quest_burst_extra_mote_count if quest_count >= 2 else quest_burst_mote_count
+	var duration := place_celebrate_duration()
+	var tween := FeedbackAnimHelper.create_tween(self, _feedback_tweens, &"quest_burst_motion", true)
+
+	for i in mote_count:
+		var mote := _make_quest_mote()
+		root.add_child(mote)
+		var angle := TAU * float(i) / float(mote_count) + 0.4
+		var direction := Vector3(cos(angle), 0.0, sin(angle))
+		var origin_y := outline.position.y
+		mote.position = Vector3(0.0, origin_y, 0.0) + direction * quest_burst_start_radius
+		var end := Vector3(0.0, origin_y + quest_burst_rise, 0.0) + direction * quest_burst_radius
+		tween.tween_property(mote, "position", end, duration)\
+			.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tween.tween_property(mote, "modulate:a", 0.0, duration)\
+			.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		tween.tween_property(mote, "scale", Vector3.ONE * 0.15, duration)\
+			.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+
+	var ring := _make_quest_ring(outline)
+	root.add_child(ring)
+	tween.tween_property(ring, "scale", outline.scale * quest_ring_scale, duration)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.tween_property(ring, "modulate:a", 0.0, duration)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+
+	if quest_count >= 2:
+		var second := _make_quest_ring(outline)
+		second.modulate.a = 0.0
+		root.add_child(second)
+		tween.tween_method(
+			_sample_quest_ring.bind(second, outline.scale, outline.scale * (quest_ring_scale + 0.25), duration),
+			0.0,
+			1.0,
+			duration
+		)
+
+	tween.finished.connect(_on_quest_burst_motion_finished)
+
+
+func _sample_quest_ring(
+	u: float,
+	ring: Sprite3D,
+	start_scale: Vector3,
+	end_scale: Vector3,
+	total: float
+) -> void:
+	if total <= 0.0:
+		return
+	var lead := minf(quest_ring_extra_delay, total * 0.45)
+	var elapsed := u * total
+	if elapsed < lead:
+		ring.scale = start_scale
+		var hidden := quest_burst_color
+		hidden.a = 0.0
+		ring.modulate = hidden
+		return
+	var span := maxf(total - lead, 0.001)
+	var local := (elapsed - lead) / span
+	ring.scale = start_scale.lerp(end_scale, local)
+	var color := quest_burst_color
+	color.a = 1.0 - local
+	ring.modulate = color
+
+
+func _make_quest_mote() -> Sprite3D:
+	var mote := Sprite3D.new()
+	mote.texture = QUEST_MOTE_TEXTURE
+	mote.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	var tex_size := QUEST_MOTE_TEXTURE.get_size()
+	var max_dim := maxf(tex_size.x, tex_size.y)
+	mote.pixel_size = quest_burst_mote_size / max_dim if max_dim > 0.0 else 0.01
+	mote.modulate = quest_burst_color
+	mote.alpha_cut = SpriteBase3D.ALPHA_CUT_DISABLED
+	mote.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	mote.render_priority = 4
+	return mote
+
+
+func _make_quest_ring(outline: Sprite3D) -> Sprite3D:
+	var ring := Sprite3D.new()
+	ring.texture = outline.texture
+	ring.axis = outline.axis
+	ring.position = outline.position
+	ring.scale = outline.scale
+	ring.modulate = quest_burst_color
+	ring.alpha_cut = SpriteBase3D.ALPHA_CUT_DISABLED
+	ring.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	return ring
+
+
+func _on_quest_burst_motion_finished() -> void:
+	_feedback_tweens.erase(&"quest_burst_motion")
+	_clear_quest_burst()
+	_try_emit_place_feedback_finished()
+
+
+func _clear_quest_burst() -> void:
+	if _quest_burst_root != null and is_instance_valid(_quest_burst_root):
+		_quest_burst_root.queue_free()
+	_quest_burst_root = null
+
+
 func _on_outline_flash_finished() -> void:
 	_feedback_tweens.erase(&"outline")
 	_reset_outline_visuals()
@@ -623,7 +835,7 @@ func _on_celebrate_finished() -> void:
 
 
 func _has_active_place_feedback_tween() -> bool:
-	for key in [&"score_pop", &"outline", &"celebrate"]:
+	for key in [&"score_pop", &"outline", &"celebrate", &"quest_burst_motion"]:
 		if not _feedback_tweens.has(key):
 			continue
 		var tween: Tween = _feedback_tweens[key]

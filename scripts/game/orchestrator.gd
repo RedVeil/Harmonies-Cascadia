@@ -924,12 +924,14 @@ func handle_tile_click(coord: Vector2i) -> void:
 		hex_manager.tiles[coord] = tile_data_preview
 
 		var quest_points := 0
+		var quest_count := 0
 		if selected_card.type == 0 and not GameSession.is_puzzle_maker():
 			quest_points = quest_manager.evaluate_pattern_quests(
 				coord,
 				hex_manager.tiles,
 				placement_logic
 			)
+			quest_count = quest_manager.completed_slot_indices.size()
 		score_engine.quest_score += quest_points
 		score_engine.total_score = (
 			score_engine.element_score + score_engine.animal_score + score_engine.quest_score
@@ -937,7 +939,9 @@ func handle_tile_click(coord: Vector2i) -> void:
 		_record_replay_place(coord, last_points_diff)
 
 		hex_manager.apply_placement(coord)
-		hex_manager.play_placement_reward(coord, last_points_diff, contributing_coords)
+		hex_manager.play_placement_reward(coord, last_points_diff, contributing_coords, quest_count)
+		if quest_count > 0:
+			quest_manager.dismiss_completed_visuals(hex_manager.place_celebrate_duration(coord))
 		InputScheme.touch.clear()
 		# Commit HUD score before remove_card: emptying a stack deselects and
 		# would otherwise wipe preview before apply_preview can animate it.

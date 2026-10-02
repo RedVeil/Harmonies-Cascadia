@@ -34,3 +34,36 @@ static func play_sounds(sounds: Array[AudioStream], volume_db: float = 0.0) -> v
 	if sounds.is_empty():
 		return
 	GameFeedback.play_sounds(sounds, volume_db)
+
+
+## Scale punch: snap from `start_scale` through `peak_scale`, then settle on `rest_scale`.
+## `t` runs 0 to 1 across `up_duration` + `settle_duration`.
+static func pop_scale(
+	t: float,
+	start_scale: float,
+	peak_scale: float,
+	rest_scale: float,
+	up_duration: float,
+	settle_duration: float
+) -> float:
+	var total := up_duration + settle_duration
+	if total <= 0.0:
+		return rest_scale
+	var elapsed := clampf(t, 0.0, 1.0) * total
+	if elapsed <= up_duration:
+		return Tween.interpolate_value(
+			start_scale,
+			peak_scale - start_scale,
+			elapsed,
+			up_duration,
+			Tween.TRANS_BACK,
+			Tween.EASE_OUT
+		)
+	return Tween.interpolate_value(
+		peak_scale,
+		rest_scale - peak_scale,
+		elapsed - up_duration,
+		settle_duration,
+		Tween.TRANS_QUAD,
+		Tween.EASE_OUT
+	)

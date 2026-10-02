@@ -116,9 +116,10 @@ func place_tile(coord: Vector2i) -> void:
 func play_placement_reward(
 	coord: Vector2i,
 	points: int,
-	contributing_coords: Array[Vector2i]
+	contributing_coords: Array[Vector2i],
+	quest_count: int = 0
 ) -> void:
-	tiles_by_coord[coord].play_place_reward(points, hex_manager.tiles[coord].element)
+	tiles_by_coord[coord].play_place_reward(points, hex_manager.tiles[coord].element, quest_count)
 
 	if points != 0:
 		var flash_delay := 0.0

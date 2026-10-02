@@ -32,10 +32,14 @@ func add_quest(id: int) -> void:
 		quest_container.add_quest(quest_index, QuestCatalog.quest_options[id])
 
 func remove_quest(index: int) -> void:
+	_retire_quest_state(index)
+	quest_container.remove_quest(index)
+
+
+func _retire_quest_state(index: int) -> void:
 	var quest_id := int(active_quests[index])
 	completed_quests.append(quest_id)
 	active_quests[index] = -1
-	quest_container.remove_quest(index)
 	Analytics.note_quest_completed(quest_id)
 
 func reset_preview() -> void:
@@ -60,8 +64,14 @@ func evaluate_pattern_quests(
 	for i in _matching_pattern_quest_slots(coord, tiles, placement_logic):
 		points += QuestCatalog.quest_options[active_quests[i]].points
 		completed_slot_indices.append(i)
-		remove_quest(i)
+		_retire_quest_state(i)
 	return points
+
+
+func dismiss_completed_visuals(duration: float) -> void:
+	if completed_slot_indices.is_empty():
+		return
+	quest_container.dismiss_quests(completed_slot_indices.duplicate(), duration)
 
 func preview_pattern_quest_points(
 	coord: Vector2i,
@@ -112,12 +122,14 @@ func undo() -> void:
 	if completed_slot_indices.is_empty():
 		return
 
+	quest_container.cancel_pending_dismiss()
 	for index in completed_slot_indices:
 		var quest_id := active_quests_backup[index]
 		if quest_id == -1:
 			continue
 		Analytics.note_quest_uncompleted(quest_id)
-		quest_container.add_quest(index, QuestCatalog.quest_options[quest_id])
+		if quest_container.quests[index] == null:
+			quest_container.add_quest(index, QuestCatalog.quest_options[quest_id])
 
 	active_quests = active_quests_backup.duplicate(true)
 	completed_quests = completed_quests_backup.duplicate(true)

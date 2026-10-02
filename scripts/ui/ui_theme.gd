@@ -17,6 +17,9 @@ const TOGGLE_WIDTH := 48
 const TOGGLE_HEIGHT := 24
 const TOGGLE_BORDER := 2.0
 const TOGGLE_THUMB_INSET := 2.0
+const BACKDROP_LAYER := -1
+const BACKDROP_NODE_NAME := "ThemeBackdrop"
+const BACKDROP_SHADER_CODE := "shader_type canvas_item;\nuniform vec4 color_top : source_color = vec4(1.0);\nuniform vec4 color_bottom : source_color = vec4(1.0);\nvoid fragment() {\n\tCOLOR = mix(color_top, color_bottom, UV.y);\n}\n"
 
 var THEMES := {
 	"ocean-dark": {
@@ -157,6 +160,7 @@ var points_positive := Color.GOLD
 var points_negative := Color.CRIMSON
 var highlight := Color(1.0, 1.0, 0.6350498, 1.0)
 
+var _backdrop_shader: Shader
 var _tile_shadow: StandardMaterial3D
 var _nav_empty := StyleBoxEmpty.new()
 var _empty_icon: Texture2D
@@ -186,7 +190,7 @@ func _watch_tree() -> void:
 
 func _on_node_added(node: Node) -> void:
 	if node is WorldEnvironment:
-		_apply_world_environment(node as WorldEnvironment)
+		_apply_world_environment.call_deferred(node)
 	elif node is MeshInstance3D or node is MultiMeshInstance3D:
 		_patch_mesh_node.call_deferred(node)
 
@@ -789,6 +793,55 @@ func _apply_world_in(node: Node) -> void:
 
 
 func _apply_world_environment(world: WorldEnvironment) -> void:
-	if world == null or world.environment == null:
+	if not is_instance_valid(world) or world.environment == null:
 		return
-	world.environment.background_color = primary
+	var env := world.environment
+	env.background_mode = Environment.BG_CANVAS
+	env.background_canvas_max_layer = BACKDROP_LAYER
+	env.background_color = primary
+	_apply_theme_backdrop(world)
+
+
+func _apply_theme_backdrop(world: WorldEnvironment) -> void:
+	var root := world.get_parent()
+	if root == null:
+		return
+	var layer := root.get_node_or_null(BACKDROP_NODE_NAME) as CanvasLayer
+	if layer == null:
+		layer = CanvasLayer.new()
+		layer.name = BACKDROP_NODE_NAME
+		layer.layer = BACKDROP_LAYER
+		root.add_child(layer)
+	var existing := layer.get_node_or_null("Gradient")
+	if existing != null and not (existing is ColorRect):
+		existing.name = "GradientOld"
+		existing.queue_free()
+		existing = null
+	var rect := existing as ColorRect
+	if rect == null:
+		rect = ColorRect.new()
+		rect.name = "Gradient"
+		rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		layer.add_child(rect)
+		_fit_backdrop.call_deferred(rect)
+	var material := rect.material as ShaderMaterial
+	if material == null:
+		material = ShaderMaterial.new()
+		material.shader = _get_backdrop_shader()
+		rect.material = material
+	material.set_shader_parameter("color_top", primary)
+	material.set_shader_parameter("color_bottom", secondary)
+	_fit_backdrop(rect)
+
+
+func _get_backdrop_shader() -> Shader:
+	if _backdrop_shader == null:
+		_backdrop_shader = Shader.new()
+		_backdrop_shader.code = BACKDROP_SHADER_CODE
+	return _backdrop_shader
+
+
+func _fit_backdrop(rect: Control) -> void:
+	if not is_instance_valid(rect) or not rect.is_inside_tree():
+		return
+	rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)

@@ -13,6 +13,9 @@ var current_backup: int = 0
 
 var _pinned := false
 var _hovered := false
+var _dismiss_tween: Tween
+
+signal dismiss_finished
 
 ## ----- Initialisation ----- ##
 
@@ -104,6 +107,39 @@ func undo() -> void:
 ## ----- Other Logic ----- ##
 
 func remove_quest() -> void:
+	queue_free()
+
+
+func play_dismiss(duration: float) -> void:
+	input_pickable = false
+	if _hovered:
+		UiPointerBlock.exit(self)
+		_hovered = false
+	_pinned = false
+	placement_tooltip.hide()
+	if _dismiss_tween != null and _dismiss_tween.is_valid():
+		_dismiss_tween.kill()
+	_dismiss_tween = create_tween()
+	_dismiss_tween.set_parallel(true)
+	_dismiss_tween.tween_property(self, "scale", Vector2.ZERO, duration)\
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+	_dismiss_tween.tween_property(self, "modulate:a", 0.0, duration)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	_dismiss_tween.finished.connect(_finish_dismiss)
+
+
+func cancel_dismiss() -> void:
+	if _dismiss_tween != null and _dismiss_tween.is_valid():
+		_dismiss_tween.kill()
+	_dismiss_tween = null
+	scale = Vector2.ONE
+	modulate.a = 1.0
+	input_pickable = true
+
+
+func _finish_dismiss() -> void:
+	_dismiss_tween = null
+	dismiss_finished.emit()
 	queue_free()
 
 ## ----- Utility Functions ----- ##
