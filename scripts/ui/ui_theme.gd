@@ -17,6 +17,7 @@ const THEME_STRIP_WIDTH := 64
 const THEME_STRIP_HEIGHT := 16
 const TOGGLE_WIDTH := 48
 const TOGGLE_HEIGHT := 24
+const TOGGLE_SUPERSAMPLE := 4
 const TOGGLE_BORDER := 2.0
 const TOGGLE_THUMB_INSET := 2.0
 const BACKDROP_LAYER := -1
@@ -416,6 +417,7 @@ func style_check_button(button: CheckButton, font_size: int = -1) -> void:
 	button.add_theme_color_override("font_hover_color", with_alpha(text, BUTTON_HOVER_ALPHA))
 	button.add_theme_color_override("font_focus_color", with_alpha(text, BUTTON_HOVER_ALPHA))
 	button.add_theme_color_override("font_disabled_color", with_alpha(text, 0.4))
+	button.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	var off_icon := _toggle_icon(false)
 	var on_icon := _toggle_icon(true)
 	for icon_name in [
@@ -566,42 +568,77 @@ func _toggle_icon(on: bool) -> Texture2D:
 func _ensure_toggle_masks() -> void:
 	if _toggle_mask_outer != null:
 		return
-	var outer := Rect2(0.0, 0.0, float(TOGGLE_WIDTH), float(TOGGLE_HEIGHT))
-	var inner := outer.grow(-TOGGLE_BORDER)
-	_toggle_mask_outer = _make_pill_mask(outer)
-	_toggle_mask_inner = _make_pill_mask(inner)
-	var thumb_radius := inner.size.y * 0.5 - TOGGLE_THUMB_INSET
+	var scale := float(TOGGLE_SUPERSAMPLE)
+	var width := TOGGLE_WIDTH * TOGGLE_SUPERSAMPLE
+	var height := TOGGLE_HEIGHT * TOGGLE_SUPERSAMPLE
+	var outer := Rect2(0.0, 0.0, float(width), float(height))
+	var inner := outer.grow(-TOGGLE_BORDER * scale)
+	_toggle_mask_outer = _downsample_mask(_make_pill_mask(outer, width, height))
+	_toggle_mask_inner = _downsample_mask(_make_pill_mask(inner, width, height))
+	var thumb_radius := inner.size.y * 0.5 - TOGGLE_THUMB_INSET * scale
 	var thumb_cy := inner.position.y + inner.size.y * 0.5
-	var thumb_off_cx := inner.position.x + TOGGLE_THUMB_INSET + thumb_radius
-	var thumb_on_cx := inner.position.x + inner.size.x - TOGGLE_THUMB_INSET - thumb_radius
-	_toggle_mask_thumb_off = _make_circle_mask(thumb_off_cx, thumb_cy, thumb_radius)
-	_toggle_mask_thumb_on = _make_circle_mask(thumb_on_cx, thumb_cy, thumb_radius)
+	var thumb_off_cx := inner.position.x + TOGGLE_THUMB_INSET * scale + thumb_radius
+	var thumb_on_cx := inner.position.x + inner.size.x - TOGGLE_THUMB_INSET * scale - thumb_radius
+	_toggle_mask_thumb_off = _downsample_mask(_make_circle_mask(thumb_off_cx, thumb_cy, thumb_radius, width, height))
+	_toggle_mask_thumb_on = _downsample_mask(_make_circle_mask(thumb_on_cx, thumb_cy, thumb_radius, width, height))
 
 
 func _blank_toggle_image() -> Image:
-	var img := Image.create(TOGGLE_WIDTH, TOGGLE_HEIGHT, false, Image.FORMAT_RGBA8)
+	return _blank_image(TOGGLE_WIDTH, TOGGLE_HEIGHT)
+
+
+func _blank_image(width: int, height: int) -> Image:
+	var img := Image.create(width, height, false, Image.FORMAT_RGBA8)
 	img.fill(Color(0, 0, 0, 0))
 	return img
 
 
-func _make_pill_mask(rect: Rect2) -> Image:
-	var img := _blank_toggle_image()
+func _make_pill_mask(rect: Rect2, width: int, height: int) -> Image:
+	var img := _blank_image(width, height)
 	_fill_pill(img, rect, Color.WHITE)
 	return img
 
 
-func _make_circle_mask(cx: float, cy: float, radius: float) -> Image:
-	var img := _blank_toggle_image()
+func _make_circle_mask(cx: float, cy: float, radius: float, width: int, height: int) -> Image:
+	var img := _blank_image(width, height)
 	_fill_circle(img, cx, cy, radius, Color.WHITE)
 	return img
+
+
+func _downsample_mask(src: Image) -> Image:
+	var dst := _blank_toggle_image()
+	var scale := TOGGLE_SUPERSAMPLE
+	var samples := float(scale * scale)
+	for y in TOGGLE_HEIGHT:
+		for x in TOGGLE_WIDTH:
+			var coverage := 0.0
+			var x0 := x * scale
+			var y0 := y * scale
+			for sy in scale:
+				for sx in scale:
+					coverage += src.get_pixel(x0 + sx, y0 + sy).a
+			coverage /= samples
+			if coverage <= 0.0:
+				continue
+			dst.set_pixel(x, y, Color(1.0, 1.0, 1.0, coverage))
+	return dst
 
 
 func _blit_mask(dst: Image, mask: Image, color: Color) -> void:
 	for y in TOGGLE_HEIGHT:
 		for x in TOGGLE_WIDTH:
-			if mask.get_pixel(x, y).a <= 0.0:
+			var coverage := mask.get_pixel(x, y).a
+			if coverage <= 0.0:
 				continue
-			dst.set_pixel(x, y, color)
+			var src_a := color.a * coverage
+			if src_a <= 0.0:
+				continue
+			var under := dst.get_pixel(x, y)
+			var out_a := src_a + under.a * (1.0 - src_a)
+			var out_r := (color.r * src_a + under.r * under.a * (1.0 - src_a)) / out_a
+			var out_g := (color.g * src_a + under.g * under.a * (1.0 - src_a)) / out_a
+			var out_b := (color.b * src_a + under.b * under.a * (1.0 - src_a)) / out_a
+			dst.set_pixel(x, y, Color(out_r, out_g, out_b, out_a))
 
 
 func _fill_pill(img: Image, rect: Rect2, color: Color) -> void:
