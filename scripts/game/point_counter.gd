@@ -195,7 +195,7 @@ func _animate_score_reward(gained: int, from_score: int, to_score: int) -> void:
 	# Allowed interrupt: replacing the previous score reward with the next one.
 	FeedbackAnimHelper.kill_all(_feedback_tweens)
 	_finish_gain_popup()
-	FeedbackAnimHelper.play_sounds(score_reward_sounds)
+	# Test: chime plays on quest completion, not on every scored placement.
 
 	ensure_score_label_pivot()
 	_setup_gain_popup_text(gained)

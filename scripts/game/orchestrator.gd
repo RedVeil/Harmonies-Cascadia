@@ -942,6 +942,7 @@ func handle_tile_click(coord: Vector2i) -> void:
 		hex_manager.play_placement_reward(coord, last_points_diff, contributing_coords, quest_count)
 		if quest_count > 0:
 			quest_manager.dismiss_completed_visuals(hex_manager.place_celebrate_duration(coord))
+			FeedbackAnimHelper.play_sounds(point_counter.score_reward_sounds)
 		InputScheme.touch.clear()
 		# Commit HUD score before remove_card: emptying a stack deselects and
 		# would otherwise wipe preview before apply_preview can animate it.
