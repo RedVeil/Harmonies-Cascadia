@@ -298,10 +298,10 @@ func _rebuild_single_offer(offer_index: int) -> void:
 	slot.add_child(buy_button)
 	_buy_buttons[offer_index] = buy_button
 
-	var buy_bg := ColorRect.new()
+	var buy_bg := Panel.new()
 	buy_bg.name = "Background"
-	buy_bg.color = UiTheme.text
 	buy_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	UiTheme.paint_panel_fill(buy_bg, UiTheme.text)
 	buy_bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	buy_button.add_child(buy_bg)
 
@@ -360,18 +360,18 @@ func _refresh_offer_button(offer_index: int) -> void:
 	if buy_button == null:
 		return
 	var buy_label: Label = buy_button.get_node("Label")
-	var buy_bg: ColorRect = buy_button.get_node("Background")
+	var buy_bg: Panel = buy_button.get_node("Background")
 	var offer := _offers[offer_index] if offer_index < _offers.size() else null
 	var has_offer := offer != null and offer.amount > 0
 
 	if _is_buy_enabled(offer_index):
 		buy_label.text = "Take"
-		buy_bg.color = UiTheme.text
+		UiTheme.paint_panel_fill(buy_bg, UiTheme.text)
 		buy_label.add_theme_color_override("font_color", UiTheme.menu)
 		buy_button.mouse_filter = Control.MOUSE_FILTER_STOP
 	else:
 		buy_label.text = "—" if not has_offer else _disabled_buy_label
-		buy_bg.color = Color(0.85, 0.85, 0.85, 1.0)
+		UiTheme.paint_panel_fill(buy_bg, Color(0.85, 0.85, 0.85, 1.0))
 		buy_label.add_theme_color_override("font_color", Color.GRAY)
 		buy_button.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
@@ -379,15 +379,15 @@ func _refresh_reroll_button() -> void:
 	if _reroll_button == null:
 		return
 	var label: Label = _reroll_button.get_node("Label")
-	var bg: ColorRect = _reroll_button.get_node("Background")
+	var bg: Panel = _reroll_button.get_node("Background")
 	if _reroll_enabled:
 		label.text = "Refresh"
-		bg.color = UiTheme.text
+		UiTheme.paint_panel_fill(bg, UiTheme.text)
 		label.add_theme_color_override("font_color", UiTheme.menu)
 		_reroll_button.mouse_filter = Control.MOUSE_FILTER_STOP
 	else:
 		label.text = "Refresh (cooling down)"
-		bg.color = Color(0.85, 0.85, 0.85, 1.0)
+		UiTheme.paint_panel_fill(bg, Color(0.85, 0.85, 0.85, 1.0))
 		label.add_theme_color_override("font_color", Color.GRAY)
 		_reroll_button.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
@@ -444,7 +444,7 @@ func _on_reroll_mouse_entered() -> void:
 	if not _reroll_enabled:
 		return
 	GameFeedback.play_hover_button()
-	_reroll_button.get_node("Background").color = UiTheme.menu
+	UiTheme.paint_panel_fill(_reroll_button.get_node("Background") as Panel, UiTheme.menu)
 	_reroll_button.get_node("Label").add_theme_color_override("font_color", UiTheme.text)
 
 func _on_reroll_mouse_exited() -> void:
@@ -459,7 +459,7 @@ func _on_buy_mouse_entered(offer_index: int) -> void:
 	if buy_button == null:
 		return
 	GameFeedback.play_hover_button()
-	buy_button.get_node("Background").color = UiTheme.menu
+	UiTheme.paint_panel_fill(buy_button.get_node("Background") as Panel, UiTheme.menu)
 	buy_button.get_node("Label").add_theme_color_override("font_color", UiTheme.text)
 
 func _on_buy_mouse_exited(offer_index: int) -> void:

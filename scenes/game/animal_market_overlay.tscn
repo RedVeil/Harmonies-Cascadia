@@ -5,10 +5,10 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_popup"]
 bg_color = Color(0.95686275, 0.8745098, 0.7921569, 1)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 shadow_color = Color(0, 0, 0, 0.1254902)
 shadow_size = 4
 
@@ -100,7 +100,7 @@ offset_top = 140.0
 offset_right = 80.0
 offset_bottom = 172.0
 
-[node name="Background" type="ColorRect" parent="PopupRoot/RerollButton"]
+[node name="Background" type="Panel" parent="PopupRoot/RerollButton"]
 layout_mode = 0
 anchors_preset = 15
 anchor_right = 1.0
@@ -108,7 +108,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(1, 1, 1, 1)
 
 [node name="Label" type="Label" parent="PopupRoot/RerollButton"]
 layout_mode = 0

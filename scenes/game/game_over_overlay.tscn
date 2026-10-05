@@ -7,10 +7,10 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_popup"]
 bg_color = Color(0.95686275, 0.8745098, 0.7921569, 1)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 shadow_color = Color(0, 0, 0, 0.1254902)
 shadow_size = 4
 
@@ -130,7 +130,7 @@ offset_top = 40.0
 offset_right = -10.0
 offset_bottom = 72.0
 
-[node name="Background" type="ColorRect" parent="PopupRoot/ContinueButton"]
+[node name="Background" type="Panel" parent="PopupRoot/ContinueButton"]
 layout_mode = 0
 anchors_preset = 15
 anchor_right = 1.0
@@ -138,7 +138,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(1, 1, 1, 1)
 
 [node name="Label" type="Label" parent="PopupRoot/ContinueButton"]
 layout_mode = 0
@@ -162,7 +161,7 @@ offset_top = 40.0
 offset_right = 130.0
 offset_bottom = 72.0
 
-[node name="Background" type="ColorRect" parent="PopupRoot/EndButton"]
+[node name="Background" type="Panel" parent="PopupRoot/EndButton"]
 layout_mode = 0
 anchors_preset = 15
 anchor_right = 1.0
@@ -170,7 +169,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(1, 1, 1, 1)
 
 [node name="Label" type="Label" parent="PopupRoot/EndButton"]
 layout_mode = 0
@@ -195,7 +193,7 @@ offset_top = 40.0
 offset_right = -10.0
 offset_bottom = 72.0
 
-[node name="Background" type="ColorRect" parent="PopupRoot/LeaveButton"]
+[node name="Background" type="Panel" parent="PopupRoot/LeaveButton"]
 layout_mode = 0
 anchors_preset = 15
 anchor_right = 1.0
@@ -203,7 +201,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(1, 1, 1, 1)
 
 [node name="Label" type="Label" parent="PopupRoot/LeaveButton"]
 layout_mode = 0
@@ -228,7 +225,7 @@ offset_top = 40.0
 offset_right = 130.0
 offset_bottom = 72.0
 
-[node name="Background" type="ColorRect" parent="PopupRoot/RestartButton"]
+[node name="Background" type="Panel" parent="PopupRoot/RestartButton"]
 layout_mode = 0
 anchors_preset = 15
 anchor_right = 1.0
@@ -236,7 +233,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(1, 1, 1, 1)
 
 [node name="Label" type="Label" parent="PopupRoot/RestartButton"]
 layout_mode = 0
@@ -261,7 +257,7 @@ offset_top = 72.0
 offset_right = 174.0
 offset_bottom = 104.0
 
-[node name="Background" type="ColorRect" parent="PopupRoot/NextButton"]
+[node name="Background" type="Panel" parent="PopupRoot/NextButton"]
 layout_mode = 0
 anchors_preset = 15
 anchor_right = 1.0
@@ -269,7 +265,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(1, 1, 1, 1)
 
 [node name="Label" type="Label" parent="PopupRoot/NextButton"]
 layout_mode = 0
@@ -294,7 +289,7 @@ offset_top = 88.0
 offset_right = 130.0
 offset_bottom = 120.0
 
-[node name="Background" type="ColorRect" parent="PopupRoot/ShareButton"]
+[node name="Background" type="Panel" parent="PopupRoot/ShareButton"]
 layout_mode = 0
 anchors_preset = 15
 anchor_right = 1.0
@@ -302,7 +297,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(1, 1, 1, 1)
 
 [node name="Label" type="Label" parent="PopupRoot/ShareButton"]
 layout_mode = 0

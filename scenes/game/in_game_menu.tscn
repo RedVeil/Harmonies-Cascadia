@@ -3,10 +3,12 @@
 [ext_resource type="Script" uid="uid://bf1gj3v1fnm2f" path="res://scripts/game/in_game_menu.gd" id="1_menu"]
 [ext_resource type="PackedScene" uid="uid://ckwpm5wl7l4a3" path="res://scenes/game/settings_panel.tscn" id="2_settings"]
 [ext_resource type="FontFile" uid="uid://c8v5t5lrl06at" path="res://assets/fonts/LuckiestGuy-Regular.ttf" id="3_title"]
-[ext_resource type="Script" path="res://scripts/game/session_replay.gd" id="4_replay"]
+[ext_resource type="Script" uid="uid://doj62naagvhpx" path="res://scripts/game/session_replay.gd" id="4_replay"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_left"]
 bg_color = Color(0.7058824, 0.64705884, 0.5803922, 1)
+shadow_color = Color(0, 0, 0, 0.1)
+shadow_size = 8
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_text"]
 
@@ -64,24 +66,10 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="TitleBand" type="Control" parent="Root/Split/LeftColumn/Margin/Sidebar"]
+[node name="TitleBand" type="Control" parent="Root/Split/LeftColumn/Margin/Sidebar" unique_id=1826162314]
 layout_mode = 1
 anchor_right = 1.0
 anchor_bottom = 0.15
-mouse_filter = 2
-
-[node name="MenuBand" type="Control" parent="Root/Split/LeftColumn/Margin/Sidebar"]
-layout_mode = 1
-anchor_top = 0.15
-anchor_right = 1.0
-anchor_bottom = 0.85
-mouse_filter = 2
-
-[node name="FooterBand" type="Control" parent="Root/Split/LeftColumn/Margin/Sidebar"]
-layout_mode = 1
-anchor_top = 0.85
-anchor_right = 1.0
-anchor_bottom = 1.0
 mouse_filter = 2
 
 [node name="TitleLabel" type="Label" parent="Root/Split/LeftColumn/Margin/Sidebar/TitleBand" unique_id=97993096]
@@ -91,11 +79,17 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
 theme_override_fonts/font = ExtResource("3_title")
 theme_override_font_sizes/font_size = 80
 text = "SYMBIA"
 vertical_alignment = 1
+
+[node name="MenuBand" type="Control" parent="Root/Split/LeftColumn/Margin/Sidebar" unique_id=1408676140]
+layout_mode = 1
+anchor_top = 0.15
+anchor_right = 1.0
+anchor_bottom = 0.85
+mouse_filter = 2
 
 [node name="RootNav" type="VBoxContainer" parent="Root/Split/LeftColumn/Margin/Sidebar/MenuBand" unique_id=1960448338]
 layout_mode = 1
@@ -251,7 +245,13 @@ horizontal_scroll_mode = 0
 custom_minimum_size = Vector2(0, 320)
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 3
+
+[node name="FooterBand" type="Control" parent="Root/Split/LeftColumn/Margin/Sidebar" unique_id=1682678360]
+layout_mode = 1
+anchor_top = 0.85
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
 
 [node name="BackButton" type="Button" parent="Root/Split/LeftColumn/Margin/Sidebar/FooterBand" unique_id=1274001881]
 layout_mode = 1

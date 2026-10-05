@@ -98,7 +98,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _apply_theme() -> void:
-	UiTheme.style_panel(_panel, 12, 0.94)
+	UiTheme.style_panel(_panel, 4, 0.94)
 	UiTheme.style_title_label(_title)
 	UiTheme.style_subtitle_label(_rank_header)
 	UiTheme.style_subtitle_label(_name_header)

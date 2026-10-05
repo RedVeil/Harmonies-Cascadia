@@ -505,7 +505,7 @@ func _refresh_share_status() -> void:
 func _set_button_hover(button: Control, hovered: bool) -> void:
 	if button == null:
 		return
-	var background: ColorRect = button.get_node("Background")
+	var background: Panel = button.get_node("Background")
 	var label: Label = button.get_node("Label")
 	UiTheme.apply_rect_button(background, label, hovered)
 

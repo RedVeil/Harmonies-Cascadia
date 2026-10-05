@@ -9,6 +9,8 @@ const BODY_FONT := preload("res://assets/fonts/Dangrek-Regular.ttf")
 const HINT_ALPHA := 0.7
 const BUTTON_HOVER_ALPHA := 0.5
 const CHIP_BORDER_WIDTH := 2
+const CHIP_CORNER_RADIUS := 2
+const RECT_BUTTON_RADIUS := 2
 const SUBTITLE_FONT_SIZE := 20
 const DEFAULT_ID := "ocean-dark"
 const THEME_STRIP_WIDTH := 64
@@ -287,18 +289,27 @@ func apply_hud_circle(background: CanvasItem, icon: CanvasItem, hovered: bool, e
 		icon.self_modulate = secondary
 
 
-func apply_rect_button(background: ColorRect, label: Label, hovered: bool, enabled: bool = true) -> void:
+func paint_panel_fill(panel: Panel, color: Color, corner_radius: int = RECT_BUTTON_RADIUS) -> void:
+	if panel == null:
+		return
+	var box := StyleBoxFlat.new()
+	box.bg_color = color
+	box.set_corner_radius_all(corner_radius)
+	panel.add_theme_stylebox_override("panel", box)
+
+
+func apply_rect_button(background: Panel, label: Label, hovered: bool, enabled: bool = true) -> void:
 	if background == null or label == null:
 		return
 	if not enabled:
-		background.color = Color(0.85, 0.85, 0.85, 1.0)
+		paint_panel_fill(background, Color(0.85, 0.85, 0.85, 1.0))
 		label.add_theme_color_override("font_color", Color.GRAY)
 		return
 	if hovered:
-		background.color = with_alpha(text, BUTTON_HOVER_ALPHA)
+		paint_panel_fill(background, with_alpha(text, BUTTON_HOVER_ALPHA))
 		label.add_theme_color_override("font_color", hud_background)
 	else:
-		background.color = text
+		paint_panel_fill(background, text)
 		label.add_theme_color_override("font_color", menu)
 
 
@@ -316,7 +327,7 @@ func make_chip_style(bg: Color, h_margin: float = 12.0, v_margin: float = 2.0, c
 	return style
 
 
-func style_chip_button(button: BaseButton, h_margin: float = 12.0, v_margin: float = 2.0, corner_radius: int = 0) -> void:
+func style_chip_button(button: BaseButton, h_margin: float = 12.0, v_margin: float = 2.0, corner_radius: int = CHIP_CORNER_RADIUS) -> void:
 	if button == null:
 		return
 	var fill_idle := make_chip_style(text, h_margin, v_margin, corner_radius)
