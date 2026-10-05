@@ -93,18 +93,18 @@ static func _add_theme_pair(
 	themes: Dictionary,
 	id: String,
 	display: String,
-	primary: Color,
-	secondary: Color
+	primary_color: Color,
+	secondary_color: Color
 ) -> void:
-	_add_theme_pair_colors(themes, id, display, primary, secondary, secondary, Color.WHITE, Color.WHITE, secondary)
+	_add_theme_pair_colors(themes, id, display, primary_color, secondary_color, secondary_color, Color.WHITE, Color.WHITE, secondary_color)
 
 
 static func _add_theme_pair_colors(
 	themes: Dictionary,
 	id: String,
 	display: String,
-	primary: Color,
-	secondary: Color,
+	primary_color: Color,
+	secondary_color: Color,
 	dark_menu: Color,
 	dark_text: Color,
 	light_menu: Color,
@@ -112,15 +112,15 @@ static func _add_theme_pair_colors(
 ) -> void:
 	themes["%s-dark" % id] = {
 		"name": "%s Dark" % display,
-		"primary": primary,
-		"secondary": secondary,
+		"primary": primary_color,
+		"secondary": secondary_color,
 		"menu": dark_menu,
 		"text": dark_text,
 	}
 	themes["%s-light" % id] = {
 		"name": "%s Light" % display,
-		"primary": primary,
-		"secondary": secondary,
+		"primary": primary_color,
+		"secondary": secondary_color,
 		"menu": light_menu,
 		"text": light_text,
 	}

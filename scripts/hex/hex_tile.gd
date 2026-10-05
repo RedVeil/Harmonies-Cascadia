@@ -674,17 +674,17 @@ func _apply_celebrate_sample(
 		return
 	var elapsed := t * total
 	var y := 0.0
-	var scale := Vector3.ONE
+	var visual_scale := Vector3.ONE
 	if elapsed <= rise_duration:
 		y = Tween.interpolate_value(0.0, lift, elapsed, rise_duration, Tween.TRANS_QUAD, Tween.EASE_OUT)
-		scale = Tween.interpolate_value(Vector3.ONE, stretch - Vector3.ONE, elapsed, rise_duration, Tween.TRANS_BACK, Tween.EASE_OUT)
+		visual_scale = Tween.interpolate_value(Vector3.ONE, stretch - Vector3.ONE, elapsed, rise_duration, Tween.TRANS_BACK, Tween.EASE_OUT)
 	elif elapsed <= rise_duration + land_duration:
 		var land_elapsed := elapsed - rise_duration
 		y = Tween.interpolate_value(lift, -lift, land_elapsed, land_duration, Tween.TRANS_QUAD, Tween.EASE_IN)
-		scale = Tween.interpolate_value(stretch, squash - stretch, land_elapsed, land_duration, Tween.TRANS_QUAD, Tween.EASE_IN)
+		visual_scale = Tween.interpolate_value(stretch, squash - stretch, land_elapsed, land_duration, Tween.TRANS_QUAD, Tween.EASE_IN)
 	else:
 		var spring_elapsed := elapsed - rise_duration - land_duration
-		scale = Tween.interpolate_value(squash, Vector3.ONE - squash, spring_elapsed, spring_duration, Tween.TRANS_BACK, Tween.EASE_OUT)
+		visual_scale = Tween.interpolate_value(squash, Vector3.ONE - squash, spring_elapsed, spring_duration, Tween.TRANS_BACK, Tween.EASE_OUT)
 
 	var rumble_start := rise_duration
 	var shove := Vector2.ZERO
@@ -698,7 +698,7 @@ func _apply_celebrate_sample(
 
 	var yaw := _visuals_root.rotation_degrees.y
 	_visuals_root.position = Vector3(shove.x, y, shove.y)
-	_visuals_root.scale = scale
+	_visuals_root.scale = visual_scale
 	_visuals_root.rotation_degrees = Vector3(rock.x, yaw, rock.y)
 
 
