@@ -23,134 +23,12 @@ const BACKDROP_LAYER := -1
 const BACKDROP_NODE_NAME := "ThemeBackdrop"
 const BACKDROP_SHADER_CODE := "shader_type canvas_item;\nuniform vec4 color_top : source_color = vec4(1.0);\nuniform vec4 color_bottom : source_color = vec4(1.0);\nvoid fragment() {\n\tCOLOR = mix(color_top, color_bottom, UV.y);\n}\n"
 
-var THEMES := {
-	"ocean-dark": {
-		"name": "Ocean Dark",
-		"primary": Color.html("#6fb3bf"),
-		"secondary": Color.html("#4d9fae"),
-		"menu": Color.html("#4d9fae"),
-		"text": Color.html("#FFFFFF"),
-	},
-	"ocean-light": {
-		"name": "Ocean Light",
-		"primary": Color.html("#6fb3bf"),
-		"secondary": Color.html("#4d9fae"),
-		"menu": Color.html("#FFFFFF"),
-		"text": Color.html("#4d9fae"),
-	},
-	"orange-dark": {
-		"name": "Orange Dark",
-		"primary": Color.html("#e8b38b"),
-		"secondary": Color.html("#e09760"),
-		"menu": Color.html("#e09760"),
-		"text": Color.html("#FFFFFF"),
-	},
-	"orange-light": {
-		"name": "Orange Light",
-		"primary": Color.html("#e8b38b"),
-		"secondary": Color.html("#e09760"),
-		"menu": Color.html("#FFFFFF"),
-		"text": Color.html("#e09760"),
-	},
-	"forest-dark": {
-		"name": "Forest Dark",
-		"primary": Color.html("#6B8F71"),
-		"secondary": Color.html("#2C3A30"),
-		"menu": Color.html("#2C3A30"),
-		"text": Color.html("#FFFFFF"),
-	},
-	"forest-light": {
-		"name": "Forest Light",
-		"primary": Color.html("#6B8F71"),
-		"secondary": Color.html("#2C3A30"),
-		"menu": Color.html("#FFFFFF"),
-		"text": Color.html("#2C3A30"),
-	},
-	"beige-dark": {
-		"name": "Beige Dark",
-		"primary": Color.html("#d1bfab"),
-		"secondary": Color.html("#8b4f3a"),
-		"menu": Color.html("#786452"),
-		"text": Color.html("#f4dfca"),
-	},
-	"beige-light": {
-		"name": "Beige Light",
-		"primary": Color.html("#d1bfab"),
-		"secondary": Color.html("#8b4f3a"),
-		"menu": Color.html("#f4dfca"),
-		"text": Color.html("#786452"),
-	},
-	"yellow-pastel-dark": {
-		"name": "Yellow Pastel Dark",
-		"primary": Color.html("#f4c48c"),
-		"secondary": Color.html("#f0ac5d"),
-		"menu": Color.html("#f0ac5d"),
-		"text": Color.html("#FFFFFF"),
-	},
-	"yellow-pastel-light": {
-		"name": "Yellow Pastel Light",
-		"primary": Color.html("#f4c48c"),
-		"secondary": Color.html("#f0ac5d"),
-		"menu": Color.html("#FFFFFF"),
-		"text": Color.html("#f0ac5d"),
-	},
-	"orange-pastel-dark": {
-		"name": "Orange Pastel Dark",
-		"primary": Color.html("#e8b38b"),
-		"secondary": Color.html("#e09760"),
-		"menu": Color.html("#e09760"),
-		"text": Color.html("#FFFFFF"),
-	},
-	"orange-pastel-light": {
-		"name": "Orange Pastel Light",
-		"primary": Color.html("#e8b38b"),
-		"secondary": Color.html("#e09760"),
-		"menu": Color.html("#FFFFFF"),
-		"text": Color.html("#e09760"),
-	},
-	"blue-pastel-dark": {
-		"name": "Blue Pastel Dark",
-		"primary": Color.html("#c8daf3"),
-		"secondary": Color.html("#9ebeea"),
-		"menu": Color.html("#9ebeea"),
-		"text": Color.html("#FFFFFF"),
-	},
-	"blue-pastel-light": {
-		"name": "Blue Pastel Light",
-		"primary": Color.html("#c8daf3"),
-		"secondary": Color.html("#9ebeea"),
-		"menu": Color.html("#FFFFFF"),
-		"text": Color.html("#92b0d9"),
-	},
-	"green-pastel-dark": {
-		"name": "Green Pastel Dark",
-		"primary": Color.html("#aaecd0"),
-		"secondary": Color.html("#68ab8e"),
-		"menu": Color.html("#68ab8e"),
-		"text": Color.html("#FFFFFF"),
-	},
-	"green-pastel-light": {
-		"name": "Green Pastel Light",
-		"primary": Color.html("#aaecd0"),
-		"secondary": Color.html("#68ab8e"),
-		"menu": Color.html("#FFFFFF"),
-		"text": Color.html("#68ab8e"),
-	},
-	"pink-pastel-dark": {
-		"name": "Pink Pastel Dark",
-		"primary": Color.html("#f3c8da"),
-		"secondary": Color.html("#ea9ebe"),
-		"menu": Color.html("#ea9ebe"),
-		"text": Color.html("#FFFFFF"),
-	},
-	"pink-pastel-light": {
-		"name": "Pink Pastel Light",
-		"primary": Color.html("#f3c8da"),
-		"secondary": Color.html("#ea9ebe"),
-		"menu": Color.html("#FFFFFF"),
-		"text": Color.html("#ea9ebe"),
-	},
+const THEME_ALIASES := {
+	"orange-pastel-dark": "orange-dark",
+	"orange-pastel-light": "orange-light",
 }
+
+var THEMES := _build_themes()
 
 var theme_id: String = DEFAULT_ID
 var primary: Color = Color.html("#6FB3BF")
@@ -162,24 +40,109 @@ var points_positive := Color.GOLD
 var points_negative := Color.CRIMSON
 var highlight := Color(1.0, 1.0, 0.6350498, 1.0)
 
+var title_font: Font
+var body_font: Font
+
 var _backdrop_shader: Shader
 var _tile_shadow: StandardMaterial3D
+var _worlds: Array[WorldEnvironment] = []
 var _nav_empty := StyleBoxEmpty.new()
 var _empty_icon: Texture2D
 var _strip_icons: Dictionary = {}
 var _toggle_icons: Dictionary = {}
+var _toggle_mask_outer: Image
+var _toggle_mask_inner: Image
+var _toggle_mask_thumb_off: Image
+var _toggle_mask_thumb_on: Image
+
+
+static func _build_themes() -> Dictionary:
+	var themes := {}
+	_add_theme_pair(themes, "ocean", "Ocean", Color.html("#6fb3bf"), Color.html("#4d9fae"))
+	_add_theme_pair(themes, "orange", "Orange", Color.html("#e8b38b"), Color.html("#e09760"))
+	_add_theme_pair(themes, "forest", "Forest", Color.html("#6B8F71"), Color.html("#2C3A30"))
+	_add_theme_pair_colors(
+		themes,
+		"beige",
+		"Beige",
+		Color.html("#d1bfab"),
+		Color.html("#8b4f3a"),
+		Color.html("#786452"),
+		Color.html("#f4dfca"),
+		Color.html("#f4dfca"),
+		Color.html("#786452")
+	)
+	_add_theme_pair(themes, "yellow-pastel", "Yellow Pastel", Color.html("#f4c48c"), Color.html("#f0ac5d"))
+	_add_theme_pair_colors(
+		themes,
+		"blue-pastel",
+		"Blue Pastel",
+		Color.html("#c8daf3"),
+		Color.html("#9ebeea"),
+		Color.html("#9ebeea"),
+		Color.WHITE,
+		Color.WHITE,
+		Color.html("#92b0d9")
+	)
+	_add_theme_pair(themes, "green-pastel", "Green Pastel", Color.html("#aaecd0"), Color.html("#68ab8e"))
+	_add_theme_pair(themes, "pink-pastel", "Pink Pastel", Color.html("#f3c8da"), Color.html("#ea9ebe"))
+	return themes
+
+
+static func _add_theme_pair(
+	themes: Dictionary,
+	id: String,
+	display: String,
+	primary: Color,
+	secondary: Color
+) -> void:
+	_add_theme_pair_colors(themes, id, display, primary, secondary, secondary, Color.WHITE, Color.WHITE, secondary)
+
+
+static func _add_theme_pair_colors(
+	themes: Dictionary,
+	id: String,
+	display: String,
+	primary: Color,
+	secondary: Color,
+	dark_menu: Color,
+	dark_text: Color,
+	light_menu: Color,
+	light_text: Color
+) -> void:
+	themes["%s-dark" % id] = {
+		"name": "%s Dark" % display,
+		"primary": primary,
+		"secondary": secondary,
+		"menu": dark_menu,
+		"text": dark_text,
+	}
+	themes["%s-light" % id] = {
+		"name": "%s Light" % display,
+		"primary": primary,
+		"secondary": secondary,
+		"menu": light_menu,
+		"text": light_text,
+	}
 
 
 func _ready() -> void:
-	_add_latin_fallback(TITLE_FONT)
-	_add_latin_fallback(BODY_FONT)
-	_tile_shadow = load(TILE_SHADOW_PATH) as StandardMaterial3D
+	title_font = TITLE_FONT.duplicate() as Font
+	body_font = BODY_FONT.duplicate() as Font
+	_add_latin_fallback(title_font)
+	_add_latin_fallback(body_font)
+	var loaded := load(TILE_SHADOW_PATH) as StandardMaterial3D
+	if loaded != null:
+		_tile_shadow = loaded.duplicate() as StandardMaterial3D
 	var stored := DEFAULT_ID
 	if GameSettings != null:
 		stored = GameSettings.theme_id
-	_apply_palette(stored)
+	_apply_palette(_canonical_theme_id(stored))
+	if GameSettings != null and THEME_ALIASES.has(stored):
+		GameSettings.theme_id = theme_id
+		GameSettings.save_to_disk()
+	_watch_tree()
 	apply()
-	call_deferred("_watch_tree")
 
 
 func _watch_tree() -> void:
@@ -188,13 +151,46 @@ func _watch_tree() -> void:
 		return
 	if not tree.node_added.is_connected(_on_node_added):
 		tree.node_added.connect(_on_node_added)
+	if tree.root != null:
+		_seed_existing(tree.root)
+
+
+func _seed_existing(node: Node) -> void:
+	if node is WorldEnvironment:
+		_register_world(node as WorldEnvironment)
+	elif node is MeshInstance3D or node is MultiMeshInstance3D:
+		_patch_mesh_node(node)
+	for child in node.get_children():
+		_seed_existing(child)
 
 
 func _on_node_added(node: Node) -> void:
 	if node is WorldEnvironment:
-		_apply_world_environment.call_deferred(node)
+		_register_world_deferred.call_deferred(node)
 	elif node is MeshInstance3D or node is MultiMeshInstance3D:
 		_patch_mesh_node.call_deferred(node)
+
+
+func _register_world_deferred(node: Node) -> void:
+	if not is_instance_valid(node) or not (node is WorldEnvironment):
+		return
+	var world := node as WorldEnvironment
+	_register_world(world)
+	_apply_world_environment(world)
+
+
+func _register_world(world: WorldEnvironment) -> void:
+	if world == null:
+		return
+	if not _worlds.has(world):
+		_worlds.append(world)
+	var forget := _forget_world.bind(world)
+	if not world.tree_exiting.is_connected(forget):
+		world.tree_exiting.connect(forget, CONNECT_ONE_SHOT)
+
+
+func _forget_world(world: WorldEnvironment) -> void:
+	_worlds.erase(world)
 
 
 func bind_node(node: Node, callback: Callable) -> void:
@@ -212,23 +208,18 @@ func _unbind_callback(callback: Callable) -> void:
 
 
 func theme_display_name(id: String) -> String:
-	var fallback := id
-	var data = THEMES.get(id, {})
-	if typeof(data) == TYPE_DICTIONARY:
-		fallback = str(data.get("name", id))
-	return Loc.ui("theme.%s" % id, fallback)
+	var canonical := _canonical_theme_id(id)
+	var data: Dictionary = THEMES[canonical]
+	var fallback := str(data.get("name", canonical))
+	return Loc.ui("theme.%s" % canonical, fallback)
 
 
 func theme_colors(id: String) -> Dictionary:
-	var data = THEMES.get(id, {})
-	if typeof(data) == TYPE_DICTIONARY:
-		return data
-	return THEMES[DEFAULT_ID]
+	return THEMES[_canonical_theme_id(id)]
 
 
 func theme_strip_icon(id: String) -> Texture2D:
-	if not THEMES.has(id):
-		id = DEFAULT_ID
+	id = _canonical_theme_id(id)
 	if _strip_icons.has(id):
 		return _strip_icons[id]
 	var colors := theme_colors(id)
@@ -245,9 +236,7 @@ func theme_strip_icon(id: String) -> Texture2D:
 
 
 func set_theme_id(id: String) -> void:
-	if not THEMES.has(id):
-		id = DEFAULT_ID
-	_apply_palette(id)
+	_apply_palette(_canonical_theme_id(id))
 	if GameSettings != null:
 		GameSettings.theme_id = theme_id
 		GameSettings.save_to_disk()
@@ -255,9 +244,15 @@ func set_theme_id(id: String) -> void:
 
 
 func apply() -> void:
-	_apply_tile_shadow()
+	_configure_rim_material(_tile_shadow)
 	_apply_world_environments()
 	theme_changed.emit()
+
+
+func substitute_rim(mat: Material) -> Material:
+	if _tile_shadow != null and _is_rim_material(mat):
+		return _tile_shadow
+	return mat
 
 
 func hint_color() -> Color:
@@ -357,7 +352,7 @@ func style_chip_button(button: BaseButton, h_margin: float = 12.0, v_margin: flo
 func apply_title_font(control: Control) -> void:
 	if control == null:
 		return
-	control.add_theme_font_override("font", TITLE_FONT)
+	control.add_theme_font_override("font", title_font if title_font != null else TITLE_FONT)
 
 
 func _add_latin_fallback(font: Font) -> void:
@@ -542,6 +537,7 @@ func _toggle_icon(on: bool) -> Texture2D:
 	var key := "%s-%s" % [theme_id, "on" if on else "off"]
 	if _toggle_icons.has(key):
 		return _toggle_icons[key]
+	_ensure_toggle_masks()
 	var light_theme := text.get_luminance() < menu.get_luminance()
 	var off_track: Color
 	var on_track: Color
@@ -557,21 +553,55 @@ func _toggle_icon(on: bool) -> Texture2D:
 		on_track = text
 		off_thumb = menu.lerp(text, 0.55)
 		on_thumb = menu
-	var img := Image.create(TOGGLE_WIDTH, TOGGLE_HEIGHT, false, Image.FORMAT_RGBA8)
-	img.fill(Color(0, 0, 0, 0))
-	var outer := Rect2(0.0, 0.0, float(TOGGLE_WIDTH), float(TOGGLE_HEIGHT))
-	_fill_pill(img, outer, hud_background)
-	var inner := outer.grow(-TOGGLE_BORDER)
-	_fill_pill(img, inner, on_track if on else off_track)
-	var thumb_radius := inner.size.y * 0.5 - TOGGLE_THUMB_INSET
-	var thumb_cy := inner.position.y + inner.size.y * 0.5
-	var thumb_cx := inner.position.x + TOGGLE_THUMB_INSET + thumb_radius
-	if on:
-		thumb_cx = inner.position.x + inner.size.x - TOGGLE_THUMB_INSET - thumb_radius
-	_fill_circle(img, thumb_cx, thumb_cy, thumb_radius, on_thumb if on else off_thumb)
+	var img := _blank_toggle_image()
+	_blit_mask(img, _toggle_mask_outer, hud_background)
+	_blit_mask(img, _toggle_mask_inner, on_track if on else off_track)
+	var thumb_mask := _toggle_mask_thumb_on if on else _toggle_mask_thumb_off
+	_blit_mask(img, thumb_mask, on_thumb if on else off_thumb)
 	var texture := ImageTexture.create_from_image(img)
 	_toggle_icons[key] = texture
 	return texture
+
+
+func _ensure_toggle_masks() -> void:
+	if _toggle_mask_outer != null:
+		return
+	var outer := Rect2(0.0, 0.0, float(TOGGLE_WIDTH), float(TOGGLE_HEIGHT))
+	var inner := outer.grow(-TOGGLE_BORDER)
+	_toggle_mask_outer = _make_pill_mask(outer)
+	_toggle_mask_inner = _make_pill_mask(inner)
+	var thumb_radius := inner.size.y * 0.5 - TOGGLE_THUMB_INSET
+	var thumb_cy := inner.position.y + inner.size.y * 0.5
+	var thumb_off_cx := inner.position.x + TOGGLE_THUMB_INSET + thumb_radius
+	var thumb_on_cx := inner.position.x + inner.size.x - TOGGLE_THUMB_INSET - thumb_radius
+	_toggle_mask_thumb_off = _make_circle_mask(thumb_off_cx, thumb_cy, thumb_radius)
+	_toggle_mask_thumb_on = _make_circle_mask(thumb_on_cx, thumb_cy, thumb_radius)
+
+
+func _blank_toggle_image() -> Image:
+	var img := Image.create(TOGGLE_WIDTH, TOGGLE_HEIGHT, false, Image.FORMAT_RGBA8)
+	img.fill(Color(0, 0, 0, 0))
+	return img
+
+
+func _make_pill_mask(rect: Rect2) -> Image:
+	var img := _blank_toggle_image()
+	_fill_pill(img, rect, Color.WHITE)
+	return img
+
+
+func _make_circle_mask(cx: float, cy: float, radius: float) -> Image:
+	var img := _blank_toggle_image()
+	_fill_circle(img, cx, cy, radius, Color.WHITE)
+	return img
+
+
+func _blit_mask(dst: Image, mask: Image, color: Color) -> void:
+	for y in TOGGLE_HEIGHT:
+		for x in TOGGLE_WIDTH:
+			if mask.get_pixel(x, y).a <= 0.0:
+				continue
+			dst.set_pixel(x, y, color)
 
 
 func _fill_pill(img: Image, rect: Rect2, color: Color) -> void:
@@ -703,12 +733,12 @@ func _apply_menu_node(node: Node) -> void:
 
 
 func _label_is_hint(label: Label) -> bool:
-	var n := label.name.to_lower()
-	if n.contains("hint") or n.contains("desc") or n.contains("status") or n.contains("sub"):
+	if label.has_meta("ui_hint"):
+		return bool(label.get_meta("ui_hint"))
+	var n := String(label.name)
+	if n == "SubLabel":
 		return true
-	if label.has_theme_color_override("font_color"):
-		return label.get_theme_color("font_color").a < 0.95
-	return false
+	return n.ends_with("Hint") or n.ends_with("Desc") or n.ends_with("Status")
 
 
 func _is_chip_button(button: BaseButton) -> bool:
@@ -722,25 +752,22 @@ func _is_chip_button(button: BaseButton) -> bool:
 	return true
 
 
-func _apply_palette(id: String) -> void:
+func _canonical_theme_id(id: String) -> String:
+	if THEME_ALIASES.has(id):
+		id = str(THEME_ALIASES[id])
 	if not THEMES.has(id):
-		id = DEFAULT_ID
-	theme_id = id
-	var data: Dictionary = THEMES[id]
+		return DEFAULT_ID
+	return id
+
+
+func _apply_palette(id: String) -> void:
+	theme_id = _canonical_theme_id(id)
+	var data: Dictionary = THEMES[theme_id]
 	primary = data["primary"]
 	secondary = data["secondary"]
 	menu = data["menu"]
 	text = data["text"]
 	_toggle_icons.clear()
-
-
-func _apply_tile_shadow() -> void:
-	if _tile_shadow == null:
-		_tile_shadow = load(TILE_SHADOW_PATH) as StandardMaterial3D
-	_configure_rim_material(_tile_shadow)
-	var tree := get_tree()
-	if tree != null and tree.root != null:
-		_patch_tile_meshes(tree.root)
 
 
 func _configure_rim_material(mat: StandardMaterial3D) -> void:
@@ -752,14 +779,8 @@ func _configure_rim_material(mat: StandardMaterial3D) -> void:
 	mat.albedo_color = secondary
 
 
-func _patch_tile_meshes(node: Node) -> void:
-	_patch_mesh_node(node)
-	for child in node.get_children():
-		_patch_tile_meshes(child)
-
-
 func _patch_mesh_node(node: Node) -> void:
-	if _tile_shadow == null:
+	if not is_instance_valid(node) or _tile_shadow == null:
 		return
 	if node is MeshInstance3D:
 		var mesh_instance := node as MeshInstance3D
@@ -783,24 +804,19 @@ func _is_rim_material(mat: Material) -> bool:
 	if not (mat is StandardMaterial3D):
 		return false
 	var standard := mat as StandardMaterial3D
-	var material_name := standard.resource_name
-	if material_name == "BrownDark" or material_name == "TileShadow":
+	if standard.resource_name == "TileShadow":
 		return true
 	return standard.resource_path.ends_with("TileShadow.tres")
 
 
 func _apply_world_environments() -> void:
-	var tree := get_tree()
-	if tree == null or tree.root == null:
-		return
-	_apply_world_in(tree.root)
-
-
-func _apply_world_in(node: Node) -> void:
-	if node is WorldEnvironment:
-		_apply_world_environment(node as WorldEnvironment)
-	for child in node.get_children():
-		_apply_world_in(child)
+	var live: Array[WorldEnvironment] = []
+	for world in _worlds:
+		if not is_instance_valid(world):
+			continue
+		_apply_world_environment(world)
+		live.append(world)
+	_worlds = live
 
 
 func _apply_world_environment(world: WorldEnvironment) -> void:

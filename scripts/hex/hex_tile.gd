@@ -94,7 +94,7 @@ func _ready() -> void:
 func _apply_theme() -> void:
 	var points_label := get_node_or_null("PointsLabel/Fill") as Label3D
 	if points_label:
-		points_label.font = UiTheme.TITLE_FONT
+		points_label.font = UiTheme.title_font
 	var element_bubble := get_node_or_null("HoverInfo/ElementBubble") as Sprite3D
 	var animal_bubble := get_node_or_null("HoverInfo/AnimalBubble") as Sprite3D
 	if element_bubble:

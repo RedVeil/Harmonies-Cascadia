@@ -1036,7 +1036,7 @@ func _make_score_label(text: String, color: Color, priority: int) -> Label3D:
 	label.render_priority = priority
 	label.modulate = color
 	label.outline_size = 0
-	label.font = UiTheme.TITLE_FONT
+	label.font = UiTheme.title_font
 	label.font_size = 520
 	label.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR
 	label.text = text

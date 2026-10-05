@@ -264,7 +264,7 @@ func _apply_multimesh_layers(resolved_multimesh_layers: Array) -> void:
 			continue
 
 		slot.multimesh = resolved["multimesh"]
-		slot.material_override = resolved.get("material")
+		slot.material_override = UiTheme.substitute_rim(resolved.get("material") as Material)
 		slot.visible = true
 
 
