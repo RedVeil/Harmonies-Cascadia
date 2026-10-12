@@ -27,7 +27,7 @@
 	"endless": {
 		"ring_count": 3,
 		"checkpoint": 100,
-		"checkpoint_multiplier": 1.5,
+		"checkpoint_multiplier": 1.8,
 		"checkpoint_flat_increase": 100,
 		"map_growth": true
 	}
