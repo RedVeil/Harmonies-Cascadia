@@ -936,7 +936,7 @@ func handle_tile_click(coord: Vector2i) -> void:
 		score_engine.total_score = (
 			score_engine.element_score + score_engine.animal_score + score_engine.quest_score
 		)
-		_record_replay_place(coord, last_points_diff)
+		_record_replay_place(coord, last_points_diff, quest_count)
 
 		hex_manager.apply_placement(coord)
 		hex_manager.play_placement_reward(coord, last_points_diff, contributing_coords, quest_count)
@@ -983,10 +983,11 @@ func handle_tile_click(coord: Vector2i) -> void:
 			"card_id": int(selected_card.id),
 		})
 
+		# Map growth clears the undo snapshot inside apply_preview, before this notify.
 		tutorial_bridge.notify("tile_placed", {
 			"coord": coord,
-			"card_type": selected_card_backup.type,
-			"card_id": selected_card_backup.id,
+			"card_type": selected_card.type,
+			"card_id": selected_card.id,
 		})
 
 
@@ -1243,7 +1244,7 @@ func handle_map_button_click(coord:Vector2i) -> void:
 	tutorial_bridge.notify("map_expanded", {"coord": coord})
 
 
-func _record_replay_place(coord: Vector2i, points: int) -> void:
+func _record_replay_place(coord: Vector2i, points: int, quest_count: int = 0) -> void:
 	if GameSession.is_puzzle_maker():
 		return
 	if hex_manager == null or not hex_manager.tiles.has(coord):
@@ -1258,6 +1259,7 @@ func _record_replay_place(coord: Vector2i, points: int) -> void:
 		"animal_id": int(tile.animal_id),
 		"animal_amount": int(tile.animal_amount),
 		"points": points,
+		"quest_count": quest_count,
 	})
 
 

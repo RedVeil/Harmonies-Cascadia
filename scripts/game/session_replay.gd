@@ -8,15 +8,6 @@ const GEAR_ICON := preload("res://assets/icons/settings.png")
 const OUTLINE_TEXTURE := preload("res://assets/icons/hex_outline_thin2.png")
 const BAR_HEIGHT := 64.0
 const SPEEDS: Array[float] = [1.0, 2.0, 4.0]
-const PLACED_LIFT := 0.42
-const PLACED_SCALE := 1.085
-const PLACED_RISE := 0.24
-const PLACED_SETTLE := 0.3
-const CONTRIBUTOR_LIFT := 0.16
-const CONTRIBUTOR_SCALE := 1.045
-const CONTRIBUTOR_RISE := 0.2
-const CONTRIBUTOR_SETTLE := 0.26
-const CONTRIBUTOR_STAGGER := 0.06
 const SCORE_POP_BASE_Y := 19.0
 const SCORE_POP_RISE := 2.05
 const SCORE_POP_START_SCALE := 0.5
@@ -40,7 +31,6 @@ var _speed_button: Button
 var _options_button: Button
 var _options_panel: PanelContainer
 var _place_sound_button: CheckButton
-var _point_sound_button: CheckButton
 var _show_points_button: CheckButton
 var _animate_animals_button: CheckButton
 var _outline_button: CheckButton
@@ -78,7 +68,6 @@ var _celebrate_tweens: Dictionary = {}
 var _bar_fade: Tween
 var _bar_hover_token: int = 0
 var _place_sound: bool = true
-var _point_sound: bool = true
 var _show_points: bool = false
 var _animate_animals: bool = false
 var _show_outline: bool = false
@@ -365,10 +354,6 @@ func _build_options_panel() -> void:
 	_place_sound_button.toggled.connect(_on_place_sound_toggled)
 	column.add_child(_place_sound_button)
 
-	_point_sound_button = _make_check("PointSoundButton", true)
-	_point_sound_button.toggled.connect(_on_point_sound_toggled)
-	column.add_child(_point_sound_button)
-
 	_show_points_button = _make_check("ShowPointsButton", false)
 	_show_points_button.toggled.connect(_on_show_points_toggled)
 	column.add_child(_show_points_button)
@@ -393,14 +378,11 @@ func _make_check(node_name: String, pressed: bool) -> CheckButton:
 
 func _reset_feedback_toggles() -> void:
 	_place_sound = true
-	_point_sound = true
 	_show_points = false
 	_animate_animals = false
 	_show_outline = false
 	if _place_sound_button:
 		_place_sound_button.set_pressed_no_signal(true)
-	if _point_sound_button:
-		_point_sound_button.set_pressed_no_signal(true)
 	if _show_points_button:
 		_show_points_button.set_pressed_no_signal(false)
 	if _animate_animals_button:
@@ -428,7 +410,7 @@ func _apply_theme() -> void:
 		UiTheme.style_chip_button(_options_button)
 	if _options_panel:
 		UiTheme.style_panel(_options_panel)
-	for toggle in [_place_sound_button, _point_sound_button, _show_points_button, _animate_animals_button, _outline_button]:
+	for toggle in [_place_sound_button, _show_points_button, _animate_animals_button, _outline_button]:
 		if toggle:
 			UiTheme.style_check_button(toggle, 16)
 	if _fullscreen_button:
@@ -445,8 +427,6 @@ func _apply_locale() -> void:
 		_speed_button.text = "%dx" % int(_speed())
 	if _place_sound_button:
 		_place_sound_button.text = Loc.ui("pause.replay_place_sound")
-	if _point_sound_button:
-		_point_sound_button.text = Loc.ui("pause.replay_point_sound")
 	if _show_points_button:
 		_show_points_button.text = Loc.ui("pause.replay_show_points")
 	if _animate_animals_button:
@@ -506,11 +486,6 @@ func _place_options_panel() -> void:
 
 func _on_place_sound_toggled(pressed: bool) -> void:
 	_place_sound = pressed
-	GameFeedback.play_click_button()
-
-
-func _on_point_sound_toggled(pressed: bool) -> void:
-	_point_sound = pressed
 	GameFeedback.play_click_button()
 
 
@@ -803,10 +778,11 @@ func _apply_step(step: Dictionary, animate: bool, feedback: bool = false) -> voi
 				continue
 			_commit(neighbor)
 	var points := int(step.get("points", 0))
+	var quest_count := int(step.get("quest_count", 0))
 	if animate:
 		_play_group_celebrate(coord, points)
 	if feedback:
-		_play_step_feedback(coord, points)
+		_play_step_feedback(coord, points, quest_count)
 
 
 func _create_patch(origin: Vector2i) -> void:
@@ -826,8 +802,12 @@ func _create_hex(coord: Vector2i) -> void:
 	var pivot := Node3D.new()
 	pivot.position = HexCoord.axial_to_world(coord, _hex_size)
 	_tiles_root.add_child(pivot)
+	# Yaw lives on this root, same as HexTile.VisualsRoot, so the place bounce can rumble around it.
+	var visual_root := Node3D.new()
+	visual_root.name = "VisualsRoot"
+	pivot.add_child(visual_root)
 	var visuals := TILE_VISUALS_SCENE.instantiate() as TileVisuals
-	pivot.add_child(visuals)
+	visual_root.add_child(visuals)
 	_pivots[coord] = pivot
 	_visuals[coord] = visuals
 	_state[coord] = {
@@ -852,8 +832,9 @@ func _commit(coord: Vector2i) -> void:
 		river_index = river_data.y
 	elif element != GameEnums.ELEMENT.NONE:
 		orientation_steps = HexCoord.pick_orientation_steps(coord)
-	var pivot := _pivots[coord] as Node3D
-	pivot.rotation_degrees.y = HexCoord.direction_to_yaw_degrees(orientation_steps)
+	var visual_root := _visual_root(coord)
+	if visual_root != null:
+		visual_root.rotation_degrees.y = HexCoord.direction_to_yaw_degrees(orientation_steps)
 	var visuals := _visuals[coord] as TileVisuals
 	var rotations: Array[float] = []
 	visuals.apply(
@@ -895,34 +876,45 @@ func _play_group_celebrate(origin: Vector2i, points: int) -> void:
 		if not _state.has(coord) or int(_state[coord]["element"]) == GameEnums.ELEMENT.NONE:
 			continue
 		_play_celebrate(coord, false, delay)
-		delay += CONTRIBUTOR_STAGGER
+		delay += _contributor_stagger()
 
 
 func _play_celebrate(coord: Vector2i, strong: bool, delay: float) -> void:
-	if not _visuals.has(coord):
+	var root := _visual_root(coord)
+	if root == null:
 		return
 	_reset_celebrate_visual(coord)
-	var visuals := _visuals[coord] as Node3D
-	if visuals == null:
+	root = _visual_root(coord)
+	if root == null:
 		return
-	var lift := PLACED_LIFT if strong else CONTRIBUTOR_LIFT
-	var peak := Vector3.ONE * (PLACED_SCALE if strong else CONTRIBUTOR_SCALE)
-	var rise := PLACED_RISE if strong else CONTRIBUTOR_RISE
-	var settle := PLACED_SETTLE if strong else CONTRIBUTOR_SETTLE
+	var motion := _celebrate_motion(strong)
+	var total := float(motion["rise"]) + float(motion["land"]) + float(motion["spring"])
+	if total <= 0.0:
+		return
 	var tween := create_tween()
 	_celebrate_tweens[coord] = tween
 	if delay > 0.0:
 		tween.tween_interval(delay)
-	tween.set_parallel(true)
-	tween.tween_property(visuals, "position:y", lift, rise)\
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	tween.tween_property(visuals, "scale", peak, rise)\
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	tween.chain().tween_property(visuals, "position:y", 0.0, settle)\
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-	tween.parallel().tween_property(visuals, "scale", Vector3.ONE, settle)\
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	tween.tween_method(_apply_celebrate_sample.bind(root, motion), 0.0, 1.0, total)
 	tween.finished.connect(_on_celebrate_finished.bind(coord))
+
+
+func _apply_celebrate_sample(t: float, root: Node3D, motion: Dictionary) -> void:
+	var stretch: Vector3 = motion["stretch"]
+	var squash: Vector3 = motion["squash"]
+	FeedbackAnimHelper.apply_celebrate_pose(
+		root,
+		t,
+		float(motion["lift"]),
+		stretch,
+		squash,
+		float(motion["rise"]),
+		float(motion["land"]),
+		float(motion["spring"]),
+		float(motion["rumble_distance"]),
+		float(motion["rumble_degrees"]),
+		float(motion["rumble_cycles"])
+	)
 
 
 func _on_celebrate_finished(coord: Vector2i) -> void:
@@ -935,13 +927,49 @@ func _reset_celebrate_visual(coord: Vector2i) -> void:
 		_celebrate_tweens.erase(coord)
 		if tween != null and tween.is_valid():
 			tween.kill()
+	var root := _visual_root(coord)
+	if root == null:
+		return
+	var yaw := root.rotation_degrees.y
+	root.position = Vector3.ZERO
+	root.scale = Vector3.ONE
+	root.rotation_degrees = Vector3(0.0, yaw, 0.0)
+
+
+func _visual_root(coord: Vector2i) -> Node3D:
 	if not _visuals.has(coord):
-		return
-	var visuals := _visuals[coord] as Node3D
+		return null
+	var visuals := _visuals[coord] as Node
 	if visuals == null or not is_instance_valid(visuals):
-		return
-	visuals.position.y = 0.0
-	visuals.scale = Vector3.ONE
+		return null
+	return visuals.get_parent() as Node3D
+
+
+func _live_hex_tile() -> HexTile:
+	if _orchestrator == null or _orchestrator.hex_manager == null:
+		return null
+	var container := _orchestrator.hex_manager.hex_container
+	if container == null or container.tiles_by_coord.is_empty():
+		return null
+	return container.tiles_by_coord.values()[0] as HexTile
+
+
+func _celebrate_motion(strong: bool) -> Dictionary:
+	var tile := _live_hex_tile()
+	if tile != null:
+		return tile.celebrate_motion(strong)
+	var fallback := HexTile.new()
+	var motion := fallback.celebrate_motion(strong)
+	fallback.free()
+	return motion
+
+
+func _contributor_stagger() -> float:
+	if _orchestrator != null and _orchestrator.hex_manager != null:
+		var container := _orchestrator.hex_manager.hex_container
+		if container != null:
+			return container.contributor_stagger
+	return 0.06
 
 
 func _stop_celebrate() -> void:
@@ -949,33 +977,30 @@ func _stop_celebrate() -> void:
 		_reset_celebrate_visual(coord)
 
 
-func _play_step_feedback(coord: Vector2i, points: int) -> void:
+func _play_step_feedback(coord: Vector2i, points: int, quest_count: int = 0) -> void:
 	var element := GameEnums.ELEMENT.NONE
 	if _state.has(coord):
 		element = int(_state[coord]["element"]) as GameEnums.ELEMENT
 	if _place_sound and element != GameEnums.ELEMENT.NONE:
 		_play_place_sound()
+		if quest_count > 0:
+			_play_quest_sound()
 	if _show_outline:
 		_flash_group_outline(coord)
 	if points == 0:
 		return
-	if _point_sound:
-		_play_point_sound()
 	if _show_points:
 		_show_score_bubble(coord, points)
 
 
 func _play_place_sound() -> void:
-	if _orchestrator == null or _orchestrator.hex_manager == null:
+	var tile := _live_hex_tile()
+	if tile == null:
 		return
-	var container := _orchestrator.hex_manager.hex_container
-	if container == null or container.tiles_by_coord.is_empty():
-		return
-	var tile: HexTile = container.tiles_by_coord.values()[0]
 	FeedbackAnimHelper.play_sounds(tile.place_celebrate_sounds)
 
 
-func _play_point_sound() -> void:
+func _play_quest_sound() -> void:
 	if _orchestrator == null or _orchestrator.point_counter == null:
 		return
 	FeedbackAnimHelper.play_sounds(_orchestrator.point_counter.score_reward_sounds)
@@ -1075,7 +1100,7 @@ func _flash_group_outline(origin: Vector2i) -> void:
 			_flash_outline(coord, 0.0)
 			continue
 		_flash_outline(coord, delay)
-		delay += CONTRIBUTOR_STAGGER
+		delay += _contributor_stagger()
 
 
 func _group_targets(origin: Vector2i) -> Array[Vector2i]:

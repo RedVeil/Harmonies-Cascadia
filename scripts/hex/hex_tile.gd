@@ -471,6 +471,32 @@ func place_celebrate_duration() -> float:
 	return placed_rise_duration + placed_land_duration + placed_spring_duration
 
 
+func celebrate_motion(strong: bool) -> Dictionary:
+	if strong:
+		return {
+			"lift": placed_lift,
+			"stretch": placed_stretch,
+			"squash": placed_squash,
+			"rise": placed_rise_duration,
+			"land": placed_land_duration,
+			"spring": placed_spring_duration,
+			"rumble_distance": placed_rumble_distance,
+			"rumble_degrees": placed_rumble_degrees,
+			"rumble_cycles": placed_rumble_cycles,
+		}
+	return {
+		"lift": contributor_lift,
+		"stretch": contributor_stretch,
+		"squash": contributor_squash,
+		"rise": contributor_rise_duration,
+		"land": contributor_land_duration,
+		"spring": contributor_spring_duration,
+		"rumble_distance": contributor_rumble_distance,
+		"rumble_degrees": contributor_rumble_degrees,
+		"rumble_cycles": contributor_rumble_cycles,
+	}
+
+
 func play_place_reward(points: int, element: int, quest_count: int = 0) -> void:
 	_awaiting_place_feedback = true
 	play_animation(&"place", {
@@ -669,37 +695,20 @@ func _apply_celebrate_sample(
 	rumble_degrees: float,
 	rumble_cycles: float
 ) -> void:
-	var total := rise_duration + land_duration + spring_duration
-	if total <= 0.0:
-		return
-	var elapsed := t * total
-	var y := 0.0
-	var visual_scale := Vector3.ONE
-	if elapsed <= rise_duration:
-		y = Tween.interpolate_value(0.0, lift, elapsed, rise_duration, Tween.TRANS_QUAD, Tween.EASE_OUT)
-		visual_scale = Tween.interpolate_value(Vector3.ONE, stretch - Vector3.ONE, elapsed, rise_duration, Tween.TRANS_BACK, Tween.EASE_OUT)
-	elif elapsed <= rise_duration + land_duration:
-		var land_elapsed := elapsed - rise_duration
-		y = Tween.interpolate_value(lift, -lift, land_elapsed, land_duration, Tween.TRANS_QUAD, Tween.EASE_IN)
-		visual_scale = Tween.interpolate_value(stretch, squash - stretch, land_elapsed, land_duration, Tween.TRANS_QUAD, Tween.EASE_IN)
-	else:
-		var spring_elapsed := elapsed - rise_duration - land_duration
-		visual_scale = Tween.interpolate_value(squash, Vector3.ONE - squash, spring_elapsed, spring_duration, Tween.TRANS_BACK, Tween.EASE_OUT)
-
-	var rumble_start := rise_duration
-	var shove := Vector2.ZERO
-	var rock := Vector2.ZERO
-	if elapsed > rumble_start and total > rumble_start:
-		var rumble_u := clampf((elapsed - rumble_start) / (total - rumble_start), 0.0, 1.0)
-		var decay := pow(1.0 - rumble_u, 1.35)
-		var wave := sin(rumble_u * TAU * rumble_cycles)
-		shove = Vector2(wave, wave * 0.35) * rumble_distance * decay
-		rock = Vector2(wave * 0.85, wave * 0.25) * rumble_degrees * decay
-
-	var yaw := _visuals_root.rotation_degrees.y
-	_visuals_root.position = Vector3(shove.x, y, shove.y)
-	_visuals_root.scale = visual_scale
-	_visuals_root.rotation_degrees = Vector3(rock.x, yaw, rock.y)
+	_cache_visual_nodes()
+	FeedbackAnimHelper.apply_celebrate_pose(
+		_visuals_root,
+		t,
+		lift,
+		stretch,
+		squash,
+		rise_duration,
+		land_duration,
+		spring_duration,
+		rumble_distance,
+		rumble_degrees,
+		rumble_cycles
+	)
 
 
 func _animate_quest_burst(quest_count: int) -> void:
